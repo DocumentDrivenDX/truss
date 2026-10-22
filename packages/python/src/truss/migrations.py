@@ -12,7 +12,7 @@ import json
 from hashlib import sha256
 import psycopg
 from ._migration_recipe import load_recipe,plan_route
-from ._migration_verify import context,verify,verify_artifact,verify_profile,installed_profile,canonical
+from ._migration_verify import context,verify,verify_artifact,verify_profile,installed_profile,canonical,profile_for
 from ._migration_execute import active,exclude,execute,receipt,MigrationCursor
 
 
@@ -95,8 +95,8 @@ class RuntimeMigrations:
         Return only the qualified source's private type closure. Applying this
         companion belongs to an explicit offline restore, never migration repair.
         """
-        state=self.status();_,artifacts,_=load_recipe()
-        profile=json.loads(artifacts[state['manifestSha256']+'.json'])
+        state=self.status();manifest,artifacts,_=load_recipe()
+        profile=profile_for(manifest,artifacts,state['manifestSha256'])
         names={row[0] for row in profile['inventory']['relations'] if row[1] in ('r','p')}
         for kind,grants in profile['acl'].items():
             if kind=='owner':continue
@@ -259,7 +259,7 @@ class RuntimeMigrations:
                         outcome='already_applied';durability='committed'
                     elif active(cursor)[1]==request['source']:
                         if alive:raise ValueError('Original dispatch backend remains alive')
-                        source=json.loads(artifacts[request['source']+'.json'])
+                        source=profile_for(manifest,artifacts,request['source'])
                         verify_profile(cursor,source)
                         verify_artifact(cursor,source)
                         outcome='rolled_back';durability='rolled_back'

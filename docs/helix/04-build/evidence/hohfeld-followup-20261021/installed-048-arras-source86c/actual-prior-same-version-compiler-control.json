@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "control": "Actual prior Weft0.4.51 candidate, same version string with different frozen native bytes",
+  "returnCode": 1,
+  "refusal": "Exact corpus-qualified installed native compiler required",
+  "noDatabaseTestsStarted": true,
+  "priorCompilerRevision": "f003997997e1d1a84ff47df34d1dc181660f2827",
+  "requiredCompilerRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
+  "stderr": "Traceback (most recent call last):\n  File \"/private/tmp/truss-048-arras-independent-final/scripts/run-hf-conformance.py\", line 24, in <module>\n    if len(selected)!=1:raise ValueError('Exact corpus-qualified installed native compiler required')\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Exact corpus-qualified installed native compiler required\n"
+}

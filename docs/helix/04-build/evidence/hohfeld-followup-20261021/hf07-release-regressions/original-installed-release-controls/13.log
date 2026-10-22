@@ -1,0 +1,27 @@
+.E..........
+======================================================================
+ERROR: test_deferred_completion_rechecks_authorization (test_catalog_unchanged_native.CatalogUnchangedTests.test_deferred_completion_rechecks_authorization)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_unchanged_native.py", line 103, in test_deferred_completion_rechecks_authorization
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.commit()
+                                                                 ^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 309, in commit
+    self.wait(self._commit_gen())
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 495, in wait
+    return waiting.wait(
+           ^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 255, in psycopg_binary._psycopg.wait_c
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 592, in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 487, in _exec_command
+    raise e.error_from_result(result, encoding=self.pgconn._encoding)
+psycopg.ProgrammingError: catalog registration authorization required
+CONTEXT:  PL/pgSQL function truss.runtime_person(boolean) line 48 at RAISE
+SQL function "catalog_actor" statement 1
+PL/pgSQL function truss.catalog_validate_unchanged() line 5 at IF
+
+----------------------------------------------------------------------
+Ran 12 tests in 32.395s
+
+FAILED (errors=1)

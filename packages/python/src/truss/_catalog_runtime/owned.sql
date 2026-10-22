@@ -464,7 +464,7 @@ BEGIN
     identity:=reference->'identity';reference_type:=truss.runtime_condition_type(identity);
     IF current_actor IS NULL THEN current_actor:=truss.runtime_person(false);END IF;
     IF NOT truss.runtime_can_read_qualified(reference_type.document_id,reference_type.module,current_actor) THEN
-     RAISE EXCEPTION 'selected object reference reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'selected object reference reader required' USING ERRCODE='P1403';END IF;
     IF NOT EXISTS(
      SELECT 1 FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=reference_type.type_id) THEN
      RAISE EXCEPTION 'target object absent' USING ERRCODE='P1004';END IF;
@@ -951,7 +951,7 @@ DECLARE input_operations jsonb;application_operations jsonb;
  value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
  scope_node_type int;scope_edge_type int;scope_edge_pin text;outgoing_counts jsonb;incoming_counts jsonb;
- indexed_workspace boolean:=false;workspace_name text;workspace_index_name text;multiplicity_failure text;
+ indexed_workspace boolean:=false;workspace_name text;workspace_index_name text;multiplicity_failure jsonb;
 BEGIN
  current_actor:=truss.runtime_person(false);
  input_operations:=input->'operations';
@@ -1097,7 +1097,7 @@ BEGIN
    IF operation->>'operation'='create_object' AND resolved_creates ? (operation->>'typeDefinitionPin') THEN
     selected_type:=jsonb_populate_record(NULL::truss.type_def,resolved_creates->(operation->>'typeDefinitionPin'));
     IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,current_actor) THEN
-     RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='P1403';END IF;
    ELSE
     -- Only alias resolution reads earlier operations; stored/create targets do not.
     selected_type:=truss.runtime_owned_operation_type_qualified(operation,
@@ -1464,20 +1464,28 @@ BEGIN
   SELECT c.key::jsonb coordinate,c.value::bigint amount,'outgoing'::text direction FROM jsonb_each_text(outgoing_counts) c
   UNION ALL SELECT c.key::jsonb,c.value::bigint,'incoming'::text FROM jsonb_each_text(incoming_counts) c),
  violations AS (
-  SELECT 'final '||c.direction||' multiplicity failed' reason FROM actual_counts c
-   JOIN live_nodes n ON n.reference=c.coordinate->>1
+  SELECT n.reference,n.type_id,r.document_id,r.module,r.rel_id,
+   CASE c.direction WHEN 'outgoing' THEN 'relationship.target_max' ELSE 'relationship.source_max' END AS rule
+   FROM actual_counts c JOIN live_nodes n ON n.reference=c.coordinate->>1
    JOIN truss.rel_def r ON r.rel_type_id=(c.coordinate->>0)::int AND r.retired_rev IS NULL
    WHERE c.amount>CASE c.direction WHEN 'outgoing' THEN r.target_max ELSE r.source_max END
   UNION ALL
-  SELECT 'final outgoing multiplicity failed' FROM live_nodes n JOIN truss.rel_endpoint e ON e.source_type=n.type_id
+  SELECT n.reference,n.type_id,r.document_id,r.module,r.rel_id,'relationship.target_min'
+   FROM live_nodes n JOIN truss.rel_endpoint e ON e.source_type=n.type_id
    JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL AND r.target_min>0
     AND coalesce((outgoing_counts->>jsonb_build_array(r.rel_type_id::text,n.reference)::text)::bigint,0)<r.target_min
   UNION ALL
-  SELECT 'final incoming multiplicity failed' FROM live_nodes n JOIN truss.rel_endpoint e ON e.target_type=n.type_id
+  SELECT n.reference,n.type_id,r.document_id,r.module,r.rel_id,'relationship.source_min'
+   FROM live_nodes n JOIN truss.rel_endpoint e ON e.target_type=n.type_id
    JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL AND r.source_min>0
     AND coalesce((incoming_counts->>jsonb_build_array(r.rel_type_id::text,n.reference)::text)::bigint,0)<r.source_min)
- SELECT reason INTO multiplicity_failure FROM violations LIMIT 1;
- IF FOUND THEN RAISE EXCEPTION '%',multiplicity_failure USING ERRCODE='P1005';END IF;
+ SELECT jsonb_build_object('rule',v.rule,
+  'entity',CASE WHEN nodes->v.reference->'identity'->>'id' IS NULL
+   THEN jsonb_build_object('kind','new_object','creationOperationIndex',nodes->v.reference->>'createIndex','typeId',v.type_id::text)
+   ELSE jsonb_build_object('kind','object','id',nodes->v.reference->'identity'->>'id','typeId',v.type_id::text) END,
+  'relationship',jsonb_build_object('documentId',v.document_id,'moduleId',v.module,'relationshipId',v.rel_id))
+ INTO multiplicity_failure FROM violations v ORDER BY v.reference COLLATE "C",v.document_id COLLATE "C",v.module COLLATE "C",v.rel_id COLLATE "C",v.rule COLLATE "C" LIMIT 1;
+ IF FOUND THEN RAISE EXCEPTION 'final relationship multiplicity failed' USING ERRCODE='P1405',DETAIL=multiplicity_failure::text;END IF;
  END IF;
  plan:=jsonb_build_object('profile','truss-owned-group-plan/0.1','catalogRevision',revision,
   'initialScope',scope,'operations',to_jsonb(plans),'aliases',aliases);
@@ -1530,7 +1538,7 @@ BEGIN
   value->'definition'->>'module' module_id FROM jsonb_each(locked->'boundary')) distinct_owners
   ORDER BY document_id COLLATE "C",module_id COLLATE "C" LOOP
   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-   RAISE EXCEPTION 'current outside endpoint reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current outside endpoint reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Implicit descendant values and zero-edge multiplicity checks require the
  -- same original readers as explicit operations, before graph exclusion.
@@ -1549,18 +1557,18 @@ BEGIN
     ORDER BY (value->>'typeDefinitionPin') COLLATE "C",ordinal) creations
  ) affected_types ORDER BY type_id LOOP
   IF truss.runtime_object_values_readable_qualified(selected_type,current_actor) IS NOT TRUE THEN
-   RAISE EXCEPTION 'complete affected property and item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete affected property and item readers required' USING ERRCODE='P1403';END IF;
   FOR relation IN WITH selected_relations AS MATERIALIZED (
    SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_type OR target_type=selected_type)
    SELECT r.* FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
    WHERE r.retired_rev IS NULL ORDER BY r.rel_type_id LOOP
    IF relation.source_min=0 AND relation.source_max IS NULL AND relation.target_min=0 AND relation.target_max IS NULL THEN CONTINUE;END IF;
    IF NOT truss.runtime_can_read_qualified(relation.document_id,relation.module,current_actor) THEN
-    RAISE EXCEPTION 'counted relationship reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'counted relationship reader required' USING ERRCODE='P1403';END IF;
    FOR endpoint_owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e
     JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE e.rel_type_id=relation.rel_type_id LOOP
     IF NOT truss.runtime_can_read_qualified(endpoint_owner.document_id,endpoint_owner.module,current_actor) THEN
-     RAISE EXCEPTION 'counted relationship endpoint reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'counted relationship endpoint reader required' USING ERRCODE='P1403';END IF;
    END LOOP;
   END LOOP;
  END LOOP;
@@ -1785,7 +1793,7 @@ BEGIN
   desired->'source',desired->'target',prior->'source',prior->'target')) WHERE value<>'null'::jsonb LOOP
   endpoint_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,endpoint_reference,'object',plan,attempt);
   IF NOT truss.runtime_can_read_qualified(endpoint_identity->'owner'->>'documentId',endpoint_identity->'owner'->>'moduleId',current_actor) THEN
-   RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  new_key:=truss.runtime_edge_business_key(relation.rel_type_id,source_identity,target_identity);
  PERFORM truss.runtime_lock_edge_business_key(new_key);
@@ -1919,7 +1927,7 @@ BEGIN
  IF authorize_read THEN
   FOR context IN SELECT value FROM jsonb_array_elements(jsonb_build_array(before_context->'source',before_context->'target',after_context->'source',after_context->'target')) WHERE value<>'null'::jsonb LOOP
    IF NOT truss.runtime_can_read_qualified(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId',current_actor) THEN
-    RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='P1403';END IF;
    PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',context->'identity','catalogRevision',plan->>'catalogRevision','ownership',context->'ownership'),current_actor);
   END LOOP;
  END IF;
@@ -1964,7 +1972,7 @@ BEGIN
   RAISE EXCEPTION 'original primary or affected descendant required' USING ERRCODE='55000';END IF;
  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,attempt);
  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
- IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=(identity->>'typeId')::int FOR UPDATE NOWAIT;
  old_image:=to_jsonb(object_row);
  IF old_image->>'ver' IS DISTINCT FROM prior->'image'->>'ver' THEN
@@ -2042,7 +2050,7 @@ BEGIN
  VALUES(selected_attempt,selected_index,attempt.writer_xid,object_row.id,object_row.type_id,old_image,new_image,keys,journals);
  current_actor:=truss.runtime_person(false);
  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
- IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current final property/item readers required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current final property/item readers required' USING ERRCODE='P1403';END IF;
  IF mode='update_object' THEN RETURN jsonb_build_object('outcome','changed','operation','update_object','identity',identity,'version',version::text,'events',event_refs);END IF;
  RETURN jsonb_build_object('outcome','deleted','operation','delete_object','identity',identity,'deletionVersion',version::text,
   'deleted',jsonb_build_array(jsonb_build_object('identity',identity,'deletionVersion',version::text)),'events',event_refs);
@@ -2473,7 +2481,7 @@ BEGIN
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
  ELSE
   PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',qualified_actor);
-  IF NOT truss.runtime_object_values_readable_qualified(transition.type_id,qualified_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified(transition.type_id,qualified_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='P1403';END IF;
   PERFORM truss.runtime_history_ownership_qualified(before_record,qualified_actor);
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership_qualified(after_record,qualified_actor);END IF;
  END IF;
@@ -2535,7 +2543,7 @@ BEGIN
   type_pin:=pin.definition_pin;
   PERFORM truss.runtime_module_writer_qualified(pin.document_id,pin.module_id,actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type,actor) THEN
-   RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='P1403';END IF;
   SELECT s.metadata INTO STRICT metadata FROM truss.runtime_type_schema s
    WHERE s.rev=head_revision AND s.type_id=selected_type;
   IF metadata->>'typeId' IS DISTINCT FROM selected_type::text
@@ -2717,7 +2725,7 @@ BEGIN
   WHERE x.attempt_id=attempt.id LOOP
   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,actor);
   IF NOT truss.runtime_object_values_readable_qualified(owner.type_id,actor) THEN
-   RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current original property readers required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- The producer counted every reservation and transition write before sealing
  -- them. Settlement keeps freshness, effect inventory and current distinct
@@ -2944,7 +2952,7 @@ BEGIN
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected_type,NULL,image_revision);type_pin:=pin.definition_pin;
   PERFORM truss.runtime_module_writer_qualified(pin.document_id,pin.module_id,actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type,actor) THEN
-   RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='P1403';END IF;
   SELECT metadata-'propertyAccess' INTO STRICT history_basis FROM truss.runtime_type_schema
    WHERE rev=image_revision AND type_id=selected_type;
   map_count:=cardinality(dictionary_keys)+1;
@@ -3235,7 +3243,7 @@ BEGIN
   UNION ALL SELECT d.document_id,d.module FROM jsonb_each(initial_scope->'edges') e JOIN truss.rel_def d ON d.rel_type_id=(e.value->>'rel_type_id')::int
  ) observed_readers LOOP
   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-   RAISE EXCEPTION 'current boundary reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current boundary reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Executed object types (including no-ops) use the compiled dependency
  -- union once per revision/type, rather than one authorization program per row.
@@ -3249,7 +3257,7 @@ BEGIN
   CROSS JOIN LATERAL jsonb_array_elements(s.value_readers) r
  LOOP
   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-   RAISE EXCEPTION 'current executed property/item reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current executed property/item reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Check historical property/item dependencies from actual captured images,
  -- including no-op sources, without reconstructing any history payload.
@@ -3274,12 +3282,12 @@ BEGIN
   IF EXISTS(SELECT 1 FROM unnest(source_cut.present_names) p(name)
    WHERE (history_basis->'propertyAccess') ? p.name
     AND history_basis->'propertyAccess'->p.name->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
-   RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='P1403';END IF;
   FOR owner IN SELECT DISTINCT r.value->>'documentId' document_id,r.value->>'moduleId' module_id
    FROM unnest(source_cut.present_names) p(name)
    CROSS JOIN LATERAL jsonb_array_elements(history_basis->'propertyAccess'->p.name->'readers') r LOOP
    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-    RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
  -- Root identity authorization is independent of reading an endpoint's type.
@@ -3292,7 +3300,7 @@ BEGIN
  LOOP
   SELECT document_id,module AS module_id INTO STRICT owner FROM truss.type_def WHERE type_id=root_type;
   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-   RAISE EXCEPTION 'current captured root reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current captured root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_edge_authorize(selected_attempt);
 END;
@@ -3346,7 +3354,7 @@ BEGIN
   OR root->'owner' IS DISTINCT FROM jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id) THEN
   RAISE EXCEPTION 'original aggregate root interpretation required' USING ERRCODE='55000';END IF;
  IF NOT truss.runtime_can_read_qualified(pin.document_id,pin.module_id,qualified_actor) THEN
-  RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='P1403';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_ownership_qualified(jsonb,oid) FROM PUBLIC;

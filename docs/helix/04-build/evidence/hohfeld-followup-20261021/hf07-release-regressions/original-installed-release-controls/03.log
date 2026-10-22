@@ -1,0 +1,93 @@
+test_non_tuple_preconditions_are_typed_input_refusals_before_host_access (test_group_runtime_bounds.GroupRuntimeBoundsTests.test_non_tuple_preconditions_are_typed_input_refusals_before_host_access) ... ok
+test_catalog_and_group_admission_refusals_are_typed (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_catalog_and_group_admission_refusals_are_typed) ... ERROR
+test_direct_object_key_and_edge_reads_return_typed_refusal (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_direct_object_key_and_edge_reads_return_typed_refusal) ... FAIL
+test_only_contained_authorization_refusals_are_translated (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_only_contained_authorization_refusals_are_translated) ... ok
+test_owned_edge_builder_returns_safe_outer_refusal_without_dereference (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_owned_edge_builder_returns_safe_outer_refusal_without_dereference) ... FAIL
+test_nonmember_admission_is_typed_for_live_and_missing_selections (test_catalog_admission_outcomes.NativeCatalogAdmissionTests.test_nonmember_admission_is_typed_for_live_and_missing_selections) ... ok
+test_all_failures_keep_ids_reasons_and_no_group_effects (test_group_preconditions_native.GroupPreconditionTests.test_all_failures_keep_ids_reasons_and_no_group_effects) ... ok
+test_legacy_precondition_128_accepts_and_129_refuses (test_group_preconditions_native.GroupPreconditionTests.test_legacy_precondition_128_accepts_and_129_refuses)
+@covers US-040-AC1 / @covers US-040-AC2: legacy inventory retains its 128 limit. ... ok
+test_middle_false_condition_and_duplicate_ids_leave_prestate_unchanged (test_group_preconditions_native.GroupPreconditionTests.test_middle_false_condition_and_duplicate_ids_leave_prestate_unchanged)
+@covers US-040-AC2: condition failure and invalid IDs preserve pre-state. ... ok
+test_owned_153_preconditions_accept_51_objects_times_three (test_group_preconditions_native.GroupPreconditionTests.test_owned_153_preconditions_accept_51_objects_times_three)
+@covers US-040-AC1 / @covers US-040-AC2: bounded condition batches commit atomically. ... ok
+test_owned_3072_mixed_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_mixed_preconditions_succeed)
+@covers US-040-AC1: mixed predicates cover the full owned condition ceiling. ... ok
+test_owned_3072_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_preconditions_succeed)
+@covers US-040-AC1: the full owned condition ceiling is accepted. ... ok
+test_owned_precondition_ceiling_plus_one_refuses_in_native (test_group_preconditions_native.GroupPreconditionTests.test_owned_precondition_ceiling_plus_one_refuses_in_native)
+@covers US-040-AC2: over-ceiling input refuses without group effects. ... ok
+test_success_replay_and_explicit_invalid_unauthorized (test_group_preconditions_native.GroupPreconditionTests.test_success_replay_and_explicit_invalid_unauthorized) ... ok
+test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint)
+@covers US-040-AC2: final multiplicity failures omit operation attribution. ... ok
+test_batched_key_conflicts_report_original_first_middle_last_ordinals (test_group_create_native.PublicCreateGroupTests.test_batched_key_conflicts_report_original_first_middle_last_ordinals)
+@covers US-040-AC2: batch conflicts report original ordinals and leave no effects. ... ok
+test_changed_request_origin_and_none_has_no_cache (test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache) ... ok
+test_committed_deleted_key_reservation_still_conflicts (test_group_create_native.PublicCreateGroupTests.test_committed_deleted_key_reservation_still_conflicts)
+@covers US-040-AC2: committed tombstone reservations block key reuse atomically. ... ok
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+test_create_preserves_absence_null_and_empty_retained_storage (test_group_create_native.PublicCreateGroupTests.test_create_preserves_absence_null_and_empty_retained_storage) ... ok
+test_current_writer_revocation_refuses_replay (test_group_create_native.PublicCreateGroupTests.test_current_writer_revocation_refuses_replay) ... ok
+test_genuine_type_reference_and_profile_definitions (test_group_create_native.PublicCreateGroupTests.test_genuine_type_reference_and_profile_definitions) ... ok
+test_group_failure_and_rollback_preserve_caller_work (test_group_create_native.PublicCreateGroupTests.test_group_failure_and_rollback_preserve_caller_work) ... ok
+test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal)
+@covers US-040-AC2: a tombstoned batch key retains its original ordinal. ... ok
+test_multiple_reserved_conflicts_report_earliest_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_multiple_reserved_conflicts_report_earliest_original_ordinal)
+@covers US-040-AC2: simultaneous key conflicts choose the earliest ordinal. ... ok
+test_native_late_journal_and_receipt_failures_are_atomic (test_group_create_native.PublicCreateGroupTests.test_native_late_journal_and_receipt_failures_are_atomic) ... ok
+test_native_retry_states_reach_host_without_internal_retry (test_group_create_native.PublicCreateGroupTests.test_native_retry_states_reach_host_without_internal_retry) ... ok
+test_noinherit_set_role_raw_privilege_is_refused_after_reset (test_group_create_native.PublicCreateGroupTests.test_noinherit_set_role_raw_privilege_is_refused_after_reset) ... ok
+test_raw_facade_rejects_missing_values_and_duplicate_json (test_group_create_native.PublicCreateGroupTests.test_raw_facade_rejects_missing_values_and_duplicate_json) ... ok
+test_reader_and_asserted_actor_cannot_authorize_first_create (test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create) ... ok
+test_repeated_create_pins_preserve_mixed_type_order_and_values (test_group_create_native.PublicCreateGroupTests.test_repeated_create_pins_preserve_mixed_type_order_and_values) ... ok
+test_selected_group_provider_is_callable_and_disposal_closes_it (test_group_create_native.PublicCreateGroupTests.test_selected_group_provider_is_callable_and_disposal_closes_it) ... ok
+test_create_lookup_commit_readonly_primary_and_alternate_keys (test_key_lookup_native.KeyLookupTests.test_create_lookup_commit_readonly_primary_and_alternate_keys) ... ok
+test_duplicate_exact_membership_is_integrity_refusal (test_key_lookup_native.KeyLookupTests.test_duplicate_exact_membership_is_integrity_refusal) ... ok
+test_unreadable_key_field_owner_does_not_expose_source_equality (test_key_lookup_native.KeyLookupTests.test_unreadable_key_field_owner_does_not_expose_source_equality) ... ok
+test_absent_null_and_empty_values_remain_distinct (test_object_read_native.PublicObjectReadTests.test_absent_null_and_empty_values_remain_distinct) ... ok
+test_hidden_missing_and_wrong_document_share_not_found (test_object_read_native.PublicObjectReadTests.test_hidden_missing_and_wrong_document_share_not_found) ... ok
+test_invalid_and_budget_refusal_preserve_prior_host_work (test_object_read_native.PublicObjectReadTests.test_invalid_and_budget_refusal_preserve_prior_host_work) ... ok
+test_malformed_unknown_and_unsupported_cells_are_not_omitted (test_object_read_native.PublicObjectReadTests.test_malformed_unknown_and_unsupported_cells_are_not_omitted) ... ok
+test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) ... ok
+test_ordinary_reader_complete_values_without_registrar_or_raw_rights (test_object_read_native.PublicObjectReadTests.test_ordinary_reader_complete_values_without_registrar_or_raw_rights) ... ok
+test_selected_release_and_fixed_snapshot_refuse (test_object_read_native.PublicObjectReadTests.test_selected_release_and_fixed_snapshot_refuse) ... ok
+test_unsafe_session_and_raw_rights_are_execution_errors (test_object_read_native.PublicObjectReadTests.test_unsafe_session_and_raw_rights_are_execution_errors) ... ok
+test_wrong_revision_and_nonrepresentable_timestamps_refuse (test_object_read_native.PublicObjectReadTests.test_wrong_revision_and_nonrepresentable_timestamps_refuse) ... ok
+test_committed_readonly_pages_use_last_returned_id_and_end (test_object_pages_native.ObjectPageTests.test_committed_readonly_pages_use_last_returned_id_and_end) ... ok
+test_cursor_context_limits_and_catalog_advance_refuse (test_object_pages_native.ObjectPageTests.test_cursor_context_limits_and_catalog_advance_refuse) ... ok
+test_exact_values_and_whole_page_byte_limit (test_object_pages_native.ObjectPageTests.test_exact_values_and_whole_page_byte_limit) ... ok
+test_revocation_after_buffered_page_does_not_publish (test_object_pages_native.ObjectPageTests.test_revocation_after_buffered_page_does_not_publish) ... ok
+test_exact_pages_and_readonly_continuation (test_typed_query_pages_native.TypedQueryPagesTests.test_exact_pages_and_readonly_continuation) ... ok
+test_existing_string_primary_key_page_facade (test_typed_query_pages_native.StringQueryPagesTests.test_existing_string_primary_key_page_facade) ... ok
+test_create_commit_and_public_reads_in_actual_read_only_transaction (test_read_only_public_native.ReadOnlyPublicTests.test_create_commit_and_public_reads_in_actual_read_only_transaction) ... ok
+test_policy_replaced_while_object_buffered_uses_current_roles (test_read_only_public_native.ReadOnlyPublicTests.test_policy_replaced_while_object_buffered_uses_current_roles) ... ok
+
+======================================================================
+ERROR: test_catalog_and_group_admission_refusals_are_typed (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_catalog_and_group_admission_refusals_are_typed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_admission_outcomes.py", line 42, in test_catalog_and_group_admission_refusals_are_typed
+    self.assertIsInstance(assembly.group_context_in_transaction(None).value, UnauthorizedPerson)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+======================================================================
+FAIL: test_direct_object_key_and_edge_reads_return_typed_refusal (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_direct_object_key_and_edge_reads_return_typed_refusal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_admission_outcomes.py", line 57, in test_direct_object_key_and_edge_reads_return_typed_refusal
+    self.assertIsInstance(key, Ok)
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='denied', retry_scope='none', sql_state='42501', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'>
+
+======================================================================
+FAIL: test_owned_edge_builder_returns_safe_outer_refusal_without_dereference (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_owned_edge_builder_returns_safe_outer_refusal_without_dereference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_admission_outcomes.py", line 73, in test_owned_edge_builder_returns_safe_outer_refusal_without_dereference
+    self.assertEqual(result.error.sql_state, '42501')
+AssertionError: None != '42501'
+
+----------------------------------------------------------------------
+Ran 52 tests in 97.439s
+
+FAILED (failures=2, errors=1)

@@ -1,0 +1,21 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47",
+  "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+  "publicWheelSha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+  "nativeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "loadedPackage": "/private/tmp/truss-public-047-clean-venv/lib/python3.11/site-packages/truss/__init__.py",
+  "originalScope": "HF-01 public-artifact observation; probe execution is distinct from desired behavioral outcome",
+  "testsExecuted": 12,
+  "observations": 31,
+  "desiredOutcomesNotSatisfied": [
+    "damaged-grant.group-context",
+    "multiplicity.group-minimum",
+    "nonmember.batch-import",
+    "nonmember.import-build",
+    "nonmember.import-context",
+    "nonmember.legacy-import",
+    "required-ddd.empty"
+  ],
+  "probeExecutionPassed": true,
+  "skipped": 0
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "Clean installed local macOS ARM64 candidate, PostgreSQL18.6/UMF0.10/Weft0.4.51; hosted Linux and public artifacts remain separate",
+  "migrationGate": {
+    "tests": 80,
+    "skipped": 0,
+    "seconds": 133.713
+  },
+  "independentCorpus": {
+    "tests": 60,
+    "skipped": 0,
+    "seconds": 138.515,
+    "archiveSha256": "041883dfbe1d20c02c35a6d0329c2d17745bb9f140f9107738774d2db97c4ddf"
+  },
+  "wheel": {
+    "filename": "truss_toolkit-0.0.48-py3-none-any.whl",
+    "sha256": "8efca204b3396dd015fda9c7728a00ed4f5aef20c42aab8f43a7aa4077b01abe"
+  },
+  "nativeManifestSha256": "2f230a44571ceb5c6ea04d86770cfd3cd3adcf18a09c5f658d644d74e01ec9fb",
+  "migrationManifestSha256": "a7459cd2398e6735dba1abeabb0c84ab98c887cabaf4f0d5eb3c60627550f990",
+  "files": {
+    "truss-048-audit-install.log": "7e59a2063ccfc5e32d9150e7875e6307581c92083d91870c0e4683d17eb55050",
+    "truss-048-audit-conformance.log": "816ee82b9810cddb70c1fd64dafbcdc5751739a76f5cf4381ba00ccb2aa1d1c7",
+    "source46-original-evidence.json": "41d2df29f3645daa55034b237322549409ecf468777416468bc95154d3f8b9d9",
+    "qualification.json": "8381f69883dee4c1a5d8de4e832b778c883b81f3170c1accb7d1aa7ed652fe54",
+    "truss-048-audit-final-build.log": "3fc37f9d7b15fe03976d460deef02fb9b906b740ef308666b47b325962332247",
+    "source46-native-inventory.json": "2885dab7aad39de0032ef34338df086204e7892fd80ba99844e5f2c91ce8b198",
+    "source47-original-evidence.json": "7472677ceb92b92bc766699aae45f443523e000948e5aa09fe64f91b557e07cf",
+    "source44-original-evidence.json": "1caccf3133be12c72c9791da67921ea881aafefe6f9504f026766137c15a9bb2",
+    "source44-native-inventory.json": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
+    "truss-048-audit-migration-gate.log": "38a90109257771dbf3299c953ff7c413d5bcbcea3ae981210b00d1a7a96362a7",
+    "source47-native-inventory.json": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92",
+    "truss-048-audit-conformance-qualification.json": "5cae085ce17e2cb7dc6f8ee740f32b15069499837b15a6e70b2845f2cf37666e",
+    "truss-048-audit-protection.log": "7c6df10408d8278c7121caaaf8d93b27f032a0e40118a88b3616330361a2f3e4",
+    "truss-048-audit-disclosure.log": "8eca2c22bc08c6b06264290b504d7407104c285a4b8b803ad15df4aeaf43b230"
+  },
+  "protectedBoundary": {
+    "passed": true,
+    "tests": 9,
+    "skipped": 0,
+    "seconds": 53.467,
+    "command": "TRUSS_DISCLOSURE_NATIVE_QUALIFICATION=1 python -m unittest test_current_disclosure_runtime_native -v",
+    "scope": "Five selected disclosure controls plus four inherited original protected-query controls; no new graph/SCRAM/context qualification",
+    "originalInvocationError": "Earlier misspelled test_current_disclosure_native module failed discovery after four query passes; original log retained"
+  }
+}

@@ -4,7 +4,7 @@ import json
 from hashlib import sha256
 from time import monotonic
 from psycopg import sql
-from ._migration_verify import verify,verify_artifact,verify_profile,preservation,canonical,acl,require_preserved_initialization
+from ._migration_verify import verify,verify_artifact,verify_profile,preservation,canonical,acl,require_preserved_initialization,profile_for
 
 
 class MigrationCursor:
@@ -51,12 +51,12 @@ def receipt(cursor,attempt_id):
 
 def execute(cursor,request,manifest,artifacts,recipe_digest,max_bytes,route):
     exclude(cursor)
-    source=json.loads(artifacts[request['source']+'.json'])
+    source=profile_for(manifest,artifacts,request['source'])
     ctx,source=verify_artifact(cursor,source)
     verify_profile(cursor,source)
     if ctx!=request['context']:raise ValueError('Original installation context changed')
     before=preservation(cursor,source['inventory'],max_bytes)
-    old_acl=acl(cursor)
+    old_acl=acl(cursor,full_names=True)
     ordered=[];recipes=[]
     def submit(statement,kind):
         original=statement if isinstance(statement,str) else statement.as_string(cursor)
@@ -77,7 +77,7 @@ def execute(cursor,request,manifest,artifacts,recipe_digest,max_bytes,route):
         for (role,) in cursor.fetchall():
             for signature in recipe['moduleGrants']:
                 submit(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),'module_grant')
-        intermediate=json.loads(artifacts[edge['target']+'.json'])
+        intermediate=profile_for(manifest,artifacts,edge['target'])
         verify_artifact(cursor,intermediate)
     # All predecessor tables/sequences, including immutable genesis, remain exact.
     after=preservation(cursor,source['inventory'],max_bytes)
@@ -85,11 +85,11 @@ def execute(cursor,request,manifest,artifacts,recipe_digest,max_bytes,route):
     # Each immutable edge declares its exact target privilege profile. Obsolete
     # facades may be retired by a future reviewed edge; preserving old runtime
     # grants forever would violate latest-only support. Retain both observations.
-    target=json.loads(artifacts[manifest['target']+'.json'])
+    target=profile_for(manifest,artifacts,manifest['target'])
     _,target=verify_artifact(cursor,target)
     require_preserved_initialization(source,target)
     cursor.execute('INSERT INTO truss.runtime_migration_receipt(attempt_id,request_bytes,request_sha256,source_sha256,target_sha256,target_release,target_layout_profile,target_configuration,recipe_sha256,recipe_bytes,source_inventory_bytes,target_inventory_bytes,step_evidence_bytes,preservation_bytes) VALUES(%s,%s,encode(sha256(%s),\'hex\'),%s,%s,%s,%s::jsonb,%s::jsonb,%s,%s,%s,%s,%s,%s)',
-        (request['attemptId'],canonical(request),canonical(request),request['source'],manifest['target'],manifest['targetRelease'],json.dumps(target['manifest']['layoutProfile']),json.dumps(target['configuration']),recipe_digest,canonical(recipes),canonical(source),canonical(target),canonical({'steps':ordered,'sourceAcl':old_acl,'targetAcl':acl(cursor)}),canonical(before)),prepare=False)
+        (request['attemptId'],canonical(request),canonical(request),request['source'],manifest['target'],manifest['targetRelease'],json.dumps(target['manifest']['layoutProfile']),json.dumps(target['configuration']),recipe_digest,canonical(recipes),canonical(source),canonical(target),canonical({'steps':ordered,'sourceAcl':old_acl,'targetAcl':acl(cursor,full_names=True)}),canonical(before)),prepare=False)
     if active(cursor)!=(manifest['targetRelease'],manifest['target']):raise ValueError('Atomic target publication failed')
     verify_profile(cursor,target)
     return before

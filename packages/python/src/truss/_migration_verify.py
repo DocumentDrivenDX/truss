@@ -110,20 +110,21 @@ def verify_profile(cursor,expected):
 
 
 _ACL = """WITH objects AS (
- SELECT 'schema' AS kind,'truss' AS name,nspowner AS owner,nspacl AS acl,'n'::\"char\" AS code FROM pg_namespace WHERE nspname='truss'
- UNION ALL SELECT 'relation',c.relname,c.relowner,c.relacl,CASE WHEN c.relkind='S' THEN 's' ELSE 'r' END::\"char\"
+ SELECT 'schema' AS kind,'truss'::text AS name,nspowner AS owner,nspacl AS acl,'n'::\"char\" AS code FROM pg_namespace WHERE nspname='truss'
+ UNION ALL SELECT 'relation',c.relname::text,c.relowner,c.relacl,CASE WHEN c.relkind='S' THEN 's' ELSE 'r' END::\"char\"
  FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND c.relkind NOT IN ('i','I')
  UNION ALL SELECT 'routine',p.proname||'('||oidvectortypes(p.proargtypes)||')',p.proowner,p.proacl,'f'::\"char\"
  FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'
- UNION ALL SELECT 'type',t.typname,t.typowner,t.typacl,'T'::\"char\" FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
+ UNION ALL SELECT 'type',t.typname::text,t.typowner,t.typacl,'T'::\"char\" FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
  WHERE n.nspname='truss')
  SELECT o.kind,o.name,o.owner,a.grantee,a.privilege_type,a.is_grantable,a.grantor FROM objects o
  CROSS JOIN LATERAL aclexplode(coalesce(o.acl,acldefault(o.code,o.owner))) a
  ORDER BY o.kind,o.name,a.grantee,a.privilege_type"""
 
 
-def acl(cursor):
-    cursor.execute(_ACL,prepare=False)
+def acl(cursor,*,full_names=False):
+    query=_ACL if full_names else _ACL.replace('SELECT o.kind,o.name,o.owner','SELECT o.kind,o.name::name::text,o.owner')
+    cursor.execute(query,prepare=False)
     return [list(row) for row in cursor.fetchall()]
 
 
@@ -146,7 +147,7 @@ def roles(cursor,owner,registrar):
     return result
 
 
-def verify(cursor,expected,acl_profiles):
+def verify(cursor,expected,acl_profiles,*,full_names=False):
     if structure(cursor)!=expected:raise ValueError('Installed native definitions drifted')
     ctx,owner,registrar=context(cursor)
     cursor.execute("SELECT nspowner FROM pg_namespace WHERE nspname='truss'",prepare=False)
@@ -162,7 +163,7 @@ def verify(cursor,expected,acl_profiles):
             FROM memberships m JOIN pg_roles r ON r.oid=m.oid""",(oid,owner,registrar),prepare=False)
         if cursor.fetchone()!=(False,):raise ValueError('Unsafe module/feed/audit role membership')
     actual={oid:set() for oid in mapping}
-    for kind,name,objowner,grantee,priv,grantable,grantor in acl(cursor):
+    for kind,name,objowner,grantee,priv,grantable,grantor in acl(cursor,full_names=full_names):
         if objowner!=owner or grantee not in mapping or grantor not in (owner,grantee):
             raise ValueError('Unexpected native owner or grant: '+kind+' '+name)
         actual[grantee].add((kind,name,priv,grantable))
@@ -210,17 +211,29 @@ def verify_artifact(cursor,profile):
     observed=structure(cursor)
     if not matches_inventory(observed,profile):raise ValueError('Installed native definitions drifted')
     selected={**profile,'inventory':observed}
-    return verify(cursor,observed,profile['acl']),selected
+    return verify(cursor,observed,profile['acl'],full_names=profile.get('aclNameProfile')=='truss-native-acl-names/0.2'),selected
+
+
+def profile_for(manifest,artifacts,digest):
+    """Original immutable profile plus separately pinned exact ACL admission evidence."""
+    profile=json.loads(artifacts[digest+'.json'])
+    supplement=manifest.get('exactAclProfiles',{}).get(digest)
+    if supplement is not None:
+        selected=json.loads(artifacts[supplement])
+        if selected['runtimeManifestSha256']!=digest or selected['aclNameProfile']!='truss-native-acl-names/0.2':
+            raise ValueError('Original exact ACL profile correspondence required')
+        profile={**profile,'acl':selected['acl'],'aclNameProfile':selected['aclNameProfile']}
+    return profile
 
 
 def installed_profile(cursor,manifest,artifacts):
     """Classify catalog definitions before calling any installation routine."""
     observed=structure(cursor)
     for digest in [manifest['target'],*manifest['sources']]:
-        expected=json.loads(artifacts[digest+'.json'])
+        expected=profile_for(manifest,artifacts,digest)
         if matches_inventory(observed,expected):
             selected={**expected,'inventory':observed}
-            ctx=verify(cursor,observed,expected['acl'])
+            ctx=verify(cursor,observed,expected['acl'],full_names=expected.get('aclNameProfile')=='truss-native-acl-names/0.2')
             verify_profile(cursor,selected)
             return ctx,selected
     raise ValueError('Installed native definitions drifted or source unsupported')

@@ -37,7 +37,7 @@ class CatalogAdmissionOutcomeTests(unittest.TestCase):
         return assembly
 
     def test_catalog_and_group_admission_refusals_are_typed(self):
-        denied = Error(ExecutionFailure('execution_obligation', 'denied', sql_state='42501'))
+        denied = Error(ExecutionFailure('execution_obligation', 'denied', sql_state='P1403'))
         assembly = self.assembly(denied)
         self.assertIsInstance(assembly.group_context_in_transaction(None).value, UnauthorizedPerson)
         self.assertIsInstance(assembly.catalog_revision_in_transaction(None).value, CatalogRefused)
@@ -48,7 +48,7 @@ class CatalogAdmissionOutcomeTests(unittest.TestCase):
             None, document_id='d', module_id='m', relationship_id='rel').value, CatalogRefused)
 
     def test_direct_object_key_and_edge_reads_return_typed_refusal(self):
-        denied = Error(ExecutionFailure('execution_obligation', 'denied', sql_state='42501'))
+        denied = Error(ExecutionFailure('execution_obligation', 'denied', sql_state='P1403'))
         assembly = self.assembly(denied)
         key = assembly.lookup_key_in_transaction(None, document_id='d', module_id='m',
             record_id='r', key_id='k', values=('v',))
@@ -70,7 +70,7 @@ class CatalogAdmissionOutcomeTests(unittest.TestCase):
                 source_endpoint=object(), target_endpoint=object(), values=(), order_key=object())
         self.assertIsInstance(result, Error)
         self.assertEqual(result.error.code, 'execution_obligation')
-        self.assertEqual(result.error.sql_state, '42501')
+        self.assertIsNone(result.error.sql_state)
         self.assertEqual(result.error.catalog_code, 'unauthorized')
         self.assertNotIn('hidden-relationship-731', result.error.message)
 
@@ -84,6 +84,7 @@ class CatalogAdmissionOutcomeTests(unittest.TestCase):
 
     def test_only_contained_authorization_refusals_are_translated(self):
         for failure in (
+            Error(ExecutionFailure('execution_obligation', 'actual damaged grant', sql_state='42501')),
             Error(ExecutionFailure('execution_obligation', 'transport', sql_state='08006')),
             Error(ExecutionFailure('transaction_unusable', 'failed', sql_state='42501')),
         ):

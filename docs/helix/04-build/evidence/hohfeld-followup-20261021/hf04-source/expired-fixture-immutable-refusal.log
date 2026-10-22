@@ -1,0 +1,35 @@
+test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies) ... ERROR
+test_expired_header_does_not_disclose_retention_after_retained_writer_revocation (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_expired_header_does_not_disclose_retention_after_retained_writer_revocation) ... ERROR
+
+======================================================================
+ERROR: test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_request_recovery_native.py", line 206, in test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies
+    h.detach();c.commit();self.expire_header_fixture();before=self.group_effect_counts()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_request_recovery_native.py", line 197, in expire_header_fixture
+    self.admin.execute("UPDATE truss.request_receipt SET payload_state='expired',lifecycle_generation=1,"
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.ObjectNotInPrerequisiteState: immutable catalog source or result
+CONTEXT:  PL/pgSQL function truss.catalog_immutable() line 2 at RAISE
+
+======================================================================
+ERROR: test_expired_header_does_not_disclose_retention_after_retained_writer_revocation (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_expired_header_does_not_disclose_retention_after_retained_writer_revocation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_request_recovery_native.py", line 216, in test_expired_header_does_not_disclose_retention_after_retained_writer_revocation
+    h.detach();c.commit();self.expire_header_fixture()
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_request_recovery_native.py", line 197, in expire_header_fixture
+    self.admin.execute("UPDATE truss.request_receipt SET payload_state='expired',lifecycle_generation=1,"
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.ObjectNotInPrerequisiteState: immutable catalog source or result
+CONTEXT:  PL/pgSQL function truss.catalog_immutable() line 2 at RAISE
+
+----------------------------------------------------------------------
+Ran 2 tests in 6.050s
+
+FAILED (errors=2)

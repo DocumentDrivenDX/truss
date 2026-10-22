@@ -331,3 +331,15 @@ maintain old application runtimes or extend the tested subset/platform claims.
 The first real subsequent native edge must supply native skip-release-chain
 execution proof. This remains blocking when that edge exists; the first release
 does not fabricate a future native edge or claim that proof has already passed.
+
+### Subsequent-edge exact ACL identity gate — 2026-10-22
+
+Native comparison exposed PostgreSQL UNION type inference coercing routine ACL
+identities to63-byte `name` values. Long signatures could collide in the old
+set comparison. The next tool observes full text identities and binds separately
+captured full ACL evidence for every admitted original public-wheel profile.
+Published profiles and recipes stay byte-identical; a digest-bound supplementary
+admission profile strengthens verification without executing an old runtime.
+Require a native collision countercontrol that revokes exactly one overloaded
+signature and cannot pass by observing the sibling's grant. New target profiles
+and every intermediate edge are checked with the full identities.

@@ -67,18 +67,18 @@ BEGIN
   IF octet_length(objects::text)>maximum_bytes THEN RAISE EXCEPTION 'complete page byte limit exceeded' USING ERRCODE='54000';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
- IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RAISE EXCEPTION 'current page reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RAISE EXCEPTION 'current page reader required' USING ERRCODE='P1403';END IF;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN RAISE EXCEPTION 'catalog changed during page observation' USING ERRCODE='55P03';END IF;
  result:=convert_to(jsonb_build_object('profile','truss-python-object-page/0.1','catalogRevision',captured_revision,'objects',objects,'continuation',continuation)::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'complete page byte limit exceeded' USING ERRCODE='54000';END IF;
- IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current buffered page interpretation reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current buffered page interpretation reader required' USING ERRCODE='P1403';END IF;
  FOR object_value IN SELECT value FROM jsonb_array_elements(objects) LOOP
   IF object_value->>'profile'='truss-python-logical-object/0.1' AND NOT truss.runtime_can_read(
    object_value->'root'->'owner'->>'documentId',object_value->'root'->'owner'->>'moduleId') THEN
-   RAISE EXCEPTION 'current buffered aggregate root reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current buffered aggregate root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF lookahead_root_owner IS NOT NULL AND NOT truss.runtime_can_read(lookahead_root_owner->>'documentId',lookahead_root_owner->>'moduleId') THEN
-  RAISE EXCEPTION 'current lookahead aggregate root reader required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current lookahead aggregate root reader required' USING ERRCODE='P1403';END IF;
  RETURN result;
 END;
 $$;

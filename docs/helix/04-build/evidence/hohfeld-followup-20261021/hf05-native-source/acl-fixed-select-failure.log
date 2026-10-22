@@ -1,0 +1,14 @@
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... FAIL
+
+======================================================================
+FAIL: test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 56, in test_selected_source_and_ordered_seek_retain_native_refusals
+    with self.assertRaises(psycopg.Error) as raised:
+AssertionError: Error not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 4.697s
+
+FAILED (failures=1)

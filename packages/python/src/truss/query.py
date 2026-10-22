@@ -27,11 +27,30 @@ class QueryReadPosition:
     semantics: Literal['committed-lower-bound'] = field(default='committed-lower-bound', init=False)
 
 @dataclass(frozen=True, slots=True)
+class QueryColumnDescriptor:
+    """Original immutable compiler metadata; no row-sampled type inference."""
+    position: int
+    output_name: str
+    representation: Mapping[str, object]
+    source_identities: tuple[Mapping[str, object], ...]
+    sql_nullable: bool
+    logical_type: Mapping[str, object] | None
+    value_descriptor: Mapping[str, object] | None
+    type_graph: tuple[Mapping[str, object], ...]
+    original: Mapping[str, object]
+
+@dataclass(frozen=True, slots=True)
+class QueryEntityProjection:
+    facts: tuple[Literal['version','createdBy','createdAt','updatedBy','updatedAt','originalAuthor','originalAt','loadId'], ...] = ()
+    relationships: bool = False
+
+@dataclass(frozen=True, slots=True)
 class QueryRows:
     columns: tuple[str, ...]
     rows: tuple[tuple[QueryValue, ...], ...]
     catalog_revision: int
     as_of: QueryReadPosition | None = None
+    column_descriptors: tuple[QueryColumnDescriptor, ...] = ()
     outcome: Literal['rows'] = field(default='rows', init=False)
 
 @dataclass(frozen=True, slots=True)
@@ -79,6 +98,7 @@ class QueryPage:
     next_cursor: QueryPageCursor | None
     as_of: QueryReadPosition | None = None
     next_sort_values: tuple[QueryValue, ...] | None = None
+    column_descriptors: tuple[QueryColumnDescriptor, ...] = ()
     outcome: Literal['page'] = field(default='page', init=False)
 
 @dataclass(frozen=True, slots=True)

@@ -1,0 +1,17 @@
+test_capture_apply_legacy_and_batched_unknown_value_retention_and_facets (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_apply_legacy_and_batched_unknown_value_retention_and_facets) ... ok
+test_capture_batched_source_timestamp_refusal (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_batched_source_timestamp_refusal) ... ok
+test_capture_damaged_function_grant_separate_from_enrollment (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_damaged_function_grant_separate_from_enrollment) ... ok
+test_capture_import_maximum (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_import_maximum) ... ok
+test_capture_import_minimum_and_group_finalization (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_import_minimum_and_group_finalization) ... ok
+test_capture_nonmember_context_references_reads_groups_and_imports (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_nonmember_context_references_reads_groups_and_imports) ... ok
+test_capture_required_paired_ddd_addition_on_empty_record (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_required_paired_ddd_addition_on_empty_record) ... ok
+test_capture_required_paired_ddd_addition_on_populated_record (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_required_paired_ddd_addition_on_populated_record) ... ok
+test_capture_valid_owner_uuid_source_native_profile_refusal (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_capture_valid_owner_uuid_source_native_profile_refusal) ... ok
+test_nondefault_decimal_catalog_is_already_supported (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_nondefault_decimal_catalog_is_already_supported) ... ok
+test_selected_recursive_scalar_containers_are_already_supported (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_selected_recursive_scalar_containers_are_already_supported) ... ok
+test_single_field_key_first_middle_last_conflicts_name_actual_ordinal (test_hohfeld_disputes_native.HohfeldDisputesNativeTests.test_single_field_key_first_middle_last_conflicts_name_actual_ordinal) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 18.838s
+
+OK

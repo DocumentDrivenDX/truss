@@ -51,7 +51,7 @@ BEGIN
     SELECT count(*),jsonb_agg(v.value->'value')->0 INTO matches,cell FROM jsonb_array_elements(draft->'values') v WHERE v.value->>'name'=component->>'name';
     IF matches<>1 THEN RAISE EXCEPTION 'complete original primary values required' USING ERRCODE='22023';END IF;
     SELECT * INTO STRICT definition FROM truss.prop_def WHERE type_id=selected_type AND prop_id=(component->>'propertyId')::int AND retired_rev IS NULL;
-    IF NOT truss.runtime_can_read(draft->>'documentId',definition.declaration_module) THEN RAISE EXCEPTION 'current primary reader required' USING ERRCODE='42501';END IF;
+    IF NOT truss.runtime_can_read(draft->>'documentId',definition.declaration_module) THEN RAISE EXCEPTION 'current primary reader required' USING ERRCODE='P1403';END IF;
     components:=components||jsonb_build_array(jsonb_build_object('propertyId',component->>'propertyId','definitionPin',component->>'definitionPin','value',cell));
    END LOOP;
    identity:=jsonb_build_object('operation','object_key','type',metadata->'type','keyNumber',metadata->>'keyNumber',
@@ -77,9 +77,9 @@ BEGIN
  FOR draft IN SELECT DISTINCT ON (value->>'kind',value->>'documentId',value->>'moduleId',value->>'recordId',value->>'relationshipId') value FROM jsonb_array_elements(drafts) LOOP
   cache_key:=jsonb_build_array(draft->>'kind',draft->>'documentId',draft->>'moduleId',draft->>'recordId',draft->>'relationshipId')::text;
   IF draft->>'kind'='object' THEN
-   IF convert_from(truss.import_key_selection(draft->>'documentId',draft->>'moduleId',draft->>'recordId',expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM cache->cache_key THEN RAISE EXCEPTION 'original builder definition changed' USING ERRCODE='42501';END IF;
+   IF convert_from(truss.import_key_selection(draft->>'documentId',draft->>'moduleId',draft->>'recordId',expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM cache->cache_key THEN RAISE EXCEPTION 'original builder definition changed' USING ERRCODE='P1403';END IF;
   ELSE
-   IF convert_from(truss.group_relationship_reference(draft->>'documentId',draft->>'moduleId',draft->>'relationshipId',expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM cache->cache_key THEN RAISE EXCEPTION 'original relationship authority changed' USING ERRCODE='42501';END IF;
+   IF convert_from(truss.group_relationship_reference(draft->>'documentId',draft->>'moduleId',draft->>'relationshipId',expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM cache->cache_key THEN RAISE EXCEPTION 'original relationship authority changed' USING ERRCODE='P1403';END IF;
   END IF;
  END LOOP;
  RETURN convert_to(jsonb_build_object('context',context,'records',to_jsonb(records))::text,'UTF8');
@@ -229,7 +229,7 @@ BEGIN
      'outcome','created','identity',created->'identity','version',created->>'version','groupAttemptId',applied->>'attemptId'));
    END LOOP;
    original_records:=batch_records;outcomes:=batch_outcomes;batch_done:=true;
-  EXCEPTION WHEN SQLSTATE 'TRB01' OR SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE '42501' OR SQLSTATE '0A000' OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' THEN
+  EXCEPTION WHEN SQLSTATE 'TRB01' OR SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1403' OR SQLSTATE '0A000' OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' OR SQLSTATE 'P1405' THEN
    -- This entire block's database effects have rolled back. Nothing from the
    -- rejected group may enter the original-record/outcome/provenance report.
    batch_done:=false;
@@ -263,9 +263,9 @@ BEGIN
     PERFORM truss.import_record_source((applied->>'attemptId')::uuid,convert_to(record::text,'UTF8'),input->>'loadId');
     selected_outcome:=jsonb_build_object('inputIndex',selected.input_index::text,'outcome','created','identity',created->'identity','version',created->>'version','groupAttemptId',applied->>'attemptId');
    END IF;
-  EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE '42501' OR SQLSTATE '0A000' OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' THEN
+  EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1403' OR SQLSTATE '0A000' OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' OR SQLSTATE 'P1405' THEN
    GET STACKED DIAGNOSTICS state=RETURNED_SQLSTATE;
-   code:=coalesce(code,CASE state WHEN '22023' THEN 'invalid' WHEN '23505' THEN 'conflict' WHEN '42501' THEN 'unauthorized' WHEN '0A000' THEN 'unsupported_profile' WHEN 'P1004' THEN 'missing_endpoint' ELSE 'dependencies' END);
+   code:=coalesce(code,CASE state WHEN '22023' THEN 'invalid' WHEN '23505' THEN 'conflict' WHEN 'P1403' THEN 'unauthorized' WHEN '0A000' THEN 'unsupported_profile' WHEN 'P1004' THEN 'missing_endpoint' ELSE 'dependencies' END);
    selected_outcome:=jsonb_build_object('inputIndex',selected.input_index::text,'outcome','rejected','code',code);
   END;
   outcomes:=array_append(outcomes,selected_outcome);
@@ -274,7 +274,7 @@ BEGIN
  FOR selected IN SELECT r.value AS original,o.value AS result FROM unnest(original_records) r(value) JOIN unnest(outcomes) o(value) ON r.value->>'inputIndex'=o.value->>'inputIndex' LOOP
   IF selected.result->>'outcome' IN ('created','skipped') THEN PERFORM truss.import_report_record_authority(convert_to(jsonb_build_object('originalIdentity',selected.original->'record'->'identity','outcomeIdentity',selected.result->'identity')::text,'UTF8'),selected.original->'record'->>'kind',expected_release,expected_digest);END IF;
  END LOOP;
- IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original import context changed' USING ERRCODE='42501';END IF;
+ IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original import context changed' USING ERRCODE='P1403';END IF;
  input_digest:=encode(sha256(convert_to('truss-batched-import-input/0.1.0'||chr(10),'UTF8')||original_input),'hex');
  PERFORM truss.runtime_record_import_load(invocation_id,chunk_index,total_chunks,input->>'loadId',input->'assertedOrigin',input_digest,counted,input->'records',to_jsonb(original_records),to_jsonb(outcomes),expected_release,expected_digest);
  result:=jsonb_build_object('context',context,'outcomes',to_jsonb(outcomes),'hostTransactionId','truss-pending-transaction:'||(context->>'sourceEpoch')||':'||pg_current_xact_id()::text);
@@ -291,14 +291,14 @@ DECLARE input jsonb;outcomes jsonb;context jsonb;item jsonb;record jsonb;
 BEGIN
  IF octet_length(original_input)>8388608 OR octet_length(original_outcomes)>8388608 OR octet_length(original_context)>1048576 THEN RAISE EXCEPTION 'bounded original report required' USING ERRCODE='54000';END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;outcomes:=convert_from(original_outcomes,'UTF8')::jsonb;context:=convert_from(original_context,'UTF8')::jsonb;
- IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original report context required' USING ERRCODE='42501';END IF;
+ IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original report context required' USING ERRCODE='P1403';END IF;
  FOR item IN SELECT value FROM jsonb_array_elements(outcomes) LOOP
   IF item->>'outcome' IN ('created','skipped') THEN
    record:=input->'records'->(item->>'inputIndex')::int;
    PERFORM truss.import_report_record_authority(convert_to(jsonb_build_object('originalIdentity',record->'identity','outcomeIdentity',item->'identity')::text,'UTF8'),record->>'kind',expected_release,expected_digest);
   END IF;
  END LOOP;
- IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original report authority changed' USING ERRCODE='42501';END IF;
+ IF convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb IS DISTINCT FROM context THEN RAISE EXCEPTION 'original report authority changed' USING ERRCODE='P1403';END IF;
  RETURN true;
 END;
 $$;

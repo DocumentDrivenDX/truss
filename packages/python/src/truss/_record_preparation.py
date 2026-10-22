@@ -31,7 +31,7 @@ def prepare_records(cursor, state, input, original_input, original_documents, re
     cached = record_schemas(state['key']) if state.get('source') == source_key and 'key' in state else None
     warm = cached is not None
     if cached is None:
-        cursor.execute('SELECT truss.writer_schema_basis(%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_writer_schema_basis(%s,%s,%s,%s)',
                        (original_input, original_documents, release, digest), prepare=False)
         raw = cursor.fetchone()[0]
         if raw is None:

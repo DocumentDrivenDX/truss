@@ -1,0 +1,18 @@
+test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol) ... ERROR
+test_selected_boolean_cells_preserve_true_and_false (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_boolean_cells_preserve_true_and_false) ... ok
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ok
+
+======================================================================
+ERROR: test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 111, in test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol
+    self.admin.execute('SELECT pg_advisory_lock(%s)',(lock_key,))
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.QueryCanceled: canceling statement due to statement timeout
+
+----------------------------------------------------------------------
+Ran 3 tests in 16.379s
+
+FAILED (errors=1)

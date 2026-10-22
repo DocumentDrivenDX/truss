@@ -1,0 +1,17 @@
+test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit) ... FAIL
+test_known_ddd_optional_field_evolves_only_with_matching_core_member (test_catalog_compatible_acceptance_native.CompatibleCatalogTests.test_known_ddd_optional_field_evolves_only_with_matching_core_member) ... ok
+test_ddd_existing_field_meaning_change_is_not_optional_addition (test_catalog_compatible_acceptance_native.CompatibleCatalogTests.test_ddd_existing_field_meaning_change_is_not_optional_addition) ... ok
+
+======================================================================
+FAIL: test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 86, in test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit
+    self.assertIsInstance(stale,Ok,repr(stale));self.assertIsInstance(stale.value,GroupFailed)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P0002', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P0002', catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 3 tests in 10.620s
+
+FAILED (failures=1)

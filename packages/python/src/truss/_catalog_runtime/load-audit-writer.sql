@@ -16,14 +16,14 @@ BEGIN
   OR actor.rolcanlogin IS NOT TRUE OR actor.original_role IS NOT TRUE
   OR NOT actor.rolsuper AND (NOT actor.rolcreaterole OR actor.rolcreatedb
    OR actor.rolreplication OR actor.rolbypassrls) THEN
-  RAISE EXCEPTION 'qualified direct installation administrator and audit role required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'qualified direct installation administrator and audit role required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation WHERE singleton;
  IF NOT actor.rolsuper THEN
   WITH RECURSIVE inherited(role_oid) AS (
    SELECT actor.oid UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m
     JOIN inherited i ON m.member=i.role_oid WHERE m.inherit_option)
   SELECT EXISTS(SELECT 1 FROM inherited WHERE role_oid=installation.owner_oid) INTO has_owner;
-  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='42501';END IF;
+  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='P1403';END IF;
  END IF;
  SELECT r.oid INTO auditor FROM pg_catalog.pg_roles r WHERE r.rolname=selected_auditor_role
   AND NOT r.rolcanlogin AND NOT r.rolsuper AND NOT r.rolcreatedb AND NOT r.rolcreaterole
@@ -55,7 +55,7 @@ DECLARE actor oid;actor_name text;installation truss.catalog_runtime_installatio
  owners jsonb:='[]'::jsonb;owner_entry jsonb;all_entries jsonb:='[]'::jsonb;identity_value jsonb;
  payload_digest text;payload_profile jsonb;group_attempt uuid;count_entries int;ordinal int:=0;
  origin_sha text;projected_identity jsonb;owner_inventory_complete boolean:=true;
- selected_type truss.type_def%ROWTYPE;selected_property truss.prop_def%ROWTYPE;type_metadata jsonb;
+ selected_type truss.type_def%ROWTYPE;selected_relation truss.rel_def%ROWTYPE;selected_property truss.prop_def%ROWTYPE;type_metadata jsonb;
  prior truss.runtime_import_load_chunk%ROWTYPE;existing boolean;
 BEGIN
  actor:=truss.runtime_person(false);
@@ -107,13 +107,13 @@ BEGIN
      AND t.retired_rev IS NULL AND d.definition_pin=identity_value->'type'->>'definitionPin';
    IF NOT FOUND OR owner_entry IS DISTINCT FROM jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module) THEN
     RAISE EXCEPTION 'exact original type owner required' USING ERRCODE='22023';END IF;
-   owners:=owners||jsonb_build_array(owner_entry);
+   IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    -- Include all declaration/item owners reachable through this type. This is
    -- a conservative historical union and prevents metadata disclosure when an
    -- imported value depends on a hidden property module.
    FOR owner_entry IN SELECT DISTINCT jsonb_build_object('documentId',selected_type.document_id,'moduleId',p.declaration_module)
     FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL LOOP
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    END LOOP;
    FOR owner_entry IN SELECT DISTINCT jsonb_build_object('documentId',node.value->>'documentId',
      'moduleId',node.value->'reference'->>'module')
@@ -121,7 +121,7 @@ BEGIN
     WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND node.value ? 'reference' LOOP
     IF owner_entry->>'documentId' IS NULL OR owner_entry->>'moduleId' IS NULL THEN
      RAISE EXCEPTION 'complete item owner required' USING ERRCODE='22023';END IF;
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    END LOOP;
    SELECT s.metadata INTO type_metadata FROM truss.runtime_type_schema s
     WHERE s.rev=(SELECT rev FROM truss.schema_head WHERE id=1) AND s.type_id=selected_type.type_id;
@@ -131,7 +131,7 @@ BEGIN
     CROSS JOIN LATERAL jsonb_array_elements(property.value->'readers') reader(value) LOOP
     IF jsonb_typeof(owner_entry) IS DISTINCT FROM 'object' OR owner_entry-ARRAY['documentId','moduleId']<>'{}'::jsonb THEN
      RAISE EXCEPTION 'complete original object reader required' USING ERRCODE='22023';END IF;
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    END LOOP;
   ELSE
    FOR ordinal IN 1..2 LOOP
@@ -151,18 +151,18 @@ BEGIN
      RAISE EXCEPTION 'bounded original edge endpoint type id required' USING ERRCODE='22023';END IF;
     IF ordinal=1 THEN SELECT t.* INTO selected_type FROM truss.type_def t JOIN truss.runtime_definition_source d
       ON d.rev=t.definition_rev AND d.ord=t.definition_doc_ord AND d.doc_id=t.definition_document_id AND d.module_id=t.module AND d.element_id=t.element
-       AND d.kind='element' AND d.key_id='' WHERE t.type_id=(identity_value->'source'->'typeId')::int
+       AND d.kind='element' AND d.key_id='' WHERE t.type_id=(identity_value->'source'->>'typeId')::int
        AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND d.definition_pin=identity_value->'source'->>'definitionPin';
     ELSE SELECT t.* INTO selected_type FROM truss.type_def t JOIN truss.runtime_definition_source d
       ON d.rev=t.definition_rev AND d.ord=t.definition_doc_ord AND d.doc_id=t.definition_document_id AND d.module_id=t.module AND d.element_id=t.element
-       AND d.kind='element' AND d.key_id='' WHERE t.type_id=(identity_value->'target'->'typeId')::int
+       AND d.kind='element' AND d.key_id='' WHERE t.type_id=(identity_value->'target'->>'typeId')::int
        AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND d.definition_pin=identity_value->'target'->>'definitionPin';END IF;
     IF NOT FOUND OR owner_entry IS DISTINCT FROM jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module) THEN
      RAISE EXCEPTION 'exact original edge endpoint owner required' USING ERRCODE='22023';END IF;
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
     FOR owner_entry IN SELECT DISTINCT jsonb_build_object('documentId',selected_type.document_id,'moduleId',p.declaration_module)
      FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL LOOP
-     owners:=owners||jsonb_build_array(owner_entry);
+     IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
     END LOOP;
     SELECT s.metadata INTO type_metadata FROM truss.runtime_type_schema s
      WHERE s.rev=(SELECT rev FROM truss.schema_head WHERE id=1) AND s.type_id=selected_type.type_id;
@@ -172,22 +172,28 @@ BEGIN
      CROSS JOIN LATERAL jsonb_array_elements(property.value->'readers') reader(value) LOOP
      IF jsonb_typeof(owner_entry) IS DISTINCT FROM 'object' OR owner_entry-ARRAY['documentId','moduleId']<>'{}'::jsonb THEN
       RAISE EXCEPTION 'complete original endpoint reader required' USING ERRCODE='22023';END IF;
-     owners:=owners||jsonb_build_array(owner_entry);
+     IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
     END LOOP;
    END LOOP;
-   SELECT t.* INTO selected_type
+   SELECT r.* INTO selected_relation
     FROM truss.runtime_definition_source d JOIN truss.rel_def r
      ON r.definition_rev=d.rev AND r.definition_doc_ord=d.ord AND r.definition_document_id=d.doc_id
       AND r.module=d.module_id AND r.rel_id=d.element_id
-    JOIN truss.type_def t ON t.type_id=r.assoc_type_id
     WHERE d.definition_pin=identity_value->>'relationshipDefinitionPin' AND d.kind='relationship'
      AND r.retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'complete original relationship owner required' USING ERRCODE='22023';END IF;
+   owner_entry:=jsonb_build_object('documentId',selected_relation.document_id,'moduleId',selected_relation.module);
+   IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
+   -- An unattributed relationship has no association Record/property schema.
+   -- Retain its real declaration owner; never fabricate an association type.
+   IF selected_relation.assoc_type_id IS NOT NULL THEN
+   SELECT * INTO selected_type FROM truss.type_def WHERE type_id=selected_relation.assoc_type_id AND retired_rev IS NULL;
+   IF NOT FOUND THEN RAISE EXCEPTION 'complete original association type required' USING ERRCODE='22023';END IF;
    owner_entry:=jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module);
-   owners:=owners||jsonb_build_array(owner_entry);
+   IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    FOR owner_entry IN SELECT DISTINCT jsonb_build_object('documentId',selected_type.document_id,'moduleId',p.declaration_module)
     FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL LOOP
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    END LOOP;
    SELECT s.metadata INTO type_metadata FROM truss.runtime_type_schema s
     WHERE s.rev=(SELECT rev FROM truss.schema_head WHERE id=1) AND s.type_id=selected_type.type_id;
@@ -197,8 +203,9 @@ BEGIN
     CROSS JOIN LATERAL jsonb_array_elements(property.value->'readers') reader(value) LOOP
     IF jsonb_typeof(owner_entry) IS DISTINCT FROM 'object' OR owner_entry-ARRAY['documentId','moduleId']<>'{}'::jsonb THEN
      RAISE EXCEPTION 'complete original association reader required' USING ERRCODE='22023';END IF;
-    owners:=owners||jsonb_build_array(owner_entry);
+    IF NOT owners @> jsonb_build_array(owner_entry) THEN owners:=owners||jsonb_build_array(owner_entry);END IF;
    END LOOP;
+   END IF;
   END IF;
   EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '22P02' THEN
    owner_inventory_complete:=false;

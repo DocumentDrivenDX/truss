@@ -21,7 +21,8 @@ class EdgeAuthorityTests(edge_tests.EdgeMutationTests):
         host.detach()
         try:
             connection.commit()
-        except psycopg.errors.InsufficientPrivilege:
+        except psycopg.ProgrammingError as denied:
+            self.assertEqual(denied.sqlstate,'P1403')
             connection.rollback()
         else:
             durable=self.admin.execute('SELECT count(*) FROM truss.edge').fetchone()[0]

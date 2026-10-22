@@ -54,10 +54,11 @@ BEGIN
   WITH pinned AS MATERIALIZED (
    SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
    WHERE definition_pin=pin AND kind='element' AND key_id='')
-  SELECT t.* INTO STRICT selected FROM pinned p JOIN truss.type_def t
+  SELECT t.* INTO selected FROM pinned p JOIN truss.type_def t
     ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
      AND t.module=p.module_id AND t.element=p.element_id
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
+  IF NOT FOUND THEN RAISE EXCEPTION 'current admitted object definition required' USING ERRCODE='22023';END IF;
  END IF;
  IF identity IS NOT NULL AND (identity->>'typeId' IS DISTINCT FROM selected.type_id::text
   OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)
@@ -65,7 +66,7 @@ BEGIN
   OR jsonb_typeof(identity->'id') IS DISTINCT FROM 'string' OR identity->>'id' !~ '^[1-9][0-9]{0,18}$'
   OR length(identity->>'id')=19 AND (identity->>'id') COLLATE "C">'9223372036854775807') THEN
   RAISE EXCEPTION 'qualified exact object identity required' USING ERRCODE='22023';END IF;
- IF NOT truss.runtime_object_values_readable_qualified(selected.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_object_values_readable_qualified(selected.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='P1403';END IF;
  RETURN selected;
 END;
 $$;
@@ -176,7 +177,7 @@ BEGIN
    WHERE s.rev=revision AND s.type_id=(identity->>'typeId')::int;
   FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
    IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',qualified_actor) THEN
-    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
@@ -223,7 +224,7 @@ BEGIN
   current_actor:=truss.runtime_person(false);
   FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
    IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',current_actor) THEN
-    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
@@ -287,10 +288,15 @@ BEGIN
    AND convert_from(a.request_bytes,'UTF8')::jsonb->'identity'->>'requestId'=request->'identity'->>'requestId') THEN RAISE EXCEPTION 'request already unfinished' USING ERRCODE='55P03';END IF;
   SELECT * INTO receipt FROM truss.request_receipt WHERE namespace_sha256=sha256(ns) AND request_sha256=sha256(rk) AND namespace_identity_utf8=ns AND request_id_utf8=rk;
   IF FOUND THEN
-   IF receipt.payload_state<>'complete' THEN RETURN convert_to('{"outcome":"unavailable","reason":"receipt_expired"}','UTF8');END IF;
+   PERFORM truss.runtime_authorize_retained_request(receipt.storage_row_id);
+   IF receipt.payload_state<>'complete' THEN
+    PERFORM truss.runtime_authorize_retained_request(receipt.storage_row_id);
+    RETURN convert_to('{"outcome":"unavailable","reason":"receipt_expired"}','UTF8');END IF;
    raw:=convert_from(receipt.original_receipt_bytes,'UTF8')::jsonb;
    IF raw->>'profile' IS DISTINCT FROM 'truss-object-group-receipt/0.1' THEN RAISE EXCEPTION 'selected receipt required' USING ERRCODE='0A000';END IF;
-   IF decode(raw->>'inputBase64','base64') IS DISTINCT FROM original_input THEN RAISE EXCEPTION 'request input changed' USING ERRCODE='P1001';END IF;
+   IF decode(raw->>'inputBase64','base64') IS DISTINCT FROM original_input THEN
+    PERFORM truss.runtime_authorize_retained_request(receipt.storage_row_id);
+    RAISE EXCEPTION 'request input changed' USING ERRCODE='P1001';END IF;
    SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=(raw->>'attemptId')::uuid;
    IF NOT attempt.complete OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
     OR (attempt.expected_receipt IS NOT NULL AND to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt) OR attempt.input_bytes IS DISTINCT FROM original_input
@@ -299,7 +305,7 @@ BEGIN
      'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN RAISE EXCEPTION 'original receipt position correspondence required' USING ERRCODE='55000';END IF;
    IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
     IF NOT truss.runtime_receipt_can_read(attempt.id) THEN
-     RAISE EXCEPTION 'current retained dependency reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'current retained dependency reader required' USING ERRCODE='P1403';END IF;
     FOR selected IN SELECT DISTINCT r.value->'identity'->'owner'->>'documentId' document_id,
      r.value->'identity'->'owner'->>'moduleId' module FROM jsonb_array_elements(attempt.results) r LOOP
      PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
@@ -322,7 +328,7 @@ BEGIN
     'actorOid',person::text,'actor',session_user::text,'scopeIdentity',context->>'authorizedScopeIdentity',
     'releaseId',expected_release,'releaseSha256',expected_digest,'basis',CASE WHEN writer=receipt.original_writer_xid THEN 'same_transaction' ELSE 'committed_receipt' END)::text,'UTF8');
    RETURN convert_to(jsonb_build_object('outcome','success','disposition','replayed','durability',CASE WHEN writer=receipt.original_writer_xid THEN 'pending' ELSE 'committed' END,
-    'semantic',raw->'semantic','receiptToken',truss.runtime_receipt_token(attempt.position_bytes),'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
+    'attemptId',attempt.id::text,'semantic',raw->'semantic','receiptToken',truss.runtime_receipt_token(attempt.position_bytes),'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
   END IF;
  END IF;
  IF input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile' OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' THEN RAISE EXCEPTION 'current group profile required on receipt miss' USING ERRCODE='0A000';END IF;
@@ -537,9 +543,9 @@ DECLARE metadata jsonb;encoded bytea;entry jsonb;
 BEGIN
  metadata:=truss.runtime_object_metadata(attempt_id,operation_index);encoded:=convert_to(metadata::text,'UTF8');
  PERFORM truss.runtime_module_writer(metadata->>'documentId',metadata->>'moduleId');
- IF NOT metadata ? 'source' AND NOT truss.runtime_object_values_readable((metadata->>'typeId')::int) THEN RAISE EXCEPTION 'current buffered property/item reader required' USING ERRCODE='42501';END IF;
+ IF NOT metadata ? 'source' AND NOT truss.runtime_object_values_readable((metadata->>'typeId')::int) THEN RAISE EXCEPTION 'current buffered property/item reader required' USING ERRCODE='P1403';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(jsonb_build_array(metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target')) WHERE value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint metadata reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint metadata reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  RETURN encoded;
 END;
@@ -1094,12 +1100,12 @@ BEGIN
    RAISE EXCEPTION 'original object operation progress and actor required' USING ERRCODE='55000';END IF;
   SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type;
   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
-  IF NOT truss.runtime_object_values_readable_qualified(selected_type,current_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified(selected_type,current_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='P1403';END IF;
   FOR root_type IN SELECT DISTINCT (image->>'root_type')::int
    FROM jsonb_array_elements(jsonb_build_array(owned_transition.before_object,owned_transition.after_object)) images(image)
    WHERE image->>'root_type' IS NOT NULL LOOP
    SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=root_type;
-   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module,current_actor) THEN RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module,current_actor) THEN RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
  -- Later ordinary mutations cannot suppress original registration dependencies.
@@ -1215,7 +1221,7 @@ BEGIN
  -- identity only after them, for this read-only final-edge validation phase.
  -- Each edge still resolves live module policy/membership independently.
  current_actor:=truss.runtime_person(false);
- IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
+ IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='P1403';END IF;
  IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
   FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP
    PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);
@@ -1246,7 +1252,7 @@ BEGIN
   expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL AND input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN to_jsonb(receipt) END,
   position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
  current_actor:=truss.runtime_person(false);
- IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
+ IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='P1403';END IF;
  IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
   FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP
    PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);
@@ -1359,7 +1365,7 @@ BEGIN
   SELECT r.oid INTO current_actor FROM pg_roles r
    WHERE r.rolname=session_user AND current_setting('role')='none' AND r.rolcanlogin
     AND NOT r.rolsuper AND NOT r.rolcreaterole AND NOT r.rolcreatedb AND NOT r.rolreplication AND NOT r.rolbypassrls;
-  IF NOT FOUND THEN RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='42501';END IF;
+  IF NOT FOUND THEN RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='P1403';END IF;
   IF owned_resource_kind='object' THEN
    SELECT document_id,module INTO STRICT owner_document,owner_module FROM truss.type_def WHERE type_id=owned_resource_type;
   ELSE
@@ -1526,7 +1532,7 @@ BEGIN
  ELSE RAISE EXCEPTION 'qualified object endpoint required' USING ERRCODE='22023';END IF;
  IF jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string' OR jsonb_typeof(identity->'definitionPin') IS DISTINCT FROM 'string' THEN
   RAISE EXCEPTION 'exact object endpoint identity required' USING ERRCODE='22023';END IF;
- selected:=truss.runtime_condition_type(identity);IF NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
+ selected:=truss.runtime_condition_type(identity);IF NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='P1403';END IF;
  SELECT * INTO object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=selected.type_id FOR UPDATE NOWAIT;
  IF NOT FOUND THEN RAISE EXCEPTION 'endpoint absent' USING ERRCODE='P1004';END IF;
  IF object_row.root_id IS NOT NULL THEN
@@ -1758,7 +1764,7 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  PERFORM truss.runtime_module_writer_qualified(metadata->>'documentId',metadata->>'moduleId',current_actor);
  FOR entry IN SELECT value FROM jsonb_array_elements(jsonb_build_array(metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target')) WHERE value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  END IF;
  IF advance THEN
@@ -1856,7 +1862,7 @@ BEGIN
       JOIN truss.rel_endpoint e USING(rel_type_id) JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type))
     SELECT DISTINCT document_id,module_id FROM dependencies
    LOOP
-    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,qualified_actor) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
+    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,qualified_actor) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='P1403';END IF;
    END LOOP;
    IF phase=1 THEN
   FOR relation IN SELECT r.* FROM (
@@ -1870,7 +1876,9 @@ BEGIN
      SELECT 1 FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND source_id=selected_id AND source_type=selected_type
      LIMIT CASE WHEN relation.target_max IS NULL THEN relation.target_min::bigint ELSE relation.target_max::bigint+1 END
     ) matching_edges;
-    IF outgoing<relation.target_min OR relation.target_max IS NOT NULL AND outgoing>relation.target_max THEN RAISE EXCEPTION 'outgoing multiplicity failed' USING ERRCODE='P1005';END IF;
+    IF outgoing<relation.target_min OR relation.target_max IS NOT NULL AND outgoing>relation.target_max THEN RAISE EXCEPTION 'outgoing multiplicity failed' USING ERRCODE='P1405',DETAIL=jsonb_build_object('rule',CASE WHEN outgoing<relation.target_min THEN 'relationship.target_min' ELSE 'relationship.target_max' END,
+     'entity',jsonb_build_object('kind','object','id',selected_id::text,'typeId',selected_type::text),
+     'relationship',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module,'relationshipId',relation.rel_id))::text;END IF;
    END IF;
    IF (relation.source_min>0 OR relation.source_max IS NOT NULL)
     AND EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND target_type=selected_type) THEN
@@ -1878,7 +1886,9 @@ BEGIN
      SELECT 1 FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND target_id=selected_id AND target_type=selected_type
      LIMIT CASE WHEN relation.source_max IS NULL THEN relation.source_min::bigint ELSE relation.source_max::bigint+1 END
     ) matching_edges;
-    IF incoming<relation.source_min OR relation.source_max IS NOT NULL AND incoming>relation.source_max THEN RAISE EXCEPTION 'incoming multiplicity failed' USING ERRCODE='P1005';END IF;
+    IF incoming<relation.source_min OR relation.source_max IS NOT NULL AND incoming>relation.source_max THEN RAISE EXCEPTION 'incoming multiplicity failed' USING ERRCODE='P1405',DETAIL=jsonb_build_object('rule',CASE WHEN incoming<relation.source_min THEN 'relationship.source_min' ELSE 'relationship.source_max' END,
+     'entity',jsonb_build_object('kind','object','id',selected_id::text,'typeId',selected_type::text),
+     'relationship',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module,'relationshipId',relation.rel_id))::text;END IF;
    END IF;
    SELECT coalesce(jsonb_agg(v ORDER BY v->>'side'),'[]'::jsonb) INTO expected FROM (
     SELECT jsonb_build_object('rel_type_id',relation.rel_type_id,'side','s','endpoint_id',selected_id,'edge_id',id) v FROM truss.edge
@@ -1993,13 +2003,13 @@ BEGIN
    t.endpoint_ownership->'after'->'source',t.endpoint_ownership->'after'->'target')) i
   WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
   IF NOT truss.runtime_can_read_qualified(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId',current_actor) THEN
-   RAISE EXCEPTION 'original endpoint context reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original endpoint context reader required' USING ERRCODE='P1403';END IF;
   PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',context->'identity','catalogRevision',revision,'ownership',context->'ownership'),current_actor);
  END LOOP;
  FOR entry IN SELECT DISTINCT i.value FROM truss.runtime_edge_transition t
   CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
   WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
 END;
 $$;
@@ -2061,10 +2071,10 @@ BEGIN
  result:=convert_to((truss.runtime_edge_history(to_jsonb(edge_row),identity,source_identity,target_identity,captured_revision)||jsonb_build_object('executedCatalogRevision',captured_revision::text))::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'bounded complete edge required' USING ERRCODE='54000';END IF;
  IF NOT truss.runtime_can_read(relation.document_id,relation.module) OR NOT truss.runtime_can_read(source_identity->'owner'->>'documentId',source_identity->'owner'->>'moduleId')
-  OR NOT truss.runtime_can_read(target_identity->'owner'->>'documentId',target_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current edge reader required' USING ERRCODE='42501';END IF;
+  OR NOT truss.runtime_can_read(target_identity->'owner'->>'documentId',target_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current edge reader required' USING ERRCODE='P1403';END IF;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN RAISE EXCEPTION 'edge catalog changed' USING ERRCODE='55P03';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(root_owners) LOOP
-  IF NOT truss.runtime_can_read(entry->>'documentId',entry->>'moduleId') THEN RAISE EXCEPTION 'current endpoint root reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(entry->>'documentId',entry->>'moduleId') THEN RAISE EXCEPTION 'current endpoint root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  RETURN jsonb_build_object('edge',convert_from(result,'UTF8')::jsonb,'rootOwners',root_owners);
 END;
@@ -2148,12 +2158,12 @@ BEGIN
   FROM (SELECT DISTINCT value FROM unnest(root_owner_buffer) AS roots(value)) unique_roots;
  IF octet_length(root_owners::text)>16777216 THEN RAISE EXCEPTION 'bounded edge page authority context required' USING ERRCODE='54000';END IF;
  FOR edge_value IN SELECT value FROM jsonb_array_elements(edges) LOOP
-  IF NOT truss.runtime_can_read(edge_value->'source'->'owner'->>'documentId',edge_value->'source'->'owner'->>'moduleId') OR NOT truss.runtime_can_read(edge_value->'target'->'owner'->>'documentId',edge_value->'target'->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint page reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(edge_value->'source'->'owner'->>'documentId',edge_value->'source'->'owner'->>'moduleId') OR NOT truss.runtime_can_read(edge_value->'target'->'owner'->>'documentId',edge_value->'target'->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint page reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF lookahead IS NOT NULL AND (NOT truss.runtime_can_read(lookahead->>'sourceDocument',lookahead->>'sourceModule') OR NOT truss.runtime_can_read(lookahead->>'targetDocument',lookahead->>'targetModule')) THEN RAISE EXCEPTION 'lookahead page authority changed' USING ERRCODE='55P03';END IF;
- IF NOT truss.runtime_can_read(selected_document,selected_module) OR NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RAISE EXCEPTION 'current relationship and anchor page reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(selected_document,selected_module) OR NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RAISE EXCEPTION 'current relationship and anchor page reader required' USING ERRCODE='P1403';END IF;
  FOR root_owner IN SELECT value FROM jsonb_array_elements(root_owners) LOOP
-  IF NOT truss.runtime_can_read(root_owner->>'documentId',root_owner->>'moduleId') THEN RAISE EXCEPTION 'current endpoint page root reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(root_owner->>'documentId',root_owner->>'moduleId') THEN RAISE EXCEPTION 'current endpoint page root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM revision THEN RAISE EXCEPTION 'edge page catalog changed' USING ERRCODE='55P03';END IF;
  result:=convert_to(jsonb_build_object('edges',edges,'catalogRevision',revision,'continuation',continuation)::text,'UTF8');
@@ -2389,7 +2399,7 @@ BEGIN
  -- is outside the public semantic result and does not alter receipt bytes.
  RETURN convert_to((result||jsonb_build_object('attemptId',attempt_id::text))::text,'UTF8');
 EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLSTATE 'P1003'
- OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' OR SQLSTATE '42501' OR SQLSTATE '0A000'
+ OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' OR SQLSTATE 'P1405' OR SQLSTATE 'P1403' OR SQLSTATE '0A000'
  OR SQLSTATE '54000' OR SQLSTATE '55P03' THEN
  GET STACKED DIAGNOSTICS native_state=RETURNED_SQLSTATE,native_detail=PG_EXCEPTION_DETAIL;
  IF operation_local_failure THEN failure_operation_index:=operation_index;END IF;
@@ -2415,8 +2425,18 @@ EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLST
   RETURN convert_to(jsonb_build_object('outcome','unavailable','reason',unavailable_reason)::text,'UTF8');END IF;
  failure_code:=CASE native_state WHEN '22023' THEN 'invalid_input' WHEN '23505' THEN 'key_conflict'
   WHEN 'P1001' THEN 'request_conflict' WHEN 'P1003' THEN 'expected_version' WHEN 'P1004' THEN 'not_found'
-  WHEN 'P1005' THEN 'dependencies' WHEN '42501' THEN 'unauthorized_person' END;
+  WHEN 'P1005' THEN 'dependencies' WHEN 'P1405' THEN 'multiplicity' WHEN 'P1403' THEN 'unauthorized_person' END;
  failure_result:=jsonb_build_object('outcome','failed','code',failure_code,'nativeState',native_state);
+ IF native_state='P1405' THEN
+  failure_operation_index:=NULL;
+  IF native_detail IS NULL OR (native_detail IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
+   RAISE EXCEPTION 'original native multiplicity diagnostic required' USING ERRCODE='55000';END IF;
+  native_detail_json:=native_detail::jsonb;
+  IF native_detail_json-ARRAY['rule','entity','relationship']<>'{}'::jsonb
+   OR NOT native_detail_json ?& ARRAY['rule','entity','relationship'] THEN
+   RAISE EXCEPTION 'closed native multiplicity diagnostic required' USING ERRCODE='55000';END IF;
+  failure_result:=failure_result||jsonb_build_object('phase','final_state')||native_detail_json;
+ END IF;
  IF failure_operation_index IS NOT NULL THEN
   failure_result:=failure_result||jsonb_build_object('operationIndex',failure_operation_index::text);
  END IF;

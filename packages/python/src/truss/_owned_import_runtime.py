@@ -63,7 +63,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
         return ImportInvalid(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"envelope"}'))
     batch_id=uuid4().hex;context=[None];entries=[];first_objects={};operation_indices={};outcomes=[];known=[None];failed_index=[None]
     def native_context(cursor):
-        cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+        cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
         return json.loads(bytes(cursor.fetchone()[0]))
     def key(cursor,selection,cache):
         payload=_bytes(selection if type(selection) is dict else _wire(selection))
@@ -77,7 +77,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
         for index,record in enumerate(input.records):
             item=selected_outcomes[index]
             identity=item.identity if type(item) in (ImportCreated,ImportSkipped) and item.identity is not ABSENT else None
-            cursor.execute('SELECT truss.import_report_record_authority(%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_import_report_record_authority(%s,%s,%s,%s)',
                 (_bytes({'originalIdentity':{'profile':context[0]['ownedImportProfile'],'identity':_wire(record.identity)},'outcomeIdentity':None if identity is None else _wire(identity)}),record.kind,manifest['releaseId'],digest),prepare=False)
             cursor.fetchone()
     def execute(cursor,observed):
@@ -90,7 +90,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
         # Resolve identities across the input before decoding any replacement.
         for index,record in enumerate(input.records):
             if type(record) is OwnedObjectImportRecord:
-                cursor.execute('SELECT truss.import_object_identity(%s,%s,NULL,%s,%s)',(envelope(record.identity),sources[record.identity.type.owner.document_id],manifest['releaseId'],digest),prepare=False)
+                cursor.execute('SELECT truss.person_import_object_identity(%s,%s,NULL,%s,%s)',(envelope(record.identity),sources[record.identity.type.owner.document_id],manifest['releaseId'],digest),prepare=False)
                 metadata=json.loads(bytes(cursor.fetchone()[0]));route=key(cursor,record.identity,key_cache)
                 entry={'metadata':metadata,'route':route}
                 if metadata['state']=='eligible':
@@ -100,7 +100,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
                 source=key(cursor,record.identity.source,key_cache);target=key(cursor,record.identity.target,key_cache)
                 if source['identity'] is not None and target['identity'] is not None:
                     selected={'relationshipDefinitionPin':record.identity.relationship_definition_pin,'source':source['identity'],'target':target['identity']}
-                    cursor.execute('SELECT truss.import_edge_identity(%s,%s,%s)',(_bytes({'profile':c['ownedImportProfile'],'identity':selected}),manifest['releaseId'],digest),prepare=False)
+                    cursor.execute('SELECT truss.person_import_edge_identity(%s,%s,%s)',(_bytes({'profile':c['ownedImportProfile'],'identity':selected}),manifest['releaseId'],digest),prepare=False)
                     metadata=json.loads(bytes(cursor.fetchone()[0]))
                 else:metadata={'state':'eligible'}
                 entry={'metadata':metadata,'source':source,'target':target}
@@ -166,7 +166,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
             batch=PendingBatch(batch_id=batch_id,input_indices=tuple(str(i) for i in range(len(input.records))),host_transaction_id=result.value) if input.records else None
             return report(batch,outcomes)
         failure=result.error;attempt=host._custody.last_attempt
-        code=known[0] or {'22023':'invalid','23505':'conflict','42501':'unauthorized','0A000':'unsupported_profile','P1004':'missing_reference','P1005':'dependencies'}.get(failure.sql_state)
+        code=known[0] or {'22023':'invalid','23505':'conflict','P1403':'unauthorized','0A000':'unsupported_profile','P1004':'missing_reference','P1005':'dependencies','P1405':'dependencies'}.get(failure.sql_state)
         if code is None or len(entries)!=len(input.records) or failure.code!='execution_obligation' or attempt.phase!='contained' or host._custody.quarantined:
             return ImportExecutionFailed(error=failure,report=None)
         rejected=[]

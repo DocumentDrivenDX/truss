@@ -1,0 +1,45 @@
+{
+  "status": "local-full-workspace-candidate-and-qualified-passed",
+  "sourceCommit": "6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a",
+  "laterWorkflowOnlyCommit": "cc694344da31af76ef6b97e572d20a8347989bdd",
+  "platform": "macOS ARM64",
+  "rustToolchain": "1.90.0",
+  "workspace": true,
+  "locked": true,
+  "offline": true,
+  "runs": {
+    "candidate": {
+      "features": "weft-runtime/truss-postgresql-candidate,weft-runtime/ashlar-databricks-candidate,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+      "exitCode": 0,
+      "groups": 62,
+      "passed": 1048,
+      "failed": 0,
+      "ignored": 0,
+      "filteredOut": 0,
+      "seconds": 832.7380150419776,
+      "log": "original-candidate.log",
+      "logSha256": "f4df212faf65abfbbeffe329a71da4fcd4ccdebf1e24e906de4748b6086e98e6"
+    },
+    "qualified": {
+      "features": "weft-runtime/truss-postgresql-qualified,weft-runtime/ashlar-databricks-qualified,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+      "exitCode": 0,
+      "groups": 62,
+      "passed": 1049,
+      "failed": 0,
+      "ignored": 0,
+      "filteredOut": 0,
+      "seconds": 730.7899338750285,
+      "log": "original-qualified.log",
+      "logSha256": "104250220804cc36d3a50e2391021d7ac3aab6538f2e7a92cac1ddf6a4a6cfba"
+    }
+  },
+  "originalResults": {
+    "path": "original-results.json",
+    "sha256": "f984da071fd8cfbf973cc962ecdbcfbefa6709e6d6e1c8d7c953d0c14dbef21a"
+  },
+  "originalCounts": {
+    "path": "original-counts.json",
+    "sha256": "11633c115d07b755cb2c018c2d54c394bcad8dd1b46fbaff140c2c9a01be6550"
+  },
+  "claimLimit": "Local macOS ARM64 full-workspace test evidence only; no hosted, publication, installed-wheel or public release gate is inferred."
+}

@@ -1,0 +1,6 @@
+test_empty_and_aggregate_types_come_from_compiler_without_sample_rows (test_query_descriptors_native.QueryDescriptorTests.test_empty_and_aggregate_types_come_from_compiler_without_sample_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 4.059s
+
+OK

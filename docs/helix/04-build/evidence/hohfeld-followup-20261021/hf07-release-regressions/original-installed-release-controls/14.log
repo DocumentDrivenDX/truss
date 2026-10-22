@@ -1,0 +1,26 @@
+.....E.
+======================================================================
+ERROR: test_writer_revoked_after_attempt_constraint_flush_still_aborts (test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_object_mutations_native.py", line 120, in test_writer_revoked_after_attempt_constraint_flush_still_aborts
+    connection.commit()
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 309, in commit
+    self.wait(self._commit_gen())
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 495, in wait
+    return waiting.wait(
+           ^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 255, in psycopg_binary._psycopg.wait_c
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 592, in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 487, in _exec_command
+    raise e.error_from_result(result, encoding=self.pgconn._encoding)
+psycopg.ProgrammingError: current qualified module writer required
+CONTEXT:  PL/pgSQL function truss.runtime_module_writer_qualified(text,text,oid) line 9 at RAISE
+SQL statement "SELECT truss.runtime_module_writer_qualified(owner_document,owner_module,current_actor)"
+PL/pgSQL function truss.runtime_object_commit_check() line 85 at PERFORM
+
+----------------------------------------------------------------------
+Ran 7 tests in 30.034s
+
+FAILED (errors=1)

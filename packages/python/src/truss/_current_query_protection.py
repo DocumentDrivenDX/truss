@@ -4,6 +4,7 @@ The host quiesces ordinary sessions and new connections until activation commits
 Legacy data interfaces stay unavailable until they have equivalent policy checks.
 """
 import json
+from importlib.resources import files
 import re
 from psycopg import sql
 from .execution import Error, ExecutionFailure
@@ -24,7 +25,9 @@ class GraphAuthorityProfileRequired(ValueError):
     pass
 
 _METADATA=('truss.reader_catalog(integer,integer,text,text)',
-           'truss.accepted_document(text,integer,text,text)')
+           'truss.accepted_document(text,integer,text,text)',
+           'truss.person_reader_catalog(integer,integer,text,text)',
+           'truss.person_accepted_document(text,integer,text,text)')
 _SUBJECT='truss.current_query_subject_current()'
 
 
@@ -91,10 +94,15 @@ def _private_homes(cursor,owner):
     if cursor.fetchone()!=(False,):raise ValueError('Owner-only complete runtime relations and columns required')
 
 
+_INDEX_ATTACHMENTS=('CREATE INDEX object_key_query_string_exception ON truss.object_key_bucket USING btree (type_id, key_num) WHERE (truss.runtime_query_single_string_key(key_bytes) IS NULL)', 'CREATE UNIQUE INDEX object_key_query_string_order ON truss.object_key_bucket USING btree (type_id, key_num, truss.runtime_query_single_string_key(key_bytes) COLLATE "C") WHERE (truss.runtime_query_single_string_key(key_bytes) IS NOT NULL)')
+
 def _routine_attachments(cursor):
     # EXECUTE revocation does not detach existing triggers/operators/casts.
     # Only relation-owned attachments on the private native homes are admitted;
-    # this profile has no expected inter-routine catalog dependency exception.
+    # The two exact redundant key indexes are private relation attachments.
+    # No arbitrary index or inter-routine dependency exception is admitted.
+    source=files('truss').joinpath('_catalog_runtime/query-selective.sql').read_text()
+    decoder=source.split('CREATE FUNCTION truss.runtime_query_single_string_key',1)[1].split('AS $$',1)[1].split('$$;',1)[0]
     cursor.execute(_HOMES+'''SELECT EXISTS(
         SELECT 1 FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_proc p ON p.oid=t.tgfoid
         JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'
@@ -109,7 +117,13 @@ def _routine_attachments(cursor):
                 OR (d.classid='pg_catalog.pg_constraint'::pg_catalog.regclass AND EXISTS(
                     SELECT 1 FROM pg_catalog.pg_constraint c JOIN homes h ON h.oid=c.conrelid WHERE c.oid=d.objid))
                 OR (d.classid='pg_catalog.pg_rewrite'::pg_catalog.regclass AND EXISTS(
-                    SELECT 1 FROM pg_catalog.pg_rewrite r JOIN homes h ON h.oid=r.ev_class WHERE r.oid=d.objid))))''',prepare=False)
+                    SELECT 1 FROM pg_catalog.pg_rewrite r JOIN homes h ON h.oid=r.ev_class WHERE r.oid=d.objid))
+                OR (d.classid='pg_catalog.pg_class'::pg_catalog.regclass AND p.proname='runtime_query_single_string_key'
+                    AND p.provolatile='i' AND p.proisstrict AND NOT p.prosecdef AND p.prosrc=%s
+                    AND EXISTS(SELECT 1 FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class c ON c.oid=i.indexrelid
+                        JOIN homes h ON h.oid=i.indrelid JOIN pg_catalog.pg_class t ON t.oid=h.oid
+                        WHERE i.indexrelid=d.objid AND c.relowner=t.relowner AND c.relowner=p.proowner
+                        AND i.indisvalid AND i.indisready AND pg_catalog.pg_get_indexdef(c.oid)=ANY(%s::text[])))))''',(decoder,list(_INDEX_ATTACHMENTS)),prepare=False)
     if cursor.fetchone()!=(False,):raise ValueError('External routine attachments require an explicit protection migration')
 
 
@@ -120,7 +134,7 @@ def _allowed_oids(cursor,owner):
         row=cursor.fetchone()
         if row is None or row[1]!=owner:raise ValueError('Complete exact protected metadata/Subject signatures required')
         allowed.append(row[0])
-    if len(set(allowed))!=3:raise ValueError('Distinct protected facade signatures required')
+    if len(set(allowed))!=5:raise ValueError('Distinct protected facade signatures required')
     return allowed
 
 
@@ -219,6 +233,13 @@ def activate_current_query_protection_in_transaction(host,transaction,*,subject_
         if (subject_registration.owner_oid,subject_registration.installation_id,subject_registration.source_receipt)!=(owner,sources.installation_id,sources.source_receipt):
             raise ValueError('Original protected Subject/source correspondence required')
         _private_homes(cursor,owner)
+        # Preserve only explicit metadata grantees on their new guarded shims.
+        # PUBLIC execution is closed even for these admitted metadata functions.
+        for original in _METADATA[:2]:
+            cursor.execute("SELECT r.rolname FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a JOIN pg_catalog.pg_roles r ON r.oid=a.grantee WHERE p.oid=%s::regprocedure AND a.grantee<>p.proowner AND a.privilege_type='EXECUTE'",(original,),prepare=False)
+            for (role,) in cursor.fetchall():
+                guarded=original.replace('truss.','truss.person_',1)
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION {} TO {}').format(sql.SQL(guarded),sql.Identifier(role)),prepare=False)
         allowed=_allowed_oids(cursor,owner)
         cursor.execute('SELECT oid FROM pg_catalog.pg_roles WHERE rolname=SESSION_USER',prepare=False)
         administrator=cursor.fetchone()[0]
@@ -229,7 +250,7 @@ def activate_current_query_protection_in_transaction(host,transaction,*,subject_
             FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
             CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a
             LEFT JOIN pg_catalog.pg_roles r ON r.oid=a.grantee WHERE n.nspname='truss' AND a.grantee<>p.proowner
-            AND p.oid<>ALL(%s::oid[])
+            AND (p.oid<>ALL(%s::oid[]) OR a.grantee=0)
             ORDER BY p.oid,a.grantee''',(allowed,),prepare=False)
         grants=cursor.fetchmany(4097)
         if len(grants)>4096:raise ValueError('Bounded runtime grant inventory required')

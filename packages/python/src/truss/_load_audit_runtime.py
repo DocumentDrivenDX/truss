@@ -344,7 +344,7 @@ def _decode_mutation_page(raw: bytes) -> MutationGroupAuditPage:
                    'create_object', 'update_object', 'delete_object',
                    'create_edge', 'update_edge', 'delete_edge'}
     for item in value['entries']:
-        if (type(item) is not dict or set(item) != {'operationIndex', 'entityKind', 'entityId',
+        if (type(item) is not dict or set(item)-{'data'} != {'operationIndex', 'entityKind', 'entityId',
                 'entityType', 'operation', 'observedAt'}
                 or type(item['operationIndex']) is not str
                 or not re.fullmatch(r'(?:0|[1-9][0-9]{0,3})', item['operationIndex'])
@@ -355,9 +355,27 @@ def _decode_mutation_page(raw: bytes) -> MutationGroupAuditPage:
                 or item['operation'] not in allowed_ops
                 or type(item['observedAt']) is not str or not item['observedAt']):
             raise ValueError('Closed metadata-only mutation event required')
+        if 'data' in item:
+            data=item['data']
+            if type(data) is not dict or set(data)!={'basis','before','after'} or data['basis']!='retained-operation':
+                raise ValueError('Closed retained operation projection required')
+            for side in ('before','after'):
+                state=data[side]
+                if state is None:continue
+                if (type(state) is not dict or set(state)!={'version','keys'}
+                        or type(state['version']) is not str or not re.fullmatch(r'[1-9][0-9]{0,19}',state['version'])
+                        or type(state['keys']) is not list or len(state['keys'])>1024):
+                    raise ValueError('Exact retained version/key projection required')
+                for key in state['keys']:
+                    if (type(key) is not dict or set(key)!={'keyId','keyNumber','definitionPin','values'}
+                            or any(type(key[n]) is not str or not 1<=len(key[n].encode('utf8'))<=65536 for n in ('keyId','keyNumber','definitionPin'))
+                            or type(key['values']) is not list or not 1<=len(key['values'])<=32):
+                        raise ValueError('Complete retained key components required')
+                    from ._import_runtime import _cell
+                    for cell in key['values']:_cell(cell)
         entries.append(MutationGroupAuditEntry(operation_index=item['operationIndex'],
             entity_kind=item['entityKind'], entity_id=item['entityId'], entity_type=item['entityType'],
-            operation=item['operation'], observed_at=item['observedAt']))
+            operation=item['operation'], observed_at=item['observedAt'],data=item.get('data')))
     return MutationGroupAuditPage(attempt_id=value['attemptId'], native_actor=value['nativeActorOid'],
         native_actor_name=value['nativeActorName'],asserted_action=value['assertedAction'],
         writer_xid=value['writerXid'],operation_count=value['operationCount'],
@@ -405,7 +423,7 @@ def _decode_mutation_listing_page(raw: bytes):
 def _reason(error: Error) -> str | None:
     if error.error.code != 'execution_obligation':
         return None
-    return {'42501': 'unauthorized', '54000': 'resource', '0A000': 'unsupported_profile',
+    return {'P1403': 'unauthorized', '54000': 'resource', '0A000': 'unsupported_profile',
             '22023': 'observation', '55P03': 'observation', 'P1002': 'observation',
             'P1010': 'observation',
             'P0002': 'not_found'}.get(error.error.sql_state)
@@ -459,7 +477,7 @@ def read_import_load_chunk(host, transaction, cursor: LoadAuditCursor,
 
     def observe(cursor, _observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.read_import_load_chunk(%s::uuid,%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_read_import_load_chunk(%s::uuid,%s,%s,%s,%s)',
             (selected_invocation, selected_chunk, page_limit, manifest['releaseId'], digest),
             prepare=False)
         return _decode_page(bytes(cursor.fetchone()[0]))
@@ -487,8 +505,8 @@ def page_import_load_audit(host, transaction, filters, cursor: LoadAuditListingC
         return Ok(LoadAuditUnavailable(reason='observation'))
     if (set(filters)-allowed or any(type(key) is not str or type(value) is not str
             for key,value in filters.items())
-            or not {'documentId','moduleId'}<=set(filters)
-            or any(not 1<=len(filters[key].encode('utf8'))<=4096 for key in ('documentId','moduleId'))
+            or ('documentId' in filters) != ('moduleId' in filters)
+            or any(not 1<=len(filters[key].encode('utf8'))<=4096 for key in ('documentId','moduleId') if key in filters)
             or any(key in filters and not _valid_filter_time(filters[key])
                    for key in ('observedAtFrom','observedAtUntil'))
             or len(filter_bytes)>8192):
@@ -512,7 +530,7 @@ def page_import_load_audit(host, transaction, filters, cursor: LoadAuditListingC
 
     def observe(native_cursor, _observed):
         pin_cursor(native_cursor)
-        native_cursor.execute('SELECT truss.page_import_load_audit(%s::jsonb,%s,%s,%s,%s)',
+        native_cursor.execute('SELECT truss.person_page_import_load_audit(%s::jsonb,%s,%s,%s,%s)',
             (selected_filters,maximum_entries,selected_cursor,manifest['releaseId'],digest),prepare=False)
         return _decode_listing_page(bytes(native_cursor.fetchone()[0]))
 
@@ -526,7 +544,7 @@ def read_mutation_group_audit(host, transaction, attempt_id: str, maximum_events
     """Read one whole committed owned-profile mutation attempt for its auditors."""
     from .psycopg_host import PsycopgHost
     if (type(host) is not PsycopgHost or type(attempt_id) is not str
-            or type(maximum_events) is not int or not 1 <= maximum_events <= 1024):
+            or type(maximum_events) is not int or not 1 <= maximum_events <= 4096):
         return Ok(LoadAuditUnavailable(reason='observation'))
     try:
         import uuid
@@ -553,11 +571,11 @@ def page_mutation_group_audit(host,transaction,filters,cursor: MutationGroupAudi
     from .psycopg_host import PsycopgHost
     from dataclasses import asdict
     if (type(host) is not PsycopgHost or type(filters) is not dict
-            or type(maximum_events) is not int or not 1<=maximum_events<=1024
+            or type(maximum_events) is not int or not 1<=maximum_events<=4096
             or cursor is not None and type(cursor) is not MutationGroupAuditListingCursor):
         return Ok(LoadAuditUnavailable(reason='observation'))
     allowed={'attemptId','documentId','moduleId','entityId','entityType','entityKey',
-             'nativeActorOid','assertedAction','observedAtFrom','observedAtUntil'}
+             'nativeActorOid','assertedAction','observedAtFrom','observedAtUntil','includeData'}
     try:
         selected_filters=json.dumps(filters,ensure_ascii=False,separators=(',',':'),sort_keys=True,allow_nan=False)
         filter_bytes=selected_filters.encode('utf8')
@@ -565,9 +583,10 @@ def page_mutation_group_audit(host,transaction,filters,cursor: MutationGroupAudi
         return Ok(LoadAuditUnavailable(reason='observation'))
     if (set(filters)-allowed or any(type(key) is not str for key in filters)
             or any(type(value) is not str for key,value in filters.items()
-                   if key not in ('entityKey',))
-            or not {'documentId','moduleId'}<=set(filters)
-            or any(not 1<=len(filters[key].encode('utf8'))<=4096 for key in ('documentId','moduleId'))
+                   if key not in ('entityKey','includeData'))
+            or 'includeData' in filters and type(filters['includeData']) is not bool
+            or ('documentId' in filters) != ('moduleId' in filters)
+            or any(not 1<=len(filters[key].encode('utf8'))<=4096 for key in ('documentId','moduleId') if key in filters)
             or any(key in filters and not _valid_filter_time(filters[key])
                    for key in ('observedAtFrom','observedAtUntil'))
             or len(filter_bytes)>65536):
@@ -590,7 +609,7 @@ def page_mutation_group_audit(host,transaction,filters,cursor: MutationGroupAudi
             return Ok(LoadAuditUnavailable(reason='observation'))
     def observe(native_cursor,_observed):
         pin_cursor(native_cursor)
-        native_cursor.execute('SELECT truss.page_mutation_group_audit(%s::jsonb,%s,%s,%s,%s)',
+        native_cursor.execute('SELECT truss.person_page_mutation_group_audit(%s::jsonb,%s,%s,%s,%s)',
             (selected_filters,maximum_events,selected_cursor,manifest['releaseId'],digest),prepare=False)
         return _decode_mutation_listing_page(bytes(native_cursor.fetchone()[0]))
     result=host._run_operation(transaction,observe,function_call=True)

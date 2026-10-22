@@ -1,0 +1,13 @@
+{
+  "status": "expected-baseline-refusal",
+  "candidateToolkit": "0.0.48",
+  "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "priorCandidateCompilerRevision": "f003997997e1d1a84ff47df34d1dc181660f2827",
+  "testProducer": "packages/python/tests/test_arras_view_model_native.py",
+  "testProducerSha256": "a56214368ea2ba48dfc9872ec1e93b3d002a61ccd607ffb54532f3c1ea7e1c64",
+  "observation": "Native acceptance and exact source custody pass; old candidate compiler refuses selected arras.view with WFT-TYPE. New compiler qualification remains pending.",
+  "limits": [
+    "Synthetic original UMF source carrying actual Arras vocabulary terms; no Arras parser/adaptor qualification.",
+    "This is a preserved failure, not a positive release receipt."
+  ]
+}

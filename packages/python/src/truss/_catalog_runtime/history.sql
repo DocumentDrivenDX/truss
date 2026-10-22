@@ -16,7 +16,7 @@ BEGIN
  OR NOT EXISTS(SELECT 1 FROM jsonb_each(selection) WHERE key='moduleId' AND jsonb_typeof(value)='string' AND octet_length(value#>>'{}') BETWEEN 1 AND 4096)
  OR NOT EXISTS(SELECT 1 FROM jsonb_each(selection) WHERE key='definitionId' AND jsonb_typeof(value)='string' AND octet_length(value#>>'{}') BETWEEN 1 AND 4096) THEN
   RAISE EXCEPTION 'bounded qualified history entity required' USING ERRCODE='22023';END IF;
- IF NOT truss.runtime_can_read(selection->>'documentId',selection->>'moduleId') THEN RAISE EXCEPTION 'current history owner reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(selection->>'documentId',selection->>'moduleId') THEN RAISE EXCEPTION 'current history owner reader required' USING ERRCODE='P1403';END IF;
  IF selection->>'kind'='object' THEN
   SELECT type_id INTO selected_type FROM truss.type_def WHERE document_id=selection->>'documentId' AND module=selection->>'moduleId' AND element=selection->>'definitionId'
    AND kind='record' AND NOT provisional AND retired_rev IS NULL;
@@ -41,7 +41,7 @@ BEGIN
   RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
  FOR reader IN SELECT value FROM jsonb_array_elements(access->'readers') LOOP
   IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
-   RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
 END;
 $$;
@@ -88,7 +88,7 @@ BEGIN
    RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
   FOR reader IN SELECT value FROM jsonb_array_elements(property_context->'readers') LOOP
    IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
-    RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
  IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership_qualified(image,qualified_actor);END IF;
@@ -97,7 +97,7 @@ BEGIN
    SELECT * INTO STRICT endpoint_pin FROM truss.runtime_owned_definition_metadata('type',(endpoint->>'typeId')::int,NULL,revision);
    IF endpoint->>'definitionPin' IS DISTINCT FROM endpoint_pin.definition_pin OR endpoint->'owner' IS DISTINCT FROM jsonb_build_object('documentId',endpoint_pin.document_id,'moduleId',endpoint_pin.module_id) THEN
     RAISE EXCEPTION 'original endpoint interpretation required' USING ERRCODE='55000';END IF;
-   IF NOT truss.runtime_can_read_qualified(endpoint_pin.document_id,endpoint_pin.module_id,qualified_actor) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read_qualified(endpoint_pin.document_id,endpoint_pin.module_id,qualified_actor) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END IF;
 END;
@@ -151,7 +151,7 @@ BEGIN
     edge_context->'before'->'source',edge_context->'before'->'target',edge_context->'after'->'source',edge_context->'after'->'target'))
     WHERE value<>'null'::jsonb LOOP
     IF NOT truss.runtime_can_read_qualified(endpoint_context->'identity'->'owner'->>'documentId',endpoint_context->'identity'->'owner'->>'moduleId',qualified_actor) THEN
-     RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='P1403';END IF;
     PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',endpoint_context->'identity',
      'catalogRevision',edge_context->>'captureCatalogRevision','ownership',endpoint_context->'ownership'),qualified_actor);
    END LOOP;
@@ -186,7 +186,7 @@ BEGIN
     RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
    FOR reader IN SELECT value FROM jsonb_array_elements(property_context->'readers') LOOP
     IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
-     RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='P1403';END IF;
    END LOOP;
   ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
   ELSIF event->>'operation'='metadata' THEN
@@ -317,7 +317,7 @@ BEGIN
    OR source_operation->>'operation' IS DISTINCT FROM
       (CASE kind WHEN 'o' THEN 'create_object' ELSE 'create_edge' END) THEN
    RAISE EXCEPTION 'original qualified import creation required' USING ERRCODE='55000';END IF;
-  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'original creation dependency reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'original creation dependency reader required' USING ERRCODE='P1403';END IF;
   SELECT to_jsonb(s) INTO actual FROM truss.record_source s WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint;
   IF actual IS NULL OR actual->>'entity_kind' IS DISTINCT FROM kind::text
    OR actual->>'entity_id' IS DISTINCT FROM entity->>'id' THEN
@@ -325,7 +325,7 @@ BEGIN
   content:=convert_to(actual::text,'UTF8');
   result:=convert_to(jsonb_build_object('outcome','found','loadId',actual->>'load_id','writerXid',ledger.writer_xid::text,
    'contentBase64',replace(encode(content,'base64'),chr(10),''),'sha256',encode(sha256(content),'hex'))::text,'UTF8');
-  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'current creation dependency reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'current creation dependency reader required' USING ERRCODE='P1403';END IF;
  END IF;
  PERFORM truss.runtime_history_entity(selection,expected_release,expected_digest);
  IF captured_revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN RAISE EXCEPTION 'provenance context changed' USING ERRCODE='55P03';END IF;

@@ -12,13 +12,13 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',endpoint_type.type_id,NULL,captured_revision);
  IF identity->>'definitionPin' IS DISTINCT FROM pin.definition_pin OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',endpoint_type.document_id,'moduleId',endpoint_type.module) THEN
   RAISE EXCEPTION 'original endpoint definition correspondence required' USING ERRCODE='22023';END IF;
- IF NOT truss.runtime_can_read(endpoint_type.document_id,endpoint_type.module) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(endpoint_type.document_id,endpoint_type.module) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT endpoint FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=endpoint_type.type_id;
  IF (endpoint.root_id IS NULL) IS DISTINCT FROM (endpoint.root_type IS NULL) THEN RAISE EXCEPTION 'complete root pair required' USING ERRCODE='55000';END IF;
  ownership:='{"state":"rootless"}';
  IF endpoint.root_id IS NOT NULL THEN
   SELECT * INTO STRICT root_type FROM truss.type_def WHERE type_id=endpoint.root_type AND kind='record' AND NOT provisional AND retired_rev IS NULL;
-  IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'aggregate root reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'aggregate root reader required' USING ERRCODE='P1403';END IF;
   SELECT * INTO STRICT root_object FROM truss.object WHERE id=endpoint.root_id AND type_id=endpoint.root_type;
   IF root_object.root_id IS NOT NULL OR root_object.root_type IS NOT NULL OR root_object.id=endpoint.id AND root_object.type_id=endpoint.type_id THEN
    RAISE EXCEPTION 'live rootless aggregate root required' USING ERRCODE='22023';END IF;

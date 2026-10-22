@@ -96,6 +96,10 @@ def main():
         base=UnchangedTupleTests if digest==manifest['target'] else RuntimeMigrationNativeTests
         case=type(label+'MigrationTests',(base,),{'source_label':label,'wheel_environment':key})
         suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(case))
+    from test_runtime_migrations_subsequent_native import SubsequentRuntimeMigrationTests
+    os.environ['TRUSS_MIGRATION_WHEELHOUSE']=str(args.wheelhouse.resolve())
+    subsequent=type('PriorPublishedReceiptTests',(SubsequentRuntimeMigrationTests,),{'wheel_environment':'TRUSS_MIGRATION_GATE_SOURCE44'})
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(subsequent))
     result=unittest.TextTestRunner(verbosity=2).run(suite)
     receipt={'scope':'Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage',
         'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),
@@ -105,7 +109,7 @@ def main():
         'originalWheels':{label:{'filename':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for label,path in wheels.items()},
         'previousMigrationRelease':previous[0] if previous else None,'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),
         'skipped':len(result.skipped),'passed':result.wasSuccessful() and not result.skipped,
-        'limitations':['No pre-0.10 or protected-profile migration','Qualification applies only to the recorded platform and exact tuple','First real subsequent edge supplies native skip-release-chain proof']}
+        'limitations':['No pre-0.10 or protected-profile migration','Qualification applies only to the recorded platform and exact tuple','One final publication per complete route; actual multi-edge and prior published receipt controls are included']}
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(receipt,indent=2)+'\n')
     raise SystemExit(0 if receipt['passed'] else 1)
 

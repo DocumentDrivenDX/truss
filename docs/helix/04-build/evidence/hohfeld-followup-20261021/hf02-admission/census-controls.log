@@ -1,0 +1,14 @@
+test_cancelled_function_preserves_prior_work_and_timeout (test_managed_function_guard_native.ManagedFunctionGuardTests.test_cancelled_function_preserves_prior_work_and_timeout) ... ok
+test_changed_timeout_guard_has_no_effect_then_executes_once (test_managed_function_guard_native.ManagedFunctionGuardTests.test_changed_timeout_guard_has_no_effect_then_executes_once) ... ok
+test_matching_timeout_uses_three_commands (test_managed_function_guard_native.ManagedFunctionGuardTests.test_matching_timeout_uses_three_commands) ... ok
+test_stale_transaction_never_invokes_function (test_managed_function_guard_native.ManagedFunctionGuardTests.test_stale_transaction_never_invokes_function) ... ok
+test_matching_table_timeout_preserves_descriptor_and_three_commands (test_managed_function_guard_native.ManagedTableFunctionGuardTests.test_matching_table_timeout_preserves_descriptor_and_three_commands) ... ok
+test_replaced_transaction_with_invalid_semantic_parameters_stays_contained (test_managed_function_guard_native.ManagedTableFunctionGuardTests.test_replaced_transaction_with_invalid_semantic_parameters_stays_contained) ... ok
+test_table_cancellation_preserves_prior_work_and_timeout (test_managed_function_guard_native.ManagedTableFunctionGuardTests.test_table_cancellation_preserves_prior_work_and_timeout) ... ok
+test_table_stale_transaction_and_wrong_row_counts_preserve_prior_work (test_managed_function_guard_native.ManagedTableFunctionGuardTests.test_table_stale_transaction_and_wrong_row_counts_preserve_prior_work) ... ok
+test_table_timeout_mismatch_has_zero_effect_before_single_dispatch (test_managed_function_guard_native.ManagedTableFunctionGuardTests.test_table_timeout_mismatch_has_zero_effect_before_single_dispatch) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 9.020s
+
+OK

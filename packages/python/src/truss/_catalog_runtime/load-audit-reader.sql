@@ -17,9 +17,9 @@ BEGIN
  SELECT * INTO selected FROM truss.runtime_import_load_chunk c WHERE c.invocation_id=selected_invocation
   AND c.chunk_index=selected_chunk AND c.writer_xid<>pg_current_xact_id();
  -- Hide whether an unqualified invocation/chunk identifier exists.
- IF NOT FOUND THEN RAISE EXCEPTION 'qualified import audit scope unavailable' USING ERRCODE='42501';END IF;
+ IF NOT FOUND THEN RAISE EXCEPTION 'qualified import audit scope unavailable' USING ERRCODE='P1403';END IF;
  IF selected.owner_inventory_complete IS NOT TRUE THEN
-  RAISE EXCEPTION 'complete original load owner inventory required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'complete original load owner inventory required' USING ERRCODE='P1403';END IF;
  IF jsonb_array_length(selected.original_owners)=0 THEN
   -- An admitted empty load has no module scope from which to derive an audit
   -- role, so only an enrolled installation registrar may inspect its metadata.
@@ -28,7 +28,7 @@ BEGIN
  FOR owner IN SELECT value FROM jsonb_array_elements(selected.original_owners) LOOP
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
     AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-   RAISE EXCEPTION 'complete original load audit membership required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete original load audit membership required' USING ERRCODE='P1403';END IF;
  END LOOP;
  SELECT count(*),coalesce(jsonb_agg(chunk_index::text ORDER BY chunk_index),'[]'::jsonb) INTO all_count,chunks
   FROM truss.runtime_import_load_chunk WHERE invocation_id=selected_invocation AND writer_xid<>pg_current_xact_id();
@@ -54,7 +54,7 @@ BEGIN
  FOR owner IN SELECT value FROM jsonb_array_elements(selected.original_owners) LOOP
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
    AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-   RAISE EXCEPTION 'load audit authority changed before release' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'load audit authority changed before release' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF jsonb_array_length(selected.original_owners)=0 THEN
   -- Repeat the registrar-only empty-scope admission at the disclosure edge;
@@ -63,7 +63,7 @@ BEGIN
  END IF;
  PERFORM truss.runtime_person(false);
  RETURN convert_to(jsonb_build_object('outcome','page','invocationId',selected.invocation_id::text,
-  'loadId',selected.load_id,'assertedOriginSha256',selected.asserted_origin_sha256,'nativeActor',selected.native_actor::text,
+  'loadId',selected.load_id,'assertedOriginSha256',selected.asserted_origin_sha256,'nativeActor',selected.native_actor::text,'nativeActorName',selected.native_actor_name,
   'observedAt',to_char(selected.audit_observed_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),'createdCount',created_count::text,
   'skippedCount',skipped_count::text,'rejectedCount',rejected_count::text,
   'loadCreatedCount',CASE WHEN state_value='complete' THEN load_created::text ELSE NULL END,
@@ -106,7 +106,7 @@ BEGIN
  actor:=truss.runtime_person(false);
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'current import audit enrollment required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current import audit enrollment required' USING ERRCODE='P1403';END IF;
  IF filters IS NULL OR jsonb_typeof(filters) IS DISTINCT FROM 'object'
   OR filters-ARRAY['invocationId','loadId','nativeActorOid','documentId','moduleId','observedAtFrom','observedAtUntil']<>'{}'::jsonb
   OR maximum_entries IS NULL OR maximum_entries NOT BETWEEN 1 AND 1024 THEN
@@ -118,7 +118,6 @@ BEGIN
   OR filters ? 'nativeActorOid' AND (jsonb_typeof(filters->'nativeActorOid') IS DISTINCT FROM 'string'
    OR filters->>'nativeActorOid' !~ '^[1-9][0-9]{0,9}$' OR (filters->>'nativeActorOid')::numeric>4294967295)
   OR (filters ? 'documentId') IS DISTINCT FROM (filters ? 'moduleId')
-  OR filters ? 'documentId' IS NOT TRUE OR filters ? 'moduleId' IS NOT TRUE
   OR filters ? 'documentId' AND (jsonb_typeof(filters->'documentId') IS DISTINCT FROM 'string'
    OR octet_length(filters->>'documentId') NOT BETWEEN 1 AND 4096
    OR jsonb_typeof(filters->'moduleId') IS DISTINCT FROM 'string'
@@ -137,10 +136,10 @@ BEGIN
   IF from_time IS NOT NULL AND until_time IS NOT NULL AND from_time>=until_time THEN
    RAISE EXCEPTION 'ordered import audit observed-time range required' USING ERRCODE='22023';END IF;
  END IF;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'qualified import audit module enrollment required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'qualified import audit module enrollment required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
   OR pg_is_in_recovery() THEN RAISE EXCEPTION 'current import audit release required' USING ERRCODE='0A000';END IF;
@@ -205,13 +204,14 @@ BEGIN
      OR c.native_actor IS DISTINCT FROM source_row.native_actor OR c.native_actor_name IS DISTINCT FROM source_row.native_actor_name)) THEN
    RAISE EXCEPTION 'inconsistent retained import invocation' USING ERRCODE='P1010';END IF;
   IF source_row.owner_inventory_complete IS NOT TRUE THEN
-   RAISE EXCEPTION 'complete original import owner inventory required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete original import owner inventory required' USING ERRCODE='P1403';END IF;
   owners:=source_row.original_owners;
   IF jsonb_array_length(owners)=0 THEN PERFORM truss.runtime_person(true);END IF;
+  IF NOT filters ? 'documentId' AND EXISTS(SELECT 1 FROM jsonb_array_elements(owners) owner(value) WHERE NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner.value->>'documentId' AND a.module=owner.value->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid))) THEN CONTINUE;END IF;
   FOR owner IN SELECT value FROM jsonb_array_elements(owners) LOOP
    IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
      AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-    RAISE EXCEPTION 'complete original load audit membership required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'complete original load audit membership required' USING ERRCODE='P1403';END IF;
   END LOOP;
   IF filters ? 'invocationId' AND candidate.invocation_id::text IS DISTINCT FROM filters->>'invocationId' THEN CONTINUE;END IF;
   IF filters ? 'loadId' AND source_row.load_id IS DISTINCT FROM filters->>'loadId' THEN CONTINUE;END IF;
@@ -245,7 +245,7 @@ BEGIN
   FOR owner IN SELECT value FROM jsonb_array_elements(owners) LOOP
    IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
      AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-    RAISE EXCEPTION 'load audit authority changed before listing release' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'load audit authority changed before listing release' USING ERRCODE='P1403';END IF;
   END LOOP;
   PERFORM truss.runtime_person(false);
   RETURN convert_to(jsonb_build_object('outcome','summary','invocationId',candidate.invocation_id::text,
@@ -258,10 +258,10 @@ BEGIN
    'createdCount',created_count::text,'skippedCount',skipped_count::text,'rejectedCount',rejected_count::text,
    'chunks',entries,'nextPageCursor',convert_from(cursor_bytes,'UTF8')::jsonb)::text,'UTF8');
  END LOOP;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'load audit module authority changed before empty-page release' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'load audit module authority changed before empty-page release' USING ERRCODE='P1403';END IF;
  PERFORM truss.runtime_person(false);
  RETURN convert_to('{"outcome":"end","nextPageCursor":null}'::text,'UTF8');
 END;

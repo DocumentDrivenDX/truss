@@ -87,5 +87,5 @@ class QueryExportSourceTests(base.PublicCreateGroupTests):
         self.assertEqual(connection.execute('SELECT count(*) FROM truss.query_export_objects(%s::jsonb,%s)',
                                             (complete, child_type)).fetchone(), (1,))
         self.admin.execute('REVOKE export_root_reader FROM consumer')
-        self.refusal(connection, '42501', 'SELECT count(*) FROM truss.query_export_objects(%s::jsonb,%s)', (complete, child_type))
+        self.refusal(connection, 'P1403', 'SELECT count(*) FROM truss.query_export_objects(%s::jsonb,%s)', (complete, child_type))
         latest.detach();connection.rollback()

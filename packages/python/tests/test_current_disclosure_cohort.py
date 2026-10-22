@@ -13,13 +13,10 @@ class DisclosureCohortTests(unittest.TestCase):
   import json
   from unittest.mock import patch
   expected={
-   'def824d16bc00f9deb50c7c63bc08a728cff631eef25cf2616032b761e1c679c':'36224fd006f525e26e79ad2504bee7ffd75439ce1c8367564cfeb7c826e736a4',
-   '8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc',
+   'e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487':'34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa',
+   'a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5':'ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445',
   }
-  expected['695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117']='2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'
-  expected['8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c']='01a1e0002edafabffaa7611e40a3a33fc48d221a5e0084e96fe1806a0f0c3fa8'
-  revisions={'db1e0dc5b1ec6aec0f12646421cefc314989d974':'0.4.48',
-             '5f013200cf36ddcaf5d4a380ba961267f819f7ca':'0.4.49'}
+  revisions={'557153731e9f5d0583193a1189a07c6ed485d3d3':'0.4.51'}
   for cohorts in (query_cohorts,disclosure_cohorts):
    self.assertEqual({row['weftWheelSha256']:row['weftModuleSha256'] for row in cohorts},expected)
    baseline={key:value for key,value in cohorts[0].items() if key not in ('weftWheelSha256','weftModuleSha256','weftRevision','weftVersion')}

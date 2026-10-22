@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_refuse_repair_accept_and_enforce_bounds (test_relationship_evolution_native.RelationshipEvolutionTests.test_refuse_repair_accept_and_enforce_bounds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_relationship_evolution_native.py", line 41, in test_refuse_repair_accept_and_enforce_bounds
+    failed=self.run_group(a,t,(Delete(operation='delete_edge',target=StoredObjectReference(identity=e1)),),'violate-min');self.assertIsInstance(failed,GroupFailed);self.assertEqual(json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))['code'],'dependencies')
+                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'multiplicity' != 'dependencies'
+- multiplicity
++ dependencies
+
+
+----------------------------------------------------------------------
+Ran 1 test in 5.308s
+
+FAILED (failures=1)

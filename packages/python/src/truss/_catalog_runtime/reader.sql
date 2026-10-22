@@ -65,7 +65,7 @@ BEGIN
  END LOOP;
  -- Membership may have changed while the projection was assembled.
  FOR module IN SELECT value FROM jsonb_array_elements(modules) LOOP
-  IF NOT truss.runtime_can_read(module->>'documentId',module->>'moduleId') THEN RAISE EXCEPTION 'current reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(module->>'documentId',module->>'moduleId') THEN RAISE EXCEPTION 'current reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Recheck every dependency actually used in the buffered projection, even if
  -- that owner was revoked before its own module was visited and emitted.
@@ -101,7 +101,7 @@ BEGIN
     JOIN truss.key_def k ON k.type_id=e.target_type AND k.key_id=d.target_key
     JOIN truss.type_def t ON t.type_id=k.type_id JOIN truss.prop_def p ON p.prop_id=ANY(k.prop_ids)
   ) used_owners LOOP
-  IF NOT truss.runtime_can_read(dependency.document_id,dependency.module_id) THEN RAISE EXCEPTION 'current dependency reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(dependency.document_id,dependency.module_id) THEN RAISE EXCEPTION 'current dependency reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
  encoded:=convert_to(jsonb_build_object('catalogRevision',captured_revision,'layoutProfile',installation.layout_profile,'modules',modules)::text,'UTF8');
@@ -237,9 +237,9 @@ BEGIN
  END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
  SELECT * INTO archive FROM truss.schema_doc WHERE rev<=captured_revision AND doc_id=selected_document ORDER BY rev DESC LIMIT 1;
- IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+ IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='P1403';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
-  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF octet_length(archive.document)>maximum_bytes THEN RAISE EXCEPTION 'document byte limit' USING ERRCODE='54000';END IF;
  IF encode(sha256(convert_to(archive.document,'UTF8')),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'exact accepted source required' USING ERRCODE='55000';END IF;
@@ -251,7 +251,7 @@ BEGIN
   ||CASE WHEN archive.validation ? 'dddValidation' THEN jsonb_build_object('dddProfile',archive.validation->'dddProfile','dddValidation',archive.validation->'dddValidation') ELSE '{}'::jsonb END)::text,'UTF8');
  IF octet_length(encoded)>maximum_bytes THEN RAISE EXCEPTION 'encoded document byte limit' USING ERRCODE='54000';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
-  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'current reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'current reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
@@ -275,9 +275,9 @@ BEGIN
  IF selected_document IS NULL THEN RETURN convert_to(jsonb_build_object('catalogRevision',revision::text)::text,'UTF8');END IF;
  IF octet_length(selected_document) NOT BETWEEN 1 AND 4096 THEN RAISE EXCEPTION 'bounded document selection required' USING ERRCODE='22023';END IF;
  SELECT * INTO archive FROM truss.schema_doc WHERE rev<=revision AND doc_id=selected_document ORDER BY rev DESC LIMIT 1;
- IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+ IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='P1403';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
-  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='P1403';END IF;
  END LOOP;
  RETURN convert_to(jsonb_build_object('catalogRevision',revision::text,'documentId',selected_document,'documentRevision',archive.doc_revision,'sourceCatalogRevision',archive.rev::text)::text,'UTF8');
 END;

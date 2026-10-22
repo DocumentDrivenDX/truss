@@ -1,0 +1,8 @@
+test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol) ... ok
+test_selected_boolean_cells_preserve_true_and_false (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_boolean_cells_preserve_true_and_false) ... ok
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 7.514s
+
+OK

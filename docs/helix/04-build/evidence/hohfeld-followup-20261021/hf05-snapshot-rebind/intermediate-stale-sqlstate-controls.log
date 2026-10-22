@@ -1,0 +1,39 @@
+test_empty_record_accepts_exact_paired_required_field_and_unknown_content (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content) ... ok
+test_paired_required_addition_does_not_authorize_unknown_extension_change (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change) ... ok
+test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit) ... ok
+test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition) ... ok
+test_populated_record_returns_typed_violation_and_preserves_head_data_history (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history) ... ok
+test_register_rebind_read_report_history_and_retry (test_catalog_rebind_native.CatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... FAIL
+test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind) ... ok
+test_missing_null_and_empty_container_counts (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_missing_null_and_empty_container_counts) ... ok
+test_register_rebind_read_report_history_and_retry (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... FAIL
+test_register_existing_objects_lookup_and_query (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_register_existing_objects_lookup_and_query) ... ok
+
+======================================================================
+FAIL: test_register_rebind_read_report_history_and_retry (test_catalog_rebind_native.CatalogRebindTests.test_register_rebind_read_report_history_and_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_rebind_native.py", line 94, in test_register_rebind_read_report_history_and_retry
+    self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_register_rebind_read_report_history_and_retry (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_register_rebind_read_report_history_and_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_rebind_native.py", line 94, in test_register_rebind_read_report_history_and_retry
+    self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+----------------------------------------------------------------------
+Ran 10 tests in 30.980s
+
+FAILED (failures=2)

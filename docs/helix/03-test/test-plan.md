@@ -27,6 +27,69 @@ ddx:
       kind: informed_by
 ---
 
+## HF-02 selected person admission and original-request recovery
+
+The post-0.0.47 selection uses CONTRACT-004/005/007/009 and ADR-005. Native
+`P1403` is explicit business authorization; genuine PostgreSQL `42501` must not
+be silently reclassified. Test all 13 HF-01 context/reference/read/group/import
+surfaces as a nonmember. Independently revoke original entrypoint and private
+callee EXECUTE for an enrolled writer; both must remain execution failures with
+native SQLSTATE and preserved prior caller work. A changed original function
+owner is integrity failure. PUBLIC invocation shims grant neither private
+implementation nor table access. A reader retains metadata context but cannot
+apply. Normal managed context remains three client statements.
+
+Concrete source: `test_person_invocation_native.PersonInvocationNativeTests`.
+Existing managed function/table guard native tests retain snapshot, timeout,
+no-effect-before-dispatch and caller savepoint/transaction assertions. Current
+component evidence is scoped in the Hohfeld execution plan; no release is qualified
+by these component checks alone.
+
+Recovery tests must freeze the original complete input/request/source frame before
+native resolution, then verify delete/unlink/later-deletion/no-op replay without
+current target lookups, changed-input conflict, retained-owner revocation,
+cross-person denial, pending versus committed outcome, missing/invisible/never-issued
+non-disclosure, expiry/protection boundaries, no canonical effect on miss, and a
+stable retained audit group identity across apply/replay. Recovery uses the existing
+caller-owned read-write READ COMMITTED admission/receipt lock profile; it observes
+receipts without executing missing requests. It does not promise a read-only
+transaction profile or infer original rollback/issuance from row absence.
+
+`test_group_request_recovery_native.GroupRequestRecoveryNativeTests` retains
+original inputs through deleted/unlinked targets, no-op followed by deletion,
+same-transaction versus committed replay, two groups in one outer transaction,
+source-frame mismatch, local digest corruption, revoked retained owners and
+cross-person scope. A real two-connection in-flight request returns observation
+unavailability; after rollback its absence carries no issuance conclusion.
+The lost-acknowledgement control commits through the real driver before injecting
+the missing acknowledgement; recovery independently observes the committed receipt.
+It qualifies that observation, not a general network-fault transport protocol.
+
+The selected ordinary runtime retains complete receipts indefinitely. Direct
+writer UPDATE/DELETE remains denied; no supported expiry writer is selected.
+The two expired-header controls explicitly seed an administrative fixture while
+restoring the original immutable triggers before observation. They qualify
+disclosure-safe expired receipt observation and no reapplication, without claiming
+an elapsed retention-window test or a supported pruning/protection transition.
+
+Final-state controls in `test_group_create_native` and `test_edge_mutations_native`
+require P1405, typed multiplicity/phase, the authorized qualified relationship and
+exact native endpoint/rule evidence, no fabricated causal ordinal, and no residue.
+Allocated object IDs inside a refused transaction do not imply durable objects.
+
+## HF-03 required core/DDD field admission
+
+`test_required_ddd_evolution_native.RequiredDDDEvolutionTests` selects original
+UMF0.10/DDD0.1 validation and exact paired scalar Field/member/extension additions.
+Require empty-Record acceptance with exact accepted source and unknown content;
+populated typed `property.required` refusal, including a valid matching retained
+value without implicit paired backfill, with exact count and unchanged
+head/data/history; both writer-first and acceptance-first native lock orders;
+and stale-pin refusal after publication. Existing optional-addition and changed
+prior-meaning refusal controls remain required. The native plan/census must run
+under the catalog-head gate; no independent host emptiness probe may authorize it.
+
+
 ## P0 forward migration release gate — 2026-10-21
 
 The latest-only policy requires a release-blocking populated predecessor-to-latest
@@ -42,6 +105,48 @@ Linux only. Exact server/driver/UMF/Weft/platform tuples scope each receipt.
 The first route uses UMF 0.10 v0.0.44 as source. Each future release adds its source
 fixture to the migration lineage; fixtures support conversion tests, not old runtime
 support. Pre-0.10, downgrade and mixed-runtime online operation remain excluded.
+
+## HF-05 native selective source component
+
+`test_query_selective_sources_native` creates10,001 committed objects through
+actual public groups, separately tests native candidate/ordered sources and
+preserves the legacy full-source refusal. Require actual GIN/Btree index scan
+deltas and original EXPLAIN ANALYZE BUFFERS; a fast result or created index alone
+is insufficient. Keep original asynchronous-GIN sequential-scan evidence and
+measure the selected synchronous index's real managed write costs. Qualify exact
+UMF key framing/Unicode/empty/length boundaries, missing keys, lookahead tails,
+resource refusal before residual truncation, and valid longer-key complete
+fallback. Preserve prior committed population and caller work on rollback.
+
+Original-function grant damage must remain42501 even after a contained54000
+source error in the same outer transaction. Role revocation remains P1403.
+The shared guard's fixed native ACL query is replanned with typed OID parameters;
+no caller SQL is interpolated. Retain the failed cached/plain-SELECT controls.
+This native source component is not the new compiler/public composition gate:
+that gate must repeat the paths via final0.2.8 artifacts, selected facts/pages,
+sparse residuals, exact fallback families and real application authorization.
+
+## HF-04 compiler-owned columns and explicit entity selection
+
+`test_query_descriptors_native` verifies compiler metadata on empty, aggregate,
+all-null and paged results, including source availability, native null, SQL
+nullability, immutable original descriptors and exclusion of hidden sort outputs.
+Never infer a descriptor from returned values. A damaged original query-binding
+grant remains PostgreSQL42501 and preserves earlier caller work. The existing
+compiled-query suite verifies nonmember/refreshed-role denial with cache reuse
+and the combined catalog/read route through guarded person entrypoints.
+
+`test_query_entity_projection_native` verifies ordered selected facts, facts-free
+entities, facts with continuation, selection-bound cursors, local invalid-selector
+refusal, and actual101-edge complete-result refusal versus explicitly bounded
+truncation. After deleting one edge, complete100 succeeds. Preserve the old entity
+profile's shape and exact scalar/page behavior. The companion Weft15-case corpus
+must pass through its installed native compiler and actual Chromium/WASM with
+byte-identical artifacts, including exact/one-over transport limits and traps.
+
+These are source component gates. Typed diagnostic reasons, indexed selective
+sources above10,000, final package versions, full migration lineage, Linux and
+public release qualification remain separate required work.
 
 
 # Truss project test plan
@@ -2201,3 +2306,21 @@ Final six native/TLS cases pass53.069s. [Evidence](../04-build/evidence/register
 retains failed historical setup/path runs, independent comparison controls and
 single-caller external registered transport. Full backend B01 admission remains
 unqualified; all132 required cases remain required.
+
+### HF-06 completion and full dry-run controls
+
+Exercise actual deferred Truss trigger failure before rollback, successful
+request-free group validation without object/journal/attempt residue, preserved
+prior caller work and caller constraint mode, an unrelated host deferred
+constraint left untouched, nonrewinding sequence effects, and a subsequent real
+application and caller-owned outer COMMIT. Native failure remains an execution
+outcome with original SQLSTATE; uncertain rollback cannot publish validation.
+
+HF-07 distributes `fixtures/hohfeld-followup-0.1.json`, its exact independently
+asserted test producers and `scripts/run-hf-conformance.py` in a separate release
+archive. The runner refuses a package/compiler/native-profile mismatch and any
+skip, failure or test-count discrepancy. Run it outside the checkout with the
+installed final wheel. This is separate from the mandatory complete source
+lineage gate, which now includes the actual prior-publication/lost-response
+controls. Record full native ACL identities, whole-route receipt append and
+existing ledger row preservation; never infer receipt-table absence from age.

@@ -1,0 +1,124 @@
+test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial) ... FAIL
+test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error) ... FAIL
+test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error) ... FAIL
+test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) ... FAIL
+test_normal_context_stays_three_statements (test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements) ... FAIL
+test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access) ... FAIL
+test_reader_keeps_context_but_cannot_apply_and_prior_work_survives (test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives) ... FAIL
+
+======================================================================
+FAIL: test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 32, in test_damaged_mutation_grants_are_not_business_denial
+    c,h,a,t=self.ready(document_ids=('adoc',));semantic,request=self.input(a,t)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 106, in test_capture_damaged_function_grant_separate_from_enrollment
+    c, h, a, t = self.ready(document_ids=('adoc',))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 23, in test_damaged_private_dependency_is_execution_error
+    c,h,a,t=self.ready(document_ids=('adoc',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 65, in test_capture_nonmember_context_references_reads_groups_and_imports
+    c, h, a, t = self.ready(document_ids=('adoc',))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_normal_context_stays_three_statements (test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 54, in test_normal_context_stays_three_statements
+    c,h,a,t=self.ready(document_ids=('adoc',));original=h._cursor;queries=[]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 66, in test_public_shim_does_not_grant_private_implementation_or_table_access
+    c,h,a,t=self.ready(document_ids=('adoc',));h.detach();c.rollback()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+======================================================================
+FAIL: test_reader_keeps_context_but_cannot_apply_and_prior_work_survives (test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 41, in test_reader_keeps_context_but_cannot_apply_and_prior_work_survives
+    c,h,a,t=self.ready(document_ids=('adoc',));semantic,request=self.input(a,t)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None) RETURN cannot have a parameter in function returning void
+LINE 231:  RETURN truss.import_report_record_authority("original_ident...
+                  ^
+
+----------------------------------------------------------------------
+Ran 7 tests in 7.360s
+
+FAILED (failures=7)

@@ -1,0 +1,2 @@
+Captured 54 actual native function declarations
+Query volatility [('query_binding', 'v'), ('query_binding_if_changed', 'v'), ('query_edges', 's'), ('query_export_edges', 's'), ('query_export_objects', 's'), ('query_export_page_objects', 's'), ('query_object_attribution', 's'), ('query_object_load_id', 's'), ('query_object_times', 's'), ('query_objects', 's'), ('query_page_objects', 's'), ('query_scope', 'v'), ('query_seek_objects', 's'), ('query_selected_objects', 's')]

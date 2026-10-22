@@ -1,0 +1,9 @@
+test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group (test_audit_disclosure_native.AuditDisclosureNativeTests.test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group) ... ok
+test_deleted_entity_type_filter_and_descending_python_continuation (test_audit_disclosure_native.AuditDisclosureNativeTests.test_deleted_entity_type_filter_and_descending_python_continuation) ... ok
+test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor (test_audit_disclosure_native.AuditDisclosureNativeTests.test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor) ... ok
+test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 17.532s
+
+OK

@@ -140,6 +140,7 @@ class MutationGroupAuditEntry(_Carrier):
                        'create_object', 'update_object', 'delete_object',
                        'create_edge', 'update_edge', 'delete_edge']
     observed_at: str
+    data: dict | None = None
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

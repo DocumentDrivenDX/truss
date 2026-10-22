@@ -1,0 +1,17 @@
+test_deferred_authority_failure_is_observed_and_prior_work_survives (test_group_validation_native.GroupValidationTests.test_deferred_authority_failure_is_observed_and_prior_work_survives) ... ok
+test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data) ... FAIL
+test_unrelated_host_constraint_is_not_forced (test_group_validation_native.GroupValidationTests.test_unrelated_host_constraint_is_not_forced) ... ok
+
+======================================================================
+FAIL: test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_validation_native.py", line 29, in test_dry_run_checks_completion_without_durable_receipt_or_data
+    self.assertIsInstance(result,Ok,repr(result)+' '+str(h._custody.last_attempt.error));self.assertIsInstance(result.value,GroupValidationObserved,repr(result))
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: GroupFailed(failure=InvalidGroupInput(diagnostic_profile=ProfilePin(identity='truss-native-create-diagnostic', version='0.1', sha256='27c241fa37e64bbabb5c24f257690f98f2dcb1c3b8d8b3c273254ba31a6499e2'), diagnostic=ExactArtifact(identity='dedaf899abe34ab31f84b72f35ac1e8963b5c06a9e0aff7b42ce5b539539eb94', bytes_base64='eyJjb2RlIjoib3JpZ2luYWxfZG9jdW1lbnRzIn0=', sha256='dedaf899abe34ab31f84b72f35ac1e8963b5c06a9e0aff7b42ce5b539539eb94'), code='invalid'), outcome='failed') is not an instance of <class 'truss.preview.GroupValidationObserved'> : Ok(value=GroupFailed(failure=InvalidGroupInput(diagnostic_profile=ProfilePin(identity='truss-native-create-diagnostic', version='0.1', sha256='27c241fa37e64bbabb5c24f257690f98f2dcb1c3b8d8b3c273254ba31a6499e2'), diagnostic=ExactArtifact(identity='dedaf899abe34ab31f84b72f35ac1e8963b5c06a9e0aff7b42ce5b539539eb94', bytes_base64='eyJjb2RlIjoib3JpZ2luYWxfZG9jdW1lbnRzIn0=', sha256='dedaf899abe34ab31f84b72f35ac1e8963b5c06a9e0aff7b42ce5b539539eb94'), code='invalid'), outcome='failed'), status='ok')
+
+----------------------------------------------------------------------
+Ran 3 tests in 6.100s
+
+FAILED (failures=1)

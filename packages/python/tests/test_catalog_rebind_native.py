@@ -91,7 +91,7 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         self.admin.execute('REVOKE group_writer,group_reader FROM consumer')
         c,h,a,t=self.consumer()
         denied=a.report_in_transaction(t,accepted.value.revision)
-        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'P1403')
         self.assertIsInstance(a.catalog_view_in_transaction(t,a.catalog_view_request()),Ok)
         h.detach();c.rollback()
 

@@ -1,0 +1,17 @@
+test_deferred_authority_failure_is_observed_and_prior_work_survives (test_group_validation_native.GroupValidationTests.test_deferred_authority_failure_is_observed_and_prior_work_survives) ... ok
+test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data) ... FAIL
+test_unrelated_host_constraint_is_not_forced (test_group_validation_native.GroupValidationTests.test_unrelated_host_constraint_is_not_forced) ... ok
+
+======================================================================
+FAIL: test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_validation_native.py", line 25, in test_dry_run_checks_completion_without_durable_receipt_or_data
+    self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,GroupValidationObserved,repr(result))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P1403', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P1403', catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 3 tests in 7.886s
+
+FAILED (failures=1)

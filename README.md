@@ -13,15 +13,15 @@ use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Sta
 
 ## Run a private local instance
 
-With `uv` installed, run the published Truss `0.0.47` launcher in an isolated
+With `uv` installed, run the published Truss `0.0.48` launcher in an isolated
 Python3.11 tool environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.47' \
+  --from 'truss-toolkit[local,native]==0.0.48' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -38,12 +38,12 @@ Tools still embed the Python library, connect with an ordinary identity and
 register UMF documents; public business-role and module-access configuration is
 separate. For development against the current checkout, use `./scripts/truss-local`.
 
-**Version 0.0.47:** native `0.73-candidate`, Weft `0.4.49`, UMF core `0.10.0`.
+**Version 0.0.48:** native `0.74-candidate`, Weft `0.4.51`, UMF core `0.10.0`.
 The latest application runtime is the sole support target. Existing databases
-from the exact v0.0.44 and shared v0.0.45/46 tuples move forward through explicit
-transactional migration with original-attempt recovery. Startup never upgrades
-or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0047),
-[release notes](docs/helix/04-build/releases/v0.0.47.md) and
+from the exact v0.0.44, shared v0.0.45/46 and v0.0.47 tuples move forward through explicit
+transactional migration with original-attempt recovery and no release-age cutoff. Startup never upgrades
+or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0048),
+[release notes](docs/helix/04-build/releases/v0.0.48.md) and
 [qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
 Broad test discovery, managed-service support and performance certification
 remain unfinished.

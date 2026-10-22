@@ -1,0 +1,545 @@
+{
+  "scope": "Installed local macOS ARM64 unit/native commands extracted from mandatory Linux release job; separate platform observation, no Linux/publication claim",
+  "commands": [
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_local_runtime",
+        "test_local_runtime_native_isolation",
+        "test_local_install_cli_native",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 29.14535575004993,
+      "log": "00.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_embedded_owner",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 3.358732707973104,
+      "log": "01.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_group_result_wire",
+        "test_group_result_wire_native",
+        "test_action_transport",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 5.214057334000245,
+      "log": "02.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "-v",
+        "test_group_runtime_bounds",
+        "test_catalog_admission_outcomes",
+        "test_group_preconditions_native.GroupPreconditionTests",
+        "test_group_create_native.PublicCreateGroupTests",
+        "test_key_lookup_native.KeyLookupTests",
+        "test_object_read_native.PublicObjectReadTests",
+        "test_object_pages_native.ObjectPageTests",
+        "test_typed_query_pages_native.TypedQueryPagesTests",
+        "test_typed_query_pages_native.StringQueryPagesTests",
+        "test_read_only_public_native.ReadOnlyPublicTests"
+      ],
+      "returncode": 1,
+      "seconds": 97.64111279201461,
+      "log": "03.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_embedder_schemas_native",
+        "test_stress_registration_native",
+        "test_catalog_view_capacity_native",
+        "test_condition_precedence_native",
+        "test_group_source_admission_native",
+        "test_create_metadata_cache_native",
+        "test_import_chunk_closure_native",
+        "test_key_footprint_capacity_native",
+        "test_endpoint_capacity_native",
+        "test_history_projection_native",
+        "test_schema_cache_native",
+        "test_embedder_workflows_native",
+        "test_bulk_update_transition_guard_native",
+        "test_schema_memory_cache",
+        "test_record_schema",
+        "test_record_schema_oracle_native",
+        "test_record_preparation_native",
+        "test_record_schema_selection_native",
+        "test_reader_catalog_native",
+        "test_compiled_query_native.CompiledQueryTests.test_wide_complete_entity_preserves_fields_with_explicit_byte_budget"
+      ],
+      "returncode": 1,
+      "seconds": 200.91787412500707,
+      "log": "04.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_group_capacity_native.GroupCapacityTests",
+        "test_bulk_create_sql_native",
+        "test_journal_batches_native"
+      ],
+      "returncode": 0,
+      "seconds": 72.57682516699424,
+      "log": "05.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_current_query_runtime_native",
+        "test_current_query_subject_cut_native",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 30.30089075001888,
+      "log": "06.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_current_disclosure_cohort",
+        "test_current_disclosure_originals",
+        "test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests",
+        "-v"
+      ],
+      "returncode": 1,
+      "seconds": 1.0277450410067104,
+      "log": "07.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_domain_pack_catalog_native.DomainPackCatalogTests",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 28.33319791703252,
+      "log": "08.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_feed_runtime_native.FeedRuntimeTests",
+        "test_history_runtime_native.HistoryRuntimeTests",
+        "test_owned_scope_native.OwnedScopeTests",
+        "test_owned_objects_native.OwnedObjectTests",
+        "test_owned_group_batch_native.OwnedGroupBatchTests",
+        "test_journal_row_guard_native.JournalRowGuardTests",
+        "test_prepared_plan_capture_native.PreparedPlanCaptureTests",
+        "test_query_export_sources_native.QueryExportSourceTests",
+        "test_rootless_preparation_native.RootlessPreparationTests",
+        "test_operation_result_slots_native.OperationResultSlotTests",
+        "test_edge_authority_native.EdgeAuthorityTests",
+        "test_final_edge_inventory_native.FinalEdgeInventoryTests"
+      ],
+      "returncode": 1,
+      "seconds": 76.21711304201744,
+      "log": "09.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_catalog_key_backfill_native",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 31.711245915968902,
+      "log": "10.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_numeric_facets_native.NumericFacetTests.test_public_accept_create_update_import_read_and_query",
+        "test_numeric_facets_native.NumericFacet12_2Tests.test_public_accept_create_update_import_read_and_query"
+      ],
+      "returncode": 0,
+      "seconds": 9.477687833015807,
+      "log": "11.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_runtime_release_cache",
+        "test_query_compile_cache",
+        "test_schema_cache_native",
+        "test_hohfeld_statement_budgets_native",
+        "test_compiled_query_native",
+        "-v"
+      ],
+      "returncode": 1,
+      "seconds": 37.69820033299038,
+      "log": "12.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_refuse_registration_with_element_diagnostics",
+        "test_catalog_unchanged_native.CatalogUnchangedTests",
+        "test_graph_commit_practical_native.GraphCommitPracticalTests",
+        "test_atomic_group_surface_native.AtomicGroupSurfaceTests",
+        "test_import_rejection_practical_native.ImportRejectionPracticalTests"
+      ],
+      "returncode": 1,
+      "seconds": 32.58358266600408,
+      "log": "13.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_date_decimal_native.DateDecimalTests",
+        "test_date_decimal_native.LargeScaleDecimalTests",
+        "test_date_decimal_native.DateQueryTests",
+        "test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_named_revision_exact_numeric_workflow",
+        "test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_registration_refuses_missing_record_and_field_names",
+        "test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts",
+        "test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create"
+      ],
+      "returncode": 1,
+      "seconds": 30.22078091703588,
+      "log": "14.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_catalog_preparation_public",
+        "test_core10_catalog_native",
+        "test_commerce_source_native",
+        "test_catalog_declarative",
+        "test_catalog_declarative_native",
+        "test_catalog_enforcement_native",
+        "test_text_limit_evolution_native"
+      ],
+      "returncode": 0,
+      "seconds": 32.04494125000201,
+      "log": "15.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_decimal_scale2_native.DecimalScale2Tests"
+      ],
+      "returncode": 0,
+      "seconds": 5.0808928339974955,
+      "log": "16.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_catalog_rebind_native",
+        "test_required_catalog_rebind_native"
+      ],
+      "returncode": 0,
+      "seconds": 19.410865082987584,
+      "log": "17.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_batched_import_native",
+        "test_batched_import_parity_native",
+        "test_catalog_additions_native",
+        "test_catalog_continuation_native",
+        "test_catalog_compatible_acceptance_native",
+        "test_group_preview_native",
+        "test_lifecycle_native",
+        "test_install_preflight_native",
+        "test_module_access_batch_native",
+        "test_load_audit_native",
+        "test_mutation_group_audit_native",
+        "test_audit_disclosure_native",
+        "test_owned_group_audit_native",
+        "test_group_preview_wire",
+        "test_load_audit_wire",
+        "test_lifecycle_wire",
+        "test_catalog_continuation_types",
+        "test_ddd_owner_preparation",
+        "-v"
+      ],
+      "returncode": 1,
+      "seconds": 159.58634399995208,
+      "log": "18.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_receipt_visibility_native.ReceiptVisibilityTests"
+      ],
+      "returncode": 1,
+      "seconds": 5.697261666995473,
+      "log": "19.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_managed_function_guard",
+        "test_managed_function_guard_native.ManagedFunctionGuardTests",
+        "test_managed_function_guard_native.ManagedTableFunctionGuardTests",
+        "test_managed_function_guard_native.CatalogTableFunctionGuardTests",
+        "test_psycopg_host_native.PsycopgHostNativeTests"
+      ],
+      "returncode": 0,
+      "seconds": 14.842480124963913,
+      "log": "20.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_recursive_containers_native"
+      ],
+      "returncode": 0,
+      "seconds": 10.598600875004195,
+      "log": "21.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_timestamp_query_native"
+      ],
+      "returncode": 0,
+      "seconds": 3.9985293329809792,
+      "log": "22.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_binary_query_native.BinaryQueryTests"
+      ],
+      "returncode": 0,
+      "seconds": 4.7919090000214055,
+      "log": "23.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_optional_binary_query_native.OptionalBinaryTests"
+      ],
+      "returncode": 0,
+      "seconds": 6.0613542920327745,
+      "log": "24.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow",
+        "test_database_key_derivation_native.DatabaseKeyDerivationTests",
+        "test_string_key_bucket_native.StringKeyBucketNativeTests"
+      ],
+      "returncode": 0,
+      "seconds": 26.790071916009765,
+      "log": "25.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_traversal_native.PublicTraversalTests"
+      ],
+      "returncode": 0,
+      "seconds": 6.670252250041813,
+      "log": "26.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_facet_evolution_native.FacetEvolutionTests"
+      ],
+      "returncode": 0,
+      "seconds": 5.9098672500113025,
+      "log": "27.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_scalar_containers_native.ScalarContainerTests"
+      ],
+      "returncode": 0,
+      "seconds": 5.422500500048045,
+      "log": "28.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_typed_relationship_keys_native"
+      ],
+      "returncode": 0,
+      "seconds": 4.717713791993447,
+      "log": "29.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_typed_query_pages_native"
+      ],
+      "returncode": 0,
+      "seconds": 7.788010584015865,
+      "log": "30.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_field_name_evolution_native"
+      ],
+      "returncode": 0,
+      "seconds": 8.01130104198819,
+      "log": "31.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_record_label_evolution_native"
+      ],
+      "returncode": 0,
+      "seconds": 5.630044499994256,
+      "log": "32.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_required_evolution_native"
+      ],
+      "returncode": 0,
+      "seconds": 5.144900500017684,
+      "log": "33.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_relationship_evolution_native"
+      ],
+      "returncode": 1,
+      "seconds": 5.503535708005074,
+      "log": "34.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_container_required_evolution_native"
+      ],
+      "returncode": 0,
+      "seconds": 5.178018209000584,
+      "log": "35.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_replay_frame_native",
+        "test_owned_import_native",
+        "test_engine_import_native",
+        "test_engine_action_session_native",
+        "test_action_subject_installation_native",
+        "test_catalog_diagnostics_native"
+      ],
+      "returncode": 0,
+      "seconds": 32.9365212090197,
+      "log": "36.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_parallel_edges_native"
+      ],
+      "returncode": 0,
+      "seconds": 4.109767708985601,
+      "log": "37.log"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-048-audit-installed-venv/bin/python",
+        "-m",
+        "unittest",
+        "test_relationship_names_native"
+      ],
+      "returncode": 0,
+      "seconds": 4.343920541985426,
+      "log": "38.log"
+    }
+  ],
+  "passed": false,
+  "complete": true,
+  "expectedCommands": 39
+}

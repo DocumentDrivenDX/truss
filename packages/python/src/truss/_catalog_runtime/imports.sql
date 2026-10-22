@@ -43,12 +43,12 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected.type_id,key_row.key_num);key_pin:=pin.definition_pin;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id ORDER BY i.ord LOOP
   IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL OR property.cardinality<>'one' OR property.nullability<>'required' OR property.home<>'json' OR property.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'selected string primary key required' USING ERRCODE='0A000';END IF;
-  IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'primary property reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'primary property reader required' USING ERRCODE='P1403';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected.type_id,property.prop_id);
   component_buffer:=array_append(component_buffer,jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'scalarType',property.scalar_type,'facets',coalesce(property.facets,'{}'::jsonb)));
  END LOOP;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) i(prop_id) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id LOOP
-  IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'current primary declaration reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'current primary declaration reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_module_writer(selected_document,selected_module);
  components:=to_jsonb(component_buffer);
@@ -109,7 +109,7 @@ BEGIN
    IF NOT owned_selection THEN RAISE EXCEPTION 'owned object import requires an explicit supported ownership import profile' USING ERRCODE='0A000';END IF;
    SELECT t.document_id,t.module INTO STRICT root_owner FROM truss.type_def t WHERE t.type_id=object_row.root_type;
    IF NOT truss.runtime_can_read(root_owner.document_id,root_owner.module) THEN
-    RAISE EXCEPTION 'current imported root reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current imported root reader required' USING ERRCODE='P1403';END IF;
   END IF;
   result:=jsonb_build_object('state','skipped','reason','live_identity','identity',jsonb_build_object('id',object_row.id::text,'typeId',selected.type_id::text,'definitionPin',metadata->'type'->>'definitionPin','owner',metadata->'type'->'owner'));
  ELSIF cardinality(observed.reservation_ids)>0 THEN result:=jsonb_build_object('state','skipped','reason','reserved_identity');
@@ -409,7 +409,7 @@ BEGIN
  IF identity-ARRAY['relationshipDefinitionPin','source','target']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed edge import identity required' USING ERRCODE='22023';END IF;
  relation:=truss.runtime_operation_relationship(jsonb_build_object('operation','create_edge','relationshipDefinitionPin',identity->>'relationshipDefinitionPin'),'[]',0);
  PERFORM truss.runtime_module_writer(relation.document_id,relation.module);source_definition:=truss.runtime_condition_type(identity->'source');target_definition:=truss.runtime_condition_type(identity->'target');
- IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'edge endpoint readers required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'edge endpoint readers required' USING ERRCODE='P1403';END IF;
  IF NOT EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=source_definition.type_id AND target_type=target_definition.type_id) THEN RAISE EXCEPTION 'admitted edge endpoint pair required' USING ERRCODE='22023';END IF;
  LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
  LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
@@ -422,7 +422,7 @@ BEGIN
   FOR endpoint IN SELECT DISTINCT t.document_id,t.module FROM truss.object o JOIN truss.type_def t ON t.type_id=o.root_type
    WHERE (o.id=(identity->'source'->>'id')::bigint AND o.type_id=source_definition.type_id
      OR o.id=(identity->'target'->>'id')::bigint AND o.type_id=target_definition.type_id) LOOP
-   IF NOT truss.runtime_can_read(endpoint.document_id,endpoint.module) THEN RAISE EXCEPTION 'current imported endpoint root reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read(endpoint.document_id,endpoint.module) THEN RAISE EXCEPTION 'current imported endpoint root reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END IF;
  PERFORM 1 FROM truss.object WHERE id=(identity->'source'->>'id')::bigint AND type_id=source_definition.type_id FOR UPDATE NOWAIT;
@@ -437,7 +437,7 @@ BEGIN
  ELSIF EXISTS(SELECT 1 FROM truss.key_tombstone WHERE entity_kind='e' AND type_id=relation.rel_type_id AND key_num=0 AND k=key) THEN result:=jsonb_build_object('state','skipped','reason','reserved_identity');
  ELSE result:=jsonb_build_object('state','eligible','documentId',relation.document_id,'moduleId',relation.module,'relationshipDefinitionPin',identity->>'relationshipDefinitionPin');END IF;
  PERFORM truss.runtime_module_writer(relation.document_id,relation.module);
- IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'current endpoint readers required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'current endpoint readers required' USING ERRCODE='P1403';END IF;
  RETURN convert_to(result::text,'UTF8');
 END;
 $$;
@@ -505,7 +505,7 @@ BEGIN
    IF FOUND AND (object_row.root_id IS NOT NULL OR object_row.root_type IS NOT NULL) THEN
     IF NOT owned_selection THEN RAISE EXCEPTION 'rootless object import report profile required' USING ERRCODE='0A000';END IF;
     SELECT t.document_id,t.module INTO STRICT root_owner FROM truss.type_def t WHERE t.type_id=object_row.root_type;
-    IF NOT truss.runtime_can_read(root_owner.document_id,root_owner.module) THEN RAISE EXCEPTION 'current imported root report reader required' USING ERRCODE='42501';END IF;
+    IF NOT truss.runtime_can_read(root_owner.document_id,root_owner.module) THEN RAISE EXCEPTION 'current imported root report reader required' USING ERRCODE='P1403';END IF;
    END IF;
   END IF;
   RETURN;
@@ -533,16 +533,16 @@ BEGIN
   IF FOUND THEN
    FOR endpoint IN SELECT o.*,t.document_id,t.module FROM truss.object o JOIN truss.type_def t ON t.type_id=o.type_id
     WHERE (o.id=edge_row.source_id AND o.type_id=edge_row.source_type OR o.id=edge_row.target_id AND o.type_id=edge_row.target_type) LOOP
-    IF NOT truss.runtime_can_read(endpoint.document_id,endpoint.module) THEN RAISE EXCEPTION 'current retained report endpoint reader required' USING ERRCODE='42501';END IF;
+    IF NOT truss.runtime_can_read(endpoint.document_id,endpoint.module) THEN RAISE EXCEPTION 'current retained report endpoint reader required' USING ERRCODE='P1403';END IF;
     IF endpoint.root_id IS NOT NULL OR endpoint.root_type IS NOT NULL THEN
      IF NOT owned_selection THEN RAISE EXCEPTION 'rootless endpoint import report profile required' USING ERRCODE='0A000';END IF;
      SELECT t.document_id,t.module INTO STRICT root_owner FROM truss.type_def t WHERE t.type_id=endpoint.root_type;
-     IF NOT truss.runtime_can_read(root_owner.document_id,root_owner.module) THEN RAISE EXCEPTION 'current imported endpoint root report reader required' USING ERRCODE='42501';END IF;
+     IF NOT truss.runtime_can_read(root_owner.document_id,root_owner.module) THEN RAISE EXCEPTION 'current imported endpoint root report reader required' USING ERRCODE='P1403';END IF;
     END IF;
    END LOOP;
   END IF;
  END IF;
- IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'current report endpoint readers required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'current report endpoint readers required' USING ERRCODE='P1403';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.import_report_record_authority(bytea,text,text,text) FROM PUBLIC;

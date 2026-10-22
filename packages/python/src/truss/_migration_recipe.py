@@ -55,6 +55,14 @@ def load_recipe():
         for endpoint in (edge['source'],edge['target']):
             if json.loads(artifacts[endpoint+'.json'])['sha256']!=endpoint:
                 raise ValueError('Exact endpoint inventory required')
+    for digest in [manifest['target'],*manifest['sources']]:
+        profile=json.loads(artifacts[digest+'.json'])
+        if profile.get('aclNameProfile')=='truss-native-acl-names/0.2':continue
+        name=manifest.get('exactAclProfiles',{}).get(digest)
+        if name not in artifacts:raise ValueError('Every admitted runtime requires exact text ACL evidence')
+        exact=json.loads(artifacts[name])
+        if exact.get('runtimeManifestSha256')!=digest or exact.get('aclNameProfile')!='truss-native-acl-names/0.2':
+            raise ValueError('Exact original ACL evidence correspondence required')
     for source in manifest['sources']:plan_route(manifest,source)
     return manifest,artifacts,sha256(original).hexdigest()
 

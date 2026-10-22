@@ -1,0 +1,7 @@
+test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies) ... ok
+test_expired_header_does_not_disclose_retention_after_retained_writer_revocation (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_expired_header_does_not_disclose_retention_after_retained_writer_revocation) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.836s
+
+OK

@@ -315,16 +315,26 @@ CommittedGroupResponse: TypeAlias = AppliedCommitted | CommittedReceiptReplay
 Response = TypeVar('Response', bound=InTransactionGroupResponse, covariant=True)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class FrozenGroupRequest(_Carrier):
+    """Exact original native input, request and source frames; no authority/issuance claim."""
+    input: ExactArtifact
+    request: ExactArtifact
+    documents: ExactArtifact
+    interface_version: Literal['truss-frozen-group-request/0.1'] = field(default='truss-frozen-group-request/0.1',init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class GroupSuccess(_Carrier, Generic[Response]):
     response: Response
+    group_id: str | Absent = ABSENT
     outcome: Literal['success'] = field(default='success', init=False)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class GroupOperationFailure(_Carrier):
     operation_index: str | Absent
-    operation_code: Literal['invalid_input', 'key_conflict', 'expected_version', 'not_found', 'dependencies']
+    operation_code: Literal['invalid_input', 'key_conflict', 'expected_version', 'not_found', 'dependencies', 'multiplicity']
     error_profile: ProfilePin
     inner_error: ExactArtifact
+    phase: Literal['final_state'] | Absent = ABSENT
     code: Literal['group_failed'] = field(default='group_failed', init=False)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -361,7 +371,7 @@ class GroupFailed(_Carrier, Generic[Failure]):
     failure: Failure
     outcome: Literal['failed'] = field(default='failed', init=False)
 
-GroupUnavailableReason: TypeAlias = Literal['profile', 'receipt', 'receipt_expired', 'observation', 'resource']
+GroupUnavailableReason: TypeAlias = Literal['profile', 'receipt', 'receipt_expired', 'request_not_observed', 'observation', 'resource']
 Reason = TypeVar('Reason', bound=GroupUnavailableReason, covariant=True)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -399,7 +409,7 @@ def validate_request_result(request: GroupRequestSelection, result: GroupApplica
     if type(request) is RequestNone:
         if (type(result) is GroupSuccess and type(result.response) is not AppliedPending
             or type(result) is GroupFailed and type(result.failure) is RequestConflict
-            or type(result) is GroupUnavailable and result.reason in ('receipt', 'receipt_expired')):
+            or type(result) is GroupUnavailable and result.reason in ('receipt', 'receipt_expired', 'request_not_observed')):
             raise ValueError('Request-free result cannot claim receipt or replay')
 
 __all__ = [

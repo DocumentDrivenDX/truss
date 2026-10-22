@@ -1,0 +1,177 @@
+{
+  "scope": "HF-01 public-artifact observation; probe execution is distinct from desired behavioral outcome",
+  "package": "0.0.47",
+  "loadedPackage": "/private/tmp/truss-public-047-clean-venv/lib/python3.11/site-packages/truss/__init__.py",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "weft": "0.4.49",
+  "nativeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "seconds": 18.875487708020955,
+  "testsExecuted": 12,
+  "probeFailures": 0,
+  "probeErrors": 0,
+  "skipped": 0,
+  "probeExecutionPassed": true,
+  "sourceCommit": null,
+  "observations": [
+    {
+      "case": "damaged-grant.group-context",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "99521a649b4964f7d152149e4cd7df33f795bea32cbbaaf4d0ce557a8f920743"
+    },
+    {
+      "case": "facets.apply",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "5d7c96ca188637b395f7c581f9fef9ae9de6fb27584bea364598e6223491710a"
+    },
+    {
+      "case": "facets.batch",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "376d40ebe39b22ca31bdf1a03744fef0fc77a51798e4f5dab3438ac28e5f1592"
+    },
+    {
+      "case": "multiplicity.batch-maximum",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "ffc3474041e6c70e363c09509542ef6f1f8f1070e6718cbe9a662ed3ef42c7e1"
+    },
+    {
+      "case": "multiplicity.batch-minimum",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "f51c76119fa222668abbada29839615b6bddece119b504dc6ed299687971f14f"
+    },
+    {
+      "case": "multiplicity.group-minimum",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "3076224db1c95916c671052d059eaf711c513c7156193f4507898a8fe1eb8453"
+    },
+    {
+      "case": "nonmember.batch-import",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "19a7185be74818dee3e80042d0a765a81d3e6bde90b0e607c4f57fdbc56d2263"
+    },
+    {
+      "case": "nonmember.edge-page",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "1e19384a1ca6624725342a213c2e966f8e1312dad7aac455b2f58bd03c0dcb29"
+    },
+    {
+      "case": "nonmember.group-apply",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "0af9b2bbac97f2c1b2034801d2469a6d44df677c6dd8b1f1c9946a97eae15783"
+    },
+    {
+      "case": "nonmember.group-context",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "1585e5f14f69deaaac8aba14e66e2747e41ac62d57c85c0320f1442c09cc7cb9"
+    },
+    {
+      "case": "nonmember.group-preparation",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "2141ac18138942f0b6028427b8ab0df0caa31b379e0ea74985a7bcc42c466885"
+    },
+    {
+      "case": "nonmember.import-build",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "95cc84cd9bc3cc67b91eae76bb3ec0e1ab2db7985c63196d4aefff1ccb1bea90"
+    },
+    {
+      "case": "nonmember.import-context",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "69c20ec29b7cd9d43a4cbb9173064190202d254420aeb3726b3fe9e6fad0f5a0"
+    },
+    {
+      "case": "nonmember.key-lookup",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "fbc3ff54fdfdd53225b6bd0a9821d28728aad486e88fa544cb1003bd4da1ee73"
+    },
+    {
+      "case": "nonmember.legacy-import",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "9c112d612fae78f8bb8bcbb959c21639a7b24a203d84f5f0636513840b662e64"
+    },
+    {
+      "case": "nonmember.object-page",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "f33db2109cc475ea3a93c1a7067a8b215031913fe29a60e34e31e29c1ce8dd47"
+    },
+    {
+      "case": "nonmember.object-read",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "cf71108c0dd8df566a2f1766dff3f6b64047234b6ee24f0d7416b765eab99496"
+    },
+    {
+      "case": "nonmember.relationship-reference",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "69a2def7788f357fa4d5eca658d7cb54c3ffc6bbb45ecbb7b8ff1d4dc5813f8b"
+    },
+    {
+      "case": "nonmember.type-reference",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "17d78897dd081faed62866c66d865c93fdd3ef00e1f589099297778d2bd303f9"
+    },
+    {
+      "case": "registration.decimal18-scale2",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "13740b1cb6ecf770c6cd9f16f2cb46ec8c9bcc76a2fa44744dbddb774fb886b3"
+    },
+    {
+      "case": "registration.nested-scalar-container",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "60f03b2c5800a4c7a3b77da776ee4e4780c8de25793bab5ac8546548a900621f"
+    },
+    {
+      "case": "registration.uuid-profile-refusal",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "394a1970f517f1121a40d2b7d16dba9627a7ece267ec8144ede0809d8f8b9371"
+    },
+    {
+      "case": "required-ddd.empty",
+      "desiredOutcomeSatisfied": false,
+      "sha256": "630698099d48c9a3dc99f68c431a9fd8a7b36c7cb4f1a46eb4aa9a9124a12692"
+    },
+    {
+      "case": "required-ddd.populated",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "a9ce478dba3ac1dce362fca673243fad9490a41d02ee76defeeb4cce41c12997"
+    },
+    {
+      "case": "single-key-collision.0",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "e6df060132031c3f7a1b35d3e25b2a9191bfbdc3632440c561ad2fa78521a9bf"
+    },
+    {
+      "case": "single-key-collision.1",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "e03a953ea879c0ab3a7b95a846dd4ff12be9c432213ed7793a81f8aa2792133e"
+    },
+    {
+      "case": "single-key-collision.2",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "1035d7b2a1de4ba88be4316f462fd7e5dcb6239326f7aa4f945fb8fcb0860cc8"
+    },
+    {
+      "case": "source-timestamp.batch",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "d80008f524f1c7930dbd6013f257c0e62b4d134f88c7a435cc31a5c27b55e62b"
+    },
+    {
+      "case": "unknown-value.apply",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "7b3b3e3390457fb3ba0484c46ffb10e2a4950da88d29e0e1df99bfb74e55f250"
+    },
+    {
+      "case": "unknown-value.batch",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "5efc2700468882d8ac2c7180a0c71c9449571999bd004c5fa1cc96cf28133338"
+    },
+    {
+      "case": "unknown-value.legacy",
+      "desiredOutcomeSatisfied": true,
+      "sha256": "66769971adb4f062ec31eae4cd526a7fc964ce2e5ac5ee05869592a9bc83ae67"
+    }
+  ],
+  "producerSha256": {
+    "scripts/qualify-hohfeld-disputes.py": "9f5077f8e915d2af59daf423b5b2f8594a891024f06b968e5771bf24d7e54423",
+    "packages/python/tests/test_hohfeld_disputes_native.py": "3eb667e693a3f7f122424a36ed0fe5b5c886f992f258fa4c6b8b66f55f0f6afb"
+  }
+}

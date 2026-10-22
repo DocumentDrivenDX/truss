@@ -115,14 +115,14 @@ def preview_group_conditions(host, transaction, input, documents, manifest, dige
 
     def observe(cursor, _observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.preview_group_conditions(%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_preview_group_conditions(%s,%s,%s,%s)',
             (original_input, original_documents, manifest['releaseId'], digest), prepare=False)
         raw = bytes(cursor.fetchone()[0])
         return _decode_preview_result(raw, input)
 
     result = host._run_operation(transaction, observe, function_call=True)
     if isinstance(result, Error) and result.error.code == 'execution_obligation':
-        if result.error.sql_state == '42501':
+        if result.error.sql_state == 'P1403':
             return Ok(PreviewRefused(reason='unauthorized'))
         if result.error.sql_state == '54000':
             return Ok(PreviewRefused(reason='resource'))
@@ -133,3 +133,31 @@ def preview_group_conditions(host, transaction, input, documents, manifest, dige
         if result.error.sql_state == '22023':
             return Ok(PreviewRefused(reason='invalid_input'))
     return result
+
+
+def validate_completion(host,transaction,manifest,digest,pin_cursor,*,input=None,documents=(),schema_state=None,dry_run=False):
+    """Ordinary effects and native completion inside host-owned rollback custody."""
+    from hashlib import sha256
+    from .preview import ValidationObservationBasis,CompletionObserved,GroupValidationObserved
+    from .groups import GroupSuccess,RequestNone
+    from ._group_runtime import apply_group,_bytes,_wire
+    def validate(cursor,observed):
+        pin_cursor(cursor)
+        cursor.execute('SELECT truss.person_group_context(%s,%s),pg_catalog.pg_current_snapshot()::text',
+            (manifest['releaseId'],digest),prepare=False)
+        original,snapshot=cursor.fetchone();context=json.loads(bytes(original))
+        input_digest=documents_digest=None
+        if dry_run:
+            # Reuse ordinary validation, native mutations and result decoding.
+            # No nested host lease, callback savepoint or receipt publication.
+            result=apply_group(host,transaction,input,RequestNone(),documents,manifest,digest,pin_cursor,
+                _cursor=cursor,_schema_state=schema_state)
+            if not isinstance(result,Ok):raise ValueError('Original contained group result required')
+            if not isinstance(result.value,GroupSuccess):return result.value
+            input_digest=sha256(_bytes(_wire(input))).hexdigest()
+            documents_digest=sha256(_bytes([{'documentId':d.document_id,'sourceText':d.content.decode('utf8')} for d in documents])).hexdigest()
+        basis=ValidationObservationBasis(catalog_revision=str(context['catalogRevision']),snapshot=snapshot,
+            source_epoch=context['sourceEpoch'],release_id=manifest['releaseId'],release_sha256=digest,
+            input_sha256=input_digest,documents_sha256=documents_digest)
+        return CompletionObserved(basis=basis) if not dry_run else GroupValidationObserved(basis=basis,operation_count=len(input.operations))
+    return host._run_validation_operation(transaction,validate)

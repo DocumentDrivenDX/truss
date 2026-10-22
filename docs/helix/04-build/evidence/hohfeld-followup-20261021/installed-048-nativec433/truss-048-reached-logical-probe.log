@@ -1,0 +1,7 @@
+test_logical_backup_restore_then_migrate_without_old_application_runtime (test_runtime_migrations_native.RuntimeMigrationNativeTests.test_logical_backup_restore_then_migrate_without_old_application_runtime)
+@covers US-045-AC8: restore into a new database identity before any target writes. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 35.980s
+
+OK

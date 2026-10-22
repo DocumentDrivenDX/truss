@@ -5,7 +5,9 @@ Stock psycopg/libpq runs unchanged. Not a production transport or recovery servi
 import select,socket,struct,threading
 
 class CommitResponseDropProxy:
- def __init__(self,parameters):
+ def __init__(self,parameters,*,maximum_backend_frame_bytes=1048576):
+  if type(maximum_backend_frame_bytes) is not int or not 1048576<=maximum_backend_frame_bytes<=67108864:raise ValueError('Bounded fixture frame profile required')
+  self.maximum_backend_frame_bytes=maximum_backend_frame_bytes
   host=parameters.get('host','');port=int(parameters.get('port',5432))
   if not host.startswith('/'):
    raise ValueError('Owned local Unix-socket server required')
@@ -31,7 +33,7 @@ class CommitResponseDropProxy:
      pending+=chunk
      while len(pending)>=5:
       length=struct.unpack('!I',pending[1:5])[0]
-      if not 4<=length<=1048576:raise ValueError('Unqualified fixture backend frame')
+      if not 4<=length<=self.maximum_backend_frame_bytes:raise ValueError('Unqualified fixture backend frame')
       if len(pending)<length+1:break
       frame,pending=pending[:length+1],pending[length+1:]
       if self.armed.is_set() and frame[:1]==b'C' and frame[5:]==b'COMMIT\0':

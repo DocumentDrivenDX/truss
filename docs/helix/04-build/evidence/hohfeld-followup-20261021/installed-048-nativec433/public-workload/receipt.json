@@ -1,0 +1,13 @@
+{
+  "scope": "Exact installed macOS ARM64 public small workload, PostgreSQL18.6/Truss48/nativec433/Weft51; no cross-platform or general p95 qualification",
+  "functionalPassed": true,
+  "bulkObjects": 1000,
+  "bulkEdges": 1000,
+  "seconds": 76.85728079098044,
+  "performanceBudgetStatus": "Latency budgets remain provisional; no prior-run nominal regression baseline supplied",
+  "files": {
+    "report.jsonl": "1e32e0ade998d1891b41c61c0cc37706b32c18c1f59794971a348dec6b0f21c5",
+    "report.json": "d94595b2cb8cfb4745fe3ad7714205281bd89a9d309ec5bf348c04594d941633",
+    "run.log": "af2c6b31f4aa08676a26681b886ff53ac109ac08a0df841e054df95d7bbc42c3"
+  }
+}

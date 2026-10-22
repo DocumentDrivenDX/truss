@@ -52,6 +52,13 @@ class ReceiptVisibilityTests(mutation_tests.ObjectMutationTests):
         reached_original=reader_assembly.reached_in_transaction(reader_tx,token)
         self.assertIsInstance(reached_original,Ok);self.assertIsInstance(reached_original.value,ReceiptIncluded)
         self.assertTrue(reached_original.value.included)
+        self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.reached(bytea,integer,text,text) FROM group_reader,group_writer')
+        try:
+            from truss import Error
+            damaged=reader_assembly.reached_in_transaction(reader_tx,token)
+            self.assertIsInstance(damaged,Error)
+            self.assertEqual(damaged.error.sql_state,'42501')
+        finally:self.admin.execute('GRANT EXECUTE ON FUNCTION truss.reached(bytea,integer,text,text) TO group_reader,group_writer')
         reader_host.detach();reader_connection.rollback()
         connection,host,assembly,tx=self.consumer()
         replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value

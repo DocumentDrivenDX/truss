@@ -1,0 +1,14 @@
+test_arras_view_metadata_is_retained_and_current_weft_query_succeeds (test_arras_view_model_native.ArrasViewModelNativeTests.test_arras_view_metadata_is_retained_and_current_weft_query_succeeds) ... FAIL
+
+======================================================================
+FAIL: test_arras_view_metadata_is_retained_and_current_weft_query_succeeds (test_arras_view_model_native.ArrasViewModelNativeTests.test_arras_view_metadata_is_retained_and_current_weft_query_succeeds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-hf048-release/packages/python/tests/test_arras_view_model_native.py", line 86, in test_arras_view_metadata_is_retained_and_current_weft_query_succeeds
+    self.assertIsInstance(queried.value, QueryCatalogRead, repr(queried.value))
+AssertionError: QueryRefused(code='unsupported_query', diagnostics=(QueryDiagnostic(code='WFT-TYPE', message='Selected UMF 0.10 element has semantics outside the raw scalar profile'),), outcome='refused') is not an instance of <class 'truss.query.QueryCatalogRead'> : QueryRefused(code='unsupported_query', diagnostics=(QueryDiagnostic(code='WFT-TYPE', message='Selected UMF 0.10 element has semantics outside the raw scalar profile'),), outcome='refused')
+
+----------------------------------------------------------------------
+Ran 1 test in 6.599s
+
+FAILED (failures=1)

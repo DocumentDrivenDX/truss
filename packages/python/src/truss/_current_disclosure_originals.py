@@ -15,7 +15,8 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Frozen Weft 0.4.48/0.4.49 sources with exact per-platform wheel/module identities.
+# Current selected Weft0.4.51 only, with exact qualified wheel/module identities.
+# Historical consumer snapshots remain evidence, not runtime compatibility modes.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -39,20 +40,16 @@ _DISCLOSURE_CONSUMER={
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
 }
 _CONSUMER_COHORTS=(
-    _DISCLOSURE_CONSUMER,
     {**_DISCLOSURE_CONSUMER,
-        'weftWheelSha256':'8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3',
-        'weftModuleSha256':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc'},
+        'weftRevision':'557153731e9f5d0583193a1189a07c6ed485d3d3',
+        'weftVersion':'0.4.51',
+        'weftWheelSha256':'e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487',
+        'weftModuleSha256':'34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa'},
     {**_DISCLOSURE_CONSUMER,
-        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
-        'weftVersion':'0.4.49',
-        'weftWheelSha256':'695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117',
-        'weftModuleSha256':'2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'},
-    {**_DISCLOSURE_CONSUMER,
-        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
-        'weftVersion':'0.4.49',
-        'weftWheelSha256':'8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c',
-        'weftModuleSha256':'01a1e0002edafabffaa7611e40a3a33fc48d221a5e0084e96fe1806a0f0c3fa8'},
+        'weftRevision':'557153731e9f5d0583193a1189a07c6ed485d3d3',
+        'weftVersion':'0.4.51',
+        'weftWheelSha256':'a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5',
+        'weftModuleSha256':'ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445'},
 )
 
 

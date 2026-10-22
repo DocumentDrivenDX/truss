@@ -39,7 +39,7 @@ def _current(cursor, state, pin_cursor):
     request=state.request
     binding=json.loads(request['target']['bindingJson'])
     documents=tuple(dict.fromkeys(module['pin']['documentId'] for module in request['modules']))
-    cursor.execute('SELECT truss.query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)',
+    cursor.execute('SELECT truss.person_query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)',
         (json.dumps(documents),binding['maximumScanRows'],binding['maximumResultRows'],binding['maximumBytes'],binding['releaseId'],binding['releaseSha256']),prepare=False)
     bundle=json.loads(bytes(cursor.fetchone()[0]))
     binding_json=bundle['bindingJson']
@@ -59,7 +59,7 @@ def _admit(cursor, state, pin_cursor):
     pin_cursor(cursor)
     cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)",prepare=False)
     cursor.fetchone()
-    cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)',(state.request['target']['bindingJson'],),prepare=False)
+    cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)',(state.request['target']['bindingJson'],),prepare=False)
     cursor.execute('SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname=session_user',prepare=False)
     if cursor.fetchone() != (state.actor,):
         raise ValueError('Original stream actor changed')
@@ -89,7 +89,7 @@ def open_stream(assembly, transaction, *, engine_program, parameters, operation_
     export=json.loads(weft.compile_engine_export_json(engine_program,json.dumps(request,ensure_ascii=False)))
     if export.get('status') != 'compiled':raise QueryStreamRefused(export)
     artifact=export['artifact']
-    if (artifact['backend'] != {'backendId':'truss.postgresql.runtime','backendVersion':'0.4.42','targetProfile':'truss-runtime-pg18.6-export/0.1','interfaceVersion':'weft-backend/0.2.7'}
+    if (artifact['backend'] != {'backendId':'truss.postgresql.runtime','backendVersion':'0.4.44','targetProfile':'truss-runtime-pg18.6-export/0.2','interfaceVersion':'weft-backend/0.2.9'}
         or artifact['bindingSha256'] != sha256(request['target']['bindingJson'].encode()).hexdigest()
         or artifact['logicalPlan']['limit'] is not None
         or [o['id'] for o in artifact['obligations']] != ['truss.runtime.context/0.1','truss.runtime.cursor-export/0.1']
@@ -167,7 +167,7 @@ def fetch_stream(assembly,transaction,handle,*,count,validate,operation_deadline
                 for index,t in zip(keys,types,strict=True):_page_key_token(row[index],t)
             _admit(cursor,state,pin_cursor)
             if _current(cursor,state,pin_cursor) != state.export:raise QueryStreamRefused(QueryRefused('stale_context'))
-            rows=QueryRows(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=json.loads(state.request['target']['bindingJson'])['catalogRevision'])
+            rows=QueryRows(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=json.loads(state.request['target']['bindingJson'])['catalogRevision'],column_descriptors=result.column_descriptors[:visible])
             validated=tuple(validate(rows))
             if len(validated)!=len(retained):raise ValueError('DTO validation must preserve native row count')
             _admit(cursor,state,pin_cursor)

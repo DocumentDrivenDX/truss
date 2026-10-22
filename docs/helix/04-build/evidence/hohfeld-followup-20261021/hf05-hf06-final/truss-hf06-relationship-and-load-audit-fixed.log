@@ -1,0 +1,16 @@
+test_invocation_audit_summary_pages_complete_counts_and_scope (test_load_audit_native.LoadAuditNativeTests.test_invocation_audit_summary_pages_complete_counts_and_scope) ... ok
+test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing) ... FAIL
+
+======================================================================
+FAIL: test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 147, in test_relationship_only_load_and_unqualified_listing
+    self.assertIsInstance(details,Ok,repr(details));self.assertEqual(details.value.entries[0].record_kind,'edge')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.939s
+
+FAILED (failures=1)

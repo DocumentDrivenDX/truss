@@ -1,0 +1,225 @@
+test_ddd_existing_field_meaning_change_is_not_optional_addition (test_catalog_compatible_acceptance_native.CompatibleCatalogTests.test_ddd_existing_field_meaning_change_is_not_optional_addition) ... ok
+test_evolve_read_write_lookup_and_original_catalog_group_recovery (test_catalog_compatible_acceptance_native.CompatibleCatalogTests.test_evolve_read_write_lookup_and_original_catalog_group_recovery) ... ok
+test_known_ddd_optional_field_evolves_only_with_matching_core_member (test_catalog_compatible_acceptance_native.CompatibleCatalogTests.test_known_ddd_optional_field_evolves_only_with_matching_core_member) ... ok
+test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind (test_catalog_rebind_native.CatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind) ... ok
+test_create_and_register_in_one_host_transaction (test_catalog_rebind_native.CatalogRebindTests.test_create_and_register_in_one_host_transaction) ... ok
+test_invalid_candidate_refuses_without_changing_data (test_catalog_rebind_native.CatalogRebindTests.test_invalid_candidate_refuses_without_changing_data) ... ok
+test_register_rebind_read_report_history_and_retry (test_catalog_rebind_native.CatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... FAIL
+test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind) ... FAIL
+test_missing_null_and_empty_container_counts (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_missing_null_and_empty_container_counts) ... FAIL
+test_register_rebind_read_report_history_and_retry (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... FAIL
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_register_existing_objects_lookup_and_query) ... ok
+test_duplicate_owned_candidates_preserve_images_and_keys (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_duplicate_owned_candidates_preserve_images_and_keys) ... ok
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_missing_root_reader_refuses_before_acceptance) ... FAIL
+test_owned_backfill_commit_reopen_and_reader_scoped_retry (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_owned_backfill_commit_reopen_and_reader_scoped_retry) ... FAIL
+test_root_reader_revoked_before_commit_aborts_backfill (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_root_reader_revoked_before_commit_aborts_backfill) ... ERROR
+test_invalid_owned_retained_value_refuses_without_effects (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_invalid_owned_retained_value_refuses_without_effects) ... ok
+test_missing_required_count_requires_root_reader (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_required_count_requires_root_reader) ... FAIL
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_root_reader_refuses_before_acceptance) ... FAIL
+test_owned_rebind_commit_history_original_roots_and_retry (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_rebind_commit_history_original_roots_and_retry) ... FAIL
+test_owned_required_rebind_and_alternate_key_commit_together (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_required_rebind_and_alternate_key_commit_together) ... FAIL
+test_root_reader_revoked_before_commit_aborts_rebind (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_root_reader_revoked_before_commit_aborts_rebind) ... ERROR
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_duplicate_candidates_refuse_without_catalog_effects) ... ERROR
+test_register_existing_objects_lookup_and_query (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_register_existing_objects_lookup_and_query) ... FAIL
+test_empty_record_accepts_exact_paired_required_field_and_unknown_content (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content) ... ok
+test_paired_required_addition_does_not_authorize_unknown_extension_change (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change) ... ok
+test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit) ... ok
+test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition) ... ok
+test_populated_record_returns_typed_violation_and_preserves_head_data_history (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history) ... ok
+
+======================================================================
+ERROR: test_root_reader_revoked_before_commit_aborts_backfill (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_root_reader_revoked_before_commit_aborts_backfill)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 159, in test_root_reader_revoked_before_commit_aborts_backfill
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):c.commit()
+                                                                 ^^^^^^^^^^
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 309, in commit
+    self.wait(self._commit_gen())
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 495, in wait
+    return waiting.wait(
+           ^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 255, in psycopg_binary._psycopg.wait_c
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 592, in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 487, in _exec_command
+    raise e.error_from_result(result, encoding=self.pgconn._encoding)
+psycopg.ProgrammingError: current historical root reader required
+CONTEXT:  PL/pgSQL function truss.runtime_history_ownership_qualified(jsonb,oid) line 22 at RAISE
+SQL statement "SELECT truss.runtime_history_ownership_qualified(image,truss.runtime_person(false))"
+PL/pgSQL function truss.runtime_history_ownership(jsonb) line 3 at PERFORM
+SQL statement "SELECT truss.runtime_history_ownership(jsonb_build_object(
+  'identity',jsonb_build_object('id',transition.object_image->>'id','typeId',transition.object_image->>'type_id'),
+  'catalogRevision',transition.object_image->'rev',
+  'ownership',truss.runtime_object_ownership_at(transition.object_image)))"
+PL/pgSQL function truss.catalog_key_backfill_transition_reader(truss.runtime_catalog_key_backfill,jsonb) line 9 at PERFORM
+SQL statement "SELECT truss.catalog_key_backfill_transition_reader((SELECT t FROM truss.runtime_catalog_key_backfill t WHERE t.transition_id=rebind.transition_id))"
+PL/pgSQL function truss.runtime_owned_row_validate_qualified(bigint,integer,oid) line 57 at PERFORM
+SQL statement "SELECT truss.runtime_owned_row_validate_qualified(NEW.object_id,NEW.type_id,current_actor)"
+PL/pgSQL function truss.runtime_object_commit_check() line 115 at PERFORM
+
+======================================================================
+ERROR: test_root_reader_revoked_before_commit_aborts_rebind (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_root_reader_revoked_before_commit_aborts_rebind)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 159, in test_root_reader_revoked_before_commit_aborts_backfill
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):c.commit()
+                                                                 ^^^^^^^^^^
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 309, in commit
+    self.wait(self._commit_gen())
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 495, in wait
+    return waiting.wait(
+           ^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 255, in psycopg_binary._psycopg.wait_c
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 592, in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 487, in _exec_command
+    raise e.error_from_result(result, encoding=self.pgconn._encoding)
+psycopg.ProgrammingError: current historical root reader required
+CONTEXT:  PL/pgSQL function truss.runtime_history_ownership_qualified(jsonb,oid) line 22 at RAISE
+SQL statement "SELECT truss.runtime_history_ownership_qualified(image,truss.runtime_person(false))"
+PL/pgSQL function truss.runtime_history_ownership(jsonb) line 3 at PERFORM
+SQL statement "SELECT truss.runtime_history_ownership(jsonb_build_object(
+    'identity',jsonb_build_object('id',image->>'id','typeId',image->>'type_id'),
+    'catalogRevision',image->'rev','ownership',truss.runtime_object_ownership_at(image)))"
+PL/pgSQL function truss.catalog_rebind_transition_reader(truss.runtime_catalog_rebind_transition,jsonb) line 8 at PERFORM
+SQL statement "SELECT truss.catalog_rebind_transition_reader((SELECT t FROM truss.runtime_catalog_rebind_transition t WHERE t.transition_id=rebind.transition_id))"
+PL/pgSQL function truss.runtime_owned_row_validate_qualified(bigint,integer,oid) line 50 at PERFORM
+SQL statement "SELECT truss.runtime_owned_row_validate_qualified(NEW.id,NEW.type_id,current_actor)"
+PL/pgSQL function truss.runtime_object_commit_check() line 114 at PERFORM
+
+======================================================================
+ERROR: test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_duplicate_candidates_refuse_without_catalog_effects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 55, in test_duplicate_candidates_refuse_without_catalog_effects
+    self.assertEqual([(v.key_id,v.rule,v.affected_object_count) for v in accepted.value.violations],[('a-backfill','key.duplicate',2)])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 55, in <listcomp>
+    self.assertEqual([(v.key_id,v.rule,v.affected_object_count) for v in accepted.value.violations],[('a-backfill','key.duplicate',2)])
+                       ^^^^^^^^
+AttributeError: 'CatalogCompatibilityViolation' object has no attribute 'key_id'
+
+======================================================================
+FAIL: test_register_rebind_read_report_history_and_retry (test_catalog_rebind_native.CatalogRebindTests.test_register_rebind_read_report_history_and_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_rebind_native.py", line 94, in test_register_rebind_read_report_history_and_retry
+    self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_rebind_native.py", line 161, in test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind
+    self.assertIsInstance(accepted.value,CatalogRegistration)
+AssertionError: CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftWrap', rule='property.required', affected_object_count=2, stored_values=()), CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftFlags', rule='property.required', affected_object_count=2, stored_values=())), outcome='refused', code='incompatible') is not an instance of <class 'truss.catalog_results.CatalogRegistration'>
+
+======================================================================
+FAIL: test_missing_null_and_empty_container_counts (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_missing_null_and_empty_container_counts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_catalog_rebind_native.py", line 33, in test_missing_null_and_empty_container_counts
+    self.assertEqual({(v.field_id,v.rule):v.affected_object_count for v in refused.value.violations},
+AssertionError: {('giftWrap', 'property.required'): 2, ('giftFlags', 'property.required'): 2} != {('giftWrap', 'property.required'): 2, ('giftFlags', 'property.required'): 1}
+- {('giftFlags', 'property.required'): 2, ('giftWrap', 'property.required'): 2}
+?                                      ^
+
++ {('giftFlags', 'property.required'): 1, ('giftWrap', 'property.required'): 2}
+?                                      ^
+
+
+======================================================================
+FAIL: test_register_rebind_read_report_history_and_retry (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_register_rebind_read_report_history_and_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_rebind_native.py", line 40, in test_register_rebind_read_report_history_and_retry
+    self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+AssertionError: CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftWrap', rule='property.required', affected_object_count=1, stored_values=()), CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftFlags', rule='property.required', affected_object_count=1, stored_values=())), outcome='refused', code='incompatible') is not an instance of <class 'truss.catalog_results.CatalogRegistration'> : Ok(value=CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftWrap', rule='property.required', affected_object_count=1, stored_values=()), CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftFlags', rule='property.required', affected_object_count=1, stored_values=())), outcome='refused', code='incompatible'), status='ok')
+
+======================================================================
+FAIL: test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_missing_root_reader_refuses_before_acceptance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 151, in test_missing_root_reader_refuses_before_acceptance
+    self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_owned_backfill_commit_reopen_and_reader_scoped_retry (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_owned_backfill_commit_reopen_and_reader_scoped_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 142, in test_owned_backfill_commit_reopen_and_reader_scoped_retry
+    self.assertIsInstance(report,Error,repr(report));self.assertEqual(report.error.sql_state,'42501')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_missing_required_count_requires_root_reader (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_required_count_requires_root_reader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 249, in test_missing_required_count_requires_root_reader
+    self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_root_reader_refuses_before_acceptance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 151, in test_missing_root_reader_refuses_before_acceptance
+    self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_owned_rebind_commit_history_original_roots_and_retry (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_rebind_commit_history_original_roots_and_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 231, in test_owned_rebind_commit_history_original_roots_and_retry
+    self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'P1403' != '42501'
+- P1403
++ 42501
+
+
+======================================================================
+FAIL: test_owned_required_rebind_and_alternate_key_commit_together (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_required_rebind_and_alternate_key_commit_together)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_key_backfill_native.py", line 256, in test_owned_required_rebind_and_alternate_key_commit_together
+    self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+AssertionError: CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftNote', rule='property.required', affected_object_count=2, stored_values=()),), outcome='refused', code='incompatible') is not an instance of <class 'truss.catalog_results.CatalogRegistration'> : Ok(value=CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftNote', rule='property.required', affected_object_count=2, stored_values=()),), outcome='refused', code='incompatible'), status='ok')
+
+======================================================================
+FAIL: test_register_existing_objects_lookup_and_query (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_register_existing_objects_lookup_and_query)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_keyed_rebind_native.py", line 37, in test_register_existing_objects_lookup_and_query
+    self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+AssertionError: CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftCode', rule='property.required', affected_object_count=2, stored_values=()),), outcome='refused', code='incompatible') is not an instance of <class 'truss.catalog_results.CatalogRegistration'> : Ok(value=CatalogAcceptanceRefused(revision=1, violations=(CatalogCompatibilityViolation(document_id='adoc', module_id='m', record_id='A', field_module_id='m', field_id='giftCode', rule='property.required', affected_object_count=2, stored_values=()),), outcome='refused', code='incompatible'), status='ok')
+
+----------------------------------------------------------------------
+Ran 29 tests in 78.413s
+
+FAILED (failures=11, errors=3)

@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-10-22T03:15:03.000176+00:00",
+  "scope": "Clarification of the conservative unqualified list in original qualification.json; original producer receipt remains unchanged",
+  "qualifiedRecoveryBoundary": "An injected acknowledgement loss after actual psycopg/server COMMIT is recovered by a later native committed receipt observation; the original result remains pending",
+  "unqualifiedRecoveryBoundary": "General network transport fault handling, a supported expiry writer and protection lifecycle remain unqualified",
+  "sourceHashesStillMatch": true,
+  "nativeTests": 36,
+  "nativeSeconds": 72.994,
+  "boundaryImports": 1702,
+  "boundaryControls": 20,
+  "packageOrReleaseClaim": false
+}

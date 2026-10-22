@@ -21,6 +21,82 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Selected HF-02 person invocation and frozen recovery
+
+The Python facade calls the finite guarded person entrypoints in CONTRACT-005.
+Native admission and the original operation share one SQL invocation, under the
+existing managed-function savepoint and unchanged statement/deadline budgets.
+Only native `P1403` is translated to business authorization denial; unexpected
+`42501`, failed containment, transport loss and uncertain termination retain their
+original execution meaning. A shim checks the original caller's EXECUTE entitlement
+before its private implementation, and exposes no installation/role/catalog data
+to an unenrolled person. Raw private helpers do not become public APIs.
+
+A pure `freeze_group_request` operation preserves complete original input,
+request selection and original document bytes before Truss resolves business state.
+Its versioned immutable frame is a recovery input, not authorization or evidence
+of issuance. `recover_group_request_in_transaction` consumes that complete frame
+without rebuilding current object/edge references or expected versions. It performs
+receipt observation only: missing/invisible/never-issued identities share the
+non-disclosing request-not-observed outcome and never trigger execution. It never
+settles or retries the caller's outer transaction. Current retained-owner rights
+and the original authenticated person scope govern every replay publication.
+
+
+## Indexed query source selection — HF-05 design
+
+The next ordinary query profile selects new compile/IR0.2.8 and backend-interface0.2.9
+and Truss query ABI1.2; preserve published0.2.7 and ABI1.1 definitions. The
+unpublished HF-04 profile moves to0.2.8 before publication. Weft owns source
+selection from resolved fields, operands and page plans; Truss never parses SQL
+or reconstructs a missing compiler predicate. Typed compiler diagnostics distinguish
+unknown/ambiguous columns from unavailable sources within supplied authorized
+models. Hidden and absent sources intentionally share the unavailable outcome.
+Reauthorize the native query scope before releasing compiler refusals.
+
+The first indexed equality subset is singular string/boolean field equality to
+an admitted literal or source parameter. A generic JSONB path-ops GIN index over
+canonical property cells admits candidate selection without per-type DDL or
+numeric normalization. Compound conjunctions may narrow by admitted exact terms;
+all residual predicates still execute over the complete bounded candidate set.
+More than maximumScanRows candidates refuses the whole query, before LIMIT/count
+can hide the excess. Unsupported/numeric/temporal predicates retain the existing
+full-source scan bound. Query result, byte, statement and operation bounds remain.
+Index traversal work is subject to native deadlines; a candidate row bound alone
+is not an exact physical index-entry or heap-allocation ceiling.
+
+The first ordered seek subset is a complete authored single required string key,
+whose exact UMF key tuple yields at most1,024 UTF-8 key bytes. A generic derived
+index decodes the existing UMF tuple transport, preserving its original bytes and
+using C ordering. Nonindexable/long/composite/nonstring tuples remain valid stored
+keys and use the existing bounded fallback. An exception index must establish the
+whole selected key inventory is indexable before ordered seeking. A redundant
+unique derived index may enforce only the already global authored key meaning;
+prove that implication from the actual namespace/codec and populated fixtures
+before accepting its DDL. Otherwise retain a typed bounded refusal/fallback.
+Never omit unindexable members or silently shorten a sparse/residual page.
+
+Data and fact wrappers MUST preserve the original STABLE statement snapshot.
+Their separately invoked current-permission guard remains VOLATILE. The fixed
+managed single-function host optimization admits only VOLATILE entrypoints; a
+STABLE data wrapper must not enter that optimization merely because it returns a
+scalar JSON result. Invocation registry0.2 records this deliberate split.
+Qualify it against a real concurrent public writer, with a VOLATILE-wrapper
+countercontrol proving that the test can detect a changed source snapshot.
+
+Every returned candidate retains complete selected row/value/root validation and
+current selected-owner authorization, plus closing scope checks. New source and
+fact invocations use the finite person gate, retaining original EXECUTE/owner
+checks and genuine installation failures. The original-function owner/EXECUTE
+observation uses a fresh plan of a fixed parameterized native catalog SELECT;
+only the original caller/function OIDs vary. Qualify revocation after an earlier
+contained native source error in the same outer transaction. Generic index/type/function additions
+need native source/UMF inventory custody and the next populated migration edge.
+Qualify10,001+ managed populations, present/absent/equality/keyset cases, actual
+native plans/index effects, exact keys, rollback, revocation, malformed rows and
+all fallback boundaries before claiming this profile supported. These paragraphs
+select implementation work; no indexed support is yet qualified.
+
 ## Immutable package verification lifetime
 
 An installed runtime package is immutable for the lifetime of its Python
@@ -33,6 +109,32 @@ text, so caller mutation cannot alter the retained verified identity. Replacing
 package files in a running process is unsupported; restart after installation.
 This optimization MUST NOT cache database installation, schema, caller,
 permission, transaction or current-native-authority observations.
+
+## Selected query descriptors and entity facts — HF-04
+
+Ordinary `QueryRows` and `QueryPage` expose an ordered `column_descriptors` tuple
+with compiler-owned positions, labels, representations, source identities and
+the original type graph. These facts exist for empty and all-null results.
+Logical type/nullability, absent availability and native envelope permission
+remain distinct from physical SQL-carrier nullability. Retain unknown descriptor
+members in an immutable original mapping. Do not infer types from returned values
+or reinterpret SQL in Truss. The separately governed protected/current-query
+profiles retain their own descriptor contracts.
+
+An explicit immutable `QueryEntityProjection` selects an ordered unique tuple
+of the eight known native facts and whether automatic complete relationships
+are included. It selects Weft's `weft-truss-entity-read/0.4.0`; older read profiles
+retain their original output. The authored Record member projection stays
+complete. Omitting automatic relationships permits existing explicit bounded
+`RELATED_KEYS` with its truncation marker; selecting complete relationships keeps
+the 100-item whole-query refusal. Neither option silently cuts complete content.
+
+The same selection can accompany compiler-owned pages. Page continuations bind
+the selection alongside SQL, parameters, model/runtime, caller and resource
+context. Hidden sort columns and their descriptors are removed using original
+compiler positions. Current authorization, exact values and statement snapshot
+remain mandatory. This profile does not itself lift the existing pre-filter
+source cap; indexed selective execution is a separate versioned HF-05 gate.
 
 The Truss Python query executor MAY retain pure successful Weft compile results
 under the exact compiler callable identity and complete original request text,
@@ -1718,3 +1820,35 @@ producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
 continuous topology/authority lifetime remain open. No backend promotion; the
 original132 cases remain required. Evidence:
 `docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.
+
+HF-05 fresh protected activation admits exactly the two reviewed private
+`object_key_query_string_order`/`object_key_query_string_exception` expression
+indexes over `object_key_bucket`. The attachment must match its exact captured
+index definition and original IMMUTABLE STRICT invoker decoder body, with the
+same private owner. Arbitrary expression indexes and external routine
+attachments still refuse. This fresh-install proof does not migrate an
+existing protected installation.
+
+### HF-06 selected validation settlement
+
+The psycopg host owns validation containment. A completion observation forces
+only currently deferred constraints in the installed `truss` namespace, inside
+one host savepoint, then rolls back to that savepoint before publishing. It
+restores the caller's constraint modes and prior pending trigger queue; it does
+not settle the outer transaction or force unrelated host constraints. Native
+SQLSTATE, retry, cancellation and uncertain cleanup follow the ordinary host
+error contract. No callback-issued savepoint or synthetic success exception
+can establish rollback. A full dry run executes the ordinary request-free group
+inside that same boundary, forces completion, and publishes its semantic result
+only after confirmed rollback. It returns no receipt, committed position or
+durable created identity. Its basis names original input/document digests,
+catalog revision, source epoch and observed native snapshot. Ordinals, sequence
+allocations and locks/CPU consumed during validation need not rewind. A successful
+observation does not promise that a later real application or outer commit succeeds.
+
+Receipt inclusion without a feed consumer uses the same denial-capable person
+read admission as object/query reads. No membership produces a typed authorization
+observation; a separately damaged original receipt-function EXECUTE grant remains
+a native42501 execution failure. Administrative installation-recovery remains an
+explicit private administrator API: lack of EXECUTE there is not reclassified as
+a person membership refusal.

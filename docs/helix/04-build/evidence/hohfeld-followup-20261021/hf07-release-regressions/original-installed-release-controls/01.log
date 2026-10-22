@@ -1,0 +1,12 @@
+test_chunked_utf8_matches_independent_codecs_and_keeps_exact_buffer_lengths (test_embedded_owner.EmbeddedByteCodecTests.test_chunked_utf8_matches_independent_codecs_and_keeps_exact_buffer_lengths) ... ok
+test_acceptance_catalog_and_exact_keys_without_any_subprocess (test_embedded_owner.EmbeddedOwnerTests.test_acceptance_catalog_and_exact_keys_without_any_subprocess) ... ok
+test_held_disclosure_original_frames_and_fencing_without_subprocess (test_embedded_owner.EmbeddedOwnerTests.test_held_disclosure_original_frames_and_fencing_without_subprocess) ... ok
+test_isolate_deadline_interrupts_nonterminating_code (test_embedded_owner.EmbeddedOwnerTests.test_isolate_deadline_interrupts_nonterminating_code) ... ok
+test_owner_engine_failure_preserves_public_preparation_refusal (test_embedded_owner.EmbeddedOwnerTests.test_owner_engine_failure_preserves_public_preparation_refusal) ... ok
+test_owner_refusal_is_a_fenced_transport_error (test_embedded_owner.EmbeddedOwnerTests.test_owner_refusal_is_a_fenced_transport_error) ... ok
+test_virtual_host_refuses_unbundled_files_and_modules (test_embedded_owner.EmbeddedOwnerTests.test_virtual_host_refuses_unbundled_files_and_modules) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 3.177s
+
+OK

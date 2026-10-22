@@ -64,12 +64,13 @@ class LoadAuditNativeTests(batch_tests.BatchedImportTests):
             (ModuleAccessGrant('zdoc','m','group_reader','group_writer'),)),Ok)
         self.admin.execute('CREATE ROLE import_audit_reader NOLOGIN NOINHERIT')
         self.admin.execute("CREATE FUNCTION truss.current_query_protection_marker() RETURNS text LANGUAGE sql VOLATILE AS 'SELECT ''protected''::text'")
+        before_schema_privilege=self.admin.execute("SELECT pg_catalog.has_schema_privilege('import_audit_reader','truss','USAGE')").fetchone()
         protected_grant=admin_assembly.grant_module_audit_access_in_transaction(admin_tx,
             ModuleAuditGrant(document_id='adoc',module_id='m',auditor_role='import_audit_reader'))
         self.assertIsInstance(protected_grant,Error,repr(protected_grant))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_import_audit_access WHERE document_id=%s AND module=%s',
             ('adoc','m')).fetchone(),(0,))
-        self.assertEqual(self.admin.execute("SELECT pg_catalog.has_schema_privilege('import_audit_reader','truss','USAGE')").fetchone(),(False,))
+        self.assertEqual(self.admin.execute("SELECT pg_catalog.has_schema_privilege('import_audit_reader','truss','USAGE')").fetchone(),before_schema_privilege)
         self.assertEqual(self.admin.execute("SELECT pg_catalog.has_function_privilege('import_audit_reader','truss.page_import_load_audit(jsonb,int,bytea,text,text)','EXECUTE')").fetchone(),(False,))
         self.admin.execute('DROP FUNCTION truss.current_query_protection_marker()')
         for document_id in ('adoc','zdoc'):
@@ -123,6 +124,27 @@ class LoadAuditNativeTests(batch_tests.BatchedImportTests):
             cursor=pages[-1].next_page_cursor,maximum_entries=2)
         self.assertIsInstance(end,Ok,repr(end));self.assertIsInstance(end.value,LoadAuditListingEnd)
         host.detach();connection.rollback()
+
+    def test_relationship_only_load_and_unqualified_listing(self):
+        from truss.batched_import import EdgeImportDraft
+        from truss.groups import GroupSuccess,NullOrderKey
+        c,h,a,t=self.ready(document_ids=('adoc',));context=a.group_context_in_transaction(t).value
+        seeded=self.apply(a,t,context.input((self.create(label='a',alias='a'),self.create(record='B',label='b',alias='b')),MapValue(entries=())),context.request('endpoints'))
+        self.assertIsInstance(seeded,GroupSuccess);left,right=(r.identity for r in seeded.response.semantic.results)
+        h.detach();c.commit();c,h,a,t=self.consumer()
+        built=a.build_import_records_in_transaction(t,(EdgeImportDraft(document_id='adoc',module_id='m',relationship_id='A-B',source_endpoint=left,target_endpoint=right,values=(),order_key=NullOrderKey()),))
+        self.assertIsInstance(built,Ok,repr(built))
+        result=self.run_batch(a,t,built.value)
+        self.assertEqual(result.result.report.counts.created_pending,'1');h.detach();c.commit()
+        self.admin.execute('CREATE ROLE load_observer NOLOGIN NOINHERIT');self.addCleanup(self.admin.execute,'DROP ROLE load_observer')
+        self.admin.execute('BEGIN');admin_host=adopt_psycopg_host(self.admin);admin_tx=admin_host.adopt_transaction().value;admin_a=create_reference_assembly(CatalogRuntimeConfiguration(),admin_host).value
+        self.assertIsInstance(admin_a.grant_module_audit_access_in_transaction(admin_tx,ModuleAuditGrant(document_id='adoc',module_id='m',auditor_role='load_observer')),Ok)
+        admin_host.detach();self.admin.commit();self.admin.execute('GRANT load_observer TO consumer WITH SET FALSE')
+        c,h,a,t=self.consumer();listing=a.page_import_load_audit_in_transaction(t,filters={})
+        self.assertIsInstance(listing,Ok,repr(listing));self.assertIsInstance(listing.value,LoadAuditInvocationSummary,repr(listing)+' '+str(h._custody.last_attempt.error)+' '+str(self.admin.execute('SELECT owner_inventory_complete,original_owners FROM truss.runtime_import_load_chunk').fetchall()));self.assertEqual(listing.value.created_count,'1')
+        from truss import LoadAuditCursor
+        details=a.read_import_load_chunk_in_transaction(t,cursor=LoadAuditCursor(invocation_id=listing.value.invocation_id,chunk_index='0'))
+        self.assertIsInstance(details,Ok,repr(details)+' '+str(h._custody.last_attempt.error));self.assertEqual(details.value.entries[0].record_kind,'edge')
 
 
 if __name__ == '__main__':

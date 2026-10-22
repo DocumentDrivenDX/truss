@@ -1,0 +1,732 @@
+{
+  "scope": "Candidate 0.74 native declaration observation; no behavior or release qualification",
+  "functions": [
+    {
+      "name": "accepted_document",
+      "arguments": "selected_document text, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.accepted_document(text,integer,text,text)"
+    },
+    {
+      "name": "apply_group",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "original_request",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.apply_group(bytea,bytea,bytea,text,text)"
+    },
+    {
+      "name": "apply_group_prepared",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text, app_prepared jsonb",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "original_request",
+        "expected_release",
+        "expected_digest",
+        "app_prepared"
+      ],
+      "inputCount": 6,
+      "set": false,
+      "modes": null,
+      "signature": "truss.apply_group_prepared(bytea,bytea,bytea,text,text,jsonb)"
+    },
+    {
+      "name": "batched_import_context",
+      "arguments": "expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 2,
+      "set": false,
+      "modes": null,
+      "signature": "truss.batched_import_context(text,text)"
+    },
+    {
+      "name": "build_import_records",
+      "arguments": "original_drafts bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_drafts",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.build_import_records(bytea,text,text)"
+    },
+    {
+      "name": "catalog_accept_with_keys",
+      "arguments": "input_bytes bytea, documents_bytes bytea, declarations_bytes bytea, source_bytes bytea, origin_bytes bytea, request_key text, key_receipts bytea, preview_mode boolean",
+      "result": "TABLE(revision text, registration_id text, report_bytes bytea, replayed boolean, unchanged boolean, actor_name text, violations_bytes bytea)",
+      "names": [
+        "input_bytes",
+        "documents_bytes",
+        "declarations_bytes",
+        "source_bytes",
+        "origin_bytes",
+        "request_key",
+        "key_receipts",
+        "preview_mode",
+        "revision",
+        "registration_id",
+        "report_bytes",
+        "replayed",
+        "unchanged",
+        "actor_name",
+        "violations_bytes"
+      ],
+      "inputCount": 8,
+      "set": true,
+      "modes": [
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t"
+      ],
+      "signature": "truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)"
+    },
+    {
+      "name": "catalog_accept_with_keys",
+      "arguments": "input_bytes bytea, documents_bytes bytea, declarations_bytes bytea, source_bytes bytea, origin_bytes bytea, request_key text, key_receipts bytea, preview_mode boolean, expected_revision integer, expected_documents bytea",
+      "result": "TABLE(revision text, registration_id text, report_bytes bytea, replayed boolean, unchanged boolean, actor_name text, violations_bytes bytea)",
+      "names": [
+        "input_bytes",
+        "documents_bytes",
+        "declarations_bytes",
+        "source_bytes",
+        "origin_bytes",
+        "request_key",
+        "key_receipts",
+        "preview_mode",
+        "expected_revision",
+        "expected_documents",
+        "revision",
+        "registration_id",
+        "report_bytes",
+        "replayed",
+        "unchanged",
+        "actor_name",
+        "violations_bytes"
+      ],
+      "inputCount": 10,
+      "set": true,
+      "modes": [
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "i",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t",
+        "t"
+      ],
+      "signature": "truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea)"
+    },
+    {
+      "name": "catalog_report",
+      "arguments": "selected_revision integer",
+      "result": "bytea",
+      "names": [
+        "selected_revision"
+      ],
+      "inputCount": 1,
+      "set": false,
+      "modes": null,
+      "signature": "truss.catalog_report(integer)"
+    },
+    {
+      "name": "catalog_revision",
+      "arguments": "expected_release text, expected_digest text, selected_document text",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest",
+        "selected_document"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.catalog_revision(text,text,text)"
+    },
+    {
+      "name": "catalog_view_basis",
+      "arguments": "selected_revision integer, maximum_count integer, maximum_bytes integer",
+      "result": "bytea",
+      "names": [
+        "selected_revision",
+        "maximum_count",
+        "maximum_bytes"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.catalog_view_basis(integer,integer,integer)"
+    },
+    {
+      "name": "get_edge",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_relationship",
+        "selected_id",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 7,
+      "set": false,
+      "modes": null,
+      "signature": "truss.get_edge(text,text,text,bigint,integer,text,text)"
+    },
+    {
+      "name": "get_object",
+      "arguments": "selected_document text, selected_module text, selected_record text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_record",
+        "selected_id",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 7,
+      "set": false,
+      "modes": null,
+      "signature": "truss.get_object(text,text,text,bigint,integer,text,text)"
+    },
+    {
+      "name": "group_context",
+      "arguments": "expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 2,
+      "set": false,
+      "modes": null,
+      "signature": "truss.group_context(text,text)"
+    },
+    {
+      "name": "group_relationship_reference",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_relationship",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.group_relationship_reference(text,text,text,text,text)"
+    },
+    {
+      "name": "group_type_reference",
+      "arguments": "selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_record",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.group_type_reference(text,text,text,text,text)"
+    },
+    {
+      "name": "import_context",
+      "arguments": "expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 2,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_context(text,text)"
+    },
+    {
+      "name": "import_edge_identity",
+      "arguments": "original_identity bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_identity",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_edge_identity(bytea,text,text)"
+    },
+    {
+      "name": "import_identity_key_selection",
+      "arguments": "original_identity bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_identity",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_identity_key_selection(bytea,text,text)"
+    },
+    {
+      "name": "import_key_selection",
+      "arguments": "selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_record",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_key_selection(text,text,text,text,text)"
+    },
+    {
+      "name": "import_object_identity",
+      "arguments": "original_identity bytea, original_document bytea, tuple_bytes bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_identity",
+        "original_document",
+        "tuple_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_object_identity(bytea,bytea,bytea,text,text)"
+    },
+    {
+      "name": "import_record_source",
+      "arguments": "selected_attempt uuid, original_record bytea, load_id text",
+      "result": "bytea",
+      "names": [
+        "selected_attempt",
+        "original_record",
+        "load_id"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_record_source(uuid,bytea,text)"
+    },
+    {
+      "name": "import_report_record_authority",
+      "arguments": "original_identity bytea, kind text, expected_release text, expected_digest text",
+      "result": "void",
+      "names": [
+        "original_identity",
+        "kind",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.import_report_record_authority(bytea,text,text,text)"
+    },
+    {
+      "name": "lookup_import_source",
+      "arguments": "selection jsonb, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selection",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.lookup_import_source(jsonb,integer,text,text)"
+    },
+    {
+      "name": "lookup_string_key",
+      "arguments": "selected_document text, selected_module text, selected_record text, selected_key text, original_document bytea, values_bytes bytea, tuple_bytes bytea, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_record",
+        "selected_key",
+        "original_document",
+        "values_bytes",
+        "tuple_bytes",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 10,
+      "set": false,
+      "modes": null,
+      "signature": "truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)"
+    },
+    {
+      "name": "page_edges",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, anchor jsonb, direction text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_relationship",
+        "anchor",
+        "direction",
+        "page_limit",
+        "maximum_bytes",
+        "original_cursor",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 10,
+      "set": false,
+      "modes": null,
+      "signature": "truss.page_edges(text,text,text,jsonb,text,integer,integer,bytea,text,text)"
+    },
+    {
+      "name": "page_import_load_audit",
+      "arguments": "filters jsonb, maximum_entries integer, original_cursor bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "filters",
+        "maximum_entries",
+        "original_cursor",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.page_import_load_audit(jsonb,integer,bytea,text,text)"
+    },
+    {
+      "name": "page_mutation_group_audit",
+      "arguments": "filters jsonb, maximum_events integer, original_cursor bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "filters",
+        "maximum_events",
+        "original_cursor",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.page_mutation_group_audit(jsonb,integer,bytea,text,text)"
+    },
+    {
+      "name": "page_objects",
+      "arguments": "selected_document text, selected_module text, selected_record text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_document",
+        "selected_module",
+        "selected_record",
+        "page_limit",
+        "maximum_bytes",
+        "original_cursor",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 8,
+      "set": false,
+      "modes": null,
+      "signature": "truss.page_objects(text,text,text,integer,integer,bytea,text,text)"
+    },
+    {
+      "name": "person_runtime_status",
+      "arguments": "expected_release text, expected_digest text, expected_layout jsonb",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest",
+        "expected_layout"
+      ],
+      "inputCount": 3,
+      "set": false,
+      "modes": null,
+      "signature": "truss.person_runtime_status(text,text,jsonb)"
+    },
+    {
+      "name": "prepare_group",
+      "arguments": "original_records bytea, original_relationships bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_records",
+        "original_relationships",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.prepare_group(bytea,bytea,text,text)"
+    },
+    {
+      "name": "preview_group_conditions",
+      "arguments": "original_input bytea, original_documents bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.preview_group_conditions(bytea,bytea,text,text)"
+    },
+    {
+      "name": "process_import_chunk",
+      "arguments": "original_input bytea, original_documents bytea, invocation_id uuid, chunk_index integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "invocation_id",
+        "chunk_index",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 6,
+      "set": false,
+      "modes": null,
+      "signature": "truss.process_import_chunk(bytea,bytea,uuid,integer,text,text)"
+    },
+    {
+      "name": "read_import_load_chunk",
+      "arguments": "selected_invocation uuid, selected_chunk integer, page_limit integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "selected_invocation",
+        "selected_chunk",
+        "page_limit",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.read_import_load_chunk(uuid,integer,integer,text,text)"
+    },
+    {
+      "name": "reader_catalog",
+      "arguments": "maximum_count integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "maximum_count",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.reader_catalog(integer,integer,text,text)"
+    },
+    {
+      "name": "reader_catalog_if_changed",
+      "arguments": "maximum_count integer, maximum_bytes integer, expected_release text, expected_digest text, validator text",
+      "result": "bytea",
+      "names": [
+        "maximum_count",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest",
+        "validator"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.reader_catalog_if_changed(integer,integer,text,text,text)"
+    },
+    {
+      "name": "recover_group_request",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "original_request",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.recover_group_request(bytea,bytea,bytea,text,text)"
+    },
+    {
+      "name": "registrar_status",
+      "arguments": "expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 2,
+      "set": false,
+      "modes": null,
+      "signature": "truss.registrar_status(text,text)"
+    },
+    {
+      "name": "traverse_objects",
+      "arguments": "start_identity jsonb, hops jsonb, maximum_objects integer, maximum_states integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "start_identity",
+        "hops",
+        "maximum_objects",
+        "maximum_states",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 7,
+      "set": false,
+      "modes": null,
+      "signature": "truss.traverse_objects(jsonb,jsonb,integer,integer,integer,text,text)"
+    },
+    {
+      "name": "validate_batched_import_report",
+      "arguments": "original_input bytea, original_outcomes bytea, original_context bytea, expected_release text, expected_digest text",
+      "result": "boolean",
+      "names": [
+        "original_input",
+        "original_outcomes",
+        "original_context",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 5,
+      "set": false,
+      "modes": null,
+      "signature": "truss.validate_batched_import_report(bytea,bytea,bytea,text,text)"
+    },
+    {
+      "name": "writer_schema_basis",
+      "arguments": "original_input bytea, original_documents bytea, expected_release text, expected_digest text",
+      "result": "bytea",
+      "names": [
+        "original_input",
+        "original_documents",
+        "expected_release",
+        "expected_digest"
+      ],
+      "inputCount": 4,
+      "set": false,
+      "modes": null,
+      "signature": "truss.writer_schema_basis(bytea,bytea,text,text)"
+    },
+    {
+      "set": false,
+      "name": "query_binding",
+      "modes": null,
+      "names": [
+        "selected_documents",
+        "maximum_scan_rows",
+        "maximum_result_rows",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest"
+      ],
+      "result": "bytea",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "signature": "truss.query_binding(jsonb,integer,integer,integer,text,text)",
+      "inputCount": 6
+    },
+    {
+      "set": false,
+      "name": "query_binding_if_changed",
+      "modes": null,
+      "names": [
+        "selected_documents",
+        "maximum_scan_rows",
+        "maximum_result_rows",
+        "maximum_bytes",
+        "expected_release",
+        "expected_digest",
+        "validator"
+      ],
+      "result": "bytea",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text, validator text",
+      "signature": "truss.query_binding_if_changed(jsonb,integer,integer,integer,text,text,text)",
+      "inputCount": 7
+    },
+    {
+      "set": false,
+      "name": "query_scope",
+      "modes": null,
+      "names": [
+        "binding"
+      ],
+      "result": "void",
+      "arguments": "binding jsonb",
+      "signature": "truss.query_scope(jsonb)",
+      "inputCount": 1
+    }
+  ]
+}

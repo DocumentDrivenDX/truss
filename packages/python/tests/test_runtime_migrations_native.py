@@ -33,6 +33,7 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         import shutil
         cls.addClassCleanup(shutil.rmtree,cls.root)
         cls.addClassCleanup(cls.runtime.close)
+        cls.addClassCleanup(cls.record_runtime_diagnostic,'before-close')
         cls.uri=cls.runtime.info.connection_uri
         manifest,_,_=load_recipe();wheel=Path(os.environ.get(cls.wheel_environment,cls.wheel_default))
         if not wheel.is_file():raise AssertionError('Real predecessor wheel required: '+str(wheel))
@@ -82,10 +83,31 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
             Path(directory,cls.source_label+'-native-inventory.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
             if not diagnostic['matches']:print('Native inventory admission diagnostic: '+json.dumps({k:v for k,v in diagnostic.items() if k!='inventory'}),flush=True)
 
+    @classmethod
+    def record_runtime_diagnostic(cls,stage,test_id=None):
+        """Bounded owned-fixture evidence, captured before close removes PGDATA."""
+        if not (directory:=os.environ.get('TRUSS_MIGRATION_EVIDENCE_DIRECTORY')):return
+        from datetime import datetime,timezone
+        output=Path(directory)/(cls.__name__+'-'+stage+'.json')
+        if output.exists():return  # Preserve the first failure, not its cascade.
+        record={'source':cls.source_label,'class':cls.__name__,'stage':stage,
+            'test':test_id,'time':datetime.now(timezone.utc).isoformat(),
+            'dataDirectory':str(cls.runtime.directory),'files':{}}
+        for name,limit in (('log',262144),('postmaster.pid',4096),('postmaster.opts',4096)):
+            path=cls.runtime.directory/name
+            if path.is_file():
+                raw=path.read_bytes();record['files'][name]={'bytes':len(raw),
+                    'truncated':len(raw)>limit,'tail':raw[-limit:].decode('utf-8',errors='replace')}
+        output.write_text(json.dumps(record,indent=2)+'\n')
+
     def setUp(self):
         self.database='migration_'+uuid4().hex[:12]
-        with psycopg.connect(self.uri,autocommit=True) as c:
-            c.execute(psycopg.sql.SQL('CREATE DATABASE {} TEMPLATE migration_template').format(psycopg.sql.Identifier(self.database)))
+        try:
+            with psycopg.connect(self.uri,autocommit=True) as c:
+                c.execute(psycopg.sql.SQL('CREATE DATABASE {} TEMPLATE migration_template').format(psycopg.sql.Identifier(self.database)))
+        except BaseException:
+            self.record_runtime_diagnostic('first-setup-failure',self.id())
+            raise
         self.params=psycopg.conninfo.conninfo_to_dict(self.uri);self.params['dbname']=self.database
         self.admin=psycopg.connect(**self.params,autocommit=True,options='-c statement_timeout=10000')
         self.registry=HostRecoveryRegistry(self.root/(self.database+'.sqlite'))
@@ -185,7 +207,11 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         self.assertEqual(result.outcome,'migrated',result)
         self.assertEqual(self.tool.status()['state'],'current')
         after=self.state()
-        for name,value in before[1].items():self.assertEqual(after[1][name],value,name)
+        for name,value in before[1].items():
+            if name!='runtime_migration_receipt':self.assertEqual(after[1][name],value,name)
+        # The tool verifies all prior ledger rows before its one final append.
+        # A fresh47 source already owns the empty ledger table.
+        self.assertEqual(after[1]['runtime_migration_receipt']['rows'],before[1].get('runtime_migration_receipt',{'rows':0})['rows']+1)
         self.assertEqual(self.tool.apply(prepared.reference).outcome,'already_applied')
         original=self.tool.receipt(prepared.reference)
         import base64
@@ -197,7 +223,8 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
             decoded=lambda name:json.loads(base64.b64decode(original[name]['bytesBase64'],validate=True))
             evidence={'source':self.source_label,'attemptId':prepared.attempt_id,
                 'sourceManifestSha256':prepared.source,'targetManifestSha256':prepared.target,
-                'preservationBefore':before[1],'preservationAfter':{name:after[1][name] for name in before[1]},
+                'preservationBefore':{name:value for name,value in before[1].items() if name!='runtime_migration_receipt'},'preservationAfter':{name:after[1][name] for name in before[1] if name!='runtime_migration_receipt'},
+                'previousLedgerRows':before[1].get('runtime_migration_receipt',{'rows':0})['rows'],'finalLedgerRows':after[1]['runtime_migration_receipt']['rows'],
                 'preservationMatched':True,'originalRequest':decoded('originalRequest'),
                 'orderedStepEvidence':decoded('orderedStepEvidence'),
                 'originalArtifactSha256':{name:original[name]['sha256'] for name in
@@ -224,6 +251,8 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
                 self.assertIsInstance(queried,Ok,queried)
                 self.assertIsInstance(queried.value,QueryRows,queried)
                 self.assertEqual(queried.value.rows,(('exact-value',),))
+                status=engine.person_runtime_status_in_transaction(tx)
+                self.assertIsInstance(status,Ok,status);self.assertEqual(status.value.installation,'compatible')
                 context=engine.group_context_in_transaction(tx).value
                 from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,CommittedReceiptReplay,UpdateObject,StoredObjectReference
                 from truss.contracts import MapValue,TextValue
@@ -271,6 +300,16 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         before=self.state()
         with self.assertRaisesRegex(ValueError,'privilege|grant'):self.tool.prepare()
         self.assertEqual(self.state(),before)
+
+    def test_long_overload_acl_identity_cannot_be_satisfied_by_its_sibling(self):
+        # These full native signatures share the old63-byte ACL display prefix.
+        signature='truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea)'
+        sibling='truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)'
+        self.assertEqual(self.admin.execute("SELECT has_function_privilege(%s,%s,'EXECUTE'),has_function_privilege(%s,%s,'EXECUTE')",(self.seed['registrar'],signature,self.seed['registrar'],sibling)).fetchone(),(True,True))
+        before=self.state()
+        self.admin.execute(psycopg.sql.SQL('REVOKE EXECUTE ON FUNCTION '+signature+' FROM {}').format(psycopg.sql.Identifier(self.seed['registrar'])))
+        with self.assertRaisesRegex(ValueError,'privileges drifted'):self.tool.status()
+        self.assertEqual(self.state()[1],before[1])
 
     def test_external_inheritance_parent_refuses_before_migration(self):
         """@covers US-045-AC6: private rows cannot acquire an unqualified ancestor."""
@@ -373,6 +412,7 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
     def test_later_native_step_failure_rolls_back_initializer(self):
         """@covers US-045-AC7"""
         prepared=self.tool.prepare();before=self.state()
+        original_ledger=self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0]
         class FailingCursor(psycopg.Cursor):
             def execute(self,query,*args,**kwargs):
                 if isinstance(query,str) and query.startswith('CREATE OR REPLACE FUNCTION truss.catalog_accept_with_keys'):
@@ -382,7 +422,7 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         result=RuntimeMigrations(connect,self.registry).apply(prepared.reference)
         self.assertEqual(result.outcome,'rolled_back',result)
         self.assertEqual(self.state(),before)
-        self.assertIsNone(self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0])
+        self.assertEqual(self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0],original_ledger)
 
     def test_original_commit_reply_loss_recovers_after_restart(self):
         """@covers US-045-AC7"""

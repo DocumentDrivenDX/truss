@@ -1,0 +1,6 @@
+first [(2, {'1': {'kind': 'string', 'text': 'aa'}, '2': {'kind': 'string', 'text': 'value'}})]
+contained refusal 54000
+prior (42,)
+admin (False,)
+second [(2, {'1': {'kind': 'string', 'text': 'aa'}, '2': {'kind': 'string', 'text': 'value'}})]
+consumer after ('consumer', 'consumer', False)

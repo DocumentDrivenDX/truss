@@ -1,0 +1,45 @@
+test_concurrent_first_use_verifies_one_complete_release (test_runtime_release_cache.RuntimeReleaseCacheTests.test_concurrent_first_use_verifies_one_complete_release) ... ok
+test_corruption_refuses_and_failure_is_not_cached (test_runtime_release_cache.RuntimeReleaseCacheTests.test_corruption_refuses_and_failure_is_not_cached) ... ok
+test_warm_access_performs_no_filesystem_reads_and_returns_fresh_manifest (test_runtime_release_cache.RuntimeReleaseCacheTests.test_warm_access_performs_no_filesystem_reads_and_returns_fresh_manifest) ... ok
+test_blocked_results_and_failures_are_not_cached (test_query_compile_cache.QueryCompileCacheTests.test_blocked_results_and_failures_are_not_cached) ... ok
+test_eviction_and_oversize_results_bound_retention (test_query_compile_cache.QueryCompileCacheTests.test_eviction_and_oversize_results_bound_retention) ... ok
+test_exact_hit_returns_fresh_artifact_and_misses_every_changed_input (test_query_compile_cache.QueryCompileCacheTests.test_exact_hit_returns_fresh_artifact_and_misses_every_changed_input) ... ok
+test_page_position_and_size_are_part_of_identity (test_query_compile_cache.QueryCompileCacheTests.test_page_position_and_size_are_part_of_identity) ... ok
+test_cached_query_schema_cannot_cache_permission_grants (test_schema_cache_native.SchemaCacheTests.test_cached_query_schema_cannot_cache_permission_grants) ... ok
+test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader (test_schema_cache_native.SchemaCacheTests.test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader) ... ERROR
+test_query_binding_cache_isolated_by_current_person (test_schema_cache_native.SchemaCacheTests.test_query_binding_cache_isolated_by_current_person) ... ok
+test_query_binding_validator_misses_rolled_back_reused_revision (test_schema_cache_native.SchemaCacheTests.test_query_binding_validator_misses_rolled_back_reused_revision) ... ok
+test_record_work_reuses_immutable_compiled_schema (test_schema_cache_native.SchemaCacheTests.test_record_work_reuses_immutable_compiled_schema) ... ok
+test_public_operation_statement_and_round_trip_budgets (test_hohfeld_statement_budgets_native.HohfeldStatementBudgetTests.test_public_operation_statement_and_round_trip_budgets) ... ok
+test_authored_composite_key_pages_and_count_profile (test_compiled_query_native.CompiledQueryTests.test_authored_composite_key_pages_and_count_profile) ... ok
+test_boolean_and_optional_values_remain_logical (test_compiled_query_native.CompiledQueryTests.test_boolean_and_optional_values_remain_logical) ... ok
+test_combined_catalog_source_query_uses_one_operation_and_current_visibility (test_compiled_query_native.CompiledQueryTests.test_combined_catalog_source_query_uses_one_operation_and_current_visibility) ... ok
+test_complete_entity_materializes_facts_and_retains_nested_proofs (test_compiled_query_native.CompiledQueryTests.test_complete_entity_materializes_facts_and_retains_nested_proofs) ... ok
+test_complete_entity_pending_update_import_and_readonly (test_compiled_query_native.CompiledQueryTests.test_complete_entity_pending_update_import_and_readonly) ... ok
+test_complete_entity_wildcard_names_include_relationship_outputs (test_compiled_query_native.CompiledQueryTests.test_complete_entity_wildcard_names_include_relationship_outputs) ... ok
+test_exact_integer_decimal_projection_and_parameters (test_compiled_query_native.CompiledQueryTests.test_exact_integer_decimal_projection_and_parameters) ... ok
+test_grouped_count_preserves_string_boolean_bags (test_compiled_query_native.CompiledQueryTests.test_grouped_count_preserves_string_boolean_bags) ... ok
+test_indexed_equality_precedes_residual_limit_with_legacy_count_page_bounds (test_compiled_query_native.CompiledQueryTests.test_indexed_equality_precedes_residual_limit_with_legacy_count_page_bounds) ... ok
+test_public_links_forward_inverse_bounded_keys_readonly_and_unlink (test_compiled_query_native.CompiledQueryTests.test_public_links_forward_inverse_bounded_keys_readonly_and_unlink) ... ok
+test_public_mutations_filter_count_complete_record_and_readonly_query (test_compiled_query_native.CompiledQueryTests.test_public_mutations_filter_count_complete_record_and_readonly_query) ... ok
+test_repeated_query_compiles_once_but_revoked_reader_still_refuses (test_compiled_query_native.CompiledQueryTests.test_repeated_query_compiles_once_but_revoked_reader_still_refuses) ... ok
+test_supported_projection_on_mixed_scalar_catalog (test_compiled_query_native.CompiledQueryTests.test_supported_projection_on_mixed_scalar_catalog) ... ok
+test_wide_complete_entity_preserves_fields_with_explicit_byte_budget (test_compiled_query_native.CompiledQueryTests.test_wide_complete_entity_preserves_fields_with_explicit_byte_budget) ... ok
+
+======================================================================
+ERROR: test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader (test_schema_cache_native.SchemaCacheTests.test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_schema_cache_native.py", line 35, in test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader
+    with c.transaction():c.execute(query,(*parameters,first['validator']))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.ProgrammingError: complete current query reader required
+CONTEXT:  PL/pgSQL function truss.query_binding_if_changed(jsonb,integer,integer,integer,text,text,text) line 25 at RAISE
+
+----------------------------------------------------------------------
+Ran 27 tests in 37.507s
+
+FAILED (errors=1)
+HOHFELD_STATEMENT_BUDGETS=[{"operation": "read_by_business_key", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.02664395800093189}, {"operation": "list_page_51", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.03725574997952208}, {"operation": "type_enumeration", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.00570591603172943}, {"operation": "conditional_catalog_hit", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.0019432079861871898}, {"operation": "prepare_group", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.003513875009957701}, {"operation": "compiled_singleton_complete_entity", "executeCalls": 11, "driverWaitCalls": 11, "seconds": 0.006918624974787235}, {"operation": "combined_catalog_source_singleton", "executeCalls": 11, "driverWaitCalls": 11, "seconds": 0.008484959020279348}, {"operation": "single_effect_apply", "executeCalls": 4, "driverWaitCalls": 4, "seconds": 0.09423437499208376}, {"operation": "three_effect_apply", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.06587808299809694}]

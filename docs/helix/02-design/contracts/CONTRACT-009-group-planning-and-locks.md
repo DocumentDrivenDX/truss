@@ -19,6 +19,37 @@ ddx:
 
 # Contract: Group planning and locks
 
+## Selected HF-02 original request recovery and group identity
+
+Freeze complete original semantic input, request identity and exact source documents
+before native state resolution. Keep that immutable bounded frame across unknown
+acknowledgement and later changes. The dedicated recovery operation verifies its
+complete canonical input/digest against retained receipt bytes before returning the
+original result; an identity alone is insufficient. Unequal complete input conflicts
+under ADR-005. Recovery does not resolve then-current targets, expected versions or
+endpoints, and an absent receipt never invokes the mutation path. A missing row in
+the supplied snapshot cannot distinguish never-issued from invisible/uncommitted
+or rolled-back, so report request_not_observed without invented issuance evidence.
+Expired retained identities remain expired; they cannot become reusable absence.
+
+Current authorization covers every retained original owner before publication.
+The original person-qualified request scope is unchanged: another person is not an
+implicit shared replay namespace. Recovery does not reconstruct results from the
+journal or live records. Preserve no-op results, original tokens and same-transaction
+pending versus independently observed committed durability. Keep the existing
+minimum receipt-protection policy independent of journal retention.
+
+Expose the retained original group-attempt UUID alongside apply/replay results,
+using the identity already owned by mutation audit. It is distinct from XID and
+receipt/feed position; two groups in one outer transaction have distinct attempt
+identities. Do not mint a second group identity or invent one for legacy evidence.
+
+Final-state multiplicity uses CONTRACT-004's distinct rule/phase diagnostic and
+omits an operation index when attribution is not unique. Locked-prestate conditions,
+restrictive delete, explicit owned cascade and per-changing-operation versions
+remain selected semantics.
+
+
 ## Selected embedder continuation ordering
 
 Document/global catalog compare-and-set checks occur under the existing
@@ -456,3 +487,32 @@ facade reopens the original consumed attempt. Bounded discovery in one admitted
 attempt is permitted only within its selected complete procedure/account; it may
 not disguise repeated native attempts as planning. Receipt lookup/reconciliation
 remains original-attempt observation and cannot replay effects.
+
+### HF-05/06 retained scope and bounded audit extension
+
+Deduplicate the exact original load owner union while deriving it; repeated
+records must not expand a duplicate owner array. Every original identity and
+owner is still validated, including rejected, skipped and later-chunk records.
+No cross-call authorization result is cached.
+
+Audit listing may omit both document/module filters to discover across currently
+authorized modules. A supplied pair remains qualified. Unqualified discovery
+omits whole invocations/groups whose complete retained owner union is not
+authorized; it never returns a partial prefix or reports hidden existence.
+Closing authority checks still refuse a concurrent revocation. The observation
+frontier and complete filters bind every cursor. A whole-group metadata page
+may contain up to4,096 events within the existing independent byte bound; a
+1,024-operation input is not a1,024-event promise. Excess refuses explicitly.
+Auditor membership alone still reveals no property/key values. Optional data
+projection requires separate current readers over the complete retained owner
+union and explicit selection; it cannot be inferred from metadata audit access.
+
+Relationship-only load scope derives the original relationship declaration and
+its actual endpoint type/property readers. An association Record contributes
+its own property scope only when one exists; no association type is invented
+for an unattributed relationship. Detailed load pages return the native actor
+name retained in the original header. Historical headers that recorded an
+incomplete original owner inventory remain immutable and unavailable; this
+release does not reconstruct or silently backfill their missing evidence.
+A real public47-produced incomplete header is a migration preservation/refusal
+control, separate from newly produced complete relationship-only inventories.

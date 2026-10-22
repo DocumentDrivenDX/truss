@@ -19,6 +19,29 @@ ddx:
 
 # ADR-005: Complete durable group request receipts
 
+## Selected follow-up — original request observation
+
+The authorized post-0.0.47 release adds a dedicated observation-only recovery API.
+It consumes the complete immutable original request frame, verifies its canonical
+bytes/digest against the retained receipt, reauthorizes retained owners and returns
+the original complete result without resolving current targets. It does not weaken
+unequal-input conflict or make a request key sufficient authority. Person scope is
+unchanged, and missing snapshot evidence never implies issued, invalid, rolled
+back or safe-to-reapply. Existing apply/replay remains available when the caller
+retains its original complete input. The retained audit attempt supplies the stable
+group identity; no second identity service or journal reconstruction is selected.
+
+The selected ordinary runtime retains complete managed receipts indefinitely;
+it exposes no time-based payload-pruning or expiry-writer operation. Its policy
+therefore preserves the minimum replay window independently of journal retention.
+This is an implementation/policy claim, not an elapsed24-hour timing experiment.
+Native ordinary-writer ACL controls must deny direct receipt UPDATE/DELETE.
+An administrator-seeded expired-header fixture qualifies only the observer:
+return explicit expiry unavailability after retained-owner authorization and
+never reapply. It does not qualify a production expiry transition, clock,
+protection-generation or cleanup protocol. Those proposals below remain separate.
+
+
 ## Owner decisions — 2026-10-07
 
 Accepted by the owner: request-enabled atomic batches use a fixed durable receipt home. Effects and the complete original ordered result, including all-no-op entries, commit together. Equal request identity and complete input replay the original result; unequal input conflicts. Lost network acknowledgment uses the same request identity for retry/lookup rather than blind reapplication. Expired identities never become reusable absence. Request-free groups remain receipt-free. Native bodies, exact selected wire/profile and qualification remain implementation gates; the old journal-only persistence alternative is superseded.

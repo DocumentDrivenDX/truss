@@ -19,6 +19,35 @@ ddx:
 
 # Contract: Module isolation
 
+## Selected HF-02 guarded person entrypoints
+
+The next runtime adds an explicit, finite set of public invocation shims for
+person-facing catalog/group/read/import entrypoints. PUBLIC schema USAGE and
+EXECUTE on these named shims permit a denial answer, not access to their private
+implementation or data. Private routines, tables, row types and administrative
+interfaces retain their exact ACL closure. Each shim invokes the native admission
+helper before the selected original routine. Native role membership, using the
+original session person and current snapshot, decides the shim's declared
+read/write/catalog/registrar/audit/status invocation family. An unenrolled person
+receives native `P1403` before any installation/role/catalog/result payload.
+
+An eligible person must independently possess EXECUTE on the original selected
+entrypoint. Missing EXECUTE or a changed function owner is an installation failure,
+not business denial. The shim does not bypass that grant by running as its owner.
+Original operation-specific owner-union authorization and closing checks remain
+mandatory. Explicit Truss authorization assertions use `P1403`; ordinary PostgreSQL
+`42501` is not proof of business denial and must retain its execution/integrity
+outcome. Do not classify diagnostic prose. A damaged shim/private dependency also
+remains execution failure. No public health or installation inventory is added.
+
+Admission and the original function execute in one guarded SQL invocation. Retain
+normal managed-call statement budgets and caller savepoint/transaction ownership;
+no second membership request or automatic operation retry supplies an answer.
+Qualify nonmember, reader/writer, unrelated module, revocation and damaged
+entrypoint/private dependency grants on native PostgreSQL, including no hidden
+identity/count disclosure and preservation of prior caller work.
+
+
 ## Selected catalog, status and audit disclosure
 
 Conditional catalog hits and misses require the same current authenticated
@@ -691,3 +720,6 @@ ended-peer refusal. This is a scoped reconciliation component, not original
 backend/coordinator incarnation, authority, store or program admission. Complete
 anchor/guard/selection/finalization obligations above remain open; no protected
 profile or backend acceptance case is promoted.
+
+HF-06 completion and dry-run settlement follow CONTRACT-007; current native
+person/module rights remain mandatory at effect and deferred completion time.

@@ -139,16 +139,16 @@ class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
         self.assertTrue(retry.value.replayed);self.assertEqual(retry.value.report_bytes,original)
         h.detach();c.commit();self.admin.execute('REVOKE roots_reader FROM consumer')
         c,h,a,t=self.consumer();report=a.report_in_transaction(t,revision)
-        self.assertIsInstance(report,Error,repr(report));self.assertEqual(report.error.sql_state,'42501')
+        self.assertIsInstance(report,Error,repr(report));self.assertEqual(report.error.sql_state,'P1403')
         h.detach();c.rollback();c,h,a,t=self.consumer();retry=self.register(a,t)
-        self.assertIsInstance(retry,Error,repr(retry));self.assertEqual(retry.error.sql_state,'42501')
+        self.assertIsInstance(retry,Error,repr(retry));self.assertEqual(retry.error.sql_state,'P1403')
         h.detach();c.rollback()
 
     def test_missing_root_reader_refuses_before_acceptance(self):
         from truss import Error
         self.seed_owned();self.admin.execute('REVOKE roots_reader FROM consumer')
         c,h,a,t=self.consumer();accepted=self.register(a,t)
-        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'P1403')
         h.detach();c.rollback();self.assert_preserved(keys=True)
 
     def test_root_reader_revoked_before_commit_aborts_backfill(self):
@@ -156,7 +156,8 @@ class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
         self.seed_owned();c,h,a,t=self.consumer();accepted=self.register(a,t)
         self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogRegistration)
         self.admin.execute('REVOKE roots_reader FROM consumer');h.detach()
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):c.commit()
+        with self.assertRaises(psycopg.Error) as raised:c.commit()
+        self.assertEqual(raised.exception.sqlstate,'P1403')
         c.rollback();self.assert_preserved(keys=True)
 
     def test_duplicate_owned_candidates_preserve_images_and_keys(self):
@@ -228,9 +229,9 @@ class OwnedCatalogRebindTests(OwnedCatalogKeyBackfillTests):
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s',(int(root.id),)).fetchone(),self.original_images[0])
         h.detach();c.rollback();self.admin.execute('REVOKE roots_writer,roots_reader FROM consumer')
         c,h,a,t=self.consumer();denied=a.report_in_transaction(t,revision)
-        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'P1403')
         h.detach();c.rollback();c,h,a,t=self.consumer();denied=self.register(a,t)
-        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'P1403')
         h.detach();c.rollback()
 
     def test_invalid_owned_retained_value_refuses_without_effects(self):
@@ -246,7 +247,7 @@ class OwnedCatalogRebindTests(OwnedCatalogKeyBackfillTests):
         self.include_note=False;self.required_note=True;self.seed_owned()
         self.admin.execute('REVOKE roots_reader FROM consumer')
         c,h,a,t=self.consumer();accepted=self.register(a,t)
-        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'P1403')
         h.detach();c.rollback();self.assert_preserved(keys=True)
 
     def test_owned_required_rebind_and_alternate_key_commit_together(self):
