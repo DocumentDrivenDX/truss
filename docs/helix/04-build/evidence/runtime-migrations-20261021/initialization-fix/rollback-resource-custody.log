@@ -1,0 +1,9 @@
+test_rollback_observation_waits_for_original_connection_close (test_runtime_migrations_native.RuntimeMigrationNativeTests.test_rollback_observation_waits_for_original_connection_close)
+@covers US-045-AC7: a rollback acknowledgment is not resource release. ... ok
+test_rollback_observation_waits_for_original_connection_close (test_runtime_migrations_native.CurrentTupleMigrationNativeTests.test_rollback_observation_waits_for_original_connection_close)
+@covers US-045-AC7: a rollback acknowledgment is not resource release. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 34.429s
+
+OK

@@ -42,7 +42,17 @@
       "status": "fixed",
       "evidence": [
         "native-cohort-controls.log",
-        "native-reader-cohort.log"
+        "native-reader-cohort.log",
+        "native-export-cohort.log"
+      ]
+    },
+    {
+      "id": "RM-R06",
+      "issue": "Rollback observation claimed resource release just before closing the original connection",
+      "resolution": "Close the original rolled-back connection before recording confirmed resource release; live-backend barrier proves no premature claim and read-only reconciliation stays conservative",
+      "status": "fixed",
+      "evidence": [
+        "rollback-resource-custody.log"
       ]
     }
   ],
@@ -58,7 +68,7 @@
     "Publication requires current source-bound installed receipt and checksums complete release assets"
   ],
   "producerSha256": {
-    "packages/python/src/truss/migrations.py": "7037c9656d5a2918f0b9cf340e070d920f91edfe813160492f9cc93f856164b9",
+    "packages/python/src/truss/migrations.py": "f32b0196c39d0fad08ca7273daef144d08939770636fffda7aedc364ef38f61a",
     "packages/python/src/truss/recovery_registry.py": "c4590bae27749d8354ab84bffa850a3430f87d12c8c5eaeb91b8af7a628a530b",
     "packages/python/src/truss/_migration_recipe.py": "9f962162dba5dbc536cd34696f902fa40cc888b3b0e600fc76a55e484a11b4b4",
     "packages/python/src/truss/_migration_verify.py": "fbcbe5986236c5262ea36ad9bd0b5941f61dc36983175d829c65f8eca533a58b",
@@ -80,7 +90,7 @@
     "First real subsequent edge supplies native multi-edge skip-release proof",
     "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
   ],
-  "updatedAt": "2026-10-21T23:35:58.438002+00:00",
+  "updatedAt": "2026-10-22T00:04:20.104739+00:00",
   "localAdditionalEvidence": {
     "atomicCapacityTests": 23,
     "passed": true,
@@ -88,6 +98,9 @@
     "readerCohortTests": 1,
     "actualCommitLossTests": 2,
     "isolatedThousandTypeCase": true,
-    "incompleteSweep": "Parallel local sweep had PostgreSQL administrator shutdown and an old unstamped reader fixture; no full-sweep pass claimed. The large-schema case passes in isolation under unchanged limits."
+    "incompleteSweep": "Parallel local sweep had PostgreSQL administrator shutdown and an old unstamped reader fixture; no full-sweep pass claimed. The large-schema case passes in isolation under unchanged limits.",
+    "currentPolicyChecks": 23,
+    "nativeExportCohortChecks": 2,
+    "rollbackResourceCustodyChecks": 2
   }
 }

@@ -182,6 +182,7 @@ class RuntimeMigrations:
             if not committing:
                 try:
                     connection.rollback()
+                    connection.close()
                     self._observe(reference,retained,request,'rollback','rolled_back');outcome='rolled_back'
                 except BaseException:pass
             return MigrationResult(outcome,reference,request['attemptId'],request['source'],request['target'],str(error))

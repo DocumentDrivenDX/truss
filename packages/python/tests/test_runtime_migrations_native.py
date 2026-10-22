@@ -426,6 +426,43 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         self.assertTrue(results)
         self.assertEqual(self.tool.reconcile(prepared.reference).outcome,'already_applied')
 
+    def test_rollback_observation_waits_for_original_connection_close(self):
+        """@covers US-045-AC7: a rollback acknowledgment is not resource release."""
+        from threading import Event,Thread
+        closing=Event();release=Event();results=[];calls=0
+        class FailLater(psycopg.Cursor):
+            def execute(self,query,*args,**kwargs):
+                if isinstance(query,str) and query.startswith('CREATE OR REPLACE FUNCTION truss.catalog_accept_with_keys'):
+                    return super().execute('SELECT 1/0')
+                return super().execute(query,*args,**kwargs)
+        class ParkedClose(psycopg.Connection):
+            def rollback(self):
+                super().rollback();self.original_rolled_back=True
+            def close(self):
+                if getattr(self,'original_rolled_back',False) and not self.closed:
+                    closing.set()
+                    if not release.wait(20):raise RuntimeError('Test cleanup barrier expired')
+                super().close()
+        def connect():
+            nonlocal calls
+            calls+=1
+            if calls!=2:return self.connect()
+            return ParkedClose.connect(**self.params,autocommit=True,options='-c statement_timeout=10000',cursor_factory=FailLater)
+        before=self.state();prepared=self.tool.prepare();tool=RuntimeMigrations(connect,self.registry)
+        thread=Thread(target=lambda:results.append(tool.apply(prepared.reference)));thread.start()
+        try:
+            self.assertTrue(closing.wait(15))
+            context=self.tool.status()['context']
+            retained=self.registry.inspect(prepared.reference,context)
+            self.assertFalse(any(o['resourceRelease']=='confirmed' for o in retained['observations']))
+            self.assertEqual(self.tool.reconcile(prepared.reference).outcome,'recovery_required')
+        finally:release.set();thread.join(20)
+        self.assertFalse(thread.is_alive());self.assertTrue(results)
+        self.assertEqual(results[0].outcome,'rolled_back',results)
+        retained=self.registry.inspect(prepared.reference,self.tool.status()['context'])
+        self.assertEqual(retained['observations'][-1]['resourceRelease'],'confirmed')
+        self.assertEqual(self.state(),before)
+
     def test_committed_receipt_does_not_override_current_native_drift(self):
         """@covers US-045-AC7"""
         prepared=self.tool.prepare();result=self.tool.apply(prepared.reference)
