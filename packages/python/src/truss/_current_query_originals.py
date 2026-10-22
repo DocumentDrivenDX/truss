@@ -25,13 +25,13 @@ _CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 # Historical consumer snapshots remain evidence, not runtime compatibility modes.
 _CONSUMER_COHORTS=(
     {**_CURRENT_CONSUMER,
-        'weftRevision':'86c092178bb8ca1a0d84edfebc175009d8862493',
-        'weftWheelSha256':'a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe',
-        'weftModuleSha256':'93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2'},
+        'weftRevision':'557153731e9f5d0583193a1189a07c6ed485d3d3',
+        'weftWheelSha256':'e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487',
+        'weftModuleSha256':'34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa'},
     {**_CURRENT_CONSUMER,
-        'weftRevision':'86c092178bb8ca1a0d84edfebc175009d8862493',
-        'weftWheelSha256':'b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f',
-        'weftModuleSha256':'cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a'},
+        'weftRevision':'557153731e9f5d0583193a1189a07c6ed485d3d3',
+        'weftWheelSha256':'a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5',
+        'weftModuleSha256':'ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445'},
 )
 
 
