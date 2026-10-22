@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-048-arras-source557-hf-conformance/scripts/run-hf-conformance.py", line 31, in <module>
+    if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=digest:raise ValueError('Original producer changed: '+name)
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original producer changed: packages/python/tests/test_current_disclosure_cohort.py
