@@ -1,0 +1,48 @@
+{
+  "scope": "Clean installed macOS ARM64 candidate; exact source runtime payload checked independently; hosted Linux and public artifact adoption remain separate",
+  "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "migrationManifestSha256": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+  "wheelSha256": "9ac9f159ba795e564da108fdb1403020354d54ecef0dd77783a79fa8593a9aec",
+  "runtimePayloadsVerified": 455,
+  "migrationTests": 80,
+  "migrationSkipped": 0,
+  "migrationSeconds": 182.468,
+  "corpusTests": 61,
+  "corpusSkipped": 0,
+  "corpusSeconds": 309.86156816600123,
+  "corpusArchiveSha256": "e35eff11b3a32daa41b0e916f0ca9cc98a2d33cf9af7982d5a1655a335dcf5f8",
+  "invalidatedRun": {
+    "tests": 80,
+    "errors": 15,
+    "reason": "Two PostgreSQL test clusters received administrator shutdown during logical restore; exact cause unknown. Subsequent connection errors invalidate that component run. Isolated logical restore passes and complete serial gate passes without any relaxed limit/assertion."
+  },
+  "files": {
+    "truss-048-reached-migration-gate.log": "49c22df38d1957819cd60820baba5b8fbd6d534393f6a63b6e344a2e6e2406ec",
+    "truss-048-reached-conformance-qualification.json": "9703d66000973478fb07bfb9d94ebf6eda557edab0c806a4faa0817fcca713e1",
+    "truss-048-reached-logical-probe.log": "6b4330a61208d2f3f3f2b842e950845d41e7ff48b6dacaafc42cfdae1f23d473",
+    "truss-048-reached-conformance.log": "4004d8f06a7574bd0d5ef2604a42a48ea76c16b057de4c75da9f056a9e410458",
+    "truss-048-reached-install.log": "a71a127bf04d339053954da25bbb62caac9da2b02cf26feeb1bb24702822a02b",
+    "truss-048-reached-build.log": "f0413251c85f4e810cdec7b71d940143c9959ca7e26a1f796999a9a0930b8f39",
+    "truss-048-reached-migration-serial.log": "b69dc2c2c690063d6e87076b0adec199612c05bcf6150de77bdd982b433cd246",
+    "migration-passed/source46-original-evidence.json": "6bd5b22dc072c02d0a3a6a3f2eb4c4c2c0251ebf06821430551ffa850a5565c0",
+    "migration-passed/qualification.json": "ed87aa6c8e5b2e9f0192d38a94505654d5d70493f351d9632fbe4555c63553be",
+    "migration-passed/source46-native-inventory.json": "2885dab7aad39de0032ef34338df086204e7892fd80ba99844e5f2c91ce8b198",
+    "migration-passed/source47-original-evidence.json": "c57dbec3b0ed033ab9d2f837c2a07de902667073e97180704e4b5119e30c7dc3",
+    "migration-passed/source44-original-evidence.json": "dd1369272f83c99ea62835b8147bafbff0a2f7da958fe33fce110e8c2b2d726c",
+    "migration-passed/source44-native-inventory.json": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
+    "migration-passed/source47-native-inventory.json": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92",
+    "migration-invalidated/source46-original-evidence.json": "4efc81b78ccb84e9c433ea80520bd89567f0a1b26de1334d0e805056ec1abe45",
+    "migration-invalidated/qualification.json": "1046b55a3a63451292d94154abb4d77a942ea29bd358053048976435599d6bdb",
+    "migration-invalidated/source46-native-inventory.json": "2885dab7aad39de0032ef34338df086204e7892fd80ba99844e5f2c91ce8b198",
+    "migration-invalidated/source47-original-evidence.json": "6c93cd8d0d4b6b7b585cd0d63d89ed19e6eecd47e95d2110eead878f33548b4e",
+    "migration-invalidated/source44-native-inventory.json": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
+    "migration-invalidated/source47-native-inventory.json": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92"
+  },
+  "sourceSnapshotCommit": "472212ac",
+  "reproducibleArchive": {
+    "sha256": "e556cc2fb857b8fc7e39b919000104e22a6cffb34ae148e77317eb8d9b0fa7ce",
+    "twoIndependentBuildsEqual": true,
+    "payloadsIdenticalToQualifiedArchive": true,
+    "scope": "Local macOS ZIP packaging; every file payload remains identical to the61-case qualified archive. Hosted archive qualification remains required."
+  }
+}

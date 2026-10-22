@@ -650,8 +650,13 @@ All27 affected native cases pass, no skips,89.874s. This refines only the unpubl
 candidate to native `c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0`;
 the prior2f23 candidate is archived with its passing component evidence, not
 admitted as a published source. Both native initializers and logical restore pass.
-The explicit independent corpus now contains61 cases. The80-case lineage gate and
-61-case extracted corpus must pass again against the new installed wheel.
+The explicit independent corpus now contains61 cases. The exact installed wheel passes the complete serial80-case lineage gate
+(no skips,182.468s) and61-case extracted corpus (no skips,309.862s).
+[Original final-candidate receipts](evidence/hohfeld-followup-20261021/installed-048-nativec433/receipt.json)
+retain both successes and the invalidated concurrent run: two fixture clusters
+received administrator shutdown during restore (cause unknown), producing15
+errors. Isolated logical restore and the full serial rerun pass without relaxed
+limits or assertions. All455 runtime payloads match the isolated release source.
 
 The Weft dependency is implemented and compiler-frozen at f0039979, with selected
 release ancestor770137be; main integration preserves separately gated managed UC
