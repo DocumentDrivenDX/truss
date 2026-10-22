@@ -656,7 +656,10 @@ The explicit independent corpus now contains61 cases. The exact installed wheel 
 retain both successes and the invalidated concurrent run: two fixture clusters
 received administrator shutdown during restore (cause unknown), producing15
 errors. Isolated logical restore and the full serial rerun pass without relaxed
-limits or assertions. All455 runtime payloads match the isolated release source.
+limits or assertions. All455 runtime payloads match the isolated release source. The original public
+1,000-object/1,000-edge installed workload also passes in76.857s
+([original report](evidence/hohfeld-followup-20261021/installed-048-nativec433/public-workload/receipt.json));
+its latency budgets remain provisional and no prior-run nominal baseline was supplied.
 
 The Weft dependency is implemented and compiler-frozen at f0039979, with selected
 release ancestor770137be; main integration preserves separately gated managed UC
