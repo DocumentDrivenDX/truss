@@ -1,0 +1,36 @@
+{
+  "status": "failed-hosted-bootstrap-repaired-hosted-step-passed-full-run-in-progress",
+  "originalRun": 39821070162,
+  "originalJob": 119972301845,
+  "originalCheckout": "aa37e57e3083fd22390796fd08dac1c9f7df6d2b",
+  "runnerImage": "ubuntu24/20261021.345",
+  "runnerImageVersion": "20261021.345.10",
+  "failedStep": "Install actual Chromium and system dependencies",
+  "failure": "No official Ubuntu archive/security source URI was found",
+  "failurePoint": "Before apt-get update and before Playwright or Chromium installation",
+  "cause": "The runner image configures ubuntu.sources with mirror+file:/etc/apt/apt-mirrors.txt; the prior workflow recognized direct Ubuntu URLs only.",
+  "runnerSource": {
+    "url": "https://github.com/actions/runner-images/blob/ubuntu24/20261021.345/images/ubuntu/scripts/build/configure-apt-sources.sh",
+    "blobSha1": "b3f5b2b180df8eb39fcbba034f616e03a69e775c"
+  },
+  "originalLog": {
+    "path": "original-run-39821070162-job-119972301845.log",
+    "sha256": "e381fcbc865c38210f66000c44d3ab65ee96fa6b1df23d757fcce53363f8589b"
+  },
+  "repairCommit": "cc694344da31af76ef6b97e572d20a8347989bdd",
+  "review": "Sol reviewed exact patch; no blocking finding.",
+  "localChecks": {
+    "helperSelfTest": "passed",
+    "pythonCompile": "passed",
+    "bothWorkflowYamlAndBashSyntax": "passed",
+    "gitDiffCheck": "passed",
+    "platform": "macOS local checkout"
+  },
+  "retryRun": 39822650250,
+  "retryStatusAtRecord": "in_progress",
+  "hostedChromiumBootstrapStep": "passed",
+  "hostedChromiumBootstrapStepNumber": 6,
+  "hostedFullConformance": "in_progress",
+  "retryStatusSnapshot": "retry-status-20261022T172905Z.json",
+  "compilerOrReleaseBuildInputsChanged": false
+}

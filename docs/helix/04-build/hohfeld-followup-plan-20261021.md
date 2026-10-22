@@ -835,6 +835,26 @@ controls and actual synthetic PR checkoutc40909fe are [retained](evidence/hohfel
 Complete local candidate/qualified workspace checks and a new full hosted run
 remain required. The selected86c compiler/build source and all wheel pins are unchanged.
 
+### Hosted Chromium apt bootstrap repair — 2026-10-22
+
+Conformance run 39821070162/job 119972301845 failed before apt update or
+Playwright: its `ubuntu24/20261021.345` image configures the active Ubuntu
+source with `mirror+file:/etc/apt/apt-mirrors.txt`, which the previous workflow
+did not recognize. The immutable original log, exact runner-image source
+provenance, cause and scoped repair are recorded in the
+[apt bootstrap evidence](evidence/hohfeld-followup-20261021/weft-apt-bootstrap-repair/README.md).
+Reviewed integration commit `cc694344da31af76ef6b97e572d20a8347989bdd` now
+recognizes only that exact selector and selects official HTTPS archive/security
+hosts without following a file reference. Local fixture, Python, YAML, bash and
+diff checks pass. Hosted retry 39822650250 has completed the actual apt/Playwright/
+Chromium setup step successfully, including the effective apt-config assertions
+and Chromium launch smoke; its compiler job remains in progress and the later
+compiler, native, WASM and full qualification gates are pending. The exact
+structured step snapshot and immutable original failure are retained in the
+[apt bootstrap evidence](evidence/hohfeld-followup-20261021/weft-apt-bootstrap-repair/README.md).
+This is not an overall hosted conformance pass. The helper leaves compiler/build
+inputs unchanged.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

@@ -1,0 +1,34 @@
+{
+  "observedAt": "2026-10-22T17:29:05Z",
+  "source": "GitHub Actions workflow run/jobs API structured step summary",
+  "repository": "DocumentDrivenDX/weft",
+  "runId": 39822650250,
+  "runStatus": "in_progress",
+  "compilerJob": {
+    "jobId": 119977661999,
+    "name": "compiler-and-evidence",
+    "status": "in_progress",
+    "conclusion": null
+  },
+  "steps": [
+    {
+      "number": 6,
+      "name": "Install actual Chromium and system dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "number": 7,
+      "name": "Install locked JavaScript dependencies",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "number": 11,
+      "name": "Install pinned browser binding builder",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "scope": "The workflow run has not completed; no overall conformance or release-gate result is asserted."
+}
