@@ -54,6 +54,16 @@
       "evidence": [
         "rollback-resource-custody.log"
       ]
+    },
+    {
+      "id": "RM-R07",
+      "issue": "Preview race observer depended on an untruncated function name beyond pg_stat_activity default capture after new admission SQL",
+      "resolution": "A test-only driver-boundary comment marks only the real native preview command; actual snapshot/revocation expectations and production SQL semantics stay unchanged",
+      "status": "fixed",
+      "evidence": [
+        "preview-observer-original.log",
+        "preview-observer-fixed.log"
+      ]
     }
   ],
   "reviewedInvariants": [
@@ -90,7 +100,7 @@
     "First real subsequent edge supplies native multi-edge skip-release proof",
     "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
   ],
-  "updatedAt": "2026-10-22T00:04:20.104739+00:00",
+  "updatedAt": "2026-10-22T00:09:21.537130+00:00",
   "localAdditionalEvidence": {
     "atomicCapacityTests": 23,
     "passed": true,
@@ -101,6 +111,11 @@
     "incompleteSweep": "Parallel local sweep had PostgreSQL administrator shutdown and an old unstamped reader fixture; no full-sweep pass claimed. The large-schema case passes in isolation under unchanged limits.",
     "currentPolicyChecks": 23,
     "nativeExportCohortChecks": 2,
-    "rollbackResourceCustodyChecks": 2
-  }
+    "rollbackResourceCustodyChecks": 2,
+    "remainingReleaseCases": 250,
+    "remainingSweepPassed": 248,
+    "remainingPreviewObserverFailures": 2,
+    "correctedPreviewRaceCasesPassed": 2
+  },
+  "reviewedRuntimeSource": "96db00a0 (only test observer changes follow)"
 }
