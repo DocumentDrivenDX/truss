@@ -503,7 +503,7 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 Check out the v0.0.48 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.47 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.48 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -521,15 +521,15 @@ previews retain their historical pins and none claims independent interchange.
 
 ## Run local PostgreSQL 18.6
 
-With `uv` installed, run the published `0.0.47` package in an isolated Python
+With `uv` installed, run the published `0.0.48` package in an isolated Python
 3.11 tool environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
   --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.47' \
+  --from 'truss-toolkit[local,native]==0.0.48' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -1045,7 +1045,7 @@ accepted scope amendment. Experimental pg8000 and older private profiles are his
 The [runtime history](docs/runtime-history.md) preserves the earlier release diary.
 Its old limitations describe their named versions, not the current interface.
 
-## Hohfeld follow-up cohort — v0.0.48
+## Arras follow-up cohort — v0.0.48
 
 This cohort pins Weft0.4.51, compile/IR0.2.8, backend43/44, interface0.2.9
 and Truss query ABI1.2. Native-indexed exact string/boolean equality and eligible
@@ -1056,6 +1056,12 @@ A cursor retains its statement snapshot while current person/scope checks stay
 live. Compiler descriptors accompany empty/null results, pages and streams.
 `QueryEntityProjection(facts=(...), relationships=False)` explicitly selects
 ordered facts and relationship expansion; continuation is bound to that choice.
+
+The selected compiler retains opaque `arras.view` Record/Field metadata when the
+same original UMF document declares vocabulary version `0.1.0`. Original bytes and
+pins, including unselected unknown content, remain intact. Malformed envelopes or
+unsupported selected versions/semantics refuse without SQL. This preserves
+presentation metadata; it does not interpret Arras view terms or qualify its parser.
 
 `freeze_group_request` freezes original complete inputs/documents before state
 resolution. `recover_group_request_in_transaction` observes the retained request
@@ -1089,5 +1095,6 @@ No historical backfill, commit timestamp or total commit order is invented.
 The release's independent conformance archive includes original asserted test
 producers, exact profile pins and `scripts/run-hf-conformance.py`. Unzip it outside
 the checkout and run the installed final cohort with `--installed-package`.
-The runner rejects skips and mismatched cohorts. The separate migration gate
+The runner rejects skips and checks the loaded native compiler hash/source against
+the exact corpus and installed Truss cohort. The separate migration gate
 covers every admitted source, real multi-edge routes and prior publication.

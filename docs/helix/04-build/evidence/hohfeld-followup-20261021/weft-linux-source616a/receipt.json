@@ -1,0 +1,17 @@
+{
+  "status": "passed-packaging-only",
+  "packagingSource": "616aa7b6b7fc7b45a53a2bf51751500935312e84",
+  "compilerFreeze": "86c092178bb8ca1a0d84edfebc175009d8862493",
+  "workflowRun": 39811059843,
+  "TrussSelectedPlatforms": [
+    "macos-arm64",
+    "linux-x86_64"
+  ],
+  "LinuxArm": "Packaging verified only, not selected for Truss native runtime",
+  "files": {
+    "independent-verification.json": "0d4348f92ce4d435c5339b8b42fc6ade4f997d4f1373d7d5d7b15732feecd877",
+    "packaging-aarch64-unknown-linux-gnu.json": "af4673721552aa5a0f043bf6025d149eaf8c6bc9a79598fd6d03bcfcd9607a8b",
+    "packaging-x86_64-unknown-linux-gnu.json": "65e628455550674b17314e0e00663decbaf34b13934fa6592d81521eba845efe",
+    "run.json": "3880bb5a1a33559f9bd3f6cae52e04ff670178b66716b4b1597a3eedd651b82b"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "negativeControl": "simulated same-version loaded native module file substitution",
+  "status": "passed",
+  "error": "Exact corpus-qualified installed native compiler required",
+  "noDatabaseTestsStarted": true
+}

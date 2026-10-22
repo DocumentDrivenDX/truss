@@ -1,6 +1,6 @@
 {
   "profile": "truss-hf-conformance/0.1",
-  "toolkitVersion": "0.0.48",
+  "toolkitVersion": "0.0.49",
   "compilerVersion": "0.4.51",
   "umfVersion": "0.10.0",
   "postgresqlVersion": "18.6",
@@ -310,6 +310,11 @@
       "id": "receipt_visibility_current_membership_and_actual_execute",
       "test": "test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority",
       "expectation": "The original receipt token remains included after authorized history changes; no membership returns typed authorization unavailable, while an actual removed original EXECUTE grant remains42501."
+    },
+    {
+      "id": "arras_view_original_source_query_and_relationship",
+      "test": "test_arras_view_model_native.ArrasViewModelNativeTests.test_arras_view_metadata_is_retained_and_current_weft_query_succeeds",
+      "expectation": "Ordinary UMF0.10 acceptance retains exact original arras.view0.1.0 Record/Field/relationship metadata and nested unknown document content, while a public create/edge/HAS_RELATED query returns rows and the same original document bytes/pin. This does not qualify Arras parser naming conventions."
     }
   ],
   "producers": {
@@ -329,6 +334,7 @@
     "packages/python/tests/test_adopter_workflow_native.py": "50a1a88e1b754ba4ef536db566308c5161caea39d07918c5c9d0cbd242818f83",
     "packages/python/tests/test_adoption_cancellation.py": "6a1313df979294d678fddde367c7e922cbfc7e265964b75c6cfb10a41c82ee3c",
     "packages/python/tests/test_archive_self_write_fence_native.py": "abe3fcfe1bf19f3ed13900fc1047fd6acb9b3fdb1256e9e735d904e0668022b9",
+    "packages/python/tests/test_arras_view_model_native.py": "a56214368ea2ba48dfc9872ec1e93b3d002a61ccd607ffb54532f3c1ea7e1c64",
     "packages/python/tests/test_atomic_group_surface_native.py": "dbd11bae8f3e7c79bc23d23aca41bacafa5aac1659c529f9b926be974604b7a0",
     "packages/python/tests/test_audit_disclosure_native.py": "1d39f754e11dd0e9e80a516c864e16bc5c72ce590c51f6ca5d15fed5fcc68770",
     "packages/python/tests/test_batched_import_native.py": "e4508be76b9fd86c4b27b7ac743d964dac74f286510f6fb4df581d8a99678b3c",
@@ -609,7 +615,7 @@
     "packages/python/tests/test_row_touch_observer_native.py": "dc01b68a5ae7fd80a5189627ff1a1d00e285b645bdfba8679db4e32c24ce4326",
     "packages/python/tests/test_row_touch_registry.py": "dd320f8da1a63d8b55a6450b75c98b767de9e66894bbd197ecc98f51304f9b39",
     "packages/python/tests/test_runtime_migrations.py": "c0a8741272929198bd8e4c35c737173c39de6ac71c8fbd756082be44dc1832e0",
-    "packages/python/tests/test_runtime_migrations_native.py": "fd751d8b41b77800f49742bd5d181cfa3ae346fec9c3828ec2376fb7f973ced1",
+    "packages/python/tests/test_runtime_migrations_native.py": "a5c76ed092c4f9550c6d4ddb30112dbb07124c58d93c799c386247130dbe0f0f",
     "packages/python/tests/test_runtime_migrations_subsequent_native.py": "43f431db4af400ab26090f1b95ee6cbf8062f26edef8a59bb2c78ade61dcae91",
     "packages/python/tests/test_runtime_release_cache.py": "24cff93ba1d8377d18d0a6c1eef86524d9079b6ebc0b08cda61fcb073b464fa6",
     "packages/python/tests/test_scalar_containers_native.py": "a5938166bd6491cabc16966aa40be1c2a48321c5b3acffdff0f55cc4bffc10b9",
@@ -683,5 +689,19 @@
     "Legacy full-scan fallback keeps complete candidate/byte bounds; selected indexed predicates and key subsets are explicit.",
     "Ordinary receipts are retained indefinitely; expired fixtures do not qualify an expiry writer.",
     "Native migration lineage, artifact packaging, hosted Linux and published-package adoption are separate mandatory release gates."
+  ],
+  "compilerCohorts": [
+    {
+      "platform": "macos-arm64",
+      "sourceRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
+      "wheelSha256": "a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe",
+      "nativeModuleSha256": "93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2"
+    },
+    {
+      "platform": "linux-x86_64",
+      "sourceRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
+      "wheelSha256": "b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f",
+      "nativeModuleSha256": "cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a"
+    }
   ]
 }

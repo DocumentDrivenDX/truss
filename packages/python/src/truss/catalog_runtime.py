@@ -499,7 +499,9 @@ class CatalogReferenceAssembly:
                                                 installation_administrator_with_cursor)
         manifest,digest,sources=_release()
         suffix=uuid4().hex[:16]
-        roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,registrar_role or 'truss_registrar_'+suffix,tolerated_grantees)
+        roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,
+                                registrar_role or 'truss_registrar_'+suffix,
+                                tolerated_grantees)
         try:
             valid_roles=_name(roles.owner) and _name(roles.client) and roles.owner!=roles.client
             selected_grantees=_policy_names(tolerated_grantees,reserved=(roles.owner,roles.client))

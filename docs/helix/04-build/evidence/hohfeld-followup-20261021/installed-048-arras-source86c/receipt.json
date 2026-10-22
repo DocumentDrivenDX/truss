@@ -1,0 +1,80 @@
+{
+  "status": "passed-local-candidate",
+  "implementationCommit": "d2a339f7e73b7f31ffe79d483c0f6f712682620d",
+  "scope": "Exact installed macOS ARM64 Truss0.0.48 candidate, UMF0.10 unprotected lineage; Linux and publication remain open",
+  "package": {
+    "status": "passed",
+    "sourcePayloads": 455,
+    "wheelSha256": "e701b06fa1972e91c8039b32bba164ea908d3fa3e0b73f6ccbec4597d9e9bbdd",
+    "sdistSha256": "9be85a0955e0602a787ef0ab5557127475fcee73033fae2093a4fd9e7609de20",
+    "scope": "Local Mac-only compiler cohort candidate; Linux cohort and publication remain pending."
+  },
+  "compilerSourceRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
+  "compilerNativeModuleSha256": "93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2",
+  "compilerWheelSha256": "a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe",
+  "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "migrationManifestSha256": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+  "independentArchiveSha256": "986a1324e3515d5c5dd1eb1be9e8f770081ecdefe15bd174c19ed546df746237",
+  "corpusSha256": "6f1b026101d7dcf8e44b2eaaded4cb463a55e277c9117f8d51db9d4af2828d24",
+  "checks": {
+    "migration": 80,
+    "independent": 62,
+    "policySourcecutDisclosure": 10,
+    "publicWorkloadObjects": 1000,
+    "publicWorkloadEdges": 1000,
+    "skipped": 0,
+    "publicWorkloadSeconds": 39.40542395901866
+  },
+  "producerHashes": {
+    "docs/helix/03-test/fixtures/hohfeld-followup-0.1.json": "6f1b026101d7dcf8e44b2eaaded4cb463a55e277c9117f8d51db9d4af2828d24",
+    "scripts/run-hf-conformance.py": "41aedcd99999f60b18cba7e62d6ec5396bf09bdaaaa74a8165268df8f93b3d07",
+    "scripts/build-hf-conformance-archive.py": "00e06d70115d7bba155ab718afd0fb7c5daa7678094cb0e1df2eba6cdf30fa82",
+    "scripts/benchmark-public-workflows.py": "7529923d43f4775e9b27b33f1af8e8b9d14369faac443893f9d46d0c06058860",
+    ".github/workflows/release.yml": "5c39e87aa1917cfef39efd71aa8f4ad1121796be7c2a03da4156334d43d5828f"
+  },
+  "invalidatedAttempts": {
+    "migration": {
+      "errors": 20,
+      "observed": "One10s CREATE DATABASE timeout; separate source47 CREATE DATABASE interrupted by administrator shutdown followed by18 setup failures. Cause unknown; serial full rerun passes without relaxed assertions/timeouts."
+    },
+    "packageCopy": "Temporary copy excluded legacy AJV dist/2020.js; exact payload check rejected454-file wheel. Restored original bytes and complete455-file wheel/sdist pass.",
+    "sharedBuilds": "Concurrent package scratch and Rust incremental outputs invalidated attempts; isolated builds pass."
+  },
+  "limits": [
+    "Latest application runtime only. Old native profiles/recipes remain migration inputs, with no release-age expiry.",
+    "No pre0.10 or protected-profile migration, downgrade or old-runtime execution mode.",
+    "Arras metadata fixture is backend source custody, not Arras parser/adapter qualification.",
+    "Focused policy/disclosure checks do not qualify broader security acceptance or managed backends.",
+    "Public latency budgets remain provisional; no prior nominal baseline or broad p95 claim.",
+    "Only new Mac compiler tuple admitted locally; final Linux tuple, full CI, public Weft/Truss publication/adoption remain required.",
+    "External source push remains blocked pending direct user approval after automatic review rejection."
+  ],
+  "files": {
+    "independent62.json": "902c9d71fd050484f9937d001a45ab88df720bcc7cf645934770d2e4562b7dd5",
+    "independent62.log": "951ed328fa1bf9ecb899f10e85358e2923cb6c180bf7bc6aec9cd6e4e6f23d5d",
+    "policy-sourcecut-disclosure10.log": "379d8101d05a9aabce3a94f169c1169831282560ca41713c1396c1687e2d2e97",
+    "public-workload.json": "741e3cc3189331fd81ff141fb46feec0dd36c3262d82c2d7e890b64f8b02038d",
+    "public-workload.log": "0b4eb818a426b16671eed4b3f8edf441784e5defad1d0fe0e1489de507ff265e",
+    "source-wheel-sdist.json": "2859a12d0e2d899ffd46c3db16a3b2dd35df06bca8d2393be43b678be24e8eb1",
+    "actual-prior-same-version-compiler-control.json": "830ef926bdd30ff14a019d2bbf99c5df02abfd7940ef9aa93985a777b70a3ca1",
+    "simulated-compiler-substitution-control.json": "baf51ee56d1bd0da0e4430a3d73109307ebd3c83c4c0d70cb16daa75bc952d87",
+    "migration80-serial.log": "4365e49ef7795953340f543cfc1f76ec72304b4df7ccf3e0adecff4fb8bb707f",
+    "invalidated-migration20-errors.log": "8504c5d1221b5f9f9ad3698bd5a6f451363eee9afbcacbad7c7044dca1cc7656",
+    "invalidated-migration-qualification.json": "fa8bdc5f29bd698f97c76259e4ba5fcbc9a4231af65b192d04af602e75870a6c",
+    "invalidated-package-shared-scratch.log": "6bdb71cacc718ded1a5da53a6e26f9748dcb907807ed6d2203600d801818d8e1",
+    "complete-isolated-package-build.log": "54aadb2946965395103f7c14e928e7f510dce1c4b687b537dc178ad9ebabf871",
+    "migration80/source47MigrationTests-before-close.json": "f82394df18d8c3f48b0405f0fad40611dc1e161eff337510a0cb9390d677ad2f",
+    "migration80/source46-original-evidence.json": "978989c6832868acf999cbb86f161c4ca6102e06089d28688bf72a001be51a1c",
+    "migration80/qualification.json": "95f22989825bdb905bef9d1b53fa09aff30acad054ad7dc9dca53acd5a7f7de5",
+    "migration80/PriorPublishedReceiptTests-before-close.json": "31261e919cabce6106968d6ed7ca93470536e380783bf354655e87f7496069ff",
+    "migration80/source46-native-inventory.json": "2885dab7aad39de0032ef34338df086204e7892fd80ba99844e5f2c91ce8b198",
+    "migration80/source47-original-evidence.json": "03e3d177ba486b3d612cda81cce1209376ba2bcc5c706ac98a5ed6d2ba1ba0f6",
+    "migration80/source44MigrationTests-before-close.json": "158554add9960c53b264a00ec179952dd03b533af7f5bbf56f839db6e3c25771",
+    "migration80/source44-original-evidence.json": "60e7d1e0f36182c755f3b2399f49c183c54136578070e8deb2003f5421771951",
+    "migration80/source44-native-inventory.json": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
+    "migration80/source47-native-inventory.json": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92",
+    "migration80/source46MigrationTests-before-close.json": "b25a4e219f49c96ec4bba63457ca5ad12e31225f5b87739dd455aa2a4b14c38f",
+    "qualified-mac-corpus.json": "6f1b026101d7dcf8e44b2eaaded4cb463a55e277c9117f8d51db9d4af2828d24",
+    "independent-archive-manifest.json": "de17eebeac82524fcfd4d86e4913a981bc841178381e5168e4879a8fd584d630"
+  }
+}

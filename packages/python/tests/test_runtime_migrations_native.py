@@ -33,6 +33,7 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         import shutil
         cls.addClassCleanup(shutil.rmtree,cls.root)
         cls.addClassCleanup(cls.runtime.close)
+        cls.addClassCleanup(cls.record_runtime_diagnostic,'before-close')
         cls.uri=cls.runtime.info.connection_uri
         manifest,artifacts,_=load_recipe()
         cls.source_profile=json.loads(
@@ -85,10 +86,31 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
             Path(directory,cls.source_label+'-native-inventory.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
             if not diagnostic['matches']:print('Native inventory admission diagnostic: '+json.dumps({k:v for k,v in diagnostic.items() if k!='inventory'}),flush=True)
 
+    @classmethod
+    def record_runtime_diagnostic(cls,stage,test_id=None):
+        """Bounded owned-fixture evidence, captured before close removes PGDATA."""
+        if not (directory:=os.environ.get('TRUSS_MIGRATION_EVIDENCE_DIRECTORY')):return
+        from datetime import datetime,timezone
+        output=Path(directory)/(cls.__name__+'-'+stage+'.json')
+        if output.exists():return  # Preserve the first failure, not its cascade.
+        record={'source':cls.source_label,'class':cls.__name__,'stage':stage,
+            'test':test_id,'time':datetime.now(timezone.utc).isoformat(),
+            'dataDirectory':str(cls.runtime.directory),'files':{}}
+        for name,limit in (('log',262144),('postmaster.pid',4096),('postmaster.opts',4096)):
+            path=cls.runtime.directory/name
+            if path.is_file():
+                raw=path.read_bytes();record['files'][name]={'bytes':len(raw),
+                    'truncated':len(raw)>limit,'tail':raw[-limit:].decode('utf-8',errors='replace')}
+        output.write_text(json.dumps(record,indent=2)+'\n')
+
     def setUp(self):
         self.database='migration_'+uuid4().hex[:12]
-        with psycopg.connect(self.uri,autocommit=True) as c:
-            c.execute(psycopg.sql.SQL('CREATE DATABASE {} TEMPLATE migration_template').format(psycopg.sql.Identifier(self.database)))
+        try:
+            with psycopg.connect(self.uri,autocommit=True) as c:
+                c.execute(psycopg.sql.SQL('CREATE DATABASE {} TEMPLATE migration_template').format(psycopg.sql.Identifier(self.database)))
+        except BaseException:
+            self.record_runtime_diagnostic('first-setup-failure',self.id())
+            raise
         self.params=psycopg.conninfo.conninfo_to_dict(self.uri);self.params['dbname']=self.database
         self.admin=psycopg.connect(**self.params,autocommit=True,options='-c statement_timeout=10000')
         self.registry=HostRecoveryRegistry(self.root/(self.database+'.sqlite'))

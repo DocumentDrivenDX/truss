@@ -1,0 +1,62 @@
+{
+  "status": "passed-focused-source-provenance-controls",
+  "createdAt": "2026-10-22T16:11:12.131060+00:00",
+  "freeze": "86c092178bb8ca1a0d84edfebc175009d8862493",
+  "inputs": [
+    "Cargo.toml",
+    "Cargo.lock",
+    "crates",
+    "spec",
+    "vendor",
+    ".cargo",
+    "rust-toolchain",
+    "rust-toolchain.toml",
+    "docs/helix/02-design/contracts"
+  ],
+  "actualGitControls": [
+    {
+      "role": "selected",
+      "commit": "6636e8f60cc521810afbc71394ce8141666bdae9",
+      "freezeAncestor": true,
+      "frozenInputDiffExit": 0,
+      "changedFiles": [],
+      "publicationAdmitted": true
+    },
+    {
+      "role": "integration",
+      "commit": "c5a4537db6ba54e52a988c0f05b5df69d09991dd",
+      "freezeAncestor": true,
+      "frozenInputDiffExit": 1,
+      "changedFiles": [
+        "crates/weft-databricks/src/authored_pages.rs",
+        "crates/weft-databricks/src/binding.rs",
+        "crates/weft-databricks/src/candidate.rs",
+        "crates/weft-databricks/src/lib.rs",
+        "crates/weft-databricks/src/local_spark42.rs",
+        "crates/weft-databricks/src/managed_current_core.rs",
+        "crates/weft-databricks/src/managed_current_core_xxhash64.rs",
+        "crates/weft-databricks/src/managed_current_pages.rs",
+        "crates/weft-databricks/src/managed_current_pages_xxhash64.rs",
+        "crates/weft-databricks/src/paths.rs",
+        "crates/weft-databricks/src/paths_keys.rs",
+        "crates/weft-databricks/src/paths_keys_having_spark42.rs",
+        "crates/weft-python/pyproject.toml",
+        "crates/weft-runtime/src/engine_read.rs",
+        "crates/weft-runtime/src/lib.rs",
+        "crates/weft-runtime/src/paths_keys.rs",
+        "docs/helix/02-design/contracts/CONTRACT-001-weft-sql-and-logical-plan.md",
+        "docs/helix/02-design/contracts/CONTRACT-002-backend-interface.md"
+      ],
+      "publicationAdmitted": false
+    }
+  ],
+  "releaseWorkflowSha256": "e9ad972d6e40c30c8d9e6ba9c1c773c010e8a16aa890f9ecb0e608964e38a3a5",
+  "review": "Sol fresh-eyes review found two source-custody defects; Luna workflow616aa7b6 repairs actual Linux checkout binding and Mac frozen-input correspondence. Sol rereview reports no further concrete findings. Chromium setup887edc33 reviewed with no concrete findings.",
+  "packagingRun": 39811059843,
+  "integrationRun": 39811016266,
+  "limits": [
+    "Hosted workflows still in progress; no successful Linux or public release claim",
+    "Selected compiler/build bytes remain unchanged; source-only workflow fixes require new packaging receipts",
+    "Latest-only Truss policy is unchanged; admitted previous UMF0.10 sources migrate forward without age expiry"
+  ]
+}

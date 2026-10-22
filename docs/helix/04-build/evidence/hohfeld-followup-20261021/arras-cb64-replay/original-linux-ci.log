@@ -1,0 +1,921 @@
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	﻿2026-10-22T13:31:03.4078093Z Current runner version: '2.338.0'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4101666Z ##[group]Runner Image Provisioner
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4102477Z Hosted Compute Agent
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4102955Z Version: 20261012.601
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4103562Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4104204Z Build Date: 2026-10-12T17:48:21Z
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4104984Z Worker ID: {3de8ad81-6060-4c20-ac27-7879edd95641}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4105651Z Region: centralus
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4106110Z Cloud: Azure
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4106595Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4107831Z ##[group]Operating System
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4108345Z Ubuntu
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4108850Z 24.04.5
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4109279Z LTS
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4109840Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4110342Z ##[group]Runner Image
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4110838Z Image: ubuntu-24.04
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4111359Z Version: 20261012.334.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4112452Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4113849Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4114849Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4115814Z ##[group]GITHUB_TOKEN Permissions
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4117421Z Contents: read
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4118022Z Metadata: read
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4118485Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4120968Z Secret source: Actions
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4121810Z Cache mode: write
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.4122525Z Prepare workflow directory
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.6250350Z Prepare all required actions
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.6295762Z Getting action download info
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:03.8596599Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:04.3068864Z Download action repository 'astral-sh/setup-uv@v5' (SHA:d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5225608Z Complete job name: Truss adapter on PostgreSQL 18.6
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5786975Z ##[group]Run actions/checkout@v4
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5787393Z with:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5787569Z   repository: DocumentDrivenDX/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5789523Z   token: ***
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5789682Z   ssh-strict: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5789844Z   ssh-user: git
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790008Z   persist-credentials: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790185Z   clean: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790370Z   sparse-checkout-cone-mode: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790559Z   fetch-depth: 1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790714Z   fetch-tags: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5790874Z   show-progress: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5791057Z   lfs: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5791223Z   submodules: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5791404Z   set-safe-directory: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5791615Z   allow-unsafe-pr-checkout: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.5792171Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6648913Z Syncing repository: DocumentDrivenDX/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6650528Z ##[group]Getting Git version info
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6651035Z Working directory is '/home/runner/work/arras/arras'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6651598Z [command]/usr/bin/git version
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6817225Z git version 2.55.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6853614Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6860520Z Temporarily overriding HOME='/home/runner/work/_temp/c7492254-ceb1-43f6-9c3c-f4d1155360c9' before making global git config changes
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6861460Z Adding repository directory to the temporary git global config as a safe directory
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6868358Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/arras/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6918435Z Deleting the contents of '/home/runner/work/arras/arras'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6921426Z ##[group]Initializing the repository
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.6938112Z [command]/usr/bin/git init /home/runner/work/arras/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7071191Z hint: Using 'master' as the name for the initial branch. This default branch name
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7085644Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7106651Z hint: to use in all of your new repositories, which will suppress this warning,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7123569Z hint: call:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7124159Z hint:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7124845Z hint: 	git config --global init.defaultBranch <name>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7127889Z hint:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7128691Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7129826Z hint: 'development'. The just-created branch can be renamed via this command:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7130365Z hint:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7130773Z hint: 	git branch -m <name>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7131155Z hint:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7131629Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7134670Z Initialized empty Git repository in /home/runner/work/arras/arras/.git/
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7160139Z [command]/usr/bin/git remote add origin https://github.com/DocumentDrivenDX/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7161628Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7162333Z ##[group]Disabling automatic garbage collection
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7163094Z [command]/usr/bin/git config --local gc.auto 0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7226875Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7245459Z ##[group]Setting up auth
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7255943Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7257836Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7611528Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7647587Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7845051Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.7878153Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.8072683Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.8113758Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.8114922Z ##[group]Fetching the repository
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:05.8121793Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +cb64ecd7d70aae41e26cfc2d766a95b1c71e6441:refs/remotes/origin/main
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7666219Z From https://github.com/DocumentDrivenDX/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7836145Z  * [new ref]         cb64ecd7d70aae41e26cfc2d766a95b1c71e6441 -> origin/main
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7837406Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7837763Z ##[group]Determining the checkout info
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7838133Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7838404Z [command]/usr/bin/git sparse-checkout disable
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7839117Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7840295Z ##[group]Checking out the ref
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.7840683Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8420745Z Switched to a new branch 'main'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8421598Z branch 'main' set up to track 'origin/main'.
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8423985Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8460069Z [command]/usr/bin/git log -1 --format=%H
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8485269Z cb64ecd7d70aae41e26cfc2d766a95b1c71e6441
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8676328Z ##[group]Run astral-sh/setup-uv@v5
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8676514Z with:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8676631Z   enable-cache: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8678270Z   github-token: ***
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8678449Z   cache-dependency-glob: **/uv.lock
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	**/requirements*.txt
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8678655Z   prune-cache: true
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8678793Z   ignore-nothing-to-cache: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8678957Z   ignore-empty-workdir: false
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:06.8679255Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:07.0484811Z (node:1973) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:07.0590848Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:07.4043265Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.13.5/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:07.8424820Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/cfacf909-486d-4af3-9b4b-54b74c6ebacd -f /home/runner/work/_temp/6e9aea17-7a6b-4a77-a0d9-6f70f3ecfc3d
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4295042Z Added /home/runner/.local/bin to the path
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4315054Z Added /opt/hostedtoolcache/uv/0.13.5/x86_64 to the path
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4343881Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4344740Z Successfully installed uv version 0.13.5
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4345278Z Searching files using cache dependency glob: **/uv.lock,**/requirements*.txt
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4935926Z /home/runner/work/arras/arras/uv.lock
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.4950104Z Found 1 files to hash.
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.5710347Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-unknown-a7891761feabcee1cc9450384750d62884950d89053688d0e472049943a17b9b
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7159490Z No GitHub Actions cache found for key: setup-uv-1-x86_64-unknown-linux-gnu-unknown-a7891761feabcee1cc9450384750d62884950d89053688d0e472049943a17b9b
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7295262Z ##[group]Run uv sync --locked --extra truss --group truss-test
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7295577Z ^[[36;1muv sync --locked --extra truss --group truss-test^[[0m
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7521286Z shell: /usr/bin/bash -e {0}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7521471Z env:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7521639Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.7521824Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:08.9150755Z Downloading cpython-3.11.17-linux-x86_64-gnu (download) (29.1MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:09.7492525Z  Downloaded cpython-3.11.17-linux-x86_64-gnu (download)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.0401524Z Using CPython 3.11.17
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.0402190Z Creating virtual environment at: .venv
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.0421512Z Resolved 35 packages in 0.77ms
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.0500277Z    Building arras @ file:///home/runner/work/arras/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1236256Z Downloading hypothesis (1.1MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1237937Z Downloading ruff (9.9MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1239144Z Downloading pygments (1.2MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1239981Z Downloading mini-racer (21.2MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1244879Z Downloading pyright (5.9MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.1245655Z Downloading psycopg-binary (5.0MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.2233937Z Downloading pgserver-pg18 (11.8MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.2584602Z  Downloaded hypothesis
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.2880692Z  Downloaded pygments
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.3966806Z Downloading truss-toolkit (4.0MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.3967541Z  Downloaded psycopg-binary
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.4197772Z Downloading weft-sql (12.7MiB)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.4218154Z  Downloaded ruff
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.6099878Z  Downloaded mini-racer
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.6382762Z  Downloaded pyright
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.6936661Z  Downloaded truss-toolkit
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.7816309Z  Downloaded weft-sql
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:10.8316555Z  Downloaded pgserver-pg18
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.2011434Z       Built arras @ file:///home/runner/work/arras/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.2113510Z Prepared 33 packages in 1.16s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7669750Z Installed 33 packages in 553ms
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7670543Z  + arras==0.5.0 (from file:///home/runner/work/arras/arras)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7671128Z  + attrs==26.1.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7674859Z  + click==8.5.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7680882Z  + fasteners==0.20
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7681081Z  + graphql-core==3.3.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7681267Z  + h11==0.16.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7681436Z  + hypothesis==6.170.5
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7681616Z  + iniconfig==2.3.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7682065Z  + jsonschema==4.26.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7682271Z  + jsonschema-specifications==2025.9.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7682500Z  + mini-racer==0.14.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7682675Z  + nodeenv==1.11.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7682860Z  + opentelemetry-api==1.45.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7683067Z  + opentelemetry-sdk==1.45.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7683332Z  + opentelemetry-semantic-conventions==0.66b1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7683580Z  + packaging==26.3
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7683793Z  + pgserver-pg18==18.6.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7683985Z  + platformdirs==4.12.4
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7684172Z  + pluggy==1.7.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7684527Z  + psutil==7.2.2
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7684688Z  + psycopg==3.3.6
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7684861Z  + psycopg-binary==3.3.6
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685039Z  + pygments==2.21.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685199Z  + pyright==1.1.414
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685365Z  + pytest==9.1.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685529Z  + referencing==0.37.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685704Z  + rpds-py==2026.9.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7685872Z  + ruff==0.17.1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7686049Z  + sortedcontainers==2.4.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7686237Z  + truss-toolkit==0.0.45
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7686427Z  + typing-extensions==4.16.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7686625Z  + uvicorn==0.54.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7686892Z  + weft-sql==0.4.49
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7854543Z ##[group]Run uv run --no-sync pytest -m truss -q
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7854780Z ^[[36;1muv run --no-sync pytest -m truss -q^[[0m
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7906058Z shell: /usr/bin/bash -e {0}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7906196Z env:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7906335Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7906503Z   ARRAS_REQUIRE_TRUSS: 1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:31:11.7906627Z ##[endgroup]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:32:31.2317587Z ............................................................FF.......... [ 38%]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:34:29.9592620Z .............................FFFFFFFFFFFFFFFFFFFFF...................... [ 77%]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1630121Z ...........................................                              [100%]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1630805Z =================================== FAILURES ===================================
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1631324Z ____ test_the_harness_runs_every_acceptance_criterion_and_prints_the_table _____
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1631738Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1632065Z capsys = <_pytest.capture.CaptureFixture object at 0x7f865d985290>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1632418Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1632703Z     def test_the_harness_runs_every_acceptance_criterion_and_prints_the_table(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1633189Z         capsys: pytest.CaptureFixture[str],
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1633568Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1633826Z         _require()
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1634123Z >       assert bench_latency.main(SMALL) == 0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1634662Z                ^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1634907Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1635084Z tests/test_truss_bench.py:26: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1635449Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1647735Z tests/bench_latency.py:1009: in main
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1648246Z     results = run_once(world, args, f"{run_id}{n}")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1648627Z               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1648983Z tests/bench_latency.py:793: in run_once
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1649461Z     ops = Ops(h.session(world.principal), run_id + ("w" if warm else "c"))
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1649932Z           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1650310Z tests/bench_latency.py:248: in __init__
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1650707Z     self.use_cases = self.keys("catalog.UseCase", "UseCase")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1651115Z                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1651474Z tests/bench_latency.py:266: in keys
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1651841Z     rows = self.o.query(module, sql, params, limit=100)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1652223Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1652579Z src/arras/telemetry.py:260: in wrapper
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1653212Z     value = fn(*args, **kwargs)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1653505Z             ^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1653804Z src/arras/callscope.py:48: in wrapper
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1654142Z     return fn(*args, **kwargs)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1654670Z            ^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1654956Z src/arras/core.py:471: in query
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1655386Z     current := self._read_current(module, statement, limit, consistency, at_least, text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1655888Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1656257Z src/arras/core.py:523: in _read_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1656700Z     ans: Answer | None = ask(self.principal, module, statement, limit=limit, text=text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1657186Z                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1657592Z src/arras/adapters/truss/__init__.py:240: in query_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1658080Z     return self._reader.query_current(principal, module, statement, limit=limit, text=text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1658528Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1659108Z src/arras/adapters/truss/query.py:312: in query_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1659515Z     found = self.run(call, document, statement.sql, params, validator=held[0])
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1659912Z             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1660262Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1660520Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1660755Z self = <arras.adapters.truss.query.Reader object at 0x7f865daa0510>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1661670Z call = Call(backend='primary', operation='query', principal=Principal(user='bench', groups=(), admin=False), assembly=<truss....uss.execution.TransactionHandle object at 0x7f865f9cf750>, read_only=True, rollback=False, quarantined=False, facts={})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1662568Z document = 'catalog-example'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1662967Z sql = 'SELECT x."code" FROM "catalog"."UseCase" x ORDER BY x."code" LIMIT 101'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1663402Z params = {}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1663789Z validator = '9f0712835eea6cec687f52e78140d3214d9e806ed4eb1f3b7364b83c3d20f39a'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1664173Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1664444Z     def run(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1664687Z         self,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1664932Z         call: Call,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1665185Z         document: str,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1665443Z         sql: str,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1665706Z         params: dict[str, Any],
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1665984Z         *,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1666235Z         validator: str | None = None,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1666538Z     ) -> Any:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1666909Z         """The `QueryRows` of the first profile Truss serves the statement under (with a validator,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1667354Z         the `QueryCatalogRead` that carries them)."""
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1667675Z         ladder: tuple[str | None, ...] = (
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1668023Z             (COMPLETE,) if _STAR.search(sql) else (None, *PAGE_PROFILES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1668360Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1668583Z         first: Any = None
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1668849Z         for profile in ladder:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1669245Z             found = self._once(call, document, sql, params, profile, validator)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1669630Z             kind = kind_of(found)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1669933Z             if kind in ("QueryRows", "QueryCatalogRead"):
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1670247Z                 return found
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1670529Z             if kind == "QueryUnavailable":
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1670879Z                 raise unavailable(self.name, found)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1671242Z             first = first if first is not None else found
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1671752Z             if not _tries_next(found, profile):
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1674899Z                 break
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1675384Z >       raise refusal(self.name, first)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1675850Z E       arras.errors.Unsupported: unsupported: Truss refused the statement (unsupported_query, WFT-TYPE)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1676232Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1676410Z src/arras/adapters/truss/query.py:350: Unsupported
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1676866Z ----------------------------- Captured stdout call -----------------------------
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1677492Z versions {'truss-toolkit': '0.0.45', 'weft-sql': '0.4.49', 'psycopg': '3.3.6', 'pgserver-pg18': '18.6.1'}; 3 runs after 1 warm-up runs per operation
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1678083Z cold seed (a new PostgreSQL, install, three ontologies): 9.62 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1678459Z   cluster start and install                     1.47 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1678820Z   register, grant and seed catalog              4.37 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1679201Z   register, grant and seed northwind            2.13 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1679575Z   register, grant and seed pizza                1.65 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1679844Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1680047Z === run 1 of 1: load average 0.81 0.29 0.11 on 2 cpus; busiest: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1680519Z _____________ test_enforce_exits_non_zero_when_a_target_is_missed ______________
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1680869Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1681290Z monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f865d389d10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1681799Z capsys = <_pytest.capture.CaptureFixture object at 0x7f865d389bd0>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1682113Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1682305Z     def test_enforce_exits_non_zero_when_a_target_is_missed(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1682752Z         monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1683152Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1683399Z         _require()
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1683733Z         monkeypatch.setitem(bench_latency.TARGETS, "AC1", 0.000001)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1684191Z >       assert bench_latency.main([*SMALL, "--enforce"]) == 1
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1684709Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1684970Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1685139Z tests/test_truss_bench.py:38: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1685503Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1685911Z tests/bench_latency.py:1009: in main
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1686267Z     results = run_once(world, args, f"{run_id}{n}")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1686633Z               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1686980Z tests/bench_latency.py:793: in run_once
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1687395Z     ops = Ops(h.session(world.principal), run_id + ("w" if warm else "c"))
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1687813Z           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1688182Z tests/bench_latency.py:248: in __init__
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1688546Z     self.use_cases = self.keys("catalog.UseCase", "UseCase")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1688936Z                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1689284Z tests/bench_latency.py:266: in keys
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1689641Z     rows = self.o.query(module, sql, params, limit=100)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1690006Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1690349Z src/arras/telemetry.py:260: in wrapper
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1690672Z     value = fn(*args, **kwargs)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1690961Z             ^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1691264Z src/arras/callscope.py:48: in wrapper
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1691572Z     return fn(*args, **kwargs)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1691847Z            ^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1692122Z src/arras/core.py:471: in query
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1692531Z     current := self._read_current(module, statement, limit, consistency, at_least, text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1693002Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1693349Z src/arras/core.py:523: in _read_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1693786Z     ans: Answer | None = ask(self.principal, module, statement, limit=limit, text=text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1694522Z                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1694907Z src/arras/adapters/truss/__init__.py:240: in query_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1695401Z     return self._reader.query_current(principal, module, statement, limit=limit, text=text)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1695889Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1696283Z src/arras/adapters/truss/query.py:312: in query_current
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1696848Z     found = self.run(call, document, statement.sql, params, validator=held[0])
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1703115Z             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1703521Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1703796Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1704043Z self = <arras.adapters.truss.query.Reader object at 0x7f865f30acd0>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1705190Z call = Call(backend='primary', operation='query', principal=Principal(user='bench', groups=(), admin=False), assembly=<truss....uss.execution.TransactionHandle object at 0x7f865d7846d0>, read_only=True, rollback=False, quarantined=False, facts={})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1706308Z document = 'catalog-example'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1706674Z sql = 'SELECT x."code" FROM "catalog"."UseCase" x ORDER BY x."code" LIMIT 101'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1707062Z params = {}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1707408Z validator = '46eef271b8b5016c14c8954618a6e68bffe8fd3092e0e6127454c981a0974286'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1707745Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1707878Z     def run(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1708104Z         self,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1708330Z         call: Call,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1708570Z         document: str,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1708813Z         sql: str,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1709056Z         params: dict[str, Any],
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1709330Z         *,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1709571Z         validator: str | None = None,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1709859Z     ) -> Any:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1710237Z         """The `QueryRows` of the first profile Truss serves the statement under (with a validator,
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1710705Z         the `QueryCatalogRead` that carries them)."""
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1711048Z         ladder: tuple[str | None, ...] = (
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1711414Z             (COMPLETE,) if _STAR.search(sql) else (None, *PAGE_PROFILES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1711770Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1712002Z         first: Any = None
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1712267Z         for profile in ladder:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1712766Z             found = self._once(call, document, sql, params, profile, validator)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1713150Z             kind = kind_of(found)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1713458Z             if kind in ("QueryRows", "QueryCatalogRead"):
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1713783Z                 return found
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1714087Z             if kind == "QueryUnavailable":
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1714510Z                 raise unavailable(self.name, found)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1714848Z             first = first if first is not None else found
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1715183Z             if not _tries_next(found, profile):
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1715474Z                 break
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1715728Z >       raise refusal(self.name, first)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1716199Z E       arras.errors.Unsupported: unsupported: Truss refused the statement (unsupported_query, WFT-TYPE)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1716609Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1716786Z src/arras/adapters/truss/query.py:350: Unsupported
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1717188Z ----------------------------- Captured stdout call -----------------------------
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1717825Z versions {'truss-toolkit': '0.0.45', 'weft-sql': '0.4.49', 'psycopg': '3.3.6', 'pgserver-pg18': '18.6.1'}; 3 runs after 1 warm-up runs per operation
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1718440Z cold seed (a new PostgreSQL, install, three ontologies): 9.35 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1718830Z   cluster start and install                     1.24 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1719327Z   register, grant and seed catalog              4.30 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1719677Z   register, grant and seed northwind            2.17 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1720029Z   register, grant and seed pizza                1.64 s
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1720271Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1720469Z === run 1 of 1: load average 0.84 0.31 0.12 on 2 cpus; busiest: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1720935Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.UseCase] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1721280Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1721471Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1721894Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1722273Z local = 'UseCase'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1722437Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1722646Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1723085Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1723515Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1723848Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1724104Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1724737Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1727132Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1727558Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1727987Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1728253Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1728516Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1729403Z E       AssertionError: {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1730832Z E       assert (200 == 200 and 'errors' not in {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1731635Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1731811Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1732265Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Solution] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1732624Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1732815Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1733247Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1733629Z local = 'Solution'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1733799Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1733999Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1734592Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1735020Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1735351Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1735599Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1735913Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1736209Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1736620Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1737029Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1737294Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1737552Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1738419Z E       AssertionError: {'data': {'solutionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['solutionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1739837Z E       assert (200 == 200 and 'errors' not in {'data': {'solutionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['solutionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1740773Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1740941Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1741375Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Product] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1741734Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1741969Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1742390Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1742776Z local = 'Product'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1742943Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1743138Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1743563Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1743987Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1744417Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1744677Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1744979Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1745272Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1745789Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1746204Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1746472Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1746727Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1747594Z E       AssertionError: {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1749031Z E       assert (200 == 200 and 'errors' not in {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1749844Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1750017Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1750502Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.CoverageAssertion] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1750884Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1751076Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1751506Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1751909Z local = 'CoverageAssertion'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1752108Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1752304Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1752733Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1753164Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1753493Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1753744Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1754057Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1754440Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1754841Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1755264Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1755530Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1755788Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1756677Z E       AssertionError: {'data': {'coverageAssertionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupporte...ath': ['coverageAssertionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1758161Z E       assert (200 == 200 and 'errors' not in {'data': {'coverageAssertionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupporte...ath': ['coverageAssertionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1759125Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1759297Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1759762Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.ProductVersion] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1760138Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1760325Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1760745Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1761140Z local = 'ProductVersion'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1761326Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1761525Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1761948Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1762372Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1762701Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1762948Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1763253Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1763542Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1763942Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1764571Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1764837Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1765096Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1765975Z E       AssertionError: {'data': {'productVersionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_q... 'path': ['productVersionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1767424Z E       assert (200 == 200 and 'errors' not in {'data': {'productVersionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_q... 'path': ['productVersionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1768249Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1768421Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1768938Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Finding] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1769294Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1769477Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1769899Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1770286Z local = 'Finding'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1770452Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1770652Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1771079Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1771501Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1771833Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1772077Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1772384Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1772678Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1773085Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1773507Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1773766Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1774016Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1774972Z E       AssertionError: {'data': {'findingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['findingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1776377Z E       assert (200 == 200 and 'errors' not in {'data': {'findingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['findingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1781053Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1781256Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1781712Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Category] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1782084Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1782275Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1782702Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1783090Z local = 'Category'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1783257Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1783455Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1783880Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1784423Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1784753Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1785002Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1785307Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1785600Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1785998Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1786401Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1787095Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1787408Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1788261Z E       AssertionError: {'data': {'categoryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['categoryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1789650Z E       assert (200 == 200 and 'errors' not in {'data': {'categoryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['categoryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1790452Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1790625Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1791082Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Supplier] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1791439Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1791626Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1792054Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1792445Z local = 'Supplier'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1792614Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1792813Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1793237Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1793669Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1793997Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1794245Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1794641Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1794925Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1795329Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1795740Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1796008Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1796268Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1797126Z E       AssertionError: {'data': {'supplierList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['supplierList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1798620Z E       assert (200 == 200 and 'errors' not in {'data': {'supplierList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['supplierList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1820039Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1820249Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1820903Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Product] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1821260Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1821453Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1821907Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1822303Z local = 'Product'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1822479Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1822677Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1823112Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1823557Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1823896Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1824150Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1824654Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1824955Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1825367Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1825797Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1826068Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1826463Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1827344Z E       AssertionError: {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1828764Z E       assert (200 == 200 and 'errors' not in {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1829604Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1829777Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1830235Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Customer] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1830593Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1830785Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1831215Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1831604Z local = 'Customer'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1831774Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1831975Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1832408Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1832838Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1833171Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1833423Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1833736Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1834032Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1834556Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1834976Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1835243Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1835506Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1836391Z E       AssertionError: {'data': {'customerList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['customerList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1837803Z E       assert (200 == 200 and 'errors' not in {'data': {'customerList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['customerList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1838638Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1838809Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1839258Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Employee] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1839737Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1839922Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1840350Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1840745Z local = 'Employee'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1840915Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1841111Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1841543Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1841977Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1842313Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1842560Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1842871Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1843167Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1843568Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1843991Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1844363Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1844692Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1845653Z E       AssertionError: {'data': {'employeeList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['employeeList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1847109Z E       assert (200 == 200 and 'errors' not in {'data': {'employeeList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['employeeList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1847935Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1848106Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1848541Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Order] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1848894Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1849082Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1849510Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1849898Z local = 'Order'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1850064Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1850261Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1850686Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1851119Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1851455Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1851708Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1852011Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1852305Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1852703Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1853120Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1853387Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1853653Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1854612Z E       AssertionError: {'data': {'orderList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['orderList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1856018Z E       assert (200 == 200 and 'errors' not in {'data': {'orderList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['orderList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1856848Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1857018Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1857479Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.OrderLine] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1857965Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1858147Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1858571Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1858967Z local = 'OrderLine'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1859145Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1859340Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1859764Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1860195Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1860523Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1860776Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1861082Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1861375Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1861781Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1862191Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1862461Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1862722Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1863706Z E       AssertionError: {'data': {'orderLineList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['orderLineList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1865192Z E       assert (200 == 200 and 'errors' not in {'data': {'orderLineList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['orderLineList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1866025Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1866193Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1866622Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Pizza] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1866964Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1867150Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1867573Z console = <test_console.Client object at 0x7f865d387790>, module = 'pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1867946Z local = 'Pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1868111Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1868308Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1868732Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1869159Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1869485Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1869734Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1870041Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1870333Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1870741Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1871151Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1871421Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1871683Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1872558Z E       AssertionError: {'data': {'pizzaList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['pizzaList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1873990Z E       assert (200 == 200 and 'errors' not in {'data': {'pizzaList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['pizzaList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1874917Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1875123Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1875557Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Topping] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1875897Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1876082Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1876609Z console = <test_console.Client object at 0x7f865d387790>, module = 'pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1876988Z local = 'Topping'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1877154Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1877350Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1877782Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1878211Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1878537Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1878786Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1879091Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1879386Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1879784Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1880192Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1880456Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1880712Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1881667Z E       AssertionError: {'data': {'toppingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['toppingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1883073Z E       assert (200 == 200 and 'errors' not in {'data': {'toppingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['toppingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1883893Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1884067Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1884602Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.PizzaBase] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1884951Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1885138Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1885556Z console = <test_console.Client object at 0x7f865d387790>, module = 'pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1885929Z local = 'PizzaBase'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1886099Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1886295Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1886722Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1887153Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1887476Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1887721Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1888055Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1888345Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1888742Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1889151Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1889411Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1889667Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1890546Z E       AssertionError: {'data': {'pizzaBaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['pizzaBaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1891954Z E       assert (200 == 200 and 'errors' not in {'data': {'pizzaBaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['pizzaBaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1892790Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1892959Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1893405Z _ test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Country] _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1893749Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1893935Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1894444Z console = <test_console.Client object at 0x7f865d387790>, module = 'pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1894922Z local = 'Country'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1895088Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1895278Z     @pytest.mark.parametrize(("module", "local"), ALL_TYPES)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1895703Z     def test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1896129Z         box: TrussBox, console: Client, module: str, local: str
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1896523Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1896775Z         rels = _selection(box, module, local)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1897073Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1897358Z         status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1897758Z             f"{{ {field}(limit: 100) {{ items {{ key {rels} }} truncated freshness {{ backend }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1898160Z             f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1898417Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1898669Z >       assert status == 200 and "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1899578Z E       AssertionError: {'data': {'countryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['countryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1901066Z E       assert (200 == 200 and 'errors' not in {'data': {'countryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['countryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1901894Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1902065Z tests/test_truss_examples.py:98: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1902477Z __ test_the_catalog_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink ___
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1902794Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1902978Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1903353Z console = <test_console.Client object at 0x7f865d387790>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1903606Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1903841Z     def test_the_catalog_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1904248Z         box: TrussBox, console: Client
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1904619Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1904882Z         alice = box.arras.session(box.people["alice"])
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1905210Z         new = "uc-" + uuid.uuid4().hex[:6]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1905533Z >       use_case = _keys(console, "catalog", "UseCase")[0]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1905868Z                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1906091Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1906245Z tests/test_truss_examples.py:132: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1906567Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1906833Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1907062Z console = <test_console.Client object at 0x7f865d387790>, module = 'catalog'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1907440Z local = 'UseCase'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1907608Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1907813Z     def _keys(console: Client, module: str, local: str) -> list[str]:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1908180Z         field = f"{_lower(local)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1908470Z         _, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1908812Z             f"{{ {field}(limit: 100) {{ items {{ key }} }} }}", f"/graphql/{module}"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1909171Z         )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1909434Z >       return [i["key"] for i in got["data"][field]["items"]]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1909782Z                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1910127Z E       TypeError: 'NoneType' object is not subscriptable
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1910383Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1910543Z tests/test_truss_examples.py:117: TypeError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1910944Z ___ test_northwind_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink ____
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1911261Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1911450Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1911819Z console = <test_console.Client object at 0x7f865d387790>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1912080Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1912432Z     def test_northwind_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1912834Z         box: TrussBox, console: Client
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1913105Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1913377Z         alice = box.arras.session(box.people["alice"])
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1913706Z         new = "cat-" + uuid.uuid4().hex[:6]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1914083Z         alice.invoke("northwind.AddCategory", {"code": new, "name": "Added"})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1914672Z         alice.invoke("northwind.RenameCategory", {"category": new, "name": "Renamed"})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1915219Z         alice.invoke("northwind.CorrectCategory", {"category": new, "description": "Corrected"})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1915761Z >       assert _read(console, "northwind", "Category", new, "name description") == {
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1916176Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1916502Z             "name": "Renamed",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1916778Z             "description": "Corrected",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1917050Z         }
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1917203Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1917356Z tests/test_truss_examples.py:159: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1917856Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1918119Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1918360Z console = <test_console.Client object at 0x7f865d387790>, module = 'northwind'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1918807Z local = 'Category', key = 'cat-ed8f20', fields = 'name description'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1919093Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1919365Z     def _read(console: Client, module: str, local: str, key: str, fields: str) -> dict[str, Any]:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1919854Z         query = f'{{ {_lower(local)}(key: "{key}") {{ {fields} }} }}'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1920237Z         _, got, _ = console.gql(query, f"/graphql/{module}")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1920572Z >       assert "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1921393Z E       AssertionError: {'data': {'category': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-...bounds']}, 'path': ['category'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1922756Z E       assert 'errors' not in {'data': {'category': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-...bounds']}, 'path': ['category'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1923547Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1923719Z tests/test_truss_examples.py:123: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1924143Z _ test_pizza_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink_of_has_topping _
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1924583Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1924770Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1925142Z console = <test_console.Client object at 0x7f865d387790>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1925397Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1925661Z     def test_pizza_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink_of_has_topping(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1926097Z         box: TrussBox, console: Client
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1926371Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1926638Z         alice = box.arras.session(box.people["alice"])
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1926966Z         new = "top-" + uuid.uuid4().hex[:6]
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1927374Z         alice.invoke("pizza.AddTopping", {"code": new, "name": "Added"})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1927831Z         alice.invoke("pizza.RenameTopping", {"topping": new, "name": "Renamed"})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1928308Z >       assert _read(console, "pizza", "Topping", new, "name")["name"] == "Renamed"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1928708Z                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1928944Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1929097Z tests/test_truss_examples.py:184: 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1929419Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1929680Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1929908Z console = <test_console.Client object at 0x7f865d387790>, module = 'pizza'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1930437Z local = 'Topping', key = 'top-079396', fields = 'name'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1930690Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1930968Z     def _read(console: Client, module: str, local: str, key: str, fields: str) -> dict[str, Any]:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1931442Z         query = f'{{ {_lower(local)}(key: "{key}") {{ {fields} }} }}'
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1931820Z         _, got, _ = console.gql(query, f"/graphql/{module}")
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1932148Z >       assert "errors" not in got, got
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1932977Z E       AssertionError: {'data': {'topping': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-T... bounds']}, 'path': ['topping'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1934416Z E       assert 'errors' not in {'data': {'topping': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-T... bounds']}, 'path': ['topping'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1935227Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1935395Z tests/test_truss_examples.py:123: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1935924Z __ test_a_whole_entity_list_with_the_facts_reads_every_type_of_every_example ___
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1936250Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1936435Z box = <arras.devtruss.TrussBox object at 0x7f865c090f10>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1936810Z console = <test_console.Client object at 0x7f865d387790>
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1937064Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1937302Z     def test_a_whole_entity_list_with_the_facts_reads_every_type_of_every_example(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1937701Z         box: TrussBox, console: Client
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1937970Z     ) -> None:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1938344Z         """A list that selects a fact (`version`, an attribution field) is the whole-entity read, whose
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1938917Z         statement names no relationship column twice (R17.2); one that does not is a projection."""
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1939376Z         for module, mod, t in _types(box):
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1939690Z             field = f"{_lower(t.local_name)}List"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1940065Z             rels = " ".join(f"{n} {{ key }}" for n, _ in relationships_of(mod, t))
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1940429Z             status, got, _ = console.gql(
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1940824Z                 f"{{ {field}(limit: 3) {{ items {{ key version createdBy updatedAt {rels} }} }} }}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1941227Z                 f"/graphql/{module}",
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1941495Z             )
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1941816Z >           assert status == 200 and "errors" not in got, (module, t.local_name, got)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1942735Z E           AssertionError: ('catalog', 'UseCase', {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statemen...ds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1944131Z E           assert (200 == 200 and 'errors' not in {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1945050Z 
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1945216Z tests/test_truss_examples.py:216: AssertionError
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1945585Z =========================== short test summary info ============================
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1946441Z FAILED tests/test_truss_bench.py::test_the_harness_runs_every_acceptance_criterion_and_prints_the_table - arras.errors.Unsupported: unsupported: Truss refused the statement (unsupported_query, WFT-TYPE)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1947601Z FAILED tests/test_truss_bench.py::test_enforce_exits_non_zero_when_a_target_is_missed - arras.errors.Unsupported: unsupported: Truss refused the statement (unsupported_query, WFT-TYPE)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1949187Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.UseCase] - AssertionError: {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1951073Z assert (200 == 200 and 'errors' not in {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1952832Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Solution] - AssertionError: {'data': {'solutionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['solutionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1954714Z assert (200 == 200 and 'errors' not in {'data': {'solutionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['solutionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1956478Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Product] - AssertionError: {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1958188Z assert (200 == 200 and 'errors' not in {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1960013Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.CoverageAssertion] - AssertionError: {'data': {'coverageAssertionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupporte...ath': ['coverageAssertionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1961834Z assert (200 == 200 and 'errors' not in {'data': {'coverageAssertionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupporte...ath': ['coverageAssertionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1963667Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.ProductVersion] - AssertionError: {'data': {'productVersionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_q... 'path': ['productVersionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1965530Z assert (200 == 200 and 'errors' not in {'data': {'productVersionList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_q... 'path': ['productVersionList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1967288Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[catalog.Finding] - AssertionError: {'data': {'findingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['findingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1968980Z assert (200 == 200 and 'errors' not in {'data': {'findingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['findingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1970860Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Category] - AssertionError: {'data': {'categoryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['categoryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1972570Z assert (200 == 200 and 'errors' not in {'data': {'categoryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['categoryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1974563Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Supplier] - AssertionError: {'data': {'supplierList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['supplierList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1976649Z assert (200 == 200 and 'errors' not in {'data': {'supplierList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['supplierList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1978687Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Product] - AssertionError: {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1980531Z assert (200 == 200 and 'errors' not in {'data': {'productList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['productList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1982303Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Customer] - AssertionError: {'data': {'customerList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['customerList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1984047Z assert (200 == 200 and 'errors' not in {'data': {'customerList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['customerList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1985897Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Employee] - AssertionError: {'data': {'employeeList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['employeeList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1987732Z assert (200 == 200 and 'errors' not in {'data': {'employeeList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, ...ds']}, 'path': ['employeeList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1989569Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.Order] - AssertionError: {'data': {'orderList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['orderList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1991404Z assert (200 == 200 and 'errors' not in {'data': {'orderList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['orderList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1993202Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[northwind.OrderLine] - AssertionError: {'data': {'orderLineList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['orderLineList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1995047Z assert (200 == 200 and 'errors' not in {'data': {'orderLineList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['orderLineList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1996975Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Pizza] - AssertionError: {'data': {'pizzaList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['pizzaList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.1998723Z assert (200 == 200 and 'errors' not in {'data': {'pizzaList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT...ounds']}, 'path': ['pizzaList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.2000501Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Topping] - AssertionError: {'data': {'toppingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['toppingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6089741Z assert (200 == 200 and 'errors' not in {'data': {'toppingList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['toppingList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6092642Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.PizzaBase] - AssertionError: {'data': {'pizzaBaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['pizzaBaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6095250Z assert (200 == 200 and 'errors' not in {'data': {'pizzaBaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query,...s']}, 'path': ['pizzaBaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6097249Z FAILED tests/test_truss_examples.py::test_every_type_lists_the_way_the_console_asks_and_opens_by_its_key[pizza.Country] - AssertionError: {'data': {'countryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['countryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6099215Z assert (200 == 200 and 'errors' not in {'data': {'countryList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['countryList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6100622Z FAILED tests/test_truss_examples.py::test_the_catalog_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink - TypeError: 'NoneType' object is not subscriptable
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6102699Z FAILED tests/test_truss_examples.py::test_northwind_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink - AssertionError: {'data': {'category': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-...bounds']}, 'path': ['category'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6104659Z assert 'errors' not in {'data': {'category': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-...bounds']}, 'path': ['category'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 2}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6106455Z FAILED tests/test_truss_examples.py::test_pizza_takes_an_add_a_rename_a_correct_and_a_link_and_an_unlink_of_has_topping - AssertionError: {'data': {'topping': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-T... bounds']}, 'path': ['topping'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6108543Z assert 'errors' not in {'data': {'topping': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, WFT-T... bounds']}, 'path': ['topping'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 3}}}
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6110306Z FAILED tests/test_truss_examples.py::test_a_whole_entity_list_with_the_facts_reads_every_type_of_every_example - AssertionError: ('catalog', 'UseCase', {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statemen...ds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6112083Z assert (200 == 200 and 'errors' not in {'data': {'useCaseList': None}, 'errors': [{'message': 'unsupported: Truss refused the statement (unsupported_query, W...nds']}, 'path': ['useCaseList'], 'locations': [{'line': 1, 'column': 3}]}], 'extensions': {'revision': {'primary': 1}}})
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:25.6113089Z 23 failed, 164 passed, 2574 deselected in 312.74s (0:05:12)
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.5320691Z ##[error]Process completed with exit code 1.
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8112001Z Post job cleanup.
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8722356Z [command]/usr/bin/git version
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8805127Z git version 2.55.0
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8819949Z Temporarily overriding HOME='/home/runner/work/_temp/b4260934-967f-466c-a17c-1434bc18e07d' before making global git config changes
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8821903Z Adding repository directory to the temporary git global config as a safe directory
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8824116Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/arras/arras
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8882685Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.8907368Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9255411Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9278322Z http.https://github.com/.extraheader
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9316362Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9376612Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9645218Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:26.9674046Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:27.0027352Z Cleaning up orphan processes
+Truss adapter on PostgreSQL 18.6	UNKNOWN STEP	2026-10-22T13:36:27.0245848Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, astral-sh/setup-uv@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
