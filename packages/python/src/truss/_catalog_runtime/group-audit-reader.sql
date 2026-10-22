@@ -266,13 +266,13 @@ BEGIN
  FOR owner IN SELECT value FROM jsonb_array_elements(owner_union) LOOP
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
    AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-   RAISE EXCEPTION 'complete mutation group audit membership required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete mutation group audit membership required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Recheck every original owner after constructing the whole-group projection.
  FOR owner IN SELECT value FROM jsonb_array_elements(owner_union) LOOP
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
    AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-   RAISE EXCEPTION 'mutation group audit authority changed before release' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'mutation group audit authority changed before release' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
  RETURN convert_to(jsonb_build_object('outcome','page','attemptId',attempt.id::text,
@@ -448,7 +448,7 @@ BEGIN
  actor:=truss.runtime_person(false);
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'current mutation audit enrollment required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current mutation audit enrollment required' USING ERRCODE='P1403';END IF;
  IF filters IS NULL OR jsonb_typeof(filters) IS DISTINCT FROM 'object'
   OR filters-ARRAY['attemptId','documentId','moduleId','entityId','entityType','entityKey','nativeActorOid',
     'assertedAction','observedAtFrom','observedAtUntil']<>'{}'::jsonb
@@ -495,7 +495,7 @@ BEGIN
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'qualified mutation audit module enrollment required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'qualified mutation audit module enrollment required' USING ERRCODE='P1403';END IF;
  IF filters ? 'assertedAction' AND octet_length(convert_to(filters->>'assertedAction','UTF8'))>4096 THEN
   RAISE EXCEPTION 'bounded mutation audit action required' USING ERRCODE='22023';END IF;
  IF filters ? 'observedAtFrom' AND filters ? 'observedAtUntil' THEN
@@ -599,7 +599,7 @@ BEGIN
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
-  RAISE EXCEPTION 'mutation audit module authority changed before empty-page release' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'mutation audit module authority changed before empty-page release' USING ERRCODE='P1403';END IF;
  PERFORM truss.runtime_person(false);
  RETURN convert_to('{"outcome":"end","nextPageCursor":null}','UTF8');
 END;

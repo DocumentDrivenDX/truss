@@ -115,14 +115,14 @@ def preview_group_conditions(host, transaction, input, documents, manifest, dige
 
     def observe(cursor, _observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.preview_group_conditions(%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_preview_group_conditions(%s,%s,%s,%s)',
             (original_input, original_documents, manifest['releaseId'], digest), prepare=False)
         raw = bytes(cursor.fetchone()[0])
         return _decode_preview_result(raw, input)
 
     result = host._run_operation(transaction, observe, function_call=True)
     if isinstance(result, Error) and result.error.code == 'execution_obligation':
-        if result.error.sql_state == '42501':
+        if result.error.sql_state == 'P1403':
             return Ok(PreviewRefused(reason='unauthorized'))
         if result.error.sql_state == '54000':
             return Ok(PreviewRefused(reason='resource'))

@@ -1,0 +1,22 @@
+test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint)
+@covers US-040-AC2: final multiplicity failures omit operation attribution. ... FAIL
+test_final_unlink_multiplicity_names_retained_endpoint_without_causal_ordinal (test_edge_mutations_native.EdgeMutationTests.test_final_unlink_multiplicity_names_retained_endpoint_without_causal_ordinal) ... ok
+test_link_retarget_unlink_and_original_retry (test_edge_mutations_native.EdgeMutationTests.test_link_retarget_unlink_and_original_retry) ... ok
+test_mandatory_link_and_failed_count_are_atomic (test_edge_mutations_native.EdgeMutationTests.test_mandatory_link_and_failed_count_are_atomic) ... ok
+
+======================================================================
+FAIL: test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint)
+@covers US-040-AC2: final multiplicity failures omit operation attribution.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 296, in test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint
+    self.assertEqual(original['entity']['kind'],'new_object')
+AssertionError: 'stored_object' != 'new_object'
+- stored_object
++ new_object
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 11.963s
+
+FAILED (failures=1)

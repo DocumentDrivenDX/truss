@@ -29,6 +29,9 @@ _MANAGED_FUNCTIONS = frozenset(('accepted_document','acknowledge_feed','apply_gr
     'read_import_load_chunk','reader_catalog',
     'reader_catalog_if_changed','registrar_status','validate_batched_import_report',
     'reached','read_feed','read_history','reread_feed','traverse_objects','writer_schema_basis'))
+from ._runtime_admission import person_entrypoints
+_MANAGED_FUNCTIONS = _MANAGED_FUNCTIONS | frozenset(
+    e['publicName'] for e in person_entrypoints() if not e['set'])
 _MANAGED_TABLE_FUNCTIONS = {
     'catalog_status': (('installation_id',25),('release_id',25),('release_sha256',25),
                        ('layout_profile',25),('revision',25)),
@@ -48,6 +51,15 @@ _MANAGED_TABLE_CALLS = {
         'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',None),
 }
 from ._runtime_admission import runtime_digest
+
+for _native_name, _columns in tuple(_MANAGED_TABLE_FUNCTIONS.items()):
+    if any(e['name']==_native_name for e in person_entrypoints()):
+        _MANAGED_TABLE_FUNCTIONS['person_'+_native_name]=_columns
+for _query, (_native_name,_expression,_projection) in tuple(_MANAGED_TABLE_CALLS.items()):
+    if any(e['name']==_native_name for e in person_entrypoints()):
+        _qualified='truss.'+_native_name+'('
+        _MANAGED_TABLE_CALLS[_query.replace(_qualified,'truss.person_'+_native_name+'(')]=(
+            'person_'+_native_name,_expression.replace(_qualified,'truss.person_'+_native_name+'('),_projection)
 
 _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  l.virtualtransaction::pg_catalog.text,

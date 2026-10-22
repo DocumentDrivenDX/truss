@@ -1,0 +1,7 @@
+test_inflight_observation_is_busy_then_rollback_is_indistinguishable_from_absence (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_inflight_observation_is_busy_then_rollback_is_indistinguishable_from_absence) ... ok
+test_recovery_after_injected_loss_of_actual_commit_acknowledgement (test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_recovery_after_injected_loss_of_actual_commit_acknowledgement) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.957s
+
+OK

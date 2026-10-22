@@ -42,14 +42,14 @@ BEGIN
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=definition.type_id AND retired_rev IS NULL;
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
-   RAISE EXCEPTION 'current key backfill reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current key backfill reader required' USING ERRCODE='P1403';END IF;
   FOREACH component IN ARRAY definition.prop_ids LOOP
    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.prop_id=component AND p.type_id=owner.type_id AND p.retired_rev IS NULL;
    IF property.nullability IS DISTINCT FROM 'required' OR property.cardinality IS DISTINCT FROM 'one'
     OR property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') THEN
     RAISE EXCEPTION 'required scalar key components required' USING ERRCODE='0A000';END IF;
    IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE THEN
-    RAISE EXCEPTION 'current planned key component reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current planned key component reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
   SELECT * INTO STRICT archive FROM jsonb_populate_recordset(NULL::truss.schema_doc,planned_basis->'schema_doc') d
    WHERE d.rev=definition.definition_rev AND d.ord=definition.definition_doc_ord AND d.doc_id=definition.definition_document_id;
@@ -87,7 +87,7 @@ BEGIN
  FOR owner IN SELECT t.* FROM truss.type_def t WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(result) c WHERE c.value->>'typeId'=t.type_id::text) ORDER BY t.type_id LOOP
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
-   RAISE EXCEPTION 'current key backfill disclosure reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current key backfill disclosure reader required' USING ERRCODE='P1403';END IF;
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=owner.type_id AND o.root_id IS NOT NULL LOOP
    PERFORM truss.runtime_history_ownership(jsonb_build_object(
     'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
@@ -102,7 +102,7 @@ BEGIN
     AND NOT EXISTS(SELECT 1 FROM truss.key_def old WHERE old.type_id=k.type_id AND old.key_id=k.key_id)) LOOP
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=property.type_id;
   IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE THEN
-   RAISE EXCEPTION 'current planned key component disclosure reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current planned key component disclosure reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  RETURN result;
 END;
@@ -163,7 +163,7 @@ BEGIN
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=selected.type_id AND retired_rev IS NULL;
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
-   RAISE EXCEPTION 'current key backfill reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current key backfill reader required' USING ERRCODE='P1403';END IF;
   SELECT * INTO STRICT object_row FROM truss.object WHERE id=selected.object_id AND type_id=selected.type_id FOR UPDATE;
   original_image:=to_jsonb(object_row);effects:='[]';
   FOR entry IN SELECT r.value FROM jsonb_array_elements(verified_receipts) r
@@ -238,7 +238,7 @@ BEGIN
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(transition.revision));
  SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=transition.type_id;
  IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN
-  RAISE EXCEPTION 'current original backfill owner reader required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current original backfill owner reader required' USING ERRCODE='P1403';END IF;
  PERFORM truss.runtime_history_ownership(jsonb_build_object(
   'identity',jsonb_build_object('id',transition.object_image->>'id','typeId',transition.object_image->>'type_id'),
   'catalogRevision',transition.object_image->'rev',
@@ -252,7 +252,7 @@ BEGIN
   FOREACH component IN ARRAY definition.prop_ids LOOP
    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.prop_id=component AND p.type_id=transition.type_id;
    IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE THEN
-    RAISE EXCEPTION 'current original key component reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current original key component reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
 END;

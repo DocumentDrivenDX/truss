@@ -27,13 +27,13 @@ def _group_refusal_state(result):
     if isinstance(result,GroupUnavailable):
         return {'profile':'0A000','resource':'54000','observation':'55P03'}.get(result.reason)
     if isinstance(result,GroupFailed):
-        if isinstance(result.failure,UnauthorizedPerson):return '42501'
+        if isinstance(result.failure,UnauthorizedPerson):return 'P1403'
         if isinstance(result.failure,InvalidGroupInput):return '22023'
         if isinstance(result.failure,GroupOperationFailure):
             try:
                 value=json.loads(base64.b64decode(result.failure.inner_error.bytes_base64,validate=True))
                 state=value.get('nativeState')
-                if state in ('22023','23505','42501','0A000','P1004','P1005'):return state
+                if state in ('22023','23505','P1403','0A000','P1004','P1005','P1405'):return state
             except (ValueError,TypeError,AttributeError):pass
     return None
 
@@ -116,7 +116,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
     def release_report(cursor,observed):
         pin_cursor(cursor)
         def original_scope():
-            cursor.execute('SELECT truss.group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             native=json.loads(bytes(cursor.fetchone()[0]))
             if any(native[k]!=context[k] for k in ('installationId','sourceEpoch','authorizedScopeIdentity')):
                 raise ValueError('Original engine import disclosure context required')
@@ -124,7 +124,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
         for outcome in outcomes:
             if type(outcome) not in (ImportCreated,ImportSkipped):continue
             record=input.records[int(outcome.input_index)]
-            cursor.execute('SELECT truss.import_report_record_authority(%s,%s,%s,%s)',(_bytes({'originalIdentity':_wire(record.identity),'outcomeIdentity':None if outcome.identity is ABSENT else _wire(outcome.identity)}),record.kind,manifest['releaseId'],digest),prepare=False);cursor.fetchone()
+            cursor.execute('SELECT truss.person_import_report_record_authority(%s,%s,%s,%s)',(_bytes({'originalIdentity':_wire(record.identity),'outcomeIdentity':None if outcome.identity is ABSENT else _wire(outcome.identity)}),record.kind,manifest['releaseId'],digest),prepare=False);cursor.fetchone()
         if _engine is not None:original_scope()
         return True
     def interrupted(error):
@@ -150,7 +150,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
     try:
         with _HostOperationReservation(host) if _engine is None else nullcontext():
             def admit(cursor,observed):
-                pin_cursor(cursor);cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+                pin_cursor(cursor);cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
                 native=json.loads(bytes(cursor.fetchone()[0]))
                 if _wire(input.layout_profile)!=native['layoutProfile'] or _wire(input.import_profile)!=native['importProfile'] or _wire(input.value_profile)!=native['valueProfile'] or _wire(input.catalog)!=native['catalog']:
                     raise ValueError('Selected original import context required')
@@ -181,12 +181,12 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                 def execute(cursor,observed):
                     entered[0]=True
                     pin_cursor(cursor)
-                    cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+                    cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
                     if json.loads(bytes(cursor.fetchone()[0]))!= {k:v for k,v in context.items() if k!='hostTransactionId'}:raise ValueError('Original import context changed')
                     if type(record) is ObjectImportRecord:
-                        cursor.execute('SELECT truss.import_object_identity(%s,%s,NULL,%s,%s)',
+                        cursor.execute('SELECT truss.person_import_object_identity(%s,%s,NULL,%s,%s)',
                             (_bytes(_wire(record.identity)),sources[record.identity.type.owner.document_id],manifest['releaseId'],digest),prepare=False)
-                    else:cursor.execute('SELECT truss.import_edge_identity(%s,%s,%s)',(_bytes(_wire(record.identity)),manifest['releaseId'],digest),prepare=False)
+                    else:cursor.execute('SELECT truss.person_import_edge_identity(%s,%s,%s)',(_bytes(_wire(record.identity)),manifest['releaseId'],digest),prepare=False)
                     metadata=json.loads(bytes(cursor.fetchone()[0]))
                     if metadata['state']=='skipped':return ImportSkipped(input_index=str(index),batch_id=batch_id,reason=metadata['reason'],identity=_identity(metadata['identity']) if 'identity' in metadata else ABSENT)
                     try:operation=_payload(record,metadata)
@@ -199,7 +199,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                     if not isinstance(applied.value,GroupSuccess):
                         raise _RecordRefused('Import group refused',native_state=_group_refusal_state(applied.value))
                     created=applied.value.response.semantic.results[0]
-                    cursor.execute('SELECT truss.import_record_source(%s::uuid,%s,%s)',(capture[0],_bytes(_wire(record)),input.load_id),prepare=False);cursor.fetchone()
+                    cursor.execute('SELECT truss.person_import_record_source(%s::uuid,%s,%s)',(capture[0],_bytes(_wire(record)),input.load_id),prepare=False);cursor.fetchone()
                     return ImportCreated(input_index=str(index),batch_id=batch_id,identity=created.identity,version=created.version)
                 result=host._run_operation(transaction,execute)
                 if isinstance(result,Ok):
@@ -220,7 +220,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                 proof=_bytes({'attempt':attempt_id,'index':str(index),'error':_wire(failure),
                     'nativeAttemptReference':None if native_attempt is None else native_attempt.reference,
                     'phase':None if native_attempt is None else native_attempt.phase,'hostTransactionId':context['hostTransactionId']})
-                rejected=known[0] or {'22023':'invalid','23505':'conflict','42501':'unauthorized','0A000':'unsupported_profile','P1004':'missing_endpoint','P1005':'dependencies'}.get(failure.sql_state)
+                rejected=known[0] or {'22023':'invalid','23505':'conflict','P1403':'unauthorized','0A000':'unsupported_profile','P1004':'missing_endpoint','P1005':'dependencies','P1405':'dependencies'}.get(failure.sql_state)
                 if contained and failure.code=='execution_obligation' and failure.retry_scope=='none' and rejected is not None:
                     visited.add(index);outcomes.append(ImportRejected(input_index=str(index),batch_id=batch_id,code=rejected))
                     batches.append(RolledBackBatch(batch_id=batch_id,input_indices=(str(index),),rollback_evidence_sha256=sha256(proof).hexdigest()))

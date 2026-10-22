@@ -141,7 +141,7 @@ BEGIN
   ELSE RAISE EXCEPTION 'known condition required' USING ERRCODE='22023';END IF;
   SELECT coalesce(jsonb_agg(value ORDER BY ord),'[]'::jsonb) INTO scopes FROM unnest(scope_entries) WITH ORDINALITY s(value,ord);
   FOR owner IN SELECT DISTINCT value->>'documentId' AS document_id,value->>'moduleId' AS module_id FROM jsonb_array_elements(scopes) LOOP
-   IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'current predicate owner read authority required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'current predicate owner read authority required' USING ERRCODE='P1403';END IF;
   END LOOP;
   inventory_entries[cardinality(inventory_entries)+1]:=entry||jsonb_build_object('objects',objects,'scopes',scopes);index:=index+1;
  END LOOP;
@@ -283,7 +283,7 @@ BEGIN
     OR octet_length(scope->>'moduleId') NOT BETWEEN 1 AND 4096 THEN
     RAISE EXCEPTION 'complete preview scope required' USING ERRCODE='55000';END IF;
    IF NOT truss.runtime_can_read_qualified(scope->>'documentId',scope->>'moduleId',qualified_actor) THEN
-    RAISE EXCEPTION 'current preview owner read authority required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current preview owner read authority required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
 END;
@@ -330,7 +330,7 @@ BEGIN
   OR current_installation.source_epoch::text IS DISTINCT FROM truth->>'sourceEpoch'
   OR current_revision::text IS DISTINCT FROM truth->>'catalogRevision' THEN
   RAISE EXCEPTION 'observed preview basis changed before release' USING ERRCODE='55P03';END IF;
- IF truss.runtime_person(false) IS DISTINCT FROM actor THEN RAISE EXCEPTION 'current preview person required' USING ERRCODE='42501';END IF;
+ IF truss.runtime_person(false) IS DISTINCT FROM actor THEN RAISE EXCEPTION 'current preview person required' USING ERRCODE='P1403';END IF;
  RETURN convert_to(jsonb_build_object('outcome','observed','conditions',truth->'conditions',
   'basis',jsonb_build_object('catalogRevision',truth->'catalogRevision','snapshot',truth->'snapshot',
    'sourceEpoch',truth->'sourceEpoch','releaseId',truth->'releaseId','releaseSha256',truth->'releaseSha256',

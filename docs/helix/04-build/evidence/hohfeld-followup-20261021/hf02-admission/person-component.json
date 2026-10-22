@@ -1,0 +1,30 @@
+{
+  "scope": "HF-02 person invocation component only; recovery, graph diagnostics, migration target freeze and release remain unfinished",
+  "nativeRelease": "truss-catalog-runtime/0.74-candidate",
+  "controls": 7,
+  "passed": true,
+  "seconds": 11.135,
+  "nonmemberSurfaces": 13,
+  "normalContextClientStatements": 3,
+  "originalEntrypointGrantDamageDistinguished": true,
+  "privateDependencyGrantDamageDistinguished": true,
+  "privateFunctionsAndTablesRemainDenied": true,
+  "nativeManifestSha256": "e20a0c54275891994c206ceb95b50b75a9450e3a34a3283ee04c0760a345d320",
+  "incompleteRegressionRun": {
+    "executed": 35,
+    "passed": 33,
+    "setupErrors": 2,
+    "reason": "TRUSS_CENSUS_POSTGRES_BIN omitted; class controls rerun separately"
+  },
+  "observedAt": "2026-10-22T02:36:23.752229+00:00",
+  "correctedCensusControls": {
+    "tests": 9,
+    "passed": true,
+    "seconds": 9.02
+  },
+  "moduleBoundaries": {
+    "imports": 1697,
+    "controls": 20,
+    "passed": true
+  }
+}

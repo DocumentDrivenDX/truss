@@ -109,7 +109,7 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                     subject_rows=_text_rows(caller_cursor,'SELECT * FROM truss.current_query_subject_current()',limit=1)
                     if len(subject_rows)!=1:raise ValueError('Current ordinary Subject required')
                     if graph_candidate:_verify_graph_caller_cut(caller_cursor,caller_observed[0][:2])
-                    raw=caller_cursor.execute('SELECT truss.reader_catalog(%s,%s,%s,%s)',(65536,16777216,manifest['releaseId'],digest),prepare=False).fetchone()
+                    raw=caller_cursor.execute('SELECT truss.person_reader_catalog(%s,%s,%s,%s)',(65536,16777216,manifest['releaseId'],digest),prepare=False).fetchone()
                     if raw is None or type(raw[0]) is not bytes:raise ValueError('Original caller-readable catalog required')
                     view=decode_owner_evidence_json(raw[0])
                     actual={(m['documentId'],m['moduleId']):(m['documentRevision'],m['documentSha256']) for m in view['modules']}

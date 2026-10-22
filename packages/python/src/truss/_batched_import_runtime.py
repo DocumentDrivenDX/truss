@@ -1,3 +1,4 @@
+from .groups import UnauthorizedPerson
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit native chunk execution; original legacy per-record route is unchanged."""
 import base64
@@ -36,9 +37,12 @@ def _configuration(value):
 def context(host, transaction, manifest, digest, pin_cursor):
     def observe(cursor, observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.batched_import_context(%s,%s)', (manifest['releaseId'], digest), prepare=False)
+        cursor.execute('SELECT truss.person_batched_import_context(%s,%s)', (manifest['releaseId'], digest), prepare=False)
         return _context(json.loads(bytes(cursor.fetchone()[0])))
-    return host._run_operation(transaction, observe, function_call=True)
+    result=host._run_operation(transaction,observe,function_call=True)
+    if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='P1403':
+        return Ok(UnauthorizedPerson())
+    return result
 
 
 def _decimal(value, maximum_digits=20, *, zero=False):
@@ -80,7 +84,7 @@ def build_records(host,transaction,drafts,manifest,digest,pin_cursor):
     original=_bytes(_wire(drafts))
     def observe(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.build_import_records(%s,%s,%s)',(original,manifest['releaseId'],digest),prepare=False)
+        cursor.execute('SELECT truss.person_build_import_records(%s,%s,%s)',(original,manifest['releaseId'],digest),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
         if type(value) is not dict or set(value)!={'context','records'} or type(value['records']) is not list or len(value['records'])!=len(drafts):
             raise ValueError('Complete original builder output required')
@@ -89,7 +93,10 @@ def build_records(host,transaction,drafts,manifest,digest,pin_cursor):
         if any(r.kind!=d.kind or r.payload_profile!=selected.payload_profile for r,d in zip(records,drafts)):
             raise ValueError('Original builder order and payload profile required')
         return BuiltImportRecords(context=selected,records=records)
-    return host._run_operation(transaction,observe,function_call=True)
+    result=host._run_operation(transaction,observe,function_call=True)
+    if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='P1403':
+        return Ok(UnauthorizedPerson())
+    return result
 
 
 def run_batched_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,_engine=None):
@@ -122,7 +129,7 @@ def run_batched_import(host,transaction,input,documents,manifest,digest,pin_curs
                 unprocessed=str(len(input.records)-len(visited))))
     def release(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.validate_batched_import_report(%s,%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_validate_batched_import_report(%s,%s,%s,%s,%s)',
             (original,_bytes(_wire(tuple(outcomes))),_bytes(native_context),manifest['releaseId'],digest),prepare=False)
         cursor.fetchone()
         return True
@@ -149,7 +156,7 @@ def run_batched_import(host,transaction,input,documents,manifest,digest,pin_curs
                 if count>4096 or size>268435456:return interrupted(ExecutionFailure('execution_obligation','Cumulative import submission budget exceeded',sql_state='54000'))
                 def execute(cursor,observed):
                     pin_cursor(cursor)
-                    cursor.execute('SELECT truss.process_import_chunk(%s,%s,%s::uuid,%s,%s,%s)',
+                    cursor.execute('SELECT truss.person_process_import_chunk(%s,%s,%s::uuid,%s,%s,%s)',
                         (original,sources,invocation,chunk,manifest['releaseId'],digest),prepare=False)
                     value=json.loads(bytes(cursor.fetchone()[0]))
                     if type(value) is not dict or set(value)!={'context','outcomes','hostTransactionId'} or type(value['outcomes']) is not list:

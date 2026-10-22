@@ -19,6 +19,37 @@ ddx:
 
 # Contract: Group planning and locks
 
+## Selected HF-02 original request recovery and group identity
+
+Freeze complete original semantic input, request identity and exact source documents
+before native state resolution. Keep that immutable bounded frame across unknown
+acknowledgement and later changes. The dedicated recovery operation verifies its
+complete canonical input/digest against retained receipt bytes before returning the
+original result; an identity alone is insufficient. Unequal complete input conflicts
+under ADR-005. Recovery does not resolve then-current targets, expected versions or
+endpoints, and an absent receipt never invokes the mutation path. A missing row in
+the supplied snapshot cannot distinguish never-issued from invisible/uncommitted
+or rolled-back, so report request_not_observed without invented issuance evidence.
+Expired retained identities remain expired; they cannot become reusable absence.
+
+Current authorization covers every retained original owner before publication.
+The original person-qualified request scope is unchanged: another person is not an
+implicit shared replay namespace. Recovery does not reconstruct results from the
+journal or live records. Preserve no-op results, original tokens and same-transaction
+pending versus independently observed committed durability. Keep the existing
+minimum receipt-protection policy independent of journal retention.
+
+Expose the retained original group-attempt UUID alongside apply/replay results,
+using the identity already owned by mutation audit. It is distinct from XID and
+receipt/feed position; two groups in one outer transaction have distinct attempt
+identities. Do not mint a second group identity or invent one for legacy evidence.
+
+Final-state multiplicity uses CONTRACT-004's distinct rule/phase diagnostic and
+omits an operation index when attribution is not unique. Locked-prestate conditions,
+restrictive delete, explicit owned cascade and per-changing-operation versions
+remain selected semantics.
+
+
 ## Selected embedder continuation ordering
 
 Document/global catalog compare-and-set checks occur under the existing

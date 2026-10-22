@@ -57,7 +57,7 @@ def _decode_recovery(raw: bytes) -> AdminInstallRecovery:
 def _catalog_reason(error: Error) -> str | None:
     if error.error.code != 'execution_obligation':
         return None
-    return {'42501': 'unauthorized', '0A000': 'profile', '55P03': 'observation',
+    return {'P1403': 'unauthorized', '0A000': 'profile', '55P03': 'observation',
             '54000': 'observation', '22023': 'observation', '3F000': 'installation',
             '42883': 'installation'}.get(error.error.sql_state)
 
@@ -70,7 +70,7 @@ def person_runtime_status(host, transaction, manifest: dict[str, Any], digest: s
 
     def observe(cursor, _observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.person_runtime_status(%s,%s,%s::jsonb)',
+        cursor.execute('SELECT truss.person_person_runtime_status(%s,%s,%s::jsonb)',
             (manifest['releaseId'], digest, json.dumps(manifest['layoutProfile'],
              sort_keys=True, separators=(',', ':'))), prepare=False)
         return _decode_status(bytes(cursor.fetchone()[0]))

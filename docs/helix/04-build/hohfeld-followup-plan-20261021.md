@@ -381,6 +381,73 @@ and elapsed-time evidence is the available actual measurement. HF-01 baseline
 reconciliation is complete; HF-02/03 contract amendments and desired-behavior tests
 are next. Import scaling and the other accepted slices remain required.
 
+### HF-02 selected implementation boundary
+
+Native PostgreSQL18.6 controls show that dynamic CASE and MATERIALIZED/LATERAL
+filters do not avoid EXECUTE checks on a referenced private function: both raise
+42501 before a denial branch can produce its result. Do not claim an SQL guard
+can classify that by inspecting prose. The chosen design is a finite set of
+native public person-entrypoint shims: current native role-family admission,
+then independent verification of the original caller's EXECUTE on the selected
+original function, then its existing private implementation. No extra client SQL
+roundtrip or alternate mutation engine is introduced. Private grants stay private.
+Intentional native authorization is P1403; PostgreSQL42501 is not classified as
+business denial. Governed contract amendments precede source changes.
+
+The same slice adds an immutable original request frame and observation-only
+recovery, stable retained audit attempt identity, and distinct final-state
+multiplicity diagnostics. It preserves complete canonical comparison, retained
+owner authorization, no cross-person replay, no execution on missing receipt,
+no fabricated operation index and original transaction/uncertainty custody.
+Low-confidence estimate for this larger correctness slice is 20,000–40,000
+additional tokens including native controls and review; no overall ceiling or
+per-slice token meter is available. Record actual case/elapsed evidence, and do
+not treat this estimate as a release spending promise. HF-03 remains required
+alongside it; no follow-up capability is claimed complete by this design.
+
+HF-02 person invocation component: seven native desired controls pass in 11.135s,
+covering all 13 nonmember surfaces, original/mutation/private dependency grant
+damage, no private PUBLIC access, retained prior work and a three-statement normal
+context call. Thirty-three additional source controls pass. Two census classes
+initially lacked their binary environment; the corrected run passes all nine
+native controls in 9.020s. Python boundaries pass at 1,697 imports and 20 checker
+controls. Generated native signatures come from the original PostgreSQL metadata;
+the generator explicitly handles void and TABLE results. The earlier void-result
+DDL error is retained, not counted as a product pass. Recovery, graph diagnostics,
+HF-03–HF-07, final native inventory/migration edge and publication remain unfinished.
+
+### HF-02/03 implementation checkpoint — 2026-10-22
+
+The source now implements original-frame receipt recovery, stable retained group
+IDs, distinct final-state multiplicity diagnostics and empty-Record paired
+required core/DDD additions. A first combined native source run passes 34 cases
+in 67.771s, with exact source hashes in
+`evidence/hohfeld-followup-20261021/hf02-hf03-source/qualification.json`.
+Two added settlement controls pass in 5.957s: real in-flight contention and an
+injected lost acknowledgement after actual server commit. The final combined
+cohort passes all 36 cases without skips in 72.994s; its original receipt, exact
+test producers and claim clarification are retained separately in
+`evidence/hohfeld-followup-20261021/hf02-hf03-source-v2/`. Earlier run evidence
+stays unchanged. The injected acknowledgement control proves the later native
+receipt observation, not a general network-fault transport protocol.
+
+Required-field controls cover both lock orders and populated refusal; three
+existing compatible-evolution workflows also pass. The stale-pin race exposed
+a preexisting low-level missing-row error. The native selected-type resolver now
+raises its explicit invalid-input verdict on a missing current definition; the
+optimization can fall back and the group facade returns a typed refusal.
+The PL/pgSQL CASE syntax repair and the incorrect initial assumption that every
+failed create is diagnosed before native allocation are retained as failed
+attempts. Actual allocated IDs are reported without a persistence claim; proposed
+objects use their original creation ordinal, never an invented native ID.
+
+Python boundaries pass at 1,702 imports and all 20 checker controls. The root
+exports only the public immutable request frame and pure freezer; the existing
+group runtime owns serialization and recovery. No new compiler/parser boundary
+is introduced. Per-slice token usage remains unavailable. These are component
+claims; the selected expiry/protection disposition, HF-04–HF-07, frozen migration
+edge, final Linux/installed cohort and publication are still required.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

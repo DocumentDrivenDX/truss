@@ -125,7 +125,7 @@ BEGIN
   IF object_count>10000 OR object_row.ver=9223372036854775807 THEN RAISE EXCEPTION 'bounded catalog rebinding required' USING ERRCODE='54000';END IF;
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=object_row.type_id;
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
-  IF truss.runtime_object_values_readable(object_row.type_id) IS NOT TRUE THEN RAISE EXCEPTION 'current rebind interpretation reader required' USING ERRCODE='42501';END IF;
+  IF truss.runtime_object_values_readable(object_row.type_id) IS NOT TRUE THEN RAISE EXCEPTION 'current rebind interpretation reader required' USING ERRCODE='P1403';END IF;
   PERFORM truss.runtime_history_ownership(jsonb_build_object(
    'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
@@ -207,7 +207,7 @@ BEGIN
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
-   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='P1403';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=property.type_id
    AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)
@@ -234,7 +234,7 @@ BEGIN
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
-   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='P1403';END IF;
   IF affected>0 THEN
    violation_buffer:=array_append(violation_buffer,jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
     'recordId',owner.element,'fieldModuleId',property.declaration_module,'fieldId',property.element,
@@ -246,7 +246,7 @@ BEGIN
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
-   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='P1403';END IF;
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=property.type_id
    AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)
    AND (property.nullability='required' OR coalesce(o.retained ? property.name,false)) LOOP
@@ -270,7 +270,7 @@ DECLARE owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;basis jsonb
 BEGIN
   basis:=coalesce(planned_basis,truss.catalog_all_expected_records(transition.revision));
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=transition.type_id;
-  IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN RAISE EXCEPTION 'current original rebind owner reader required' USING ERRCODE='42501';END IF;
+  IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN RAISE EXCEPTION 'current original rebind owner reader required' USING ERRCODE='P1403';END IF;
   FOR image IN SELECT value FROM jsonb_array_elements(jsonb_build_array(transition.before_object,transition.after_object)) LOOP
    PERFORM truss.runtime_history_ownership(jsonb_build_object(
     'identity',jsonb_build_object('id',image->>'id','typeId',image->>'type_id'),
@@ -284,7 +284,7 @@ BEGIN
    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=transition.type_id AND p.prop_id=property_id::int;
    IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
     OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
-    RAISE EXCEPTION 'current original rebind property/item reader required' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current original rebind property/item reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
 END;
 $$;

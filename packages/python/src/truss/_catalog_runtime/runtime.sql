@@ -82,7 +82,7 @@ BEGIN
      OR (c.relkind='S' AND has_sequence_privilege(actor.oid,c.oid,'USAGE,SELECT,UPDATE'))))
   OR (SELECT oid FROM pg_roles WHERE rolname=current_user) IS DISTINCT FROM installation.owner_oid
   OR require_registrar IS NULL OR (require_registrar AND NOT member_of_registrar) THEN
-  RAISE EXCEPTION 'catalog registration authorization required' USING ERRCODE='42501'; END IF;
+  RAISE EXCEPTION 'catalog registration authorization required' USING ERRCODE='P1403'; END IF;
  RETURN actor.oid;
 END;
 $$;
@@ -267,7 +267,7 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=NEW.rev;
  IF request.actor_oid IS DISTINCT FROM truss.catalog_actor() THEN
-  RAISE EXCEPTION 'current original registration authority required' USING ERRCODE='42501'; END IF;
+  RAISE EXCEPTION 'current original registration authority required' USING ERRCODE='P1403'; END IF;
  IF request.installation_id<>installation.installation_id OR NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev>=request.revision) THEN
   RAISE EXCEPTION 'complete catalog publication required' USING ERRCODE='55000'; END IF;
  origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
@@ -286,7 +286,7 @@ DECLARE original truss.catalog_registration_request%ROWTYPE; stored truss.catalo
 BEGIN
  IF TG_TABLE_SCHEMA<>'truss' OR TG_TABLE_NAME<>'catalog_unchanged_request'
   OR NEW.actor_oid IS DISTINCT FROM truss.catalog_actor() OR NEW.actor_name IS DISTINCT FROM session_user::text THEN
-  RAISE EXCEPTION 'current unchanged request authority required' USING ERRCODE='42501'; END IF;
+  RAISE EXCEPTION 'current unchanged request authority required' USING ERRCODE='P1403'; END IF;
  SELECT * INTO STRICT stored FROM truss.catalog_unchanged_request r
   WHERE r.installation_id=NEW.installation_id AND r.actor_oid=NEW.actor_oid AND r.request_key=NEW.request_key;
  IF stored IS DISTINCT FROM NEW THEN RAISE EXCEPTION 'original unchanged request required' USING ERRCODE='55000'; END IF;
@@ -338,7 +338,7 @@ BEGIN
 END;
 $$;
 
--- The only selected DDD extension evolution is an append-only optional Field
+-- The selected DDD extension evolution is an append-only optional or empty-Record required Field
 -- whose exact core Field and Record member are added together. Unknown payload
 -- content stays in source custody; no other DDD change is inferred compatible.
 CREATE FUNCTION truss.catalog_ddd_optional_evolution_supported(documents_bytes bytea) RETURNS boolean
@@ -412,7 +412,7 @@ BEGIN
      WHERE module.value->>'id'=field_module AND element.value->>'id'=field_id;
     IF NOT FOUND OR field_element->>'kind' IS DISTINCT FROM 'field'
       OR field_element->>'name' IS DISTINCT FROM added_name
-      OR field_element->>'nullability' IS DISTINCT FROM 'absent-allowed'
+      OR field_element->>'nullability' NOT IN ('absent-allowed','required')
       OR field_element->>'cardinality' IS DISTINCT FROM 'one' THEN RETURN false;END IF;
     core_scalar:=field_element->>'scalarType';
     ddd_scalar:=CASE core_scalar WHEN 'string' THEN 'string' WHEN 'boolean' THEN 'boolean'
@@ -421,7 +421,7 @@ BEGIN
       OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name)) NOT BETWEEN 2 AND 3
       OR ((new_fields->added_name)-ARRAY['type','cardinality','description']) IS DISTINCT FROM '{}'::jsonb
       OR jsonb_typeof(new_fields->added_name->'cardinality') IS DISTINCT FROM 'string'
-      OR new_fields->added_name->>'cardinality' IS DISTINCT FROM 'optional'
+      OR new_fields->added_name->>'cardinality' IS DISTINCT FROM (CASE field_element->>'nullability' WHEN 'required' THEN 'one' ELSE 'optional' END)
       OR jsonb_typeof(new_fields->added_name->'type') IS DISTINCT FROM 'object'
       OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name->'type'))<>2
       OR new_fields->added_name->'type'->>'kind' IS DISTINCT FROM 'scalar'
@@ -454,7 +454,7 @@ BEGIN
  IF compact AND declarations_bytes<>''::bytea THEN RAISE EXCEPTION 'source-only catalog request required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.73-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.74-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -620,7 +620,7 @@ BEGIN
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d
   JOIN truss.schema_doc s ON s.doc_id=d.value->>'documentId') THEN
   IF NOT truss.catalog_ddd_optional_evolution_supported(documents_bytes) THEN
-   RAISE EXCEPTION 'known DDD source evolution is outside optional-member compatibility' USING ERRCODE='0A000';END IF;
+   RAISE EXCEPTION 'known DDD source evolution is outside selected additive-member compatibility' USING ERRCODE='0A000';END IF;
   violations:=truss.catalog_scalar_violations_with_sources(declarations_bytes,documents_bytes);
   IF violations IS NOT NULL THEN
    PERFORM truss.catalog_actor();

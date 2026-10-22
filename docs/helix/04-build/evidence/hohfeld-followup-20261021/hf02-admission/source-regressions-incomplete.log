@@ -1,0 +1,73 @@
+test_selected_functions_have_volatile_installed_source (test_managed_function_guard.ManagedFunctionInventoryTests.test_selected_functions_have_volatile_installed_source) ... ok
+setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests) ... ERROR
+setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests) ... ERROR
+test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint)
+@covers US-040-AC2: whole-group dependency failures omit operation attribution. ... ok
+test_batched_key_conflicts_report_original_first_middle_last_ordinals (test_group_create_native.PublicCreateGroupTests.test_batched_key_conflicts_report_original_first_middle_last_ordinals)
+@covers US-040-AC2: batch conflicts report original ordinals and leave no effects. ... ok
+test_changed_request_origin_and_none_has_no_cache (test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache) ... ok
+test_committed_deleted_key_reservation_still_conflicts (test_group_create_native.PublicCreateGroupTests.test_committed_deleted_key_reservation_still_conflicts)
+@covers US-040-AC2: committed tombstone reservations block key reuse atomically. ... ok
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+test_create_preserves_absence_null_and_empty_retained_storage (test_group_create_native.PublicCreateGroupTests.test_create_preserves_absence_null_and_empty_retained_storage) ... ok
+test_current_writer_revocation_refuses_replay (test_group_create_native.PublicCreateGroupTests.test_current_writer_revocation_refuses_replay) ... ok
+test_genuine_type_reference_and_profile_definitions (test_group_create_native.PublicCreateGroupTests.test_genuine_type_reference_and_profile_definitions) ... ok
+test_group_failure_and_rollback_preserve_caller_work (test_group_create_native.PublicCreateGroupTests.test_group_failure_and_rollback_preserve_caller_work) ... ok
+test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal)
+@covers US-040-AC2: a tombstoned batch key retains its original ordinal. ... ok
+test_multiple_reserved_conflicts_report_earliest_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_multiple_reserved_conflicts_report_earliest_original_ordinal)
+@covers US-040-AC2: simultaneous key conflicts choose the earliest ordinal. ... ok
+test_native_late_journal_and_receipt_failures_are_atomic (test_group_create_native.PublicCreateGroupTests.test_native_late_journal_and_receipt_failures_are_atomic) ... ok
+test_native_retry_states_reach_host_without_internal_retry (test_group_create_native.PublicCreateGroupTests.test_native_retry_states_reach_host_without_internal_retry) ... ok
+test_noinherit_set_role_raw_privilege_is_refused_after_reset (test_group_create_native.PublicCreateGroupTests.test_noinherit_set_role_raw_privilege_is_refused_after_reset) ... ok
+test_raw_facade_rejects_missing_values_and_duplicate_json (test_group_create_native.PublicCreateGroupTests.test_raw_facade_rejects_missing_values_and_duplicate_json) ... ok
+test_reader_and_asserted_actor_cannot_authorize_first_create (test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create) ... ok
+test_repeated_create_pins_preserve_mixed_type_order_and_values (test_group_create_native.PublicCreateGroupTests.test_repeated_create_pins_preserve_mixed_type_order_and_values) ... ok
+test_selected_group_provider_is_callable_and_disposal_closes_it (test_group_create_native.PublicCreateGroupTests.test_selected_group_provider_is_callable_and_disposal_closes_it) ... ok
+test_create_commit_and_public_reads_in_actual_read_only_transaction (test_read_only_public_native.ReadOnlyPublicTests.test_create_commit_and_public_reads_in_actual_read_only_transaction) ... ok
+test_policy_replaced_while_object_buffered_uses_current_roles (test_read_only_public_native.ReadOnlyPublicTests.test_policy_replaced_while_object_buffered_uses_current_roles) ... ok
+test_1024_count_and_zero_record_pending_load (test_batched_import_native.BatchedImportTests.test_1024_count_and_zero_record_pending_load) ... ok
+test_builder_and_chunk_client_statement_budget_is_fixed (test_batched_import_native.BatchedImportTests.test_builder_and_chunk_client_statement_budget_is_fixed) ... ok
+test_create_skip_reject_original_indices_and_caller_rollback (test_batched_import_native.BatchedImportTests.test_create_skip_reject_original_indices_and_caller_rollback) ... ok
+test_empty_engine_confirmed_commit_rejection_is_rolled_back (test_batched_import_native.BatchedImportTests.test_empty_engine_confirmed_commit_rejection_is_rolled_back) ... ok
+test_empty_engine_unknown_ack_retains_explicit_unknown_load (test_batched_import_native.BatchedImportTests.test_empty_engine_unknown_ack_retains_explicit_unknown_load) ... ok
+test_engine_chunks_and_empty_load_settlement_are_durable (test_batched_import_native.BatchedImportTests.test_engine_chunks_and_empty_load_settlement_are_durable) ... ok
+test_engine_cleanup_fault_retains_confirmed_empty_load (test_batched_import_native.BatchedImportTests.test_engine_cleanup_fault_retains_confirmed_empty_load) ... ok
+test_independent_batch_never_falls_back_after_stale_resource_or_retry_failure (test_batched_import_native.BatchedImportTests.test_independent_batch_never_falls_back_after_stale_resource_or_retry_failure) ... ok
+test_independent_batch_refuses_unselected_legacy_payload_profile_before_effects (test_batched_import_native.BatchedImportTests.test_independent_batch_refuses_unselected_legacy_payload_profile_before_effects) ... ok
+test_independent_imports_share_one_native_set_based_group_and_exact_sources (test_batched_import_native.BatchedImportTests.test_independent_imports_share_one_native_set_based_group_and_exact_sources) ... ok
+test_malformed_later_chunk_response_is_contained_and_keeps_prior_work (test_batched_import_native.BatchedImportTests.test_malformed_later_chunk_response_is_contained_and_keeps_prior_work) ... ok
+test_malformed_later_engine_response_keeps_prior_confirmed_chunk (test_batched_import_native.BatchedImportTests.test_malformed_later_engine_response_keeps_prior_confirmed_chunk) ... ok
+test_many_small_chunks_and_1025_envelope_refusal (test_batched_import_native.BatchedImportTests.test_many_small_chunks_and_1025_envelope_refusal) ... ok
+test_nonempty_lost_commit_ack_and_cleanup_preserve_confirmed_prefix (test_batched_import_native.BatchedImportTests.test_nonempty_lost_commit_ack_and_cleanup_preserve_confirmed_prefix) ... ok
+
+======================================================================
+ERROR: setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+    return Path(os.environ[variable])
+                ~~~~~~~~~~^^^^^^^^^^
+  File "<frozen os>", line 679, in __getitem__
+KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+
+======================================================================
+ERROR: setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+    return Path(os.environ[variable])
+                ~~~~~~~~~~^^^^^^^^^^
+  File "<frozen os>", line 679, in __getitem__
+KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+
+----------------------------------------------------------------------
+Ran 35 tests in 67.249s
+
+FAILED (errors=2)

@@ -169,3 +169,7 @@ from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext,
     BatchedImportExecutionResult)
 __all__ += ['BatchedImportInput','BatchedImportRuntimeContext','ObjectImportDraft',
     'EdgeImportDraft','ImportRecordDraft','BuiltImportRecords','EmptyLoadDisposition','BatchedImportExecutionResult']
+
+from .groups import FrozenGroupRequest
+from ._group_runtime import freeze_group_request
+__all__ += ['FrozenGroupRequest','freeze_group_request']

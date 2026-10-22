@@ -19,6 +19,8 @@ from ._receipt_position import decode_receipt_position
 
 _DIAGNOSTIC=ProfilePin(identity='truss-native-create-diagnostic',version='0.1',
     sha256=sha256(b'Native create result: closed outcome/code/operationIndex/nativeState; no database source diagnostic disclosure; v1').hexdigest())
+_FINAL_STATE_DIAGNOSTIC=ProfilePin(identity='truss-native-final-state-diagnostic',version='0.1',
+    sha256=sha256(b'Closed native outcome=failed/code=multiplicity/nativeState=P1405/phase=final_state; rule=relationship.{source,target}_{min,max}; authorized entity={kind:new_object,creationOperationIndex,typeId}|{kind:object,id,typeId}; qualified relationship={documentId,moduleId,relationshipId}; no causal operation index or source diagnostic disclosure; v1').hexdigest())
 _OBSERVATION=ProfilePin(identity='truss-native-create-replay-observation',version='0.1',
     sha256=sha256(b'Native READ COMMITTED visible exact receipt; original xid versus current xid; current authorized person and owners; v1').hexdigest())
 
@@ -103,8 +105,8 @@ def _semantic(value):
         aliases=tuple(AliasIdentity(alias=a['alias'],identity=_identity(a['identity'])) for a in value['aliases']))
 
 
-def _closed_object(value, fields, description):
-    if type(value) is not dict or set(value) != set(fields):
+def _closed_object(value, fields, description, optional=()):
+    if type(value) is not dict or not set(fields)<=set(value) or set(value)-set(fields)-set(optional):
         raise ValueError(f'Exact native {description} required')
     return value
 
@@ -188,9 +190,9 @@ def _result(raw: bytes, *, request_present: bool):
         raise ValueError('Original native group outcome required')
     if value['outcome']=='unavailable':
         _closed_object(value,('outcome','reason'),'group unavailability')
-        if value['reason'] not in ('profile','receipt','receipt_expired','observation','resource'):
+        if value['reason'] not in ('profile','receipt','receipt_expired','request_not_observed','observation','resource'):
             raise ValueError('Supported native group unavailability required')
-        if not request_present and value['reason'] in ('receipt','receipt_expired'):
+        if not request_present and value['reason'] in ('receipt','receipt_expired','request_not_observed'):
             raise ValueError('Request-free native result cannot claim receipt availability')
         return GroupUnavailable(reason=value['reason'])
     if value['outcome']=='failed':
@@ -207,15 +209,37 @@ def _result(raw: bytes, *, request_present: bool):
                     raise ValueError('Original typed precondition failure required')
         else:
             required_fields=('outcome','code','nativeState')
-            allowed_fields=(set(required_fields),set(required_fields)|{'operationIndex'})
+            allowed_fields=(set(required_fields),set(required_fields)|{'operationIndex'},
+                set(required_fields)|{'phase','rule','entity','relationship'})
             if type(value) is not dict or set(value) not in allowed_fields:
                 raise ValueError('Exact native group failure required')
             native_codes={'invalid_input':'22023','key_conflict':'23505','request_conflict':'P1001',
                 'expected_version':'P1003','not_found':'P1004','dependencies':'P1005',
-                'unauthorized_person':'42501'}
+                'unauthorized_person':'P1403','multiplicity':'P1405'}
             if (value.get('code') not in native_codes
                     or value['nativeState'] != native_codes[value['code']]):
                 raise ValueError('Original native group failure mapping required')
+            if value['code']=='multiplicity':
+                if (set(value)!=set(required_fields)|{'phase','rule','entity','relationship'}
+                        or value['phase']!='final_state' or value['rule'] not in (
+                            'relationship.source_min','relationship.source_max',
+                            'relationship.target_min','relationship.target_max')):
+                    raise ValueError('Exact final-state multiplicity diagnostic required')
+                entity=value['entity'];relationship=value['relationship']
+                if type(entity) is not dict or entity.get('kind') not in ('new_object','object'):
+                    raise ValueError('Original multiplicity entity reference required')
+                identity_field='creationOperationIndex' if entity['kind']=='new_object' else 'id'
+                _closed_object(entity,('kind',identity_field,'typeId'),'multiplicity entity')
+                for name in (identity_field,'typeId'):
+                    if type(entity[name]) is not str or re.fullmatch('0|[1-9][0-9]*',entity[name]) is None:
+                        raise ValueError('Exact native multiplicity entity coordinate required')
+                if int(entity['typeId'])<1 or (entity['kind']=='new_object' and int(entity[identity_field])>1023):
+                    raise ValueError('Bounded native multiplicity entity coordinate required')
+                _closed_object(relationship,('documentId','moduleId','relationshipId'),'multiplicity relationship')
+                if any(type(v) is not str or not v for v in relationship.values()):
+                    raise ValueError('Qualified original multiplicity relationship required')
+            elif 'phase' in value or 'rule' in value:
+                raise ValueError('Final-state fields require a multiplicity verdict')
             if 'operationIndex' in value and (type(value['operationIndex']) is not str
                     or not re.fullmatch('0|[1-9][0-9]*',value['operationIndex'])
                     or int(value['operationIndex']) > 1023):
@@ -231,10 +255,12 @@ def _result(raw: bytes, *, request_present: bool):
         if value['code']=='request_conflict':
             if not request_present:raise ValueError('Request-free native result cannot claim a request conflict')
             return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
-        if value['code'] not in ('invalid_input','key_conflict','expected_version','not_found','dependencies'):
+        if value['code'] not in ('invalid_input','key_conflict','expected_version','not_found','dependencies','multiplicity'):
             raise ValueError('Selected native operation failure code required')
         return GroupFailed(failure=GroupOperationFailure(operation_index=value.get('operationIndex',ABSENT),
-            operation_code=value['code'],error_profile=_DIAGNOSTIC,inner_error=evidence))
+            operation_code=value['code'],
+            error_profile=_FINAL_STATE_DIAGNOSTIC if value['code']=='multiplicity' else _DIAGNOSTIC,
+            inner_error=evidence,phase=value.get('phase',ABSENT)))
     if value['outcome']!='success':raise ValueError('Supported native group outcome required')
     disposition=value.get('disposition')
     if disposition=='applied':
@@ -256,9 +282,14 @@ def _result(raw: bytes, *, request_present: bool):
         else:
             if token_value is not None:raise ValueError('Request-free native result cannot carry a receipt token')
             token=ABSENT
-        return GroupSuccess(response=AppliedPending(semantic=_semantic(value['semantic']),receipt_token=token))
+        return GroupSuccess(response=AppliedPending(semantic=_semantic(value['semantic']),receipt_token=token),group_id=attempt_id)
     if disposition!='replayed':raise ValueError('Supported native group disposition required')
-    _closed_object(value,('outcome','disposition','durability','semantic','receiptToken','observationBase64','observationSha256'),'replayed group result')
+    _closed_object(value,('outcome','disposition','durability','semantic','receiptToken','observationBase64','observationSha256'),'replayed group result',optional=('attemptId',))
+    group_id=value.get('attemptId',ABSENT)
+    if group_id is not ABSENT:
+        try:
+            if type(group_id) is not str or str(uuid.UUID(group_id))!=group_id:raise ValueError()
+        except (ValueError,AttributeError):raise ValueError('Original replay group identity required') from None
     if not request_present or value['durability'] not in ('pending','committed'):
         raise ValueError('Original request replay durability required')
     if type(value['receiptToken']) is not str:raise ValueError('Original request replay token required')
@@ -268,10 +299,10 @@ def _result(raw: bytes, *, request_present: bool):
     observation=_native_receipt_observation(value['observationBase64'],value['observationSha256'],value['receiptToken'],value['durability'])
     evidence=_artifact(observation)
     if value['durability']=='pending':
-        return GroupSuccess(response=SameTransactionReplay(semantic=semantic,
+        return GroupSuccess(group_id=group_id,response=SameTransactionReplay(semantic=semantic,
             replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=value['receiptToken']))
     if value['durability']=='committed':
-        return GroupSuccess(response=CommittedReceiptReplay(semantic=semantic,
+        return GroupSuccess(group_id=group_id,response=CommittedReceiptReplay(semantic=semantic,
             replay=CommittedReceiptReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=value['receiptToken']))
     raise ValueError('Actual native receipt durability required')
 
@@ -279,7 +310,7 @@ def _result(raw: bytes, *, request_present: bool):
 def group_context(host,transaction,manifest,digest,pin_cursor):
     def observe(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+        cursor.execute('SELECT truss.person_group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
         return _runtime_context(value)
     return host._run_operation(transaction,observe, function_call=True)
@@ -317,7 +348,7 @@ def catalog_revision(host,transaction,manifest,digest,pin_cursor,document_id):
         return Error(ExecutionFailure('execution_obligation','Bounded document selection required',catalog_code='invalid_input'))
     def observe(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.catalog_revision(%s,%s,%s)',(manifest['releaseId'],digest,document_id),prepare=False)
+        cursor.execute('SELECT truss.person_catalog_revision(%s,%s,%s)',(manifest['releaseId'],digest,document_id),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
         return CatalogRevisionProbe(catalog_revision=value['catalogRevision'],
             document_id=value['documentId'] if 'documentId' in value else ABSENT,
@@ -333,7 +364,7 @@ def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationsh
     original_relationships=json.dumps([{'documentId':document,'moduleId':module,'relationshipId':relationship} for document,module,relationship in relationships],separators=(',',':')).encode()
     def observe(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.prepare_group(%s,%s,%s,%s)',(original_records,original_relationships,manifest['releaseId'],digest),prepare=False)
+        cursor.execute('SELECT truss.person_prepare_group(%s,%s,%s,%s)',(original_records,original_relationships,manifest['releaseId'],digest),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
         return PreparedGroup(catalog_revision=value['catalogRevision'],context=_runtime_context(value['context']),
             types=tuple(_definition(entry) for entry in value['types']),relationships=tuple(_definition(entry) for entry in value['relationships']))
@@ -395,10 +426,10 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             from ._record_preparation import prepare_records
             prepared=prepare_records(cursor,_schema_state,input,original_input,original_documents,manifest['releaseId'],digest)
         if prepared is None:
-            cursor.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_apply_group(%s,%s,%s,%s,%s)',
                 (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
         else:
-            cursor.execute('SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)',
+            cursor.execute('SELECT truss.person_apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)',
                 (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(prepared).decode('utf8')),prepare=False)
         raw=bytes(cursor.fetchone()[0])
         result=_result(raw,request_present=type(request) is RequestPresent)
@@ -415,7 +446,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     # typed refusal. Only translate a permission failure the host contained;
     # unresolved transaction/connection failures retain their execution outcome.
     if (isinstance(result,Error) and result.error.code=='execution_obligation'
-            and result.error.sql_state=='42501'):
+            and result.error.sql_state=='P1403'):
         return Ok(GroupFailed(failure=UnauthorizedPerson()))
     return result
 
@@ -447,3 +478,64 @@ class NativeGroupCapability:
 class GroupCapabilityAvailable:
     capability: NativeGroupCapability
     status: Literal['ok'] = 'ok'
+
+
+_REQUEST_FRAME_DIAGNOSTIC=ProfilePin(identity='truss-group-request-frame-diagnostic',version='0.1',
+    sha256=sha256(b'Original bounded request frame codec refusal; stable code; no native SQLSTATE or authority; v1').hexdigest())
+
+def _frame_invalid(code):
+    return InvalidGroupInput(diagnostic_profile=_REQUEST_FRAME_DIAGNOSTIC,
+        diagnostic=_artifact(_bytes({'code':code})))
+
+def freeze_group_request(input,request,*,documents):
+    """Pure existing native-wire serialization before Truss state resolution.
+
+    This freezes consumed wire inputs, not application-specific lookup semantics.
+    Retain the returned immutable frame, including source/request artifacts.
+    """
+    from .groups import FrozenGroupRequest
+    if (type(input) is not GroupSemanticInput or type(request) is not RequestPresent
+        or type(documents) is not tuple or not 1<=len(documents)<=512
+        or any(type(d) is not CatalogDocument or type(d.content) is not bytes for d in documents)
+        or len({d.document_id for d in documents})!=len(documents)):
+        return Ok(_frame_invalid('request_present_original_sources'))
+    if sum(len(d.content) for d in documents)>4194304:
+        return Ok(_frame_invalid('source_resource'))
+    try:
+        original_input=_bytes(_wire(input));original_request=_bytes(_wire(request))
+        original_sources=_bytes([{'documentId':d.document_id,'sourceText':d.content.decode('utf8')} for d in documents])
+    except (ValueError,TypeError,UnicodeError,RecursionError):
+        return Ok(_frame_invalid('original_request_encoding'))
+    if not (1<=len(original_input)<=1048576 and 1<=len(original_request)<=65536 and 1<=len(original_sources)<=4194304):
+        return Ok(_frame_invalid('frame_resource'))
+    return Ok(FrozenGroupRequest(input=_artifact(original_input),request=_artifact(original_request),documents=_artifact(original_sources)))
+
+def _request_artifact(artifact,maximum):
+    if (type(artifact) is not ExactArtifact or type(artifact.bytes_base64) is not str
+        or len(artifact.bytes_base64)>4*((maximum+2)//3)):
+        raise ValueError('Bounded original artifact required')
+    raw=base64.b64decode(artifact.bytes_base64,validate=True)
+    digest=sha256(raw).hexdigest()
+    if not 1<=len(raw)<=maximum or digest!=artifact.sha256 or digest!=artifact.identity:
+        raise ValueError('Exact original artifact required')
+    return raw
+
+def recover_group_request(host,transaction,frame,manifest,digest,pin_cursor):
+    from .groups import FrozenGroupRequest
+    if type(frame) is not FrozenGroupRequest:
+        return Ok(GroupFailed(failure=_frame_invalid('frame_type')))
+    try:
+        original_input=_request_artifact(frame.input,1048576)
+        original_request=_request_artifact(frame.request,65536)
+        original_sources=_request_artifact(frame.documents,4194304)
+    except (ValueError,TypeError,UnicodeError,base64.binascii.Error):
+        return Ok(GroupFailed(failure=_frame_invalid('frame_integrity')))
+    def observe(cursor,observed):
+        pin_cursor(cursor)
+        cursor.execute('SELECT truss.person_recover_group_request(%s,%s,%s,%s,%s)',
+            (original_input,original_sources,original_request,manifest['releaseId'],digest),prepare=False)
+        return _result(bytes(cursor.fetchone()[0]),request_present=True)
+    result=host._run_operation(transaction,observe,function_call=True)
+    if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='P1403':
+        return Ok(GroupFailed(failure=UnauthorizedPerson()))
+    return result

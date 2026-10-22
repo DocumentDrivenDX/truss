@@ -15,16 +15,16 @@ BEGIN
    AND t.module=rec->>'moduleId' AND t.element=rec->>'elementId' AND t.retired_rev IS NULL;
   IF NOT FOUND THEN CONTINUE;END IF;
   IF NOT truss.runtime_can_read(rec->>'documentId',rec->>'moduleId') THEN
-   RAISE EXCEPTION 'current module read authority required for compatibility counts' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current module read authority required for compatibility counts' USING ERRCODE='P1403';END IF;
   scopes:=array_append(scopes,jsonb_build_object('documentId',rec->>'documentId','moduleId',rec->>'moduleId'));
   field_checks:=ARRAY[]::jsonb[];field_ordinal:=0;
   FOR field IN SELECT value FROM jsonb_array_elements(rec->'fields') LOOP
    field_ordinal:=field_ordinal+1;
    IF NOT truss.runtime_can_read(rec->>'documentId',field->>'fieldModule') THEN
-    RAISE EXCEPTION 'current field module read authority required for compatibility counts' USING ERRCODE='42501';END IF;
+    RAISE EXCEPTION 'current field module read authority required for compatibility counts' USING ERRCODE='P1403';END IF;
    scopes:=array_append(scopes,jsonb_build_object('documentId',rec->>'documentId','moduleId',field->>'fieldModule'));
    IF field->'declaration'->>'cardinality' IN ('array','map') THEN
-    IF truss.runtime_can_read(rec->>'documentId',field->'declaration'->'itemType'->>'module') IS NOT TRUE THEN RAISE EXCEPTION 'current item module read authority required for compatibility counts' USING ERRCODE='42501';END IF;
+    IF truss.runtime_can_read(rec->>'documentId',field->'declaration'->'itemType'->>'module') IS NOT TRUE THEN RAISE EXCEPTION 'current item module read authority required for compatibility counts' USING ERRCODE='P1403';END IF;
     scopes:=array_append(scopes,jsonb_build_object('documentId',rec->>'documentId','moduleId',field->'declaration'->'itemType'->>'module'));
    END IF;
    property_id:=NULL;original_item:=NULL;
@@ -33,13 +33,13 @@ BEGIN
     AND p.declaration_module=field->>'fieldModule' AND p.element=field->>'fieldId' AND p.retired_rev IS NULL;
    IF FOUND THEN property_id:=property_meta.prop_id;IF property_meta.cardinality IN ('array','map') THEN original_item:=property_meta.item;END IF;END IF;
    IF original_item IS NOT NULL THEN
-    IF truss.runtime_item_chain_readable(original_item) IS NOT TRUE THEN RAISE EXCEPTION 'complete current item readers required for compatibility counts' USING ERRCODE='42501';END IF;
+    IF truss.runtime_item_chain_readable(original_item) IS NOT TRUE THEN RAISE EXCEPTION 'complete current item readers required for compatibility counts' USING ERRCODE='P1403';END IF;
     FOR node IN SELECT value FROM jsonb_array_elements(jsonb_build_array(original_item)||coalesce(original_item->'descendants','[]'::jsonb)) LOOP
      scopes:=array_append(scopes,jsonb_build_object('documentId',node->>'documentId','moduleId',node->'reference'->>'module'));
     END LOOP;
    END IF;
    candidate_name:=coalesce(field->'declaration'->>'name',field->'declaration'->>'id');
-   check_required:=property_id IS NOT NULL AND field->'declaration'->>'nullability'='required' AND property_meta.nullability IS DISTINCT FROM 'required';
+   check_required:=field->'declaration'->>'nullability'='required' AND (property_id IS NULL OR property_meta.nullability IS DISTINCT FROM 'required');
    check_family:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'
     AND (property_meta.cardinality IS DISTINCT FROM 'one' OR property_meta.scalar_type IS DISTINCT FROM field->'declaration'->>'scalarType');
    check_facets:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'
@@ -152,10 +152,10 @@ BEGIN
     RAISE EXCEPTION 'tightening requires unchanged endpoint declarations' USING ERRCODE='0A000';END IF;
   END IF;
   IF truss.runtime_can_read(selected_relation.document_id,selected_relation.module) IS NOT TRUE THEN
-   RAISE EXCEPTION 'relationship reader required for compatibility counts' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'relationship reader required for compatibility counts' USING ERRCODE='P1403';END IF;
   scopes:=array_append(scopes,jsonb_build_object('documentId',selected_relation.document_id,'moduleId',selected_relation.module));
   FOR owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE e.rel_type_id=selected_relation.rel_type_id LOOP
-   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN RAISE EXCEPTION 'complete endpoint reader required for compatibility counts' USING ERRCODE='42501';END IF;
+   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN RAISE EXCEPTION 'complete endpoint reader required for compatibility counts' USING ERRCODE='P1403';END IF;
    scopes:=array_append(scopes,jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module));
   END LOOP;
   IF NOT tightening THEN CONTINUE;END IF;
@@ -189,7 +189,7 @@ BEGIN
  END LOOP;
  FOR owner IN SELECT DISTINCT item.value->>'documentId' AS document_id,item.value->>'moduleId' AS module_id FROM unnest(scopes) AS item(value) LOOP
   IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN
-   RAISE EXCEPTION 'current module authority changed during compatibility validation' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current module authority changed during compatibility validation' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF cardinality(violations)=0 THEN RETURN NULL;END IF;
  result:=convert_to(to_jsonb(violations)::text,'UTF8');
@@ -225,7 +225,7 @@ BEGIN
   FOR field IN SELECT value FROM jsonb_array_elements(rec->'fields') LOOP
    IF field->'declaration'->>'cardinality' NOT IN ('array','map') THEN CONTINUE;END IF;
    item:=truss.catalog_item_definition_indexed(source_indexes->(rec->>'documentId'),rec->>'documentId',1,0,field->'declaration'->'itemType');
-   IF truss.runtime_item_chain_readable(item) IS NOT TRUE THEN RAISE EXCEPTION 'complete candidate item readers required for compatibility counts' USING ERRCODE='42501';END IF;
+   IF truss.runtime_item_chain_readable(item) IS NOT TRUE THEN RAISE EXCEPTION 'complete candidate item readers required for compatibility counts' USING ERRCODE='P1403';END IF;
    FOR node IN SELECT value FROM jsonb_array_elements(jsonb_build_array(item)||coalesce(item->'descendants','[]'::jsonb)) LOOP
     scopes:=array_append(scopes,jsonb_build_object('documentId',node->>'documentId','moduleId',node->'reference'->>'module'));
    END LOOP;
@@ -233,7 +233,7 @@ BEGIN
  END LOOP;
  result:=truss.catalog_scalar_violations(declarations_bytes);
  FOR node IN SELECT value FROM unnest(scopes) AS item(value) LOOP
-  IF truss.runtime_can_read(node->>'documentId',node->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'candidate item authority changed during compatibility counts' USING ERRCODE='42501';END IF;
+  IF truss.runtime_can_read(node->>'documentId',node->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'candidate item authority changed during compatibility counts' USING ERRCODE='P1403';END IF;
  END LOOP;
  RETURN result;
 END;

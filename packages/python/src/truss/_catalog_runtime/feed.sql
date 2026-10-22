@@ -126,13 +126,13 @@ BEGIN
  IF NOT FOUND OR NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
   SELECT 1 FROM memberships WHERE role_oid=consumer.reader_oid) THEN
-  RAISE EXCEPTION 'authorized feed consumer required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'authorized feed consumer required' USING ERRCODE='P1403';END IF;
  -- This is a complete database feed, not a role-filtered change stream.
  -- Every module in every disclosed historical document must be readable.
  FOR owner IN SELECT DISTINCT d.doc_id,m.value->>'id' AS module_id FROM truss.schema_doc d
   CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m LOOP
   IF NOT truss.runtime_can_read(owner.doc_id,owner.module_id) THEN
-   RAISE EXCEPTION 'complete source authority required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete source authority required' USING ERRCODE='P1403';END IF;
  END LOOP;
 END;
 $$;

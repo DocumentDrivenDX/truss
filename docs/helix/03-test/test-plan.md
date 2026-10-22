@@ -29,6 +29,62 @@ ddx:
 
 ## P0 forward migration release gate — 2026-10-21
 
+
+## HF-02 selected person admission and original-request recovery
+
+The post-0.0.47 selection uses CONTRACT-004/005/007/009 and ADR-005. Native
+`P1403` is explicit business authorization; genuine PostgreSQL `42501` must not
+be silently reclassified. Test all 13 HF-01 context/reference/read/group/import
+surfaces as a nonmember. Independently revoke original entrypoint and private
+callee EXECUTE for an enrolled writer; both must remain execution failures with
+native SQLSTATE and preserved prior caller work. A changed original function
+owner is integrity failure. PUBLIC invocation shims grant neither private
+implementation nor table access. A reader retains metadata context but cannot
+apply. Normal managed context remains three client statements.
+
+Concrete source: `test_person_invocation_native.PersonInvocationNativeTests`.
+Existing managed function/table guard native tests retain snapshot, timeout,
+no-effect-before-dispatch and caller savepoint/transaction assertions. Current
+component evidence is scoped in the Hohfeld execution plan; no release is qualified
+by these component checks alone.
+
+Recovery tests must freeze the original complete input/request/source frame before
+native resolution, then verify delete/unlink/later-deletion/no-op replay without
+current target lookups, changed-input conflict, retained-owner revocation,
+cross-person denial, pending versus committed outcome, missing/invisible/never-issued
+non-disclosure, expiry/protection boundaries, no canonical effect on miss, and a
+stable retained audit group identity across apply/replay. Recovery uses the existing
+caller-owned read-write READ COMMITTED admission/receipt lock profile; it observes
+receipts without executing missing requests. It does not promise a read-only
+transaction profile or infer original rollback/issuance from row absence.
+
+`test_group_request_recovery_native.GroupRequestRecoveryNativeTests` retains
+original inputs through deleted/unlinked targets, no-op followed by deletion,
+same-transaction versus committed replay, two groups in one outer transaction,
+source-frame mismatch, local digest corruption, revoked retained owners and
+cross-person scope. A real two-connection in-flight request returns observation
+unavailability; after rollback its absence carries no issuance conclusion.
+The lost-acknowledgement control commits through the real driver before injecting
+the missing acknowledgement; recovery independently observes the committed receipt.
+It qualifies that observation, not a general network-fault transport protocol.
+
+Final-state controls in `test_group_create_native` and `test_edge_mutations_native`
+require P1405, typed multiplicity/phase, the authorized qualified relationship and
+exact native endpoint/rule evidence, no fabricated causal ordinal, and no residue.
+Allocated object IDs inside a refused transaction do not imply durable objects.
+
+## HF-03 required core/DDD field admission
+
+`test_required_ddd_evolution_native.RequiredDDDEvolutionTests` selects original
+UMF0.10/DDD0.1 validation and exact paired scalar Field/member/extension additions.
+Require empty-Record acceptance with exact accepted source and unknown content;
+populated typed `property.required` refusal with exact count and unchanged
+head/data/history; both writer-first and acceptance-first native lock orders;
+and stale-pin refusal after publication. Existing optional-addition and changed
+prior-meaning refusal controls remain required. The native plan/census must run
+under the catalog-head gate; no independent host emptiness probe may authorize it.
+
+
 The latest-only policy requires a release-blocking populated predecessor-to-latest
 workflow, plus migration of every admitted lineage source using the latest tool.
 [STP-045](test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md) owns RM-T01–08

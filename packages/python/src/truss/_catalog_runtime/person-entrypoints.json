@@ -1,0 +1,366 @@
+{
+  "interfaceVersion": "truss-person-invocations/0.1",
+  "scope": "Declared person-family admission plus original caller EXECUTE; no private helper or administrative grant",
+  "functions": [
+    {
+      "name": "accepted_document",
+      "publicName": "person_accepted_document",
+      "signature": "truss.accepted_document(text,integer,text,text)",
+      "arguments": "selected_document text, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "catalog",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "apply_group",
+      "publicName": "person_apply_group",
+      "signature": "truss.apply_group(bytea,bytea,bytea,text,text)",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "apply_group_prepared",
+      "publicName": "person_apply_group_prepared",
+      "signature": "truss.apply_group_prepared(bytea,bytea,bytea,text,text,jsonb)",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text, app_prepared jsonb",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "batched_import_context",
+      "publicName": "person_batched_import_context",
+      "signature": "truss.batched_import_context(text,text)",
+      "arguments": "expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "build_import_records",
+      "publicName": "person_build_import_records",
+      "signature": "truss.build_import_records(bytea,text,text)",
+      "arguments": "original_drafts bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "catalog_accept_with_keys",
+      "publicName": "person_catalog_accept_with_keys",
+      "signature": "truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)",
+      "arguments": "input_bytes bytea, documents_bytes bytea, declarations_bytes bytea, source_bytes bytea, origin_bytes bytea, request_key text, key_receipts bytea, preview_mode boolean",
+      "mode": "registrar",
+      "result": "TABLE(revision text, registration_id text, report_bytes bytea, replayed boolean, unchanged boolean, actor_name text, violations_bytes bytea)",
+      "set": true
+    },
+    {
+      "name": "catalog_accept_with_keys",
+      "publicName": "person_catalog_accept_with_keys",
+      "signature": "truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea)",
+      "arguments": "input_bytes bytea, documents_bytes bytea, declarations_bytes bytea, source_bytes bytea, origin_bytes bytea, request_key text, key_receipts bytea, preview_mode boolean, expected_revision integer, expected_documents bytea",
+      "mode": "registrar",
+      "result": "TABLE(revision text, registration_id text, report_bytes bytea, replayed boolean, unchanged boolean, actor_name text, violations_bytes bytea)",
+      "set": true
+    },
+    {
+      "name": "catalog_report",
+      "publicName": "person_catalog_report",
+      "signature": "truss.catalog_report(integer)",
+      "arguments": "selected_revision integer",
+      "mode": "registrar",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "catalog_revision",
+      "publicName": "person_catalog_revision",
+      "signature": "truss.catalog_revision(text,text,text)",
+      "arguments": "expected_release text, expected_digest text, selected_document text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "catalog_view_basis",
+      "publicName": "person_catalog_view_basis",
+      "signature": "truss.catalog_view_basis(integer,integer,integer)",
+      "arguments": "selected_revision integer, maximum_count integer, maximum_bytes integer",
+      "mode": "registrar",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "get_edge",
+      "publicName": "person_get_edge",
+      "signature": "truss.get_edge(text,text,text,bigint,integer,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "get_object",
+      "publicName": "person_get_object",
+      "signature": "truss.get_object(text,text,text,bigint,integer,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_record text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "group_context",
+      "publicName": "person_group_context",
+      "signature": "truss.group_context(text,text)",
+      "arguments": "expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "group_relationship_reference",
+      "publicName": "person_group_relationship_reference",
+      "signature": "truss.group_relationship_reference(text,text,text,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "group_type_reference",
+      "publicName": "person_group_type_reference",
+      "signature": "truss.group_type_reference(text,text,text,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_context",
+      "publicName": "person_import_context",
+      "signature": "truss.import_context(text,text)",
+      "arguments": "expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_edge_identity",
+      "publicName": "person_import_edge_identity",
+      "signature": "truss.import_edge_identity(bytea,text,text)",
+      "arguments": "original_identity bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_identity_key_selection",
+      "publicName": "person_import_identity_key_selection",
+      "signature": "truss.import_identity_key_selection(bytea,text,text)",
+      "arguments": "original_identity bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_key_selection",
+      "publicName": "person_import_key_selection",
+      "signature": "truss.import_key_selection(text,text,text,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_object_identity",
+      "publicName": "person_import_object_identity",
+      "signature": "truss.import_object_identity(bytea,bytea,bytea,text,text)",
+      "arguments": "original_identity bytea, original_document bytea, tuple_bytes bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_record_source",
+      "publicName": "person_import_record_source",
+      "signature": "truss.import_record_source(uuid,bytea,text)",
+      "arguments": "selected_attempt uuid, original_record bytea, load_id text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "import_report_record_authority",
+      "publicName": "person_import_report_record_authority",
+      "signature": "truss.import_report_record_authority(bytea,text,text,text)",
+      "arguments": "original_identity bytea, kind text, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "void",
+      "set": false
+    },
+    {
+      "name": "lookup_import_source",
+      "publicName": "person_lookup_import_source",
+      "signature": "truss.lookup_import_source(jsonb,integer,text,text)",
+      "arguments": "selection jsonb, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "lookup_string_key",
+      "publicName": "person_lookup_string_key",
+      "signature": "truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_record text, selected_key text, original_document bytea, values_bytes bytea, tuple_bytes bytea, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "page_edges",
+      "publicName": "person_page_edges",
+      "signature": "truss.page_edges(text,text,text,jsonb,text,integer,integer,bytea,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_relationship text, anchor jsonb, direction text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "page_import_load_audit",
+      "publicName": "person_page_import_load_audit",
+      "signature": "truss.page_import_load_audit(jsonb,integer,bytea,text,text)",
+      "arguments": "filters jsonb, maximum_entries integer, original_cursor bytea, expected_release text, expected_digest text",
+      "mode": "audit",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "page_mutation_group_audit",
+      "publicName": "person_page_mutation_group_audit",
+      "signature": "truss.page_mutation_group_audit(jsonb,integer,bytea,text,text)",
+      "arguments": "filters jsonb, maximum_events integer, original_cursor bytea, expected_release text, expected_digest text",
+      "mode": "audit",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "page_objects",
+      "publicName": "person_page_objects",
+      "signature": "truss.page_objects(text,text,text,integer,integer,bytea,text,text)",
+      "arguments": "selected_document text, selected_module text, selected_record text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "person_runtime_status",
+      "publicName": "person_person_runtime_status",
+      "signature": "truss.person_runtime_status(text,text,jsonb)",
+      "arguments": "expected_release text, expected_digest text, expected_layout jsonb",
+      "mode": "status",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "prepare_group",
+      "publicName": "person_prepare_group",
+      "signature": "truss.prepare_group(bytea,bytea,text,text)",
+      "arguments": "original_records bytea, original_relationships bytea, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "preview_group_conditions",
+      "publicName": "person_preview_group_conditions",
+      "signature": "truss.preview_group_conditions(bytea,bytea,text,text)",
+      "arguments": "original_input bytea, original_documents bytea, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "process_import_chunk",
+      "publicName": "person_process_import_chunk",
+      "signature": "truss.process_import_chunk(bytea,bytea,uuid,integer,text,text)",
+      "arguments": "original_input bytea, original_documents bytea, invocation_id uuid, chunk_index integer, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "read_import_load_chunk",
+      "publicName": "person_read_import_load_chunk",
+      "signature": "truss.read_import_load_chunk(uuid,integer,integer,text,text)",
+      "arguments": "selected_invocation uuid, selected_chunk integer, page_limit integer, expected_release text, expected_digest text",
+      "mode": "audit",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "reader_catalog",
+      "publicName": "person_reader_catalog",
+      "signature": "truss.reader_catalog(integer,integer,text,text)",
+      "arguments": "maximum_count integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "catalog",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "reader_catalog_if_changed",
+      "publicName": "person_reader_catalog_if_changed",
+      "signature": "truss.reader_catalog_if_changed(integer,integer,text,text,text)",
+      "arguments": "maximum_count integer, maximum_bytes integer, expected_release text, expected_digest text, validator text",
+      "mode": "catalog",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "recover_group_request",
+      "publicName": "person_recover_group_request",
+      "signature": "truss.recover_group_request(bytea,bytea,bytea,text,text)",
+      "arguments": "original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "registrar_status",
+      "publicName": "person_registrar_status",
+      "signature": "truss.registrar_status(text,text)",
+      "arguments": "expected_release text, expected_digest text",
+      "mode": "catalog",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "traverse_objects",
+      "publicName": "person_traverse_objects",
+      "signature": "truss.traverse_objects(jsonb,jsonb,integer,integer,integer,text,text)",
+      "arguments": "start_identity jsonb, hops jsonb, maximum_objects integer, maximum_states integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "validate_batched_import_report",
+      "publicName": "person_validate_batched_import_report",
+      "signature": "truss.validate_batched_import_report(bytea,bytea,bytea,text,text)",
+      "arguments": "original_input bytea, original_outcomes bytea, original_context bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "boolean",
+      "set": false
+    },
+    {
+      "name": "writer_schema_basis",
+      "publicName": "person_writer_schema_basis",
+      "signature": "truss.writer_schema_basis(bytea,bytea,text,text)",
+      "arguments": "original_input bytea, original_documents bytea, expected_release text, expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false
+    }
+  ]
+}

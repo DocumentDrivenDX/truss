@@ -109,6 +109,17 @@ extension equality relaxation MUST NOT establish compatibility. Required-field
 backfill, changed prior field meaning and unknown/unsupported extension edits
 retain explicit incompatibility and leave head/data/history unchanged.
 
+The same exact append-only correspondence MAY add a required scalar core Field
+and known DDD field with cardinality `one` when the affected existing Record has
+no instances. The original UMF validations remain mandatory. Acceptance holds
+the catalog-head exclusion lock while observing the current instance census and
+publishing; ordinary writers retain their head-share lock through settlement.
+A populated Record returns an authorized `property.required` compatibility
+violation with its exact affected count. No default, implicit backfill or
+unknown-extension relaxation is selected. A concurrent writer either precedes
+the locked census or prevents acceptance with the existing busy refusal; stale
+field pins cannot write an old shape after publication.
+
 For example, a document accepted at revision 8 can be conditionally updated with
 expectation 8 after an unrelated document advances the global head to 9. Two
 different updates expecting that same document revision cannot both publish.

@@ -278,7 +278,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertEqual(set(selected),{'creationTransitionProfile','mutationProfile','valueProfile','canonicalizationProfile',
                                         'requestFingerprintProfile','adapterProfile','positionProfile','policyProfile'})
     def test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint(self):
-        """@covers US-040-AC2: whole-group dependency failures omit operation attribution."""
+        """@covers US-040-AC2: final multiplicity failures omit operation attribution."""
         def require_target(source):source['modules'][0]['relationships'][0]['targetMultiplicity']['min']=1
         connection,host,assembly,tx=self.ready(require_target)
         counts='SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal),(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.runtime_object_attempt)'
@@ -287,9 +287,16 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         failed=self.apply(assembly,tx,input,request)
         self.assertIsInstance(failed,GroupFailed)
         self.assertEqual((failed.failure.code,failed.failure.operation_code,failed.failure.operation_index),
-            ('group_failed','dependencies',ABSENT))
+            ('group_failed','multiplicity',ABSENT))
         original=json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))
-        self.assertEqual(original['nativeState'],'P1005')
+        self.assertEqual(original['nativeState'],'P1405')
+        self.assertEqual(failed.failure.phase,'final_state')
+        self.assertEqual(original['phase'],'final_state')
+        self.assertEqual(original['rule'],'relationship.target_min')
+        self.assertEqual(original['entity']['kind'],'object')
+        self.assertRegex(original['entity']['id'],r'^[1-9][0-9]*$')
+        self.assertNotIn('creationOperationIndex',original['entity'])
+        self.assertEqual(original['relationship'],{'documentId':'adoc','moduleId':'m','relationshipId':'A-B'})
         self.assertNotIn('operationIndex',original)
         self.assertEqual(self.admin.execute(counts).fetchone(),before)
         target,_=self.input(assembly,tx,(self.create(record='B'),))

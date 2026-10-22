@@ -140,7 +140,7 @@ BEGIN
   ELSE RAISE EXCEPTION 'known condition required' USING ERRCODE='22023';END IF;
   SELECT coalesce(jsonb_agg(value ORDER BY ord),'[]'::jsonb) INTO scopes FROM unnest(scope_entries) WITH ORDINALITY s(value,ord);
   FOR owner IN SELECT DISTINCT value->>'documentId' AS document_id,value->>'moduleId' AS module_id FROM jsonb_array_elements(scopes) LOOP
-   IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'current predicate owner read authority required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'current predicate owner read authority required' USING ERRCODE='P1403';END IF;
   END LOOP;
   inventory_entries[cardinality(inventory_entries)+1]:=entry||jsonb_build_object('objects',objects,'scopes',scopes);index:=index+1;
  END LOOP;

@@ -23,6 +23,37 @@ ddx:
 
 # Contract: Mutation protocol and conformance corpus
 
+## Selected HF-02 diagnostics and import admission
+
+`P1403` identifies an intentional native authorization assertion. A generic
+PostgreSQL `42501`, including a missing original entrypoint or private dependency
+grant, remains an execution failure. Person-facing group/read/import facades use
+the explicitly guarded invocation contract in CONTRACT-005, without interpreting
+message text or masking broken installation privileges.
+
+Import context/build refusal uses the existing `UnauthorizedPerson` carrier in
+the outer Outcome. Import execution retains its complete original tagged result;
+`ImportExecutionFailed` adds `reason = execution | authorization`, default
+execution. Authorization classification preserves its original ExecutionFailure
+and optional report, including pending/committed/uncertain progress. Missing
+report never establishes no writes or rollback. The batched wrapper and empty-load
+settlement remain intact. No authority/error shortcut makes partial imports atomic.
+
+A final-state multiplicity violation is distinct from restrictive object-delete
+dependencies. Its operation code is `multiplicity`, its native SQLSTATE is `P1405`,
+and its explicit phase is final_state. Preserve permitted structured rule/entity
+diagnostics and an absent operation index when no unique original operation is
+attributable. Never blame the last delete or derive meaning from its operation
+kind. Ordinary immediate failures retain their original ordinal and code.
+The profiled original diagnostic names the authorized qualified relationship
+and `relationship.source_min`, `source_max`, `target_min` or `target_max` rule.
+An entity coordinate is either an actual native object ID/type pair, which may
+have been allocated inside the refused transaction, or a `new_object` reference
+with its original creation ordinal and type. Neither establishes persistence;
+the creation ordinal is not causal operation attribution. Do not invent an ID
+for a proposed object or reveal a relationship outside the admitted reader union.
+
+
 ## Independent set-based import execution
 
 The explicit batched import route MAY group an eligible chunk of new rootless
@@ -206,7 +237,7 @@ authority and failure precedence. Atomic groups MUST NOT be silently split.
 
 `GroupOperationFailure.code` remains `group_failed`. Add `operation_code` with
 the selected stable vocabulary `key_conflict`, `expected_version`, `not_found`,
-`dependencies` and indexed operation `invalid_input`; each value MUST agree
+`dependencies`, `multiplicity` and indexed operation `invalid_input`; each value MUST agree
 with the complete original profiled
 `inner_error`. Existing failure artifacts and retained replay bytes remain exact.
 New group-input validation retains its separate `InvalidGroupInput` result.

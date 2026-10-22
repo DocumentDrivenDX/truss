@@ -24,17 +24,17 @@ BEGIN
      AND a.module=m.module AND truss.runtime_audit_role_member(actor,a.auditor_oid))
    ORDER BY m.document_id,m.module LIMIT 1;
   IF selected_document IS NULL OR selected_module IS NULL THEN
-   RAISE EXCEPTION 'current enrolled module reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current enrolled module reader required' USING ERRCODE='P1403';END IF;
   IF NOT (truss.runtime_can_read(selected_document,selected_module)
    OR EXISTS(SELECT 1 FROM truss.module_access m WHERE m.document_id=selected_document AND m.module=selected_module
     AND truss.runtime_audit_role_member(actor,pg_catalog.to_regrole(m.writer_role)))
    OR EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=selected_document
     AND a.module=selected_module AND truss.runtime_audit_role_member(actor,a.auditor_oid))) THEN
-   RAISE EXCEPTION 'current enrolled module reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current enrolled module reader required' USING ERRCODE='P1403';END IF;
   catalog_state:='accepted';
  END IF;
  IF truss.runtime_person(false) IS DISTINCT FROM actor THEN
-  RAISE EXCEPTION 'current status person required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current status person required' USING ERRCODE='P1403';END IF;
  RETURN convert_to(jsonb_build_object('outcome','status','installation','compatible',
   'catalog',catalog_state)::text,'UTF8');
 END;
@@ -54,14 +54,14 @@ BEGIN
  FROM pg_catalog.pg_roles WHERE rolname=session_user;
  IF actor.rolcanlogin IS NOT TRUE OR actor.original_role IS NOT TRUE
   OR NOT (actor.rolsuper OR actor.rolcreaterole) THEN
-  RAISE EXCEPTION 'direct installation administrator required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'direct installation administrator required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation WHERE singleton;
  IF NOT actor.rolsuper THEN
   WITH RECURSIVE inherited(role_oid) AS (
    SELECT actor.oid UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m
     JOIN inherited i ON m.member=i.role_oid WHERE m.inherit_option)
   SELECT EXISTS(SELECT 1 FROM inherited WHERE role_oid=installation.owner_oid) INTO has_owner;
-  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='42501';END IF;
+  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='P1403';END IF;
  END IF;
  SELECT rolname::text INTO owner_name FROM pg_catalog.pg_roles WHERE oid=installation.owner_oid
   AND NOT rolcanlogin AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole

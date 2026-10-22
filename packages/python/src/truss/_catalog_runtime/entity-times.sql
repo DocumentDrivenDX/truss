@@ -19,7 +19,7 @@ BEGIN
  SELECT * INTO STRICT current_object FROM truss.object WHERE id=selected_id AND type_id=selected_type;
  root_identity:=truss.query_object_root(binding,current_object);
  PERFORM truss.query_scope(binding);
- IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current metadata aggregate root reader required' USING ERRCODE='42501';END IF;
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current metadata aggregate root reader required' USING ERRCODE='P1403';END IF;
  RETURN jsonb_build_object(
   '_created_at',to_char(current_object.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
   '_updated_at',to_char(current_object.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'));

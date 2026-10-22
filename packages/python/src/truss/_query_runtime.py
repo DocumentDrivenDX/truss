@@ -459,7 +459,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
     result = host._run_operation(transaction, execute)
     if isinstance(result, Error) and result.error.code=='execution_obligation':
         state = result.error.sql_state
-        if state == '42501':
+        if state == 'P1403':
             return Ok(QueryRefused(code='unauthorized'))
         if state=='22003':return Ok(QueryRefused(code='native_domain'))
         if state in ('0A000', '54000', '55P03'):

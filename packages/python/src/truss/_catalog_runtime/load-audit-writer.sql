@@ -16,14 +16,14 @@ BEGIN
   OR actor.rolcanlogin IS NOT TRUE OR actor.original_role IS NOT TRUE
   OR NOT actor.rolsuper AND (NOT actor.rolcreaterole OR actor.rolcreatedb
    OR actor.rolreplication OR actor.rolbypassrls) THEN
-  RAISE EXCEPTION 'qualified direct installation administrator and audit role required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'qualified direct installation administrator and audit role required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation WHERE singleton;
  IF NOT actor.rolsuper THEN
   WITH RECURSIVE inherited(role_oid) AS (
    SELECT actor.oid UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m
     JOIN inherited i ON m.member=i.role_oid WHERE m.inherit_option)
   SELECT EXISTS(SELECT 1 FROM inherited WHERE role_oid=installation.owner_oid) INTO has_owner;
-  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='42501';END IF;
+  IF has_owner IS NOT TRUE THEN RAISE EXCEPTION 'installation owner administration required' USING ERRCODE='P1403';END IF;
  END IF;
  SELECT r.oid INTO auditor FROM pg_catalog.pg_roles r WHERE r.rolname=selected_auditor_role
   AND NOT r.rolcanlogin AND NOT r.rolsuper AND NOT r.rolcreatedb AND NOT r.rolcreaterole

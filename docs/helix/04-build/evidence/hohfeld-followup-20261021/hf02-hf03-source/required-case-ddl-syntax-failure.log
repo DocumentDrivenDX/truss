@@ -1,0 +1,85 @@
+test_empty_record_accepts_exact_paired_required_field_and_unknown_content (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content) ... FAIL
+test_paired_required_addition_does_not_authorize_unknown_extension_change (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change) ... FAIL
+test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition) ... FAIL
+test_populated_record_returns_typed_violation_and_preserves_head_data_history (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history) ... FAIL
+
+======================================================================
+FAIL: test_empty_record_accepts_exact_paired_required_field_and_unknown_content (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 40, in test_empty_record_accepts_exact_paired_required_field_and_unknown_content
+    c,h,a,t=self.ready_required();document,prepared=self.evolution(a)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 27, in ready_required
+    c,h,a,t=self.ready(self.ddd,document_ids=('adoc',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42601', catalog_code=None) syntax error at end of input
+LINE 75: ...CT FROM CASE field->>'nullability' WHEN 'required' THEN 'one...
+                                                              ^
+
+======================================================================
+FAIL: test_paired_required_addition_does_not_authorize_unknown_extension_change (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 69, in test_paired_required_addition_does_not_authorize_unknown_extension_change
+    c,h,a,t=self.ready_required();_,prepared=self.evolution(a,alter_unknown=True)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 27, in ready_required
+    c,h,a,t=self.ready(self.ddd,document_ids=('adoc',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42601', catalog_code=None) syntax error at end of input
+LINE 75: ...CT FROM CASE field->>'nullability' WHEN 'required' THEN 'one...
+                                                              ^
+
+======================================================================
+FAIL: test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 60, in test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition
+    c,h,a,t=self.ready_required();_,prepared=self.evolution(a)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 27, in ready_required
+    c,h,a,t=self.ready(self.ddd,document_ids=('adoc',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42601', catalog_code=None) syntax error at end of input
+LINE 75: ...CT FROM CASE field->>'nullability' WHEN 'required' THEN 'one...
+                                                              ^
+
+======================================================================
+FAIL: test_populated_record_returns_typed_violation_and_preserves_head_data_history (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 52, in test_populated_record_returns_typed_violation_and_preserves_head_data_history
+    c,h,a,t=self.ready_required();created,_,_=self.run_group(a,t,(self.create(),),'seed')
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_required_ddd_evolution_native.py", line 27, in ready_required
+    c,h,a,t=self.ready(self.ddd,document_ids=('adoc',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 20, in ready
+    self.install()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 62, in install
+    if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42601', catalog_code=None) syntax error at end of input
+LINE 75: ...CT FROM CASE field->>'nullability' WHEN 'required' THEN 'one...
+                                                              ^
+
+----------------------------------------------------------------------
+Ran 4 tests in 6.192s
+
+FAILED (failures=4)

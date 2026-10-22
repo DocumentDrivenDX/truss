@@ -248,7 +248,7 @@ BEGIN
   END IF;
  END IF;
  PERFORM truss.query_scope(binding);
- IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current attribution aggregate root reader required' USING ERRCODE='42501';END IF;
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current attribution aggregate root reader required' USING ERRCODE='P1403';END IF;
  RETURN jsonb_build_object('_version',object_row.ver::text,'_created_by',created_actor,'_updated_by',updated_actor,
   '_original_author',source_row.source->'author','_original_at',source_row.source->'at');
 END;

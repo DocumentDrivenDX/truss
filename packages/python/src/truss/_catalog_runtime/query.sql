@@ -72,7 +72,7 @@ BEGIN
  OR binding-ARRAY['interfaceVersion','queryAbi','schema','installationId','releaseId','releaseSha256','catalogRevision','documents','records','relationships','maximumScanRows','maximumResultRows','maximumBytes']<>'{}'::jsonb
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.73-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.74-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -85,7 +85,7 @@ BEGIN
    AND compiled->'relationships'=binding->'relationships' AND compiled->'closed'='true'::jsonb AND compiled->'itemsValid'='true'::jsonb THEN
    FOR selected_document IN SELECT value FROM jsonb_array_elements(compiled->'readers') LOOP
     IF NOT truss.runtime_can_read_qualified(selected_document->>'documentId',selected_document->>'moduleId',current_actor) THEN
-     RAISE EXCEPTION 'complete selected_document reader required' USING ERRCODE='42501';END IF;
+     RAISE EXCEPTION 'complete selected_document reader required' USING ERRCODE='P1403';END IF;
    END LOOP;
    RETURN;
   END IF;
@@ -95,22 +95,22 @@ BEGIN
   IF NOT FOUND OR source.doc_revision IS DISTINCT FROM selected_document->>'revision' OR source.content_sha256 IS DISTINCT FROM selected_document->>'sha256' THEN RAISE EXCEPTION 'original query source changed' USING ERRCODE='55P03';END IF;
   -- Full original source bytes are supplied only under complete selected_document scope.
   FOR module IN SELECT value FROM jsonb_array_elements(source.document::jsonb->'modules') LOOP
-   IF NOT truss.runtime_can_read(source.doc_id,module->>'id') THEN RAISE EXCEPTION 'complete selected_document reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read(source.doc_id,module->>'id') THEN RAISE EXCEPTION 'complete selected_document reader required' USING ERRCODE='P1403';END IF;
   END LOOP;
  END LOOP;
  FOR selected_record IN SELECT value FROM jsonb_array_elements(binding->'records') LOOP
   SELECT * INTO owner FROM truss.type_def t WHERE t.type_id=(selected_record->>'typeId')::int AND t.retired_rev IS NULL AND NOT t.provisional AND t.kind='record';
   IF NOT FOUND OR owner.document_id IS DISTINCT FROM selected_record->'identity'->>'documentId' OR owner.module IS DISTINCT FROM selected_record->'identity'->>'module' OR owner.element IS DISTINCT FROM selected_record->'identity'->>'element'
    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'documents') d WHERE d.value->>'documentId'=owner.document_id AND d.value->>'revision'=selected_record->'identity'->>'revision')
-   OR NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RAISE EXCEPTION 'accepted authorized query record required' USING ERRCODE='42501';END IF;
+   OR NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RAISE EXCEPTION 'accepted authorized query record required' USING ERRCODE='P1403';END IF;
   IF jsonb_typeof(selected_record->'fields') IS DISTINCT FROM 'array' OR jsonb_array_length(selected_record->'fields')<>(SELECT count(*) FROM truss.prop_def p WHERE p.type_id=owner.type_id AND p.retired_rev IS NULL)
    OR (SELECT count(DISTINCT f.value->>'propertyId') FROM jsonb_array_elements(selected_record->'fields') f)<>jsonb_array_length(selected_record->'fields') THEN RAISE EXCEPTION 'complete property mapping required' USING ERRCODE='0A000';END IF;
-  IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN RAISE EXCEPTION 'current query interpretation reader required' USING ERRCODE='42501';END IF;
+  IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN RAISE EXCEPTION 'current query interpretation reader required' USING ERRCODE='P1403';END IF;
   FOR selected_field IN SELECT value FROM jsonb_array_elements(selected_record->'fields') LOOP
    SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=owner.type_id AND p.prop_id=(selected_field->>'propertyId')::int AND p.retired_rev IS NULL;
    IF NOT FOUND OR property.element IS DISTINCT FROM selected_field->'identity'->>'element' OR property.declaration_module IS DISTINCT FROM selected_field->'identity'->>'module'
     OR selected_field->'identity'->>'documentId' IS DISTINCT FROM owner.document_id OR selected_field->'identity'->>'revision' IS DISTINCT FROM selected_record->'identity'->>'revision'
-    OR NOT truss.runtime_can_read(owner.document_id,property.declaration_module) THEN RAISE EXCEPTION 'accepted authorized property mapping required' USING ERRCODE='42501';END IF;
+    OR NOT truss.runtime_can_read(owner.document_id,property.declaration_module) THEN RAISE EXCEPTION 'accepted authorized property mapping required' USING ERRCODE='P1403';END IF;
   END LOOP;
   IF jsonb_typeof(selected_record->'keys') IS DISTINCT FROM 'array' OR jsonb_array_length(selected_record->'keys')<>(SELECT count(*) FROM truss.key_def k WHERE k.type_id=owner.type_id AND k.retired_rev IS NULL)
    OR (SELECT count(DISTINCT k.value->>'keyId') FROM jsonb_array_elements(selected_record->'keys') k)<>jsonb_array_length(selected_record->'keys') THEN RAISE EXCEPTION 'complete current key mapping required' USING ERRCODE='0A000';END IF;
@@ -130,7 +130,7 @@ BEGIN
    OR NOT EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=relation.rel_type_id AND e.source_type=(selected_relation->>'sourceTypeId')::int AND e.target_type=(selected_relation->>'targetTypeId')::int)
    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE r.value->>'typeId'=selected_relation->>'sourceTypeId')
    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE r.value->>'typeId'=selected_relation->>'targetTypeId') THEN
-   RAISE EXCEPTION 'accepted authorized relationship mapping required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'accepted authorized relationship mapping required' USING ERRCODE='P1403';END IF;
  END LOOP;
 END;
 $$;
@@ -200,7 +200,7 @@ BEGIN
  END LOOP;
  FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
   IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',actor) THEN
-   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  current_validator:=encode(sha256(convert_to(jsonb_build_object(
   'installation',installation.installation_id::text,'release',expected_release,'digest',expected_digest,
@@ -218,7 +218,7 @@ BEGIN
   RAISE EXCEPTION 'query basis changed during observation' USING ERRCODE='55P03';END IF;
  FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
   IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',actor) THEN
-   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'conditional query binding byte limit' USING ERRCODE='54000';END IF;
  RETURN result;
@@ -246,7 +246,7 @@ BEGIN
   ON archive.doc_id=d.value->>'documentId' AND archive.doc_revision=d.value->>'revision' AND archive.content_sha256=d.value->>'sha256'
   WHERE archive.doc_id=root_type.document_id AND archive.rev<=captured_revision
    AND EXISTS(SELECT 1 FROM jsonb_array_elements(archive.document::jsonb->'modules') m WHERE m.value->>'id'=root_type.module)) THEN RAISE EXCEPTION 'aggregate root document must be selected for query' USING ERRCODE='0A000';END IF;
- IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'current query aggregate root reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'current query aggregate root reader required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',root_row.type_id,NULL,captured_revision);
  RETURN jsonb_build_object('id',root_row.id::text,'typeId',root_row.type_id::text,'definitionPin',pin.definition_pin,
   'owner',jsonb_build_object('documentId',root_type.document_id,'moduleId',root_type.module));
@@ -284,7 +284,7 @@ BEGIN
  END LOOP;
  FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP
   IF NOT truss.runtime_can_read(root_entry->'owner'->>'documentId',root_entry->'owner'->>'moduleId') THEN
-   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- PL/pgSQL buffers this complete validated source before caller predicates run.
  PERFORM truss.query_scope(binding);
@@ -319,7 +319,7 @@ BEGIN
  END LOOP;
  FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP
   IF NOT truss.runtime_can_read(root_entry->'owner'->>'documentId',root_entry->'owner'->>'moduleId') THEN
-   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  -- Buffer the complete validated edge bag before correlation and key predicates.
  PERFORM truss.query_scope(binding);
@@ -333,7 +333,7 @@ LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET 
 DECLARE key_definition truss.key_def%ROWTYPE;component truss.prop_def%ROWTYPE;row record;counted int:=0;
 BEGIN
  PERFORM truss.query_scope(binding);
- IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='42501';END IF;
+ IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='P1403';END IF;
  SELECT * INTO key_definition FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_id=selected_key AND k.retired_rev IS NULL;
  IF NOT FOUND OR cardinality(key_definition.prop_ids) NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded authored page key required' USING ERRCODE='0A000';END IF;
  FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY k(prop_id,n) JOIN truss.prop_def p ON p.prop_id=k.prop_id AND p.type_id=selected_type ORDER BY k.n LOOP

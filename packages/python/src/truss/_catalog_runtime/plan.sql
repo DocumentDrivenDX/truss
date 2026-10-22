@@ -68,11 +68,11 @@ BEGIN
  SELECT element.value INTO field FROM jsonb_array_elements(new_module->'elements') element(value)
   WHERE element.value->>'id'=member->>'element';
  IF NOT FOUND OR field->>'kind' IS DISTINCT FROM 'field' OR field->>'name' IS DISTINCT FROM added_name
-  OR field->>'nullability' IS DISTINCT FROM 'absent-allowed' OR field->>'cardinality' IS DISTINCT FROM 'one' THEN RETURN false;END IF;
+  OR field->>'nullability' NOT IN ('absent-allowed','required') OR field->>'cardinality' IS DISTINCT FROM 'one' THEN RETURN false;END IF;
  IF jsonb_typeof(new_fields->added_name) IS DISTINCT FROM 'object'
   OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name)) NOT BETWEEN 2 AND 3
   OR ((new_fields->added_name)-ARRAY['type','cardinality','description']) IS DISTINCT FROM '{}'::jsonb
-  OR new_fields->added_name->>'cardinality' IS DISTINCT FROM 'optional'
+  OR new_fields->added_name->>'cardinality' IS DISTINCT FROM (CASE field->>'nullability' WHEN 'required' THEN 'one' ELSE 'optional' END)
   OR new_fields->added_name->'type'->>'kind' IS DISTINCT FROM 'scalar' THEN RETURN false;END IF;
  RETURN CASE field->>'scalarType' WHEN 'string' THEN new_fields->added_name->'type'->>'name'='string'
   WHEN 'boolean' THEN new_fields->added_name->'type'->>'name'='boolean'

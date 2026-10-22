@@ -1,0 +1,95 @@
+test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial) ... FAIL
+test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error) ... FAIL
+test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error) ... FAIL
+test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) ... 
+  test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='import-context') ... FAIL
+  test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='import-build') ... FAIL
+  test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='legacy-import') ... FAIL
+  test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='batch-import') ... FAIL
+test_normal_context_stays_three_statements (test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements) ... ok
+test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access) ... ERROR
+test_reader_keeps_context_but_cannot_apply_and_prior_work_survives (test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives) ... ok
+
+======================================================================
+ERROR: test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 68, in test_public_shim_does_not_grant_private_implementation_or_table_access
+    self.assertTrue(self.admin.execute("SELECT has_function_privilege('consumer','truss.person_group_context(text,text)','EXECUTE')").fetchone()[0])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-public-047-clean-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UndefinedFunction: function "truss.person_group_context(text,text)" does not exist
+
+======================================================================
+FAIL: test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 36, in test_damaged_mutation_grants_are_not_business_denial
+    self.assertIsInstance(result,Error,repr(result));self.assertEqual(result.error.sql_state,'42501')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Ok(value=GroupFailed(failure=UnauthorizedPerson(code='unauthorized_person'), outcome='failed'), status='ok') is not an instance of <class 'truss.execution.Error'> : Ok(value=GroupFailed(failure=UnauthorizedPerson(code='unauthorized_person'), outcome='failed'), status='ok')
+
+======================================================================
+FAIL: test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 112, in test_capture_damaged_function_grant_separate_from_enrollment
+    self.observe('damaged-grant.group-context', result,
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 17, in observe
+    self.assertTrue(desired,repr(result))
+AssertionError: False is not true : Ok(value=UnauthorizedPerson(code='unauthorized_person'), status='ok')
+
+======================================================================
+FAIL: test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 28, in test_damaged_private_dependency_is_execution_error
+    self.assertIsInstance(result,Error,repr(result));self.assertEqual(result.error.sql_state,'42501')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Ok(value=UnauthorizedPerson(code='unauthorized_person'), status='ok') is not an instance of <class 'truss.execution.Error'> : Ok(value=UnauthorizedPerson(code='unauthorized_person'), status='ok')
+
+======================================================================
+FAIL: test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='import-context')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 99, in test_capture_nonmember_context_references_reads_groups_and_imports
+    self.observe('nonmember.'+name, result, desired=self.typed_denial(result),
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 17, in observe
+    self.assertTrue(desired,repr(result))
+AssertionError: False is not true : Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code=None), status='error')
+
+======================================================================
+FAIL: test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='import-build')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 99, in test_capture_nonmember_context_references_reads_groups_and_imports
+    self.observe('nonmember.'+name, result, desired=self.typed_denial(result),
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 17, in observe
+    self.assertTrue(desired,repr(result))
+AssertionError: False is not true : Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code=None), status='error')
+
+======================================================================
+FAIL: test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='legacy-import')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 99, in test_capture_nonmember_context_references_reads_groups_and_imports
+    self.observe('nonmember.'+name, result, desired=self.typed_denial(result),
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 17, in observe
+    self.assertTrue(desired,repr(result))
+AssertionError: False is not true : ImportExecutionFailed(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code=None), report=None, outcome='execution_failed')
+
+======================================================================
+FAIL: test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) (surface='batch-import')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_hohfeld_disputes_native.py", line 99, in test_capture_nonmember_context_references_reads_groups_and_imports
+    self.observe('nonmember.'+name, result, desired=self.typed_denial(result),
+  File "/Users/erik/Projects/truss/packages/python/tests/test_person_invocation_native.py", line 17, in observe
+    self.assertTrue(desired,repr(result))
+AssertionError: False is not true : BatchedImportExecutionResult(result=ImportExecutionFailed(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code=None), report=None, outcome='execution_failed'), empty_load_settlement=None)
+
+----------------------------------------------------------------------
+Ran 7 tests in 12.095s
+
+FAILED (failures=7, errors=1)

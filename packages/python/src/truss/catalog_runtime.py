@@ -175,7 +175,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','person-entrypoints.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -190,7 +190,7 @@ def _verified_release():
     for entry in json.loads(public_profiles)['profiles']+json.loads(public_profiles).get('retainedProfiles',[]):
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('query-abi.json','preparation-baseline.json'):
+    for name in ('query-abi.json','preparation-baseline.json','person-entrypoints.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original query/preparation baseline required')
     return original,sha256(original).hexdigest(),tuple(sources)
 
@@ -266,7 +266,7 @@ def _catalog_failure(result, local_code=None):
     if failure.code=='execution_obligation' and failure.sql_state=='P1011':return Ok(CatalogCASConflict())
     code=None
     if failure.code=='execution_obligation':
-        code={'42501':'unauthorized','22023':'invalid_input','P1001':'request_conflict',
+        code={'P1403':'unauthorized','22023':'invalid_input','P1001':'request_conflict',
               '0A000':'unsupported_profile','25006':'unsupported_profile','54000':'resource',
               '55P03':'observation','42P01':'installation','42883':'installation','3F000':'installation'}.get(failure.sql_state)
     if local_code is not None and failure.code=='invalid_transaction' and failure.sql_state is None:
@@ -281,7 +281,7 @@ def _admission_refused(result):
     Host/transaction failures and unrelated native errors retain their original
     Error so callers can still distinguish retry, transport and execution state.
     """
-    return isinstance(result, Error) and result.error.code == 'execution_obligation' and result.error.sql_state == '42501'
+    return isinstance(result, Error) and result.error.code == 'execution_obligation' and result.error.sql_state == 'P1403'
 
 
 _SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'],Literal['history'],Literal['weft_execution'])
@@ -578,6 +578,11 @@ class CatalogReferenceAssembly:
                 FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
+            from ._runtime_admission import person_entrypoints
+            cursor.execute('GRANT USAGE ON SCHEMA truss TO PUBLIC',prepare=False)
+            for entry in person_entrypoints():
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{}({}) TO PUBLIC').format(
+                    sql.Identifier(entry['publicName']),sql.SQL(entry['arguments'])),prepare=False)
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,int,bytea)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)','reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)','person_runtime_status(text,text,jsonb)','admin_install_recovery()','grant_import_audit_access(text,text,text)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
             cursor.execute('GRANT EXECUTE ON FUNCTION truss.admin_install_recovery(),truss.grant_import_audit_access(text,text,text) TO CURRENT_USER',prepare=False)
@@ -678,7 +683,7 @@ class CatalogReferenceAssembly:
         def execute(cursor,observed,ordinal,parameters):
             _pin_cursor(cursor)
             require_original()
-            cursor.execute('SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',parameters,prepare=False)
+            cursor.execute('SELECT * FROM truss.person_catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',parameters,prepare=False)
             rows=cursor.fetchmany(2)
             if len(rows)!=1:raise ValueError('Complete catalog result required')
             revision,identity,report,replayed,unchanged,actor,violations=rows[0]
@@ -731,7 +736,7 @@ class CatalogReferenceAssembly:
             return Error(ExecutionFailure('execution_obligation','Valid catalog revision required',catalog_code='invalid_input'))
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.catalog_report(%s)',(revision,),prepare=False)
+            cursor.execute('SELECT truss.person_catalog_report(%s)',(revision,),prepare=False)
             raw=bytes(cursor.fetchone()[0])
             if json.loads(raw)['revision']!=str(revision):raise ValueError('Original report revision required')
             return CatalogReport(revision,raw)
@@ -850,7 +855,7 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_relationship_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text),truss.recover_group_request(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.batched_import_context(text,text),truss.build_import_records(bytea,text,text),truss.process_import_chunk(bytea,bytea,uuid,int,text,text),truss.validate_batched_import_report(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
             _grant_application_writers(cursor)
             _close_partial_group_grants(cursor)
@@ -884,7 +889,7 @@ class CatalogReferenceAssembly:
         count=int(request.limits.definition_count);size=int(request.limits.encoded_bytes)
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.catalog_view_basis(%s,%s,%s)',(selected,count,16777216),prepare=False)
+            cursor.execute('SELECT truss.person_catalog_view_basis(%s,%s,%s)',(selected,count,16777216),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return CatalogViewUnavailable(reason='context')
             from ._schema_memory import cached_catalog_view
@@ -914,7 +919,7 @@ class CatalogReferenceAssembly:
         selection=[{'direction':hop.direction,'relationship':{'kind':'relationship','definitionPin':hop.relationship.definition_pin,'owner':{'documentId':hop.relationship.owner.document_id,'moduleId':hop.relationship.owner.module_id},'authoredIdentity':hop.relationship.authored_identity,'relationshipId':hop.relationship.relationship_id}} for hop in hops]
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.traverse_objects(%s::jsonb,%s::jsonb,%s,%s,%s,%s,%s)',(json.dumps({'id':start.id,'typeId':start.type_id,'definitionPin':start.definition_pin,'owner':{'documentId':start.owner.document_id,'moduleId':start.owner.module_id}}),json.dumps(selection),maximum_objects,maximum_path_states,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_traverse_objects(%s::jsonb,%s::jsonb,%s,%s,%s,%s,%s)',(json.dumps({'id':start.id,'typeId':start.type_id,'definitionPin':start.definition_pin,'owner':{'documentId':start.owner.document_id,'moduleId':start.owner.module_id}}),json.dumps(selection),maximum_objects,maximum_path_states,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return ObjectNotFound()
             basis=json.loads(bytes(raw))
@@ -951,7 +956,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.get_object(%s,%s,%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_get_object(%s,%s,%s,%s,%s,%s,%s)',
                 (document_id,module_id,record_id,object_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return ObjectNotFound()
@@ -976,13 +981,13 @@ class CatalogReferenceAssembly:
             return run_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
 
     @_active_operation
-    def batched_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[BatchedImportRuntimeContext]:
+    def batched_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[BatchedImportRuntimeContext | UnauthorizedPerson]:
         from ._batched_import_runtime import context
         manifest,digest,_=_release()
         return context(self._host,transaction,manifest,digest,_pin_cursor)
 
     @_active_operation
-    def build_import_records_in_transaction(self,transaction: TransactionHandle,drafts: tuple[ImportRecordDraft,...]) -> Outcome[BuiltImportRecords]:
+    def build_import_records_in_transaction(self,transaction: TransactionHandle,drafts: tuple[ImportRecordDraft,...]) -> Outcome[BuiltImportRecords | UnauthorizedPerson]:
         from ._batched_import_runtime import build_records
         manifest,digest,_=_release()
         return build_records(self._host,transaction,drafts,manifest,digest,_pin_cursor)
@@ -994,19 +999,20 @@ class CatalogReferenceAssembly:
         return run_batched_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor)
 
     @_active_operation
-    def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
+    def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext | UnauthorizedPerson]:
         from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
         from .imports import ImportCatalogPin
         from .contracts import ProfilePin
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(cursor.fetchone()[0]))
             return ImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),import_profile=ProfilePin(**value['importProfile']),
                 value_profile=ProfilePin(**value['valueProfile']),payload_profile=ProfilePin(**value['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
-        return self._host._run_operation(transaction,observe, function_call=True)
+        result=self._host._run_operation(transaction,observe, function_call=True)
+        return Ok(UnauthorizedPerson()) if _admission_refused(result) else result
 
     @_active_operation
     def owned_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[OwnedImportRuntimeContext]:
@@ -1015,7 +1021,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(cursor.fetchone()[0]))
             return OwnedImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),
                 import_profile=ProfilePin(**value['ownedImportProfile']),value_profile=ProfilePin(**value['valueProfile']),
@@ -1042,7 +1048,7 @@ class CatalogReferenceAssembly:
         if isinstance(reference,Error):return reference
         if isinstance(reference.value,CatalogRefused):
             return Error(ExecutionFailure('execution_obligation','Accepted relationship reference required',
-                sql_state='42501',catalog_code='unauthorized'))
+                sql_state=None,catalog_code='unauthorized'))
         if reference.value is None:return Error(ExecutionFailure('execution_obligation','Accepted relationship reference required'))
         return Ok(OwnedEdgeImportRecord(identity=OwnedEdgeImportIdentity(relationship_definition_pin=reference.value.definition_pin,
             source=source_endpoint,target=target_endpoint),payload=selected.value.edge_payload(values,order_key,source=source),payload_profile=selected.value.payload_profile))
@@ -1059,13 +1065,13 @@ class CatalogReferenceAssembly:
             _pin_cursor(cursor)
             if type(source_endpoint) is not TypedIdentity or type(target_endpoint) is not TypedIdentity:
                 raise ValueError('Exact caller endpoint identities required')
-            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             context=json.loads(bytes(cursor.fetchone()[0]))
             builder=ImportRuntimeContext(layout_profile=ProfilePin(**context['layoutProfile']),import_profile=ProfilePin(**context['importProfile']),
                 value_profile=ProfilePin(**context['valueProfile']),payload_profile=ProfilePin(**context['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=context['catalog']['revision'],model_bundle_sha256=context['catalog']['modelBundleSha256']))
             payload=builder.edge_payload(values,order_key,source=source)
-            cursor.execute('SELECT truss.group_relationship_reference(%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_group_relationship_reference(%s,%s,%s,%s,%s)',
                 (document_id,module_id,relationship_id,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:raise ValueError('Available accepted relationship reference required')
@@ -1084,7 +1090,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.import_key_selection(%s,%s,%s,%s,%s)',(document_id,module_id,record_id,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_import_key_selection(%s,%s,%s,%s,%s)',(document_id,module_id,record_id,manifest['releaseId'],digest),prepare=False)
             selection=json.loads(bytes(cursor.fetchone()[0]));components=[]
             for selected in selection['components']:
                 matching=tuple(v.value for v in values if v.name==selected['name'])
@@ -1093,7 +1099,7 @@ class CatalogReferenceAssembly:
             identity=ObjectKeySelection(type=ReadTypeReference(type_id=selection['type']['typeId'],definition_pin=selection['type']['definitionPin'],
                 owner=QualifiedOwner(document_id=document_id,module_id=module_id)),key_number=selection['keyNumber'],key_definition_pin=selection['keyDefinitionPin'],
                 key_encoding_profile=ProfilePin(**selection['keyEncodingProfile']),components=tuple(components))
-            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False);context=json.loads(bytes(cursor.fetchone()[0]))
+            cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False);context=json.loads(bytes(cursor.fetchone()[0]))
             builder=ImportRuntimeContext(layout_profile=ProfilePin(**context['layoutProfile']),import_profile=ProfilePin(**context['importProfile']),
                 value_profile=ProfilePin(**context['valueProfile']),payload_profile=ProfilePin(**context['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=context['catalog']['revision'],model_bundle_sha256=context['catalog']['modelBundleSha256']))
@@ -1127,7 +1133,7 @@ class CatalogReferenceAssembly:
             return ReceiptIncluded(included=value['included'],comparison_profile=ProfilePin(**value['comparisonProfile']))
         result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
-            reason={'42501':'authorization','0A000':'epoch_profile','54000':'resource','55P03':'observation_integrity','55000':'observation_integrity'}.get(result.error.sql_state)
+            reason={'P1403':'authorization','0A000':'epoch_profile','54000':'resource','55P03':'observation_integrity','55000':'observation_integrity'}.get(result.error.sql_state)
             if reason:return Ok(ReceiptVisibilityUnavailable(reason=reason))
         return result
 
@@ -1158,9 +1164,9 @@ class CatalogReferenceAssembly:
         def observe(cursor,observed):
             _pin_cursor(cursor)
             if edge_id is not None:
-                cursor.execute('SELECT truss.get_edge(%s,%s,%s,%s,%s,%s,%s)',(document_id,module_id,relationship_id,edge_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+                cursor.execute('SELECT truss.person_get_edge(%s,%s,%s,%s,%s,%s,%s)',(document_id,module_id,relationship_id,edge_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             else:
-                cursor.execute('SELECT truss.page_edges(%s,%s,%s,%s::jsonb,%s,%s,%s,%s,%s,%s)',
+                cursor.execute('SELECT truss.person_page_edges(%s,%s,%s,%s::jsonb,%s,%s,%s,%s,%s,%s)',
                     (document_id,module_id,relationship_id,_bytes(_wire(anchor)).decode('utf8'),direction,limit,maximum_bytes,None if continuation is None else continuation.content,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return EdgeNotFound()
@@ -1202,7 +1208,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(native_cursor,observed):
             _pin_cursor(native_cursor)
-            native_cursor.execute('SELECT truss.page_objects(%s,%s,%s,%s,%s,%s,%s,%s)',
+            native_cursor.execute('SELECT truss.person_page_objects(%s,%s,%s,%s,%s,%s,%s,%s)',
                 (document_id,module_id,record_id,limit,maximum_bytes,cursor_bytes,manifest['releaseId'],digest),prepare=False)
             raw=native_cursor.fetchone()[0]
             if raw is None:return ObjectNotFound()
@@ -1229,6 +1235,12 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         result=group_context(self._host,transaction,manifest,digest,_pin_cursor)
         return Ok(UnauthorizedPerson()) if _admission_refused(result) else result
+
+    @_active_operation
+    def recover_group_request_in_transaction(self,transaction: TransactionHandle,frame) -> Outcome[GroupApplicationResult]:
+        from ._group_runtime import recover_group_request
+        manifest,digest,_=_release()
+        return recover_group_request(self._host,transaction,frame,manifest,digest,_pin_cursor)
 
     @_active_operation
     def preview_group_conditions_in_transaction(self,transaction: TransactionHandle,input: GroupConditionPreviewInput,*,documents: tuple[CatalogDocument,...]=()) -> Outcome[PreviewObserved | PreviewRefused]:
@@ -1331,7 +1343,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.group_type_reference(%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_group_type_reference(%s,%s,%s,%s,%s)',
                 (document_id,module_id,record_id,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return None
@@ -1347,7 +1359,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.group_relationship_reference(%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_group_relationship_reference(%s,%s,%s,%s,%s)',
                 (document_id,module_id,relationship_id,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return None
@@ -1379,7 +1391,7 @@ class CatalogReferenceAssembly:
     def _reader_result(self,result):
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             state=result.error.sql_state
-            if state=='42501':return Ok(CatalogRefused())
+            if state=='P1403':return Ok(CatalogRefused())
             reason={'0A000':'profile','25006':'profile','54000':'resource','55P03':'observation','42P01':'installation','42883':'installation'}.get(state)
             if reason:return Ok(CatalogUnavailable(code=reason))
         return result
@@ -1397,7 +1409,7 @@ class CatalogReferenceAssembly:
         selection=json.dumps({'kind':entity.kind,'documentId':entity.document_id,'moduleId':entity.module_id,'definitionId':entity.definition_id,'id':str(entity.id)})
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.lookup_import_source(%s::jsonb,%s,%s,%s)',(selection,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_lookup_import_source(%s::jsonb,%s,%s,%s)',(selection,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(cursor.fetchone()[0]))
             if value['outcome']=='absent':return ImportSourceAbsent()
             content=base64.b64decode(value['contentBase64'],validate=True)
@@ -1405,7 +1417,7 @@ class CatalogReferenceAssembly:
             return ImportSourceFound(load_id=value['loadId'],content=content,sha256=value['sha256'],writer_xid=value['writerXid'])
         result=self._host._run_operation(transaction,read, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
-            reason={'42501':'authorization','22023':'context','0A000':'profile','55000':'integrity','54000':'resource','P1010':'observation','55P03':'observation'}.get(result.error.sql_state)
+            reason={'P1403':'authorization','22023':'context','0A000':'profile','55000':'integrity','54000':'resource','P1010':'observation','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ImportSourceUnavailable(reason=reason))
         return result
 
@@ -1447,7 +1459,7 @@ class CatalogReferenceAssembly:
             return HistoricalRecord(record=record,event=event)
         result=self._host._run_operation(transaction,read, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
-            reason={'42501':'authorization','54000':'resource','55P03':'observation','0A000':'profile','55000':'integrity','22023':'context','P1010':'history'}.get(result.error.sql_state)
+            reason={'P1403':'authorization','54000':'resource','55P03':'observation','0A000':'profile','55000':'integrity','22023':'context','P1010':'history'}.get(result.error.sql_state)
             if reason:return Ok(HistoryUnavailable(reason=reason))
         return result
 
@@ -1499,7 +1511,7 @@ class CatalogReferenceAssembly:
     def _feed_result(self,result):
         from .feed import FeedUnavailable
         if isinstance(result,Error) and result.error.code=='execution_obligation':
-            reasons={'42501':'authorization','54000':'resource','55P03':'context','0A000':'profile','P1001':'conflict','22023':'context','55000':'integrity','25006':'context'}
+            reasons={'P1403':'authorization','54000':'resource','55P03':'context','0A000':'profile','P1001':'conflict','22023':'context','55000':'integrity','25006':'context'}
             reason=reasons.get(result.error.sql_state)
             if reason:return Ok(FeedUnavailable(reason=reason))
         return result
@@ -1623,7 +1635,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.reader_catalog(%s,%s,%s,%s)',(maximum_count,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_reader_catalog(%s,%s,%s,%s)',(maximum_count,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]))
             return ReaderCatalog(catalog_revision=basis['catalogRevision'],layout_profile=basis['layoutProfile'],modules=tuple(basis['modules']))
         return self._reader_result(self._host._run_operation(transaction,read, function_call=True))
@@ -1637,7 +1649,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.reader_catalog_if_changed(%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_reader_catalog_if_changed(%s,%s,%s,%s,%s)',
                 (maximum_count,maximum_bytes,manifest['releaseId'],digest,validator),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]))
             if basis.get('outcome')=='unchanged' and set(basis)=={'outcome','validator'}:
@@ -1654,7 +1666,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.registrar_status(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_registrar_status(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]))
             if type(basis) is not dict or set(basis)!={'registrar'} or type(basis['registrar']) is not bool:
                 raise ValueError('Exact advisory registrar observation required')
@@ -1670,7 +1682,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.accepted_document(%s,%s,%s,%s)',(document_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_accepted_document(%s,%s,%s,%s)',(document_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(basis['contentBase64'])
             if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
             return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'],source_catalog_revision=basis['sourceCatalogRevision'],validation_bytes=json.dumps(basis['validation'],ensure_ascii=False,separators=(',',':')).encode('utf8'),ddd_profile_bytes=json.dumps(basis['dddProfile'],ensure_ascii=False,separators=(',',':')).encode('utf8') if 'dddProfile' in basis else None,ddd_validation_bytes=json.dumps(basis['dddValidation'],ensure_ascii=False,separators=(',',':')).encode('utf8') if 'dddValidation' in basis else None)
@@ -1698,7 +1710,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.person_lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                 (document_id,module_id,record_id,key_id,original_document,encoded_values,None,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             return ObjectNotFound() if raw is None else _object_result(raw,manifest,digest)

@@ -113,7 +113,7 @@ BEGIN
  IF NOT FOUND OR NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
   SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid WHERE r.rolname::text=policy.writer_role) THEN
-  RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='42501'; END IF;
+  RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='P1403'; END IF;
  RETURN person;
 END;
 $$;
@@ -199,7 +199,7 @@ BEGIN
     AND t.module=p.module_id AND t.element=p.element_id
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
   PERFORM truss.runtime_module_writer_qualified(selected_type.document_id,selected_type.module,qualified_actor);
-  IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='P1403';END IF;
   source_slot_list:=source_slots->selected_type.document_id;
   IF source_slot_list IS NULL THEN RAISE NO_DATA_FOUND;END IF;
   IF jsonb_array_length(source_slot_list)<>1 THEN RAISE TOO_MANY_ROWS;END IF;
@@ -470,7 +470,7 @@ BEGIN
    WHERE t.rev=captured_revision AND t.type_id=selected_type.type_id;
   PERFORM truss.runtime_module_writer_qualified(selected_type.document_id,selected_type.module,qualified_actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,qualified_actor) THEN
-   RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='P1403';END IF;
   metadata:=jsonb_build_array(jsonb_build_object('typeId',selected_type.type_id::text,
    'documentId',selected_type.document_id,'moduleId',selected_type.module));
  ELSE
@@ -842,11 +842,11 @@ BEGIN
  END IF;
  FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
   IF truss.runtime_module_writer_qualified(operation_meta->>'documentId',operation_meta->>'moduleId',qualified_actor) IS DISTINCT FROM outer_attempt.actor_oid THEN
-   RAISE EXCEPTION 'original current create actor required' USING ERRCODE='42501';END IF;
-  IF NOT truss.runtime_object_values_readable_qualified((operation_meta->>'typeId')::int,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+   RAISE EXCEPTION 'original current create actor required' USING ERRCODE='P1403';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified((operation_meta->>'typeId')::int,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF root_identity IS NOT NULL AND NOT truss.runtime_can_read_qualified(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId',qualified_actor) THEN
-  RAISE EXCEPTION 'current create root reader required' USING ERRCODE='42501';END IF;
+  RAISE EXCEPTION 'current create root reader required' USING ERRCODE='P1403';END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic)::text,'UTF8');
 END;
 $$;
@@ -1020,7 +1020,7 @@ BEGIN
   'documentsSha256',encode(sha256(original_documents),'hex')),'records',records)::text,'UTF8');
  IF octet_length(result_bytes)>16777216 THEN RETURN NULL;END IF;
  RETURN result_bytes;
-EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '42501' OR SQLSTATE '0A000' OR SQLSTATE '54000' OR SQLSTATE '55P03' OR SQLSTATE 'P0002' THEN
+EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE 'P1403' OR SQLSTATE '0A000' OR SQLSTATE '54000' OR SQLSTATE '55P03' OR SQLSTATE 'P0002' THEN
  RETURN NULL;
 END;
 $$;

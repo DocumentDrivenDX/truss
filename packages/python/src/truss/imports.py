@@ -210,6 +210,12 @@ class ImportExecutionFailed(_Carrier, Generic[Report]):
     error: ExecutionFailure
     report: Report | None
     outcome: Literal['execution_failed'] = field(default='execution_failed', init=False)
+    reason: Literal['execution','authorization'] = field(default='execution',init=False)
+
+    def __post_init__(self):
+        if self.error.code=='execution_obligation' and self.error.sql_state=='P1403':
+            object.__setattr__(self,'reason','authorization')
+        _Carrier.__post_init__(self)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ImportInvalid(_Carrier):

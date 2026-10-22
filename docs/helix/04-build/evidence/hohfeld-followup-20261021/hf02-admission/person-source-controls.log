@@ -1,0 +1,12 @@
+test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial) ... ok
+test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error) ... ok
+test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error) ... ok
+test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) ... ok
+test_normal_context_stays_three_statements (test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements) ... ok
+test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access) ... ok
+test_reader_keeps_context_but_cannot_apply_and_prior_work_survives (test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 11.135s
+
+OK

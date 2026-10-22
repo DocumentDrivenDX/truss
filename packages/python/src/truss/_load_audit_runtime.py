@@ -405,7 +405,7 @@ def _decode_mutation_listing_page(raw: bytes):
 def _reason(error: Error) -> str | None:
     if error.error.code != 'execution_obligation':
         return None
-    return {'42501': 'unauthorized', '54000': 'resource', '0A000': 'unsupported_profile',
+    return {'P1403': 'unauthorized', '54000': 'resource', '0A000': 'unsupported_profile',
             '22023': 'observation', '55P03': 'observation', 'P1002': 'observation',
             'P1010': 'observation',
             'P0002': 'not_found'}.get(error.error.sql_state)
@@ -459,7 +459,7 @@ def read_import_load_chunk(host, transaction, cursor: LoadAuditCursor,
 
     def observe(cursor, _observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.read_import_load_chunk(%s::uuid,%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.person_read_import_load_chunk(%s::uuid,%s,%s,%s,%s)',
             (selected_invocation, selected_chunk, page_limit, manifest['releaseId'], digest),
             prepare=False)
         return _decode_page(bytes(cursor.fetchone()[0]))
@@ -512,7 +512,7 @@ def page_import_load_audit(host, transaction, filters, cursor: LoadAuditListingC
 
     def observe(native_cursor, _observed):
         pin_cursor(native_cursor)
-        native_cursor.execute('SELECT truss.page_import_load_audit(%s::jsonb,%s,%s,%s,%s)',
+        native_cursor.execute('SELECT truss.person_page_import_load_audit(%s::jsonb,%s,%s,%s,%s)',
             (selected_filters,maximum_entries,selected_cursor,manifest['releaseId'],digest),prepare=False)
         return _decode_listing_page(bytes(native_cursor.fetchone()[0]))
 
@@ -590,7 +590,7 @@ def page_mutation_group_audit(host,transaction,filters,cursor: MutationGroupAudi
             return Ok(LoadAuditUnavailable(reason='observation'))
     def observe(native_cursor,_observed):
         pin_cursor(native_cursor)
-        native_cursor.execute('SELECT truss.page_mutation_group_audit(%s::jsonb,%s,%s,%s,%s)',
+        native_cursor.execute('SELECT truss.person_page_mutation_group_audit(%s::jsonb,%s,%s,%s,%s)',
             (selected_filters,maximum_events,selected_cursor,manifest['releaseId'],digest),prepare=False)
         return _decode_mutation_listing_page(bytes(native_cursor.fetchone()[0]))
     result=host._run_operation(transaction,observe,function_call=True)

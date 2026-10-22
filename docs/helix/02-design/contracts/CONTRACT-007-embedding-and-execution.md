@@ -21,6 +21,28 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Selected HF-02 person invocation and frozen recovery
+
+The Python facade calls the finite guarded person entrypoints in CONTRACT-005.
+Native admission and the original operation share one SQL invocation, under the
+existing managed-function savepoint and unchanged statement/deadline budgets.
+Only native `P1403` is translated to business authorization denial; unexpected
+`42501`, failed containment, transport loss and uncertain termination retain their
+original execution meaning. A shim checks the original caller's EXECUTE entitlement
+before its private implementation, and exposes no installation/role/catalog data
+to an unenrolled person. Raw private helpers do not become public APIs.
+
+A pure `freeze_group_request` operation preserves complete original input,
+request selection and original document bytes before Truss resolves business state.
+Its versioned immutable frame is a recovery input, not authorization or evidence
+of issuance. `recover_group_request_in_transaction` consumes that complete frame
+without rebuilding current object/edge references or expected versions. It performs
+receipt observation only: missing/invisible/never-issued identities share the
+non-disclosing request-not-observed outcome and never trigger execution. It never
+settles or retries the caller's outer transaction. Current retained-owner rights
+and the original authenticated person scope govern every replay publication.
+
+
 ## Immutable package verification lifetime
 
 An installed runtime package is immutable for the lifetime of its Python
