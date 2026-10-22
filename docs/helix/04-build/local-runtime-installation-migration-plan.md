@@ -10,9 +10,11 @@ v0.0.44 source; pre-0.10, old-runtime operation and downgrades are excluded.
 Keep admitted database migration paths through future releases. Historical
 component receipts and older draft interfaces do not establish shipped support.
 Use CONTRACT-008 RM-01–07, STP-045 RM-T01–08 and restoration slices RM-S1–S7.
-The v0.0.47 candidate implements the selected routes and public `truss-migrate`
-flow. Follow the restoration plan and package README for its exact evidence,
-resource/restore limits and pending hosted release qualification. Earlier draft
+The [v0.0.47 release](releases/v0.0.47.md) implements the selected routes and public
+`truss-migrate` flow. Complete Linux tag qualification, public checksums, a fresh
+public-wheel 52-case migration matrix and the published `uvx` quickstart pass.
+Follow the restoration plan and package README for original evidence and exact
+resource/restore limits. Earlier draft
 bindings below remain historical where they conflict with that selected profile.
 # Local runtime, installation and migration execution plan
 

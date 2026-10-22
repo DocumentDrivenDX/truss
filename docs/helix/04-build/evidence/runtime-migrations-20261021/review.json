@@ -102,14 +102,12 @@
     "packages/python/tests/security_commit_loss_proxy.py": "f534e8a28e3bfa53db469b89ed7f26d2b08e20646c4944e5f56ff8f34b84ac9f"
   },
   "openProductFindings": [],
-  "remainingGates": [
-    "Merge reviewed PR, publish tag workflow, verify public assets and clean installed migration matrix"
-  ],
+  "remainingGates": [],
   "deferredByScope": [
     "First real subsequent edge supplies native multi-edge skip-release proof",
     "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
   ],
-  "updatedAt": "2026-10-22T00:50:31.040543+00:00",
+  "updatedAt": "2026-10-22T01:19:49.695346+00:00",
   "localAdditionalEvidence": {
     "atomicCapacityTests": 23,
     "passed": true,
@@ -135,5 +133,12 @@
     "skippedPerPlatform": 0,
     "runtimeFiles": 445,
     "fullWorkflow": "success"
+  },
+  "releasedDelivery": {
+    "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+    "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47",
+    "workflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/39702368076",
+    "validation": "published-0.0.47/validation.json",
+    "passed": true
   }
 }

@@ -1,0 +1,36 @@
+{
+  "observedAt": "2026-10-22T01:18:46.175218+00:00",
+  "passed": true,
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47",
+  "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+  "pullRequest": "https://github.com/DocumentDrivenDX/truss/pull/27",
+  "linuxWorkflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/39702368076",
+  "linuxFullWorkflowPassed": true,
+  "linuxMigrationTests": 52,
+  "macOSPublicMigrationTests": 52,
+  "skippedMigrationCases": 0,
+  "publicAssetsVerified": 12,
+  "runtimeFilesMatched": 445,
+  "publicQuickstartOutsideCheckout": true,
+  "independentInstancesRetainDataAndIdentity": true,
+  "runtimeSupport": "latest-only",
+  "pre010Supported": false,
+  "receiptsSha256": {
+    "release-verification.json": "3b20ccd10c3da6466e677e05bdbb776156176d084f9ff8132ad53b9cf2f18c3b",
+    "release-workflow.json": "3f74abc1ad0b8c2a112838abb2e3c01c01c0a497e3e901a2a7ee05a16d426caa",
+    "migration-qualification.json": "23bdea211ecb7716267b084f85dadc7c4a56687047aa7866d75635f0cb2f367f",
+    "linux-public-workload-status.json": "c65b832ef4bd45a80502ed59921b9e54f1ebb6dc2bedf1a80a50341f772fbc30",
+    "clean-installed/qualification.json": "fc20341f38c1d1c8b36c561eeaf24de5f7561bedd3571a9064e64dacad63dce2",
+    "clean-installed/public-wheel-binding.json": "112da9dab0092a1a0bb1530f0211cff084fe3b1a55fa7f201fb0aae1092cb243",
+    "receipt.json": "3c6ff18b23d2c1179ecbe5b786d6ac44f9652392392a9aa6c0d4c94d7f3898bb"
+  },
+  "producerSha256": {
+    "verify-public-assets.py": "ceb52145aa4fef8fa731c8bc327ab965b7ef19ba92eddc2b014904d4eefbad7e",
+    "check-published-uvx.py": "b596d8fb78ca440285ca28d9cabc6d844f03f745bbf73253cbc49b30e6c2b566"
+  },
+  "limits": [
+    "Exact unprotected PostgreSQL18.6/UMF0.10 tuples and qualified original initializer profiles",
+    "No pre-0.10, protected-profile migration, downgrade, managed-service, physical-restore or large-database migration-capacity claim",
+    "First real subsequent native edge must add skip-release-chain execution proof"
+  ]
+}

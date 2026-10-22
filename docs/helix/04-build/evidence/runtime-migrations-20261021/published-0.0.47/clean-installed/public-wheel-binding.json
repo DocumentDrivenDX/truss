@@ -1,0 +1,11 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47",
+  "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+  "publicWheelSha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+  "runtimeFilesMatched": 445,
+  "qualificationSha256": "fc20341f38c1d1c8b36c561eeaf24de5f7561bedd3571a9064e64dacad63dce2",
+  "scope": "Separate source/public wheel binding; original local receipt retains sourceCommit null",
+  "tests": 52,
+  "skipped": 0,
+  "passed": true
+}
