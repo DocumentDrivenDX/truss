@@ -17,6 +17,9 @@
     "integrated-corpus-protected/hf-corpus.log": "f6c5dd7e8a3d0da73accd268d46bab604f847d2aa01c85685723a93845cb1bfb",
     "integrated-corpus-protected/protected.log": "f55b6173fa24c05076760cce93d2ce14d441ebcee551ee32df227028d6f4e1e4",
     "key-backfill-preliminary.log": "92f98930a6ad21f6698221dad1e2f8c5e8a54ee82638da45b779b11bbfffff14",
+    "lifecycle/managed_grants_lifecycle_installed.json": "993662d0b960e38d1218b010049098a4569f16bb1b3e7430608290a10c098376",
+    "lifecycle/managed_grants_lifecycle_installed.py": "015ea0cbd1acc4e26efc64511f028399297ec08a17a7fe81c389b8fa9cd03306",
+    "lifecycle/run.log": "993662d0b960e38d1218b010049098a4569f16bb1b3e7430608290a10c098376",
     "owner-dependencies-v2.log": "83e5a061fe90b71dbb591e234433e4658c5d7cfa835ce40624c0658ea9cf8642",
     "owner-dependencies.log": "ed1172e21b715f7aa0735b2dad13ba9f53aa63d834b4191abba02dd3eecd95fd",
     "preliminary-selected-v3.log": "0444a42c1fdfa1dc7b4d7dbd67fe3414e4ac08ac9de8db094622f3e4b035b876",
@@ -82,5 +85,11 @@
   "preliminaryPublicWorkload": {
     "functionalPassed": true,
     "scope": "Original1000object/1000edge,1000reads/200committedupdates integratedpreliminary49; not finalpublic-release qualification"
+  },
+  "preliminaryLifecycle": {
+    "passed": true,
+    "scope": "Integrated49 preliminary wheel, additiveevolution/containedretirementrefusal/selectedACLvariation; notactualpublic49qualification",
+    "ownedWorkerInventoryRestored": true,
+    "workerStopped": true
   }
 }
