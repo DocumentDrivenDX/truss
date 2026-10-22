@@ -996,7 +996,7 @@ accepted scope amendment. Experimental pg8000 and older private profiles are his
 The [runtime history](docs/runtime-history.md) preserves the earlier release diary.
 Its old limitations describe their named versions, not the current interface.
 
-## Hohfeld follow-up cohort — v0.0.48
+## Arras follow-up cohort — v0.0.48
 
 This cohort pins Weft0.4.51, compile/IR0.2.8, backend43/44, interface0.2.9
 and Truss query ABI1.2. Native-indexed exact string/boolean equality and eligible
@@ -1007,6 +1007,12 @@ A cursor retains its statement snapshot while current person/scope checks stay
 live. Compiler descriptors accompany empty/null results, pages and streams.
 `QueryEntityProjection(facts=(...), relationships=False)` explicitly selects
 ordered facts and relationship expansion; continuation is bound to that choice.
+
+The selected compiler retains opaque `arras.view` Record/Field metadata when the
+same original UMF document declares vocabulary version `0.1.0`. Original bytes and
+pins, including unselected unknown content, remain intact. Malformed envelopes or
+unsupported selected versions/semantics refuse without SQL. This preserves
+presentation metadata; it does not interpret Arras view terms or qualify its parser.
 
 `freeze_group_request` freezes original complete inputs/documents before state
 resolution. `recover_group_request_in_transaction` observes the retained request
@@ -1040,5 +1046,6 @@ No historical backfill, commit timestamp or total commit order is invented.
 The release's independent conformance archive includes original asserted test
 producers, exact profile pins and `scripts/run-hf-conformance.py`. Unzip it outside
 the checkout and run the installed final cohort with `--installed-package`.
-The runner rejects skips and mismatched cohorts. The separate migration gate
+The runner rejects skips and checks the loaded native compiler hash/source against
+the exact corpus and installed Truss cohort. The separate migration gate
 covers every admitted source, real multi-edge routes and prior publication.
