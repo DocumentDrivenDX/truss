@@ -1,0 +1,98 @@
+name: Diagnose whole-group audit deadline
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/diagnose-managed-audit-deadline.py'
+      - '.github/workflows/managed-audit-diagnostic.yml'
+permissions:
+  contents: read
+concurrency:
+  group: managed-audit-diagnostic-${{ github.ref }}-${{ github.run_id }}
+  cancel-in-progress: false
+jobs:
+  linux-diagnostic:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build the exact checked-out Truss wheel
+        run: |
+          python -m pip install build==1.3.0
+          python -m build --outdir "$RUNNER_TEMP/truss-current" packages/python
+          test "$(find "$RUNNER_TEMP/truss-current" -maxdepth 1 -name 'truss_toolkit-*.whl' | wc -l)" -eq 1
+      - name: Download and verify the public Truss 0.0.48 wheel
+        run: |
+          python - <<'PYTHON'
+          import hashlib,pathlib,subprocess,sys,urllib.request
+          out=pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'truss-public-048'
+          out.mkdir()
+          subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links','https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48','--dest',str(out),'truss-toolkit==0.0.48'],check=True)
+          wheels=list(out.glob('truss_toolkit-0.0.48-*.whl'))
+          assert len(wheels)==1, [p.name for p in wheels]
+          manifest=urllib.request.urlopen('https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/SHA256SUMS',timeout=30).read().decode()
+          entries={parts[-1].lstrip('*'):parts[0] for line in manifest.splitlines() if (parts:=line.split())}
+          actual=hashlib.sha256(wheels[0].read_bytes()).hexdigest()
+          assert entries.get(wheels[0].name)==actual, 'Public Truss wheel SHA256SUMS mismatch'
+          assert actual=='1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3', 'Public Truss 0.0.48 wheel differs from the reviewed baseline asset'
+          (out/'public-wheel.json').write_text(__import__('json').dumps({'wheel':wheels[0].name,'sha256':actual,'manifestSha256':hashlib.sha256(manifest.encode()).hexdigest()},indent=2)+'\n')
+          (out/'SHA256SUMS').write_text(manifest)
+          PYTHON
+      - name: Download and verify the pinned public Weft 0.4.51 wheel
+        run: |
+          python -m pip download --only-binary=:all: --no-deps --no-index \
+            --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.51 \
+            --dest "$RUNNER_TEMP/weft-051" weft-sql==0.4.51
+          python - <<'PYTHON'
+          import hashlib,pathlib,urllib.request
+          root=pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'weft-051'
+          wheels=list(root.glob('*.whl'));assert len(wheels)==1
+          raw=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.51/SHA256SUMS',timeout=30).read().decode()
+          entries={parts[-1].lstrip('*'):parts[0] for line in raw.splitlines() if (parts:=line.split())}
+          assert entries.get(wheels[0].name)==hashlib.sha256(wheels[0].read_bytes()).hexdigest()
+          (root/'SHA256SUMS').write_text(raw)
+          PYTHON
+          python scripts/verify-weft-release-wheel.py "$RUNNER_TEMP"/weft-051/*.whl
+      - name: Diagnose the unchanged deadline case on public Truss 0.0.48
+        run: |
+          python -m venv "$RUNNER_TEMP/venv-public-048"
+          PY="$RUNNER_TEMP/venv-public-048/bin/python"
+          "$PY" -m pip install --no-index --no-deps "$RUNNER_TEMP"/weft-051/*.whl
+          "$PY" scripts/install-local-runtime.py --wheelhouse "$RUNNER_TEMP/runtime-public-048" --truss-wheel "$RUNNER_TEMP"/truss-public-048/*.whl
+          "$PY" scripts/diagnose-managed-audit-deadline.py \
+            --wheel "$RUNNER_TEMP"/truss-public-048/*.whl --expected-version 0.0.48 \
+            --cohort public-truss-0.0.48 --output "$RUNNER_TEMP/managed-audit-public-048"
+      - name: Diagnose the unchanged deadline case on the exact checked-out wheel
+        if: always()
+        run: |
+          python -m venv "$RUNNER_TEMP/venv-current"
+          PY="$RUNNER_TEMP/venv-current/bin/python"
+          "$PY" -m pip install --no-index --no-deps "$RUNNER_TEMP"/weft-051/*.whl
+          "$PY" scripts/install-local-runtime.py --wheelhouse "$RUNNER_TEMP/runtime-current" --truss-wheel "$RUNNER_TEMP"/truss-current/*.whl
+          "$PY" scripts/diagnose-managed-audit-deadline.py \
+            --wheel "$RUNNER_TEMP"/truss-current/*.whl --expected-version "$(python -c 'import tomllib;print(tomllib.load(open("packages/python/pyproject.toml","rb"))["project"]["version"])')" \
+            --cohort checked-out-truss-wheel --output "$RUNNER_TEMP/managed-audit-current"
+      - name: Retain both bounded diagnostics and package inputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: managed-audit-deadline-diagnostic-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/managed-audit-public-048/**
+            ${{ runner.temp }}/managed-audit-current/**
+            ${{ runner.temp }}/truss-public-048/public-wheel.json
+            ${{ runner.temp }}/truss-public-048/*.whl
+            ${{ runner.temp }}/truss-current/*.whl
+            ${{ runner.temp }}/weft-051/*
+            ${{ runner.temp }}/runtime-public-048/**
+            ${{ runner.temp }}/runtime-current/**
+          if-no-files-found: warn

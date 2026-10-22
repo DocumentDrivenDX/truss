@@ -1,0 +1,107 @@
+{
+  "scope": "Original unchanged hosted rerun reproduced the audit deadline failure; this is a release blocker, not incidental-run qualification.",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39845177814/attempts/2",
+  "sourceCommit": "6287e52a5ef8a0abce90341106e8e9389216cb80",
+  "passed": false,
+  "migrationTests": 106,
+  "migrationPassed": true,
+  "hfTests": 62,
+  "hfFailures": 1,
+  "hfErrors": 0,
+  "hfSkipped": 0,
+  "failure": "Same whole-group >1024-event audit case: ExecutionFailure cancelled SQLSTATE57014 under unchanged10sSQL/30soperation limits.",
+  "nextGate": "Same-host Linux public48/current49 cursor timing/timeout/plan diagnostics before any fix or further qualification retry. No assertion, workload or limit changes authorized by this receipt.",
+  "retainedEvidence": {
+    "linux-branch-628-attempt2-failure.log": {
+      "originalSha256": "474cdb72fe834c9d9ce67760b8f07ebf793b8e5ce96764c585e873c537e1cc65",
+      "retained": "linux-branch-628-attempt2-failure.log.gz",
+      "retainedSha256": "fb56a71a8515de7c48047ee346fea5b12bd510836cbf6774ac0432751202e39f"
+    },
+    "linux-branch-628-attempt2-run.json": {
+      "originalSha256": "f7cf4b61fa56ee91771e0775c463dcc63e0c190f88ffae6ed031395fc876a9f4",
+      "retained": "linux-branch-628-attempt2-run.json.gz",
+      "retainedSha256": "07c24243f22e0be6cddb0cc12cde5d9a4bc33bbce139096910ac5fbe5c1e2ad3"
+    },
+    "linux-branch-628-attempt2-hf/qualification.json": {
+      "originalSha256": "9e35ecaa7c64fe1959decd61ada54a490bc02b78db218878dbac80f11f5a4e4b",
+      "retained": "linux-branch-628-attempt2-hf/qualification.json.gz",
+      "retainedSha256": "f522f2c987dbc650a47479fda6b1940735ed72067de714abd27a292a81c10016"
+    },
+    "linux-branch-628-attempt2-migrations/source48-original-evidence.json": {
+      "originalSha256": "5e35dc31d35cb6186d86abe2ee21d4200cf4d5719f28f8868f71a5effeb919e2",
+      "retained": "linux-branch-628-attempt2-migrations/source48-original-evidence.json.gz",
+      "retainedSha256": "17e363803720f92c576ff3a5c1f1d1dd88ff1ee7525068e41131914015b2d8c1"
+    },
+    "linux-branch-628-attempt2-migrations/source47MigrationTests-before-close.json": {
+      "originalSha256": "5c07a1762cd0c93afcee77186850fec36b57118f4026565e6772e3f5eb4bdb99",
+      "retained": "linux-branch-628-attempt2-migrations/source47MigrationTests-before-close.json.gz",
+      "retainedSha256": "ea49dd3653f5e0805b66944d44153d129ebf14e8e890f0a864420dc4c5d5c8aa"
+    },
+    "linux-branch-628-attempt2-migrations/source46-original-evidence.json": {
+      "originalSha256": "18942661aae0c721b3e512ea169e90711c4422935e34627011320dd4841d98a0",
+      "retained": "linux-branch-628-attempt2-migrations/source46-original-evidence.json.gz",
+      "retainedSha256": "75edb7d80dd42d42db97106103a450362e5e50a17485fe27636fff8ca857bebb"
+    },
+    "linux-branch-628-attempt2-migrations/qualification.json": {
+      "originalSha256": "94e0bffc32f308466cf4931726a164cccfed156f09cd369bc0601d71382327a2",
+      "retained": "linux-branch-628-attempt2-migrations/qualification.json.gz",
+      "retainedSha256": "c98e6991c6396969c98fc2839d6e589076df8463227a3563103d10c7a6cf038e"
+    },
+    "linux-branch-628-attempt2-migrations/PriorPublishedReceiptTests-before-close.json": {
+      "originalSha256": "caa5edc6c070d3f4bc55edd4dcc531d96b481b5aaf2e9e9a6a17ff17d995e4b6",
+      "retained": "linux-branch-628-attempt2-migrations/PriorPublishedReceiptTests-before-close.json.gz",
+      "retainedSha256": "5adbe002f0d8d198b381f2e988a712c4b2730afb98f437f3c64b14c88b40445a"
+    },
+    "linux-branch-628-attempt2-migrations/source48-native-inventory.json": {
+      "originalSha256": "5f8c5d4c412f4e1e0ee3e81a2608db3e0cd6f5ce2287d5afc5ba98156d51b363",
+      "retained": "linux-branch-628-attempt2-migrations/source48-native-inventory.json.gz",
+      "retainedSha256": "d04a7307d19935f1ecd3ca1ab63c4bf6ae5008bb7e3704c2acd56031df45d945"
+    },
+    "linux-branch-628-attempt2-migrations/source46-native-inventory.json": {
+      "originalSha256": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+      "retained": "linux-branch-628-attempt2-migrations/source46-native-inventory.json.gz",
+      "retainedSha256": "4ca7612fa5790f64a67c988e6c2bc76cecfa43dfdd864b3ef030e55ae8051a7f"
+    },
+    "linux-branch-628-attempt2-migrations/source47-original-evidence.json": {
+      "originalSha256": "9906801893bab9ee187a454f674b622655dc78a0e08f667a96de105ddf2ee64e",
+      "retained": "linux-branch-628-attempt2-migrations/source47-original-evidence.json.gz",
+      "retainedSha256": "1e08777be8ec3e8da1d4c0ef6c677d52f3d3c73f762e1c857b88afb31dac11fc"
+    },
+    "linux-branch-628-attempt2-migrations/source44MigrationTests-before-close.json": {
+      "originalSha256": "45221890c4201a563889d5250b1396a440f404a7137bc818f6b1b64118ce4ec6",
+      "retained": "linux-branch-628-attempt2-migrations/source44MigrationTests-before-close.json.gz",
+      "retainedSha256": "b7efb541d59e4f25dd96f83ddd2f7b04256a8efddac0ba1e4c73e32076de0c1e"
+    },
+    "linux-branch-628-attempt2-migrations/source44-original-evidence.json": {
+      "originalSha256": "008a4c81bc0c66b41e1dd88c892e5e54620a04dc928594571eba5c384c38b143",
+      "retained": "linux-branch-628-attempt2-migrations/source44-original-evidence.json.gz",
+      "retainedSha256": "8f16abe162ea0af1f23b4ec9c302f6ae253a9264ee1504344e4e701572ade7a4"
+    },
+    "linux-branch-628-attempt2-migrations/Published48ReceiptTests-before-close.json": {
+      "originalSha256": "5e1da68f05b3bba4b85253ffdb5ac0caf5c822cfea601e7ccb0a3a3b93d982e3",
+      "retained": "linux-branch-628-attempt2-migrations/Published48ReceiptTests-before-close.json.gz",
+      "retainedSha256": "47ff8cd3fb3f9abf5d3c324fdc0c931008f9247db1019b49087fcaab800b0e08"
+    },
+    "linux-branch-628-attempt2-migrations/source44-native-inventory.json": {
+      "originalSha256": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+      "retained": "linux-branch-628-attempt2-migrations/source44-native-inventory.json.gz",
+      "retainedSha256": "93b37f438c2381f820cd660aeb241abcfdf63802c4794d0e59c1bcaf47dede6f"
+    },
+    "linux-branch-628-attempt2-migrations/source48MigrationTests-before-close.json": {
+      "originalSha256": "9909159d4d464e6dab4a6ef796f7dc3270718d6a0b732ba771774d77fadef024",
+      "retained": "linux-branch-628-attempt2-migrations/source48MigrationTests-before-close.json.gz",
+      "retainedSha256": "d2749590bd5152038ed19cda20fbabcbce1492eecfa742bd4559d41b859eddc5"
+    },
+    "linux-branch-628-attempt2-migrations/source47-native-inventory.json": {
+      "originalSha256": "c53951359da8a9bd37ae909929f92142a4b7351d4b534c12144a541c84c5ad11",
+      "retained": "linux-branch-628-attempt2-migrations/source47-native-inventory.json.gz",
+      "retainedSha256": "870048c0fc85913e28095a5247e0b5339d3c5afdd8806d838601c74c22e263a9"
+    },
+    "linux-branch-628-attempt2-migrations/source46MigrationTests-before-close.json": {
+      "originalSha256": "7da7cddb013028106636ee961d327c6616102c238dda9eff4bb4773c71352e00",
+      "retained": "linux-branch-628-attempt2-migrations/source46MigrationTests-before-close.json.gz",
+      "retainedSha256": "8746913a4c7a3e87eafe92e9cf3ef3e5635270a659ac919e1677cc585180c24e"
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}

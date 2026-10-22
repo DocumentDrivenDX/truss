@@ -100,3 +100,10 @@ recommended one unchanged failed-job rerun of run39845177814; attempt2 is pendin
 No assertion or limit was changed. A repeat requires Linux timing/plan diagnosis
 before release. Hosted Linux/tag qualification and public-download verification
 remain open.
+
+The [unchanged Linux rerun](linux-attempt-3/receipt.json) reproduced the same
+whole-group audit SQL cancellation. Linux qualification and publication remain
+blocked pending same-host public48/current49 SQL timing and plan diagnosis.
+There is no further incidental rerun; the original workload, assertions and
+10-second SQL / 30-second operation limits remain unchanged. The retained final
+Mac pass qualifies its recorded source and tuple only.
