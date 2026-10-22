@@ -11,7 +11,8 @@ from threading import Lock, Event, Timer, get_ident
 from time import monotonic
 from uuid import uuid4
 from weakref import WeakKeyDictionary, ref
-from .execution import AccessMode, Error, ExecutionFailure, Isolation, Ok, TransactionHandle
+from .execution import (AccessMode, Error, ExecutionFailure, Isolation, Ok, TransactionHandle,
+                        _UnsupportedProfileIncompatibility)
 
 
 _registry_lock = Lock()
@@ -595,7 +596,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False, validation=False):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False, validation=False, attempt_capture=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         host_reservation=self._custody.reservation
@@ -639,6 +640,8 @@ class PsycopgHost:
             attempt = _Attempt(uuid4().hex)
             self._custody.pending = attempt
             self._custody.last_attempt = attempt
+            if attempt_capture is not None:
+                attempt_capture(attempt)
             try:
                 if semantic:
                     from ._operation_ordinal import OperationOrdinalIssuer, OrdinalReservation
@@ -838,6 +841,10 @@ class PsycopgHost:
                     return _failure('retry', 'Whole caller transaction must be retried', state, 'whole_transaction')
                 if state == '57014' or isinstance(primary, TimeoutError):
                     return _failure('cancelled', 'Original operation cancelled and locally contained', state)
+                if isinstance(primary, _UnsupportedProfileIncompatibility):
+                    return Error(ExecutionFailure('invalid_transaction',
+                        'Protected activation is incompatible with the installed managed-grant policy',
+                        sql_state=state, catalog_code='unsupported_profile'))
                 if isinstance(primary, ValueError):
                     return _failure('invalid_transaction', 'Original transaction/profile admission refused', state)
                 return _failure('execution_obligation', 'Original operation failed and locally contained', state)
@@ -877,6 +884,17 @@ class PsycopgHost:
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody, operation_deadline=operation_deadline, function_call=function_call)
+
+    def _run_operation_with_attempt(self, transaction, callback):
+        """Private operation variant returning the exact attempt created by this call."""
+        custody = (self._transactions.get(transaction._key)
+                   if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
+        if (custody is None or custody.handle is not transaction
+                or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
+            return _failure('invalid_transaction', 'Original issued transaction handle required'), None
+        captured=[]
+        result=self._attempt(callback,custody,attempt_capture=captured.append)
+        return result, captured[0] if len(captured)==1 else None
 
     def _run_validation_operation(self, transaction, callback):
         """Trusted Truss validation only; publish after checked host rollback."""

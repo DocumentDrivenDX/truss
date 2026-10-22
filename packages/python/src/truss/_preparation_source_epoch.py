@@ -14,7 +14,7 @@ import re
 from .catalog_runtime import _release, _pin_cursor
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._security_catalog_assessment import SOURCE_TABLES, capture_accepted_catalog
 from ._security_source_epoch_installation import (
     PendingSourceEpochInfrastructure, _sources, _verify,
@@ -41,11 +41,24 @@ def _parameters(original):
 
 
 def _runtime_recipe(sources):
-    result = []
+    # Source fragments are ordered. CREATE OR REPLACE supersedes one exact
+    # PostgreSQL input signature; overloads with the same name are separate.
+    result = {}
+    declaration = re.compile(
+        r"CREATE\s+(OR\s+REPLACE\s+)?FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\s+"
+        r"([\s\S]*?)\bLANGUAGE\s+(sql|plpgsql)\s+([\s\S]*?)\bAS\s+"
+        r"(\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;", re.IGNORECASE)
     for source in sources:
-        for match in re.finditer(r"CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\s+([\s\S]*?)\bLANGUAGE\s+(sql|plpgsql)\s+([\s\S]*?)\bAS\s+(\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;", source):
-            name, arguments, returns, language, attributes, body = match.groups()
+        declared = list(re.finditer(
+            r"\bCREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION\s+truss\.\w+\s*\(",
+            source, re.IGNORECASE))
+        matches = list(declaration.finditer(source))
+        if len(declared) != len(matches):
+            raise ValueError('Complete original runtime routine recipe required')
+        for match in matches:
+            replace, name, arguments, returns, language, attributes, body = match.groups()
             inputs = _parameters(arguments)
+            identity = (name, tuple(parameter[1] for parameter in inputs))
             returns = returns.strip()
             outputs = _parameters(returns[len('TABLE'):].strip()[1:-1]) if returns.startswith('TABLE') else []
             return_type = ('record' if len(outputs) > 1 else outputs[0][1]) if outputs else returns.removeprefix('SETOF ').strip()
@@ -58,23 +71,51 @@ def _runtime_recipe(sources):
                 value = value.strip().strip("'")
                 if key == 'search_path': value = ', '.join(p.strip() for p in value.split(','))
                 settings.append(key + '=' + value)
-            result.append(dict(name=name, inputs=inputs, outputs=outputs, returns=return_type,
+            routine = dict(name=name, inputs=inputs, outputs=outputs, returns=return_type,
                 language=language, set=bool(outputs) or returns.startswith('SETOF '),
                 security='SECURITY DEFINER' in attributes, strict=bool(re.search(r'\bSTRICT\b', attributes)),
                 volatility='i' if 'IMMUTABLE' in attributes else 's' if 'STABLE' in attributes else 'v',
                 parallel='s' if 'PARALLEL SAFE' in attributes else 'r' if 'PARALLEL RESTRICTED' in attributes else 'u',
-                settings=settings or None, body=body[2:-2] if body.startswith('$$') else body[1:-1].replace("''", "'")))
-    declared_names = [name for source in sources for name in
-        re.findall(r'\bCREATE FUNCTION\s+(truss\.\w+)\s*\(', source)]
-    recipe_names = [routine['name'] for routine in result]
-    if (not declared_names or len(set(declared_names)) != len(declared_names)
-            or recipe_names != declared_names):
+                settings=settings or None, body=body[2:-2] if body.startswith('$$') else body[1:-1].replace("''", "'"))
+            if identity in result and not replace:
+                raise ValueError('Duplicate original runtime signature declaration')
+            result[identity] = routine
+    if not result:
         raise ValueError('Complete original runtime routine recipe required')
-    return result
+    return list(result.values())
+
+
+def _expected_runtime_acls(cursor, owner):
+    """Build base-routine ACL expectations once from the packaged profile."""
+    from ._installation_privileges import installation_grant_policy_with_cursor
+    from ._migration_recipe import load_recipe
+    from ._migration_verify import profile_for, roles
+
+    manifest, artifacts, _ = load_recipe()
+    profile = profile_for(manifest, artifacts, manifest['target'])
+    managed = installation_grant_policy_with_cursor(cursor)
+    managed_oids = {role['oid'] for role in managed['roles']}
+    if managed_oids:
+        raise ValueError('Protected source marker requires the strict managed-grants profile')
+    cursor.execute(
+        'SELECT registrar_oid FROM truss.catalog_runtime_installation WHERE singleton',
+        prepare=False)
+    rows = cursor.fetchmany(2)
+    if len(rows) != 1 or type(rows[0][0]) is not int:
+        raise ValueError('Original registrar runtime role required')
+    mapping = roles(cursor, owner, rows[0][0], managed_oids)
+    expected = {}
+    for oid, kinds in mapping.items():
+        for kind in kinds:
+            for object_kind, object_name, privilege, grantable in profile['acl'][kind]:
+                if object_kind == 'routine':
+                    expected.setdefault(object_name, set()).add((oid, privilege, grantable))
+    return expected
 
 
 def _runtime_inventory(cursor, sources, owner):
     recipe = _runtime_recipe(sources)
+    expected_acls = _expected_runtime_acls(cursor, owner)
     result = []
     for expected in recipe:
         types = [p[1] for p in expected['inputs'] + expected['outputs']]
@@ -83,13 +124,18 @@ def _runtime_inventory(cursor, sources, owner):
         oids = [row[0] for row in cursor.fetchmany(len(types) + 1)]
         if len(oids) != len(types) or any(type(oid) is not int or oid <= 0 for oid in oids):
             raise ValueError('Original routine native types required')
+        argument_oids=' '.join(str(oid) for oid in oids[:len(expected['inputs'])])
         cursor.execute("""SELECT pg_catalog.to_jsonb(p)::pg_catalog.text,l.lanname::pg_catalog.text,
             pg_catalog.pg_get_expr(p.proargdefaults,0)::pg_catalog.text
+            ,p.proname::pg_catalog.text||'('||pg_catalog.oidvectortypes(p.proargtypes)||')'
             FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
             JOIN pg_catalog.pg_language l ON l.oid=p.prolang
-            WHERE n.nspname='truss' AND p.proname=%s""", (expected['name'].split('.')[1],), prepare=False, binary=False)
+            WHERE n.nspname='truss' AND p.proname=%s
+              AND p.pronargs=%s AND p.proargtypes::pg_catalog.text=%s""",
+            (expected['name'].split('.')[1], len(expected['inputs']), argument_oids),
+            prepare=False, binary=False)
         rows = cursor.fetchmany(2)
-        if len(rows) != 1 or type(rows[0][0]) is not str:
+        if len(rows) != 1 or type(rows[0][0]) is not str or type(rows[0][3]) is not str:
             raise ValueError('Unique original runtime signature required')
         actual = json.loads(rows[0][0]); count = len(expected['inputs'])
         names = [p[0] for p in expected['inputs'] + expected['outputs']] or None
@@ -111,11 +157,18 @@ def _runtime_inventory(cursor, sources, owner):
             raise ValueError('Original runtime body and execution attributes required: ' + expected['name'])
         cursor.execute("SELECT a.grantee,a.grantor,a.privilege_type,a.is_grantable FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE p.oid=%s::pg_catalog.oid ORDER BY a.grantee,a.grantor,a.privilege_type,a.is_grantable", (actual['oid'],), prepare=False)
         acl = cursor.fetchmany(257)
-        if not acl or len(acl) > 256 or any(row[0] == 0 or row[1:] != (owner, 'EXECUTE', False) for row in acl):
+        expected_acl = expected_acls.get(rows[0][3], set())
+        ordinary_acl = set()
+        for grantee, grantor, privilege, grantable in acl:
+            if grantor not in (owner, grantee):
+                raise ValueError('Original runtime ACL grantor required')
+            ordinary_acl.add((grantee, privilege, grantable))
+        if (not acl or len(acl) > 256 or len(ordinary_acl) != len(expected_acl)
+                or ordinary_acl != expected_acl):
             raise ValueError('Original private runtime execution ACL required')
         result.append(dict(signature=expected['name'] + '(' + ','.join(p[1] for p in expected['inputs']) + ')',
             oid=str(actual['oid']), owner=str(owner), bodySha256=sha256(expected['body'].encode()).hexdigest(), acl=acl))
-    return _json({'profile': _PROFILE, 'routines': result, 'scope': 'original_runtime_code_and_private_acl_only'})
+    return _json({'profile': _PROFILE, 'routines': result, 'scope': 'original_runtime_code_and_declared_acl_only'})
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,6 +241,7 @@ def bootstrap_preparation_source_marker_in_transaction(host, transaction):
     manifest, digest, sources = _release()
     release = files('truss').joinpath('_catalog_runtime', 'manifest.json').read_bytes()
     def install(cursor, observed):
+        require_empty_managed_grants_with_cursor(cursor,'Preparation source marker')
         path, identity, owner, actor = _context(cursor)
         cursor.execute('SELECT (SELECT count(*) FROM truss.installation_marker),(SELECT count(*) FROM truss.installation_archive),(SELECT count(*) FROM truss.source_epoch_current),(SELECT count(*) FROM truss.source_epoch_registry)', prepare=False)
         if cursor.fetchmany(2) != [(0,0,0,0)]: raise ValueError('Existing source metadata requires explicit migration')

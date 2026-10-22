@@ -1,0 +1,3070 @@
+{
+  "passed": false,
+  "complete": false,
+  "tests": 1262,
+  "workers": [
+    {
+      "worker": 0,
+      "modules": [
+        {
+          "module": "test_acceptance_json.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.43485783296637237,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_acceptance_json.log.gz",
+          "logSha256": "e3dc64914f3f443f720f480b61844a894f8fdcb74c454641e903e661d22df6e6",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_role_installation_native.py",
+          "tests": 1,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.468350625014864,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_action_role_installation_native.log.gz",
+          "logSha256": "a7753b1d82bc7da54db1ae034d897e87c8e9b56dfeea1ab640df6619458606c0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_store_native.py",
+          "tests": 1,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.271689959045034,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_action_store_native.log.gz",
+          "logSha256": "bee03a1a590548c53f8439586c535dcab029b2a53e00a64e3d7d0d5e964bd8fd",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_transport.py",
+          "tests": 23,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.2269789160345681,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_action_transport.log.gz",
+          "logSha256": "82afa17f1313b6ef9a7bf11ba1109feb6a36703b56fd01111a1734a6e904992e",
+          "skippedTests": [
+            {
+              "test": "test_sync_client_classifies_oversized_registered_request_as_limit (test_action_transport.GeneratedClientPreflightTests.test_sync_client_classifies_oversized_registered_request_as_limit)",
+              "reason": "Set TRUSS_UMF_SOURCE_ROOT and install Bun for generated-client coverage"
+            }
+          ]
+        },
+        {
+          "module": "test_adopter_workflow_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.298755166993942,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_adopter_workflow_native.log.gz",
+          "logSha256": "0a7a39a3140bfc48009b6441c890027054418e69b6d39c5ecdf13b5af50e3ac0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_archive_self_write_fence_native.py",
+          "tests": 8,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.7231597080244683,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_archive_self_write_fence_native.log.gz",
+          "logSha256": "95e78ff3ca9eb8ed1654c6930f0696f5224eee2d92e6b117f1d80802401ab7d9",
+          "skippedTests": []
+        },
+        {
+          "module": "test_audit_disclosure_native.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 25.11803054099437,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_audit_disclosure_native.log.gz",
+          "logSha256": "7d96a78d8034dcb0667656ac4f879252a5dbbfeb3c6f8ac6678a312a98b44ebe",
+          "skippedTests": []
+        },
+        {
+          "module": "test_batched_import_parity_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 41.077170000004116,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_batched_import_parity_native.log.gz",
+          "logSha256": "fad80c52ecedc6be3db2ee001c9182041a910cdd790328c170b1743f33241191",
+          "skippedTests": []
+        },
+        {
+          "module": "test_borrowed_host.py",
+          "tests": 17,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.1179699169588275,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_borrowed_host.log.gz",
+          "logSha256": "fbbb39452a74248d7b2b3f36202cc06c992cf8c72e4a5e827ec40f218ca5929c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_buffered_ingress.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.12483291700482368,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_buffered_ingress.log.gz",
+          "logSha256": "8bce30c00e4614946fee9ff135eb42d23c962976fc7576f59e32d87a640bdef3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_bulk_create_sql_native.py",
+          "tests": 10,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 52.21301158401184,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_bulk_create_sql_native.log.gz",
+          "logSha256": "f82137d391a6c8f52f14dbe623187c8596a5562532c46dc7e077519791361b22",
+          "skippedTests": []
+        },
+        {
+          "module": "test_bulk_update_transition_guard_native.py",
+          "tests": 8,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 38.553349957976025,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_bulk_update_transition_guard_native.log.gz",
+          "logSha256": "676615d4bb07109b39d5d8ad77709dac052589977b5d3c22327b31dc78861469",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_additions_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 19.593349666974973,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_additions_native.log.gz",
+          "logSha256": "39d0eb195a199c27c621a581291795653acfba22a54ea91731e706d052d6f5f4",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_codes_native.py",
+          "tests": 2,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 11.202151792007498,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_codes_native.log.gz",
+          "logSha256": "40c38d9c7e7e9f26bdd751ca559b4eba0635a7d97e632aaf38b54b0349d6a346",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_continuation_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 60.0675777499564,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_continuation_native.log.gz",
+          "logSha256": "83d559ee83ef51b0ff5867485930a4d7d75822e2a990a6dd723d5bfba2c17c34",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_declarative.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.0409860409563407,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_declarative.log.gz",
+          "logSha256": "543da3ce0f8b3b76d08f916a3256f73522bd89e19d90a444480edb80f7a06ca6",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_definition_source.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.295496959006414,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_definition_source.log.gz",
+          "logSha256": "19969c3cb596840f2d62fb1645c532fd640ccebe4fed43a233cf76758e816ac5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_document_bounds_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 19.523637917009182,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_document_bounds_native.log.gz",
+          "logSha256": "34ce60d9b9fbd4ddeebb5adb04a06d24a4ab20a495f011d172542883dca98941",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_evolution_native.py",
+          "tests": 3,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 21.83059583301656,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_evolution_native.log.gz",
+          "logSha256": "356a526559eed0cb91aa33832345ab586019be2b5b1de724ecd9a949b0a17723",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_key_backfill_native.py",
+          "tests": 12,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 158.1807796669891,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_key_backfill_native.log.gz",
+          "logSha256": "26ca5a020d29428bc8a7cc3b2316131e76baf41cd2af534bde65e32358538cd2",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_preparation_public.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 3.681415583996568,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_preparation_public.log.gz",
+          "logSha256": "c043545583f77637ee02f11f8d1b73724b4c71ee06119a2be3b70c5f76dab5a4",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_relational_support.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.006306166993454,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_relational_support.log.gz",
+          "logSha256": "74a4dba8b006ca18c7c39ba959db985c33b11e844bf1099ae554a8ba426fe100",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_runtime_native.py",
+          "tests": 34,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 101.92770970799029,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_runtime_native.log.gz",
+          "logSha256": "735ebc3d2d6238e73c9458be0585927419ee195a22c9d3707e2b46ca34044cb9",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_unchanged_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 15.742973166983575,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_unchanged_native.log.gz",
+          "logSha256": "5b9f63b23863649654d2751fa8e36a957cdc30f6521c86f6917bfbb24b82d851",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_view_contracts.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.21429958299268037,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_catalog_view_contracts.log.gz",
+          "logSha256": "72e993605c30c26b51e14280d928fc3aa260da0391c511abe17141ba8095f575",
+          "skippedTests": []
+        },
+        {
+          "module": "test_commerce_source_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.032539582985919,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_commerce_source_native.log.gz",
+          "logSha256": "9342359c69b58a7a7cb5647e7406cf1e68571edb982a0e4b2ec72b574529a190",
+          "skippedTests": []
+        },
+        {
+          "module": "test_condition_precedence_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 22.14470279199304,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_condition_precedence_native.log.gz",
+          "logSha256": "52fab99830e333615046aebcadf9cbb3361906deabd7624cc36cb154b40d720c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_consumer_northwind_numeric_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 24.971557417011354,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_consumer_northwind_numeric_native.log.gz",
+          "logSha256": "c2f1a82e67d0b85d79548aacb0d6f33b8508b9c7a9784c15366c39718ce8e678",
+          "skippedTests": []
+        },
+        {
+          "module": "test_core10_catalog_native.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 22.010143457970116,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_core10_catalog_native.log.gz",
+          "logSha256": "6862019a27e5341cbe1dc853e26088d45839be7eef50c039c509d7b60f3796e0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_create_leaf_closure_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.164737584011164,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_create_leaf_closure_native.log.gz",
+          "logSha256": "bef0d7f772e8153cd2e9ea37d7f94c4cd81eb7809ae3a4e79926c8195c6ef9e8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_api.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.4311657499638386,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_api.log.gz",
+          "logSha256": "62425a8cbc2f7b313e04c04752e2451ee72ade58ef7206d22b96d1c0cee5952e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_codecs_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.2886805000016466,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_codecs_native.log.gz",
+          "logSha256": "ef86541ce1d508320df8b633338a06d310279a284467fa4bd0c0a2136ac7f081",
+          "skippedTests": [
+            {
+              "test": "test_public_exact_scalar_capture_and_original_disclosure (test_current_disclosure_codecs_native.NativeScalarCodecTests.test_public_exact_scalar_capture_and_original_disclosure)",
+              "reason": "requires explicit isolated graph/codec native campaign"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_compiler_integration.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.7213568339939229,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_compiler_integration.log.gz",
+          "logSha256": "4c8ad71c1028799599d1d00fca24b03b0babc6cbc9f505ef650af1360a838949",
+          "skippedTests": [
+            {
+              "test": "test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker)",
+              "reason": "requires explicitly selected reviewed local presence wheel"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_context_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.3401759590487927,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_context_native.log.gz",
+          "logSha256": "58927f7976d0804ad17a72833d50251edb9208ec4823b2e06bb6f8ea01a483b8",
+          "skippedTests": [
+            {
+              "test": "test_registered_full_population_same_context_and_original_inspector (test_current_disclosure_context_native.ContextDisclosureNativeTests.test_registered_full_population_same_context_and_original_inspector)",
+              "reason": "explicit serialized context capture qualification required"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_graphs.py",
+          "tests": 10,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5497256250237115,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_graphs.log.gz",
+          "logSha256": "be0050dcbf70c212723d81a0eb5f18d005be7bbf44166f3e5a7f860c0be660f0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_originals.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.7512557919835672,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_originals.log.gz",
+          "logSha256": "b597a4683d4d3acc668a6dfb9d28a721a46b65d566eb0ca9db8c4e3b6bc67334",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_runtime_native.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5604031659895554,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_runtime_native.log.gz",
+          "logSha256": "684f901e73bc5c724b41cee13c4b83344d3f22957cea30f86925443c07bb0e5c",
+          "skippedTests": [
+            {
+              "test": "test_native_all_denied_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_all_denied_disclosure)",
+              "reason": "requires serialized explicit native qualification window"
+            },
+            {
+              "test": "test_native_changed_source_before_closing_guard_refuses_public_data (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_changed_source_before_closing_guard_refuses_public_data)",
+              "reason": "requires serialized explicit native qualification window"
+            },
+            {
+              "test": "test_native_empty_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_empty_disclosure)",
+              "reason": "requires serialized explicit native qualification window"
+            },
+            {
+              "test": "test_native_masked_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_masked_disclosure)",
+              "reason": "requires serialized explicit native qualification window"
+            },
+            {
+              "test": "test_native_post_transport_whole_batch_refusal_never_releases (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_post_transport_whole_batch_refusal_never_releases)",
+              "reason": "requires serialized explicit native qualification window"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_session.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.2343050420167856,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_disclosure_session.log.gz",
+          "logSha256": "eb7a9c6db8e8fb5a4fce470b2656c2bf3680eeba85a0c84f1db2baca3c921008",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_graph_admission_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.196284250007011,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_graph_admission_native.log.gz",
+          "logSha256": "4be6510347d3cb45e272525a9cd748e3d954053dfddfdefe761d0cc4dcac6275",
+          "skippedTests": [
+            {
+              "test": "test_matching_legacy_graph_activation_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_legacy_graph_activation_refuses_before_collection)",
+              "reason": "explicit serialized Graph refusal qualification required"
+            },
+            {
+              "test": "test_matching_partial_helper_registration_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_partial_helper_registration_refuses_before_collection)",
+              "reason": "explicit serialized Graph refusal qualification required"
+            },
+            {
+              "test": "test_settled_caller_refuses_without_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_settled_caller_refuses_without_collection)",
+              "reason": "explicit serialized Graph refusal qualification required"
+            }
+          ]
+        },
+        {
+          "module": "test_current_query_facts_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.840980167035013,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_query_facts_native.log.gz",
+          "logSha256": "ed234d32bbdd4a21552462610c2412fafda330aff5e145d6b6a11c4d9d7e8523",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_query_pipe.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.31801558402366936,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_query_pipe.log.gz",
+          "logSha256": "0dd6f77194c3f933557fc0a568c7cc1cf1bdae13f2b397df40607b81e6dfb932",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_query_sources_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 7.37187495798571,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_query_sources_native.log.gz",
+          "logSha256": "23126ab721900c5f1aa35c965907e1218c289cc0e0ffbfbff86ff7dc720ba929",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_query_subjects_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.762697250000201,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_current_query_subjects_native.log.gz",
+          "logSha256": "205662012ac20fa84fe82eddd8a678e48d86a26e609d46e6e02ab9a2815f15c2",
+          "skippedTests": []
+        },
+        {
+          "module": "test_date_decimal_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 31.155594584008213,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_date_decimal_native.log.gz",
+          "logSha256": "98432fbbfb7811b85b40437d099820ccaa61c82606fdb847550c5bd4d652024a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_decimal_scale2_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.668540375016164,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_decimal_scale2_native.log.gz",
+          "logSha256": "9bb74faedccb7971472f44c8f4fc23bed4795ea278a11a17067845400a6be455",
+          "skippedTests": []
+        },
+        {
+          "module": "test_domain_pack_catalog_native.py",
+          "tests": 21,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 37.30041533400072,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_domain_pack_catalog_native.log.gz",
+          "logSha256": "26f3882fbab370d1c6f8d6121072d513386fb0d3f6200755320489fd05d45a32",
+          "skippedTests": []
+        },
+        {
+          "module": "test_edge_event_frame_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 3.812524124979973,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_edge_event_frame_native.log.gz",
+          "logSha256": "27218a4b6536295e06d63693e0eb10b7862e5434e3c3ad8a56b3c70d7472497c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_edge_writer_hotfix_native.py",
+          "tests": 1,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.170977625006344,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_edge_writer_hotfix_native.log.gz",
+          "logSha256": "dbddf4f1df70b8c6047867965c88d209a8fb24341421b1042840890cbcc92a4f",
+          "skippedTests": []
+        },
+        {
+          "module": "test_embedder_schemas_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 14.180222333001439,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_embedder_schemas_native.log.gz",
+          "logSha256": "485476c772b309ca878a84a6f4e8ae5bce61d7a45be38802cc1ec86a1824d946",
+          "skippedTests": []
+        },
+        {
+          "module": "test_endpoint_capacity_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 17.491418541991152,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_endpoint_capacity_native.log.gz",
+          "logSha256": "1f24d1b505e369e60c719ae56625d8b0a0e7ed473d4bcf85233b54e8f9edd5f2",
+          "skippedTests": []
+        },
+        {
+          "module": "test_engine_action_session_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 9.304088332981337,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_engine_action_session_native.log.gz",
+          "logSha256": "647c55222db23cb9d632c61518054616cd18d54cf5bc62041220d305317c4e81",
+          "skippedTests": []
+        },
+        {
+          "module": "test_engine_preparation.py",
+          "tests": 11,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.0555957080214284,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_engine_preparation.log.gz",
+          "logSha256": "a4f07c50ecf3702263f41a2cfb453975493731211632d3724af07ff11e85ec24",
+          "skippedTests": []
+        },
+        {
+          "module": "test_epoch_state_fence_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": false,
+          "elapsedSeconds": 4.143889459024649,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/0/test_epoch_state_fence_native.log.gz",
+          "logSha256": "bb979b7a55f08e5f910737ff9489e7a68cf4db99bc117193c8ba1b39e3c02dba",
+          "skippedTests": []
+        }
+      ],
+      "stopped": true,
+      "startupSeconds": 7.675710750045255,
+      "fixtures": [
+        {
+          "database": "truss_test_20ae11dd2b924425a6f07898fb18fd7b",
+          "ownerRole": "truss_owner_8e07bcb122da43b092e6a65acded6b37",
+          "removedRoles": [
+            "truss_owner_8e07bcb122da43b092e6a65acded6b37"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_b004dfdf7237420babb32e413430aef0",
+          "ownerRole": "truss_owner_6168c2d12d22466cbea8cdd87c1b6140",
+          "removedRoles": [
+            "truss_owner_6168c2d12d22466cbea8cdd87c1b6140"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_e9a68fee94f64b8c8adad9c0337b72d0",
+          "ownerRole": "truss_owner_501ca8d17b0b4983b112dea822bacccc",
+          "removedRoles": [
+            "truss_owner_501ca8d17b0b4983b112dea822bacccc"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_6abb47878ce546e19af8e21ff8ad9683",
+          "ownerRole": "truss_owner_c63048428b2f4b5b89201473bb268d0d",
+          "removedRoles": [
+            "truss_owner_c63048428b2f4b5b89201473bb268d0d"
+          ],
+          "baselineRestored": true
+        }
+      ],
+      "shutdownSeconds": 1.5726381670101546
+    },
+    {
+      "worker": 1,
+      "modules": [
+        {
+          "module": "test_action_identity_codec.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.20258641697000712,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_action_identity_codec.log.gz",
+          "logSha256": "f9eed26f8338b52dc9e27f5ca01b6adf58d622e30be3441153768a4b8ca33eb0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_store_context.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.26872324995929375,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_action_store_context.log.gz",
+          "logSha256": "bf24b7deb021d832576b950cb3c2a20dbfaaf8e7ce14049a90618dcbcb12e564",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_subject_installation_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.542364833003376,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_action_subject_installation_native.log.gz",
+          "logSha256": "507bbd0347a4f449e91429ee5079d703e11f901f978f6d37a97c1fcbaeb763e1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_action_transport_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.280429042002652,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_action_transport_native.log.gz",
+          "logSha256": "10ae825cca1cc6dffe6dbc6e7ae1d421740b6a150172bb3cb149725d0b40e15d",
+          "skippedTests": [
+            {
+              "test": "test_generated_sync_actions_use_owned_native_group_and_exact_receipts (test_action_transport_native.NativeGeneratedActionTransportTests.test_generated_sync_actions_use_owned_native_group_and_exact_receipts)",
+              "reason": "Set TRUSS_UMF_SOURCE_ROOT and install Bun for generated UMF native integration"
+            }
+          ]
+        },
+        {
+          "module": "test_adoption_cancellation.py",
+          "tests": 22,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.775668125017546,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_adoption_cancellation.log.gz",
+          "logSha256": "7e37d98af855d231e1721a9ab33f629b6af599824863f1ab46e5f0a16cf85e40",
+          "skippedTests": []
+        },
+        {
+          "module": "test_atomic_group_surface_native.py",
+          "tests": 20,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 44.39035037497524,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_atomic_group_surface_native.log.gz",
+          "logSha256": "4f8010812df2c1f0deba98cf657d74b3d24b1e35fbb4cd6a3cf979a554a0025d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_batched_import_native.py",
+          "tests": 14,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 39.446669541997835,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_batched_import_native.log.gz",
+          "logSha256": "2ae9b5c8973c03eecb49cafc24b57d5faef8ea57c14dd690712c46bcc35c9fa1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_binary_query_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.917591791017912,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_binary_query_native.log.gz",
+          "logSha256": "16ce2c3a69fefbafc9ea5f029c2bd4fad1cdb72c3876fff0db4ed40d3373f4a5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_bounded_receive.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.4054829999804497,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_bounded_receive.log.gz",
+          "logSha256": "bf091d4d86c9cf643eefa2ea831c9075d575ea9ae3f778fe3330afe9761f5509",
+          "skippedTests": []
+        },
+        {
+          "module": "test_bulk_action_gateway.py",
+          "tests": 7,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.26128945796517655,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_bulk_action_gateway.log.gz",
+          "logSha256": "f11ff4bc5a270855c53eefc4e4e9794f85dd14fbd03c4814e2142757137c29b7",
+          "skippedTests": []
+        },
+        {
+          "module": "test_bulk_set_values.py",
+          "tests": 4,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.8041982920258306,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_bulk_set_values.log.gz",
+          "logSha256": "a7b275a3b5a4456bed65a7fabaab44be4d1de05a7b78f896841367ca012cf5ec",
+          "skippedTests": []
+        },
+        {
+          "module": "test_canonical_wire_tree.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.679334208020009,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_canonical_wire_tree.log.gz",
+          "logSha256": "e1d995c067e15e16f52dc0bcab5fa100be6a7f0ec49219251e354d6b94fb6b5c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_admission_outcomes.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.436143417027779,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_admission_outcomes.log.gz",
+          "logSha256": "f9a659088aeeacbb60dc34012468cf55232483a4cdfc2252aefc7451608a1e9e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_compatible_acceptance_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.776311583991628,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_compatible_acceptance_native.log.gz",
+          "logSha256": "067770c2b022733221165391f2b56a6b3c117cf0ccde5d9a455b9b933c36c782",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_continuation_types.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.21207191701978445,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_continuation_types.log.gz",
+          "logSha256": "88469875ed5bad4c7b28641415f0761fd765ac03ecd107131d00d3f4f5823aa1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_declarative_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 7.371365957951639,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_declarative_native.log.gz",
+          "logSha256": "70d9be46226b2afb3de7d04eb9a4e5dee53493824fbc41c6c4e56d518770e135",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_diagnostics_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.620115333003923,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_diagnostics_native.log.gz",
+          "logSha256": "d2bb6c277d52c958adb348b0841eb159ccb36a24428092ae03a6851e4d460c1d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_enforcement_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 10.152517625014298,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_enforcement_native.log.gz",
+          "logSha256": "11751c786b6136cfd1bdf55b2c3eba37b861ee30da4f624b6fb1664623a918a9",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_installation.py",
+          "tests": 16,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 16.948743499990087,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_installation.log.gz",
+          "logSha256": "016e1756c9f9e5235bad0d95e4a7abdb5a8a456ab161b2a7df84344f6e00c71a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_keyed_rebind_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 10.291050042025745,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_keyed_rebind_native.log.gz",
+          "logSha256": "ae7caee534dcc8ae55dcbe062e5b323f4d534775da297b0d612ae9392b1ae243",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_rebind_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 19.971817250014283,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_rebind_native.log.gz",
+          "logSha256": "adcb73642b45d595838d2264ca236c287ed9aea2743c273b2275882f66614370",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_report_semantics.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.3305691669811495,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_report_semantics.log.gz",
+          "logSha256": "248ee3565f9274306c9adf842b4babd1089c4b0cc7beb4360eb8d23f8870e59d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_support.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.1926326249958947,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_support.log.gz",
+          "logSha256": "d51fd3a4f334bdec37b9f1266f94ebca141976b5b1bb49048f30089c81100103",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_view_capacity_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 35.25161129201297,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_view_capacity_native.log.gz",
+          "logSha256": "c63403ea44abe85af41c5c68a8008975eb3488ecd76b46de9960a3109c71aa30",
+          "skippedTests": []
+        },
+        {
+          "module": "test_catalog_view_revisions.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5527366250171326,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_catalog_view_revisions.log.gz",
+          "logSha256": "e8508f9735dbd9fad830f2928e049dad96d7a3af3b87b15fc121bb5d17b1a0b9",
+          "skippedTests": []
+        },
+        {
+          "module": "test_compiled_query_native.py",
+          "tests": 14,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 86.73613904195372,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_compiled_query_native.log.gz",
+          "logSha256": "7e289f5247475ae0bb0cec756e2a6a4e7b7e4e91e4e1661a954427ea3666d36f",
+          "skippedTests": []
+        },
+        {
+          "module": "test_construction_recovery.py",
+          "tests": 20,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.731367875006981,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_construction_recovery.log.gz",
+          "logSha256": "350f871e013d5560b8afab602197bf34224e49beb36a57a7852170bbba19ec30",
+          "skippedTests": []
+        },
+        {
+          "module": "test_container_required_evolution_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.676806750008836,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_container_required_evolution_native.log.gz",
+          "logSha256": "0c7dc54ece4d9ee29c731618050e59d122fc90fa3a7a62c991ee2f438cad6e96",
+          "skippedTests": []
+        },
+        {
+          "module": "test_core10_group_create_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 39.7834181250073,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_core10_group_create_native.log.gz",
+          "logSha256": "394fa719b2b84b38c03c1f6ca68ac4ec897ff339ae32610c8ed165724a9fd525",
+          "skippedTests": []
+        },
+        {
+          "module": "test_create_metadata_cache_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 71.46723508299328,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_create_metadata_cache_native.log.gz",
+          "logSha256": "4dd1dddc2ba46fc5854839e227e3e11ef30887961c6a5651d88630977548b6a1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_capture_closing.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.8825335410074331,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_capture_closing.log.gz",
+          "logSha256": "dc4eb2f919a02c402cd8c874f80b449a2f08b923e7d5c138637c6841044d533c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_cohort.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.520655374974012,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_cohort.log.gz",
+          "logSha256": "f0fd638d4afb5054f8cfa5dabbde56d80ab538d7d1fcaeacddccae2f1319118b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_context_capture.py",
+          "tests": 8,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.7601123329950497,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_context_capture.log.gz",
+          "logSha256": "b5fac09e01d96d6c700174fc741c6e0a662805914ddf8db18cc4f958231c2bf9",
+          "skippedTests": [
+            {
+              "test": "test_sql_substitution_refuses_without_repreparing_parent_or_child (test_current_disclosure_context_capture.ActualContextTests.test_sql_substitution_refuses_without_repreparing_parent_or_child)",
+              "reason": "explicit actual Graph wheel required"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_graph_transport.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.6371372090070508,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_graph_transport.log.gz",
+          "logSha256": "12a5c43361b30a37ccd936839e4a1966d41d1cf81594d22b735c01d70f153d13",
+          "skippedTests": [
+            {
+              "test": "test_original_graph_ontology_decisions_use_all_captured_populations (test_current_disclosure_graph_transport.GraphTransportTests.test_original_graph_ontology_decisions_use_all_captured_populations)",
+              "reason": "requires explicit packaged semantic child component qualification"
+            },
+            {
+              "test": "test_parallel_alice_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_alice_preserves_required_behavior)",
+              "reason": "requires explicit packaged semantic child component qualification"
+            },
+            {
+              "test": "test_parallel_bob_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_bob_preserves_required_behavior)",
+              "reason": "requires explicit packaged semantic child component qualification"
+            },
+            {
+              "test": "test_parallel_outsider_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_outsider_preserves_required_behavior)",
+              "reason": "requires explicit packaged semantic child component qualification"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_graphs_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.6571385000133887,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_graphs_native.log.gz",
+          "logSha256": "41663c7fa89d0f4458ed3cf75d4d461144c61f08871480a3b73ffd212e25bec0",
+          "skippedTests": [
+            {
+              "test": "test_actual_public_graph_capture_and_original_held_semantics (test_current_disclosure_graphs_native.NativeGraphCaptureTests.test_actual_public_graph_capture_and_original_held_semantics)",
+              "reason": "requires explicit isolated graph native campaign and exact UMF child bundle"
+            },
+            {
+              "test": "test_actual_public_parallel_graph_and_original_held_semantics (test_current_disclosure_graphs_native.NativeGraphCaptureTests.test_actual_public_parallel_graph_and_original_held_semantics)",
+              "reason": "requires explicit isolated graph native campaign and exact UMF child bundle"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_population.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.177601457980927,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_population.log.gz",
+          "logSha256": "e2459f05ed92513e0cf6fb557f4d9821b9692b5a082e8b52b208f0ed54327fab",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_disclosure_scram_native.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.8948249999666587,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_scram_native.log.gz",
+          "logSha256": "3495f5d14bcce784383faa4b1885da39d10b540e2c1d4a1b0617f0172aeed596",
+          "skippedTests": [
+            {
+              "test": "test_native_all_denied_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_all_denied_disclosure)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            },
+            {
+              "test": "test_native_changed_source_before_closing_guard_refuses_public_data (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_changed_source_before_closing_guard_refuses_public_data)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            },
+            {
+              "test": "test_native_empty_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_empty_disclosure)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            },
+            {
+              "test": "test_native_masked_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_masked_disclosure)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            },
+            {
+              "test": "test_native_post_transport_whole_batch_refusal_never_releases (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_post_transport_whole_batch_refusal_never_releases)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            },
+            {
+              "test": "test_scram_credential_control (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_scram_credential_control)",
+              "reason": "requires serialized explicit isolated SCRAM native campaign"
+            }
+          ]
+        },
+        {
+          "module": "test_current_disclosure_wire.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.9771091250004247,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_disclosure_wire.log.gz",
+          "logSha256": "879c31e5a7d7d0c206362ffa5e1349ed5d44950f0fe3b116604365ed3bfcc5e7",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_graph_authority_native.py",
+          "tests": 21,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 86.43233595904894,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_graph_authority_native.log.gz",
+          "logSha256": "bb307d3e3c45d2a8671d18d9380bf15fcea810e54f40a0df2942d787ce760a15",
+          "skippedTests": [
+            {
+              "test": "test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object)",
+              "reason": "explicit serialized quiescent-admin Graph qualification required"
+            },
+            {
+              "test": "test_scram_bob_has_only_own_project_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_bob_has_only_own_project_resource)",
+              "reason": "explicit serialized quiescent-admin Graph qualification required"
+            },
+            {
+              "test": "test_scram_outsider_has_no_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_outsider_has_no_resource)",
+              "reason": "explicit serialized quiescent-admin Graph qualification required"
+            }
+          ]
+        },
+        {
+          "module": "test_current_query_full_sources_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.806331958970986,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_query_full_sources_native.log.gz",
+          "logSha256": "042cc10bb4f3fd3fd196269e9152bb735a794aec535720d1ee040f7c62ffb601",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_query_runtime_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 58.87373229203513,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_query_runtime_native.log.gz",
+          "logSha256": "cbbcfd7bdb0cb47157b0458abdbbc8452a768e5258eedf178ad52b4c19e71c48",
+          "skippedTests": []
+        },
+        {
+          "module": "test_current_query_subject_cut_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.702593917027116,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_current_query_subject_cut_native.log.gz",
+          "logSha256": "c2766e27ba300fb1d5efb6c84fb30589b476b04c2453b34b74969736d509d428",
+          "skippedTests": []
+        },
+        {
+          "module": "test_database_key_derivation_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 26.31778179097455,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_database_key_derivation_native.log.gz",
+          "logSha256": "63b4fc0db7b7aff718308a4b8bd32140533632b6c3f48d3e737de049d28f1737",
+          "skippedTests": []
+        },
+        {
+          "module": "test_ddd_owner_preparation.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.747383541020099,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_ddd_owner_preparation.log.gz",
+          "logSha256": "e4ff66c9f8a4fb4bbc361cc8bcb12fae5cf49624314a422351f3f73ee7e1caae",
+          "skippedTests": []
+        },
+        {
+          "module": "test_directory_resources.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.6775447920081206,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_directory_resources.log.gz",
+          "logSha256": "e7239aacddfa79871b3492a737adefae43f284d949c4ac5900e7fb3f88a70d34",
+          "skippedTests": []
+        },
+        {
+          "module": "test_edge_authority_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 15.448767832946032,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_edge_authority_native.log.gz",
+          "logSha256": "82831bd13ef33055bbb37a53a588f5b9f65fa7b8210e831a54ead5fcaeb6feaf",
+          "skippedTests": []
+        },
+        {
+          "module": "test_edge_mutations_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 14.458111957996152,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_edge_mutations_native.log.gz",
+          "logSha256": "d0a34798a0a7c3dc648e646a2eb76a7190dacd5f23c4f3c4b9a827c2ec84bdbb",
+          "skippedTests": []
+        },
+        {
+          "module": "test_embedded_owner.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.219603333971463,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_embedded_owner.log.gz",
+          "logSha256": "85ec676b505ebb7f0a18c132490ae5bdbae2d451aca70bb43fbb69afb74ca228",
+          "skippedTests": []
+        },
+        {
+          "module": "test_embedder_workflows_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 14.985212125000544,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_embedder_workflows_native.log.gz",
+          "logSha256": "14500e0b8bcf4963099dda049b07faf0994155366b82015d912efdbd2a5d9ae0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_engine_action_session.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.46634316601557657,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_engine_action_session.log.gz",
+          "logSha256": "bb340a4ef8d3d0836790db107b8451a1211c114be361bb92b829009fe96c61d2",
+          "skippedTests": []
+        },
+        {
+          "module": "test_engine_import_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 26.16433770803269,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_engine_import_native.log.gz",
+          "logSha256": "831f25f4f21d1f050e3fe83fe6d1169b2a54c1535431f1bb01cc81bbd427fabc",
+          "skippedTests": []
+        },
+        {
+          "module": "test_engine_preparation_scram_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.998857708007563,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_engine_preparation_scram_native.log.gz",
+          "logSha256": "1e4ca0483e2d08ba6c689ded1f39af4ca31012ad3d163fdd5f9ec269e5ec7187",
+          "skippedTests": []
+        },
+        {
+          "module": "test_exact_numeric.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.1800195419928059,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_exact_numeric.log.gz",
+          "logSha256": "f840813115daa92ccd9edb375483f5c42efb0bef164cd26d9813bb26f03114c6",
+          "skippedTests": []
+        },
+        {
+          "module": "test_exact_timestamp.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.15402362501481548,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_exact_timestamp.log.gz",
+          "logSha256": "3cf0781fb1f12c6dbe4371102f1ad412a04cbf44f78adefa3e248840433534e8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_fact_cut_descriptor_boundary.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.29035670799203217,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_fact_cut_descriptor_boundary.log.gz",
+          "logSha256": "ac9b5f0d89efa46f1dbc18abf9291709c470dc76de0a72ec21a7f3baff66580b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_feed_runtime_native.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.94405375001952,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_feed_runtime_native.log.gz",
+          "logSha256": "9cab3f9d96687401da9a966636b351a87b31f39946f3d5dec1124c78f5d3b9cf",
+          "skippedTests": []
+        },
+        {
+          "module": "test_field_name_evolution_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.782366209023166,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_field_name_evolution_native.log.gz",
+          "logSha256": "3bfb1592a4b5d09f87ecd9104de7a08ccd2428d58c29666b8c1360cce53f399f",
+          "skippedTests": []
+        },
+        {
+          "module": "test_graph_commit_practical_native.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 23.437436333973892,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_graph_commit_practical_native.log.gz",
+          "logSha256": "e78a5a372a5aae256c828fd36407acd676ede1fb6264e4c3f1ee0f2aa1e82706",
+          "skippedTests": []
+        },
+        {
+          "module": "test_group_create_native.py",
+          "tests": 18,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 45.35941858298611,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_group_create_native.log.gz",
+          "logSha256": "64d8cd4392ba027ce887a51162750a6dc6bcd7b2b05f9073e72a9d0adca03e6d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_group_preview_native.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 28.197309665963985,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_group_preview_native.log.gz",
+          "logSha256": "8e84902bdc6d82b2023b235f8a8067bf12cc388f8f30b4ed3575b6e826e0b585",
+          "skippedTests": []
+        },
+        {
+          "module": "test_group_request_recovery_native.py",
+          "tests": 16,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 35.422320874989964,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_group_request_recovery_native.log.gz",
+          "logSha256": "60d2da984bf361b105e89ae526bde68172a31fbf8738cd45c56e036906cdaa57",
+          "skippedTests": []
+        },
+        {
+          "module": "test_group_result_wire_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.978031708044,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_group_result_wire_native.log.gz",
+          "logSha256": "d5502c9a3b449c4ba72aa4bc3a69303968b4a3f8eef3e3d76e45e13551f5c998",
+          "skippedTests": []
+        },
+        {
+          "module": "test_group_source_admission_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 16.710403417004272,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_group_source_admission_native.log.gz",
+          "logSha256": "d1c2208343dc1ed84b90ad8c3238b9b2620e18174a140dae24cfba5f2a6ed85d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_history_projection_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 18.96364570799051,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_history_projection_native.log.gz",
+          "logSha256": "7d0a746a84b4e6a0d57179a6243420d7739254d51ed1377e8d8ae267f72abca3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_hohfeld_disputes_native.py",
+          "tests": 12,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 61.584214958013035,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_hohfeld_disputes_native.log.gz",
+          "logSha256": "8e96ed290150bddbc1ef09b91aba9afb7174df73e8f28c63120ff71eecc08587",
+          "skippedTests": []
+        },
+        {
+          "module": "test_host_call_recovery.py",
+          "tests": 17,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.7082065410213545,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_host_call_recovery.log.gz",
+          "logSha256": "6d0c807111d2166d8354ae0a535167ceb6b5b1f630bbe5177c00c489f80b87a3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_host_control_deadline.py",
+          "tests": 11,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.01828341599321,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_host_control_deadline.log.gz",
+          "logSha256": "b92f11a0f0f4f43eb11e5e0e28c6a34aa0d8356f396e6427dfa3cd5e03734abe",
+          "skippedTests": []
+        },
+        {
+          "module": "test_host_session.py",
+          "tests": 29,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.240277417004108,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_host_session.log.gz",
+          "logSha256": "2661d6227f3b86a46678fb1da57a32b3311a9d31391ea12731f48c68dc52eeef",
+          "skippedTests": []
+        },
+        {
+          "module": "test_import_chunk_closure_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 27.657520874985494,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_import_chunk_closure_native.log.gz",
+          "logSha256": "7bae257ff6cc0e068064bee6cd741e495979efca1401e9b0c3e0398eea369b1b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_import_load_query_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 22.63271099998383,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_import_load_query_native.log.gz",
+          "logSha256": "facfcf38423b1cb5216e62e204b65a300d3410b8b61bf15c72c89bd8e635dc88",
+          "skippedTests": []
+        },
+        {
+          "module": "test_import_runtime_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 30.537035041023046,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_import_runtime_native.log.gz",
+          "logSha256": "09e1fb0ca807b6e4c3d076a7d70c9002053d633d66e2d9aed04c4ee48470a088",
+          "skippedTests": []
+        },
+        {
+          "module": "test_installation_archive.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5222484999685548,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_installation_archive.log.gz",
+          "logSha256": "4d9998f80c57dd7c93086177b9cfc000e873476c9d7b719ec33b667272fb6344",
+          "skippedTests": []
+        },
+        {
+          "module": "test_installation_observation.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.5874050420243293,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_installation_observation.log.gz",
+          "logSha256": "ef379d25e4e9273d7cf0ed117c974bd723257833e3fe22627d6d076dc54e9137",
+          "skippedTests": []
+        },
+        {
+          "module": "test_installation_resources.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5504643749445677,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_installation_resources.log.gz",
+          "logSha256": "465b72972f5de977e366245b5e43d6dc818740d4081bd0d91c7a2565372d859b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_installed_admission_operator_routes.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.6752574159763753,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_installed_admission_operator_routes.log.gz",
+          "logSha256": "a7bf6dd1ce2eaf7be4ccfb6f73c9346badbca8e26097aa27b57cbf601cb45df5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_journal_row_guard_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.742453332990408,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_journal_row_guard_native.log.gz",
+          "logSha256": "89c78d60561f97b7d7eac4c649ea67ff1e02b403e0d08db6ab3e39d270903d50",
+          "skippedTests": []
+        },
+        {
+          "module": "test_key_lookup_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 19.89299854199635,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_key_lookup_native.log.gz",
+          "logSha256": "57b8864037019f0d881e072eb8133aff71c9eb5cc9ef115f6d9f22e394912129",
+          "skippedTests": []
+        },
+        {
+          "module": "test_lifecycle_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 14.89325020898832,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_lifecycle_native.log.gz",
+          "logSha256": "88dd6ab2cfc7607a2395c108edf25648873b0ecf9b0528e563d0f1a079d68564",
+          "skippedTests": []
+        },
+        {
+          "module": "test_load_audit_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 15.355691000004299,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_load_audit_native.log.gz",
+          "logSha256": "a8fe3893eb7f80696b6823c980f7f5ce3531cbdd67ca88c86e21f97915fef210",
+          "skippedTests": []
+        },
+        {
+          "module": "test_local_install_cli_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 19.882690667000134,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_local_install_cli_native.log.gz",
+          "logSha256": "4e7cff88b54d155a72d56d4f9963ffcd456c8771f6b2ab83f71311f79b2e5b0a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_local_runtime_native_isolation.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 20.33220812503714,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_local_runtime_native_isolation.log.gz",
+          "logSha256": "e7fba86dc4bf5d119c3d3e79c20d2130f4f97aae45f59899c1d1aa4b1df96832",
+          "skippedTests": []
+        },
+        {
+          "module": "test_managed_function_guard_native.py",
+          "tests": 13,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 13.045915458002128,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_managed_function_guard_native.log.gz",
+          "logSha256": "0aa57dc0007ee0a385458e358b0b0383c6408967e3626eae226f993c2d60094e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_managed_installation_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 7.9961119999643415,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_managed_installation_native.log.gz",
+          "logSha256": "f31ed04c846b42bf35259d816c737e745bff9cf76c2a6aef57d4dda9309cb55d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_migration_planning.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.22294695803429931,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_migration_planning.log.gz",
+          "logSha256": "f130d741e2e6e5e23fa07f9771a576c3c1a430c4bbb4d0b28c3132ce7b03aabd",
+          "skippedTests": []
+        },
+        {
+          "module": "test_mutation_group_audit_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 11.049593708012253,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_mutation_group_audit_native.log.gz",
+          "logSha256": "1159242db89d837f4f88e4f7066a9915d79675e82a8968d84ea38a69d9352d95",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_admission_dispatch.py",
+          "tests": 97,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 12.554616457957309,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_admission_dispatch.log.gz",
+          "logSha256": "12673cd8f84debf27906b9d5ce5808d888be855669a494c7d177d180e44f2eb3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_admission_request.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.24688216700451449,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_admission_request.log.gz",
+          "logSha256": "26bca48dfcd3f336680492b067422981b8af84e94aabb7fe390603cbdec1c3d8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_adoption.py",
+          "tests": 22,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.295594000024721,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_adoption.log.gz",
+          "logSha256": "7f0587d5a55f309a2df8b4823d4420bfe695cbc6c907debc22327095caa4e6de",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_bootstrap.py",
+          "tests": 18,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.560062958044,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_bootstrap.log.gz",
+          "logSha256": "b250919a5b244108fd51beee26ce8206eb8bfd6c8b8ea4d6318012afb8e96518",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_cancellation.py",
+          "tests": 25,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 3.4162567500025034,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_cancellation.log.gz",
+          "logSha256": "3cc9ec7f77123eef47c37c8ce93a0af5df2cc2f835ab4a3587019750885f9a07",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_deadline.py",
+          "tests": 15,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.155022041988559,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_deadline.log.gz",
+          "logSha256": "c3cdd65f47cddb4049dc7ddfc3dfdb698e4f338eba3fdd0a5392c1244b15696c",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_edge_limit.py",
+          "tests": 21,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 3.1283287500264123,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_edge_limit.log.gz",
+          "logSha256": "dafa6ba69a74548589d7cfe50bc7c0e70a9273e1d32991a9c139726bcfd28203",
+          "skippedTests": [
+            {
+              "test": "test_nondeterministic_side_collation_does_not_fold_marker (test_native_edge_limit.NativeEdgeLimitTests.test_nondeterministic_side_collation_does_not_fold_marker)",
+              "reason": "Selected local PostgreSQL build lacks ICU"
+            }
+          ]
+        },
+        {
+          "module": "test_native_fresh_epoch_capture.py",
+          "tests": 13,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.346097124973312,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_fresh_epoch_capture.log.gz",
+          "logSha256": "d938dcdbd06816a19a68b12ca98d8e28a589a34ff4991108ad59ba5ea2f5da4d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_graph_correspondence_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.36103137501049787,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_graph_correspondence_native.log.gz",
+          "logSha256": "e1fb0970706d0d40e585e869bd3ff7177308a820cbb4364db7b5f5d56a094eae",
+          "skippedTests": [
+            {
+              "test": "test_issued_graph_context_maps_actual_catalog_and_edge_columns (test_native_graph_correspondence_native.NativeGraphJoinTests.test_issued_graph_context_maps_actual_catalog_and_edge_columns)",
+              "reason": "explicit serialized native Graph correspondence required"
+            }
+          ]
+        },
+        {
+          "module": "test_native_model_correspondence.py",
+          "tests": 14,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5487136250012554,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_model_correspondence.log.gz",
+          "logSha256": "3abab43f2c86b716d3723c012a3585c24ba5ab6b6f15d58916a6813bc217fc3e",
+          "skippedTests": [
+            {
+              "test": "test_actual_factory_retains_same_parent_and_originals (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_actual_factory_retains_same_parent_and_originals)",
+              "reason": "requires explicitly selected original opt-in Weft candidate"
+            },
+            {
+              "test": "test_equal_data_contexts_keep_distinct_actual_parent_identity (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_equal_data_contexts_keep_distinct_actual_parent_identity)",
+              "reason": "requires explicitly selected original opt-in Weft candidate"
+            },
+            {
+              "test": "test_report_import_wrong_receiver_cannot_supply_current (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_report_import_wrong_receiver_cannot_supply_current)",
+              "reason": "requires explicitly selected original opt-in Weft candidate"
+            }
+          ]
+        },
+        {
+          "module": "test_native_model_correspondence_qualification.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.39200549997622147,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_model_correspondence_qualification.log.gz",
+          "logSha256": "cf06ca3f831d5395453039695d274bb15b8aded87011a857502cd670420659a1",
+          "skippedTests": [
+            {
+              "test": "test_exact_original_model_native_catalog_and_ordered_keys (test_native_model_correspondence_qualification.NativeModelCorrespondenceTests.test_exact_original_model_native_catalog_and_ordered_keys)",
+              "reason": "explicit serialized native correspondence required"
+            }
+          ]
+        },
+        {
+          "module": "test_native_operation_ordinals.py",
+          "tests": 65,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.9191606669919565,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_operation_ordinals.log.gz",
+          "logSha256": "4521fc5fe7eb02f7ea96b54f8596265e3aa089df4bde8d2598a07374cd23dca1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_pg8000.py",
+          "tests": 13,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.2696512500406243,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_pg8000.log.gz",
+          "logSha256": "0fc200b9351fb7ea5320282db8fed00909ab66f013602444b0bf6504f761e4e8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_source_census.py",
+          "tests": 11,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.6301342920050956,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_source_census.log.gz",
+          "logSha256": "374e4c04d76e3f05c68739fbeffa57c02807adddff6928a595333c37a9a684f5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_source_observation.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.4746762909926474,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_source_observation.log.gz",
+          "logSha256": "6aae535bf5960620ae2dcf03e507478457c5b51362db9daa68f9e7bf973aa3c6",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_state_owner.py",
+          "tests": 4,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 10.194368416036014,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_state_owner.log.gz",
+          "logSha256": "52e30e0cd16b8eb05ab595560c4f0897361f921ed27c52b970732f31b9394bdd",
+          "skippedTests": []
+        },
+        {
+          "module": "test_native_string_dispatch.py",
+          "tests": 1,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.11592441698303446,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_native_string_dispatch.log.gz",
+          "logSha256": "e77265e9d381b8297ecb82484c09e4c6255a44ee9e995213746e11faf91669b8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_numeric_binary_native.py",
+          "tests": 17,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.7061475410009734,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_numeric_binary_native.log.gz",
+          "logSha256": "7bc66eb4ffa5d3d11c37c50226146d353d71f7f1b5738d6759fae575ca07b4e5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_numeric_row_image_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 3.1302012920496054,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_numeric_row_image_native.log.gz",
+          "logSha256": "c97bc44e6659cb114988533a3901c3e9bcfc8837d77023143bc21f97e4efa325",
+          "skippedTests": []
+        },
+        {
+          "module": "test_object_mutations_native.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 36.72272429201985,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_object_mutations_native.log.gz",
+          "logSha256": "23e54c6d84250924714c78025b17c2c8a18ccab043f791029e77e83f5a4d64ad",
+          "skippedTests": []
+        },
+        {
+          "module": "test_object_read_native.py",
+          "tests": 9,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 31.950387875025626,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_object_read_native.log.gz",
+          "logSha256": "eca54e93849482d7c38dc376803ab568f4234f7ede62f4634b260c8375d437a3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_operation_admission.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.21496616705553606,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_operation_admission.log.gz",
+          "logSha256": "d27094d6a3b0c5b9768fea5450f7b6d608c55d0f140ca9e0aa3772fc4fdfadb8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_operation_ordinal.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.30375787505181506,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_operation_ordinal.log.gz",
+          "logSha256": "07b99cfd0e3244e7ce2d2108e50aacf678c0c437cdfaa25a73c37d796334698e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_operation_result_slots_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 13.39277212502202,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_operation_result_slots_native.log.gz",
+          "logSha256": "cb0507b749357f3dfa74cb165e2d79911225d388537ce1135f711db366769fab",
+          "skippedTests": []
+        },
+        {
+          "module": "test_ordinary_subject_cut_privileges_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 8.258514416986145,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_ordinary_subject_cut_privileges_native.log.gz",
+          "logSha256": "d1b226a5be3eb93857c6cbca5aae861b350b8b44cf7e83573bd95b20662b5ef1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_owned_group_batch_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 23.548269333026838,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_owned_group_batch_native.log.gz",
+          "logSha256": "f4f7196360528991c35812e9c78fd857f1dd2e498989df3eea62a6e8e2274012",
+          "skippedTests": []
+        },
+        {
+          "module": "test_owned_objects_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 24.5127768330276,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_owned_objects_native.log.gz",
+          "logSha256": "f34dbfe209f6d4ce66f62573502ae929edb49cad5122239bce6b8c30dcd7c7be",
+          "skippedTests": []
+        },
+        {
+          "module": "test_owner_evidence_json.py",
+          "tests": 5,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.36162670800695196,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_owner_evidence_json.log.gz",
+          "logSha256": "18fea552d9e9d4464c4f6f76973d774a878b5bfd44efedb684ce25dc8867de52",
+          "skippedTests": []
+        },
+        {
+          "module": "test_person_invocation_native.py",
+          "tests": 8,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 25.377882667002268,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_person_invocation_native.log.gz",
+          "logSha256": "4e834798f2425e4661fe672cc6c0d5085a1e6d52f0b91b301d40859e7d98e4f0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_preparation.py",
+          "tests": 23,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 13.458678582974244,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_preparation.log.gz",
+          "logSha256": "a25fa055b93979cb7beb5e08b54ea0bcd954c22a0213fcbafd2a3660572cdff5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_preparation_permit_binding_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 7.655831958982162,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_preparation_permit_binding_native.log.gz",
+          "logSha256": "58b9851b844f945dd734e9f07be0fdf068219addc0a21469461ce3609c2358d0",
+          "skippedTests": []
+        },
+        {
+          "module": "test_preparation_role_settlement_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 4.3210872919880785,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_preparation_role_settlement_native.log.gz",
+          "logSha256": "5b045c1fa796f98f9edbb3512336519d3a4ea2763a0695aa0c258e81cafb6cee",
+          "skippedTests": []
+        },
+        {
+          "module": "test_preparation_source_inventory_native.py",
+          "tests": 2,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 6.939579790981952,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_preparation_source_inventory_native.log.gz",
+          "logSha256": "dfdeb9814d0b77ff06035703e36b98e8aefd660ef1bdbe1c39ee2391f0128687",
+          "skippedTests": []
+        },
+        {
+          "module": "test_psycopg_epoch_cut_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.4789727500174195,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_psycopg_epoch_cut_native.log.gz",
+          "logSha256": "170d79cb8bd8b5456e21a500cbf2e47607e426182d6a2b670854ab5c686c704e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_psycopg_graph_projection_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.2718291250057518,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_psycopg_graph_projection_native.log.gz",
+          "logSha256": "1fd8bfd9397e45d59f9195facd2559a72a6e5bebf5ecd35dd2ee2845f737c8bf",
+          "skippedTests": []
+        },
+        {
+          "module": "test_psycopg_host_native.py",
+          "tests": 30,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 1.2681546249659732,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_psycopg_host_native.log.gz",
+          "logSha256": "38b3aeb5f8e54538e6f36490fe2da2b608abf59e671db86e1f25577697418d6a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_psycopg_profile_native.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 2.2264865420293063,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_psycopg_profile_native.log.gz",
+          "logSha256": "b4c36e8e9c2446e254db05aee4a53cbf68ce92059ffc996e9595a1caa70ba13d",
+          "skippedTests": []
+        },
+        {
+          "module": "test_psycopg_source_census.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.1868680830230005,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_psycopg_source_census.log.gz",
+          "logSha256": "6e7ac3877fb69ebfe4c18816e03a6d4f6d6c3ccd7fe26a6bc4d7e34e5e49790a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_public_contracts.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.6343641660059802,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_public_contracts.log.gz",
+          "logSha256": "53ebd6771edfe45adb6d82a647305abdbcacdc87022642c177b3fde8b19ca53b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_public_inspection_assembly.py",
+          "tests": 3,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.3089436670416035,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_public_inspection_assembly.log.gz",
+          "logSha256": "38c0c61269db187f221e6c6559bfc8bbaf3b130cfba1cbb7f324174513da8bd8",
+          "skippedTests": []
+        },
+        {
+          "module": "test_query_descriptors_native.py",
+          "tests": 4,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 18.309797832975164,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_query_descriptors_native.log.gz",
+          "logSha256": "cd92ee58991fe4404aba90e844e968a13050758452b4e0b421575c668500158b",
+          "skippedTests": []
+        },
+        {
+          "module": "test_query_execution.py",
+          "tests": 18,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.1776069580228068,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_query_execution.log.gz",
+          "logSha256": "d870d9c1564013aa538c7bdd19cf5f47b683a83e65a9ff85fa0fa95b9697cf0a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_query_selective_sources_native.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 30.741602250025608,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_query_selective_sources_native.log.gz",
+          "logSha256": "3b6a9336d7409733518d68d7355d7e98883b0541e42ba4f7436978bd49f67df5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_read_only_public_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 11.542432916990947,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_read_only_public_native.log.gz",
+          "logSha256": "c0fdc50c491ea8d6657e7522590924be9c3227a80155337965c41142bbb57b40",
+          "skippedTests": []
+        },
+        {
+          "module": "test_receipt_position.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.2993933329707943,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_receipt_position.log.gz",
+          "logSha256": "009f94058269c00af858e189088244e48a3ac0bfa21d6e8107dbfe84be6a5a0a",
+          "skippedTests": []
+        },
+        {
+          "module": "test_record_label_evolution_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 13.204183875001036,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_record_label_evolution_native.log.gz",
+          "logSha256": "42beb0f139d64169e60f95700b59b55ad46ba5deed68c1828cbfadf22d5e84f5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_record_schema.py",
+          "tests": 10,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.3318716250360012,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_record_schema.log.gz",
+          "logSha256": "72011dd3ce5bbf4dd88276681064857efe13f81081fede619a2156b6a709cb26",
+          "skippedTests": []
+        },
+        {
+          "module": "test_record_schema_selection_native.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 14.226991291041486,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_record_schema_selection_native.log.gz",
+          "logSha256": "0c687143d2688092ef0bbc504f95f935062a5a9213fbc2fa68d808fec9c3a55e",
+          "skippedTests": []
+        },
+        {
+          "module": "test_reference_assembly.py",
+          "tests": 7,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.34308750001946464,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_reference_assembly.log.gz",
+          "logSha256": "ef69442dc9766ef889400f2bd22338c2a604253544511872df124f2a12807ab1",
+          "skippedTests": []
+        },
+        {
+          "module": "test_relationship_evolution_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 7.474796042020898,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_relationship_evolution_native.log.gz",
+          "logSha256": "f5f56f03f5ce3d9543409a89d908cd9f1ca24d477280e70156932925ef3d1cec",
+          "skippedTests": []
+        },
+        {
+          "module": "test_replay_frame_native.py",
+          "tests": 1,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 5.470499249990098,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_replay_frame_native.log.gz",
+          "logSha256": "f62729655359aab73fd28016035b60091cb9b2781337af0f04455561f3a05dec",
+          "skippedTests": []
+        },
+        {
+          "module": "test_required_ddd_evolution_native.py",
+          "tests": 6,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 21.189027625019662,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_required_ddd_evolution_native.log.gz",
+          "logSha256": "85443afcb3f7a4302f97e58594a7c4d84677b3b343dc32a9e4b2c7060fc2afb5",
+          "skippedTests": []
+        },
+        {
+          "module": "test_resource_registration_preflight.py",
+          "tests": 2,
+          "returncode": 0,
+          "passed": true,
+          "baselineRestored": true,
+          "elapsedSeconds": 0.5028562499792315,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_resource_registration_preflight.log.gz",
+          "logSha256": "45a88b7c453674bc3a7d3404b3ec0a51c6777f8ed6e3cba0a02d95fb4dc527d3",
+          "skippedTests": []
+        },
+        {
+          "module": "test_routine_ddl_barrier_native.py",
+          "tests": 0,
+          "returncode": 1,
+          "passed": false,
+          "baselineRestored": false,
+          "elapsedSeconds": 2.210452500032261,
+          "log": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-1/installed-suite/python-workers/1/test_routine_ddl_barrier_native.log.gz",
+          "logSha256": "d34e6fd423c0611588f671ddb49a3093252139edfc15cfe447e38f2d2a35b2ce",
+          "skippedTests": []
+        }
+      ],
+      "stopped": true,
+      "startupSeconds": 3.942313125007786,
+      "fixtures": [
+        {
+          "database": "truss_test_eba06bbed1eb4195adf0488c812ba6dc",
+          "ownerRole": "truss_owner_5504274205744cc0a74f738bd7b2ea08",
+          "removedRoles": [
+            "truss_owner_5504274205744cc0a74f738bd7b2ea08"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_9c609a0dfa8842f996f054393a8476a5",
+          "ownerRole": "truss_owner_c186fee2093d41af9d1144fc81136fe3",
+          "removedRoles": [
+            "truss_owner_c186fee2093d41af9d1144fc81136fe3"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_3ef6f5a312f14e7fb9a4ed975ff2f26b",
+          "ownerRole": "truss_owner_64c31a1da595451b8aba20192b82ba62",
+          "removedRoles": [
+            "constructor_consumer",
+            "truss_owner_64c31a1da595451b8aba20192b82ba62"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_19870e0e8d67487aa8f85ae8167ddcd3",
+          "ownerRole": "truss_owner_0c0a701f674e4d7a8c42d07943c80154",
+          "removedRoles": [
+            "truss_owner_0c0a701f674e4d7a8c42d07943c80154"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_27b30e73c5c943b58f2b9376dc2cf3b6",
+          "ownerRole": "truss_owner_2e25b68c951e4785af40c64b366d585b",
+          "removedRoles": [
+            "truss_owner_2e25b68c951e4785af40c64b366d585b"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_3124c402cea14bb68979cdc7c2b205a5",
+          "ownerRole": "truss_owner_93b084b4b9014b1b9c349c0cb078481a",
+          "removedRoles": [
+            "truss_owner_93b084b4b9014b1b9c349c0cb078481a"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_6a7ab2db94674ce3a3c6a43ff5197d78",
+          "ownerRole": "truss_owner_9b8eec3d1bc5429eb2e014d49f456d11",
+          "removedRoles": [
+            "truss_owner_9b8eec3d1bc5429eb2e014d49f456d11"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_ad9395499faa4c9aba6d0e93e455a34e",
+          "ownerRole": "truss_owner_3dd13e4a5d02411a9a08998c5dcebcd3",
+          "removedRoles": [
+            "truss_owner_3dd13e4a5d02411a9a08998c5dcebcd3"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_24402db290c6459ba2170148a995f5c8",
+          "ownerRole": "truss_owner_acefb76452724717ae0afa5e51cac941",
+          "removedRoles": [
+            "truss_owner_acefb76452724717ae0afa5e51cac941"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_85c4f2e188f44ef2b8770e625dccb2be",
+          "ownerRole": "truss_owner_f5fc108d44674afba46a3802aa342c33",
+          "removedRoles": [
+            "truss_owner_f5fc108d44674afba46a3802aa342c33"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_62dbd0db793442d9a8b5c73247f56e8a",
+          "ownerRole": "truss_owner_2baf93cc5c0949eda8ac820c9a63f513",
+          "removedRoles": [
+            "truss_owner_2baf93cc5c0949eda8ac820c9a63f513"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_ecf3ab72728b4c4fa9774825c7f37c99",
+          "ownerRole": "truss_owner_6a77a976d1254b1aa5e99019b02f7ea0",
+          "removedRoles": [
+            "truss_owner_6a77a976d1254b1aa5e99019b02f7ea0"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_1da57bc84ef7437fa0545fb5ac92e4c7",
+          "ownerRole": "truss_owner_cfe7e384412643159b9288612c1d7234",
+          "removedRoles": [
+            "truss_owner_cfe7e384412643159b9288612c1d7234"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_6a3c8b7f7a0342a69289fdc3cabdce8b",
+          "ownerRole": "truss_owner_7b51292a92624afcb7de618bdd8c60d3",
+          "removedRoles": [
+            "truss_owner_7b51292a92624afcb7de618bdd8c60d3"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_0f5f75ba75314460848b51e8e8f5a403",
+          "ownerRole": "truss_owner_f1177aaf54fe4e579e9df9e52ad4ac5c",
+          "removedRoles": [
+            "truss_owner_f1177aaf54fe4e579e9df9e52ad4ac5c"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_bdcafb85ebc04881aa7d3bc37b4367ac",
+          "ownerRole": "truss_owner_0390c7e1bb6d4ba39ec63125c2c20bf3",
+          "removedRoles": [
+            "truss_owner_0390c7e1bb6d4ba39ec63125c2c20bf3"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_55a3f930055546eca8a2a0df002a3f9a",
+          "ownerRole": "truss_owner_eb6420fc0e3d40319b279d715b7bb440",
+          "removedRoles": [
+            "truss_el_ordinary",
+            "truss_owner_eb6420fc0e3d40319b279d715b7bb440"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_ae189ea526e446feaf888f5145b8369c",
+          "ownerRole": "truss_owner_128f8232b68f43e395776052139778d6",
+          "removedRoles": [
+            "truss_owner_128f8232b68f43e395776052139778d6"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_0ddd70a4f619486295189a4ec6dc80b2",
+          "ownerRole": "truss_owner_a9244cb4e48941bb9a2be39466119a84",
+          "removedRoles": [
+            "truss_owner_a9244cb4e48941bb9a2be39466119a84"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_30608c93a2c94ad7bd6fef2dc383a2cf",
+          "ownerRole": "truss_owner_dac84b8bb1b8467db13975d9f816577d",
+          "removedRoles": [
+            "truss_owner_dac84b8bb1b8467db13975d9f816577d"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_32d9a1129efc46d2b3ec6b265f9a12c0",
+          "ownerRole": "truss_owner_7a04fa64c7664c908a0c92f6bbb22d54",
+          "removedRoles": [
+            "truss_owner_7a04fa64c7664c908a0c92f6bbb22d54"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_fd2277692d2b459ebabebee88f3cab3f",
+          "ownerRole": "truss_owner_cc44772c64914e53aaf4a313c5df42e7",
+          "removedRoles": [
+            "truss_owner_cc44772c64914e53aaf4a313c5df42e7"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_806a35de5c704cc6b22ec6ae19473af9",
+          "ownerRole": "truss_owner_fdeaf0e2cf0e4425ae4ad80b749737ba",
+          "removedRoles": [
+            "truss_owner_fdeaf0e2cf0e4425ae4ad80b749737ba"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_b91930e589cc4fe1ab1ed61c51f79213",
+          "ownerRole": "truss_owner_dd6bca5681c24114958e0ff094ad0e2d",
+          "removedRoles": [
+            "truss_owner_dd6bca5681c24114958e0ff094ad0e2d"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_7b63c1c745d3477fa5fbcea6ea7137ec",
+          "ownerRole": "truss_owner_28f4aa2ae8dd4ccc9c75eca4c1008b54",
+          "removedRoles": [
+            "truss_owner_28f4aa2ae8dd4ccc9c75eca4c1008b54"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_28b241b264d8426f96201141f6dbf89c",
+          "ownerRole": "truss_owner_2d799f5b96b447218e3b7b1be4c0fb38",
+          "removedRoles": [
+            "truss_owner_2d799f5b96b447218e3b7b1be4c0fb38"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_78874300e1df487a896e77244daab061",
+          "ownerRole": "truss_owner_7054de4ffd004e998d68a59576d23912",
+          "removedRoles": [
+            "truss_owner_7054de4ffd004e998d68a59576d23912"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_48539e2c68ce48c886171302abc903da",
+          "ownerRole": "truss_owner_6bb127c42682436c8bda8b1ba7830a58",
+          "removedRoles": [
+            "truss_owner_6bb127c42682436c8bda8b1ba7830a58"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_4391ccffec0540ceb3ec45b7c895043f",
+          "ownerRole": "truss_owner_b7f5ce58d5604a8db372d33932f3684d",
+          "removedRoles": [
+            "truss_owner_b7f5ce58d5604a8db372d33932f3684d"
+          ],
+          "baselineRestored": true
+        }
+      ],
+      "shutdownSeconds": 2.01995500002522
+    }
+  ],
+  "elapsedSeconds": 1619.076958834019,
+  "skippedTests": [
+    {
+      "test": "test_sync_client_classifies_oversized_registered_request_as_limit (test_action_transport.GeneratedClientPreflightTests.test_sync_client_classifies_oversized_registered_request_as_limit)",
+      "reason": "Set TRUSS_UMF_SOURCE_ROOT and install Bun for generated-client coverage"
+    },
+    {
+      "test": "test_public_exact_scalar_capture_and_original_disclosure (test_current_disclosure_codecs_native.NativeScalarCodecTests.test_public_exact_scalar_capture_and_original_disclosure)",
+      "reason": "requires explicit isolated graph/codec native campaign"
+    },
+    {
+      "test": "test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker)",
+      "reason": "requires explicitly selected reviewed local presence wheel"
+    },
+    {
+      "test": "test_registered_full_population_same_context_and_original_inspector (test_current_disclosure_context_native.ContextDisclosureNativeTests.test_registered_full_population_same_context_and_original_inspector)",
+      "reason": "explicit serialized context capture qualification required"
+    },
+    {
+      "test": "test_native_all_denied_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_all_denied_disclosure)",
+      "reason": "requires serialized explicit native qualification window"
+    },
+    {
+      "test": "test_native_changed_source_before_closing_guard_refuses_public_data (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_changed_source_before_closing_guard_refuses_public_data)",
+      "reason": "requires serialized explicit native qualification window"
+    },
+    {
+      "test": "test_native_empty_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_empty_disclosure)",
+      "reason": "requires serialized explicit native qualification window"
+    },
+    {
+      "test": "test_native_masked_disclosure (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_masked_disclosure)",
+      "reason": "requires serialized explicit native qualification window"
+    },
+    {
+      "test": "test_native_post_transport_whole_batch_refusal_never_releases (test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests.test_native_post_transport_whole_batch_refusal_never_releases)",
+      "reason": "requires serialized explicit native qualification window"
+    },
+    {
+      "test": "test_matching_legacy_graph_activation_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_legacy_graph_activation_refuses_before_collection)",
+      "reason": "explicit serialized Graph refusal qualification required"
+    },
+    {
+      "test": "test_matching_partial_helper_registration_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_partial_helper_registration_refuses_before_collection)",
+      "reason": "explicit serialized Graph refusal qualification required"
+    },
+    {
+      "test": "test_settled_caller_refuses_without_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_settled_caller_refuses_without_collection)",
+      "reason": "explicit serialized Graph refusal qualification required"
+    },
+    {
+      "test": "test_generated_sync_actions_use_owned_native_group_and_exact_receipts (test_action_transport_native.NativeGeneratedActionTransportTests.test_generated_sync_actions_use_owned_native_group_and_exact_receipts)",
+      "reason": "Set TRUSS_UMF_SOURCE_ROOT and install Bun for generated UMF native integration"
+    },
+    {
+      "test": "test_sql_substitution_refuses_without_repreparing_parent_or_child (test_current_disclosure_context_capture.ActualContextTests.test_sql_substitution_refuses_without_repreparing_parent_or_child)",
+      "reason": "explicit actual Graph wheel required"
+    },
+    {
+      "test": "test_original_graph_ontology_decisions_use_all_captured_populations (test_current_disclosure_graph_transport.GraphTransportTests.test_original_graph_ontology_decisions_use_all_captured_populations)",
+      "reason": "requires explicit packaged semantic child component qualification"
+    },
+    {
+      "test": "test_parallel_alice_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_alice_preserves_required_behavior)",
+      "reason": "requires explicit packaged semantic child component qualification"
+    },
+    {
+      "test": "test_parallel_bob_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_bob_preserves_required_behavior)",
+      "reason": "requires explicit packaged semantic child component qualification"
+    },
+    {
+      "test": "test_parallel_outsider_preserves_required_behavior (test_current_disclosure_graph_transport.GraphTransportTests.test_parallel_outsider_preserves_required_behavior)",
+      "reason": "requires explicit packaged semantic child component qualification"
+    },
+    {
+      "test": "test_actual_public_graph_capture_and_original_held_semantics (test_current_disclosure_graphs_native.NativeGraphCaptureTests.test_actual_public_graph_capture_and_original_held_semantics)",
+      "reason": "requires explicit isolated graph native campaign and exact UMF child bundle"
+    },
+    {
+      "test": "test_actual_public_parallel_graph_and_original_held_semantics (test_current_disclosure_graphs_native.NativeGraphCaptureTests.test_actual_public_parallel_graph_and_original_held_semantics)",
+      "reason": "requires explicit isolated graph native campaign and exact UMF child bundle"
+    },
+    {
+      "test": "test_native_all_denied_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_all_denied_disclosure)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_native_changed_source_before_closing_guard_refuses_public_data (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_changed_source_before_closing_guard_refuses_public_data)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_native_empty_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_empty_disclosure)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_native_masked_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_masked_disclosure)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_native_post_transport_whole_batch_refusal_never_releases (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_post_transport_whole_batch_refusal_never_releases)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_scram_credential_control (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_scram_credential_control)",
+      "reason": "requires serialized explicit isolated SCRAM native campaign"
+    },
+    {
+      "test": "test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object)",
+      "reason": "explicit serialized quiescent-admin Graph qualification required"
+    },
+    {
+      "test": "test_scram_bob_has_only_own_project_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_bob_has_only_own_project_resource)",
+      "reason": "explicit serialized quiescent-admin Graph qualification required"
+    },
+    {
+      "test": "test_scram_outsider_has_no_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_outsider_has_no_resource)",
+      "reason": "explicit serialized quiescent-admin Graph qualification required"
+    },
+    {
+      "test": "test_nondeterministic_side_collation_does_not_fold_marker (test_native_edge_limit.NativeEdgeLimitTests.test_nondeterministic_side_collation_does_not_fold_marker)",
+      "reason": "Selected local PostgreSQL build lacks ICU"
+    },
+    {
+      "test": "test_issued_graph_context_maps_actual_catalog_and_edge_columns (test_native_graph_correspondence_native.NativeGraphJoinTests.test_issued_graph_context_maps_actual_catalog_and_edge_columns)",
+      "reason": "explicit serialized native Graph correspondence required"
+    },
+    {
+      "test": "test_actual_factory_retains_same_parent_and_originals (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_actual_factory_retains_same_parent_and_originals)",
+      "reason": "requires explicitly selected original opt-in Weft candidate"
+    },
+    {
+      "test": "test_equal_data_contexts_keep_distinct_actual_parent_identity (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_equal_data_contexts_keep_distinct_actual_parent_identity)",
+      "reason": "requires explicitly selected original opt-in Weft candidate"
+    },
+    {
+      "test": "test_report_import_wrong_receiver_cannot_supply_current (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_report_import_wrong_receiver_cannot_supply_current)",
+      "reason": "requires explicitly selected original opt-in Weft candidate"
+    },
+    {
+      "test": "test_exact_original_model_native_catalog_and_ordered_keys (test_native_model_correspondence_qualification.NativeModelCorrespondenceTests.test_exact_original_model_native_catalog_and_ordered_keys)",
+      "reason": "explicit serialized native correspondence required"
+    }
+  ],
+  "sourceSha256": {
+    "scripts/run-python-installed-workers.py": "b7c5bd856e8e16691186ee1ce880f369edb26011fb3fe08315846f4085c4ff30",
+    "scripts/native_fixture.py": "1f130fab83c0f931ce8b8b0a4f18e323e053c3dfc38a5cc529e1d60f5b2cda88",
+    "scripts/run-python-test-module.py": "0d6f19afcc764d1ba27e53ae5192881bbf770c8b5617d4f81c75f9609df60b92",
+    "packages/python/tests/test_acceptance_json.py": "6f4a2df00b81a68e175ac178229538b29a386e984a1cc493c957c4e5e8c5f3ac",
+    "packages/python/tests/test_action_identity_codec.py": "a7a2f7365713afd1ffe1bca263e19f9bb12ca13a662d45b49576285edaf93d8a",
+    "packages/python/tests/test_action_role_installation_native.py": "5a90f1c14152a25bda1fff6fc4d1a3d6382d4c498586a277f42fd076c26686ad",
+    "packages/python/tests/test_action_store_context.py": "daac0434852118b879fc932b37b96a3e07c663e8299a5963b6b6bb14f769eb8a",
+    "packages/python/tests/test_action_store_native.py": "65d59019dc2bc8d6ab57e95506fb6b4ad1b2e576537381b5acb7dac538f0cf94",
+    "packages/python/tests/test_action_subject_installation_native.py": "bbbbf39cbb2ef6ade7aaed970b3c99ca75364c3da4a6f56f391d4a60a22e6e70",
+    "packages/python/tests/test_action_transport.py": "3714bc3d871383405a07fba2d2c7fc677da2615bc2ea1cd9d499db588ee28916",
+    "packages/python/tests/test_action_transport_native.py": "87604d28da27d8285d4b865dcba123b485525b00509caea547f3b28dbda661c0",
+    "packages/python/tests/test_adopter_workflow_native.py": "50a1a88e1b754ba4ef536db566308c5161caea39d07918c5c9d0cbd242818f83",
+    "packages/python/tests/test_adoption_cancellation.py": "6a1313df979294d678fddde367c7e922cbfc7e265964b75c6cfb10a41c82ee3c",
+    "packages/python/tests/test_archive_self_write_fence_native.py": "abe3fcfe1bf19f3ed13900fc1047fd6acb9b3fdb1256e9e735d904e0668022b9",
+    "packages/python/tests/test_atomic_group_surface_native.py": "dbd11bae8f3e7c79bc23d23aca41bacafa5aac1659c529f9b926be974604b7a0",
+    "packages/python/tests/test_audit_disclosure_native.py": "1d39f754e11dd0e9e80a516c864e16bc5c72ce590c51f6ca5d15fed5fcc68770",
+    "packages/python/tests/test_batched_import_native.py": "e4508be76b9fd86c4b27b7ac743d964dac74f286510f6fb4df581d8a99678b3c",
+    "packages/python/tests/test_batched_import_parity_native.py": "165b14a8f9c5ba45bb4e10be534deeee8f11b398228769ad8a934d1b83f4e9eb",
+    "packages/python/tests/test_binary_query_native.py": "142532cd4b453a0075cf6f5c7692bd26704ae77e4489053f7d48173c719858b9",
+    "packages/python/tests/test_borrowed_host.py": "0d39703d0cbb2308c2c8232de97d8f11e94bcace115beede05c64867c6c466c5",
+    "packages/python/tests/test_bounded_receive.py": "9b7cb48fae96fd41d244a525430887002b757d309c4e9ee5a8853f3b58e87992",
+    "packages/python/tests/test_buffered_ingress.py": "4611d4be97d4ea88c1367426eb45c04a3b1a9bae732b73fc2f719957f91b6b8c",
+    "packages/python/tests/test_bulk_action_gateway.py": "f713e29167c64d0c4961c3817ad32d5a5383c965bd6085bf84ee2bff4fc467e5",
+    "packages/python/tests/test_bulk_create_sql_native.py": "a091c378abff33f329e700ea4a1a2e21928ae7a8080cf673d4f7f2ef72f82504",
+    "packages/python/tests/test_bulk_set_values.py": "cb783488878e7ec9b86cb7ef3168c58a3f40a5f59671bf41d711c0b8df72156f",
+    "packages/python/tests/test_bulk_update_transition_guard_native.py": "9007aada13d182a7af7193aac73d54ecd834e3f97396a8a50a599c0dca1577a7",
+    "packages/python/tests/test_canonical_wire_tree.py": "586535490197f524da957bb45b414acede7c5f6e0ae6744bf3abb5a413a88a0c",
+    "packages/python/tests/test_catalog_additions_native.py": "2001d4d6895070db25dd178a0b4ba1cd4343ad7c44a89b4223f4d4d58bcc0dcb",
+    "packages/python/tests/test_catalog_admission_outcomes.py": "1ef9c764d6a6476b66aa7c03e9385b28f711fb174a6d8c63285ff1674f198356",
+    "packages/python/tests/test_catalog_codes_native.py": "9495a653e08d76b1c555e5552472cb7fb50f35d888d0d8ea9cec64949e9f360c",
+    "packages/python/tests/test_catalog_compatible_acceptance_native.py": "74f3451f0324b37388256d8d46bf232321b877b5d9fc0d2d535fa6285431a690",
+    "packages/python/tests/test_catalog_continuation_native.py": "ea68c748c37964628e4cf85ebbb347f017a0bcf06ff701cdefd8940ceba68443",
+    "packages/python/tests/test_catalog_continuation_types.py": "974f16d626a00a00c11ac7aaed2586b08d5922304471eec94bef7054e866d371",
+    "packages/python/tests/test_catalog_declarative.py": "373e30edbeb949b179ea83f9a9bde12ef88992575bb3daec354a2964b8601da0",
+    "packages/python/tests/test_catalog_declarative_native.py": "cfee0e7987fd0551b49132909f373cd334e98868236e23ca45f952a77439a54c",
+    "packages/python/tests/test_catalog_definition_source.py": "03505a54627daf8f86948856849a2fa95024f524a2e4e6fbe7237d595ab669ce",
+    "packages/python/tests/test_catalog_diagnostics_native.py": "c13a7372df98c88b2ca99b744e9d896cd2ee662670851d84eb4b9dfe4a78ca85",
+    "packages/python/tests/test_catalog_document_bounds_native.py": "bc99ec34a16eca3c86503d656fbe0620e4e82c49a8bfd1f629459407b25e9a7a",
+    "packages/python/tests/test_catalog_enforcement_native.py": "134a2753d3a1a5a7d14fec806d3cfe2e5a2ac6eaf9f17f89a0a3953af7c4348f",
+    "packages/python/tests/test_catalog_evolution_native.py": "7592a51efc0a13beae8ef0063baba1a827a31c0b57a0cb066f464888a5796873",
+    "packages/python/tests/test_catalog_installation.py": "e8e97f62ddce1f09e6cfe05da188a1a865fcc066cc9b59c0f9c217d073859907",
+    "packages/python/tests/test_catalog_key_backfill_native.py": "62341b112d6fe3eb5eaeeba9165f629cef1924ba2eba0a31fb5317354883cae4",
+    "packages/python/tests/test_catalog_keyed_rebind_native.py": "8f35d7924108c7c1eec0f41af8244851b9e8322c5b03aad6e456245d1bd3797a",
+    "packages/python/tests/test_catalog_preparation_public.py": "afee2ff44de18c72dc48350ed40f0e8553f6e1a55c973c8c498b3d353fb91c63",
+    "packages/python/tests/test_catalog_rebind_native.py": "7ae5e976237d867496173f4c406a57183b87be632573c0c4bfe98d3335d9d99a",
+    "packages/python/tests/test_catalog_relational_support.py": "2bfac8881b6b0b7e912eb0d5d7f3106e68ce5ad72d07120bef093b24cc65cb9e",
+    "packages/python/tests/test_catalog_report_semantics.py": "159ebb176bff5099ab0e3160a05f887a3436b7a88f8f49b1fe5b171fcf74caee",
+    "packages/python/tests/test_catalog_runtime_native.py": "b349bc0549dd78eaf646cf0173f09bf2c81ab620873562567a534ae01b82936d",
+    "packages/python/tests/test_catalog_support.py": "56842c55f9faf73fba98132276bc9e7f1f13933da5c85448464df15140786806",
+    "packages/python/tests/test_catalog_unchanged_native.py": "2bc6a00c76e1781e8f0581fb4a085e6f5ece0e89cd4a3d862628d29019b96fb4",
+    "packages/python/tests/test_catalog_view_capacity_native.py": "ae4015bd41e0ca3b903e85b7913f58d22c13b3cc5f2a23ae725c3401ef935467",
+    "packages/python/tests/test_catalog_view_contracts.py": "5f561d1c3699281e1cd64358641c8eea1f38a8fce780af22469ef06c9196a12a",
+    "packages/python/tests/test_catalog_view_revisions.py": "c7acd69656d8346ce96c9b88f4228a733813c6ab65c4a70da45875a575ee8016",
+    "packages/python/tests/test_commerce_source_native.py": "653d04a43a114acd2968be649c9795492639672cca8bef9d9f97edc5743f193a",
+    "packages/python/tests/test_compiled_query_native.py": "0641fbe4ff802ba563b5da20aacdf62b80b6127aa0123de54f443ecabbd9d3ee",
+    "packages/python/tests/test_condition_precedence_native.py": "1577bf94ad2b9117dde9695458b723172758d5028f402dd7140696f8876265db",
+    "packages/python/tests/test_construction_recovery.py": "d38171637534f3a4196c44985d16ba350e977e59d43713cdc8daf9004a19a17e",
+    "packages/python/tests/test_consumer_northwind_numeric_native.py": "78661758c0cde3243ddcd5847617f5e149657d0e56bbfef6e38f53b9ee12ca6f",
+    "packages/python/tests/test_container_required_evolution_native.py": "876cef12a18e19c242e46401fc4afef15426c4d02435b8565c54e660976d339a",
+    "packages/python/tests/test_core10_catalog_native.py": "e227a4648b8d7c31e2d722be7a07a8e8c6a7c0f79db3ea993eb31d5fa7decf11",
+    "packages/python/tests/test_core10_group_create_native.py": "94cc3a59bc3d5db9c8380c77ccf2d1248e213a4626708d2d9c87bb58e492689a",
+    "packages/python/tests/test_create_leaf_closure_native.py": "ebe1cf4ab4d1f9c528744981b0e00f05ee2ed3b4c853dcea9084ff37d1d6be8d",
+    "packages/python/tests/test_create_metadata_cache_native.py": "c9ec604ba7293d5308bf92c3fb8637cbf7b57b91cda23a87d7d8010e6c6184f4",
+    "packages/python/tests/test_current_disclosure_api.py": "fdf7ee59dbc05ac6445e39f633ac23e13eed67b18914a1a1e82133010389331a",
+    "packages/python/tests/test_current_disclosure_capture_closing.py": "d94ec928e70ec5ce95fcd9047605bd13795985d4c7c7f462602d27d2b2763c2b",
+    "packages/python/tests/test_current_disclosure_codecs_native.py": "19de148b766e39257e9b04e9e8e0755fbba8a7f77d3b991908526e1335182bd6",
+    "packages/python/tests/test_current_disclosure_cohort.py": "f59c4edc922f14e8b94b5bbd2ad927cce5c0dadc3ae97facf33416a5909667e4",
+    "packages/python/tests/test_current_disclosure_compiler_integration.py": "c7cd39a9fac99c0af14ddb7ddaad8ec2bfff7a43643fcb4ba64319a4fccbfd9c",
+    "packages/python/tests/test_current_disclosure_context_capture.py": "33abf4fc9981f32245553a91e8a1188ac079957ca1e5e58ede449d31d9f51d44",
+    "packages/python/tests/test_current_disclosure_context_native.py": "9bd7b5fa9c345bcb6774c05bdfad7761517ebe492e2b73b59fa3eab1a8974435",
+    "packages/python/tests/test_current_disclosure_graph_transport.py": "8f946a7310fd01d6decac65dc2dc72d49f4c80175e9e9bfc191ff1a92925ba7c",
+    "packages/python/tests/test_current_disclosure_graphs.py": "20c8f27cd20f561781fafec72859e74f7c101a5cb3967c97e30c8223dca31da1",
+    "packages/python/tests/test_current_disclosure_graphs_native.py": "556bb3307b5ffad4b8b33100d4d55c3e601a230782367b26df46c08c7927c574",
+    "packages/python/tests/test_current_disclosure_originals.py": "eac5de4d953336eaf3211e24c4943f10efc6d8cdddc3111d3b612110fe7b54bf",
+    "packages/python/tests/test_current_disclosure_population.py": "c9abf1270afbd742e9e9be6a8f7cbeb5ba22c66a0cbcda59ed3caee3c232e3f0",
+    "packages/python/tests/test_current_disclosure_runtime_native.py": "f1cd550e2c80df2b429906551f0da6f241151741d4d02d224903be7df4296d29",
+    "packages/python/tests/test_current_disclosure_scram_native.py": "3cb0a61ef9937cf8a12c0b2b157e0ff18291ecb01e934c3d2e22d2df371d3e12",
+    "packages/python/tests/test_current_disclosure_session.py": "20510064f7016f75995cec4cf33971580d4974534a6b445c8a4938d8e75a6b71",
+    "packages/python/tests/test_current_disclosure_wire.py": "08527e8d809ef130e6d803d0c139670212435548e6d842af80bf3204d05d1029",
+    "packages/python/tests/test_current_graph_admission_native.py": "03889d153a9b4d2609d0ff15e6217b38b4a59470a0d8ef0c0956d8bdaa3ccc1f",
+    "packages/python/tests/test_current_graph_authority_native.py": "cccbc77030efe0de1970bdaad0d19d8aa1e52a07977f51c6aabf3fba6e62dc4f",
+    "packages/python/tests/test_current_query_facts_native.py": "5948aa83359398a6afbfffe78bc8e54a411cfd0d2eb6450327469048fea87806",
+    "packages/python/tests/test_current_query_full_sources_native.py": "397fb45c1af125b84bdcee216a092dae60ff3f3cbd0307a4bb469e25eefa1609",
+    "packages/python/tests/test_current_query_pipe.py": "27e2ed8bf3aa2b26785ba37611b250da4b08c17764d9c965d4171e99d5e926ad",
+    "packages/python/tests/test_current_query_runtime_native.py": "19a42009626eef9456ce9e590ad4360384d57a5cff691273d4993c3d7885ea70",
+    "packages/python/tests/test_current_query_sources_native.py": "eb285ef09bf04a9b37db838386add78fc4fab94cf6dc03f2d1d57798a7dfd76f",
+    "packages/python/tests/test_current_query_subject_cut_native.py": "8dea11b1e367e7d575a7673f629c06dfbc6570df7980a75bad9d8cbac43763cc",
+    "packages/python/tests/test_current_query_subjects_native.py": "a14016b8dbeb78e1da1ecaa549c12002e855ca3f5724597828d4c64c8a9b78b2",
+    "packages/python/tests/test_database_key_derivation_native.py": "7ca59bececa0d407b3468e0dc6491ef0d8b15037c93688e4a57f889e03fc07b0",
+    "packages/python/tests/test_date_decimal_native.py": "34fc87a20f724ed1c564cfa8d008185b23d6ed10b6bed8044c0a8744991c9898",
+    "packages/python/tests/test_ddd_owner_preparation.py": "2448dd7377ec5342c4feb364ac748a7f87e0c706f3e9cd5fa691993ffd1f7369",
+    "packages/python/tests/test_decimal_scale2_native.py": "610243bb34c00d76b1cee7a1fc193cc25f767d301e481d0ed2fb3b01c8e7d901",
+    "packages/python/tests/test_directory_resources.py": "96f50253f4e0f6d8d41b3cd5cdefa55dadbac39ba15c07adb9521d863dc21506",
+    "packages/python/tests/test_domain_pack_catalog_native.py": "3e447a81804cfeb618cadeb9ae4bcbc85c9d947d8e58e25a23f1f5da7bad6a1c",
+    "packages/python/tests/test_edge_authority_native.py": "cf579fcf320aaa29c9aaddb8161da60591a6c4a42c56f2ff1667ea22bf8821ca",
+    "packages/python/tests/test_edge_event_frame_native.py": "741a500a29a5a40d3d627a049e9a1352e24c52a24dc02f82638edc34b7ea05b5",
+    "packages/python/tests/test_edge_mutations_native.py": "90b6eeca461d457231c09f6b5b5534baee4f65aaf631a61871d40616f60452b1",
+    "packages/python/tests/test_edge_writer_hotfix_native.py": "4b365cf11919a9de95ae14c44851ac0515781c37ac132bcbad2de2cdaa92d285",
+    "packages/python/tests/test_embedded_owner.py": "61ee1289b17b39eb46ab4b7cc28e03dacd09d8091f3061a3a69a07fe8955c672",
+    "packages/python/tests/test_embedder_schemas_native.py": "464e8d8e286019e07d703e3ee20cf1d78c49d10cc54bb3a1f6261aa7bafe8f08",
+    "packages/python/tests/test_embedder_workflows_native.py": "ae498bd006ed471a83b6edd528ff928edf250967e6e308bd76f3954daef7e487",
+    "packages/python/tests/test_endpoint_capacity_native.py": "29552a34887d2b2676d1af6ea8de3bdc9c1f1143b950b4abe53a1e5fe29a32dd",
+    "packages/python/tests/test_engine_action_session.py": "b7d8d184ede72cba60f009ff9237cc90072f8488abc55e7adedb7cebd13071e0",
+    "packages/python/tests/test_engine_action_session_native.py": "29367d0a9c52ebda1d69835535cf6d4130de55b9cce622f150df73a1b4fa4999",
+    "packages/python/tests/test_engine_import_native.py": "e009e18ed441204b986503338638bc659c5f4228226f670a792d1d53e7930d58",
+    "packages/python/tests/test_engine_preparation.py": "7f1d8566ddbfbbd75d612e326227ffc98f1291d39834dc6b75ee464a3de7f3af",
+    "packages/python/tests/test_engine_preparation_scram_native.py": "2c2214b083c063be78b8505c10f8b3ea746af6a47f0e18afccb492172d5bb93e",
+    "packages/python/tests/test_epoch_state_fence_native.py": "427d34dcf072fa28c721d063c6e4edb01474ec9389836f048d5054d22d1452eb",
+    "packages/python/tests/test_exact_numeric.py": "e4d61dc9bc347ea0393fa9d3a21e18c13ee87931be77d68d9d632186dfed417e",
+    "packages/python/tests/test_exact_scalar_values_native.py": "42cab050bff605110acbc87c302c98a6b3fcd1dee7a6e150f37afd5766fd0483",
+    "packages/python/tests/test_exact_timestamp.py": "ddcfb2f54a0175d966b0cc88256f8f58ecae9bcdf06d65a09400b229cc5936d7",
+    "packages/python/tests/test_facet_evolution_native.py": "4f44e884ee0e43e4158aa8a4a1bb9757351ee4760ed9e0e44027c7a37760da22",
+    "packages/python/tests/test_fact_cut_descriptor_boundary.py": "563f4f5829fbf040b295232d456773c6ce4b28a226bbe707362900a6e29da735",
+    "packages/python/tests/test_feed_ack_receipt_native.py": "735aa98fe6652717222844479eaaa0c31e83753dbd3461f4b1094af4b71206d6",
+    "packages/python/tests/test_feed_runtime_native.py": "1d265c184d68aab3f0c278195bd78e597ef860a0720428bdab84064ef2879658",
+    "packages/python/tests/test_fenced_subject_key_native.py": "ab7f44ae18af0be566f5939b76c90a8db37a7df911c9723f7cb95e6671da7b7b",
+    "packages/python/tests/test_field_name_evolution_native.py": "903a77ecbee3525dc9b439db8410d989ae7b3f22a4eee6b5451de2a2e211658c",
+    "packages/python/tests/test_final_edge_inventory_native.py": "7a82666141a32b5ca53335d4b1825d47760d4733b519b225de2e591b4d5e08ba",
+    "packages/python/tests/test_graph_commit_practical_native.py": "080c1dcd1315a5eb17e5d8c44fb981908485b7dd8429fa3f8a29b0a72a628969",
+    "packages/python/tests/test_group_capacity_native.py": "8aed0129307dc6b883f854571f4b9bfa320b1ab72681cb70b884e3fb12774871",
+    "packages/python/tests/test_group_create_native.py": "651dd53d798fca33084e58da951852880b453a9dd87442132431eab306a44802",
+    "packages/python/tests/test_group_preconditions_native.py": "93552041af01c7eaef4d7433e8455bc26b61538a9aef21361369e5c610a4b92a",
+    "packages/python/tests/test_group_preview_native.py": "39a894d2348768a229f6833c141c8816b1036a05b30fa8a888e651dccde35022",
+    "packages/python/tests/test_group_preview_wire.py": "caad4f354e132b4dd1a1adf0d1eb38779d8e94b4b7807f8bc45e4479f5461d74",
+    "packages/python/tests/test_group_request_recovery_native.py": "f1629b454a30470e4897da95ea57b316aef25320fbac673725538d65b7f66fd4",
+    "packages/python/tests/test_group_result_wire.py": "5543df6f3a822c347013ada95492ea5318336709171dad9f59514a642bbe3aaf",
+    "packages/python/tests/test_group_result_wire_native.py": "9e506bfa7d9ac5d23cf8a2561782a86fb08ead55bb48a91f32efaaf7760be32e",
+    "packages/python/tests/test_group_runtime_bounds.py": "d3a40c2fc00a8a15606d40ba3b513790c0ffd463418be43cefb7b53571c6397d",
+    "packages/python/tests/test_group_source_admission_native.py": "e489b6770175aac4b961a311de6a978bf86fc36bc177d0878a60ac557af6dc61",
+    "packages/python/tests/test_group_validation_native.py": "5ebbfb94e15763d31bbfa618d6a2bd528cad160173c0eedc5ce48945a0a505b0",
+    "packages/python/tests/test_history_projection_native.py": "85509cc02b45648245b59896b2c61e549d16ea283629af7d361965f13bf69965",
+    "packages/python/tests/test_history_runtime_native.py": "0fa55974ab68a85461510e846f3df4eaf003925de2594bfa0669bab282bf2c2b",
+    "packages/python/tests/test_hohfeld_disputes_native.py": "3eb667e693a3f7f122424a36ed0fe5b5c886f992f258fa4c6b8b66f55f0f6afb",
+    "packages/python/tests/test_hohfeld_statement_budgets_native.py": "3586d32205c24b755f330c96bf32c9c46eb14dde2c092a80503723cd8816735d",
+    "packages/python/tests/test_host_call_recovery.py": "9c039fb5bcdc5aab5e30ce173b58153439a1357bbc24b6d24dd58baaf7ba8975",
+    "packages/python/tests/test_host_control_custody.py": "900275e7749328d9cdec5fbdf2733a541e3a88c6264ca72f7b6dbc6a979818ed",
+    "packages/python/tests/test_host_control_deadline.py": "12b2bc56539266417559f13def3465bd466ea1f3920c92f0ad5e2a7c38e48420",
+    "packages/python/tests/test_host_execution.py": "99921a201e3e8e5c19ab72ace306d212bcb4e3f8ba1a944ff952b8606e0c42b7",
+    "packages/python/tests/test_host_session.py": "9769e9686198afd0e23e5f2eb16578c8424bf88f9f571bf0fbf153b9dc98bed6",
+    "packages/python/tests/test_host_simple_recovery.py": "54ed48f6e798416a137bf9ef6391cd1c5a63bc4db7e77c622f8b369275c9837c",
+    "packages/python/tests/test_import_chunk_closure_native.py": "43fd833fcb629ccaab1aa43fe439c238bfe41a4111e515398a6dd1e5017c0ea0",
+    "packages/python/tests/test_import_contracts.py": "374296e454b56305d7ae5260333c4f4f4091d912ad26a2e68be97e1aa7640f6b",
+    "packages/python/tests/test_import_load_query_native.py": "d9cb28b52de181289cb9075c9c3d1cbd5ddfd2b9903d2b4376f425e81c4ebb30",
+    "packages/python/tests/test_import_rejection_practical_native.py": "06d9f2b37187e9940ab043a1737b126bbbf4b74e31e7b96bf1f13cfcaac030bf",
+    "packages/python/tests/test_import_runtime_native.py": "e8ce5403ae3bd8b3fede97c0c25c504752b8358a9811ed7391155de567c39f56",
+    "packages/python/tests/test_install_preflight_native.py": "776df46dac8558ea58874cd1d1aa2978a5454c72f28a0f5e195442b3bad664cb",
+    "packages/python/tests/test_installation_archive.py": "a7725d4cee369f4efb77e8d3fe9589ee9a4353dddbe17e7b0878cacc226d9c04",
+    "packages/python/tests/test_installation_metadata.py": "698f867a4040e675e404e7c28fb5ded1a59e008bc707079053f4a133bfaa63a8",
+    "packages/python/tests/test_installation_observation.py": "3f2f26b77a1b08f72c9bf1e5fa9d468a68ed66daab3e8a2908aeba7580906502",
+    "packages/python/tests/test_installation_privileges_native.py": "3f3d765c8034f8b1191194c00a7b648597c43099dc68442477971fdc3810fbaf",
+    "packages/python/tests/test_installation_resources.py": "eca67682f4be437a02f656ea4b870524d6232e7c5be7df43a76f389955eaa1c9",
+    "packages/python/tests/test_installed_admission_inventory.py": "bf899da347f6e3a2d2cda80b20f5c6adc50546186c58dcb293552cb4dae68f67",
+    "packages/python/tests/test_installed_admission_operator_routes.py": "47c63e9446361ed211a5f0b870b90a82c54dd253e66bcaf231d6a3b557de9808",
+    "packages/python/tests/test_journal_batches_native.py": "d5eb6988578ed7e094c27a269ac57f98fb480d9da70c4311af1929466b82f172",
+    "packages/python/tests/test_journal_row_guard_native.py": "a13421d4cd5a4c4bbb670f9f5d84106f84ad5e1ebed51d1bb7a5f028b47e27ef",
+    "packages/python/tests/test_key_footprint_capacity_native.py": "061a7805e9e08040f6a81a53688999a3b9e48f820ede9d17102a50d212cd4032",
+    "packages/python/tests/test_key_lookup_native.py": "13cb476653065ca00e537f43c28e53b929fc0b9b421677574a25e7630168643f",
+    "packages/python/tests/test_large_runner_capacity_helper.py": "61c5ecd134b7dcc78292ac051c621c694c7a15174f90c871bd8fe71f1afce4c3",
+    "packages/python/tests/test_lifecycle_native.py": "959c8502bc6dc49a78d0a95cdc24a6f0f69779533cb9881a76054c3fb5996a71",
+    "packages/python/tests/test_lifecycle_wire.py": "e17585220671df5437fbafda5afd6966817f3d99fb1ee22bb4bdfea8ab283096",
+    "packages/python/tests/test_load_audit_native.py": "746b3ba54c5d35bed68137f2538f71c1f1bd787332156e2fc98b36be2cae2c17",
+    "packages/python/tests/test_load_audit_wire.py": "878c82268463eb1e29305b59e1c4245b7dcf2da115e1b112a1a7cdbc43216e13",
+    "packages/python/tests/test_local_install_cli_native.py": "84eec86519b514ea61b811a89b89bff38a5a92923547ba0b9990962b4f6b4a0f",
+    "packages/python/tests/test_local_runtime.py": "3c4f012084a0a6f71638106e905c42a9981a8b901832004b9d2397e357b71a59",
+    "packages/python/tests/test_local_runtime_native_isolation.py": "3caf75fef7e5443647e20815f9108e6b577645f528e9f143bd2563f20b0100ae",
+    "packages/python/tests/test_managed_function_guard.py": "fd777a3f2c76bbb87666eb875841715f63e71b5cd4bad7a0c2a7ede37fcc4107",
+    "packages/python/tests/test_managed_function_guard_native.py": "d0a6d26967304c80c1f19c293e72526c12d4d2a452e537b332af91ec888e436a",
+    "packages/python/tests/test_managed_grants_migration_native.py": "f38ea2565002719dd21f165e4ef03a2d4b71f28da7fbb5396a52cffa046c92e8",
+    "packages/python/tests/test_managed_installation_native.py": "1b8382abb020956de42a05abf74731e012ff6ad14d18e26b630f91fc70e91b64",
+    "packages/python/tests/test_managed_platform_grants_native.py": "5778caca1bd8b45ab6610d51d80ab4beb5f2484252b40052ff3868f0e194fdfd",
+    "packages/python/tests/test_migration_planning.py": "ccb7eb9c2643cea7f26896ffc707984d80116a018234b9ea1c1870c7783bc6fb",
+    "packages/python/tests/test_module_access_batch_native.py": "13c836d060d46f92930e517102b808a8b16f04726f3c26dba12829935b7c8676",
+    "packages/python/tests/test_mutation_group_audit_native.py": "9f4daade7502e213551cf08c1cc6877eda0abedbff20b65388a5170294e30560",
+    "packages/python/tests/test_native_admission_capture.py": "a7939688ef9877996308ffc9066473855f131fb0e1b9a2a5b107a8e20f22ee6c",
+    "packages/python/tests/test_native_admission_dispatch.py": "759d941c4ab9308fa7ea4e3f2a77c1e9c7b17f8b1174096e6043608e3602cdc2",
+    "packages/python/tests/test_native_admission_preparation.py": "b8ba64857eb4ba95ba5f6ad08bb3a4f22039fb06ecf4fee2465bbbc40c716250",
+    "packages/python/tests/test_native_admission_request.py": "f7f92abc2af2c128602a65b055d6a13c6d6042e36aa838f36e85cd82e99b26a4",
+    "packages/python/tests/test_native_admission_request_postgresql.py": "f51604eaa5cdbf71179882c956b763b361c77582b5ec886f77625fa900643836",
+    "packages/python/tests/test_native_adoption.py": "12a14c29982aa7070d40a22dc315cb46ce9bdd9e8d3496deb4992c36e8b8c9db",
+    "packages/python/tests/test_native_arbitration.py": "3ae6992381125b826c65e9017bd9ba6ba1ffe6657ac0eb5f117a39020660a514",
+    "packages/python/tests/test_native_bootstrap.py": "d341482ecb9ebf899730ab760d76e94c38fa47035b61e88f08f146de184318f8",
+    "packages/python/tests/test_native_call_root.py": "5beabbf894b1fd38006bd254030ef0727e810f235f6373aafed2330f9bb14dd1",
+    "packages/python/tests/test_native_cancellation.py": "e2cdbc5cc19bfc20f1235030eca582e5a5316e39db89e370acae087d666575ab",
+    "packages/python/tests/test_native_connected_string_writer.py": "925b214793a60f1fe903498855dd44d7f510568f9feb5bd4951a09dbd32b6dbd",
+    "packages/python/tests/test_native_deadline.py": "53e9e1722a937e2804f41f73b4b510b6491d001b781668d606ed6488d3787f6a",
+    "packages/python/tests/test_native_dependent_owner.py": "93bf83331aa5b9d1b73870c2c539a92aaa4960f71e4f0405ed39e982fc741ad7",
+    "packages/python/tests/test_native_edge_limit.py": "72f9ae68075b61fcda42490ad78ad5f0aff592f694f50ba62f21a22387d9ebcb",
+    "packages/python/tests/test_native_epoch_acquisitions.py": "3ab17dce6013d6e0fac32abf5b5dfc360068a55da7f24583d205758ede82d801",
+    "packages/python/tests/test_native_fresh_epoch_capture.py": "be08ff065735799b6d8ac09a82a5ed1a09ead7f9a26f5a78bd4c6cadae383a10",
+    "packages/python/tests/test_native_graph_correspondence.py": "0ccb9bee4205390ff1bb2be11e0ace23b2b0758739fcc165ecc7567d43fd22ce",
+    "packages/python/tests/test_native_graph_correspondence_native.py": "dc35d772356fe43592f00142e19a86f2ae25f45f44ea1c026a3b313c2a693fad",
+    "packages/python/tests/test_native_ingress_deadline.py": "b830c9eb2453f8cf6631e35e27a74490922dcef5acb09b8121b84058cd62ad02",
+    "packages/python/tests/test_native_model_correspondence.py": "e17f7d2befafe1f7719f1be7d9290e9c46ddd3977ae3aa8dad64ee6ccdd6ea62",
+    "packages/python/tests/test_native_model_correspondence_native.py": "6b4a921b85be6ee50cde3dae98faf3ada8398113c530133d286b9c4df7684a89",
+    "packages/python/tests/test_native_model_correspondence_qualification.py": "619f9ffb875d727722f5391ba82e103df0ed02ff361f71995a6cd7fe608acb43",
+    "packages/python/tests/test_native_operation.py": "c40039b755a014c282ad6c8c0014acb2fcfc1e1802408a3669b9ad1958afff5d",
+    "packages/python/tests/test_native_operation_ordinals.py": "1424d42a3de6c67418ee6095a271797f88f4f78579a9629cab50a382bd59fd1d",
+    "packages/python/tests/test_native_outbound.py": "10e604b8cc1e3ef114e682b01ed6f3d36c667607dd6796dd90fe21ce3c88c339",
+    "packages/python/tests/test_native_pg8000.py": "a13c3734ab4f3b3a55d2a5344be4dfd4f83f5ef51fea90a07fe296596df6099c",
+    "packages/python/tests/test_native_resources.py": "62851eba1554fd7e2b2dfabd6c4737cd995eaf243a4fc06f92394241f4709ba9",
+    "packages/python/tests/test_native_source_census.py": "d104cb2a0791e646448732828c7d97c2dc267c34d01f7a480b44242389315ad4",
+    "packages/python/tests/test_native_source_descriptor.py": "e1c520ba1888d6e3d50f5f5aad81d3f8a61a0aea50fbe934eceeeb6c793c3ae1",
+    "packages/python/tests/test_native_source_observation.py": "19c866f3b4b53326292b5a773a7e75e6f6e54f399746062c5434abec62c61ec8",
+    "packages/python/tests/test_native_source_observation_native.py": "b4053c6f84f79832ff0b884d0d814b6d449c305f276f2ca293dfacc5e85a7e83",
+    "packages/python/tests/test_native_state_owner.py": "e682b797b0670a79ccd8a2662a85a6338a03c031d7c8964545d3b085294b715f",
+    "packages/python/tests/test_native_string_candidate.py": "cc5a6e7642da9f23024450af9bf7170dcd831959c88980f82dafc7811dd52c5e",
+    "packages/python/tests/test_native_string_dispatch.py": "ed461c313f5dc41917d034acb5451fd558f4056ca6d29c2d9505f0b05a3f9954",
+    "packages/python/tests/test_native_transactions.py": "5e52aaedb842a5d3a447978f5bdf7f53e460ab149359c61c56c21882ee1eba8a",
+    "packages/python/tests/test_numeric_binary_native.py": "774dc12b0eed84195720bdf5754b09c62e8f83e1c380dc839909e7381cef89c8",
+    "packages/python/tests/test_numeric_facets_native.py": "a961934ed92a6e6d0acab675523a2cf3b95ec0a9fc2718884504c8948e743ffa",
+    "packages/python/tests/test_numeric_row_image_native.py": "e736588d465f9b13b5618b1b12092271fef6112ca626ed9a953f470ab7da8122",
+    "packages/python/tests/test_numeric_witness_native.py": "716891452553928a001318e28443c1750334f2aee80c1672f2f1c1fcf603276f",
+    "packages/python/tests/test_object_mutations_native.py": "5a92949744c95874983c5b44e2ecc3dcd4e277cabaaecb7e31c78f7add4f3db6",
+    "packages/python/tests/test_object_pages_native.py": "571858e71ad800a0de29eebf3d27d9cab9c816d47c9f93b2889c72f2b3f5612a",
+    "packages/python/tests/test_object_read_native.py": "8ba81664d0a6481dc98c57ac7ef8574e9f588a7dadc57bedf38068d96d571093",
+    "packages/python/tests/test_object_string_key_native.py": "776c602b94049340212d5d73724ae69320b61ffa47759b50ecb1542fd47eb2d8",
+    "packages/python/tests/test_operation_admission.py": "91ad4b9986892e813a83fe502ac37ae94905a9995e57af039b75236dbb7372d0",
+    "packages/python/tests/test_operation_arbitration.py": "c44c0a6147421aca7953a637766c6dc587db0b4a78c978aea115b55168a1b60e",
+    "packages/python/tests/test_operation_ordinal.py": "4839759dbd49b333006aa50a2dc5f2bac29a0086afdd7602d5301883dc44203e",
+    "packages/python/tests/test_operation_registry.py": "70c4ec736871f7809eeb20fce7296414a42a7805a813dc87b7be7eae25a647c8",
+    "packages/python/tests/test_operation_result_slots_native.py": "4b2980095333357f9332877ccea7bc7a9aae786ee2fc29b6550fd8c038fd03d8",
+    "packages/python/tests/test_optional_binary_query_native.py": "8a5081872eef47b1f8d392a8fca56f45d2deb8776eb795e5362d413b798b3ad3",
+    "packages/python/tests/test_ordinary_subject_cut_privileges_native.py": "9e2d57da283c102741b4ccf677bf8ffa58467baf0cc60805434457f9df2b348c",
+    "packages/python/tests/test_owned_group_audit_native.py": "5cdb5f18d740c5380e7f77cc1fe6a0ab0c31d4cc14319d2ba6e7f0037cb749e3",
+    "packages/python/tests/test_owned_group_batch_native.py": "4f67905ec2f70fe177af7182b758bb9d425931c624ad739dd97125174f3ef96c",
+    "packages/python/tests/test_owned_import_native.py": "52abba1a0c37fd1a68ca60fca4ae1720be086d26e27f45fcf80f2bd62ba4478b",
+    "packages/python/tests/test_owned_objects_native.py": "2ec41d73ba18f0ffbbb097d7a21d121905c591661e71f8be46f005f32608e80c",
+    "packages/python/tests/test_owned_scope_native.py": "ba55bc5d89092b182b30f2941d259f9c0b8c9065d3b66dca393ed7915b31fd0f",
+    "packages/python/tests/test_owner_evidence_json.py": "b6818591d539b1b73baec59090047c68ff7ebc9af6e17e79f035c76a72c1b295",
+    "packages/python/tests/test_parallel_edges_native.py": "0dc114fead945ee15943ef9502ae943a5846065307278e242a2b78f7378b645c",
+    "packages/python/tests/test_person_invocation_native.py": "e99bf212a99a1de7ae10b00e60e2d35e10253c7a651b5293bde93c89a4a0039c",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "56edb3f89daa6b127cc775e44dc994ebdff256a0d78902aa0200e2a502e0011e",
+    "packages/python/tests/test_preparation.py": "c4703c99f2ac70666e5eba18b66eb7ab9a5f36224ac75671c3613bb56ca4ee71",
+    "packages/python/tests/test_preparation_attempt_anchor_native.py": "c9923d08e6a8db8ae020664282c73cef39cf8da746de5a3320aa6baf1c58e810",
+    "packages/python/tests/test_preparation_permit_binding_native.py": "4c4e4dba2ccd76858712a2e6d663a67df6bd7b22894ad8a0240e3d7730903a2f",
+    "packages/python/tests/test_preparation_program_native.py": "8d95c46040cd8e3dcd423859531a1bfb34685306d3bbf4dec00fa74e7105de44",
+    "packages/python/tests/test_preparation_role_settlement_native.py": "1f3a43124621f38d8844d4cdbc185c9ca41b525530f17400cbda7831fa609510",
+    "packages/python/tests/test_preparation_seal_storage_native.py": "488d8e874a2a540942ada09d962b6d5202e8686b312d541fa2f88f1337f7bb34",
+    "packages/python/tests/test_preparation_source_inventory_native.py": "79cb6a5de9fff0f18e80a1a3866f5746f5009ba340cb19565197242f8f2a22b2",
+    "packages/python/tests/test_prepared_plan_capture_native.py": "d2125eb4c90f0cb48aac41b7326bc97165e95506aab4c3592decfe6ba2f5ef35",
+    "packages/python/tests/test_psycopg_epoch_cut_native.py": "3b09879bc215754bf191fd681abe050a4475a3ac8424ff9353d8574440656373",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "956251b9216bfe7057e944e08dbf2a05c8688b06a4ebb22098834185e0eee5ad",
+    "packages/python/tests/test_psycopg_graph_projection_native.py": "6f22910477d3dde7985da8aca6794e99e8e872612cccff660da973624703836b",
+    "packages/python/tests/test_psycopg_graph_scope_metadata.py": "ab94a8de3c6521f6481dcea96b4e2bd516b0880204e3287cf356cbaa3454aefe",
+    "packages/python/tests/test_psycopg_host_native.py": "2eddbc52eaa90c1352005e85b1d87add5c998d7af6970422fe4a37b2b342723b",
+    "packages/python/tests/test_psycopg_literal_subject_key_native.py": "5766e5bf8b9bb384ca40f80f18f19de212b850ed9c219f381f2287c67807609c",
+    "packages/python/tests/test_psycopg_profile_native.py": "5d5af45c6a0654a787ce3d5e926ae647d4a580a3ed1aa7497f5596ae5417359a",
+    "packages/python/tests/test_psycopg_semantic_ordinals_native.py": "97eebc60b6088b1f83c8daf3edfc8e4db422d241102bcdb80fc16f7e6bd91228",
+    "packages/python/tests/test_psycopg_source_census.py": "9581a9b1c5de895568528c7b37b6d87072c0186ede2da3ccbf5e66b85b8e319c",
+    "packages/python/tests/test_psycopg_subject_observation_native.py": "4bec2bafec5973820d1a79680e1ed278b110900c9436bfd93d0b021193bce333",
+    "packages/python/tests/test_public_contracts.py": "afece98c1454df822d0a3a847aa0b72467d78887abd5ad24b3e6a655759853cd",
+    "packages/python/tests/test_public_host.py": "5663538aa775948aa4de9a7f876c0f47b5c75ac907e8b33c3fb677c4a1e38c2c",
+    "packages/python/tests/test_public_inspection_assembly.py": "783ef44bf6c933cd0d313b7e3cbc0ba3e9288bcf0aede4de190507fdf21f53c9",
+    "packages/python/tests/test_query_compile_cache.py": "85672b69b95b05ae5e2111352555439b7f235a83ede1cddc4a57d03c9a816d0f",
+    "packages/python/tests/test_query_descriptors_native.py": "782cbf370b7688f12b8d793405520f1b45fca455bcf11c9c907bb273f8e5f154",
+    "packages/python/tests/test_query_entity_projection_native.py": "4f408366d13a020100e5901a07f7cf01994c67ff9f08229d2f59c356b5ca8e3e",
+    "packages/python/tests/test_query_execution.py": "8c3b780367eac83ad2484567d7ce5034e826110b13168dc895c090dfde0f6203",
+    "packages/python/tests/test_query_export_sources_native.py": "5cd535eac51f60a8ad09fcf9d979cf5b0fc95dc28df8ed0b233259648315e1f3",
+    "packages/python/tests/test_query_selective_sources_native.py": "7df4f8013421a6107865582e34b3427af3c0a1e7f000cd4ad570fd48420cee2e",
+    "packages/python/tests/test_query_stream_abi12_native.py": "8589849a1567800a00e3f3c02c2cc4169dcd95c5989e282d64f6a9600b2974a2",
+    "packages/python/tests/test_read_only_public_native.py": "eb36cd6993ace70b8d73c4f684f67468f366d4d2fcdad10ea1e61b04c7df5b91",
+    "packages/python/tests/test_reader_catalog_native.py": "d8c8448bc9f3dcf3dc965b83dd67a98d44bd42bb0dc76eba642f6caa30e5a968",
+    "packages/python/tests/test_receipt_position.py": "5d0675c74ba1d32546bd3e7118d3860f9a0adb6d68946845ace3b96b953063f9",
+    "packages/python/tests/test_receipt_visibility_native.py": "d7c154a0ac95a740c5ea657b3f1ea4cfd7ef3ef566991b13923b6522b6c21219",
+    "packages/python/tests/test_record_label_evolution_native.py": "974e9533274f66a698d5299effdc661dc7316cb8d81723884b342905e0285318",
+    "packages/python/tests/test_record_preparation_native.py": "d1d744e39fba829e8c2d78deff8d55b379e97fe6f391a4db77cc4d57eec9ad6d",
+    "packages/python/tests/test_record_schema.py": "c7a523d2e50419b847dc00ebf79e0dbb899e071d64af0ba15af3bdf2e023a3da",
+    "packages/python/tests/test_record_schema_oracle_native.py": "ddfde30397213c87cbdd8c444bf241e0c71aefc5dc2c0482bc72d0e92b6cbe44",
+    "packages/python/tests/test_record_schema_selection_native.py": "2ba9cd45f655edda36ae309e6a24f5e9aa1038c16a18f8547608ae9859c60192",
+    "packages/python/tests/test_recursive_containers_native.py": "2d6f7c1c60fb4295a3e40f2481171c1252550f7f52928a6ce9047de2434e3155",
+    "packages/python/tests/test_reference_assembly.py": "da3236c159ba9d9dfc253a5571d56e37ccd731061e6a7376da5af58ba99ff423",
+    "packages/python/tests/test_reference_decimal_native.py": "3b97e3de0a67fe764b08ff941e4ca8d570a2589987364e2f5d9a0c5a0282d2b2",
+    "packages/python/tests/test_relationship_evolution_native.py": "f11111d522e5b4f83033d3141f5aa509490594ecfc1430eac2731b53fcb08123",
+    "packages/python/tests/test_relationship_names_native.py": "32b49268245547ddc473a63b4944448d52dff7352cf6796d59421855c717c685",
+    "packages/python/tests/test_replay_frame_native.py": "e543e6e3315b98ab09e953c3b7a36373701958e97861d4ac4291b76f70ac63ba",
+    "packages/python/tests/test_required_catalog_rebind_native.py": "3e43e10fd1561bcd3266867d63a86bff11b41c36b9001f7b5e93c961b144a3c6",
+    "packages/python/tests/test_required_ddd_evolution_native.py": "d3c3665b41c9c35823c7e7bc826a42ef41fa62a2c45c696a8e14753987c0b520",
+    "packages/python/tests/test_required_evolution_native.py": "85e97bffe9406268660b4baf9b358afc7007ef5d236b1a651c0195709c3c53a1",
+    "packages/python/tests/test_resource_registration_preflight.py": "da396b688976537325b06d09eac7be496be72f932cc3b5c282db4575fb95eebd",
+    "packages/python/tests/test_rootless_preparation_native.py": "da551d8585dbb3fb5d47b6cbca5f2e0038230a826e345a60ed77469fdabb191c",
+    "packages/python/tests/test_routine_ddl_barrier_native.py": "6b0a2515c8ba250433a93775fd8f1d9ffbbffa1aceed339243ab7d531d3f2824",
+    "packages/python/tests/test_row_event_attribution.py": "2560c907279118e6e1c4faaffb393e127d457ced5c66e332f077b0e9e76afa64",
+    "packages/python/tests/test_row_forest_native.py": "9112a36b0edae94f0e65e10f75d0186a9911003d10ce852a3582a6e67f19c19f",
+    "packages/python/tests/test_row_group_custody.py": "7f630015a8c2dd0ab38f588676f33e0b49dc74abbeeb9d62ec137dafe29d027d",
+    "packages/python/tests/test_row_image.py": "0c0a9a88535b653702ad59c7e50d5136d1550502c4c6f8939cfbb64e07577893",
+    "packages/python/tests/test_row_image_capture.py": "d84c32c0dae8564b6c8d4df3816a9f098af32a5d60b07c9810070925c3cdc221",
+    "packages/python/tests/test_row_image_scalar_shape.py": "cfc6f777fa599cc5850e3d512fa937b2e2aaaf86bef5b5944abd51cb1795757f",
+    "packages/python/tests/test_row_image_tree.py": "5720aeeddc4c83098e1a085378fd72100e707a7677aa3ebe80a0210e0dc778fe",
+    "packages/python/tests/test_row_operation_address.py": "8e20aba043f2870676df1e93fadbffaa77b560671d11e9e2cde4c0341c9b2f80",
+    "packages/python/tests/test_row_operation_context.py": "835c9641a2116e85105f46b7417a3f07e3c3f668eac5e807a4fe953f6729b8c8",
+    "packages/python/tests/test_row_operation_custody.py": "25338ebd6644c73713388d1dc40e82c8336c791e7be4dd45af7d3270005056e5",
+    "packages/python/tests/test_row_operation_json.py": "888dffcd1736b810eedff78aaf5acc2dbe4623c79e2bef0c834689c63348c002",
+    "packages/python/tests/test_row_registry_correspondence.py": "32947f11b5d03d62706e96039175402514f1f90f80c6834f56dc1fc9f109380f",
+    "packages/python/tests/test_row_touch_observer_native.py": "dc01b68a5ae7fd80a5189627ff1a1d00e285b645bdfba8679db4e32c24ce4326",
+    "packages/python/tests/test_row_touch_registry.py": "dd320f8da1a63d8b55a6450b75c98b767de9e66894bbd197ecc98f51304f9b39",
+    "packages/python/tests/test_runtime_migrations.py": "c0a8741272929198bd8e4c35c737173c39de6ac71c8fbd756082be44dc1832e0",
+    "packages/python/tests/test_runtime_migrations_native.py": "912405252ce53f24487aa000b6483deabd0075a9e0031bb804bb06ad10e477d3",
+    "packages/python/tests/test_runtime_migrations_subsequent_native.py": "43f431db4af400ab26090f1b95ee6cbf8062f26edef8a59bb2c78ade61dcae91",
+    "packages/python/tests/test_runtime_release_cache.py": "24cff93ba1d8377d18d0a6c1eef86524d9079b6ebc0b08cda61fcb073b464fa6",
+    "packages/python/tests/test_scalar_containers_native.py": "a5938166bd6491cabc16966aa40be1c2a48321c5b3acffdff0f55cc4bffc10b9",
+    "packages/python/tests/test_schema_cache_native.py": "69f8efff248008ca18a7c830ee99d24f58be06a6916e328b204670ec6444c235",
+    "packages/python/tests/test_schema_memory_cache.py": "39661e6e1ef86baaba3fb29ce5cfa04bc456e3fd9aeeca1e8607fd40f822c263",
+    "packages/python/tests/test_scram_preparation_login.py": "78da2c37c29ed20e0f76308f8f09e2b1c4d0cc319d85a15b5ce70826268280f6",
+    "packages/python/tests/test_scram_preparation_login_native.py": "65086aaaa260ffbc4f5687150a95b1a9192341ccbdbdf2726e1b2f926f2281ee",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "cb300c7f909266a503cac52992c72550fe3863ed09ea438c49ae94c64f8f4f17",
+    "packages/python/tests/test_security_association_binding.py": "c0d1533f97ab1e253ad7267709e4be32c405badd3305f4a63f23e59622c08b48",
+    "packages/python/tests/test_security_catalog_archive_native.py": "254a09f1d85dc2832e9b20a2fe577f48ef2e095e07cf41f2fa562bb1d5d55ee5",
+    "packages/python/tests/test_security_catalog_authority_native.py": "7d700998ebb06efa541e28f53e87b5b530c42694165ed527096c8e9c600087a7",
+    "packages/python/tests/test_security_catalog_channel.py": "a7f98ae608cf0b7cb1eec8d18c7b32c74a60397f6a882e4b6fabcd5a4fa5d0f8",
+    "packages/python/tests/test_security_catalog_channel_native.py": "c93d2bf6f06b5bbe2661a717fed632e36d729a647cfdf11dbc495e5cae1a1799",
+    "packages/python/tests/test_security_catalog_guard_native.py": "06ea66184f26f5700c5a359744c495079ca6c4e5756349d91390d9c56e4bf037",
+    "packages/python/tests/test_security_catalog_read_native.py": "2e1872a4e8c390033b15d1f6f4c61f37f1dab3e67a37f217da691a21bd44711c",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "9167c03d7124aaba26250c6e3f44dbbcb0f5ffcb8f097ed15172686cd70b4d02",
+    "packages/python/tests/test_security_catalog_source_factory_native.py": "84881160a037f8458a8efb67a2c4f0523018dd0dc097c1310d7881240c4eed7d",
+    "packages/python/tests/test_security_catalog_source_installation_native.py": "4f587c50d3c0082c7c8ef2b4c1e65cd1f27bb9d72301f957bbcdaa94b22c09f6",
+    "packages/python/tests/test_security_catalog_subject_installation_native.py": "201a478232b743b2cd426c365617fc55f03e129399efef15a6090aec6602f847",
+    "packages/python/tests/test_security_catalog_subject_native.py": "ad4af9454c7c87ca9ecc87629142bc43291f248a4cf8deee99c2185cf52d67dc",
+    "packages/python/tests/test_security_fact_coverage.py": "97869a57c6f356ce6f76ec3b6afd5afeb204f9dc621c80bc67aa098774d673f1",
+    "packages/python/tests/test_security_fixture_privacy.py": "a67fe2f1d74ddf2eb554cca750fd4304e5eb751c73a2a70d9b47469bf0e0dc36",
+    "packages/python/tests/test_security_graph_projection.py": "5b05f4f4004929e38e56b8e7ca2844325fb23b02d464cde18d386980405d4e36",
+    "packages/python/tests/test_security_graph_read_native.py": "47e0308c9b0f6d7102c76f3d0bc65f0a807cc945f9b90c3c6225becb1f4fb85e",
+    "packages/python/tests/test_security_graph_source_cut_native.py": "3664f4f5da63caef99c1913250c23cb332348f9ac8280e4c169a52065fd857fc",
+    "packages/python/tests/test_security_guarded_preflight.py": "ef3fa36f1c411f68b5a08678c0df15bf59256c41f27f73ff6a373f9c3830e772",
+    "packages/python/tests/test_security_guarded_source.py": "6a4024eba4edc7ee58d9de94f623cd3a1cded2eeaaf7c03e9cc9a9aa498db395",
+    "packages/python/tests/test_security_guarded_subject_native.py": "efb38ae1a0718e7362fe49723fd210c17c3376cd68a89ef52ce0b4661c307d83",
+    "packages/python/tests/test_security_helper_acl_native.py": "788291881407633521d5dcdb01bf2fdc8e92a9f7a0a66d61c6a20775ade09b27",
+    "packages/python/tests/test_security_helper_definition_native.py": "a169f20b464bf2afcb549bdf137aa9215fd1b0c205871b12dddece7e67364583",
+    "packages/python/tests/test_security_mapping_compatibility_native.py": "37410f772516ed20b5e93218b60cabba0cc00bce789ae09783cbf01387d8d2d1",
+    "packages/python/tests/test_security_mapping_native.py": "272dd68f453b612e9931a6385fa2fd92c7276d032b254cbc66cdfb292dc0cbf0",
+    "packages/python/tests/test_security_masked_query_use.py": "fa9dedfe09b62eb7aac1cb317b3579895d61fca4c4b42b81f53197907923b1dc",
+    "packages/python/tests/test_security_ontology_edges_native.py": "24ba07f37ae708f86bbcbf8e2333f0499c1222cbcbbabbc409306c26e5d3006e",
+    "packages/python/tests/test_security_predicate_native.py": "deadcfb949e048bf0bb47eca13f7c867611af469275241a064d02b69d46e7074",
+    "packages/python/tests/test_security_preparation.py": "2cb2888696cee6bc57af1e965d904daa03cddb19107887cadde1aba97b0e9f21",
+    "packages/python/tests/test_security_preparation_authority_native.py": "6e0e8d55c936bc42fc78ab7f2148496527cee33cd15bc96f2c0133b5ae038219",
+    "packages/python/tests/test_security_public_ontology_native.py": "9b369d6e6051fc273aaf500c44b90f15b9157af1aad54b65e60cc2a1cb5b8a8c",
+    "packages/python/tests/test_security_public_relationship_native.py": "5e06ed252eeb7f1945bbcb4ff0def90bff2bd81aa58a0b87d1056b4bc02717d8",
+    "packages/python/tests/test_security_query_publication.py": "5f733ae4e691a63e3c1b2024334c337e1a7b2af9d97c927d9f39ad5102885c42",
+    "packages/python/tests/test_security_registered_callers_native.py": "eaa33992cde7605c2c2670c157fb3889193cfeb3705db026b1d674c46c329265",
+    "packages/python/tests/test_security_relational_capture.py": "70ad1f31e75b37b87e7d6eba0ae4bf222161ef26ff731b7c7a2045fd110b1f08",
+    "packages/python/tests/test_security_relational_codecs.py": "d89f7bd913f7b86716c3a211733584d25df30bd50cfb40895840443d9871b9ac",
+    "packages/python/tests/test_security_relational_inspection.py": "945e15ce92f64130f4dfe7391bfe3ce19ab7289be093c8beef1b8d23b880506a",
+    "packages/python/tests/test_security_relational_source.py": "def93276ed484e5b366d1617c93ccefad286060b6b4c53b91963d9704e92f7c8",
+    "packages/python/tests/test_security_relationship_boundaries.py": "291d5a422a16e8fc699981fd8c145ed623d49aae84d8374518e7e70e6bc5bbbe",
+    "packages/python/tests/test_security_relationship_source.py": "6179286baca0aa70c8ffd1bae7892a81d994c8cd2a6cdcdebfcf4bd59520bc5d",
+    "packages/python/tests/test_security_source_epoch_installation_native.py": "52e5b40f157f517ee5b45247adf531742bd8247feb2fbe8525206a4b56750570",
+    "packages/python/tests/test_selected_capabilities_native.py": "106669db07a592dcbcad09e4e435f7badf9a9d3dfc10375602efc1cc3f5fe001",
+    "packages/python/tests/test_stress_registration_native.py": "c5be6674922cd07f23f3b7e2b2cdcddc8f73fde20f090719f7492099c1a0d229",
+    "packages/python/tests/test_string_key_bucket_native.py": "c7077693b728b0111bf8118a686b0670ed72a321c1082f02de1bdc9f56bf6e9d",
+    "packages/python/tests/test_text_limit_evolution_native.py": "15a26e58ea90b14a2dba12875d91253cb4820228756d3788f6c3b9102cde0c7a",
+    "packages/python/tests/test_timestamp_query_native.py": "e09cee99830685e49e6b7bfa81e335ddf7d2a67f2b536372e2cad4cdf65709be",
+    "packages/python/tests/test_touch_operation_correspondence.py": "59c6ccdf57c4e5a5eb6fd88597ffeb609d52000aff12b82794846d3a4313e095",
+    "packages/python/tests/test_traversal_native.py": "f262755189b8b30dc35246c2afc7b2f3733d9a5859e6f80efee0fb947a6b750d",
+    "packages/python/tests/test_typed_keys_native.py": "226490634e892a8df5fa59a00a45ff5dbd77816f40781d2aacbf5eaba40e067d",
+    "packages/python/tests/test_typed_query_pages_native.py": "280db2c122b1957c5d6461a465347f925a3751703913b9f43ca253df34085a71",
+    "packages/python/tests/test_typed_relationship_keys_native.py": "9f567de0b8490e8208b004a1fb8d97c848f6939997f5105c29d931755570c9a5",
+    "packages/python/tests/test_umf_domain_packs_native.py": "9e1b423332911058756f00fb2dbadb080cfb9469ad5821110edc028ea8ad229d",
+    "packages/python/tests/test_umf_key_tuples.py": "0dd8ddadc65093b1dbb87a85dada4e7c69cc04aa53a7ac571e96b3e972d4c5e3",
+    "packages/python/tests/test_umf_literal_key_tuples.py": "7bbcb9a86c691508ade062539608838c40200f986afd34e151c0d4d788124a1b",
+    "packages/python/tests/test_umf_string_key_verifier_native.py": "a9a268e479154143e701e74921fc11a2c05e2d0e2d803a6ef9f8f2c5bccd1e29",
+    "packages/python/tests/test_verify_weft_release_wheel.py": "01d94f23c0e2898f0d415c66a0961efee0cce16e5e9cd94fa9ab504747efb838",
+    "packages/python/tests/test_weft.py": "ff5c1c17b3bda2a3ec41e54b1ac27fd57a1065705b7ecfb99c92c28974cc0453"
+  },
+  "expectedModuleCount": 358,
+  "postgresqlVersion": "18.6",
+  "lifecycleIsolation": "Direct LocalPostgres and raw startup/shutdown fixtures retain separate owned clusters"
+}

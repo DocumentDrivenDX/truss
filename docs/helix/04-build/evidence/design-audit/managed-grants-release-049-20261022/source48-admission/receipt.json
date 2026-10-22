@@ -1,0 +1,51 @@
+{
+  "scope": "Actual public v0.0.48 two-timezone initializer capture and additive migration artifact admission; final49 native qualification is separate.",
+  "passed": true,
+  "sourceCommitBeforeAdmission": "d7c739d6f06d06ce6c73725d629a272594940354",
+  "capturedAt": "2026-10-22T19:46:15.417644+00:00",
+  "sourceWheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+  "sourceNativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "targetNativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "producer": "scripts/build-managed-grants-source48-route.py",
+  "producerSha256": "d36909085e8c5566c9290e2e8436425d732ff855bbdf862960ff9209ffa1fc1e",
+  "migrationManifestSha256": "86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923",
+  "twoCapturesReturnCode": {
+    "America/New_York": 0,
+    "UTC": 0
+  },
+  "checkOnlyReturnCode": 0,
+  "packageReturnCode": 0,
+  "workerContextsClosed": true,
+  "workerFixtureInventoryVerifiedClean": true,
+  "postCaptureProcessCheck": "Escalated pgrep found no postgres.*truss process after both contexts exited.",
+  "retainedEvidence": {
+    "America_New_York.json": {
+      "rawSha256": "5f029c848b3c7c7f6addc006021e397ec1d837324cff0b5b7dbad05c146dd790",
+      "retained": "America_New_York.json.gz",
+      "retainedSha256": "bdfa570bd70080d89b4b1d844ce621f9d235890ea735a73fa2c0bb05a77d5384"
+    },
+    "UTC.json": {
+      "rawSha256": "d165c21ba2fc7bc6049254922934606ff35f1c8575259fb4624fd37b47e6e09a",
+      "retained": "UTC.json.gz",
+      "retainedSha256": "7a7dadbe2264fc6a8e825f11737bd0e1d9a130e786447b90c3f46a24f3c14fd0"
+    },
+    "source48-ny.log": {
+      "retained": "source48-ny.log",
+      "retainedSha256": "0f5d611c61bf677760787b0e518e03a5c415863c0b9e17906008fbb296fc65db"
+    },
+    "source48-utc.log": {
+      "retained": "source48-utc.log",
+      "retainedSha256": "cc33705339278a4ee766af457d39dadd0fc95ff659cbb67fb3dded0a8a164ade"
+    },
+    "source48-finalize-check.log": {
+      "retained": "source48-finalize-check.log",
+      "retainedSha256": "94cd4d25a1b17b7d05e7d0e36e653ba3ed6c2117837254e97cc0b2b42b5abb58"
+    },
+    "source48-package.log": {
+      "retained": "source48-package.log",
+      "retainedSha256": "dbcfa487e31885dc6603a63fb7a8d4722bed78220e8cfb7e12efb1adcef9aebd"
+    }
+  },
+  "actualLakebaseAcceptance": "not_run",
+  "final49Qualification": "pending"
+}

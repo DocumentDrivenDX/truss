@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/scripts/qualify-managed-platform-grants.py", line 181, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/erik/Projects/truss/scripts/qualify-managed-platform-grants.py", line 84, in main
+    raise ValueError('Exact unmodified independent UMF owner source/lock required')
+ValueError: Exact unmodified independent UMF owner source/lock required

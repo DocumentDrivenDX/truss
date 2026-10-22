@@ -1,0 +1,113 @@
+{
+  "scope": "Original failed first attempt of corrected hosted628 campaign; one unchanged complete failed-job rerun allowed after Sol review.",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39845177814/attempts/1",
+  "sourceCommit": "6287e52a5ef8a0abce90341106e8e9389216cb80",
+  "passed": false,
+  "migrationTests": 106,
+  "migrationPassed": true,
+  "hfTests": 62,
+  "hfFailures": 1,
+  "hfErrors": 0,
+  "hfSkipped": 0,
+  "failure": "test_whole_group_more_than_1024_events_uses_separate_event_budget: ExecutionFailure cancelled SQLSTATE57014",
+  "diagnosis": "Consistent with fixed10000ms SQL deadline; test/audit source unchanged from public48, where it passed in11.160s total; same candidate passed locally in9.250s total; failed hosted case19.517s total. Host speed is a possible explanation, not established cause. No assertions or limits changed. Repeat requires Linux timing/plan diagnosis before release.",
+  "unchangedRerun": "39845177814 attempt2 pending",
+  "retainedEvidence": {
+    "linux-branch-628-failure.log": {
+      "originalSha256": "b7739a256ec2b54d1d3ca114f0c514a99fb1bd24672742c41b4fba7accb85c04",
+      "retained": "linux-branch-628-failure.log.gz",
+      "retainedSha256": "77af3ffae4157b4c4e10b8bc0160ded97e7ffa33b4d2a75bc495adfba3f09b1b"
+    },
+    "linux-branch-628-hf/qualification.json": {
+      "originalSha256": "7cf759c5d4486c6eddd81d3d080f8988e41c5ff22955312dad65d0742cea87ed",
+      "retained": "linux-branch-628-hf/qualification.json.gz",
+      "retainedSha256": "1a6e79d37738287736406f287f47c7a0e8af9bdd95425c76514274af8795b954"
+    },
+    "linux-branch-628-migrations/PriorPublishedReceiptTests-before-close.json": {
+      "originalSha256": "e8fee0ffae974bd2378b21a38b4c93e62ef36dcf4216fd6ad5b8af3fbdbc3563",
+      "retained": "linux-branch-628-migrations/PriorPublishedReceiptTests-before-close.json.gz",
+      "retainedSha256": "00a57aa1efa8dc8fe1c777b376905ad5d1d03baa52d25e19d2985c45e781f570"
+    },
+    "linux-branch-628-migrations/Published48ReceiptTests-before-close.json": {
+      "originalSha256": "6bfc1cb1a0fc874531b0c732ffca00dc99c9c356bb1161b94895ad8a79259460",
+      "retained": "linux-branch-628-migrations/Published48ReceiptTests-before-close.json.gz",
+      "retainedSha256": "bedd5c92b9ec3649f13c5c67728a6c5d6036a3f11818ad2cd01396734b8bb2b4"
+    },
+    "linux-branch-628-migrations/qualification.json": {
+      "originalSha256": "94e0bffc32f308466cf4931726a164cccfed156f09cd369bc0601d71382327a2",
+      "retained": "linux-branch-628-migrations/qualification.json.gz",
+      "retainedSha256": "c98e6991c6396969c98fc2839d6e589076df8463227a3563103d10c7a6cf038e"
+    },
+    "linux-branch-628-migrations/source44-native-inventory.json": {
+      "originalSha256": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+      "retained": "linux-branch-628-migrations/source44-native-inventory.json.gz",
+      "retainedSha256": "93b37f438c2381f820cd660aeb241abcfdf63802c4794d0e59c1bcaf47dede6f"
+    },
+    "linux-branch-628-migrations/source44-original-evidence.json": {
+      "originalSha256": "823cae891b0d9563535432b18f551973f453baec7d061e7f1e2ba542365d82a4",
+      "retained": "linux-branch-628-migrations/source44-original-evidence.json.gz",
+      "retainedSha256": "5705155a14057306907cffbe247ed64c575e9289d6a56d61e4a5ee6b8c22015c"
+    },
+    "linux-branch-628-migrations/source44MigrationTests-before-close.json": {
+      "originalSha256": "cee9eb80058104d54158cf6aabacb310fb4556036f654e221ed656e85300fd0f",
+      "retained": "linux-branch-628-migrations/source44MigrationTests-before-close.json.gz",
+      "retainedSha256": "dbba6b8aa77274409813966bbd6f5b9fda55d9d63ac1a97b1f81bfd55c796290"
+    },
+    "linux-branch-628-migrations/source46-native-inventory.json": {
+      "originalSha256": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+      "retained": "linux-branch-628-migrations/source46-native-inventory.json.gz",
+      "retainedSha256": "4ca7612fa5790f64a67c988e6c2bc76cecfa43dfdd864b3ef030e55ae8051a7f"
+    },
+    "linux-branch-628-migrations/source46-original-evidence.json": {
+      "originalSha256": "64411121da7e46c5cdcc358e6d049b1e2768f66b148b228f1d22c6d8d9f48e0b",
+      "retained": "linux-branch-628-migrations/source46-original-evidence.json.gz",
+      "retainedSha256": "0fc0bf255f67d41c9d6c0246aa1b52f28aec8b0b9e698ab3e267279c2ea832f4"
+    },
+    "linux-branch-628-migrations/source46MigrationTests-before-close.json": {
+      "originalSha256": "a447a62b5ebf962408a917e12461ad363ec4b2b75e65fece03f5af408fe2aae6",
+      "retained": "linux-branch-628-migrations/source46MigrationTests-before-close.json.gz",
+      "retainedSha256": "bc76db9c2c840b3b88783a8420140484e436f414c1777c802d159abd44f59e39"
+    },
+    "linux-branch-628-migrations/source47-native-inventory.json": {
+      "originalSha256": "c53951359da8a9bd37ae909929f92142a4b7351d4b534c12144a541c84c5ad11",
+      "retained": "linux-branch-628-migrations/source47-native-inventory.json.gz",
+      "retainedSha256": "870048c0fc85913e28095a5247e0b5339d3c5afdd8806d838601c74c22e263a9"
+    },
+    "linux-branch-628-migrations/source47-original-evidence.json": {
+      "originalSha256": "6b2bd51d27a2919e28cc27c99d99cae0c3899a7a7d8ab80bfebaf720716ffb3e",
+      "retained": "linux-branch-628-migrations/source47-original-evidence.json.gz",
+      "retainedSha256": "e4e96b1b07a304a3c331b47df5d1ba2a93f80694c857a1a9fcc735d837dbe6e0"
+    },
+    "linux-branch-628-migrations/source47MigrationTests-before-close.json": {
+      "originalSha256": "264437e55912444b866c3fea26920eca73a7a8051a24e0fddbabb9775b5fd4da",
+      "retained": "linux-branch-628-migrations/source47MigrationTests-before-close.json.gz",
+      "retainedSha256": "5e89260f16dad63b60ca5ecd40a4d074d5fe7c5990419986b3f2ee247dcf9209"
+    },
+    "linux-branch-628-migrations/source48-native-inventory.json": {
+      "originalSha256": "5f8c5d4c412f4e1e0ee3e81a2608db3e0cd6f5ce2287d5afc5ba98156d51b363",
+      "retained": "linux-branch-628-migrations/source48-native-inventory.json.gz",
+      "retainedSha256": "d04a7307d19935f1ecd3ca1ab63c4bf6ae5008bb7e3704c2acd56031df45d945"
+    },
+    "linux-branch-628-migrations/source48-original-evidence.json": {
+      "originalSha256": "dcedc5b36b91a97d69522a83535d8f0d8dba8b1b03343363d058a66f0037ff8e",
+      "retained": "linux-branch-628-migrations/source48-original-evidence.json.gz",
+      "retainedSha256": "a0c35564fefe1765bcf61f6af77dec2d2b9c8011050524455127ae4fce371b34"
+    },
+    "linux-branch-628-migrations/source48MigrationTests-before-close.json": {
+      "originalSha256": "934a2a84d8a01c056547fe58fcc0fa477edfc6a7c53cad7dee8b0e7d7c286f1e",
+      "retained": "linux-branch-628-migrations/source48MigrationTests-before-close.json.gz",
+      "retainedSha256": "6529e54ec25eaedcab4bb6aed7ba9890e6483143aa6037c089dadb35beaa8815"
+    },
+    "linux-branch-628-run.json": {
+      "originalSha256": "22e847ecba2f06c12282dc0ae48d9f21c230237f17c3e18c1bb793fa269eb7f7",
+      "retained": "linux-branch-628-run.json.gz",
+      "retainedSha256": "510fb32418b0c845dc2e1f08c6ebd8a0283254f0688af78ec0cb66db671b4fde"
+    },
+    "retained-files.json": {
+      "originalSha256": "cbd5074ffffbf820dd41bee4636bc7404dd95b4c8c508c515b0818f919f781b0",
+      "retained": "retained-files.json.gz",
+      "retainedSha256": "a211e4a873b893c8511d6a78122608ceefc140b0ef6004cbac01e1016363c743"
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}

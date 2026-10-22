@@ -3,7 +3,9 @@
 import json
 from dataclasses import replace
 import hashlib
+import os
 from pathlib import Path
+import shutil
 import subprocess
 import psycopg
 import test_group_create_native as base
@@ -62,9 +64,12 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         self.addCleanup(self.admin.execute,'DROP ROLE action_reviewer')
         def original_owner(model, action):
             payload = {'model':json.loads(model),'action':json.loads(action),'pin':request['modelPin']}
-            result = subprocess.run(['/opt/homebrew/bin/bun',str(Path(__file__).with_name('owner_action_preparation.ts'))],input=json.dumps(payload),capture_output=True,text=True,timeout=30)
+            bun = os.environ.get('TRUSS_BUN_EXECUTABLE') or shutil.which('bun') or 'bun'
+            result = subprocess.run([bun,str(Path(__file__).with_name('owner_action_preparation.ts'))],input=json.dumps(payload),capture_output=True,text=True,timeout=30)
             if result.returncode:
-                raise ValueError('Original owner refused')
+                stderr = result.stderr.strip()[:1200]
+                detail = f': {stderr}' if stderr else ''
+                raise ValueError(f'Original owner refused (exit {result.returncode}){detail}')
             return result.stdout.strip().encode()
         registry = ActionRegistration(original_owner)
         model_bytes = json.dumps(request['model']).encode()

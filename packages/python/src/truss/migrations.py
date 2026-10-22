@@ -127,7 +127,7 @@ class RuntimeMigrations:
         # current independently observed installation, never from a caller JSON permit.
         with self._connection() as connection:
             self._begin(connection,read_only=True)
-            with connection.cursor() as cursor:ctx,_,_=context(cursor)
+            with connection.cursor() as cursor:ctx,_,_,_=context(cursor)
             connection.rollback()
         retained=self.registry.inspect(reference,ctx)
         request=_evidence(retained['obligation']['originalEvidence'])['request']

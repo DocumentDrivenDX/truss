@@ -143,6 +143,8 @@ def register_preparation_program_in_transaction(host, transaction, *, store_cont
         return Error(ExecutionFailure('execution_obligation', 'Original bounded preparation program required'))
 
     def register(cursor, observed):
+        from ._installation_privileges import require_empty_managed_grants_with_cursor
+        require_empty_managed_grants_with_cursor(cursor,'Preparation program registry')
         path, installation, owner, actor = _context(cursor)
         verify_action_store_enrollment_context_with_cursor(cursor, context, installation)
         binding = _artifact(_json(program.binding_artifact))

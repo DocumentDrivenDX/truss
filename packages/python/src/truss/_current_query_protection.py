@@ -9,7 +9,7 @@ import re
 from psycopg import sql
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._current_query_sources import capture_current_query_sources_with_cursor
 from ._current_query_subjects import _verify_helper
 from ._current_disclosure_originals import is_graph_disclosure_originals
@@ -216,6 +216,7 @@ def activate_current_query_protection_in_transaction(host,transaction,*,subject_
         return Error(ExecutionFailure('execution_obligation','Original protection host and Subject registration required'))
     def activate(cursor,observed):
         _pin_cursor(cursor)
+        require_empty_managed_grants_with_cursor(cursor,'Current query protection')
         cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
         prior=cursor.fetchone()[0]
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)

@@ -1,0 +1,2 @@
+error: Bun could not find a package.json file to install from
+note: Run "bun init" to initialize a project

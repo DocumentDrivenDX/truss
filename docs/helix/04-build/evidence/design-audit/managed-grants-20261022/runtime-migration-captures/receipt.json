@@ -1,0 +1,185 @@
+{
+  "activeEdges": [
+    {
+      "artifact": "edge-9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.json",
+      "direction": "forward",
+      "source": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+      "target": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea"
+    },
+    {
+      "artifact": "edge-71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.json",
+      "direction": "forward",
+      "source": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+      "target": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea"
+    },
+    {
+      "artifact": "edge-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea-35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.json",
+      "direction": "forward",
+      "source": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "target": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f"
+    }
+  ],
+  "baselineMigrationManifestSha256": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+  "captureProducer": {
+    "compatibilityNote": "The saved captures were produced before context() changed from three to four return values. The current generator updates that unpack and enforces an empty managed policy; captures were not rerun.",
+    "currentScriptSha256": "510028a8acf0b73bf2e754daeb986023dcedb0a3f0226bcef076490528e0aa47",
+    "script": "scripts/build-managed-grants-migration.py",
+    "sha256AtCapture": "08ab48a50c652a3a4f43c81c8fc08aada6c11e655a69ce5ec087df289a3ed82d"
+  },
+  "captureTool": "scripts/build-managed-grants-migration.py",
+  "captures": [
+    {
+      "archive": "America_New_York.json.gz",
+      "sha256": "7a57b8218ce7d4f6d32d5951e5ec4db2f9253278364b83aefe068d75d0379c0f",
+      "sourceRuntimeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "sourceWheelSha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+      "targetRuntimeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+      "timeZone": "America/New_York",
+      "uncompressedSha256": "3ca2d8b10086fdc5dcb2811f1bdc8f9c058c77c36e3a72ab828ef3505b2455d1"
+    },
+    {
+      "archive": "UTC.json.gz",
+      "sha256": "314338f41a62ab87c8e53b2b65bc68d718551a9cde78921c5fbb76dd2fa65f72",
+      "sourceRuntimeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "sourceWheelSha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+      "targetRuntimeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+      "timeZone": "UTC",
+      "uncompressedSha256": "35d8a7599753c9bad5c2521d4775983b2cb7061ad8dc9e737397e4f89dc90b97"
+    }
+  ],
+  "currentMigrationManifestSha256": "fd9a9b6d6c82233c2a9733d7c0a06657573a4f627b5f210f1c0e401ced96d8ef",
+  "initializerRuleCount": 1,
+  "interfaceVersion": "truss-managed-grants-migration-capture-receipt/0.1",
+  "nativeProfile": {
+    "postgres": "18.6",
+    "psycopg": "3.3.6",
+    "wheelhouse": "/private/tmp/truss-runtime-migration-wheelhouse"
+  },
+  "nativeValidation": {
+    "captureDelta": "passed: source47 profiles match immutable history; target adds managed_grants JSONB + CHECK/NOT NULL and changes only runtime_current_installation()",
+    "cleanup": "DatabaseFixture cleanup and WorkerCluster.verify_clean completed.",
+    "command": "PYTHONPATH=packages/python/src:packages/python/tests:scripts /private/tmp/truss-managed-grants-qualification/venv/bin/python -m unittest -v test_managed_grants_migration_native",
+    "migrationStatus": "passed: managed-grants-aware status and verify accept the selected persisted column grant; prepare refuses an already-current target",
+    "modelCorrespondence": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/managed-grants-model.json (passed)",
+    "negativeControls": [
+      "rogue column ACL refused",
+      "rogue relation ACL refused",
+      "registrar membership in selected role refused",
+      "renamed selected role identity refused"
+    ],
+    "outputFile": "runtime-migration-status-test.txt",
+    "result": "Ran 1 test in 6.456s; OK",
+    "test": "packages/python/tests/test_managed_grants_migration_native.py (1/1 passed)"
+  },
+  "newArtifacts": {
+    "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.acl.json": "477e826be5ffa0de30b97560c9023097b358068e56e059835f4814b7b71e09e8",
+    "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.json": "8d37c94aa6369dce2a0cebdef93f14f77b1b1606df9da26a9014c03cfbccbe80",
+    "edge-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea-35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.json": "27ab0147244cd6753f86d6f28e608b74d94bc9dc18d873c6c8efbe41b8d14021"
+  },
+  "passed": true,
+  "postCaptureContextCompatibility": {
+    "apiChange": "_migration_verify.context(cursor) now returns (context, owner_oid, registrar_oid, managed_grants_policy); both capture builders unpack and intentionally ignore the fourth policy value because these immutable profiles record physical schema, ACL and role state separately.",
+    "captureArchivesPreserved": true,
+    "captureRerun": false,
+    "postEditGeneratorSha256": {
+      "scripts/build-managed-grants-migration.py": "3a82a0af9932ced86400acfe0fd558ff68b4472b76d262d29c41e01fae43e461",
+      "scripts/build-runtime-migration-baseline.py": "31ad0ec0caa247f52c3cb00b26d53effa0a3ddc57800816d58ac3767659492f9"
+    },
+    "preEditGeneratorSha256": {
+      "scripts/build-managed-grants-migration.py": "08ab48a50c652a3a4f43c81c8fc08aada6c11e655a69ce5ec087df289a3ed82d",
+      "scripts/build-runtime-migration-baseline.py": "32082ee338b8a1fb4f951170a2a2000fe2b8b2d6e4e72965d27a9be3af6daefb"
+    },
+    "validation": "finalize-captures --check-only passed against temporary uncompressed copies of the two original capture archives; no package artifacts written."
+  },
+  "preservationRegression": {
+    "cleanup": "Each test teardown dropped its disposable database; class cleanup stopped and removed the owned LocalPostgres cluster.",
+    "result": "3/3 passed in 26.693s against exact published wheelhouse fixtures.",
+    "sourceColumnProjection": "The preservation census uses the exact archived source profile column list for every observed relation; after migration the new managed_grants carrier is independently asserted to equal the strict empty v0.1 policy.",
+    "sources": [
+      "source44",
+      "source46",
+      "source47"
+    ],
+    "test": "test_runtime_migrations_native.RuntimeMigrationNativeTests.test_populated_latest_read_preservation_replay_and_old_runtime_refusal"
+  },
+  "preservedBaselineArtifacts": {
+    "count": 15,
+    "files": [
+      {
+        "path": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0.manifest.json",
+        "sha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0"
+      },
+      {
+        "path": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e.acl.json",
+        "sha256": "83dc5e79150670ec525c8c41a05dacdd6c512dee6edb7e4c2e5131c753dbdae0"
+      },
+      {
+        "path": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e.json",
+        "sha256": "c7fa489e83bb8f0705672dad28e3ff61f6c86c36c6f885a06a49f436246eed1c"
+      },
+      {
+        "path": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.acl.json",
+        "sha256": "6700115732ee8630c7d82e9dc5f10a21afd0916066fd225ca203c8dda67345bf"
+      },
+      {
+        "path": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.json",
+        "sha256": "69f2f14227c294977be70cc593eb5e47434c3e7c839c3609c867b7ed5e4a5364"
+      },
+      {
+        "path": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00.acl.json",
+        "sha256": "4926b33ad53f54516b47f750c75155a2d9e090dc1d60e633f445ed4aa57349eb"
+      },
+      {
+        "path": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00.json",
+        "sha256": "919f1a5fbd16d69c7a1da677b913058afa9d7f5db0858a8bd2fea5761029e117"
+      },
+      {
+        "path": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json",
+        "sha256": "c7bd0ec8860448dee20a4b100298770ae438ff6ed16a070fe7a1e78833bd52d3"
+      },
+      {
+        "path": "edge-71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.json",
+        "sha256": "a9c72bf6caade86a806a3f26618e260e9d6eb947e38fa91b96fdfbb6cb29019b"
+      },
+      {
+        "path": "edge-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea-c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json",
+        "sha256": "754c329b84b8432a9885ca7146277396b3bf8eea41ce7b215a062245135cc70f"
+      },
+      {
+        "path": "edge-9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea.json",
+        "sha256": "ab5df910a908f6de23afa972accbc2165839a0dff72e5c7ec3c35517cc649db1"
+      },
+      {
+        "path": "native-deparse-equivalence-0.1.json",
+        "sha256": "47e3950e0c37620e23eb45978d6ac398e15fde2ca73a05a4310115aba9e29bd1"
+      },
+      {
+        "path": "native-initialization-profiles-0.1.json",
+        "sha256": "b1396e6e406a16cb9989a3f076c40600bd4144bf852b378a58ce20e54a3436d4"
+      },
+      {
+        "path": "receipt-model-0.1.evidence.json",
+        "sha256": "d1911ce69de8eef2600a702bbcd8eb5f7efc0e0c47c37e827244d1d641ed3422"
+      },
+      {
+        "path": "receipt-model-0.1.umf.json",
+        "sha256": "55f602da57b3ddab50963fd177a440832d51bed1cd6354a1bae157f3a55cf042"
+      }
+    ],
+    "retainedByteIdentically": true,
+    "scopeNote": "Includes original published source44/source46/source47 artifacts and the archived unpublished c4339 HF candidate; all baseline bytes remain unchanged."
+  },
+  "releaseState": {
+    "publishedRelease": false,
+    "v0.0.48LocalTagPresent": false
+  },
+  "scope": "Independent PG18.6 source47/managed-target native captures, target delta validation, and immutable lineage preservation.",
+  "sourceRuntimeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "sourceWheel": {
+    "filename": "truss_toolkit-0.0.47-py3-none-any.whl",
+    "runtimeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+    "sha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+    "tag": "v0.0.47"
+  },
+  "targetRuntimeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f"
+}

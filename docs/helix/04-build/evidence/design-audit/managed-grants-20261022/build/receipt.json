@@ -1,0 +1,20 @@
+{
+  "sourceHead": "0d1838a39a56bdca54e5573176840a4bb2442d9d",
+  "v0.0.48LocalTagPresent": false,
+  "qualificationEnvironment": "fresh isolated Python3.11 venv; Truss installed from exact candidate wheel",
+  "wheelInstalledWithDependencies": false,
+  "dependencyProvenance": "dependencies.txt and environment.json; pg8000 is test-only",
+  "priorWorkerShutdown": {
+    "v3": "owned contexts closed; inventoriesRestored [true,true]",
+    "v4": "owned context closed; inventoriesRestored [true]"
+  },
+  "files": {
+    "payload-verification.json": "cb69c378bf0c71801fdaefd3925fe9422f44ccd7a5b7a07fa90b5318c51fb5ad",
+    "run-final-gates.py": "b1f7fb1067942732b40a4db0e0cb61734a5062427c6695e619424cbd2e57ac92",
+    "verify-package-payload.py": "cfe8e250e6101c7ea44b998cef6c2e6a0c97dc0a4dd584b88c7afe2eb6fef6a0",
+    "dependencies.txt": "f81ebaa7fda2b1641e4fbe206373feb962e6b15b3bd0594cfedc35a9074e3a23",
+    "concurrent-baseline.json": "d77321a6b19e3a3a3eedba9e2a84d05c9294f8fc283c018c8f4cd06b962cb551",
+    "environment.json": "c34b92e1335abed5a411f3099f904806a09a00677b18d9bf53add3a2457c85d7"
+  },
+  "scope": "Local candidate only; no published release or Lakebase/Arras acceptance claim"
+}

@@ -1,0 +1,7 @@
+$ PYTHONPATH=packages/python/src:packages/python/tests:scripts /private/tmp/truss-managed-grants-qualification/venv/bin/python -m unittest -v test_managed_grants_migration_native
+test_current_status_accepts_only_the_saved_native_policy (test_managed_grants_migration_native.ManagedGrantsMigrationNativeTests.test_current_status_accepts_only_the_saved_native_policy) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.456s
+
+OK

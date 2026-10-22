@@ -1,0 +1,120 @@
+{
+  "checks": {
+    "selected_acl_variation": {
+      "aclAfterAdd": [
+        [
+          "relation",
+          "16653",
+          "truss.object",
+          "18365",
+          "INSERT",
+          false
+        ],
+        [
+          "relation",
+          "16653",
+          "truss.object",
+          "18365",
+          "SELECT",
+          true
+        ]
+      ],
+      "aclAfterRevoke": [
+        [
+          "relation",
+          "16653",
+          "truss.object",
+          "18365",
+          "SELECT",
+          true
+        ]
+      ],
+      "aclBefore": [
+        [
+          "relation",
+          "16653",
+          "truss.object",
+          "18365",
+          "SELECT",
+          true
+        ]
+      ],
+      "aclRestored": true,
+      "addAndRemoveAcceptedByStatus": true,
+      "addedPrivilege": "INSERT ON truss.object",
+      "carrierSha256": "a8c6e5767b3f031831c6d356f27eb11280eba4de61eac61b3b70633abd392530",
+      "policyCarrierUnchanged": true
+    },
+    "supported_additive_evolution": {
+      "head": 2,
+      "historicalSourceAndObjectPreserved": true,
+      "managedCarrierPreserved": true,
+      "r1SourceSha256": "3da8d00e3ff8ab7dea51c41f95b5cdb2fb6e5b0fd5c026994e4c75da7413d36c",
+      "r2SourceSha256": "8db8cd78f03c73aa472db1e4b9e7df26f7afa4fd1da4f23c6d9eee6812bd82c1",
+      "selectedAclRows": 1
+    }
+  },
+  "cleanup": {
+    "ownedWorkerInventoryRestored": true,
+    "workerStoppedByContext": true
+  },
+  "managedPolicy": {
+    "carrierSha256": "a8c6e5767b3f031831c6d356f27eb11280eba4de61eac61b3b70633abd392530",
+    "initialAclRows": [
+      [
+        "relation",
+        "16653",
+        "truss.object",
+        "18365",
+        "SELECT",
+        true
+      ]
+    ],
+    "platformRole": "mgl_platform_1cfd9d79ff",
+    "platformRoleOid": 16386,
+    "roles": [
+      {
+        "name": "mgl_platform_1cfd9d79ff",
+        "oid": 16386
+      }
+    ]
+  },
+  "nativeWorker": {
+    "serverVersion": "18.6",
+    "settings": {
+      "autovacuum": "off",
+      "listen_addresses": "",
+      "port": "5432",
+      "server_version": "18.6",
+      "unix_socket_directories": "/private/tmp/truss-nw-ner_sc9z/data"
+    },
+    "socketOnly": true
+  },
+  "provenance": {
+    "bun": "1.4.3",
+    "libpqImplementation": "binary",
+    "managedTargetSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+    "migrationRecipeSha256": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+    "package": "/private/tmp/truss-managed-grants-049/final-venv-2/lib/python3.11/site-packages/truss/__init__.py",
+    "psycopg": "3.3.6",
+    "version": "0.0.49",
+    "weft": "0.4.51",
+    "wheel": "/private/tmp/truss-managed-grants-049/audit-2888-final-dist/truss_toolkit-0.0.49-py3-none-any.whl",
+    "wheelSha256": "57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790"
+  },
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "retirement": {
+    "headPreserved": 2,
+    "managedCarrierPreserved": true,
+    "nativeAttempt": {
+      "exception": "FeatureNotSupported('record retirement requires explicit support\\nCONTEXT:  PL/pgSQL function truss.catalog_revision_plan(jsonb,jsonb) line 151 at RAISE\\nPL/pgSQL function truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 198 at assignment\\nSQL statement \"SELECT * FROM truss.catalog_accept_with_keys(\"input_bytes\",\"documents_bytes\",\"declarations_bytes\",\"source_bytes\",\"origin_bytes\",\"request_key\",\"key_receipts\",\"preview_mode\",\"expected_revision\",\"expected_documents\")\"\\nPL/pgSQL function truss.person_catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 4 at RETURN QUERY')",
+      "message": "record retirement requires explicit support",
+      "sqlstate": "0A000"
+    },
+    "objectAndJournalPreserved": true,
+    "outcome": "Error",
+    "public": "Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='0A000', catalog_code='unsupported_profile'), status='error')",
+    "selectedAclPreserved": true,
+    "sourceHistoryPreserved": true
+  }
+}

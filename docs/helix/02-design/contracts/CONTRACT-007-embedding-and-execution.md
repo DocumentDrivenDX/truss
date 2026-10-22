@@ -19,6 +19,32 @@ ddx:
       kind: informed_by
 ---
 
+## Managed installation refusal containment — 2026-10-22
+
+CONTRACT-008's explicit grantee policy retains existing outer transaction custody.
+`InstallRefused` additionally admits `code="third_party_grant"` with bounded
+`role_name`, `object_class` and `phase` detail. `role_name` is the exact native
+role name, at most 63 UTF-8 bytes; `object_class` is one of `schema`, `relation`,
+`sequence`, `routine`, `type`, `column`; `phase` identifies the fixed installer
+check (`pre_ownership` or `post_installation`). Existing preflight codes retain
+no arbitrary native exception text. Invalid policy input uses `invalid_roles`;
+installed policy/identity drift uses `incompatible`.
+
+A grant check after installation DDL MUST raise a private typed marker through
+`PsycopgHost`'s established operation boundary. The host publishes the public
+refusal only after confirmed rollback to its operation savepoint and successful
+cleanup/restoration. The callback MUST NOT return a normal result after partial
+DDL. Transport loss, cancellation, native retry, unusable transaction, cleanup
+failure and uncertain settlement retain their original outer result and take
+precedence over the marker. The host never converts arbitrary `ValueError`
+messages or catches SQL permission errors as a managed-grantee refusal.
+
+Operation rollback preserves prior caller work, search path and original attempt
+custody; the host does not commit, roll back or retry the caller's outer
+transaction. A successful installation remains pending until the caller's original
+outer settlement is known. Named administrative refusal detail grants no new
+person-status disclosure or ordinary administrative capability.
+
 # Contract: Embedding and execution
 
 ## Selected HF-02 person invocation and frozen recovery

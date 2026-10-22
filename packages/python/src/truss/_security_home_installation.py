@@ -10,7 +10,8 @@ from importlib.resources import files
 from psycopg import sql
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import (installation_administrator_with_cursor,
+    require_empty_managed_grants_with_cursor)
 from .catalog_runtime import _release, _pin_cursor
 
 _SOURCES = ('guard.sql','claims.sql','capacity.sql')
@@ -48,6 +49,7 @@ def bootstrap_security_homes_in_transaction(host, transaction, *, installation_i
         rows=cursor.fetchall()
         if len(rows)!=1:raise ValueError('Unique original installation required')
         identity,owner,release_id,digest=rows[0]
+        require_empty_managed_grants_with_cursor(cursor, 'Protected security-home')
         cursor.execute('SELECT release_id,release_sha256 FROM truss.runtime_current_installation()',prepare=False)
         current=cursor.fetchall()
         if identity.encode('utf8')!=installation_identity or current!=[(manifest['releaseId'],release_digest)]:

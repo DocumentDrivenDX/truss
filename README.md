@@ -13,15 +13,26 @@ use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Sta
 
 ## Run a private local instance
 
-With `uv` installed, run the published Truss `0.0.48` launcher in an isolated
-Python3.11 tool environment:
+The source candidate is **v0.0.49**, adding explicit managed platform grants to
+the separate [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
+The [macOS ARM64 campaign at commit `19d7bbe5`](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
+and [hosted Linux campaign at commit `4188141f`](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
+pass on the same exact wheel and native manifest, including all four published
+migration sources. Final tag qualification and public v0.0.49 verification remain
+pending; see the
+[v0.0.49 release notes](docs/helix/04-build/releases/v0.0.49.md) for current status.
+The command below requires checksum-verified public v0.0.49 assets and their
+matching tag. Do not substitute v0.0.48 when you need managed-grants support.
+
+With `uv` installed, run the v0.0.49 launcher in an isolated Python3.11 tool
+environment after its assets are qualified and public:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.49/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.48' \
+  --from 'truss-toolkit[local,native]==0.0.49' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -38,15 +49,21 @@ Tools still embed the Python library, connect with an ordinary identity and
 register UMF documents; public business-role and module-access configuration is
 separate. For development against the current checkout, use `./scripts/truss-local`.
 
-**Version 0.0.48:** native `0.74-candidate`, Weft `0.4.51`, UMF core `0.10.0`.
-The latest application runtime is the sole support target. Existing databases
-from the exact v0.0.44, shared v0.0.45/46 and v0.0.47 tuples move forward through explicit
-transactional migration with original-attempt recovery and no release-age cutoff. Startup never upgrades
-or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0048),
-[release notes](docs/helix/04-build/releases/v0.0.48.md) and
-[qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
-Broad test discovery, managed-service support and performance certification
-remain unfinished.
+**Source candidate v0.0.49:** native `0.74-candidate`, Weft `0.4.51`, UMF core
+`0.10.0`. It adds managed platform grants to the v0.0.48 HF baseline. Final
+v0.0.49 installed qualification passes for the recorded macOS ARM64 commit `19d7bbe5`
+and Linux commit `4188141f` tuples on native manifest SHA-256 prefix `288801f7`.
+Final tag qualification and public verification remain pending. The latest
+application runtime is the sole support target. Existing
+databases from the exact v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48
+tuples move forward through explicit transactional migration with
+original-attempt recovery and no release-age cutoff. Startup never upgrades or
+resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0049),
+[v0.0.49 draft](docs/helix/04-build/releases/v0.0.49.md), the historical
+[v0.0.48 release notes](docs/helix/04-build/releases/v0.0.48.md), and the
+[migration qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
+Actual Lakebase acceptance and broader managed-service support require separate
+qualification.
 
 For source development, the checkout wrapper selects the matching constraints
 and PostgreSQL wheel:

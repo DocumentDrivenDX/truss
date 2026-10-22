@@ -1,0 +1,6 @@
+Focused populated lineage preservation check
+
+Source cohorts: exact published 0.0.44, 0.0.46, 0.0.47 wheels from /private/tmp/truss-runtime-migration-wheelhouse.
+Test: test_runtime_migrations_native.RuntimeMigrationNativeTests.test_populated_latest_read_preservation_replay_and_old_runtime_refusal
+Result: Ran 3 tests in 26.693s; OK.
+Cleanup: every test teardown dropped its disposable database; unittest class cleanup stopped and removed the LocalPostgres cluster.

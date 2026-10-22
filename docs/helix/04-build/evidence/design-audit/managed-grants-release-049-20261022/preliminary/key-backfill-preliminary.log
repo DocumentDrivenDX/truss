@@ -1,0 +1,17 @@
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_register_existing_objects_lookup_and_query) ... ok
+test_duplicate_owned_candidates_preserve_images_and_keys (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_duplicate_owned_candidates_preserve_images_and_keys) ... ok
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_missing_root_reader_refuses_before_acceptance) ... ok
+test_owned_backfill_commit_reopen_and_reader_scoped_retry (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_owned_backfill_commit_reopen_and_reader_scoped_retry) ... ok
+test_root_reader_revoked_before_commit_aborts_backfill (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_root_reader_revoked_before_commit_aborts_backfill) ... ok
+test_invalid_owned_retained_value_refuses_without_effects (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_invalid_owned_retained_value_refuses_without_effects) ... ok
+test_missing_required_count_requires_root_reader (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_required_count_requires_root_reader) ... ok
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_root_reader_refuses_before_acceptance) ... ok
+test_owned_rebind_commit_history_original_roots_and_retry (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_rebind_commit_history_original_roots_and_retry) ... ok
+test_owned_required_rebind_and_alternate_key_commit_together (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_required_rebind_and_alternate_key_commit_together) ... ok
+test_root_reader_revoked_before_commit_aborts_rebind (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_root_reader_revoked_before_commit_aborts_rebind) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 36.634s
+
+OK

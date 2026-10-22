@@ -50,7 +50,7 @@ with LocalPostgres(RUN/'data') as pg:
   with psycopg.connect(selected,autocommit=True) as c:
    with c.cursor() as cursor:
     cursor.execute('SET search_path=pg_catalog,pg_temp')
-    ctx,owner,registrar=context(cursor);inventory=structure(cursor);rolemap=roles(cursor,owner,registrar)
+    ctx,owner,registrar,_managed_policy=context(cursor);inventory=structure(cursor);rolemap=roles(cursor,owner,registrar)
     prof={kind:[] for kind in ['owner','registrar','administrator','reader','writer','feed','audit','public']}
     for kind,name,objowner,grantee,priv,grantable,grantor in acl(cursor):
      kinds=rolemap.get(grantee)

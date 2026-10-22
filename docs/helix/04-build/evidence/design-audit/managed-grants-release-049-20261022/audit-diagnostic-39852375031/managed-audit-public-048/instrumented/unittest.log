@@ -1,0 +1,6 @@
+test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.653s
+
+OK

@@ -1,0 +1,192 @@
+{
+  "scope": "Concurrent preimage preservation audit; unchanged bytes are evidence of custody, intentional overlap changes require reviewed composition and final HF corpus/native-delta qualification",
+  "baselineHead": "3fd4bf845dfd86117ba86ceadf8a685073653186",
+  "concurrentCommitRetained": "0d1838a39a56bdca54e5573176840a4bb2442d9d",
+  "rows": [
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "baselineSha256": "5507b63f86c675c69ca59689bdcdd31806c6d3c8ad1895554202a65e78ff5a2f",
+      "currentSha256": "4d90da62269a3d0ef801ac357bac890281fe8b367c3bcb251b2e8c651ae71a08"
+    },
+    {
+      "path": "docs/helix/03-test/fixtures/hohfeld-followup-0.1.json",
+      "baselineSha256": "ffecccd4c55e8fe6d63f139448f4b990b0fbf378216a43f7db1e9ed8ff17d24d",
+      "currentSha256": "497b2181f8f6ef90eef741343abac8e782b9a5366217fba43c934525a13e529c"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/receipt.json",
+      "baselineSha256": "797bd8d2a2ac2211d0ac39428801e83a468a9988d15dbc14e3f539c46d31b99e",
+      "currentSha256": "797bd8d2a2ac2211d0ac39428801e83a468a9988d15dbc14e3f539c46d31b99e"
+    },
+    {
+      "path": "docs/helix/04-build/hohfeld-followup-plan-20261021.md",
+      "baselineSha256": "95e3b2418cd394cf71173f2632f4a8d41fada0f8a4652b42069150a719ecc26e",
+      "currentSha256": "95e3b2418cd394cf71173f2632f4a8d41fada0f8a4652b42069150a719ecc26e"
+    },
+    {
+      "path": "docs/helix/04-build/releases/v0.0.48.md",
+      "baselineSha256": "98e9130f68d720bc283edb85babd8092d174b246ac7fb3112e2de4f1f73e36eb",
+      "currentSha256": "6edc6e9ccce4c2d054484743a591c408e61b828578156a9227a1b303ee7d85e9"
+    },
+    {
+      "path": "docs/helix/README.md",
+      "baselineSha256": "a38cc81b489931ca93ef10035affd16378b06be4b1ecd72e49f525a6aaba18d7",
+      "currentSha256": "a38cc81b489931ca93ef10035affd16378b06be4b1ecd72e49f525a6aaba18d7"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/manifest.json",
+      "baselineSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+      "currentSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/person-entrypoints.json",
+      "baselineSha256": "13be01c73c4812cd2b5f3a8273db4ce8265ed91ae78e577b25d53ea9825ad26a",
+      "currentSha256": "13be01c73c4812cd2b5f3a8273db4ce8265ed91ae78e577b25d53ea9825ad26a"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/person-entrypoints.sql",
+      "baselineSha256": "2c99d9894bf5ae278feb227419851107567e5ee0f2a1583e95113f68e29b5164",
+      "currentSha256": "2c99d9894bf5ae278feb227419851107567e5ee0f2a1583e95113f68e29b5164"
+    },
+    {
+      "path": "packages/python/src/truss/_current_disclosure_originals.py",
+      "baselineSha256": "3bc4c33702f636b610b3a9f019a19b5b00eeecc3fb340be46d9a5b4a3505abaf",
+      "currentSha256": "3bc4c33702f636b610b3a9f019a19b5b00eeecc3fb340be46d9a5b4a3505abaf"
+    },
+    {
+      "path": "packages/python/src/truss/_current_query_originals.py",
+      "baselineSha256": "d09349e5907f9b3f69120fc84b39ed01e8e4ed78b02709b4baee62f10a6c37ac",
+      "currentSha256": "d09349e5907f9b3f69120fc84b39ed01e8e4ed78b02709b4baee62f10a6c37ac"
+    },
+    {
+      "path": "packages/python/src/truss/_migrations/manifest.json",
+      "baselineSha256": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+      "currentSha256": "fd9a9b6d6c82233c2a9733d7c0a06657573a4f627b5f210f1c0e401ced96d8ef"
+    },
+    {
+      "path": "packages/python/src/truss/catalog_runtime.py",
+      "baselineSha256": "c3090a85ae7a3d4b210509defc31514729670f62fb2755bd78dbc7852a3e31b0",
+      "currentSha256": "e13aeb173b6d77da13ca2e94cfaba63df413bc9a66c651bea051bf0fc981077e"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_admission_outcomes.py",
+      "baselineSha256": "1ef9c764d6a6476b66aa7c03e9385b28f711fb174a6d8c63285ff1674f198356",
+      "currentSha256": "1ef9c764d6a6476b66aa7c03e9385b28f711fb174a6d8c63285ff1674f198356"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_unchanged_native.py",
+      "baselineSha256": "2bc6a00c76e1781e8f0581fb4a085e6f5ece0e89cd4a3d862628d29019b96fb4",
+      "currentSha256": "2bc6a00c76e1781e8f0581fb4a085e6f5ece0e89cd4a3d862628d29019b96fb4"
+    },
+    {
+      "path": "packages/python/tests/test_current_disclosure_cohort.py",
+      "baselineSha256": "f59c4edc922f14e8b94b5bbd2ad927cce5c0dadc3ae97facf33416a5909667e4",
+      "currentSha256": "f59c4edc922f14e8b94b5bbd2ad927cce5c0dadc3ae97facf33416a5909667e4"
+    },
+    {
+      "path": "packages/python/tests/test_edge_authority_native.py",
+      "baselineSha256": "cf579fcf320aaa29c9aaddb8161da60591a6c4a42c56f2ff1667ea22bf8821ca",
+      "currentSha256": "cf579fcf320aaa29c9aaddb8161da60591a6c4a42c56f2ff1667ea22bf8821ca"
+    },
+    {
+      "path": "packages/python/tests/test_group_preview_native.py",
+      "baselineSha256": "39a894d2348768a229f6833c141c8816b1036a05b30fa8a888e651dccde35022",
+      "currentSha256": "39a894d2348768a229f6833c141c8816b1036a05b30fa8a888e651dccde35022"
+    },
+    {
+      "path": "packages/python/tests/test_lifecycle_native.py",
+      "baselineSha256": "959c8502bc6dc49a78d0a95cdc24a6f0f69779533cb9881a76054c3fb5996a71",
+      "currentSha256": "959c8502bc6dc49a78d0a95cdc24a6f0f69779533cb9881a76054c3fb5996a71"
+    },
+    {
+      "path": "packages/python/tests/test_object_mutations_native.py",
+      "baselineSha256": "5a92949744c95874983c5b44e2ecc3dcd4e277cabaaecb7e31c78f7add4f3db6",
+      "currentSha256": "5a92949744c95874983c5b44e2ecc3dcd4e277cabaaecb7e31c78f7add4f3db6"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_visibility_native.py",
+      "baselineSha256": "d7c154a0ac95a740c5ea657b3f1ea4cfd7ef3ef566991b13923b6522b6c21219",
+      "currentSha256": "d7c154a0ac95a740c5ea657b3f1ea4cfd7ef3ef566991b13923b6522b6c21219"
+    },
+    {
+      "path": "packages/python/tests/test_relationship_evolution_native.py",
+      "baselineSha256": "f11111d522e5b4f83033d3141f5aa509490594ecfc1430eac2731b53fcb08123",
+      "currentSha256": "f11111d522e5b4f83033d3141f5aa509490594ecfc1430eac2731b53fcb08123"
+    },
+    {
+      "path": "packages/python/tests/test_rootless_preparation_native.py",
+      "baselineSha256": "da551d8585dbb3fb5d47b6cbca5f2e0038230a826e345a60ed77469fdabb191c",
+      "currentSha256": "da551d8585dbb3fb5d47b6cbca5f2e0038230a826e345a60ed77469fdabb191c"
+    },
+    {
+      "path": "packages/python/tests/test_schema_cache_native.py",
+      "baselineSha256": "69f8efff248008ca18a7c830ee99d24f58be06a6916e328b204670ec6444c235",
+      "currentSha256": "69f8efff248008ca18a7c830ee99d24f58be06a6916e328b204670ec6444c235"
+    },
+    {
+      "path": "scripts/build-person-entrypoints.py",
+      "baselineSha256": "7b18b3e12ba85ea2100794611966d21ce4a58e07119ac5aa49a3d5a75a54283f",
+      "currentSha256": "7b18b3e12ba85ea2100794611966d21ce4a58e07119ac5aa49a3d5a75a54283f"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/truss-048-audit-disclosure.log",
+      "baselineSha256": "8eca2c22bc08c6b06264290b504d7407104c285a4b8b803ad15df4aeaf43b230",
+      "currentSha256": "8eca2c22bc08c6b06264290b504d7407104c285a4b8b803ad15df4aeaf43b230"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/truss-048-audit-protection.log",
+      "baselineSha256": "7c6df10408d8278c7121caaaf8d93b27f032a0e40118a88b3616330361a2f3e4",
+      "currentSha256": "7c6df10408d8278c7121caaaf8d93b27f032a0e40118a88b3616330361a2f3e4"
+    },
+    {
+      "path": "docs/helix/04-build/managed-platform-grants-plan.md",
+      "baselineSha256": "164e83d052f17357c034d50f979f75e05165ba0d0388de8a60ff499cc004af2c",
+      "currentSha256": "488f05d4afcd6a8ab5f5da45c77d9fb056d614a60aad77ac5ce5c232ba64fe15"
+    },
+    {
+      "path": "packages/python/src/truss/_migrations/c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json",
+      "baselineSha256": "c7bd0ec8860448dee20a4b100298770ae438ff6ed16a070fe7a1e78833bd52d3",
+      "currentSha256": "c7bd0ec8860448dee20a4b100298770ae438ff6ed16a070fe7a1e78833bd52d3"
+    },
+    {
+      "path": "packages/python/src/truss/_migrations/edge-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea-c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json",
+      "baselineSha256": "754c329b84b8432a9885ca7146277396b3bf8eea41ce7b215a062245135cc70f",
+      "currentSha256": "754c329b84b8432a9885ca7146277396b3bf8eea41ce7b215a062245135cc70f"
+    }
+  ],
+  "unchanged": [
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/receipt.json",
+    "docs/helix/04-build/hohfeld-followup-plan-20261021.md",
+    "docs/helix/README.md",
+    "packages/python/src/truss/_catalog_runtime/person-entrypoints.json",
+    "packages/python/src/truss/_catalog_runtime/person-entrypoints.sql",
+    "packages/python/src/truss/_current_disclosure_originals.py",
+    "packages/python/src/truss/_current_query_originals.py",
+    "packages/python/tests/test_catalog_admission_outcomes.py",
+    "packages/python/tests/test_catalog_unchanged_native.py",
+    "packages/python/tests/test_current_disclosure_cohort.py",
+    "packages/python/tests/test_edge_authority_native.py",
+    "packages/python/tests/test_group_preview_native.py",
+    "packages/python/tests/test_lifecycle_native.py",
+    "packages/python/tests/test_object_mutations_native.py",
+    "packages/python/tests/test_receipt_visibility_native.py",
+    "packages/python/tests/test_relationship_evolution_native.py",
+    "packages/python/tests/test_rootless_preparation_native.py",
+    "packages/python/tests/test_schema_cache_native.py",
+    "scripts/build-person-entrypoints.py",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/truss-048-audit-disclosure.log",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/installed-048-native2f23/truss-048-audit-protection.log",
+    "packages/python/src/truss/_migrations/c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json",
+    "packages/python/src/truss/_migrations/edge-7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea-c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.json"
+  ],
+  "changed": [
+    "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+    "docs/helix/03-test/fixtures/hohfeld-followup-0.1.json",
+    "docs/helix/04-build/releases/v0.0.48.md",
+    "packages/python/src/truss/_catalog_runtime/manifest.json",
+    "packages/python/src/truss/_migrations/manifest.json",
+    "packages/python/src/truss/catalog_runtime.py",
+    "docs/helix/04-build/managed-platform-grants-plan.md"
+  ],
+  "noPraxisWrites": "Task edits restricted to Truss and owned tmp qualification files; no Praxis source edits performed"
+}

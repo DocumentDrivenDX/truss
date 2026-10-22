@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/home/runner/work/_temp/venv-current/bin/python",
+    "/home/runner/work/truss/truss/scripts/run-python-test-module.py",
+    "test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget",
+    "-v"
+  ],
+  "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget",
+  "instrumented": false,
+  "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+  "trussVersion": "0.0.49",
+  "postgresqlExpected": "18.6",
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000
+}

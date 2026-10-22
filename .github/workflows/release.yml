@@ -155,6 +155,31 @@ jobs:
           name: hf-conformance-qualification-${{ matrix.os }}
           path: ${{ runner.temp }}/hf-conformance-qualification/*
           if-no-files-found: error
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.3'
+      - name: Check out the independent strict protected test oracle
+        uses: actions/checkout@v6
+        with:
+          repository: DocumentDrivenDX/umf
+          ref: 5ba77cff91a121a44c82f6bce32a78d8842161b5
+          path: .qualification/umf-owner
+          persist-credentials: false
+      - name: Install pinned independent test oracle dependencies
+        working-directory: .qualification/umf-owner
+        run: bun install --frozen-lockfile
+      - name: Qualify installed managed platform grants and contained refusals
+        env:
+          UMF_OWNER_ROOT: ${{ github.workspace }}/.qualification/umf-owner
+          TRUSS_BUN_EXECUTABLE: bun
+        run: python scripts/qualify-managed-platform-grants.py --wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)" --output "$RUNNER_TEMP/managed-grants"
+      - name: Retain managed platform grants qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: managed-grants-qualification-${{ matrix.os }}
+          path: ${{ runner.temp }}/managed-grants/*
+          if-no-files-found: error
       - name: Verify installed local runtime lifecycle and isolation
         env:
           PYTHONPATH: packages/python/tests
@@ -592,6 +617,10 @@ jobs:
         with:
           name: hf-conformance-qualification-ubuntu-24.04
           path: /tmp/published-hf-conformance
+      - uses: actions/download-artifact@v4
+        with:
+          name: managed-grants-qualification-ubuntu-24.04
+          path: /tmp/published-managed-grants
       - name: Record exact assets and publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -624,6 +653,28 @@ jobs:
           compiler_cohorts=[c for c in corpus['compilerCohorts'] if c['nativeModuleSha256']==hf['compilerNativeModuleSha256'] and c['sourceRevision']==hf['compilerSourceRevision'] and c['platform']=='linux-x86_64']
           assert len(compiler_cohorts)==1
           (root/'hf-conformance-qualification.json').write_bytes(hf_path.read_bytes())
+          managed_path=pathlib.Path('/tmp/published-managed-grants/qualification.json')
+          managed=json.loads(managed_path.read_bytes())
+          assert managed['passed'] and managed['skipped']==0
+          assert managed['sourceCommit']==os.environ['GITHUB_SHA'] and managed['platform'].lower().startswith('linux')
+          assert managed['nativeManifestSha256']==qualification['targetManifestSha256']
+          assert managed['wheelSha256']==hashlib.sha256(next(root.glob('*.whl')).read_bytes()).hexdigest()
+          assert managed['workerStopped'] and managed['workerBaselineRestored'] and managed['inputsUnchanged'] and managed['payloadUnchanged']
+          assert managed['ownerOracle']['inputsUnchanged'] and managed['ownerOracle']['sourceClean']
+          assert managed['ownerOracle']['Bun']=='1.4.3'
+          gate_ast=ast.parse(pathlib.Path('scripts/qualify-managed-platform-grants.py').read_bytes())
+          gate_constants={n.targets[0].id:ast.literal_eval(n.value) for n in gate_ast.body if isinstance(n,ast.Assign) and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id in ('MODULES','UMF_OWNER_REVISION')}
+          assert managed['ownerOracle']['sourceCommit']==gate_constants['UMF_OWNER_REVISION']
+          assert [row['module'] for row in managed['outcomes']]==list(gate_constants['MODULES'])
+          assert managed['tests']==sum(row['tests'] for row in managed['outcomes'])
+          for row in managed['outcomes']:
+              assert row['passed'] and row['returncode']==0 and row['tests']>0 and row['baselineRestored'] and not row['timedOut']
+              assert pathlib.Path(row['log']).name==row['log']
+              assert hashlib.sha256((managed_path.parent/row['log']).read_bytes()).hexdigest()==row['logSha256']
+          (root/'managed-grants-qualification.json').write_bytes(managed_path.read_bytes())
+          with tarfile.open(root/'managed-grants-qualification-evidence.tar.gz','w:gz') as archive:
+              for path in sorted(managed_path.parent.iterdir()):
+                  if path.is_file():archive.add(path,arcname=path.name)
           with tarfile.open(root/'migration-qualification-evidence.tar.gz','w:gz') as archive:
               for path in sorted(evidence.iterdir()):
                   if path.is_file():archive.add(path,arcname=path.name)
@@ -647,6 +698,7 @@ jobs:
           migration=pathlib.Path('packages/python/src/truss/_migrations/manifest.json')
           lineage=json.loads(migration.read_bytes())
           pins.update(runtimeSupport='latest-only',migrationInterface=lineage['interfaceVersion'],migrationManifestSha256=hashlib.sha256(migration.read_bytes()).hexdigest(),migrationSources=lineage['sources'],migrationTarget=lineage['target'],migrationProfile='offline-administrative-unprotected-umf010',pre010MigrationSupported=False)
+          pins.update(managedGrantsInterface='truss-managed-grants/0.1',managedGrantsSelection='fresh-install-only',managedGrantsProtectedActivation=False,actualLakebaseAcceptance=False)
           pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf010CatalogSupport={'identity':policy['identity'],'version':policy['version'],'sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf010CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])

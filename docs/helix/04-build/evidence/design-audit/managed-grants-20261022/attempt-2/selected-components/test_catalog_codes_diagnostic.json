@@ -1,0 +1,146 @@
+test_public_registration_report_view_and_status_codes (__main__.Diagnostic.test_public_registration_report_view_and_status_codes) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.164s
+
+OK
+{
+  "passed": true,
+  "diagnostics": [
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "invalid_input",
+      "sqlState": null,
+      "message": "Original unchanged preparation required",
+      "nativeError": "ValueError('Original unchanged preparation required')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "invalid_input",
+      "sqlState": null,
+      "message": "Stable request key required",
+      "nativeError": "ValueError('Stable request key required')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "invalid_input",
+      "sqlState": null,
+      "message": "Original asserted origin object required",
+      "nativeError": "ValueError('Original asserted origin object required')"
+    },
+    {
+      "operation": "report_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "invalid_input",
+      "sqlState": null,
+      "message": "Valid catalog revision required",
+      "nativeError": "ValueError('Original asserted origin object required')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "invalid_transaction",
+      "catalogCode": null,
+      "sqlState": null,
+      "message": "Original issued transaction handle required",
+      "nativeError": "ValueError('Original asserted origin object required')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": null,
+      "sqlState": "23505",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "UniqueViolation('duplicate key value violates unique constraint \"test_single_revision\"\\nDETAIL:  Key ((true))=(t) already exists.\\nCONTEXT:  SQL statement \"INSERT INTO truss.schema_rev(rev,accepted_at,origin) SELECT rev,accepted_at,origin FROM jsonb_populate_recordset(NULL::truss.schema_rev,$1) ON CONFLICT(rev) DO NOTHING\"\\nPL/pgSQL function truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 234 at EXECUTE\\nSQL statement \"SELECT * FROM truss.catalog_accept_with_keys(\"input_bytes\",\"documents_bytes\",\"declarations_bytes\",\"source_bytes\",\"origin_bytes\",\"request_key\",\"key_receipts\",\"preview_mode\",\"expected_revision\",\"expected_documents\")\"\\nPL/pgSQL function truss.person_catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 4 at RETURN QUERY')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Ok",
+      "errorCode": null,
+      "catalogCode": null,
+      "sqlState": null,
+      "message": null,
+      "nativeError": "None"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "request_conflict",
+      "sqlState": "P1001",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "ProgrammingError('request key reused with different registration input\\nCONTEXT:  PL/pgSQL function truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 64 at RAISE\\nSQL statement \"SELECT * FROM truss.catalog_accept_with_keys(\"input_bytes\",\"documents_bytes\",\"declarations_bytes\",\"source_bytes\",\"origin_bytes\",\"request_key\",\"key_receipts\",\"preview_mode\",\"expected_revision\",\"expected_documents\")\"\\nPL/pgSQL function truss.person_catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 4 at RETURN QUERY')"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Ok",
+      "errorCode": null,
+      "catalogCode": null,
+      "sqlState": null,
+      "message": null,
+      "nativeError": "None"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "unauthorized",
+      "sqlState": "P1403",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "ProgrammingError('current module read authority required for compatibility counts\\nCONTEXT:  PL/pgSQL function truss.catalog_scalar_violations(bytea) line 15 at RAISE\\nPL/pgSQL function truss.catalog_scalar_violations_with_sources(bytea,bytea) line 30 at assignment\\nPL/pgSQL function truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 181 at assignment\\nSQL statement \"SELECT * FROM truss.catalog_accept_with_keys(\"input_bytes\",\"documents_bytes\",\"declarations_bytes\",\"source_bytes\",\"origin_bytes\",\"request_key\",\"key_receipts\",\"preview_mode\",\"expected_revision\",\"expected_documents\")\"\\nPL/pgSQL function truss.person_catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 4 at RETURN QUERY')"
+    },
+    {
+      "operation": "report_in_transaction",
+      "resultType": "Ok",
+      "errorCode": null,
+      "catalogCode": null,
+      "sqlState": null,
+      "message": null,
+      "nativeError": "None"
+    },
+    {
+      "operation": "accept_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "unauthorized",
+      "sqlState": "P1403",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "ProgrammingError('current person invocation admission required\\nCONTEXT:  PL/pgSQL function truss.require_person_invocation(regprocedure,text) line 22 at RAISE\\nSQL statement \"SELECT truss.require_person_invocation(\\'truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea)\\'::regprocedure,\\'registrar\\')\"\\nPL/pgSQL function truss.person_catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea) line 3 at PERFORM')"
+    },
+    {
+      "operation": "report_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "unauthorized",
+      "sqlState": "P1403",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "ProgrammingError('current person invocation admission required\\nCONTEXT:  PL/pgSQL function truss.require_person_invocation(regprocedure,text) line 22 at RAISE\\nSQL statement \"SELECT truss.require_person_invocation(\\'truss.catalog_report(integer)\\'::regprocedure,\\'registrar\\')\"\\nPL/pgSQL function truss.person_catalog_report(integer) line 3 at PERFORM')"
+    },
+    {
+      "operation": "catalog_view_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": "unauthorized",
+      "sqlState": "P1403",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "ProgrammingError('current person invocation admission required\\nCONTEXT:  PL/pgSQL function truss.require_person_invocation(regprocedure,text) line 22 at RAISE\\nSQL statement \"SELECT truss.require_person_invocation(\\'truss.catalog_view_basis(integer,integer,integer)\\'::regprocedure,\\'registrar\\')\"\\nPL/pgSQL function truss.person_catalog_view_basis(integer,integer,integer) line 3 at PERFORM')"
+    },
+    {
+      "operation": "status_in_transaction",
+      "resultType": "Error",
+      "errorCode": "execution_obligation",
+      "catalogCode": null,
+      "sqlState": "42501",
+      "message": "Original operation failed and locally contained",
+      "nativeError": "InsufficientPrivilege('permission denied for function catalog_status')"
+    }
+  ]
+}

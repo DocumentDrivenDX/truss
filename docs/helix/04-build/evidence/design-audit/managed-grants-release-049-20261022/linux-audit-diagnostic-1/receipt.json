@@ -1,0 +1,192 @@
+{
+  "scope": "Same-host original and buffered-instrumented unchanged audit case on actual public48 and diagnostic35fd candidate; not acceptance.",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39850251479",
+  "sourceCommit": "bc7ac7d0b5b4593f582157ab1c6a8df8b72cd368",
+  "diagnosticOnly": true,
+  "acceptancePassed": false,
+  "bothOriginalCasesFailedStatementDeadline": true,
+  "limitsMs": {
+    "statement": 10000,
+    "operation": 30000
+  },
+  "originalUninstrumentedSeconds": {
+    "public48": 17.623,
+    "candidate49": 17.692
+  },
+  "instrumentedTimedOutSQLSeconds": {
+    "public48": 10.000793148000014,
+    "candidate49": 10.001170582000015
+  },
+  "cpuModel": "AMD EPYC 9V74 80-Core Processor",
+  "allFourWorkersCleanAndStopped": true,
+  "diagnosis": "Both versions reach shared legacy collector during the second collector invocation. The measurements support collector cost; they do not establish new managed policy validation as the cause.",
+  "inspectionLimit": "EXPLAIN targeted an unrelated SELECT because the diagnostic candidate filter omitted WITH CTEs. Original statement timing and PostgreSQL QueryCanceled context are retained and valid; that unrelated plan is not evidence about the audit statement. Reviewed filter correction precedes the next diagnostic.",
+  "externalBinaryArtifacts": {
+    "runtime-current/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+      "bytes": 12378048,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/audit-diagnostic-39850251479/runtime-current/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    },
+    "runtime-public-048/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+      "bytes": 12378048,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/audit-diagnostic-39850251479/runtime-public-048/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    },
+    "truss-current/truss_toolkit-0.0.49-py3-none-any.whl": {
+      "sha256": "af1f7e692b191ab56c4841037c060120e5718846e676baf9d4b41a1de619f3e0",
+      "bytes": 5941725,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/audit-diagnostic-39850251479/truss-current/truss_toolkit-0.0.49-py3-none-any.whl"
+    },
+    "truss-public-048/truss_toolkit-0.0.48-py3-none-any.whl": {
+      "sha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+      "bytes": 5506731,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/audit-diagnostic-39850251479/truss-public-048/truss_toolkit-0.0.48-py3-none-any.whl"
+    },
+    "weft-051/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+      "sha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+      "bytes": 13531659,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/audit-diagnostic-39850251479/weft-051/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    }
+  },
+  "retainedEvidence": {
+    "managed-audit-current/instrumented/bootstrap/sitecustomize.py": {
+      "originalSha256": "9ce44f1249903ad50bc2bb9b477ad2f45b479b6575b65c8a2019169859bb8b5e",
+      "retained": "managed-audit-current/instrumented/bootstrap/sitecustomize.py",
+      "retainedSha256": "9ce44f1249903ad50bc2bb9b477ad2f45b479b6575b65c8a2019169859bb8b5e",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/instrumented/bootstrap-loaded": {
+      "originalSha256": "25dbd4fa5b9f0710b9f27009c1e38969b8cbb2806502388beae5063d460a85f5",
+      "retained": "managed-audit-current/instrumented/bootstrap-loaded",
+      "retainedSha256": "25dbd4fa5b9f0710b9f27009c1e38969b8cbb2806502388beae5063d460a85f5",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/instrumented/command.json": {
+      "originalSha256": "3588c46899e8e6b9b856f5e265dfe56f194d3e807b432313dcbe98e7cfcba5c7",
+      "retained": "managed-audit-current/instrumented/command.json",
+      "retainedSha256": "3588c46899e8e6b9b856f5e265dfe56f194d3e807b432313dcbe98e7cfcba5c7",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/instrumented/cursor-statements.jsonl": {
+      "originalSha256": "16507dace9ad1c9c76adce1628b2a2271a2e1f40762f0ceccc9f071ceb30389f",
+      "retained": "managed-audit-current/instrumented/cursor-statements.jsonl.gz",
+      "retainedSha256": "de870a340adcf56405a14bffdca458b0524717239e940e696ec0237f24d4941a",
+      "gzipOriginal": true
+    },
+    "managed-audit-current/instrumented/failure-diagnostics.json": {
+      "originalSha256": "bb1727a62774b2536edbf407a25c647119ea81b0251cad745426c682418be48f",
+      "retained": "managed-audit-current/instrumented/failure-diagnostics.json",
+      "retainedSha256": "bb1727a62774b2536edbf407a25c647119ea81b0251cad745426c682418be48f",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/instrumented/unittest.log": {
+      "originalSha256": "a54f5bc38f26db587d2895e089b41227b3c01d1f440a0f32d5e5aa889495a9ae",
+      "retained": "managed-audit-current/instrumented/unittest.log",
+      "retainedSha256": "a54f5bc38f26db587d2895e089b41227b3c01d1f440a0f32d5e5aa889495a9ae",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/original/command.json": {
+      "originalSha256": "27bc456e497a7d154476513a5f8054229c536fbdcee5fee397c605697fd74c35",
+      "retained": "managed-audit-current/original/command.json",
+      "retainedSha256": "27bc456e497a7d154476513a5f8054229c536fbdcee5fee397c605697fd74c35",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/original/unittest.log": {
+      "originalSha256": "0ab1466e2acec16e8660a848e7fc2d6dfb2400bfec42da1522d1c515fe48838c",
+      "retained": "managed-audit-current/original/unittest.log",
+      "retainedSha256": "0ab1466e2acec16e8660a848e7fc2d6dfb2400bfec42da1522d1c515fe48838c",
+      "gzipOriginal": false
+    },
+    "managed-audit-current/receipt.json": {
+      "originalSha256": "9f2c27cabc724be2c6ef1ef680acf9fbbdd12a097cbe6c36c78d98fae2a51575",
+      "retained": "managed-audit-current/receipt.json",
+      "retainedSha256": "9f2c27cabc724be2c6ef1ef680acf9fbbdd12a097cbe6c36c78d98fae2a51575",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/instrumented/bootstrap/sitecustomize.py": {
+      "originalSha256": "9ce44f1249903ad50bc2bb9b477ad2f45b479b6575b65c8a2019169859bb8b5e",
+      "retained": "managed-audit-public-048/instrumented/bootstrap/sitecustomize.py",
+      "retainedSha256": "9ce44f1249903ad50bc2bb9b477ad2f45b479b6575b65c8a2019169859bb8b5e",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/instrumented/bootstrap-loaded": {
+      "originalSha256": "25dbd4fa5b9f0710b9f27009c1e38969b8cbb2806502388beae5063d460a85f5",
+      "retained": "managed-audit-public-048/instrumented/bootstrap-loaded",
+      "retainedSha256": "25dbd4fa5b9f0710b9f27009c1e38969b8cbb2806502388beae5063d460a85f5",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/instrumented/command.json": {
+      "originalSha256": "198bc80df2f5f376ce35be00e6c52ec9b0079a6624b4754d45f1b69900d344ee",
+      "retained": "managed-audit-public-048/instrumented/command.json",
+      "retainedSha256": "198bc80df2f5f376ce35be00e6c52ec9b0079a6624b4754d45f1b69900d344ee",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/instrumented/cursor-statements.jsonl": {
+      "originalSha256": "bbc0f4f53cabf1f41f1af505fb46a7a2c726ef02e4710db61f714b1dd2ebfe3c",
+      "retained": "managed-audit-public-048/instrumented/cursor-statements.jsonl.gz",
+      "retainedSha256": "c57f4cf97f0eaa84d11ef58fabc5ce3ac52936abaa8616133ecaaffb5246f915",
+      "gzipOriginal": true
+    },
+    "managed-audit-public-048/instrumented/failure-diagnostics.json": {
+      "originalSha256": "0c4ee572a80eeab6b9fefc9e3bdb952ae08dfc36d0c331e0266f44aac002397a",
+      "retained": "managed-audit-public-048/instrumented/failure-diagnostics.json",
+      "retainedSha256": "0c4ee572a80eeab6b9fefc9e3bdb952ae08dfc36d0c331e0266f44aac002397a",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/instrumented/unittest.log": {
+      "originalSha256": "7e1a43e0aa09cc143bef664d5f4434e94849db90972c9f8c002dd9e4fbaa2b03",
+      "retained": "managed-audit-public-048/instrumented/unittest.log",
+      "retainedSha256": "7e1a43e0aa09cc143bef664d5f4434e94849db90972c9f8c002dd9e4fbaa2b03",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/original/command.json": {
+      "originalSha256": "75201b0aab14a145eaf4a4e6f28fecfad5f302d5233261d2fbcca01ce7bf9b0c",
+      "retained": "managed-audit-public-048/original/command.json",
+      "retainedSha256": "75201b0aab14a145eaf4a4e6f28fecfad5f302d5233261d2fbcca01ce7bf9b0c",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/original/unittest.log": {
+      "originalSha256": "7d04834635835a8d743ee9977f20cd6e164e9b7e45f5ae678dd1c143c1b99156",
+      "retained": "managed-audit-public-048/original/unittest.log",
+      "retainedSha256": "7d04834635835a8d743ee9977f20cd6e164e9b7e45f5ae678dd1c143c1b99156",
+      "gzipOriginal": false
+    },
+    "managed-audit-public-048/receipt.json": {
+      "originalSha256": "269ac12e92c163839229a83fdfcf268237034cab34771d7cdb5ff8b1c024165d",
+      "retained": "managed-audit-public-048/receipt.json",
+      "retainedSha256": "269ac12e92c163839229a83fdfcf268237034cab34771d7cdb5ff8b1c024165d",
+      "gzipOriginal": false
+    },
+    "runtime-current/SHA256SUMS": {
+      "originalSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+      "retained": "runtime-current/SHA256SUMS",
+      "retainedSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+      "gzipOriginal": false
+    },
+    "runtime-public-048/SHA256SUMS": {
+      "originalSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+      "retained": "runtime-public-048/SHA256SUMS",
+      "retainedSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+      "gzipOriginal": false
+    },
+    "truss-public-048/public-wheel.json": {
+      "originalSha256": "b641d117720fce9de08e8c7e7c2fb5c45d834b38e554cf290e2a30da03187fb1",
+      "retained": "truss-public-048/public-wheel.json",
+      "retainedSha256": "b641d117720fce9de08e8c7e7c2fb5c45d834b38e554cf290e2a30da03187fb1",
+      "gzipOriginal": false
+    },
+    "weft-051/SHA256SUMS": {
+      "originalSha256": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75",
+      "retained": "weft-051/SHA256SUMS",
+      "retainedSha256": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75",
+      "gzipOriginal": false
+    },
+    "workflow-failed-steps.log": {
+      "originalSha256": "9fb7e8226f68ae72e734a15d6d6de4c39b523190068a6980678db1c22f8c45be",
+      "retained": "workflow-failed-steps.log",
+      "retainedSha256": "9fb7e8226f68ae72e734a15d6d6de4c39b523190068a6980678db1c22f8c45be",
+      "gzipOriginal": false
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}

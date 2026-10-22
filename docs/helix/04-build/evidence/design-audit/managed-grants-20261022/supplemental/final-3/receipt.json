@@ -1,0 +1,9 @@
+{
+  "scope": "Repeated reviewed supplemental source on final exact wheel; original final2 retained",
+  "passed": true,
+  "scriptSha256": "015ea0cbd1acc4e26efc64511f028399297ec08a17a7fe81c389b8fa9cd03306",
+  "resultSha256": "9a99d60ea93b2a51967ce5c700a329c8b942855ec3053ba7321c4ac72687e099",
+  "logSha256": "9a99d60ea93b2a51967ce5c700a329c8b942855ec3053ba7321c4ac72687e099",
+  "expectedWheelSha256": "7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4",
+  "nativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f"
+}

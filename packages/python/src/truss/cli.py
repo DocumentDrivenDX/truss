@@ -21,16 +21,39 @@ def _without_postgres_environment():
         os.environ.update(saved)
 
 
-def _installation(connection_uri):
+class _InstallRefusalError(RuntimeError):
+    """A typed, contained refusal from the fresh-install operation."""
+
+    def __init__(self, refusal):
+        self.refusal = refusal
+        super().__init__(refusal.code)
+
+    def payload(self):
+        refusal = self.refusal
+        result = {'outcome': 'refused', 'code': refusal.code}
+        for field in ('role_name', 'object_class', 'phase'):
+            value = getattr(refusal, field)
+            if value is not None:
+                result[field] = value
+        return result
+
+
+def _required(result, *, install_result=False):
+    from truss import InstallRefused, Ok
+    if not isinstance(result, Ok):
+        raise RuntimeError(f'Truss installation/status refused: {result!r}')
+    if isinstance(result.value, InstallRefused):
+        if install_result:
+            raise _InstallRefusalError(result.value)
+        raise RuntimeError('Truss installation/status refused: InstallRefused')
+    return result.value
+
+
+def _installation(connection_uri, tolerated_grantees=()):
     """The CLI owns fresh installation and status-confirmation settlement."""
     import psycopg
-    from truss import (CatalogRuntimeConfiguration, CatalogRuntimeStatus, Ok,
+    from truss import (CatalogRuntimeConfiguration, CatalogRuntimeStatus,
                        adopt_psycopg_host, create_reference_assembly)
-
-    def required(result):
-        if not isinstance(result, Ok):
-            raise RuntimeError(f'Truss installation/status refused: {result!r}')
-        return result.value
 
     # The URI carries the owned socket/database/user; the CLI has removed
     # inherited PG* settings for this one-shot connection.
@@ -41,15 +64,20 @@ def _installation(connection_uri):
             host = adopt_psycopg_host(connection, statement_timeout_ms=10000,
                                      operation_timeout_ms=30000)
             try:
-                tx = required(host.adopt_transaction())
-                assembly = required(create_reference_assembly(CatalogRuntimeConfiguration(), host))
-                before = required(assembly.status_in_transaction(tx))
+                tx = _required(host.adopt_transaction())
+                assembly = _required(create_reference_assembly(CatalogRuntimeConfiguration(), host))
+                before = _required(assembly.status_in_transaction(tx))
                 if type(before) is not CatalogRuntimeStatus:
                     raise RuntimeError('Exact public installation status required')
                 if before.installed is False:
-                    pending = required(assembly.install_in_transaction(tx))
+                    pending = _required(assembly.install_in_transaction(
+                        tx, tolerated_grantees=tuple(tolerated_grantees)), install_result=True)
                     identity = pending.installation_id
                 elif before.installed is True:
+                    if tolerated_grantees:
+                        raise RuntimeError(
+                            '--tolerated-grantee applies only to a fresh installation; '
+                            'the existing installation policy is retained')
                     identity = before.installation_id
                 else:
                     raise RuntimeError('Exact installed status required')
@@ -60,9 +88,9 @@ def _installation(connection_uri):
             host = adopt_psycopg_host(connection, statement_timeout_ms=10000,
                                      operation_timeout_ms=30000)
             try:
-                tx = required(host.adopt_transaction())
-                assembly = required(create_reference_assembly(CatalogRuntimeConfiguration(), host))
-                confirmed = required(assembly.status_in_transaction(tx))
+                tx = _required(host.adopt_transaction())
+                assembly = _required(create_reference_assembly(CatalogRuntimeConfiguration(), host))
+                confirmed = _required(assembly.status_in_transaction(tx))
                 if type(confirmed) is not CatalogRuntimeStatus or confirmed.installed is not True or not identity or confirmed.installation_id != identity:
                     raise RuntimeError('Committed installation status did not confirm the original identity')
                 expected_release = pending.release_id if pending else before.release_id
@@ -87,7 +115,11 @@ def main():
     parser.add_argument('--probe', action='store_true', help='Verify readiness, then stop; retain data')
     parser.add_argument('--install', action='store_true',
                         help='Explicitly install fresh Truss or confirm current status; never upgrade')
+    parser.add_argument('--tolerated-grantee', action='append', default=[], metavar='ROLE',
+                        help='On a fresh install, retain existing grants to this exact PostgreSQL role name; repeat as needed')
     args = parser.parse_args()
+    if args.tolerated_grantee and not args.install:
+        parser.error('--tolerated-grantee requires --install')
     stop = threading.Event()
     previous = {}
     for name in ('SIGINT', 'SIGTERM'):
@@ -101,8 +133,12 @@ def main():
                 # This executable handles a single owned server in its own
                 # process, so temporarily remove libpq's process environment
                 # while creating its explicit host connection.
-                with _without_postgres_environment():
-                    installation = _installation(info.connection_uri)
+                try:
+                    with _without_postgres_environment():
+                        installation = _installation(info.connection_uri, args.tolerated_grantee)
+                except _InstallRefusalError as error:
+                    print(json.dumps(error.payload()), flush=True)
+                    raise SystemExit(1)
             else:
                 installation = None
             output = {'runtime': 'pgserver', 'runtimeVersion': info.runtime_version,

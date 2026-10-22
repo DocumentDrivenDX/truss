@@ -1,0 +1,12 @@
+{
+  "source": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "target": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "edge": "edge-c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0-35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.json",
+  "source48WheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+  "files": [
+    "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243.manifest.json",
+    "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0.acl.json",
+    "edge-c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0-35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f.json"
+  ],
+  "writtenTo": "/Users/erik/Projects/truss/packages/python/src/truss/_migrations"
+}

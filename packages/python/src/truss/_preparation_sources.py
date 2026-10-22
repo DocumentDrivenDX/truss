@@ -149,6 +149,7 @@ def register_preparation_sources_in_transaction(host, transaction, *, program_id
     from .execution import Error, ExecutionFailure
     from ._preparation_source_epoch import _context, _restore
     from ._preparation_program import _verify_home
+    from ._installation_privileges import require_empty_managed_grants_with_cursor
     if type(host) is not PsycopgHost or type(program_id) is not int or not 1 <= program_id <= 9223372036854775807:
         return Error(ExecutionFailure('execution_obligation', 'Original program identifier required'))
     try:
@@ -157,6 +158,7 @@ def register_preparation_sources_in_transaction(host, transaction, *, program_id
     except (ValueError, TypeError, KeyError, OSError):
         return Error(ExecutionFailure('execution_obligation', 'Original preparation sources and actual producer correspondence required'))
     def register(cursor, observed):
+        require_empty_managed_grants_with_cursor(cursor,'Preparation source registry')
         path, installation, owner, actor = _context(cursor)
         cursor.execute('LOCK TABLE ONLY truss.action_store_registration,truss.preparation_program_registration IN SHARE MODE NOWAIT', prepare=False)
         _verify_home(cursor, owner)

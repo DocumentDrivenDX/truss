@@ -1,0 +1,14 @@
+{
+  "scope": "Pure source48 helper controls only; no public download or native qualification",
+  "producerSha256": "51b7cc3c9db25ae8f62249934c32ddf0319ed9cf3a672d08866ab66754e177f8",
+  "controls": [
+    "valid complete RECORD and metadata",
+    "unsafe ZIP path rejected",
+    "RECORD digest mismatch rejected",
+    "duplicate SUMS rejected",
+    "unsafe SUMS rejected"
+  ],
+  "passed": true,
+  "publicGateExecuted": false,
+  "nativeQualificationExecuted": false
+}

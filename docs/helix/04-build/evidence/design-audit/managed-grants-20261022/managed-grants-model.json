@@ -1,0 +1,16 @@
+{
+  "scope": "Current managed-grants SQL fragment imported and reloaded/exported through UMF 0.10; source and exported PostgreSQL native ASTs match after source-location removal. Native installation/migration qualification is separate.",
+  "backend": "@libpg-query/parser@17.6.10",
+  "sourcePath": "packages/python/src/truss/_catalog_runtime/managed-grants.sql",
+  "sourceSha256": "0c14b6a10c896ca207604e0391fc5f3be8ba202705f77e42f69ab531626ca2ed",
+  "ownerExportSha256": "8a38677e94516c65ef40aaff12c550ab57c0c0a9869b4e3d42f1cd43e091ef13",
+  "modelPath": "docs/helix/02-design/models/truss-managed-grants-0.1.umf.json",
+  "modelSha256": "3a8eb1c4b2aee7af04d3ba1777f5475a0e52a3b26eabe3d1fd8d4eeb8041fdc3",
+  "ownerFiles": {
+    "src/adapters/postgresql/index.ts": "5ab9ade96f0b9bb923cad57eb33213653846f39808952d0f20bc3708e5b81810",
+    "native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751",
+    "spec/extensions/postgresql/native-ast.schema.json": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039",
+    "bun.lock": "5fb58795dfe9ef5df89597c44372cf2a0739e1855f322f7622ae0c9d0ac71ce4"
+  },
+  "passed": true
+}

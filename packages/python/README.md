@@ -1,6 +1,20 @@
 # Truss Python toolkit
 
-## Runtime migrations — v0.0.48
+Version **0.0.49** adds explicit managed platform grants to the separate
+[v0.0.48 HF baseline](../../docs/helix/04-build/releases/v0.0.48.md). Consult the
+[v0.0.49 release notes](../../docs/helix/04-build/releases/v0.0.49.md) and linked
+qualification evidence for the published release status. The installation and
+example commands below require checksum-verified public v0.0.49 assets and their
+matching tag; do not substitute v0.0.48 when managed-grants support is required.
+
+<a id="runtime-migrations--v0048"></a>
+
+## Runtime migrations — v0.0.49
+
+This guide retains its historical v0.0.48 link anchor. The v0.0.49 migration
+route includes admission of the actual public v0.0.48 wheel; consult the v0.0.49
+release notes and linked qualification evidence for the published route status.
+The existing admitted sources and migration procedure below remain the baseline.
 
 Truss supports the latest application runtime only. Previous databases move
 forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
@@ -10,12 +24,18 @@ complete declared route in one transaction and appends one final receipt; it
 does not launch intermediate application releases. Existing receipts retain
 their original bytes and remain observable through current tooling.
 
-The published offline, transactional routes accept the exact UMF 0.10 installation
-from v0.0.44, the shared tuple from v0.0.45/v0.0.46, and v0.0.47 native0.73, on
-PostgreSQL18.6. The target is native `0.74-candidate`; exact manifest and installed
-definitions, privileges and preparation configuration decide admission. Matching
-release/layout labels alone do not. The public 80-case gate includes the actual
-two-edge v0.0.46 → v0.0.47 → v0.0.48 route, the admitted earlier sources, and
+The v0.0.49 source routes accept the exact UMF0.10 installation from v0.0.44,
+the shared tuple from v0.0.45/v0.0.46, v0.0.47 native0.73 and the actual public
+v0.0.48 nativec433 target, on PostgreSQL18.6. The v0.0.49 target is native
+`0.74-candidate` with manifest35fd; exact manifest and installed definitions,
+privileges and preparation configuration decide admission. Matching release/layout
+labels alone do not. The [final local source628 receipt](../../docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
+passes all 106 migration/recovery cases on its exact macOS ARM64 artifact.
+Hosted Linux/tag and public v0.0.49 verification remain separate requirements;
+consult the linked release notes for status.
+
+The published v0.0.48 baseline has its own 80-case gate, including the actual
+two-edge v0.0.46 → v0.0.47 → v0.0.48 route, earlier admitted sources and
 latest-tool-only execution: [Linux 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json),
 [macOS 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json). Pre-0.10 and protected-query installations are
 excluded. Unknown or modified sources refuse with data intact. Current authored-name
@@ -158,8 +178,8 @@ Historical v0.0.45 pins `weft-sql==0.4.49`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions. These descriptions
-remain scoped to their named releases; the active v0.0.48 ABI1.2 cohort appears
-below in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048).
+remain scoped to their named releases. The v0.0.49 source inherits the
+v0.0.48 ABI1.2 cohort described below in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048).
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
@@ -338,10 +358,14 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.48
+## Install version 0.0.49
 
-Use the matching Truss and Weft release artifacts below. Source builds require
-the current version cohort; existing installations require explicit migration.
+The commands below select v0.0.49 and its matching dependencies. Use them only
+with the publicly published v0.0.49 assets after verifying their published
+checksums. The v0.0.49 release notes and linked qualification evidence are the
+authority for the exact release status and supported cohort. Source builds must
+select a matching source and dependency cohort; existing installations require
+explicit migration.
 
 The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -486,10 +510,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.51 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.48'
+  'truss-toolkit[local,native,query]==0.0.49'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -507,10 +531,11 @@ qualification. Other platforms are outside the selected release gates. See
 
 ## Run a real workflow
 
-Check out the v0.0.48 tag to obtain the examples, then run with a new directory:
+After the v0.0.49 tag and assets are public, verify their published checksums,
+then obtain the matching examples and run with a new directory:
 
 ```sh
-git clone --branch v0.0.48 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.49 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -528,15 +553,18 @@ previews retain their historical pins and none claims independent interchange.
 
 ## Run local PostgreSQL 18.6
 
-With `uv` installed, run the published `0.0.48` package in an isolated Python
-3.11 tool environment:
+With `uv` installed, the following command selects v0.0.49 in an isolated Python
+3.11 tool environment. Run it only after the v0.0.49 wheel and constraints asset
+are publicly available and their published checksums have been verified. Consult
+the v0.0.49 release notes and linked qualification evidence for release status
+and supported platforms:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.49/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.48' \
+  --from 'truss-toolkit[local,native]==0.0.49' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -589,7 +617,67 @@ Fresh owner/registrar role names come from the installation result; save them
 for access setup. A restart reports confirmed status without inventing those
 names. Ordinary-person registration and module access still require the role
 configuration described below. Without `--install`, the launcher only starts
-PostgreSQL. Confirmed candidate status does not establish full security readiness.
+PostgreSQL. Confirmed installation status does not by itself establish full
+security readiness; consult the qualification evidence for the selected release.
+
+### Managed platform grants — v0.0.49
+
+Managed-grantee support is part of the v0.0.49 interface; v0.0.48 does not
+include it. For a released deployment, use the checksum-verified v0.0.49 assets
+and consult that release's notes and qualification evidence for its status and
+supported cohort. From a matching source checkout, an explicit fresh local
+install can pass one or more exact PostgreSQL role names:
+
+```sh
+./scripts/truss-local \
+  --data-dir "$HOME/.local/share/truss/beads-managed" \
+  --install \
+  --tolerated-grantee databricks_service \
+  --tolerated-grantee operator_reader
+```
+
+The option records selected native role identities and existing ACL observations;
+it does not issue grants. Named roles must already exist; a missing role returns
+`invalid_roles`. Names are exact and patterns are unsupported. The flag
+is valid only for fresh installation. Later status and migration checks use the
+stored policy. The embedding API uses
+`install_in_transaction(tx, tolerated_grantees=("databricks_service", ...))`.
+An `InstallRefused` with `code="third_party_grant"` carries bounded
+`role_name`, `object_class` and `phase` fields only after the host confirms
+operation rollback; map those fields directly in an Arras adapter and preserve
+outer transaction/transport failures. The local CLI writes a safe refusal JSON
+object and exits with status 1; other transaction/transport failures retain their
+original failure path.
+
+The following records are historical pre-integration candidate evidence. They
+describe only the exact candidate identified by each receipt and do not establish
+the status of the released v0.0.49 artifacts. The earlier local candidate wheel
+SHA-256 is
+`7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4`,
+with native manifest
+`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
+[Selected installed regression](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-4/selected-components/qualification.json)
+passes 19 modules/116 tests with zero skips.
+[Other final local gates](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-5/qualification.json)
+pass the 61-case HF corpus, 9 strict protected regressions, all 80 supported
+migration controls and the original 1,000-object/1,000-edge public workload.
+[Managed lifecycle evidence](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/final-3/receipt.json)
+qualifies supported evolution, contained unsupported-retirement refusal and later
+selected ACL changes without rewriting initial evidence.
+
+Those receipts qualify their exact earlier candidate, before integration of
+the newer HF62/compiler cohort and v0.0.48 migration source. They are retained as
+historical evidence; consult the published v0.0.49 release notes and linked
+receipts for the final wheel/archive hashes and release qualification. None of
+these records establishes Lakebase support. The retained legacy all-discovery
+diagnostic remains incomplete and unqualified outside the mandatory supported
+campaign in [the Linux release workflow](../../.github/workflows/release.yml).
+Consult the published release evidence for the status and scope of that campaign
+and public-artifact verification.
+Arras adoption must bind the exact qualified Truss wheel and native target
+manifest together with its UMF/Weft dependency pins, use the qualified
+PostgreSQL 18.6 / psycopg 3.3.6 local profile for local evidence, and separately
+retain the actual Lakebase TLS, transaction and consumer-workflow receipt.
 
 ## Embed in your host
 
@@ -895,8 +983,8 @@ projection list; to add a relationship projection after `a.*`, use a unique alia
 
 Historical ABI1.1 behavior for pinned Weft0.4.49 and Truss backend0.4.41:
 `maximum_scan_rows` was a **source population bound**, capped at10,000. The table
-below is limited to that historical cohort; current v0.0.48 / ABI1.2 behavior is
-specified in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048). It applies
+below is limited to that historical cohort. The v0.0.49 source inherits the
+v0.0.48 ABI1.2 behavior specified in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048). It applies
 before outer SQL predicates, joins, ordering, aggregates and `LIMIT`. A selective
 key predicate or small output does not make a large type admissible.
 

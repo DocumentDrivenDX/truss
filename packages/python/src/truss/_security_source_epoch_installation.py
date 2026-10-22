@@ -12,7 +12,7 @@ import json
 from .execution import Error,ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _release,_pin_cursor
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._psycopg_epoch_cut import _DDLBarrierComparison
 
 _FUNCTIONS=(
@@ -92,6 +92,7 @@ def bootstrap_source_epoch_infrastructure_in_transaction(host,transaction,*,inst
  except ValueError:return Error(ExecutionFailure('execution_obligation','Original source epoch installation sources required'))
  def install(cursor,observed):
   _pin_cursor(cursor);manifest,digest,_=_release()
+  require_empty_managed_grants_with_cursor(cursor,'Source epoch')
   paths=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(paths)!=1:raise ValueError('Original source epoch caller path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)

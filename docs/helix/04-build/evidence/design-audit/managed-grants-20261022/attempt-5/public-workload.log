@@ -1,0 +1,977 @@
+test_small (__main__.RealWorkflows.test_small) ... small: install 703.81 ms (1 rows)
+small: prepare 312.37 ms (1 rows)
+small: register 43.79 ms (1 rows)
+small: registrar_catalog_view 4.27 ms (1 rows)
+small: bulk_create 749.15 ms (1000 rows)
+small: bulk_edges 822.33 ms (1000 rows)
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 27.157s
+
+OK
+{
+  "passed": true,
+  "functionalPassed": true,
+  "performanceQualification": "measured",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1,
+      100,
+      1000
+    ],
+    "committedAtomicGroupSizes": [
+      1,
+      100,
+      1000
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "small",
+      "status": "passed",
+      "workload": {
+        "id": "small",
+        "types": 1,
+        "fieldsPerType": 4,
+        "shape": "scalar",
+        "nodes": 1000,
+        "edges": 1000,
+        "indexedPropertiesPerType": 1,
+        "distribution": "uniform",
+        "tier": "smoke"
+      },
+      "schemaBytes": 1225,
+      "records": 1,
+      "elements": 5,
+      "actions": 0,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "schemaStorage": {
+        "sourceBytes": 1225,
+        "compiledTypeBytes": 1335,
+        "compiledDocumentBytes": 1311
+      },
+      "bulkCreateIncludingCommitMs": 804.76625,
+      "bulkCreateRowsPerSecondIncludingCommit": 1242.596841008181,
+      "createdEdges": 1000,
+      "edgeLoadIncludingCommitMs": 978.014083,
+      "edgeRowsPerSecondIncludingCommit": 1022.4801640202966,
+      "defaultListByteBudgetControl": {
+        "maximumBytes": 1048576,
+        "status": "within_default_budget",
+        "scope": "Original default query budget retained; no partial rows released on limit refusal"
+      },
+      "listRead": {
+        "status": "passed",
+        "sql": "SELECT x.* FROM \"m\".\"R0\" x LIMIT 51",
+        "maximumBytes": 16777216,
+        "rows": 51,
+        "columns": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "_version",
+          "_created_by",
+          "_updated_by",
+          "_original_author",
+          "_original_at",
+          "_created_at",
+          "_updated_at",
+          "_load_id",
+          "R0.link"
+        ]
+      },
+      "installedPhysicalIndexes": [
+        "catalog_acceptance_report_pkey",
+        "catalog_registration_request_input",
+        "catalog_registration_request_installation_id_actor_oid_requ_key",
+        "catalog_registration_request_pkey",
+        "catalog_registration_request_revision_key",
+        "catalog_registration_request_writer",
+        "catalog_runtime_installation_installation_id_key",
+        "catalog_runtime_installation_pkey",
+        "catalog_unchanged_request_pkey",
+        "edge_in",
+        "edge_limit_edge",
+        "edge_limit_pkey",
+        "edge_out",
+        "edge_pkey",
+        "edge_typed_identity_row_home",
+        "installation_archive_identity_route",
+        "installation_archive_pkey",
+        "installation_marker_installation_id_key",
+        "installation_marker_pkey",
+        "journal_entity",
+        "journal_feed",
+        "journal_pkey",
+        "journal_request",
+        "journal_runtime_horizon_entity_kind_entity_id_ver_idx",
+        "journal_runtime_horizon_expr_idx",
+        "journal_runtime_horizon_pkey",
+        "journal_runtime_horizon_xid_seq_idx",
+        "key_bucket_guard_pkey",
+        "key_def_pkey",
+        "key_def_type_id_key_num_key",
+        "key_tombstone_pkey",
+        "module_access_qualified_pk",
+        "object_key_bucket_one_per_object",
+        "object_key_bucket_pkey",
+        "object_key_bucket_route",
+        "object_key_query_string_exception",
+        "object_key_query_string_order",
+        "object_key_reservation_bucket_pkey",
+        "object_key_reservation_bucket_route",
+        "object_pkey",
+        "object_query_cells_gin",
+        "object_type_id",
+        "prop_def_owner_property_row_home",
+        "prop_def_pkey",
+        "prop_def_qualified_field",
+        "prop_def_type_id_name_key",
+        "reader_catalog_validator_secret_pkey",
+        "record_source_load",
+        "record_source_pkey",
+        "rel_def_pkey",
+        "rel_endpoint_pkey",
+        "relationship_lineage_pkey",
+        "relationship_lineage_route",
+        "request_receipt_route",
+        "rr_guard_pk",
+        "rr_receipt_pk",
+        "runtime_catalog_key_backfill_owner",
+        "runtime_catalog_key_backfill_pkey",
+        "runtime_catalog_key_backfill_registration_id_object_id_type_key",
+        "runtime_catalog_key_backfill_writer",
+        "runtime_catalog_rebind_owner",
+        "runtime_catalog_rebind_transi_registration_id_object_id_typ_key",
+        "runtime_catalog_rebind_transition_pkey",
+        "runtime_catalog_rebind_writer",
+        "runtime_create_group_pkey",
+        "runtime_create_group_writer",
+        "runtime_create_member_group_id_operation_index_key",
+        "runtime_create_member_pkey",
+        "runtime_definition_source_pin",
+        "runtime_definition_source_pkey",
+        "runtime_definition_source_rev_ord_module_id_element_id_kind_key",
+        "runtime_document_schema_pkey",
+        "runtime_edge_transition_attempt_id_operation_index_edge_id__key",
+        "runtime_edge_transition_owner",
+        "runtime_edge_transition_pkey",
+        "runtime_edge_transition_writer",
+        "runtime_feed_ack_receipt_pkey",
+        "runtime_feed_configuration_pkey",
+        "runtime_feed_consumer_pkey",
+        "runtime_feed_consumer_registration_id_key",
+        "runtime_feed_reservation_pkey",
+        "runtime_feed_reservation_writer",
+        "runtime_feed_transaction_configuration_pkey",
+        "runtime_import_audit_access_pkey",
+        "runtime_import_budget_pkey",
+        "runtime_import_load_actor",
+        "runtime_import_load_chunk_pkey",
+        "runtime_import_load_observed",
+        "runtime_import_source_attempt_operation",
+        "runtime_import_source_pkey",
+        "runtime_migration_receipt_pkey",
+        "runtime_object_attempt_audit_observed",
+        "runtime_object_attempt_pkey",
+        "runtime_object_attempt_receipt",
+        "runtime_object_attempt_writer",
+        "runtime_object_transition_attempt_id_operation_index_object_key",
+        "runtime_object_transition_owner",
+        "runtime_object_transition_pkey",
+        "runtime_object_transition_writer",
+        "runtime_owned_operation_pkey",
+        "runtime_rel_endpoint_source",
+        "runtime_rel_endpoint_target",
+        "runtime_type_schema_pkey",
+        "schema_change_pkey",
+        "schema_doc_current",
+        "schema_doc_definition_source_tuple",
+        "schema_doc_pkey",
+        "schema_doc_rev_doc_id_key",
+        "schema_head_pkey",
+        "schema_rev_pkey",
+        "setting_pkey",
+        "source_epoch_current_pkey",
+        "source_epoch_registry_pkey",
+        "source_epoch_registry_source_epoch_key",
+        "type_def_current_definition_source_route",
+        "type_def_lineage_route",
+        "type_def_pkey"
+      ],
+      "indexWorkload": "Unique business-key properties; optional nonunique lookup indexes not represented",
+      "maintainedBusinessKeys": [
+        {
+          "record": "R0",
+          "typeId": 1,
+          "declaredKeys": 1,
+          "objects": 1000,
+          "maintainedKeyRows": 1000
+        }
+      ],
+      "loaded": 1000,
+      "readSamples": 1000,
+      "committedUpdates": 200,
+      "reopenedValuesVerified": true,
+      "driverSqlSubmissions": {
+        "total": 26121,
+        "host": 25857,
+        "driver": 264,
+        "executemanyCalls": 0,
+        "hostAdoptions": 251,
+        "groupContextAcquisitions": 217,
+        "bySqlClass": {
+          "savepoint_open": 7446,
+          "admission_observer": 276,
+          "other": 3755,
+          "savepoint_release": 7445,
+          "public_function_payload": 7199
+        },
+        "transactionActions": {
+          "commit": 221,
+          "rollback": 31
+        }
+      },
+      "napkinMath": {
+        "model": "T(n) = fixedMs + n * perRowMs, fitted to median atomic groups 1 and 100",
+        "fixedMs": 13.805641747474748,
+        "perRowMs": 0.6405252525252525,
+        "fitValid": true,
+        "bulk100SpeedupOverCommittedSingles": 11.621319058281966,
+        "qualification": "Local estimate only; no extrapolated atomic support beyond the configured and exercised limit. Requires independent batch sizes and repeated runs before a budget is agreed.",
+        "independent1000RowCheck": {
+          "predictedMs": 654.3308942727273,
+          "observedMedianMs": 798.108666,
+          "observedToPredictedRatio": 1.2197325129926475
+        }
+      }
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 4170.863959,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 4170.863959,
+      "minMs": 4170.863959,
+      "maxMs": 4170.863959
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 514.791667,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 514.791667,
+      "minMs": 514.791667,
+      "maxMs": 514.791667
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 749.148292,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 7,
+        "host": 7,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 1,
+        "bySqlClass": {
+          "savepoint_open": 2,
+          "public_function_payload": 3,
+          "savepoint_release": 2
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1334.8492023258862,
+      "p50Ms": 749.148292,
+      "minMs": 749.148292,
+      "maxMs": 749.148292
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 54.724084,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 1,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 54.724084,
+      "minMs": 54.724084,
+      "maxMs": 54.724084
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 822.331334,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 6,
+        "host": 6,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 1,
+        "bySqlClass": {
+          "savepoint_open": 2,
+          "public_function_payload": 2,
+          "savepoint_release": 2
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1216.0548414661284,
+      "p50Ms": 822.331334,
+      "minMs": 822.331334,
+      "maxMs": 822.331334
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 78.376792,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 1,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 78.376792,
+      "minMs": 78.376792,
+      "maxMs": 78.376792
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_1",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 233.24045800000002,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 31,
+        "host": 31,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "savepoint_open": 10,
+          "public_function_payload": 11,
+          "savepoint_release": 10
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 21.437104192275253,
+      "p50Ms": 11.800458,
+      "minMs": 10.451,
+      "maxMs": 185.7075
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_100",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 401.544376,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 30,
+        "host": 30,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "savepoint_open": 10,
+          "public_function_payload": 10,
+          "savepoint_release": 10
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1245.1923869057005,
+      "p50Ms": 70.675541,
+      "minMs": 70.356709,
+      "maxMs": 102.512709
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_1000",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3886.3242920000002,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 30,
+        "host": 30,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "savepoint_open": 10,
+          "public_function_payload": 10,
+          "savepoint_release": 10
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1286.5627323722063,
+      "p50Ms": 746.51375,
+      "minMs": 676.694792,
+      "maxMs": 1003.6685
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_commit_1",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 12.839833,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 1.58575,
+      "minMs": 1.083375,
+      "maxMs": 7.21475
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_commit_100",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 29.355958,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 5.861,
+      "minMs": 5.661375,
+      "maxMs": 6.154875
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_commit_1000",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 279.09666599999997,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 49.359917,
+      "minMs": 46.880125,
+      "maxMs": 68.424917
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_end_to_end_1",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 251.902875,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 51,
+        "host": 46,
+        "driver": 5,
+        "executemanyCalls": 0,
+        "hostAdoptions": 5,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "other": 5,
+          "savepoint_open": 15,
+          "admission_observer": 5,
+          "savepoint_release": 15,
+          "public_function_payload": 11
+        },
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 19.8489199458323,
+      "p50Ms": 14.446167,
+      "minMs": 12.611042,
+      "maxMs": 194.189125
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_end_to_end_100",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 437.469166,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 50,
+        "host": 45,
+        "driver": 5,
+        "executemanyCalls": 0,
+        "hostAdoptions": 5,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "other": 5,
+          "savepoint_open": 15,
+          "admission_observer": 5,
+          "savepoint_release": 15,
+          "public_function_payload": 10
+        },
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1142.9376944934218,
+      "p50Ms": 77.858167,
+      "minMs": 77.394625,
+      "maxMs": 109.888583
+    },
+    {
+      "case": "small",
+      "operation": "bulk_update_end_to_end_1000",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 4242.452874,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 50,
+        "host": 45,
+        "driver": 5,
+        "executemanyCalls": 0,
+        "hostAdoptions": 5,
+        "groupContextAcquisitions": 5,
+        "bySqlClass": {
+          "other": 5,
+          "savepoint_open": 15,
+          "admission_observer": 5,
+          "savepoint_release": 15,
+          "public_function_payload": 10
+        },
+        "transactionActions": {
+          "commit": 5,
+          "rollback": 0
+        }
+      },
+      "rowsPerSecond": 1178.5634745980683,
+      "p50Ms": 798.108666,
+      "minMs": 746.550458,
+      "maxMs": 1137.793833
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 703.809292,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 3409,
+        "host": 3408,
+        "driver": 1,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 2,
+          "admission_observer": 16,
+          "other": 3390,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 1,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 703.809292,
+      "minMs": 703.809292,
+      "maxMs": 703.809292
+    },
+    {
+      "case": "small",
+      "operation": "list_complete_entities",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 137.436125,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 11,
+        "host": 10,
+        "driver": 1,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "admission_observer": 3,
+          "public_function_payload": 3,
+          "other": 3,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 137.436125,
+      "minMs": 137.436125,
+      "maxMs": 137.436125
+    },
+    {
+      "case": "small",
+      "operation": "list_default_byte_budget_control",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 148.902375,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 11,
+        "host": 10,
+        "driver": 1,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "admission_observer": 3,
+          "public_function_payload": 3,
+          "other": 3,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 148.902375,
+      "minMs": 148.902375,
+      "maxMs": 148.902375
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 312.373792,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 312.373792,
+      "minMs": 312.373792,
+      "maxMs": 312.373792
+    },
+    {
+      "case": "small",
+      "operation": "read_by_id",
+      "attempts": 1000,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1529.3357839999985,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 3000,
+        "host": 3000,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1000,
+          "public_function_payload": 1000,
+          "savepoint_release": 1000
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 1.5046455,
+      "minMs": 1.425416,
+      "maxMs": 2.107,
+      "p95Ms": 1.685917,
+      "p99Ms": 1.820334
+    },
+    {
+      "case": "small",
+      "operation": "read_by_key",
+      "attempts": 100,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 365.3707960000001,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 300,
+        "host": 300,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 100,
+          "public_function_payload": 100,
+          "savepoint_release": 100
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 3.5841875,
+      "minMs": 3.461667,
+      "maxMs": 5.388709,
+      "p95Ms": 4.033875
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 43.791084,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 3,
+        "host": 3,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "public_function_payload": 1,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 43.791084,
+      "minMs": 43.791084,
+      "maxMs": 43.791084
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 4.265833,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 3,
+        "host": 3,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "public_function_payload": 1,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 4.265833,
+      "minMs": 4.265833,
+      "maxMs": 4.265833
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 9.129625,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 1,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 9.129625,
+      "minMs": 9.129625,
+      "maxMs": 9.129625
+    },
+    {
+      "case": "small",
+      "operation": "single_update_including_commit",
+      "attempts": 200,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1867.7824189999997,
+      "failedElapsedMs": [],
+      "sqlSubmissions": {
+        "total": 2000,
+        "host": 1800,
+        "driver": 200,
+        "executemanyCalls": 0,
+        "hostAdoptions": 200,
+        "groupContextAcquisitions": 200,
+        "bySqlClass": {
+          "other": 200,
+          "savepoint_open": 600,
+          "admission_observer": 200,
+          "savepoint_release": 600,
+          "public_function_payload": 400
+        },
+        "transactionActions": {
+          "commit": 200,
+          "rollback": 0
+        }
+      },
+      "p50Ms": 9.048146,
+      "minMs": 8.631166,
+      "maxMs": 30.488125,
+      "p95Ms": 9.954625
+    }
+  ]
+}

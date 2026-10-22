@@ -1,0 +1,182 @@
+{
+  "scope": "17 explicitly selected modules successful across independent observations on one exact installed candidate2 wheel; not one fresh17-module run or fullsuite/release acceptance",
+  "passed": true,
+  "modules": 17,
+  "tests": 111,
+  "skips": 0,
+  "wheelSha256": "9e6ad94f1f08d8c965b46e8b80d1bbbb96eefdf986fa60e7d3e3c6baeaf59b3d",
+  "nativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "sourcePayloadUnchanged": true,
+  "priorInputChanges": [
+    {
+      "path": "docs/helix/03-test/fixtures/hohfeld-followup-0.1.json",
+      "priorSha256": "cc67adb510305a225be8daef47946fe839fa6cad736aad345208e58f134278d5",
+      "currentSha256": "497b2181f8f6ef90eef741343abac8e782b9a5366217fba43c934525a13e529c"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_codes_native.py",
+      "priorSha256": "9495a653e08d76b1c555e5552472cb7fb50f35d888d0d8ea9cec64949e9f360c",
+      "currentSha256": "6fa2b13ee942fc138d1fc6e94cdd277aab8c44c201ceeb2840ae0d64654479ae"
+    }
+  ],
+  "supportingImportsHelpersSetupASTUnchanged": true,
+  "reusedModulesDoNotImportChangedCodesTestModule": true,
+  "first14PassedTests": 72,
+  "remaining3PassedTests": 39,
+  "outcomes": [
+    {
+      "module": "test_managed_platform_grants_native.py",
+      "tests": 13,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_managed_platform_grants_native.log.gz",
+      "sha256": "ebfeda6d2ddeba867fdb0243eecd3fad817e71e4930a8ae2b12746c884d56663",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_managed_grants_migration_native.py",
+      "tests": 1,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_managed_grants_migration_native.log.gz",
+      "sha256": "6b6bfe1cdf88f3483a7bc71a0b772d7f5d4cc25c8a23526e8b8894501a53e604",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_preparation_runtime_recipe.py",
+      "tests": 5,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_preparation_runtime_recipe.log.gz",
+      "sha256": "8eca3fa6105d2a94145ff1ae7670e55e9ccc8aa71de5596cce575300eb7650a4",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_installation_privileges_native.py",
+      "tests": 6,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_installation_privileges_native.log.gz",
+      "sha256": "fdcaafc9467965146e9edd013970709ed3d968da2c98519e54d64c4bf0c0e182",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_managed_installation_native.py",
+      "tests": 1,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_managed_installation_native.log.gz",
+      "sha256": "feac7fefbbf6081629a3f3c4c647d6ed26e9dcf71fe48a2d60098493ee52f46b",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_install_preflight_native.py",
+      "tests": 7,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_install_preflight_native.log.gz",
+      "sha256": "a25c2770d660cd98ec5e96488355384a57083b6ee34c8c81ca8beb80bf1c0c49",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_lifecycle_native.py",
+      "tests": 3,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_lifecycle_native.log.gz",
+      "sha256": "7c544b4d6f28b6fa3900d60e800115c93caad70330920bbb22dd188f5d2f9e5e",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_module_access_batch_native.py",
+      "tests": 1,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_module_access_batch_native.log.gz",
+      "sha256": "d9eac499660d55c30a991e3f0c9cfe273b761386e4c84be4a45387fa0be32118",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_host_execution.py",
+      "tests": 9,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_host_execution.log.gz",
+      "sha256": "e83611eb0e05b7a30614f97a9e9ef7b6c1118f5cfedccac3241b99256a56484c",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_host_control_custody.py",
+      "tests": 19,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_host_control_custody.log.gz",
+      "sha256": "ea4f513eebed3b9b64ea231d813a78e385ab3026d6616b494f579275b27b341c",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_lifecycle_wire.py",
+      "tests": 3,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_lifecycle_wire.log.gz",
+      "sha256": "46f3e81162fa0f5e2838bb50b815ff51781987b0816566f51c586f095ebe01b4",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_action_role_installation_native.py",
+      "tests": 1,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_action_role_installation_native.log.gz",
+      "sha256": "95dd51eef103715dec55854998d1c79f2635a8711328b08825cf2618bc8427fe",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_action_store_native.py",
+      "tests": 1,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_action_store_native.log.gz",
+      "sha256": "4dfeaa22faedd003f02e5669935fdf6ca9c95e76bac4da9048e49d0c9405fcdb",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_preparation_source_inventory_native.py",
+      "tests": 2,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_preparation_source_inventory_native.log.gz",
+      "sha256": "8a11aadb716ff84e8676d6ea06ca9f81d33f0d44bda284b81e332c8484015d64",
+      "baselineRestored": true
+    },
+    {
+      "module": "test_catalog_codes_native.py",
+      "tests": 2,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_codes_native-rerun.log",
+      "sha256": "83d43f21bcc19240e901fe346ba8585fc886ef923e0dd51552191e98858a8a81",
+      "cleanup": {
+        "runner": "scripts/run-python-test-module.py",
+        "classCleanupExceptions": 0,
+        "LocalPostgresStopConfirmed": true,
+        "evidence": "each runner exited 0; LocalPostgres.close runs in registered class cleanup and raises unless postmaster.pid is absent after pg_ctl stop"
+      }
+    },
+    {
+      "module": "test_catalog_runtime_native.py",
+      "tests": 34,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_runtime_native-rerun.log",
+      "sha256": "5f8447baa121041ca6cc02ba5e881f981645fc70edeff818cb220d8fdb0751a0",
+      "cleanup": {
+        "runner": "scripts/run-python-test-module.py",
+        "classCleanupExceptions": 0,
+        "LocalPostgresStopConfirmed": true,
+        "evidence": "each runner exited 0; LocalPostgres.close runs in registered class cleanup and raises unless postmaster.pid is absent after pg_ctl stop"
+      }
+    },
+    {
+      "module": "test_catalog_evolution_native.py",
+      "tests": 3,
+      "passed": true,
+      "observation": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_evolution_native-rerun.log",
+      "sha256": "edd0744bac53a542445bec8831f77cd8c56bcef1067a68168c4c86b35a783824",
+      "cleanup": {
+        "runner": "scripts/run-python-test-module.py",
+        "classCleanupExceptions": 0,
+        "LocalPostgresStopConfirmed": true,
+        "evidence": "each runner exited 0; LocalPostgres.close runs in registered class cleanup and raises unless postmaster.pid is absent after pg_ctl stop"
+      }
+    }
+  ],
+  "originalFailedObservationPreserved": "attempt-2/selected-components/test_catalog_codes_native.log.gz",
+  "legacyFullSuite": "unresolved, not credited as passing; attempt-1 retained",
+  "producerSha256": "6cccf75249539372d89da0134b2d503f28b21e34c76315ecb0ea4f84992d6363"
+}

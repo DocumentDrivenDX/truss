@@ -1,0 +1,6 @@
+{
+  "capture": "/private/tmp/truss-managed-grants-049/public-source48-captures/America_New_York.json",
+  "sourceManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "targetManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "timezone": "America/New_York"
+}

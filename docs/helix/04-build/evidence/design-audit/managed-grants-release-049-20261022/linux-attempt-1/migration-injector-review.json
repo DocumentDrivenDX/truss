@@ -1,0 +1,82 @@
+{
+  "scope": "Static injector review and non-native cursor simulation only; native campaigns remain required",
+  "passed": true,
+  "producer": "packages/python/tests/test_runtime_migrations_native.py",
+  "oldProducerSha256": "a5c76ed092c4f9550c6d4ddb30112dbb07124c58d93c799c386247130dbe0f0f",
+  "producerSha256": "4509468c3d9867673e9135dccdb05b515b1bdabd0db9382f51a47c0471728d36",
+  "profileBeforeSha256": "93e452f1a3dc86610d1a6bb8049b7a749737893c20dbc3aad42bd3747459d38e",
+  "profileAfterSha256": "d5b89965ea9962049077fb1b813aed32341c9c8948c70b526a8baf21e5eeabfe",
+  "producerCount": 363,
+  "unchangedOtherProducers": 362,
+  "corpusCases": 62,
+  "casesLimitsAndOtherProfileValuesUnchanged": true,
+  "existingAssertionsPreserved": true,
+  "newExactInjectionAssertionsPerTest": 1,
+  "controls": [
+    {
+      "test": "test_later_native_step_failure_rolls_back_initializer",
+      "source": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+      "edgeCount": 2,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_later_native_step_failure_rolls_back_initializer",
+      "source": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+      "edgeCount": 2,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_later_native_step_failure_rolls_back_initializer",
+      "source": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "edgeCount": 1,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_later_native_step_failure_rolls_back_initializer",
+      "source": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+      "edgeCount": 1,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_rollback_observation_waits_for_original_connection_close",
+      "source": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+      "edgeCount": 2,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_rollback_observation_waits_for_original_connection_close",
+      "source": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+      "edgeCount": 2,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_rollback_observation_waits_for_original_connection_close",
+      "source": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "edgeCount": 1,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    },
+    {
+      "test": "test_rollback_observation_waits_for_original_connection_close",
+      "source": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+      "edgeCount": 1,
+      "injections": 1,
+      "realAlterPrefixSubmitted": true,
+      "laterFunctionNotSubmitted": true
+    }
+  ],
+  "nativeQualificationExecuted": false
+}

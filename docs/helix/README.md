@@ -1,6 +1,18 @@
 # truss project documentation
 
-Current delivery: [runtime migrations released in v0.0.48](04-build/runtime-migration-restoration-plan.md) and [release notes](04-build/releases/v0.0.48.md).
+[Managed platform grants](04-build/managed-platform-grants-plan.md) are implemented
+in the [v0.0.49 source candidate](04-build/releases/v0.0.49.md), with explicit
+retained grantee policy, typed contained refusals and lifecycle/migration
+consistency. The [macOS ARM64 campaign at commit `19d7bbe5`](04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
+and [hosted Linux campaign at commit `4188141f`](04-build/evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
+pass on the same exact wheel and native manifest SHA-256 prefix `288801f7`,
+including all four published migration sources. Final tag qualification and
+public-download verification remain pending; v0.0.49 is not yet published.
+Arras is the active consumer name; historical Praxis requests and snapshots
+retain their original provenance. Actual Lakebase support requires separate
+consumer/service qualification.
+
+Current public delivery: [runtime migrations released in v0.0.48](04-build/runtime-migration-restoration-plan.md) and [release notes](04-build/releases/v0.0.48.md).
 Only the latest application runtime is supported. Every admitted database retains
 an unexpired forward route to the latest runtime; previous application runtimes
 do not remain supported. The v0.0.48 public gate covers the exact UMF 0.10

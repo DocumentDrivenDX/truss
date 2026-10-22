@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "4188141faf3e51a7a25711a6fc22751cb37c7ae4",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39854672450",
+  "runtimeFiles": 467,
+  "sourceWheelSdistInstalledExact": true,
+  "hfArchiveMembersVerified": 411,
+  "artifactSha256": {
+    "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+    "truss_toolkit-0.0.49-py3-none-any.whl": "57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790",
+    "truss_toolkit-0.0.49.tar.gz": "77c9d8081811010f3014f56f521a0cf1cc8c5fa57117c228854b102b0222b6eb",
+    "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889"
+  },
+  "nativeQualification": "pending"
+}
