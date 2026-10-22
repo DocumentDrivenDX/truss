@@ -1,0 +1,9 @@
+test_external_inheritance_parent_refuses_before_migration (test_runtime_migrations_native.RuntimeMigrationNativeTests.test_external_inheritance_parent_refuses_before_migration)
+@covers US-045-AC6: private rows cannot acquire an unqualified ancestor. ... ok
+test_external_inheritance_parent_refuses_before_migration (test_runtime_migrations_native.CurrentTupleMigrationNativeTests.test_external_inheritance_parent_refuses_before_migration)
+@covers US-045-AC6: private rows cannot acquire an unqualified ancestor. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.013s
+
+OK

@@ -62,8 +62,9 @@ ownership and refuses with the new entry point.
 
 `_migration_recipe` admits only checksum-pinned inventories, ordered native recipe
 artifacts and a forward DAG to the latest target. `_migration_verify` observes
-native definitions, ownership, effective role/grant closure, exact configuration,
-server and database/source identity. Verify definitions before invoking private
+native definitions, cross-namespace table/index inheritance, partition keys,
+ownership, effective role/grant closure, exact configuration, server and
+database/source identity. Verify definitions before invoking private
 installation functions. `_migration_execute` takes the installer's advisory key,
 then ACCESS EXCLUSIVE NOWAIT table locks in sorted order; it verifies source,
 executes the ordered delta and ownership/grants, verifies each endpoint, compares

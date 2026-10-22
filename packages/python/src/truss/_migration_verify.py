@@ -13,9 +13,14 @@ def canonical(value):
 # pg_get_* definitions resolve native identities independently of source SQL formatting.
 _STRUCTURE = {
  'relations': """SELECT c.relname,c.relkind,c.relpersistence,c.relrowsecurity,c.relforcerowsecurity,
- c.reloptions,c.relispartition,pg_get_expr(c.relpartbound,c.oid),a.amname,t.spcname
+ c.reloptions,c.relispartition,pg_get_expr(c.relpartbound,c.oid),a.amname,t.spcname,pg_get_partkeydef(c.oid)
  FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace LEFT JOIN pg_am a ON a.oid=c.relam
  LEFT JOIN pg_tablespace t ON t.oid=c.reltablespace WHERE n.nspname='truss' ORDER BY c.relname""",
+ 'inheritance': """SELECT cn.nspname,c.relname,pn.nspname,p.relname,i.inhseqno,i.inhdetachpending
+ FROM pg_inherits i JOIN pg_class c ON c.oid=i.inhrelid JOIN pg_namespace cn ON cn.oid=c.relnamespace
+ JOIN pg_class p ON p.oid=i.inhparent JOIN pg_namespace pn ON pn.oid=p.relnamespace
+ WHERE cn.nspname='truss' OR pn.nspname='truss'
+ ORDER BY cn.nspname,c.relname,pn.nspname,p.relname,i.inhseqno""",
  'columns': """SELECT c.relname,a.attnum,a.attname,format_type(a.atttypid,a.atttypmod),
  a.attnotnull,a.attidentity,a.attgenerated,a.attisdropped,a.attstorage,a.attcompression,a.attndims,
  a.attoptions,cn.nspname,co.collname,pg_get_expr(d.adbin,d.adrelid)

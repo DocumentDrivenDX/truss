@@ -272,6 +272,19 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         with self.assertRaisesRegex(ValueError,'privilege|grant'):self.tool.prepare()
         self.assertEqual(self.state(),before)
 
+    def test_external_inheritance_parent_refuses_before_migration(self):
+        """@covers US-045-AC6: private rows cannot acquire an unqualified ancestor."""
+        clean=self.state()[0]
+        self.assertEqual(self.tool.status()['state'],'upgrade_required')
+        self.admin.execute('CREATE TABLE public.migration_bad_parent (LIKE truss.object INCLUDING CONSTRAINTS)')
+        self.admin.execute('ALTER TABLE truss.object INHERIT public.migration_bad_parent')
+        before=self.state()
+        self.assertIn(['truss','object','public','migration_bad_parent',1,False],before[0]['inheritance'])
+        for category in clean:
+            if category!='inheritance':self.assertEqual(before[0][category],clean[category],category)
+        with self.assertRaisesRegex(ValueError,'definitions drifted'):self.tool.prepare()
+        self.assertEqual(self.state(),before)
+
     def test_busy_original_writer_preserves_source(self):
         """@covers US-045-AC7"""
         prepared=self.tool.prepare();before=self.state()

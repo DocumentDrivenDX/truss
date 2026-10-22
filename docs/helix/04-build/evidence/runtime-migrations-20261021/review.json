@@ -64,6 +64,16 @@
         "preview-observer-original.log",
         "preview-observer-fixed.log"
       ]
+    },
+    {
+      "id": "RM-R08",
+      "issue": "Native relation inventory omitted inheritance parent links and partition-key definitions",
+      "resolution": "Capture exact cross-namespace table/index inheritance and partition keys; refreshed pre-publication profiles using unchanged real wheels and byte-identical native recipes. Corruption case starts from admitted source and changes only parent links, then refuses before effects.",
+      "status": "fixed",
+      "evidence": [
+        "final-native-inventory/controls.log",
+        "final-native-inventory/inheritance-only-drift.log"
+      ]
     }
   ],
   "reviewedInvariants": [
@@ -81,7 +91,7 @@
     "packages/python/src/truss/migrations.py": "f32b0196c39d0fad08ca7273daef144d08939770636fffda7aedc364ef38f61a",
     "packages/python/src/truss/recovery_registry.py": "c4590bae27749d8354ab84bffa850a3430f87d12c8c5eaeb91b8af7a628a530b",
     "packages/python/src/truss/_migration_recipe.py": "9f962162dba5dbc536cd34696f902fa40cc888b3b0e600fc76a55e484a11b4b4",
-    "packages/python/src/truss/_migration_verify.py": "fbcbe5986236c5262ea36ad9bd0b5941f61dc36983175d829c65f8eca533a58b",
+    "packages/python/src/truss/_migration_verify.py": "dded8595cef1167a66f275bf338987f7f38ca2626335f08cea0d3a3d2686e870",
     "packages/python/src/truss/_migration_execute.py": "804ba184de3fce44316b99c120df56222c376cf63fcbd89ffbc53ff9624ed0d6",
     "packages/python/src/truss/_runtime_admission.py": "2eb6bc1b9f3da8153142b738fe28543bff04ca56cc56ef43ba73b13af6883972",
     "packages/python/src/truss/psycopg_host.py": "81f4ec61ff6355dfb84874da83450fad01c3d8913dbbbeca616be388b555a63b",
@@ -100,7 +110,7 @@
     "First real subsequent edge supplies native multi-edge skip-release proof",
     "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
   ],
-  "updatedAt": "2026-10-22T00:09:21.537130+00:00",
+  "updatedAt": "2026-10-22T00:23:19.658884+00:00",
   "localAdditionalEvidence": {
     "atomicCapacityTests": 23,
     "passed": true,
@@ -117,5 +127,6 @@
     "remainingPreviewObserverFailures": 2,
     "correctedPreviewRaceCasesPassed": 2
   },
-  "reviewedRuntimeSource": "96db00a0 (only test observer changes follow)"
+  "reviewedRuntimeSource": "Final native inventory producer hashes; only delivery evidence may follow",
+  "finalMigrationManifestSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0"
 }

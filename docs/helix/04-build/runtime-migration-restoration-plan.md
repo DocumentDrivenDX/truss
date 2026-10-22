@@ -268,6 +268,18 @@ incomplete, with no full-suite claim. Required complete Linux release/public-wor
 qualification, merge, publication and public installed verification remain pending.
 Native future multi-edge execution remains deferred until a real subsequent edge.
 
+Final review adds exact table/index inheritance (including external parents) and
+partition-key observation. The source wheels, native target and converter SQL
+remain unchanged; independently recaptured pre-publication profiles produce
+migration manifest `132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0`.
+The native corruption control starts from an admitted source, adds an external
+ancestor without changing any previously observed facts, then requires pre-effect
+refusal. Review also moves confirmed rollback resource release after actual
+connection close and replaces truncated preview-race observation with a test-only
+marker on the real SQL statement. No production deadline or admission condition is
+weakened. Final installed migration matrix now has 52 cases; full Linux/public
+qualification and publication remain the delivery gates.
+
 ## Exit criteria
 
 - [x] First populated v0.0.44 → frozen candidate route and v0.0.45/46 exact tuple pass local installed qualification.

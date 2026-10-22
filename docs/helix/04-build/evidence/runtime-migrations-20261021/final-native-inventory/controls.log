@@ -1,0 +1,24 @@
+test_artifact_corruption_refuses_before_connection (test_runtime_migrations.MigrationRecipeTests.test_artifact_corruption_refuses_before_connection)
+@covers US-045-AC6 ... ok
+test_exact_packaged_target_and_predecessors (test_runtime_migrations.MigrationRecipeTests.test_exact_packaged_target_and_predecessors)
+@covers US-045-AC6 ... ok
+test_nondurable_recovery_refuses (test_runtime_migrations.MigrationRecipeTests.test_nondurable_recovery_refuses) ... ok
+test_only_exact_native_initialization_profiles_are_admitted_and_preserved (test_runtime_migrations.MigrationRecipeTests.test_only_exact_native_initialization_profiles_are_admitted_and_preserved)
+@covers US-045-AC6 @covers US-045-AC7 ... ok
+test_skipped_release_uses_only_latest_tool_and_cycles_refuse (test_runtime_migrations.MigrationRecipeTests.test_skipped_release_uses_only_latest_tool_and_cycles_refuse)
+@covers US-045-AC8: metadata planning only, not native chain qualification. ... ok
+test_latest_runtime_has_no_predecessor_application_import (test_runtime_migrations.RecoveryRegistryTests.test_latest_runtime_has_no_predecessor_application_import)
+@covers US-045-AC8 ... ok
+test_original_evidence_conflict_restart_and_observation_order (test_runtime_migrations.RecoveryRegistryTests.test_original_evidence_conflict_restart_and_observation_order)
+@covers US-045-AC7 ... ok
+test_previous_sources_target_and_published_bytes_cannot_be_dropped (test_runtime_migrations.ReleaseLineageTests.test_previous_sources_target_and_published_bytes_cannot_be_dropped)
+@covers US-045-AC8: release gate controls, not native chain proof. ... ok
+test_external_inheritance_parent_refuses_before_migration (test_runtime_migrations_native.RuntimeMigrationNativeTests.test_external_inheritance_parent_refuses_before_migration)
+@covers US-045-AC6: private rows cannot acquire an unqualified ancestor. ... ok
+test_external_inheritance_parent_refuses_before_migration (test_runtime_migrations_native.CurrentTupleMigrationNativeTests.test_external_inheritance_parent_refuses_before_migration)
+@covers US-045-AC6: private rows cannot acquire an unqualified ancestor. ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 14.094s
+
+OK
