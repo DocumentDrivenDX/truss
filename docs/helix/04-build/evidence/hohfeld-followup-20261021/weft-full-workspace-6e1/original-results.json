@@ -1,0 +1,36 @@
+{
+  "source": "6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a",
+  "platform": "macOS ARM64",
+  "results": [
+    {
+      "variant": "candidate",
+      "exitCode": 0,
+      "seconds": 832.7380150419776,
+      "log": "/private/tmp/weft-6e1-full-workspace-candidate.log",
+      "command": [
+        "/Users/erik/.rustup/toolchains/1.90.0-aarch64-apple-darwin/bin/cargo",
+        "test",
+        "--workspace",
+        "--features",
+        "weft-runtime/truss-postgresql-candidate,weft-runtime/ashlar-databricks-candidate,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+        "--locked",
+        "--offline"
+      ]
+    },
+    {
+      "variant": "qualified",
+      "exitCode": 0,
+      "seconds": 730.7899338750285,
+      "log": "/private/tmp/weft-6e1-full-workspace-qualified.log",
+      "command": [
+        "/Users/erik/.rustup/toolchains/1.90.0-aarch64-apple-darwin/bin/cargo",
+        "test",
+        "--workspace",
+        "--features",
+        "weft-runtime/truss-postgresql-qualified,weft-runtime/ashlar-databricks-qualified,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+        "--locked",
+        "--offline"
+      ]
+    }
+  ]
+}

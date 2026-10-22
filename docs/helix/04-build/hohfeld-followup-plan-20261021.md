@@ -855,6 +855,20 @@ structured step snapshot and immutable original failure are retained in the
 This is not an overall hosted conformance pass. The helper leaves compiler/build
 inputs unchanged.
 
+### Full local Weft integration workspace — 2026-10-22
+
+The full workspace candidate and qualified feature sets now both pass locally
+on macOS ARM64 at source `6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a` with Rust
+1.90.0, `--locked --offline`: the candidate has 1,048 passed across 62 groups
+and the qualified run has 1,049 passed across 62 groups; each has zero failures,
+ignored tests or filtered tests, and both commands exit zero. Their original
+logs, result metadata and independently reconciled group counts are preserved in the
+[full-workspace evidence](evidence/hohfeld-followup-20261021/weft-full-workspace-6e1/README.md).
+The later `cc694344` workflow-only change does not alter Cargo source/build inputs.
+This closes only the local full-workspace gate for those source bytes. Hosted
+Linux conformance, browser/native packaging, installed Truss adoption, publication
+and public-release gates remain separate and are not credited from this run.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
