@@ -1,0 +1,72 @@
+test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol) ... ok
+test_original_umf_key_projection_is_exact_or_explicitly_unindexable (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_original_umf_key_projection_is_exact_or_explicitly_unindexable) ... ok
+test_populated_10001_managed_objects_select_without_legacy_source_scan (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan) ... {"managedPopulationBatch": {"start": 0, "objects": 1000, "seconds": 0.7397597079980187}}
+{"managedPopulationBatch": {"start": 1000, "objects": 1000, "seconds": 0.653880708036013}}
+{"managedPopulationBatch": {"start": 2000, "objects": 1000, "seconds": 0.5869394160108641}}
+{"managedPopulationBatch": {"start": 3000, "objects": 1000, "seconds": 0.5607526669627987}}
+{"managedPopulationBatch": {"start": 4000, "objects": 1000, "seconds": 0.5722201250027865}}
+{"managedPopulationBatch": {"start": 5000, "objects": 1000, "seconds": 0.6042667919537053}}
+{"managedPopulationBatch": {"start": 6000, "objects": 1000, "seconds": 0.551787750038784}}
+{"managedPopulationBatch": {"start": 7000, "objects": 1000, "seconds": 0.6230690000229515}}
+{"managedPopulationBatch": {"start": 8000, "objects": 1000, "seconds": 0.5754993750015274}}
+{"managedPopulationBatch": {"start": 9000, "objects": 1000, "seconds": 0.5682984169689007}}
+{"managedPopulationBatch": {"start": 10000, "objects": 1, "seconds": 0.010690041992347687}}
+ok
+test_selected_boolean_cells_preserve_true_and_false (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_boolean_cells_preserve_true_and_false) ... ok
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ok
+test_selected_string_operand_preserves_exact_token_bound_with_json_overhead (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_string_operand_preserves_exact_token_bound_with_json_overhead) ... ok
+test_changed_original_entrypoint_owner_is_integrity_error (test_person_invocation_native.PersonInvocationNativeTests.test_changed_original_entrypoint_owner_is_integrity_error) ... ok
+test_damaged_mutation_grants_are_not_business_denial (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial) ... ok
+test_damaged_original_entrypoint_grant_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error) ... ok
+test_damaged_private_dependency_is_execution_error (test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error) ... ok
+test_nonmember_all_selected_surfaces_have_typed_denial (test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial) ... ok
+test_normal_context_stays_three_statements (test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements) ... ok
+test_public_shim_does_not_grant_private_implementation_or_table_access (test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access) ... ok
+test_reader_keeps_context_but_cannot_apply_and_prior_work_survives (test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives) ... ok
+test_absent_installation_status_preserves_caller_work (test_managed_function_guard_native.CatalogTableFunctionGuardTests.test_absent_installation_status_preserves_caller_work) ... ok
+test_catalog_table_calls_keep_stock_parameter_and_result_adapters (test_managed_function_guard_native.CatalogTableFunctionGuardTests.test_catalog_table_calls_keep_stock_parameter_and_result_adapters) ... ok
+test_existing_schema_without_status_keeps_the_native_error (test_managed_function_guard_native.CatalogTableFunctionGuardTests.test_existing_schema_without_status_keeps_the_native_error) ... ok
+test_installed_status_and_acceptance_use_three_commands (test_managed_function_guard_native.CatalogTableFunctionGuardTests.test_installed_status_and_acceptance_use_three_commands) ... ok
+setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests) ... ERROR
+setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests) ... ERROR
+test_empty_record_accepts_exact_paired_required_field_and_unknown_content (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content) ... ok
+test_paired_required_addition_does_not_authorize_unknown_extension_change (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change) ... ok
+test_paired_required_addition_does_not_implicitly_rebind_populated_retained_values (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_implicitly_rebind_populated_retained_values) ... ok
+test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit) ... ok
+test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition) ... ok
+test_populated_record_returns_typed_violation_and_preserves_head_data_history (test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history) ... ok
+test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind) ... ok
+test_missing_null_and_empty_container_counts (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_missing_null_and_empty_container_counts) ... ok
+test_register_rebind_read_report_history_and_retry (test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_keyed_rebind_native.CatalogKeyedRebindTests.test_register_existing_objects_lookup_and_query) ... ok
+
+======================================================================
+ERROR: setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+    return Path(os.environ[variable])
+                ~~~~~~~~~~^^^^^^^^^^
+  File "<frozen os>", line 679, in __getitem__
+KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+
+======================================================================
+ERROR: setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+    return Path(os.environ[variable])
+                ~~~~~~~~~~^^^^^^^^^^
+  File "<frozen os>", line 679, in __getitem__
+KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+
+----------------------------------------------------------------------
+Ran 28 tests in 70.418s
+
+FAILED (errors=2)

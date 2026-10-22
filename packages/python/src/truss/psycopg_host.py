@@ -31,7 +31,7 @@ _MANAGED_FUNCTIONS = frozenset(('accepted_document','acknowledge_feed','apply_gr
     'reached','read_feed','read_history','reread_feed','traverse_objects','writer_schema_basis'))
 from ._runtime_admission import person_entrypoints
 _MANAGED_FUNCTIONS = _MANAGED_FUNCTIONS | frozenset(
-    e['publicName'] for e in person_entrypoints() if not e['set'])
+    e['publicName'] for e in person_entrypoints() if not e['set'] and e['volatility']=='v')
 _MANAGED_TABLE_FUNCTIONS = {
     'catalog_status': (('installation_id',25),('release_id',25),('release_sha256',25),
                        ('layout_profile',25),('revision',25)),

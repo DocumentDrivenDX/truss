@@ -120,6 +120,16 @@ unknown-extension relaxation is selected. A concurrent writer either precedes
 the locked census or prevents acceptance with the existing busy refusal; stale
 field pins cannot write an old shape after publication.
 
+This empty-only paired addition is distinct from the existing qualified core-only
+retained-value rebind route. New-property requiredness is evaluated once by the
+planned rebind validator, after complete owned-root readership. That validator
+receives the original admitted declarations and refuses every populated paired
+required addition even if matching retained values happen to exist. Existing
+core-only required rebinds still require complete valid retained values; no
+default or new conversion is inferred. Existing-property tightening continues
+to check canonical cells under the same head exclusion.
+
+
 For example, a document accepted at revision 8 can be conditionally updated with
 expectation 8 after an unrelated document advances the global head to 9. Two
 different updates expecting that same document revision cannot both publish.

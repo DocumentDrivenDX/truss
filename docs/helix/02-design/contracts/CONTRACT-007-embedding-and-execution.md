@@ -76,6 +76,14 @@ prove that implication from the actual namespace/codec and populated fixtures
 before accepting its DDL. Otherwise retain a typed bounded refusal/fallback.
 Never omit unindexable members or silently shorten a sparse/residual page.
 
+Data and fact wrappers MUST preserve the original STABLE statement snapshot.
+Their separately invoked current-permission guard remains VOLATILE. The fixed
+managed single-function host optimization admits only VOLATILE entrypoints; a
+STABLE data wrapper must not enter that optimization merely because it returns a
+scalar JSON result. Invocation registry0.2 records this deliberate split.
+Qualify it against a real concurrent public writer, with a VOLATILE-wrapper
+countercontrol proving that the test can detect a changed source snapshot.
+
 Every returned candidate retains complete selected row/value/root validation and
 current selected-owner authorization, plus closing scope checks. New source and
 fact invocations use the finite person gate, retaining original EXECUTE/owner

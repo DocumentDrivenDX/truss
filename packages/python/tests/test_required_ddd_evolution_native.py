@@ -2,8 +2,11 @@
 """HF-03 required core/DDD additions under the ordinary catalog writer gate."""
 import json
 import psycopg
+from dataclasses import replace
 from truss import CatalogDocument, CatalogRegistration, CatalogAcceptanceRefused, Ok, Error
 from truss.groups import GroupSuccess, GroupUnavailable, GroupFailed
+from truss.groups import AuthoredValue
+from truss.contracts import TextValue
 import test_hohfeld_disputes_native as fixtures
 
 
@@ -54,6 +57,17 @@ class RequiredDDDEvolutionTests(fixtures.HohfeldDisputesNativeTests):
         _,prepared=self.evolution(a);before=self.group_effect_counts()
         self.assert_populated_refusal(a.accept_in_transaction(t,prepared,request_key='required-r2'))
         h.detach();c.commit();self.assertEqual(self.group_effect_counts(),before)
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
+
+    def test_paired_required_addition_does_not_implicitly_rebind_populated_retained_values(self):
+        c,h,a,t=self.ready_required();operation=self.create()
+        operation=replace(operation,values=operation.values+(AuthoredValue(name='A-required',value=TextValue(kind='string',text='already-retained')),))
+        self.assertIsInstance(self.run_group(a,t,(operation,),'retained-required-seed')[0],GroupSuccess)
+        h.detach();c.commit();c,h,a,t=self.consumer();_,prepared=self.evolution(a)
+        before=self.admin.execute('SELECT id,type_id,ver,props,retained FROM truss.object ORDER BY id').fetchall()
+        self.assert_populated_refusal(a.accept_in_transaction(t,prepared,request_key='required-retained-r2'))
+        h.detach();c.commit()
+        self.assertEqual(self.admin.execute('SELECT id,type_id,ver,props,retained FROM truss.object ORDER BY id').fetchall(),before)
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
 
     def test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition(self):

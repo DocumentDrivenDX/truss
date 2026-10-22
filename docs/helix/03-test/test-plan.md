@@ -82,7 +82,8 @@ Allocated object IDs inside a refused transaction do not imply durable objects.
 `test_required_ddd_evolution_native.RequiredDDDEvolutionTests` selects original
 UMF0.10/DDD0.1 validation and exact paired scalar Field/member/extension additions.
 Require empty-Record acceptance with exact accepted source and unknown content;
-populated typed `property.required` refusal with exact count and unchanged
+populated typed `property.required` refusal, including a valid matching retained
+value without implicit paired backfill, with exact count and unchanged
 head/data/history; both writer-first and acceptance-first native lock orders;
 and stale-pin refusal after publication. Existing optional-addition and changed
 prior-meaning refusal controls remain required. The native plan/census must run

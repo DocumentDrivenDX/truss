@@ -23,6 +23,9 @@ modes={
 'page_import_load_audit':'audit','page_mutation_group_audit':'audit','read_import_load_chunk':'audit'}
 selected=[f for f in source['functions'] if f['name'] in modes]
 assert {f['name'] for f in selected}==set(modes),set(modes)-{f['name'] for f in selected}
+statement_sources={
+ 'query_objects','query_edges','query_page_objects','query_export_objects','query_export_edges','query_export_page_objects',
+ 'query_selected_objects','query_seek_objects','query_object_attribution','query_object_times','query_object_load_id'}
 helper='''-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Denial-capable public invocations; private grants remain mandatory.
 CREATE FUNCTION truss.require_person_invocation(original_function regprocedure,admission_kind text) RETURNS void
@@ -72,9 +75,11 @@ for f in selected:
  assert not f['modes'] or all(m in ('i','o','t') for m in f['modes']),f
  args=','.join('"'+n.replace('"','""')+'"' for n in names[:f['inputCount']])
  mode=modes[f['name']];name='person_'+f['name'];sig=f['signature'];stmt='RETURN QUERY SELECT * FROM' if f['set'] else 'PERFORM' if f['result']=='void' else 'RETURN'
+ volatility='STABLE' if f['name'] in statement_sources else 'VOLATILE'
+ if volatility=='STABLE':assert f['volatility']=='s',f
  suffix='\n RETURN;' if f['result']=='void' else ''
  parts.append(f'''CREATE FUNCTION truss.{name}({f['arguments']}) RETURNS {f['result']}
-LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+LANGUAGE plpgsql {volatility} SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 BEGIN
  PERFORM truss.require_person_invocation('{sig}'::regprocedure,'{mode}');
  {stmt} truss.{f['name']}({args});{suffix}
@@ -83,7 +88,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.{name}({f['arguments']}) FROM PUBLIC;
 
 ''')
- entries.append({'name':f['name'],'publicName':name,'signature':sig,'arguments':f['arguments'],'mode':mode,'result':f['result'],'set':f['set']})
+ entries.append({'name':f['name'],'publicName':name,'signature':sig,'arguments':f['arguments'],'mode':mode,'result':f['result'],'set':f['set'],'volatility':'s' if volatility=='STABLE' else 'v'})
 (root/'person-entrypoints.sql').write_text(''.join(parts))
-(root/'person-entrypoints.json').write_text(json.dumps({'interfaceVersion':'truss-person-invocations/0.1','scope':'Declared person-family admission plus original caller EXECUTE; no private helper or administrative grant','functions':entries},indent=2)+'\n')
+(root/'person-entrypoints.json').write_text(json.dumps({'interfaceVersion':'truss-person-invocations/0.2','scope':'Declared person-family admission plus fresh original caller EXECUTE; statement-snapshot data/facts; no private helper or administrative grant','functions':entries},indent=2)+'\n')
 print('Generated',len(entries),'native person invocation declarations from exact PostgreSQL metadata')

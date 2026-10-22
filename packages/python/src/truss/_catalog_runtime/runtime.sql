@@ -643,7 +643,7 @@ BEGIN
  -- archives and immutable history are not another request or a rendered view.
  IF jsonb_array_length(expected->'type_def')+jsonb_array_length(expected->'prop_def')+jsonb_array_length(expected->'key_def')+jsonb_array_length(expected->'rel_def')>65536
   THEN RAISE EXCEPTION 'complete catalog resource limit' USING ERRCODE='54000';END IF;
- violations:=truss.catalog_rebind_violations(expected,new_revision);
+ violations:=truss.catalog_rebind_violations(expected,new_revision,declarations_bytes);
  IF violations IS NOT NULL THEN
   PERFORM truss.catalog_actor();
   RETURN QUERY SELECT prior_revision::text,NULL::text,NULL::bytea,false,false,session_user::text,violations;RETURN;

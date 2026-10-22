@@ -17,6 +17,6 @@ def person_entrypoints():
     if sha256(raw).hexdigest()!=manifest['files']['person-entrypoints.json']:
         raise ValueError('Exact person invocation declarations required')
     value=json.loads(raw)
-    if value['interfaceVersion']!='truss-person-invocations/0.1':
+    if value['interfaceVersion']!='truss-person-invocations/0.2':
         raise ValueError('Selected person invocation profile required')
     return tuple(value['functions'])

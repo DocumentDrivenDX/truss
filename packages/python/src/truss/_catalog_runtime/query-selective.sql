@@ -91,10 +91,14 @@ BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN
   RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
- IF jsonb_typeof(selected_cells) IS DISTINCT FROM 'object' OR octet_length(selected_cells::text)>1048576
+ IF octet_length(selected_cells::text)>8388608 THEN
+  RAISE EXCEPTION 'bounded selected cell envelope required' USING ERRCODE='54000';END IF;
+ IF jsonb_typeof(selected_cells) IS DISTINCT FROM 'object'
   OR (SELECT count(*) FROM jsonb_object_keys(selected_cells))<>1 THEN
   RAISE EXCEPTION 'one bounded exact selected cell required' USING ERRCODE='22023';END IF;
  SELECT key,value INTO STRICT property_id,cell FROM jsonb_each(selected_cells);
+ IF cell->>'kind'='string' AND octet_length(cell->>'text')>1048576 THEN
+  RAISE EXCEPTION 'bounded selected string operand required' USING ERRCODE='54000';END IF;
  SELECT * INTO definition FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id::text=property_id AND p.retired_rev IS NULL;
  IF NOT FOUND OR definition.home<>'json' OR definition.cardinality<>'one' OR definition.scalar_type NOT IN ('string','boolean')
   OR truss.valid_property_value(cell,definition) IS NOT TRUE OR cell->>'kind' IS DISTINCT FROM definition.scalar_type THEN
@@ -123,6 +127,7 @@ BEGIN
   SELECT * INTO component FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=key_definition.prop_ids[1] AND p.retired_rev IS NULL;
  END IF;
  IF component.scalar_type IS DISTINCT FROM 'string' OR component.nullability IS DISTINCT FROM 'required' OR component.cardinality IS DISTINCT FROM 'one'
+  OR component.home IS DISTINCT FROM 'json' OR coalesce(component.facets,'{}')<>'{}'::jsonb
   OR EXISTS(SELECT 1 FROM truss.object_key_bucket k WHERE k.type_id=selected_type AND k.key_num=key_definition.key_num
    AND truss.runtime_query_single_string_key(k.key_bytes) IS NULL) THEN
   RETURN QUERY SELECT q.* FROM truss.query_page_objects(binding,selected_type,selected_key) q;RETURN;

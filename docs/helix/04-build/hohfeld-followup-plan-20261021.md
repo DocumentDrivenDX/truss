@@ -529,6 +529,59 @@ qualifies native source components only. Original native-index/model custody,
 full new compiler/public composition, remaining HF-05 costs, HF-06/07, target
 freeze, populated migration lineage and final release gates remain required.
 
+### Snapshot and existing rebind regression checkpoint — 2026-10-22
+
+Actual native metadata identifies11 STABLE data/fact sources. Their new public
+wrappers now preserve that statement snapshot while the person/owner/ACL guard
+remains independently current. Registry0.2 records the split; STABLE scalar fact
+wrappers do not enter the VOLATILE managed-function optimization. A controlled
+concurrent public writer proves the distinction: an intentionally VOLATILE data
+wrapper sees the later committed value, while the selected STABLE wrapper returns
+the original statement value. The fixture's initial transaction-scoped advisory
+lock cleanup failure is retained and corrected; no modified fixture installation
+is promoted as the released source profile.
+
+Broader evolution testing exposed an HF-03 regression: an early new-property
+required count blocked existing valid retained-value core rebinds. The shared
+planned rebind validator now owns new-property requiredness after complete root
+readership. Original admitted declarations distinguish the empty-only paired
+DDD addition, which refuses every populated Record even when valid retained
+values exist, from the existing qualified core-only rebind path. Existing-property
+tightening retains its original canonical census. Six paired-addition controls
+and original required/keyed rebind workflows pass. Stale42501 business-denial
+assertions were corrected to nativeP1403; real damaged grants remain42501.
+
+The final pre-ABI source run passes37 native cases, no skips,68.504s with the
+exact PostgreSQL binary supplied to the managed guard fixture. It includes actual
+10,001-object index use, exact/control-character operand byte bounds, true/false
+cells, snapshot countercontrol, managed guards, person admission and the rebind
+split. Original failed attempts, source hashes and test producers are retained in
+`evidence/hohfeld-followup-20261021/hf05-snapshot-rebind/qualification.json`.
+No final ABI/package/migration/release claim follows from this checkpoint.
+
+### Next-release migration publication obligations
+
+Minimal person status currently reads the genesis installation marker rather
+than the effective migration overlay. Qualify and correct status after a populated
+upgrade, including fresh47 genesis versus44-upgraded47 genesis.
+
+The initial XID-tie concern was an incorrect inference from the SQL head helper.
+Inspection of `_migration_execute.execute` confirms that a complete route appends
+one final immutable receipt after all edge effects and intermediate structural
+verifications. `RuntimeMigrations` requires an owned idle autocommit connection
+and settles its own excluded administration transaction. A real44→73→74 route
+therefore does not append two tied-XID receipts or publish its intermediate73
+runtime. Keep that actual atomic publication contract and qualify exactly one
+append per completed route, with all original edge recipes/step evidence retained
+inside it. Writer XIDs are not a general commit-order service. Do not add a new
+chain-head algorithm for the disproven tied-edge premise.
+
+The next release still requires actual fresh47 and previously upgraded47
+populations, the real multi-edge route from44 using only the latest tool,
+unchanged prior receipt rows plus one new final append, no old-wheel execution,
+rollback/lost-ack settlement and current person status. Published47 source
+profiles and recipes stay immutable. No release-age eligibility cutoff is added.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

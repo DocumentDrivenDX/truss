@@ -196,11 +196,19 @@ $$;
 REVOKE ALL ON FUNCTION truss.catalog_rebind_objects(truss.catalog_registration_request,jsonb) FROM PUBLIC;
 
 -- Check retained candidates against the actual native planned property definition.
-CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int) RETURNS bytea
+CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int,declarations_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb;violation_buffer jsonb[]:=ARRAY[]::jsonb[];owner_index jsonb;
+DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb;violation_buffer jsonb[]:=ARRAY[]::jsonb[];owner_index jsonb;paired_fields jsonb;paired_required boolean;
 BEGIN
  SELECT coalesce(jsonb_object_agg(t.value->>'type_id',t.value),'{}'::jsonb) INTO owner_index FROM jsonb_array_elements(planned_basis->'type_def') t;
+ -- Original source/declaration correspondence and known DDD evolution were
+ -- admitted by the caller. Keep the empty-only paired addition distinct from
+ -- the existing independently qualified retained-value core rebind route.
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(r.value->>'documentId',r.value->>'moduleId',r.value->>'elementId')::text,
+  r.value->'declaration'->'extensions'->'umf.ddd'->'fields'),'{}'::jsonb) INTO paired_fields
+ FROM jsonb_array_elements(convert_from(declarations_bytes,'UTF8')::jsonb) d
+ CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r
+ WHERE jsonb_typeof(r.value->'declaration'->'extensions'->'umf.ddd'->'fields')='object';
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision LOOP
   SELECT * INTO STRICT owner FROM jsonb_populate_record(NULL::truss.type_def,owner_index->property.type_id::text) t WHERE t.type_id=property.type_id;
   IF NOT EXISTS(SELECT 1 FROM truss.type_def WHERE type_id=property.type_id) THEN CONTINUE;END IF;
@@ -209,6 +217,8 @@ BEGIN
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='P1403';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
+  paired_required:=property.nullability='required' AND coalesce(
+   (paired_fields->jsonb_build_array(owner.document_id,owner.module,owner.element)::text) ? property.element,false);
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=property.type_id
    AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)
    AND (property.nullability='required' OR coalesce(o.retained ? property.name,false)) LOOP
@@ -217,7 +227,7 @@ BEGIN
    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
   END LOOP;
   SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
-   AND (coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
+   AND (paired_required OR coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
   IF missing>0 THEN
    violation_buffer:=array_append(violation_buffer,jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
     'recordId',owner.element,'fieldModuleId',property.declaration_module,'fieldId',property.element,
@@ -260,7 +270,7 @@ BEGIN
  RETURN convert_to(violations::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.catalog_rebind_violations(jsonb,int) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.catalog_rebind_violations(jsonb,int,bytea) FROM PUBLIC;
 
 -- Reports now contain original data: registrar authority alone cannot disclose it.
 -- Original definitions survive object deletion and later catalog evolution.

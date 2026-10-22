@@ -39,7 +39,10 @@ BEGIN
     END LOOP;
    END IF;
    candidate_name:=coalesce(field->'declaration'->>'name',field->'declaration'->>'id');
-   check_required:=field->'declaration'->>'nullability'='required' AND (property_id IS NULL OR property_meta.nullability IS DISTINCT FROM 'required');
+   -- Existing-property tightening counts canonical cells here. New-property
+   -- requiredness is checked once by catalog_rebind_violations against the
+   -- admitted retained-value destination under the same exclusive head gate.
+   check_required:=property_id IS NOT NULL AND field->'declaration'->>'nullability'='required' AND property_meta.nullability IS DISTINCT FROM 'required';
    check_family:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'
     AND (property_meta.cardinality IS DISTINCT FROM 'one' OR property_meta.scalar_type IS DISTINCT FROM field->'declaration'->>'scalarType');
    check_facets:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'

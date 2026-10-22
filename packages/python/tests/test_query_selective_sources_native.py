@@ -3,11 +3,14 @@
 import json
 import os
 import time
+from dataclasses import replace
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import psycopg
 from truss import Ok, QueryRefused
 from truss.catalog_runtime import _release
-from truss.groups import GroupSuccess
+from truss.contracts import BooleanValue, TextValue
+from truss.groups import AuthoredValue, GroupSuccess, UpdateObject, StoredObjectReference
 import test_compiled_query_native as fixtures
 
 
@@ -62,6 +65,71 @@ class QuerySelectiveSourcesTests(fixtures.CompiledQueryTests):
             with c.transaction():c.execute('SELECT * FROM truss.person_query_selected_objects(%s::jsonb,%s,%s::jsonb)',(binding,selected_type,selected)).fetchall()
         # The finite person gate rejects the now-unenrolled native caller.
         self.assertEqual(raised.exception.sqlstate,'P1403')
+
+    def test_selected_string_operand_preserves_exact_token_bound_with_json_overhead(self):
+        c,h,a,t=self.ready(document_ids=('adoc',));selected_type,property_id,key=self.coordinates();binding=self.binding(c)
+        for value in ('x'*1048576,'\x01'*1048576):
+            cells=json.dumps({str(property_id):{'kind':'string','text':value}})
+            self.assertEqual(c.execute('SELECT * FROM truss.person_query_selected_objects(%s::jsonb,%s,%s::jsonb)',(binding,selected_type,cells)).fetchall(),[])
+        cells=json.dumps({str(property_id):{'kind':'string','text':'x'*1048577}})
+        with self.assertRaises(psycopg.Error) as raised:
+            with c.transaction():c.execute('SELECT * FROM truss.person_query_selected_objects(%s::jsonb,%s,%s::jsonb)',(binding,selected_type,cells)).fetchall()
+        self.assertEqual(raised.exception.sqlstate,'54000')
+
+    def test_selected_boolean_cells_preserve_true_and_false(self):
+        def boolean(source):next(e for e in source['modules'][0]['elements'] if e['id']=='A-value')['scalarType']='boolean'
+        c,h,a,t=self.ready(boolean,document_ids=('adoc',));operations=[]
+        for value in (False,True):
+            original=self.create(label=str(value),alias=str(value))
+            operations.append(replace(original,values=(original.values[0],AuthoredValue(name='A-value',value=BooleanValue(value=value)))))
+        self.assertIsInstance(self.run_group(a,t,tuple(operations))[0],GroupSuccess)
+        selected_type,_,_=self.coordinates();binding=self.binding(c)
+        property_id=self.admin.execute("SELECT prop_id FROM truss.prop_def WHERE type_id=%s AND element='A-value'",(selected_type,)).fetchone()[0]
+        for value in (False,True):
+            cells=json.dumps({str(property_id):{'kind':'boolean','value':value}})
+            rows=c.execute('SELECT * FROM truss.person_query_selected_objects(%s::jsonb,%s,%s::jsonb)',(binding,selected_type,cells)).fetchall()
+            self.assertEqual([row[1][str(property_id)] for row in rows],[{'kind':'boolean','value':value}])
+
+    def test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol(self):
+        c,h,a,t=self.ready(document_ids=('adoc',))
+        seeded=self.run_group(a,t,(self.create(label='stable',value='before-stable',alias='stable'),self.create(label='volatile',value='before-volatile',alias='volatile')))[0]
+        self.assertIsInstance(seeded,GroupSuccess);identities={r.alias:r.identity for r in seeded.response.semantic.results}
+        h.detach();c.commit();c,h,a,t=self.consumer()
+        selected_type,_,_=self.coordinates();binding=self.binding(c)
+        property_id=self.admin.execute("SELECT prop_id FROM truss.prop_def WHERE type_id=%s AND element='A-value'",(selected_type,)).fetchone()[0]
+        signature='truss.person_query_objects(jsonb,int)'
+        source=self.admin.execute('SELECT pg_get_functiondef(%s::regprocedure)',(signature,)).fetchone()[0]
+        self.assertEqual(self.admin.execute('SELECT provolatile FROM pg_proc WHERE oid=%s::regprocedure',(signature,)).fetchone(),('s',))
+        lock_key=918234570
+        try:
+            for mode in ('volatile','stable'):
+                # Fixture-only barrier changes no data predicate or returned cell.
+                # Restore exact source before cleanup; this is snapshot evidence,
+                # not certification of an administratively modified installation.
+                self.admin.execute(source.replace('RETURN QUERY',f'PERFORM pg_catalog.pg_advisory_xact_lock({lock_key});\n RETURN QUERY',1))
+                self.admin.execute(f'ALTER FUNCTION {signature} {mode.upper()}')
+                self.admin.execute('SELECT pg_advisory_lock(%s)',(lock_key,))
+                with ThreadPoolExecutor(max_workers=1) as pool:
+                    future=pool.submit(lambda:c.execute('SELECT * FROM truss.person_query_objects(%s::jsonb,%s)',(binding,selected_type),prepare=False).fetchall())
+                    try:
+                        deadline=time.monotonic()+10
+                        while not self.admin.execute("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE pid=%s AND wait_event='advisory')",(c.info.backend_pid,)).fetchone()[0]:
+                            if future.done():self.fail('Native source returned before the controlled data boundary: '+repr(future.result()))
+                            if time.monotonic()>deadline:self.fail('Native source did not reach the controlled advisory barrier')
+                            time.sleep(0.01)
+                        writer,writer_host,writer_assembly,writer_tx=self.consumer()
+                        update=UpdateObject(target=StoredObjectReference(identity=identities[mode]),set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='after-'+mode)),),unset=(),expected_version='1')
+                        changed=self.run_group(writer_assembly,writer_tx,(update,),'snapshot-update-'+mode)[0]
+                        self.assertIsInstance(changed,GroupSuccess,repr(changed));writer_host.detach();writer.commit()
+                    finally:self.admin.execute('SELECT pg_advisory_unlock(%s)',(lock_key,))
+                    rows=future.result(timeout=10)
+                observed=next(props[str(property_id)]['text'] for identity,props in rows if str(identity)==identities[mode].id)
+                self.assertEqual(observed,('before-' if mode=='stable' else 'after-')+mode)
+                # The fixture barrier is transaction-scoped on the reader.
+                h.detach();c.rollback();c,h,a,t=self.consumer();binding=self.binding(c)
+        finally:
+            self.admin.execute('SELECT pg_advisory_unlock_all()')
+            self.admin.execute(source)
 
     def test_populated_10001_managed_objects_select_without_legacy_source_scan(self):
         def single_primary(source):
