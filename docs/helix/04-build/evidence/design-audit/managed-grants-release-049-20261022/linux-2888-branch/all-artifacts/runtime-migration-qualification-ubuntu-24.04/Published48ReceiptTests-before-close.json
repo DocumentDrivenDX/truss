@@ -1,0 +1,25 @@
+{
+  "source": "source44",
+  "class": "Published48ReceiptTests",
+  "stage": "before-close",
+  "test": null,
+  "time": "2026-10-22T21:12:46.192747+00:00",
+  "dataDirectory": "/tmp/truss-runtime-migrations-3jc4p62o/data",
+  "files": {
+    "log": {
+      "bytes": 2075,
+      "truncated": false,
+      "tail": "2026-10-22 21:12:14.754 UTC [4046] LOG:  starting PostgreSQL 18.6 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 10.2.1 20210130 (Red Hat 10.2.1-11), 64-bit\n2026-10-22 21:12:14.755 UTC [4046] LOG:  listening on Unix socket \"/tmp/truss-pg18-1001/d84f4cb90986a271acf45637/.s.PGSQL.5432\"\n2026-10-22 21:12:14.757 UTC [4052] LOG:  database system was shut down at 2026-10-22 21:12:14 UTC\n2026-10-22 21:12:14.759 UTC [4046] LOG:  database system is ready to accept connections\n2026-10-22 21:12:27.165 UTC [4050] LOG:  checkpoint starting: immediate force wait\n2026-10-22 21:12:27.210 UTC [4050] LOG:  checkpoint complete: wrote 1727 buffers (10.5%), wrote 4 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.022 s, sync=0.023 s, total=0.046 s; sync files=593, longest=0.003 s, average=0.001 s; distance=20638 kB, estimate=20638 kB; lsn=0/2B174B0, redo lsn=0/2B17458\n2026-10-22 21:12:36.498 UTC [4050] LOG:  checkpoint starting: immediate force wait\n2026-10-22 21:12:36.501 UTC [4050] LOG:  checkpoint complete: wrote 21 buffers (0.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.004 s; sync files=8, longest=0.001 s, average=0.001 s; distance=11026 kB, estimate=19677 kB; lsn=0/35DC0A0, redo lsn=0/35DC048\n2026-10-22 21:12:42.626 UTC [4050] LOG:  checkpoint starting: immediate force wait\n2026-10-22 21:12:42.628 UTC [4050] LOG:  checkpoint complete: wrote 22 buffers (0.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=9, longest=0.001 s, average=0.001 s; distance=10015 kB, estimate=18711 kB; lsn=0/3FA3CF0, redo lsn=0/3FA3C98\n2026-10-22 21:12:46.178 UTC [4050] LOG:  checkpoint starting: immediate force wait\n2026-10-22 21:12:46.180 UTC [4050] LOG:  checkpoint complete: wrote 17 buffers (0.1%), wrote 2 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=8, longest=0.001 s, average=0.001 s; distance=12048 kB, estimate=18045 kB; lsn=0/4B67E30, redo lsn=0/4B67DD8\n"
+    },
+    "postmaster.pid": {
+      "bytes": 141,
+      "truncated": false,
+      "tail": "4046\n/tmp/truss-runtime-migrations-3jc4p62o/data\n1792703534\n5432\n/tmp/truss-pg18-1001/d84f4cb90986a271acf45637\n\n  9439005        29\nready   \n"
+    },
+    "postmaster.opts": {
+      "bytes": 327,
+      "truncated": false,
+      "tail": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pgserver/pginstall/bin/postgres \"-D\" \"/tmp/truss-runtime-migrations-3jc4p62o/data\" \"-h\" \"\" \"-k\" \"/tmp/truss-pg18-1001/d84f4cb90986a271acf45637\" \"-p\" \"5432\" \"-c\" \"data_directory=/tmp/truss-runtime-migrations-3jc4p62o/data\" \"-c\" \"unix_socket_permissions=0700\"\n"
+    }
+  }
+}

@@ -522,8 +522,9 @@ evidence. In the 363-entry producer ledger, the merge changes only the reviewed
 disclosure-cohort digest; all 62 cases and limits, the six
 managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
 managed release gates are preserved. Final Truss qualification must use the
-new public compiler bytes. The final v0.0.49 installed macOS campaign below
-passes; hosted Linux qualification and publication remain pending.
+new public compiler bytes. The historical35fd installed macOS campaign below passes for its recorded
+artifact. New2888 hosted branch Linux qualification passes below; new macOS,
+tag and public verification remain pending.
 
 The [public v0.0.48 integrity receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-truss-048/verification.json)
 binds its published wheel SHA-256
@@ -643,8 +644,8 @@ unrun/unqualified status.
 | Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
 | Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Historical35fd local 106-case campaign passes; complete2888 qualification remains pending |
 | Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Historical source628/native35fd artifacts reviewed; new 2888 artifact freeze and complete qualification pending |
-| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Historical source628/native35fd macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). This does not qualify2888; full new Mac/Linux gates remain pending |
-| Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Pending; no v0.0.49 publication claimed |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Historical source628/native35fd macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). New2888 branch Linux passes below; new Mac and tag/public gates remain pending |
+| Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Full source4188 branch Linux passes; tag campaign and public verification pending, with no v0.0.49 publication claimed |
 
 Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
 qualification. The package may describe the explicit policy and locally proven
@@ -657,8 +658,8 @@ wheel hashes to the new release.
 
 Planning, implementation and the earlier explicitly selected local qualification
 are complete for their recorded candidate. The authorized v0.0.49 release remains
-pending until tag/final artifact review, the mandatory Linux campaign and
-public-artifact verification pass. The exact source628 installed macOS campaign
+pending until new2888 macOS qualification, tag/final artifact review, the mandatory
+tag Linux campaign and public-artifact verification pass. The exact source628 installed macOS campaign
 and complete local lineage gate pass. Actual public
 v0.0.48 input integrity and additive route admission are complete. The historical all-discovery
 diagnostic remains unqualified outside that supported release campaign. Actual
@@ -703,4 +704,34 @@ semantic controls. HF keeps all 62 cases, limits and compiler cohorts; all 363
 existing producer digests remain unchanged and the new test producer makes 364.
 Native capture/packaging and one-case diagnosis are complete. New exact-artifact
 Mac/Linux/corpus/lineage/lifecycle/workload and tag/public verification remain
-pending; no 2888 full qualification or publication is claimed.
+pending except for the hosted branch Linux pass below; no publication is claimed.
+
+### Hosted branch Linux qualification — native2888
+
+The [full Linux branch receipt](evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
+records run39854672450 at source
+`4188141faf3e51a7a25711a6fc22751cb37c7ae4`. The package and complete mandatory
+branch native jobs pass. The exact wheel is
+`57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790`,
+with native2888 and migration96add. All 467 source/wheel/sdist runtime files
+agree; the HF archive has 411 exact manifest-bound source payloads and SHA-256
+`ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6`.
+The current corpus remains 62 cases/364 producer bindings.
+
+The hosted run passes 21 managed modules/130 tests with zero skips and confirmed
+worker restoration/shutdown, unchanged inputs/payload and the pinned clean
+UMF5ba/Bun1.4.3 oracle. HF62 and all 106 migration/recovery tests pass with zero
+failures, errors or skips, using public Weft557's exact Linux cohort and all
+four actual public source wheels. The formerly failing audit case passes both
+in the independent corpus and the broader installed API regression step.
+The original public workload verifies 1,000 objects, 1,000 edges, 1,000 reads,
+200 committed updates and values after connection reopen, counting 26,122 SQL
+submissions on this Linux run. Other mandatory branch native regressions pass.
+
+The receipt retains 46 original logs/JSON outputs losslessly and identifies the
+three original binary artifacts. This is complete branch Linux qualification
+for the recorded source/artifacts, not publication: the publish job is skipped
+on that branch run. The diagnostic-trigger-only follow-up does not change the
+runtime/test/recipe basis. New2888 full macOS qualification, final tag Linux
+campaign and public-download verification remain pending. Earlier failed runs
+and source628/native35fd local receipts keep their original scopes.

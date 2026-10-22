@@ -1,0 +1,362 @@
+{
+  "scope": "Full mandatory branch Linux release campaign; exact target2888; not actual Lakebase acceptance.",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39854672450",
+  "sourceCommit": "4188141faf3e51a7a25711a6fc22751cb37c7ae4",
+  "conclusion": "success",
+  "nativeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "migrationManifestSha256": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+  "wheelSha256": "57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790",
+  "runtimeFilesVerified": 467,
+  "managed": {
+    "modules": 21,
+    "tests": 130,
+    "skipped": 0,
+    "passed": true,
+    "workerStopped": true,
+    "workerBaselineRestored": true,
+    "inputsUnchanged": true,
+    "payloadUnchanged": true
+  },
+  "hf": {
+    "tests": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true
+  },
+  "migrations": {
+    "tests": 106,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true
+  },
+  "publicWorkload": {
+    "passed": true,
+    "functionalPassed": true,
+    "sqlSubmissionCounts": {
+      "enabled": true,
+      "scope": "Cursor execute submissions counted by direct psycopg and PsycopgHost channels; executemany API calls are counted separately because psycopg may pipeline multiple parameter sets. Python connection.commit()/rollback() calls and high-level host adoption/group-context acquisition calls are reported separately. Includes setup, SAVEPOINT, observers, payload, timeout SET, RELEASE, and cleanup submissions occurring inside each workflow case. Query text and parameters are inspected transiently for fixed SQL-class labels, then discarded.",
+      "operationCountScope": "Per-operation counts include nested timed calls; operation summary rows overlap and must not be summed across operation names. Per-case totals are disjoint across selected cases and include untimed workflow setup/adoption/context calls.",
+      "timingsIncludeCounterOverhead": true,
+      "caseTotals": [
+        {
+          "case": "small",
+          "total": 26122,
+          "host": 25858,
+          "driver": 264,
+          "executemanyCalls": 0,
+          "hostAdoptions": 251,
+          "groupContextAcquisitions": 217,
+          "bySqlClass": {
+            "savepoint_open": 7446,
+            "admission_observer": 276,
+            "other": 3756,
+            "savepoint_release": 7445,
+            "public_function_payload": 7199
+          },
+          "transactionActions": {
+            "commit": 221,
+            "rollback": 31
+          }
+        }
+      ]
+    }
+  },
+  "externalBinaryArtifacts": {
+    "all-artifacts/python-package/truss-hf-conformance-0.0.49.zip": {
+      "sha256": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+      "bytes": 1197972,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/linux-2888-branch/all-artifacts/python-package/truss-hf-conformance-0.0.49.zip"
+    },
+    "all-artifacts/python-package/truss_toolkit-0.0.49-py3-none-any.whl": {
+      "sha256": "57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790",
+      "bytes": 6232642,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/linux-2888-branch/all-artifacts/python-package/truss_toolkit-0.0.49-py3-none-any.whl"
+    },
+    "all-artifacts/python-package/truss_toolkit-0.0.49.tar.gz": {
+      "sha256": "77c9d8081811010f3014f56f521a0cf1cc8c5fa57117c228854b102b0222b6eb",
+      "bytes": 6684281,
+      "retainedPrivately": "/private/tmp/truss-managed-grants-049/linux-2888-branch/all-artifacts/python-package/truss_toolkit-0.0.49.tar.gz"
+    }
+  },
+  "retainedEvidence": {
+    "payload-verification.json": {
+      "originalSha256": "a8628564b9706811e61b8f8f756a25a10cc93ee8af15c118af0918423cad7fc4",
+      "retained": "payload-verification.json",
+      "retainedSha256": "a8628564b9706811e61b8f8f756a25a10cc93ee8af15c118af0918423cad7fc4",
+      "gzipOriginal": false
+    },
+    "all-artifacts/hf-conformance-qualification-ubuntu-24.04/qualification.json": {
+      "originalSha256": "a61478d8f51f19445cfd16538af9e5020573afb3a6de0fe264275fa1f95dacca",
+      "retained": "all-artifacts/hf-conformance-qualification-ubuntu-24.04/qualification.json",
+      "retainedSha256": "a61478d8f51f19445cfd16538af9e5020573afb3a6de0fe264275fa1f95dacca",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/qualification.json": {
+      "originalSha256": "69ef2536c75827951b74c507b3326f5eea7077426d40d72c19bc1e595ec240a3",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/qualification.json",
+      "retainedSha256": "69ef2536c75827951b74c507b3326f5eea7077426d40d72c19bc1e595ec240a3",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_action_role_installation_native.log.gz": {
+      "originalSha256": "50dce8ba0b00453bf156a0fd0b1f78531f63c087ef93c0fb331b03aa2ac73bc0",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_action_role_installation_native.log.gz",
+      "retainedSha256": "50dce8ba0b00453bf156a0fd0b1f78531f63c087ef93c0fb331b03aa2ac73bc0",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_action_store_native.log.gz": {
+      "originalSha256": "a860f2a0ec279aa880a0c25848319bafbcb326b0e6171fbe091d3a8edd9ab648",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_action_store_native.log.gz",
+      "retainedSha256": "a860f2a0ec279aa880a0c25848319bafbcb326b0e6171fbe091d3a8edd9ab648",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_audit_accumulation_native.log.gz": {
+      "originalSha256": "93371834833776a3fb480878fadd3ca1b415dd398b41f76690181b965342ca62",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_audit_accumulation_native.log.gz",
+      "retainedSha256": "93371834833776a3fb480878fadd3ca1b415dd398b41f76690181b965342ca62",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_codes_native.log.gz": {
+      "originalSha256": "3bcbf79270ce6c7ddc8c50488e0de12f39d87d67d202066092962cb65a4f5203",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_codes_native.log.gz",
+      "retainedSha256": "3bcbf79270ce6c7ddc8c50488e0de12f39d87d67d202066092962cb65a4f5203",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_evolution_native.log.gz": {
+      "originalSha256": "674cf1a837d5c3604c25f53fb741fa6be7874a9f3277b8a571d806df57fb5f70",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_evolution_native.log.gz",
+      "retainedSha256": "674cf1a837d5c3604c25f53fb741fa6be7874a9f3277b8a571d806df57fb5f70",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_key_backfill_native.log.gz": {
+      "originalSha256": "48bd7fc7bc0a89c368ee17c28e27b2559683980f811443ba577110bff6274e08",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_key_backfill_native.log.gz",
+      "retainedSha256": "48bd7fc7bc0a89c368ee17c28e27b2559683980f811443ba577110bff6274e08",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_runtime_native.log.gz": {
+      "originalSha256": "d71f2e42c380f7ee149e14d5334f485e0b8fe44b4fbc10bde6406fd090c3d313",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_catalog_runtime_native.log.gz",
+      "retainedSha256": "d71f2e42c380f7ee149e14d5334f485e0b8fe44b4fbc10bde6406fd090c3d313",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_cli_install_refusal.log.gz": {
+      "originalSha256": "defeb686c624cab5fa87f3eab66545dea0b50e5aec03df8477a5b4ae7f5aa8f3",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_cli_install_refusal.log.gz",
+      "retainedSha256": "defeb686c624cab5fa87f3eab66545dea0b50e5aec03df8477a5b4ae7f5aa8f3",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_host_control_custody.log.gz": {
+      "originalSha256": "dec731b7dee6c2af1195e8107c036939145e35968d4aada173f1b1cbd711773b",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_host_control_custody.log.gz",
+      "retainedSha256": "dec731b7dee6c2af1195e8107c036939145e35968d4aada173f1b1cbd711773b",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_host_execution.log.gz": {
+      "originalSha256": "a2382467f08e43e0aad3a85980383e50c16e19fb3ae691ef88bb40d1038a37b1",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_host_execution.log.gz",
+      "retainedSha256": "a2382467f08e43e0aad3a85980383e50c16e19fb3ae691ef88bb40d1038a37b1",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_install_preflight_native.log.gz": {
+      "originalSha256": "88cec6c0db8f62b182cd101366f34a9cd1a62b18631c5d74fafb77b1b15c1321",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_install_preflight_native.log.gz",
+      "retainedSha256": "88cec6c0db8f62b182cd101366f34a9cd1a62b18631c5d74fafb77b1b15c1321",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_installation_privileges_native.log.gz": {
+      "originalSha256": "7e968c1ae571e2c4755b1518c463c0fc2c1cf46efea01d3627f8dd5cb13c62de",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_installation_privileges_native.log.gz",
+      "retainedSha256": "7e968c1ae571e2c4755b1518c463c0fc2c1cf46efea01d3627f8dd5cb13c62de",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_lifecycle_native.log.gz": {
+      "originalSha256": "1a56847a2aa4ae5b5dc797bd46f7e84716f73a8e868c1c436bc52b4b5a02712a",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_lifecycle_native.log.gz",
+      "retainedSha256": "1a56847a2aa4ae5b5dc797bd46f7e84716f73a8e868c1c436bc52b4b5a02712a",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_lifecycle_wire.log.gz": {
+      "originalSha256": "122f3c67e0046afc44ee97d3e5c138135edccc5ba48490fd17f2ac7dd9882b29",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_lifecycle_wire.log.gz",
+      "retainedSha256": "122f3c67e0046afc44ee97d3e5c138135edccc5ba48490fd17f2ac7dd9882b29",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_local_install_cli_native.log.gz": {
+      "originalSha256": "faa40930010cb713c7241f0c1777294d1ca981829e6d1293ffff53bd235249d3",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_local_install_cli_native.log.gz",
+      "retainedSha256": "faa40930010cb713c7241f0c1777294d1ca981829e6d1293ffff53bd235249d3",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_grants_migration_native.log.gz": {
+      "originalSha256": "c2d0b19e2fdd4b05aa0ef74d0cded95a15151c45d5e92157cba5188515565f43",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_grants_migration_native.log.gz",
+      "retainedSha256": "c2d0b19e2fdd4b05aa0ef74d0cded95a15151c45d5e92157cba5188515565f43",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_installation_native.log.gz": {
+      "originalSha256": "247dcaf3d411d66ab7405825bdfbdbab7717cfad6c19c05636ff89dfdbf10dab",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_installation_native.log.gz",
+      "retainedSha256": "247dcaf3d411d66ab7405825bdfbdbab7717cfad6c19c05636ff89dfdbf10dab",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_platform_grants_native.log.gz": {
+      "originalSha256": "aabe5d076be9c27478f9aa3a61f78da50309654a9eb9a36e2e753c41bb0e14a2",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_managed_platform_grants_native.log.gz",
+      "retainedSha256": "aabe5d076be9c27478f9aa3a61f78da50309654a9eb9a36e2e753c41bb0e14a2",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_module_access_batch_native.log.gz": {
+      "originalSha256": "2a3a6e9b5f52b1cdbf310fc618532750db49b2df8af47fa442401648828115dd",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_module_access_batch_native.log.gz",
+      "retainedSha256": "2a3a6e9b5f52b1cdbf310fc618532750db49b2df8af47fa442401648828115dd",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_preparation_runtime_recipe.log.gz": {
+      "originalSha256": "561b3035cb7fb8b14cdcd723448366d2b6d5afd1273bd56435cc030a6b62894c",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_preparation_runtime_recipe.log.gz",
+      "retainedSha256": "561b3035cb7fb8b14cdcd723448366d2b6d5afd1273bd56435cc030a6b62894c",
+      "gzipOriginal": false
+    },
+    "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_preparation_source_inventory_native.log.gz": {
+      "originalSha256": "feee496e13acf0952e82a064297dce608aca4e8c5c8f5d6387cdd560d2a946d6",
+      "retained": "all-artifacts/managed-grants-qualification-ubuntu-24.04/test_preparation_source_inventory_native.log.gz",
+      "retainedSha256": "feee496e13acf0952e82a064297dce608aca4e8c5c8f5d6387cdd560d2a946d6",
+      "gzipOriginal": false
+    },
+    "all-artifacts/original-public-workflow-ubuntu-24.04/report.json": {
+      "originalSha256": "9be35c046aadbb0913824fe0bee323ca9feaa87460e5f1bca652d8def4dac827",
+      "retained": "all-artifacts/original-public-workflow-ubuntu-24.04/report.json.gz",
+      "retainedSha256": "dcdf8cb12a2e61bb09e30d95b8431c07dd13dbf913b4f76651a6aa25eb3196f4",
+      "gzipOriginal": true
+    },
+    "all-artifacts/original-public-workflow-ubuntu-24.04/report.jsonl": {
+      "originalSha256": "87eab0e2676626261bc4ee2a1e570cbfd552bb3587783a94e84aa9ad1742990f",
+      "retained": "all-artifacts/original-public-workflow-ubuntu-24.04/report.jsonl.gz",
+      "retainedSha256": "f88bca653c4123c8a6ff47574eb309948025d33ac96c1f1e4003e7a19bc567d9",
+      "gzipOriginal": true
+    },
+    "all-artifacts/original-public-workflow-ubuntu-24.04/run.log": {
+      "originalSha256": "0181f8b03dd0f1acacd591f76cd8c041399b98f4d6675fa9208821540018bb3e",
+      "retained": "all-artifacts/original-public-workflow-ubuntu-24.04/run.log",
+      "retainedSha256": "0181f8b03dd0f1acacd591f76cd8c041399b98f4d6675fa9208821540018bb3e",
+      "gzipOriginal": false
+    },
+    "all-artifacts/original-public-workflow-ubuntu-24.04/status.json": {
+      "originalSha256": "922ce81dc66261b73b675ffbc3e4a2fd2e471f1ab2d55a13b226ccaaba9ddb06",
+      "retained": "all-artifacts/original-public-workflow-ubuntu-24.04/status.json",
+      "retainedSha256": "922ce81dc66261b73b675ffbc3e4a2fd2e471f1ab2d55a13b226ccaaba9ddb06",
+      "gzipOriginal": false
+    },
+    "all-artifacts/python-package/isolated-runtime-constraints.txt": {
+      "originalSha256": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+      "retained": "all-artifacts/python-package/isolated-runtime-constraints.txt",
+      "retainedSha256": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/PriorPublishedReceiptTests-before-close.json": {
+      "originalSha256": "2346a78c603dfc59ad0804aa4fa45213213ca2c3ed78f572c2c5aa9a8c9c3a36",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/PriorPublishedReceiptTests-before-close.json",
+      "retainedSha256": "2346a78c603dfc59ad0804aa4fa45213213ca2c3ed78f572c2c5aa9a8c9c3a36",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/Published48ReceiptTests-before-close.json": {
+      "originalSha256": "8de595f085087e148acb889a4ff02933f3442d6b8213df0be0d21a5291db940f",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/Published48ReceiptTests-before-close.json",
+      "retainedSha256": "8de595f085087e148acb889a4ff02933f3442d6b8213df0be0d21a5291db940f",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/qualification.json": {
+      "originalSha256": "4e6e6a3af3d691768f314eeb3883b35a0a566bccfb289e7c652012db842f4fae",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/qualification.json",
+      "retainedSha256": "4e6e6a3af3d691768f314eeb3883b35a0a566bccfb289e7c652012db842f4fae",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44-native-inventory.json": {
+      "originalSha256": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44-native-inventory.json.gz",
+      "retainedSha256": "93b37f438c2381f820cd660aeb241abcfdf63802c4794d0e59c1bcaf47dede6f",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44-original-evidence.json": {
+      "originalSha256": "fefd098d1571bd19f01c27876ef1fa9dd9a45fc2a4e5549d7c1002915f9d69ce",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44-original-evidence.json.gz",
+      "retainedSha256": "44ea2a438f9759b6b07f226a2d08c1c652d9f1d00d510d68664bbc1e29334ff3",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44MigrationTests-before-close.json": {
+      "originalSha256": "9f8b670ebff99754aab149619d8adaa5e281d22a2a3143071040a8246fa221bb",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source44MigrationTests-before-close.json",
+      "retainedSha256": "9f8b670ebff99754aab149619d8adaa5e281d22a2a3143071040a8246fa221bb",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46-native-inventory.json": {
+      "originalSha256": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46-native-inventory.json.gz",
+      "retainedSha256": "4ca7612fa5790f64a67c988e6c2bc76cecfa43dfdd864b3ef030e55ae8051a7f",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46-original-evidence.json": {
+      "originalSha256": "bc36178b9ee0f02dd55e6b2345087f81b92e37462a486145c35d538c20b9e633",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46-original-evidence.json.gz",
+      "retainedSha256": "e5953dd546c6fcb524c73f3ab73d8e35c72a9f4a85947a651907b6cf0f1ee0b5",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46MigrationTests-before-close.json": {
+      "originalSha256": "571bc03d3de5c328e48dcedb72c0f725d8754ffff68061305ecee2f4f2d280f7",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source46MigrationTests-before-close.json",
+      "retainedSha256": "571bc03d3de5c328e48dcedb72c0f725d8754ffff68061305ecee2f4f2d280f7",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47-native-inventory.json": {
+      "originalSha256": "c53951359da8a9bd37ae909929f92142a4b7351d4b534c12144a541c84c5ad11",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47-native-inventory.json.gz",
+      "retainedSha256": "870048c0fc85913e28095a5247e0b5339d3c5afdd8806d838601c74c22e263a9",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47-original-evidence.json": {
+      "originalSha256": "e1abbbd38a21c7f8e1eabe0bb455a6d7af7b018ca8e66d6abaf5d3f9641324af",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47-original-evidence.json.gz",
+      "retainedSha256": "4bd5c84d9027e12eafddc7bec0bbe7939436184c6c4cc7b8ba84e634bf49ae57",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47MigrationTests-before-close.json": {
+      "originalSha256": "2bb997d43fe9bd40e45b1db91500252b80aaf816d927502fbc82d5fb50b515b9",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source47MigrationTests-before-close.json",
+      "retainedSha256": "2bb997d43fe9bd40e45b1db91500252b80aaf816d927502fbc82d5fb50b515b9",
+      "gzipOriginal": false
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48-native-inventory.json": {
+      "originalSha256": "5f8c5d4c412f4e1e0ee3e81a2608db3e0cd6f5ce2287d5afc5ba98156d51b363",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48-native-inventory.json.gz",
+      "retainedSha256": "d04a7307d19935f1ecd3ca1ab63c4bf6ae5008bb7e3704c2acd56031df45d945",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48-original-evidence.json": {
+      "originalSha256": "49cfa4186c3e473b69e8d7830b8e042c24846d81e825db0733d9d4b2be710b07",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48-original-evidence.json.gz",
+      "retainedSha256": "33d78b637cca395a7ef59dd376a2e5543a05169b4e91997735a5597a2e7776bc",
+      "gzipOriginal": true
+    },
+    "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48MigrationTests-before-close.json": {
+      "originalSha256": "2963a915f9721a4103a625802a91b471b409f6f430ca2c050ff3a199d61295d8",
+      "retained": "all-artifacts/runtime-migration-qualification-ubuntu-24.04/source48MigrationTests-before-close.json",
+      "retainedSha256": "2963a915f9721a4103a625802a91b471b409f6f430ca2c050ff3a199d61295d8",
+      "gzipOriginal": false
+    },
+    "workflow.json": {
+      "originalSha256": "517f5f631dcdf7d1a5a3027c5ac3a285316404108f77076dddf6d06226cda62b",
+      "retained": "workflow.json",
+      "retainedSha256": "517f5f631dcdf7d1a5a3027c5ac3a285316404108f77076dddf6d06226cda62b",
+      "gzipOriginal": false
+    },
+    "workflow.log": {
+      "originalSha256": "fe9439738bf52be666312a104bf58abcf3856cc4425e67456467a4f8dde73bc6",
+      "retained": "workflow.log.gz",
+      "retainedSha256": "644f4567b2ecbc4ea09575399cc766a763c5f6863bd985851ab25c77d1706a0a",
+      "gzipOriginal": true
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}

@@ -10,8 +10,9 @@ verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
 inventories. Public packaging metadata binds source557 separately from the
 tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
 cohorts; Linux aarch64 remains packaging-only. No native tests run in this
-dependency audit. Final local Truss qualification on the refreshed public
-compiler now passes below; hosted Linux and v0.0.49 publication remain pending.
+dependency audit. Historical native35fd local qualification and new native2888
+branch Linux qualification pass for their exact artifacts below; new macOS,
+final tag and public verification remain pending.
 
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
@@ -143,7 +144,8 @@ previous 9V74 failures remain separate original evidence.
 The next gate is a fresh complete artifact freeze and the 21-module/130-test
 managed campaign, HF62, strict protected controls, all four source migration and
 recovery routes, lifecycle and the original public workload on the new native
-identity. Full Mac/Linux and tag/public verification remain pending. No release,
+identity. Full branch Linux qualification now passes below. New Mac and tag/public
+verification remain pending. No release,
 full-engine, all-discovery or Lakebase acceptance is claimed.
 
 The [automatic comparison at source4188](audit-diagnostic-39854667352/receipt.json)
@@ -160,3 +162,33 @@ the same steps, failure exits, assertions and 10-second SQL/30-second operation
 limits. This keeps the known public48 benchmark out of ordinary PR acceptance
 without relabeling its failure. The mandatory release workflow and final
 qualification requirements are unchanged.
+
+## Full hosted Linux branch qualification
+
+The [retained Linux receipt](linux-2888-branch/receipt.json) records successful
+package and complete mandatory native jobs in run39854672450 at source
+`4188141faf3e51a7a25711a6fc22751cb37c7ae4`. It binds wheel
+`57fd9520a453dcafa52dabe6aa75a143c162593237e80177acaebdbd51202790`,
+native2888, migration96add and archive
+`ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6`.
+All 467 source/wheel/sdist runtime files agree. All 411 HF archive source payloads
+match their manifest and checkout; the corpus keeps 62 cases/364 producer pins.
+
+The run passes 21 managed modules/130 tests, HF62 and 106 migration/recovery tests
+with zero skips, failures or errors. The managed receipt confirms baseline
+restoration, worker shutdown, unchanged input/payload and the clean pinned
+UMF5ba/Bun1.4.3 oracle. HF uses public Weft557's exact Linux native cohort;
+migration uses all four actual public source wheels and the prior public48
+receipt. The complete mandatory installed regressions pass. The audit case
+passes in both HF62 and the broader API regression step. The public workload
+verifies 1,000 objects, 1,000 edges, 1,000 reads, 200 committed updates and values
+after connection reopen, counting 26,122 SQL submissions.
+
+The packet retains 46 original outputs losslessly, including all 21 managed
+module logs, full workflow log and run metadata, with three binary identities
+retained privately. The input payload audit's original `nativeQualification:
+pending` field remains its pre-gate observation; the completed workflow and
+aggregate receipt record the subsequent Linux result. No original evidence is
+rewritten. This is a branch Linux pass; publication was skipped. New2888 full
+Mac qualification, the final tag campaign and public-download verification
+remain pending, with no Lakebase or full-engine claim.
