@@ -821,6 +821,54 @@ is`cef097386dc0f6a3c2e1e2e27c2021c663e406d0c0a6435c06b8e61bc982bcb3`.
 retains the original reports. These checks do not establish Linux native execution;
 the full public-compiler Truss release gate remains mandatory.
 
+
+### Historical spike boundary repair — 2026-10-22
+
+Final Weft integration CI39811016266 passed mutation/formal controls but failed
+its historical B001 numeric test: the intentionally UMF0.7 spike had begun reading
+the shared fixture already updated to UMF0.10. Reviewed test-only fix6e1b64a7
+restores the byte-exact original636-case snapshot for historical consumers, keeps
+all575 numeric expectations (288 accepts/287 refusals), leaves current0.10fixtures
+unchanged and explicitly checks that the current frontend refuses those575 original
+old requests. Spike3/currentfrontend6 focused tests pass. Original failure, successful
+controls and actual synthetic PR checkoutc40909fe are [retained](evidence/hohfeld-followup-20261021/weft-spike-boundary-failure/receipt.json).
+Complete local candidate/qualified workspace checks and a new full hosted run
+remain required. The selected86c compiler/build source and all wheel pins are unchanged.
+
+### Hosted Chromium apt bootstrap repair — 2026-10-22
+
+Conformance run 39821070162/job 119972301845 failed before apt update or
+Playwright: its `ubuntu24/20261021.345` image configures the active Ubuntu
+source with `mirror+file:/etc/apt/apt-mirrors.txt`, which the previous workflow
+did not recognize. The immutable original log, exact runner-image source
+provenance, cause and scoped repair are recorded in the
+[apt bootstrap evidence](evidence/hohfeld-followup-20261021/weft-apt-bootstrap-repair/README.md).
+Reviewed integration commit `cc694344da31af76ef6b97e572d20a8347989bdd` now
+recognizes only that exact selector and selects official HTTPS archive/security
+hosts without following a file reference. Local fixture, Python, YAML, bash and
+diff checks pass. Hosted retry 39822650250 has completed the actual apt/Playwright/
+Chromium setup step successfully, including the effective apt-config assertions
+and Chromium launch smoke; its compiler job remains in progress and the later
+compiler, native, WASM and full qualification gates are pending. The exact
+structured step snapshot and immutable original failure are retained in the
+[apt bootstrap evidence](evidence/hohfeld-followup-20261021/weft-apt-bootstrap-repair/README.md).
+This is not an overall hosted conformance pass. The helper leaves compiler/build
+inputs unchanged.
+
+### Full local Weft integration workspace — 2026-10-22
+
+The full workspace candidate and qualified feature sets now both pass locally
+on macOS ARM64 at source `6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a` with Rust
+1.90.0, `--locked --offline`: the candidate has 1,048 passed across 62 groups
+and the qualified run has 1,049 passed across 62 groups; each has zero failures,
+ignored tests or filtered tests, and both commands exit zero. Their original
+logs, result metadata and independently reconciled group counts are preserved in the
+[full-workspace evidence](evidence/hohfeld-followup-20261021/weft-full-workspace-6e1/README.md).
+The later `cc694344` workflow-only change does not alter Cargo source/build inputs.
+This closes only the local full-workspace gate for those source bytes. Hosted
+Linux conformance, browser/native packaging, installed Truss adoption, publication
+and public-release gates remain separate and are not credited from this run.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

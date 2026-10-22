@@ -1,0 +1,661 @@
+﻿2026-10-22T17:16:00.9149687Z Current runner version: '2.338.0'
+2026-10-22T17:16:00.9172146Z ##[group]Runner Image Provisioner
+2026-10-22T17:16:00.9172925Z Hosted Compute Agent
+2026-10-22T17:16:00.9173530Z Version: 20261021.618
+2026-10-22T17:16:00.9174154Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-22T17:16:00.9174756Z Build Date: 2026-10-21T00:45:21Z
+2026-10-22T17:16:00.9175339Z Worker ID: {227431b7-eb57-4227-940b-c0c2dbcc4e49}
+2026-10-22T17:16:00.9175931Z Region: westus3
+2026-10-22T17:16:00.9176397Z Cloud: Azure
+2026-10-22T17:16:00.9176887Z ##[endgroup]
+2026-10-22T17:16:00.9178054Z ##[group]Operating System
+2026-10-22T17:16:00.9178649Z Ubuntu
+2026-10-22T17:16:00.9179114Z 24.04.5
+2026-10-22T17:16:00.9179557Z LTS
+2026-10-22T17:16:00.9180058Z ##[endgroup]
+2026-10-22T17:16:00.9180530Z ##[group]Runner Image
+2026-10-22T17:16:00.9181009Z Image: ubuntu-24.04
+2026-10-22T17:16:00.9181541Z Version: 20261021.345.10
+2026-10-22T17:16:00.9182585Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261021.345/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-22T17:16:00.9184095Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261021.345
+2026-10-22T17:16:00.9184861Z ##[endgroup]
+2026-10-22T17:16:00.9185868Z ##[group]GITHUB_TOKEN Permissions
+2026-10-22T17:16:00.9187435Z Contents: read
+2026-10-22T17:16:00.9188074Z Metadata: read
+2026-10-22T17:16:00.9188552Z ##[endgroup]
+2026-10-22T17:16:00.9190415Z Secret source: Actions
+2026-10-22T17:16:00.9191238Z Cache mode: write
+2026-10-22T17:16:00.9191876Z Prepare workflow directory
+2026-10-22T17:16:00.9522444Z Prepare all required actions
+2026-10-22T17:16:00.9562459Z Getting action download info
+2026-10-22T17:16:01.2800571Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-22T17:16:01.3611814Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-22T17:16:01.4678784Z Download action repository 'oven-sh/setup-bun@v2' (SHA:0c5077e51419868618aeaa5fe8019c62421857d6)
+2026-10-22T17:16:01.9624631Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-22T17:16:02.1979914Z Complete job name: compiler-and-evidence
+2026-10-22T17:16:02.2901600Z ##[group]Run actions/checkout@v4
+2026-10-22T17:16:02.2902312Z with:
+2026-10-22T17:16:02.2902683Z   fetch-depth: 0
+2026-10-22T17:16:02.2903084Z   repository: DocumentDrivenDX/weft
+2026-10-22T17:16:02.2906499Z   token: ***
+2026-10-22T17:16:02.2906871Z   ssh-strict: true
+2026-10-22T17:16:02.2907247Z   ssh-user: git
+2026-10-22T17:16:02.2907630Z   persist-credentials: true
+2026-10-22T17:16:02.2908058Z   clean: true
+2026-10-22T17:16:02.2908434Z   sparse-checkout-cone-mode: true
+2026-10-22T17:16:02.2908871Z   fetch-tags: false
+2026-10-22T17:16:02.2909248Z   show-progress: true
+2026-10-22T17:16:02.2909637Z   lfs: false
+2026-10-22T17:16:02.2910008Z   submodules: false
+2026-10-22T17:16:02.2910406Z   set-safe-directory: true
+2026-10-22T17:16:02.2910849Z   allow-unsafe-pr-checkout: false
+2026-10-22T17:16:02.2911481Z env:
+2026-10-22T17:16:02.2911842Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:02.2912321Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:02.2912861Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:02.2913478Z ##[endgroup]
+2026-10-22T17:16:02.3788360Z Syncing repository: DocumentDrivenDX/weft
+2026-10-22T17:16:02.3790412Z ##[group]Getting Git version info
+2026-10-22T17:16:02.3790992Z Working directory is '/home/runner/work/weft/weft'
+2026-10-22T17:16:02.3791822Z [command]/usr/bin/git version
+2026-10-22T17:16:02.3889451Z git version 2.55.0
+2026-10-22T17:16:02.3910298Z ##[endgroup]
+2026-10-22T17:16:02.3926170Z Temporarily overriding HOME='/home/runner/work/_temp/e23eb4c9-c5a8-4588-9ca7-7d28b1bcb376' before making global git config changes
+2026-10-22T17:16:02.3944565Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-22T17:16:02.3946506Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/weft/weft
+2026-10-22T17:16:02.3992061Z Deleting the contents of '/home/runner/work/weft/weft'
+2026-10-22T17:16:02.4000114Z ##[group]Initializing the repository
+2026-10-22T17:16:02.4012919Z [command]/usr/bin/git init /home/runner/work/weft/weft
+2026-10-22T17:16:02.4115264Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-22T17:16:02.4117066Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-22T17:16:02.4118671Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-22T17:16:02.4119738Z hint: call:
+2026-10-22T17:16:02.4120326Z hint:
+2026-10-22T17:16:02.4121056Z hint: 	git config --global init.defaultBranch <name>
+2026-10-22T17:16:02.4121893Z hint:
+2026-10-22T17:16:02.4122682Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-22T17:16:02.4126107Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-22T17:16:02.4127183Z hint:
+2026-10-22T17:16:02.4127826Z hint: 	git branch -m <name>
+2026-10-22T17:16:02.4128501Z hint:
+2026-10-22T17:16:02.4129378Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-22T17:16:02.4130776Z Initialized empty Git repository in /home/runner/work/weft/weft/.git/
+2026-10-22T17:16:02.4134707Z [command]/usr/bin/git remote add origin https://github.com/DocumentDrivenDX/weft
+2026-10-22T17:16:02.4190868Z ##[endgroup]
+2026-10-22T17:16:02.4192051Z ##[group]Disabling automatic garbage collection
+2026-10-22T17:16:02.4195984Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-22T17:16:02.4264927Z ##[endgroup]
+2026-10-22T17:16:02.4266178Z ##[group]Setting up auth
+2026-10-22T17:16:02.4267363Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-22T17:16:02.4296409Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-22T17:16:02.4660824Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-22T17:16:02.4709224Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-22T17:16:02.4934327Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-22T17:16:02.4974218Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-22T17:16:02.5192106Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-22T17:16:02.5240567Z ##[endgroup]
+2026-10-22T17:16:02.5241795Z ##[group]Fetching the repository
+2026-10-22T17:16:02.5250736Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +aa37e57e3083fd22390796fd08dac1c9f7df6d2b:refs/remotes/pull/27/merge
+2026-10-22T17:16:09.9237116Z From https://github.com/DocumentDrivenDX/weft
+2026-10-22T17:16:09.9238560Z  * [new branch]        codex/hohfeld-formal-selector            -> origin/codex/hohfeld-formal-selector
+2026-10-22T17:16:09.9239156Z  * [new branch]        codex/hohfeld-performance                -> origin/codex/hohfeld-performance
+2026-10-22T17:16:09.9239709Z  * [new branch]        codex/praxis-lifecycle-047               -> origin/codex/praxis-lifecycle-047
+2026-10-22T17:16:09.9240224Z  * [new branch]        codex/truss-query-cohort49               -> origin/codex/truss-query-cohort49
+2026-10-22T17:16:09.9240735Z  * [new branch]        codex/truss051-integration               -> origin/codex/truss051-integration
+2026-10-22T17:16:09.9241176Z  * [new branch]        main                                     -> origin/main
+2026-10-22T17:16:09.9241573Z  * [new tag]           v0.4.10                                  -> v0.4.10
+2026-10-22T17:16:09.9242196Z  * [new tag]           v0.4.11                                  -> v0.4.11
+2026-10-22T17:16:09.9242557Z  * [new tag]           v0.4.12                                  -> v0.4.12
+2026-10-22T17:16:09.9242939Z  * [new tag]           v0.4.13                                  -> v0.4.13
+2026-10-22T17:16:09.9243613Z  * [new tag]           v0.4.14                                  -> v0.4.14
+2026-10-22T17:16:09.9244134Z  * [new tag]           v0.4.15                                  -> v0.4.15
+2026-10-22T17:16:09.9244714Z  * [new tag]           v0.4.16                                  -> v0.4.16
+2026-10-22T17:16:09.9245237Z  * [new tag]           v0.4.17                                  -> v0.4.17
+2026-10-22T17:16:09.9245785Z  * [new tag]           v0.4.18                                  -> v0.4.18
+2026-10-22T17:16:09.9246329Z  * [new tag]           v0.4.19                                  -> v0.4.19
+2026-10-22T17:16:09.9246844Z  * [new tag]           v0.4.2                                   -> v0.4.2
+2026-10-22T17:16:09.9247194Z  * [new tag]           v0.4.20                                  -> v0.4.20
+2026-10-22T17:16:09.9247555Z  * [new tag]           v0.4.21                                  -> v0.4.21
+2026-10-22T17:16:09.9247887Z  * [new tag]           v0.4.22                                  -> v0.4.22
+2026-10-22T17:16:09.9248246Z  * [new tag]           v0.4.23                                  -> v0.4.23
+2026-10-22T17:16:09.9248658Z  * [new tag]           v0.4.24                                  -> v0.4.24
+2026-10-22T17:16:09.9249186Z  * [new tag]           v0.4.25                                  -> v0.4.25
+2026-10-22T17:16:09.9250313Z  * [new tag]           v0.4.26                                  -> v0.4.26
+2026-10-22T17:16:09.9250654Z  * [new tag]           v0.4.27                                  -> v0.4.27
+2026-10-22T17:16:09.9250995Z  * [new tag]           v0.4.28                                  -> v0.4.28
+2026-10-22T17:16:09.9251456Z  * [new tag]           v0.4.29                                  -> v0.4.29
+2026-10-22T17:16:09.9251893Z  * [new tag]           v0.4.3                                   -> v0.4.3
+2026-10-22T17:16:09.9252577Z  * [new tag]           v0.4.30                                  -> v0.4.30
+2026-10-22T17:16:09.9253060Z  * [new tag]           v0.4.31                                  -> v0.4.31
+2026-10-22T17:16:09.9253575Z  * [new tag]           v0.4.32                                  -> v0.4.32
+2026-10-22T17:16:09.9253906Z  * [new tag]           v0.4.33                                  -> v0.4.33
+2026-10-22T17:16:09.9254350Z  * [new tag]           v0.4.34                                  -> v0.4.34
+2026-10-22T17:16:09.9254675Z  * [new tag]           v0.4.35                                  -> v0.4.35
+2026-10-22T17:16:09.9255054Z  * [new tag]           v0.4.36                                  -> v0.4.36
+2026-10-22T17:16:09.9255438Z  * [new tag]           v0.4.37                                  -> v0.4.37
+2026-10-22T17:16:09.9255764Z  * [new tag]           v0.4.38                                  -> v0.4.38
+2026-10-22T17:16:09.9256102Z  * [new tag]           v0.4.39                                  -> v0.4.39
+2026-10-22T17:16:09.9256438Z  * [new tag]           v0.4.4                                   -> v0.4.4
+2026-10-22T17:16:09.9256763Z  * [new tag]           v0.4.40                                  -> v0.4.40
+2026-10-22T17:16:09.9257088Z  * [new tag]           v0.4.41                                  -> v0.4.41
+2026-10-22T17:16:09.9257414Z  * [new tag]           v0.4.42                                  -> v0.4.42
+2026-10-22T17:16:09.9257736Z  * [new tag]           v0.4.43                                  -> v0.4.43
+2026-10-22T17:16:09.9258067Z  * [new tag]           v0.4.44                                  -> v0.4.44
+2026-10-22T17:16:09.9258392Z  * [new tag]           v0.4.45                                  -> v0.4.45
+2026-10-22T17:16:09.9258717Z  * [new tag]           v0.4.46                                  -> v0.4.46
+2026-10-22T17:16:09.9259196Z  * [new tag]           v0.4.47                                  -> v0.4.47
+2026-10-22T17:16:09.9259518Z  * [new tag]           v0.4.48                                  -> v0.4.48
+2026-10-22T17:16:09.9259848Z  * [new tag]           v0.4.49                                  -> v0.4.49
+2026-10-22T17:16:09.9260175Z  * [new tag]           v0.4.5                                   -> v0.4.5
+2026-10-22T17:16:09.9260504Z  * [new tag]           v0.4.6                                   -> v0.4.6
+2026-10-22T17:16:09.9260839Z  * [new tag]           v0.4.7                                   -> v0.4.7
+2026-10-22T17:16:09.9261192Z  * [new tag]           v0.4.8                                   -> v0.4.8
+2026-10-22T17:16:09.9261610Z  * [new tag]           v0.4.9                                   -> v0.4.9
+2026-10-22T17:16:09.9262210Z  * [new ref]           aa37e57e3083fd22390796fd08dac1c9f7df6d2b -> pull/27/merge
+2026-10-22T17:16:09.9263669Z ##[endgroup]
+2026-10-22T17:16:09.9264051Z ##[group]Determining the checkout info
+2026-10-22T17:16:09.9264469Z ##[endgroup]
+2026-10-22T17:16:09.9264741Z [command]/usr/bin/git sparse-checkout disable
+2026-10-22T17:16:09.9308126Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-22T17:16:09.9346516Z ##[group]Checking out the ref
+2026-10-22T17:16:09.9350531Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/27/merge
+2026-10-22T17:16:11.0737801Z Updating files:  41% (2279/5481)
+2026-10-22T17:16:11.0900241Z Updating files:  42% (2303/5481)
+2026-10-22T17:16:11.1237590Z Updating files:  43% (2357/5481)
+2026-10-22T17:16:11.1920751Z Updating files:  44% (2412/5481)
+2026-10-22T17:16:11.1978864Z Updating files:  45% (2467/5481)
+2026-10-22T17:16:11.2031501Z Updating files:  46% (2522/5481)
+2026-10-22T17:16:11.2049533Z Updating files:  47% (2577/5481)
+2026-10-22T17:16:11.2798681Z Updating files:  48% (2631/5481)
+2026-10-22T17:16:11.3199559Z Updating files:  49% (2686/5481)
+2026-10-22T17:16:11.3249972Z Updating files:  50% (2741/5481)
+2026-10-22T17:16:11.3814257Z Updating files:  51% (2796/5481)
+2026-10-22T17:16:11.4490268Z Updating files:  52% (2851/5481)
+2026-10-22T17:16:11.4832562Z Updating files:  53% (2905/5481)
+2026-10-22T17:16:11.4857575Z Updating files:  54% (2960/5481)
+2026-10-22T17:16:11.4879920Z Updating files:  55% (3015/5481)
+2026-10-22T17:16:11.4898452Z Updating files:  56% (3070/5481)
+2026-10-22T17:16:11.4923300Z Updating files:  57% (3125/5481)
+2026-10-22T17:16:11.4946910Z Updating files:  58% (3179/5481)
+2026-10-22T17:16:11.4968230Z Updating files:  59% (3234/5481)
+2026-10-22T17:16:11.4989741Z Updating files:  60% (3289/5481)
+2026-10-22T17:16:11.5016563Z Updating files:  61% (3344/5481)
+2026-10-22T17:16:11.5044114Z Updating files:  62% (3399/5481)
+2026-10-22T17:16:11.5587210Z Updating files:  63% (3454/5481)
+2026-10-22T17:16:11.5614958Z Updating files:  64% (3508/5481)
+2026-10-22T17:16:11.5645234Z Updating files:  65% (3563/5481)
+2026-10-22T17:16:11.5692642Z Updating files:  66% (3618/5481)
+2026-10-22T17:16:11.5715038Z Updating files:  67% (3673/5481)
+2026-10-22T17:16:11.5745393Z Updating files:  68% (3728/5481)
+2026-10-22T17:16:11.5776188Z Updating files:  69% (3782/5481)
+2026-10-22T17:16:11.5800221Z Updating files:  70% (3837/5481)
+2026-10-22T17:16:11.5908491Z Updating files:  71% (3892/5481)
+2026-10-22T17:16:11.6216526Z Updating files:  72% (3947/5481)
+2026-10-22T17:16:11.6274101Z Updating files:  73% (4002/5481)
+2026-10-22T17:16:11.6327799Z Updating files:  74% (4056/5481)
+2026-10-22T17:16:11.6788440Z Updating files:  75% (4111/5481)
+2026-10-22T17:16:11.6813437Z Updating files:  76% (4166/5481)
+2026-10-22T17:16:11.6831436Z Updating files:  77% (4221/5481)
+2026-10-22T17:16:11.6876562Z Updating files:  78% (4276/5481)
+2026-10-22T17:16:11.6907923Z Updating files:  79% (4330/5481)
+2026-10-22T17:16:11.6936196Z Updating files:  80% (4385/5481)
+2026-10-22T17:16:11.6960742Z Updating files:  81% (4440/5481)
+2026-10-22T17:16:11.6999204Z Updating files:  82% (4495/5481)
+2026-10-22T17:16:11.7342034Z Updating files:  83% (4550/5481)
+2026-10-22T17:16:11.7394378Z Updating files:  84% (4605/5481)
+2026-10-22T17:16:11.7452075Z Updating files:  85% (4659/5481)
+2026-10-22T17:16:11.7560857Z Updating files:  86% (4714/5481)
+2026-10-22T17:16:11.7601345Z Updating files:  87% (4769/5481)
+2026-10-22T17:16:11.7632528Z Updating files:  88% (4824/5481)
+2026-10-22T17:16:11.7656023Z Updating files:  89% (4879/5481)
+2026-10-22T17:16:11.7697041Z Updating files:  90% (4933/5481)
+2026-10-22T17:16:11.7722083Z Updating files:  91% (4988/5481)
+2026-10-22T17:16:11.7901033Z Updating files:  92% (5043/5481)
+2026-10-22T17:16:11.8102635Z Updating files:  93% (5098/5481)
+2026-10-22T17:16:11.8184229Z Updating files:  94% (5153/5481)
+2026-10-22T17:16:11.8703544Z Updating files:  95% (5207/5481)
+2026-10-22T17:16:11.8782804Z Updating files:  96% (5262/5481)
+2026-10-22T17:16:11.8803808Z Updating files:  97% (5317/5481)
+2026-10-22T17:16:11.8826599Z Updating files:  98% (5372/5481)
+2026-10-22T17:16:11.8857364Z Updating files:  99% (5427/5481)
+2026-10-22T17:16:11.8857714Z Updating files: 100% (5481/5481)
+2026-10-22T17:16:11.8858052Z Updating files: 100% (5481/5481), done.
+2026-10-22T17:16:11.9191572Z Note: switching to 'refs/remotes/pull/27/merge'.
+2026-10-22T17:16:11.9192031Z 
+2026-10-22T17:16:11.9192267Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-22T17:16:11.9192659Z changes and commit them, and you can discard any commits you make in this
+2026-10-22T17:16:11.9193026Z state without impacting any branches by switching back to a branch.
+2026-10-22T17:16:11.9193510Z 
+2026-10-22T17:16:11.9193697Z If you want to create a new branch to retain commits you create, you may
+2026-10-22T17:16:11.9194044Z do so (now or later) by using -c with the switch command. Example:
+2026-10-22T17:16:11.9194238Z 
+2026-10-22T17:16:11.9194332Z   git switch -c <new-branch-name>
+2026-10-22T17:16:11.9194464Z 
+2026-10-22T17:16:11.9194557Z Or undo this operation with:
+2026-10-22T17:16:11.9194691Z 
+2026-10-22T17:16:11.9194761Z   git switch -
+2026-10-22T17:16:11.9194869Z 
+2026-10-22T17:16:11.9195053Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-22T17:16:11.9195295Z 
+2026-10-22T17:16:11.9195790Z HEAD is now at aa37e57e Merge 24e1490af0ffa9f1db721f54abe443dd0e1de536 into 9137ca2c3d6f8982ed0d4770de050ba4be0277ee
+2026-10-22T17:16:11.9351989Z ##[endgroup]
+2026-10-22T17:16:11.9403923Z [command]/usr/bin/git log -1 --format=%H
+2026-10-22T17:16:11.9438789Z aa37e57e3083fd22390796fd08dac1c9f7df6d2b
+2026-10-22T17:16:11.9672552Z ##[group]Run actions/setup-python@v5
+2026-10-22T17:16:11.9672787Z with:
+2026-10-22T17:16:11.9672974Z   python-version: 3.12
+2026-10-22T17:16:11.9673339Z   check-latest: false
+2026-10-22T17:16:11.9675266Z   token: ***
+2026-10-22T17:16:11.9675445Z   update-environment: true
+2026-10-22T17:16:11.9675650Z   allow-prereleases: false
+2026-10-22T17:16:11.9675840Z   freethreaded: false
+2026-10-22T17:16:11.9676016Z env:
+2026-10-22T17:16:11.9676195Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:11.9676422Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:11.9676685Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:11.9676906Z ##[endgroup]
+2026-10-22T17:16:12.0781741Z ##[group]Installed versions
+2026-10-22T17:16:12.0862948Z (node:2075) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-22T17:16:12.0863754Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-22T17:16:12.0864355Z Successfully set up CPython (3.12.15)
+2026-10-22T17:16:12.0864855Z ##[endgroup]
+2026-10-22T17:16:12.1102229Z ##[group]Run oven-sh/setup-bun@v2
+2026-10-22T17:16:12.1102508Z with:
+2026-10-22T17:16:12.1102683Z   bun-version: 1.4.2
+2026-10-22T17:16:12.1102871Z   no-cache: false
+2026-10-22T17:16:12.1105037Z   token: ***
+2026-10-22T17:16:12.1105204Z env:
+2026-10-22T17:16:12.1105375Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:12.1105607Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:12.1105844Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:12.1106298Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:12.1106676Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-22T17:16:12.1107022Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:12.1107319Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:12.1107610Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:12.1107966Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-22T17:16:12.1108226Z ##[endgroup]
+2026-10-22T17:16:12.4718356Z Cache hit for: bun-gmoqYqdUbaYsI0KujeXt7Zg/p0I=
+2026-10-22T17:16:13.6204798Z Received 35684134 of 35684134 (100.0%), 37.2 MBs/sec
+2026-10-22T17:16:13.6205244Z Cache Size: ~34 MB (35684134 B)
+2026-10-22T17:16:13.6310782Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d8693cb3-662a-42bd-a6a8-460a4b89cf98/cache.tzst -P -C /home/runner/work/weft/weft --use-compress-program unzstd
+2026-10-22T17:16:13.7506744Z Cache restored successfully
+2026-10-22T17:16:13.7528698Z [command]/home/runner/.bun/bin/bun --revision
+2026-10-22T17:16:13.7578506Z 1.4.2+744846f84
+2026-10-22T17:16:13.7584062Z Using a cached version of Bun: 1.4.2+744846f84
+2026-10-22T17:16:13.7728649Z ##[group]Run rustup toolchain install 1.90.0 --profile minimal --component rustfmt --target wasm32-unknown-unknown
+2026-10-22T17:16:13.7729360Z [36;1mrustup toolchain install 1.90.0 --profile minimal --component rustfmt --target wasm32-unknown-unknown[0m
+2026-10-22T17:16:13.7729791Z [36;1mrustup default 1.90.0[0m
+2026-10-22T17:16:13.7730031Z [36;1mpython -m pip install maturin==1.9.6[0m
+2026-10-22T17:16:13.7730283Z [36;1mcargo fetch --locked[0m
+2026-10-22T17:16:13.7908426Z shell: /usr/bin/bash -e {0}
+2026-10-22T17:16:13.7908688Z env:
+2026-10-22T17:16:13.7908880Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:13.7909132Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:13.7909384Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:13.7909690Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:13.7910046Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-22T17:16:13.7910476Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:13.7910801Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:13.7911126Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:13.7911438Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-22T17:16:13.7911707Z ##[endgroup]
+2026-10-22T17:16:13.8408652Z info: syncing channel updates for 1.90.0-x86_64-unknown-linux-gnu
+2026-10-22T17:16:14.0192111Z info: latest update on 2025-09-18 for version 1.90.0 (1159e78c4 2025-09-14)
+2026-10-22T17:16:14.0195535Z info: downloading 5 components
+2026-10-22T17:16:22.2258995Z 
+2026-10-22T17:16:22.2332294Z   1.90.0-x86_64-unknown-linux-gnu installed - rustc 1.90.0 (1159e78c4 2025-09-14)
+2026-10-22T17:16:22.2332698Z 
+2026-10-22T17:16:22.2582718Z info: using existing install for 1.90.0-x86_64-unknown-linux-gnu
+2026-10-22T17:16:22.2587785Z info: default toolchain set to 1.90.0-x86_64-unknown-linux-gnu
+2026-10-22T17:16:22.2588124Z 
+2026-10-22T17:16:22.2659359Z   1.90.0-x86_64-unknown-linux-gnu unchanged - rustc 1.90.0 (1159e78c4 2025-09-14)
+2026-10-22T17:16:22.2659730Z 
+2026-10-22T17:16:22.2662534Z info: note that the toolchain '1.90.0-x86_64-unknown-linux-gnu' is currently in use (overridden by '/home/runner/work/weft/weft/rust-toolchain.toml')
+2026-10-22T17:16:24.8064496Z Collecting maturin==1.9.6
+2026-10-22T17:16:24.8459873Z   Downloading maturin-1.9.6-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl.metadata (16 kB)
+2026-10-22T17:16:24.8550868Z Downloading maturin-1.9.6-py3-none-manylinux_2_12_x86_64.manylinux2010_x86_64.musllinux_1_1_x86_64.whl (8.6 MB)
+2026-10-22T17:16:24.9816341Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.6/8.6 MB 81.7 MB/s  0:00:00
+2026-10-22T17:16:25.3544766Z Installing collected packages: maturin
+2026-10-22T17:16:25.4401338Z Successfully installed maturin-1.9.6
+2026-10-22T17:16:25.5321414Z     Updating crates.io index
+2026-10-22T17:16:25.9297459Z  Downloading crates ...
+2026-10-22T17:16:25.9915400Z   Downloaded crypto-common v0.1.7
+2026-10-22T17:16:26.0054612Z   Downloaded generic-array v0.14.7
+2026-10-22T17:16:26.0078498Z   Downloaded block-buffer v0.10.4
+2026-10-22T17:16:26.0091506Z   Downloaded cfg-if v1.0.5
+2026-10-22T17:16:26.0108846Z   Downloaded cpufeatures v0.2.17
+2026-10-22T17:16:26.0125987Z   Downloaded equivalent v1.0.2
+2026-10-22T17:16:26.0139369Z   Downloaded jsonschema-regex v0.56.0
+2026-10-22T17:16:26.0149700Z   Downloaded sqlparser_derive v0.6.0
+2026-10-22T17:16:26.0161295Z   Downloaded proc-macro-crate v3.5.0
+2026-10-22T17:16:26.0186253Z   Downloaded heck v0.5.0
+2026-10-22T17:16:26.0201914Z   Downloaded outref v0.5.2
+2026-10-22T17:16:26.0214883Z   Downloaded bit-set v0.8.0
+2026-10-22T17:16:26.0228866Z   Downloaded memoffset v0.9.1
+2026-10-22T17:16:26.0243685Z   Downloaded num-cmp v0.1.0
+2026-10-22T17:16:26.0255240Z   Downloaded scopeguard v1.2.0
+2026-10-22T17:16:26.0271237Z   Downloaded bit-vec v0.8.0
+2026-10-22T17:16:26.0291263Z   Downloaded num-iter v0.1.46
+2026-10-22T17:16:26.0303968Z   Downloaded ref-cast-impl v1.0.27
+2026-10-22T17:16:26.0314793Z   Downloaded wasm-bindgen-shared v0.2.105
+2026-10-22T17:16:26.0328263Z   Downloaded strum v0.28.0
+2026-10-22T17:16:26.0341672Z   Downloaded digest v0.10.7
+2026-10-22T17:16:26.0367848Z   Downloaded toml_parser v1.1.3+spec-1.1.0
+2026-10-22T17:16:26.0412280Z   Downloaded data-encoding v2.11.1
+2026-10-22T17:16:26.0433409Z   Downloaded toml_datetime v1.1.1+spec-1.1.0
+2026-10-22T17:16:26.0446698Z   Downloaded jsonschema-value v0.56.0
+2026-10-22T17:16:26.0476897Z   Downloaded base64 v0.22.1
+2026-10-22T17:16:26.0524131Z   Downloaded toml_edit v0.25.15+spec-1.1.0
+2026-10-22T17:16:26.0579844Z   Downloaded pyo3-macros-backend v0.27.1
+2026-10-22T17:16:26.0622307Z   Downloaded jsonschema-macros-core v0.56.0
+2026-10-22T17:16:26.0760543Z   Downloaded num-bigint v0.4.8
+2026-10-22T17:16:26.0804081Z   Downloaded zerocopy-derive v0.8.59
+2026-10-22T17:16:26.0908431Z   Downloaded hashbrown v0.17.1
+2026-10-22T17:16:26.0955464Z   Downloaded winnow v1.0.4
+2026-10-22T17:16:26.1034508Z   Downloaded fancy-regex v0.19.2
+2026-10-22T17:16:26.1090583Z   Downloaded portable-atomic v1.15.0
+2026-10-22T17:16:26.1152897Z   Downloaded proptest v1.11.0
+2026-10-22T17:16:26.1232055Z   Downloaded aho-corasick v1.1.5
+2026-10-22T17:16:26.1277732Z   Downloaded regex v1.13.1
+2026-10-22T17:16:26.1322520Z   Downloaded serde_json v1.0.145
+2026-10-22T17:16:26.1382102Z   Downloaded zerocopy v0.8.59
+2026-10-22T17:16:26.1549667Z   Downloaded syn v3.0.6
+2026-10-22T17:16:26.1635097Z   Downloaded syn v2.0.119
+2026-10-22T17:16:26.1720335Z   Downloaded regex-syntax v0.8.11
+2026-10-22T17:16:26.1777799Z   Downloaded wasip2 v1.0.4+wasi-0.2.12
+2026-10-22T17:16:26.1811706Z   Downloaded fraction v0.17.0
+2026-10-22T17:16:26.1858579Z   Downloaded rand v0.9.5
+2026-10-22T17:16:26.1889981Z   Downloaded sqlparser v0.63.0
+2026-10-22T17:16:26.1967177Z   Downloaded bumpalo v3.20.3
+2026-10-22T17:16:26.1988972Z   Downloaded memchr v2.8.3
+2026-10-22T17:16:26.2033929Z   Downloaded serde v1.0.228
+2026-10-22T17:16:26.2065374Z   Downloaded allocator-api2 v0.2.21
+2026-10-22T17:16:26.2086619Z   Downloaded r-efi v5.3.0
+2026-10-22T17:16:26.2126140Z   Downloaded wit-bindgen v0.57.1
+2026-10-22T17:16:26.2155000Z   Downloaded pyo3-ffi v0.27.1
+2026-10-22T17:16:26.2210505Z   Downloaded serde_core v1.0.228
+2026-10-22T17:16:26.2233407Z   Downloaded regex-automata v0.4.18
+2026-10-22T17:16:26.2349335Z   Downloaded indexmap v2.14.2
+2026-10-22T17:16:26.2384348Z   Downloaded fluent-uri v0.4.1
+2026-10-22T17:16:26.2407428Z   Downloaded referencing v0.56.0
+2026-10-22T17:16:26.2446808Z   Downloaded jsonschema v0.56.0
+2026-10-22T17:16:26.2611086Z   Downloaded bitflags v2.13.2
+2026-10-22T17:16:26.2646107Z   Downloaded js-sys v0.3.82
+2026-10-22T17:16:26.2659921Z   Downloaded wasm-bindgen-macro-support v0.2.105
+2026-10-22T17:16:26.2673615Z   Downloaded ryu v1.0.23
+2026-10-22T17:16:26.2700603Z   Downloaded serde_derive v1.0.228
+2026-10-22T17:16:26.2724828Z   Downloaded libc v0.2.190
+2026-10-22T17:16:26.3097190Z   Downloaded log v0.4.34
+2026-10-22T17:16:26.3116976Z   Downloaded micromap v0.3.0
+2026-10-22T17:16:26.3157613Z   Downloaded num-traits v0.2.19
+2026-10-22T17:16:26.3178817Z   Downloaded getrandom v0.3.4
+2026-10-22T17:16:26.3206577Z   Downloaded pyo3-build-config v0.27.1
+2026-10-22T17:16:26.3217787Z   Downloaded once_cell v1.21.4
+2026-10-22T17:16:26.3238013Z   Downloaded wasm-bindgen v0.2.105
+2026-10-22T17:16:26.3256595Z   Downloaded typenum v1.20.1
+2026-10-22T17:16:26.3285243Z   Downloaded unicode-ident v1.0.26
+2026-10-22T17:16:26.3306877Z   Downloaded email_address v0.2.9
+2026-10-22T17:16:26.3320219Z   Downloaded jsonschema-macros v0.56.0
+2026-10-22T17:16:26.3427991Z   Downloaded num-rational v0.4.2
+2026-10-22T17:16:26.3438627Z   Downloaded zmij v1.0.23
+2026-10-22T17:16:26.3452788Z   Downloaded redox_syscall v0.5.18
+2026-10-22T17:16:26.3479078Z   Downloaded smallvec v1.16.2
+2026-10-22T17:16:26.3490645Z   Downloaded parking_lot_core v0.9.12
+2026-10-22T17:16:26.3507526Z   Downloaded parking_lot v0.12.5
+2026-10-22T17:16:26.3528227Z   Downloaded unicode-general-category v1.1.0
+2026-10-22T17:16:26.3540213Z   Downloaded num-integer v0.1.47
+2026-10-22T17:16:26.3553073Z   Downloaded ppv-lite86 v0.2.21
+2026-10-22T17:16:26.3565697Z   Downloaded indoc v2.0.7
+2026-10-22T17:16:26.3588667Z   Downloaded pyo3 v0.27.1
+2026-10-22T17:16:26.3815780Z   Downloaded target-lexicon v0.13.5
+2026-10-22T17:16:26.3827251Z   Downloaded rustversion v1.0.23
+2026-10-22T17:16:26.3848808Z   Downloaded proc-macro2 v1.0.107
+2026-10-22T17:16:26.3872103Z   Downloaded bytecount v0.6.9
+2026-10-22T17:16:26.3887339Z   Downloaded num-complex v0.4.6
+2026-10-22T17:16:26.3898774Z   Downloaded borrow-or-share v0.2.4
+2026-10-22T17:16:26.3906391Z   Downloaded foldhash v0.2.0
+2026-10-22T17:16:26.3916137Z   Downloaded lock_api v0.4.14
+2026-10-22T17:16:26.3925943Z   Downloaded strum_macros v0.28.0
+2026-10-22T17:16:26.3944099Z   Downloaded vsimd v0.8.0
+2026-10-22T17:16:26.3960432Z   Downloaded rand_chacha v0.9.0
+2026-10-22T17:16:26.3970666Z   Downloaded rand_core v0.9.5
+2026-10-22T17:16:26.3981642Z   Downloaded autocfg v1.5.1
+2026-10-22T17:16:26.3996107Z   Downloaded quote v1.0.47
+2026-10-22T17:16:26.4016530Z   Downloaded wasm-bindgen-macro v0.2.105
+2026-10-22T17:16:26.4023665Z   Downloaded num v0.4.3
+2026-10-22T17:16:26.4031340Z   Downloaded ref-cast v1.0.27
+2026-10-22T17:16:26.4054259Z   Downloaded uuid-simd v0.8.0
+2026-10-22T17:16:26.4063459Z   Downloaded percent-encoding v2.3.2
+2026-10-22T17:16:26.4070585Z   Downloaded windows-link v0.2.1
+2026-10-22T17:16:26.4077224Z   Downloaded pyo3-macros v0.27.1
+2026-10-22T17:16:26.4083628Z   Downloaded unindent v0.2.4
+2026-10-22T17:16:26.4090402Z   Downloaded rand_xorshift v0.4.0
+2026-10-22T17:16:26.4098434Z   Downloaded unarray v0.1.4
+2026-10-22T17:16:26.4108004Z   Downloaded itoa v1.0.18
+2026-10-22T17:16:26.4119322Z   Downloaded sha2 v0.10.9
+2026-10-22T17:16:26.4138584Z   Downloaded version_check v0.9.5
+2026-10-22T17:16:26.7576284Z ##[group]Run set -euo pipefail
+2026-10-22T17:16:26.7577124Z [36;1mset -euo pipefail[0m
+2026-10-22T17:16:26.7577335Z [36;1msudo python3 - <<'PY'[0m
+2026-10-22T17:16:26.7577539Z [36;1mimport re[0m
+2026-10-22T17:16:26.7577740Z [36;1mfrom pathlib import Path[0m
+2026-10-22T17:16:26.7577951Z [36;1m[0m
+2026-10-22T17:16:26.7578196Z [36;1muri_field = re.compile(r"^([A-Za-z][A-Za-z0-9-]*):[ \t]*(.*)$")[0m
+2026-10-22T17:16:26.7578498Z [36;1mofficial_uri_token = re.compile([0m
+2026-10-22T17:16:26.7578914Z [36;1m    r"(?<!\S)https?://(?:azure\.archive\.ubuntu\.com|archive\.ubuntu\.com|security\.ubuntu\.com)/ubuntu/?(?=\s|$)"[0m
+2026-10-22T17:16:26.7579294Z [36;1m)[0m
+2026-10-22T17:16:26.7579475Z [36;1mofficial_uri = re.compile([0m
+2026-10-22T17:16:26.7579832Z [36;1m    r"^(https?)://(azure\.archive\.ubuntu\.com|archive\.ubuntu\.com|security\.ubuntu\.com)/ubuntu/?$"[0m
+2026-10-22T17:16:26.7580201Z [36;1m)[0m
+2026-10-22T17:16:26.7580530Z [36;1m[0m
+2026-10-22T17:16:26.7580757Z [36;1mdef replace_uri(uri, suites):[0m
+2026-10-22T17:16:26.7581009Z [36;1m    match = official_uri.fullmatch(uri)[0m
+2026-10-22T17:16:26.7581249Z [36;1m    if not match:[0m
+2026-10-22T17:16:26.7581446Z [36;1m        return uri, 0[0m
+2026-10-22T17:16:26.7581669Z [36;1m    scheme, host = match.groups()[0m
+2026-10-22T17:16:26.7581921Z [36;1m    if scheme == "https":[0m
+2026-10-22T17:16:26.7582129Z [36;1m        return uri, 1[0m
+2026-10-22T17:16:26.7582457Z [36;1m    security_suite = bool(suites) and all(suite.endswith("-security") for suite in suites)[0m
+2026-10-22T17:16:26.7582814Z [36;1m    canonical_host = ([0m
+2026-10-22T17:16:26.7583027Z [36;1m        "security.ubuntu.com"[0m
+2026-10-22T17:16:26.7583519Z [36;1m        if host == "security.ubuntu.com" or security_suite[0m
+2026-10-22T17:16:26.7583789Z [36;1m        else "archive.ubuntu.com"[0m
+2026-10-22T17:16:26.7584024Z [36;1m    )[0m
+2026-10-22T17:16:26.7584250Z [36;1m    return f"https://{canonical_host}/ubuntu", 1[0m
+2026-10-22T17:16:26.7584506Z [36;1m[0m
+2026-10-22T17:16:26.7584674Z [36;1mdef transform_sources(text):[0m
+2026-10-22T17:16:26.7584923Z [36;1m    lines = text.splitlines(keepends=True)[0m
+2026-10-22T17:16:26.7585168Z [36;1m    output = [][0m
+2026-10-22T17:16:26.7585379Z [36;1m    recognized = 0[0m
+2026-10-22T17:16:26.7585582Z [36;1m    block = [][0m
+2026-10-22T17:16:26.7585764Z [36;1m[0m
+2026-10-22T17:16:26.7585947Z [36;1m    def transform_block(block):[0m
+2026-10-22T17:16:26.7586172Z [36;1m        fields = [][0m
+2026-10-22T17:16:26.7586370Z [36;1m        suites = [][0m
+2026-10-22T17:16:26.7586562Z [36;1m        current = None[0m
+2026-10-22T17:16:26.7586805Z [36;1m        for index, line in enumerate(block):[0m
+2026-10-22T17:16:26.7587073Z [36;1m            content = line.rstrip("\r\n")[0m
+2026-10-22T17:16:26.7587380Z [36;1m            if not content.strip() or content.lstrip().startswith("#"):[0m
+2026-10-22T17:16:26.7587682Z [36;1m                current = None[0m
+2026-10-22T17:16:26.7587915Z [36;1m                continue[0m
+2026-10-22T17:16:26.7588146Z [36;1m            field = uri_field.match(content)[0m
+2026-10-22T17:16:26.7588381Z [36;1m            if field:[0m
+2026-10-22T17:16:26.7588609Z [36;1m                current = field.group(1).lower()[0m
+2026-10-22T17:16:26.7588876Z [36;1m                if current == "suites":[0m
+2026-10-22T17:16:26.7589141Z [36;1m                    suites.extend(field.group(2).split())[0m
+2026-10-22T17:16:26.7589410Z [36;1m                elif current == "uris":[0m
+2026-10-22T17:16:26.7589710Z [36;1m                    fields.append((index, field.start(2), field.group(2)))[0m
+2026-10-22T17:16:26.7590034Z [36;1m            elif content[:1].isspace() and current:[0m
+2026-10-22T17:16:26.7590287Z [36;1m                if current == "suites":[0m
+2026-10-22T17:16:26.7590542Z [36;1m                    suites.extend(content.split())[0m
+2026-10-22T17:16:26.7590797Z [36;1m                elif current == "uris":[0m
+2026-10-22T17:16:26.7591257Z [36;1m                    indent = len(content) - len(content.lstrip())[0m
+2026-10-22T17:16:26.7591588Z [36;1m                    fields.append((index, indent, content[indent:]))[0m
+2026-10-22T17:16:26.7591854Z [36;1m[0m
+2026-10-22T17:16:26.7592025Z [36;1m        recognized = 0[0m
+2026-10-22T17:16:26.7592258Z [36;1m        for index, start, value in fields:[0m
+2026-10-22T17:16:26.7592499Z [36;1m            def rewrite(match):[0m
+2026-10-22T17:16:26.7592729Z [36;1m                nonlocal recognized[0m
+2026-10-22T17:16:26.7593035Z [36;1m                replacement, count = replace_uri(match.group(0), suites)[0m
+2026-10-22T17:16:26.7593441Z [36;1m                recognized += count[0m
+2026-10-22T17:16:26.7593670Z [36;1m                return replacement[0m
+2026-10-22T17:16:26.7593982Z [36;1m[0m
+2026-10-22T17:16:26.7594211Z [36;1m            content = block[index].rstrip("\r\n")[0m
+2026-10-22T17:16:26.7594631Z [36;1m            block[index] = content[:start] + official_uri_token.sub(rewrite, value) + block[index][len(content):][0m
+2026-10-22T17:16:26.7595147Z [36;1m        return block, recognized[0m
+2026-10-22T17:16:26.7595361Z [36;1m[0m
+2026-10-22T17:16:26.7595523Z [36;1m    for line in lines:[0m
+2026-10-22T17:16:26.7595730Z [36;1m        if line.strip():[0m
+2026-10-22T17:16:26.7595957Z [36;1m            block.append(line)[0m
+2026-10-22T17:16:26.7596171Z [36;1m        else:[0m
+2026-10-22T17:16:26.7596402Z [36;1m            transformed, count = transform_block(block)[0m
+2026-10-22T17:16:26.7596684Z [36;1m            output.extend(transformed)[0m
+2026-10-22T17:16:26.7596934Z [36;1m            output.append(line)[0m
+2026-10-22T17:16:26.7597155Z [36;1m            recognized += count[0m
+2026-10-22T17:16:26.7597364Z [36;1m            block = [][0m
+2026-10-22T17:16:26.7597592Z [36;1m    transformed, count = transform_block(block)[0m
+2026-10-22T17:16:26.7597877Z [36;1m    output.extend(transformed)[0m
+2026-10-22T17:16:26.7598102Z [36;1m    recognized += count[0m
+2026-10-22T17:16:26.7598325Z [36;1m    return "".join(output), recognized[0m
+2026-10-22T17:16:26.7598547Z [36;1m[0m
+2026-10-22T17:16:26.7598725Z [36;1mdef transform_list(text):[0m
+2026-10-22T17:16:26.7598935Z [36;1m    output = [][0m
+2026-10-22T17:16:26.7599128Z [36;1m    recognized = 0[0m
+2026-10-22T17:16:26.7599423Z [36;1m    entry = re.compile(r"^(\s*deb(?:-src)?\s+(?:\[[^]]*\]\s+)?)(\S+)(\s+)(\S+)(.*)$")[0m
+2026-10-22T17:16:26.7599773Z [36;1m    for line in text.splitlines(keepends=True):[0m
+2026-10-22T17:16:26.7600044Z [36;1m        content = line.rstrip("\r\n")[0m
+2026-10-22T17:16:26.7600386Z [36;1m        match = entry.match(content) if not content.lstrip().startswith("#") else None[0m
+2026-10-22T17:16:26.7600719Z [36;1m        if match:[0m
+2026-10-22T17:16:26.7600988Z [36;1m            prefix, uri, separator, suite, tail = match.groups()[0m
+2026-10-22T17:16:26.7601315Z [36;1m            replacement, count = replace_uri(uri, [suite])[0m
+2026-10-22T17:16:26.7601591Z [36;1m            recognized += count[0m
+2026-10-22T17:16:26.7601921Z [36;1m            line = prefix + replacement + separator + suite + tail + line[len(content):][0m
+2026-10-22T17:16:26.7602264Z [36;1m        output.append(line)[0m
+2026-10-22T17:16:26.7602502Z [36;1m    return "".join(output), recognized[0m
+2026-10-22T17:16:26.7602727Z [36;1m[0m
+2026-10-22T17:16:26.7602896Z [36;1mdef rewrite(root):[0m
+2026-10-22T17:16:26.7603219Z [36;1m    source_dir = root / "sources.list.d"[0m
+2026-10-22T17:16:26.7603603Z [36;1m    paths = [root / "sources.list", *source_dir.glob("*.list"), *source_dir.glob("*.sources")][0m
+2026-10-22T17:16:26.7603958Z [36;1m    recognized = 0[0m
+2026-10-22T17:16:26.7604168Z [36;1m    for path in paths:[0m
+2026-10-22T17:16:26.7604386Z [36;1m        if not path.is_file():[0m
+2026-10-22T17:16:26.7604606Z [36;1m            continue[0m
+2026-10-22T17:16:26.7604824Z [36;1m        original = path.read_text()[0m
+2026-10-22T17:16:26.7605203Z [36;1m        if path.suffix == ".sources":[0m
+2026-10-22T17:16:26.7605488Z [36;1m            updated, count = transform_sources(original)[0m
+2026-10-22T17:16:26.7605746Z [36;1m        else:[0m
+2026-10-22T17:16:26.7605966Z [36;1m            updated, count = transform_list(original)[0m
+2026-10-22T17:16:26.7606229Z [36;1m        recognized += count[0m
+2026-10-22T17:16:26.7606450Z [36;1m        if updated != original:[0m
+2026-10-22T17:16:26.7606686Z [36;1m            path.write_text(updated)[0m
+2026-10-22T17:16:26.7606919Z [36;1m    if not recognized:[0m
+2026-10-22T17:16:26.7607239Z [36;1m        raise SystemExit("No official Ubuntu archive/security source URI was found")[0m
+2026-10-22T17:16:26.7607579Z [36;1m    return recognized[0m
+2026-10-22T17:16:26.7607773Z [36;1m[0m
+2026-10-22T17:16:26.7608068Z [36;1m# Fixture controls: exact Ubuntu URIs change, Signed-By and unrelated sources remain,[0m
+2026-10-22T17:16:26.7608507Z [36;1m# security suites use the security host, and a second pass is idempotent.[0m
+2026-10-22T17:16:26.7608923Z [36;1mdeb822 = ([0m
+2026-10-22T17:16:26.7609206Z [36;1m    "Types: deb\nURIs: http://azure.archive.ubuntu.com/ubuntu/\n"[0m
+2026-10-22T17:16:26.7609573Z [36;1m    "Suites: noble noble-updates\nComponents: main universe\n"[0m
+2026-10-22T17:16:26.7609952Z [36;1m    "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg\n\n"[0m
+2026-10-22T17:16:26.7610319Z [36;1m    "Types: deb\nURIs: http://azure.archive.ubuntu.com/ubuntu/\n"[0m
+2026-10-22T17:16:26.7610653Z [36;1m    "Suites: noble-security\nComponents: main universe\n"[0m
+2026-10-22T17:16:26.7610996Z [36;1m    "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg\n"[0m
+2026-10-22T17:16:26.7611273Z [36;1m)[0m
+2026-10-22T17:16:26.7611472Z [36;1mchanged, count = transform_sources(deb822)[0m
+2026-10-22T17:16:26.7611722Z [36;1massert count == 2[0m
+2026-10-22T17:16:26.7611993Z [36;1massert "URIs: https://archive.ubuntu.com/ubuntu" in changed[0m
+2026-10-22T17:16:26.7612348Z [36;1massert "URIs: https://security.ubuntu.com/ubuntu" in changed[0m
+2026-10-22T17:16:26.7612767Z [36;1massert "Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg" in changed[0m
+2026-10-22T17:16:26.7613332Z [36;1massert transform_sources(changed) == (changed, 2)[0m
+2026-10-22T17:16:26.7613671Z [36;1mdeb_list = ([0m
+2026-10-22T17:16:26.7613966Z [36;1m    "deb [arch=amd64 signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] "[0m
+2026-10-22T17:16:26.7614383Z [36;1m    "http://azure.archive.ubuntu.com/ubuntu noble-security main\n"[0m
+2026-10-22T17:16:26.7614753Z [36;1m    "deb https://packages.example.test/ubuntu noble main\n"[0m
+2026-10-22T17:16:26.7615039Z [36;1m)[0m
+2026-10-22T17:16:26.7615256Z [36;1mchanged_list, count = transform_list(deb_list)[0m
+2026-10-22T17:16:26.7615652Z [36;1massert count == 1 and "https://security.ubuntu.com/ubuntu noble-security" in changed_list[0m
+2026-10-22T17:16:26.7616089Z [36;1massert "https://packages.example.test/ubuntu" in changed_list[0m
+2026-10-22T17:16:26.7616451Z [36;1massert transform_list(changed_list) == (changed_list, 1)[0m
+2026-10-22T17:16:26.7616721Z [36;1m[0m
+2026-10-22T17:16:26.7617026Z [36;1mprint(f"Rewrote/verified {rewrite(Path('/etc/apt'))} official Ubuntu source URI(s)")[0m
+2026-10-22T17:16:26.7617368Z [36;1mPY[0m
+2026-10-22T17:16:26.7617631Z [36;1msudo tee /etc/apt/apt.conf.d/99weft-network-bounds >/dev/null <<'APT'[0m
+2026-10-22T17:16:26.7617941Z [36;1mAcquire::Retries "2";[0m
+2026-10-22T17:16:26.7618155Z [36;1mAcquire::http::Timeout "20";[0m
+2026-10-22T17:16:26.7618386Z [36;1mAcquire::https::Timeout "20";[0m
+2026-10-22T17:16:26.7618599Z [36;1mAPT[0m
+2026-10-22T17:16:26.7618836Z [36;1msudo timeout --signal=TERM --kill-after=30s 5m apt-get update[0m
+2026-10-22T17:16:26.7619153Z [36;1mplaywright_dir="$RUNNER_TEMP/playwright"[0m
+2026-10-22T17:16:26.7619624Z [36;1mtimeout --kill-after=30s 5m npm install --prefix "$playwright_dir" --ignore-scripts --no-package-lock playwright@1.62.1[0m
+2026-10-22T17:16:26.7620356Z [36;1mtimeout --kill-after=30s 15m node "$playwright_dir/node_modules/playwright/cli.js" install --with-deps chromium[0m
+2026-10-22T17:16:26.7620882Z [36;1mWEFT_PLAYWRIGHT_MODULE="$playwright_dir/node_modules/playwright/index.mjs" \[0m
+2026-10-22T17:16:26.7621282Z [36;1m  timeout --kill-after=10s 60s node --input-type=module -e '[0m
+2026-10-22T17:16:26.7621594Z [36;1m    import { pathToFileURL } from "node:url";[0m
+2026-10-22T17:16:26.7621969Z [36;1m    const { chromium } = await import(pathToFileURL(process.env.WEFT_PLAYWRIGHT_MODULE));[0m
+2026-10-22T17:16:26.7622376Z [36;1m    const browser = await chromium.launch({ headless: true });[0m
+2026-10-22T17:16:26.7622766Z [36;1m    console.log(`Launched pinned Chromium at ${chromium.executablePath()}`);[0m
+2026-10-22T17:16:26.7623094Z [36;1m    await browser.close();[0m
+2026-10-22T17:16:26.7623495Z [36;1m  '[0m
+2026-10-22T17:16:26.7673850Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-22T17:16:26.7674150Z env:
+2026-10-22T17:16:26.7674341Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:26.7674772Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:26.7675033Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:26.7675316Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.7675654Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-22T17:16:26.7676000Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.7676304Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.7676613Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.7676921Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-22T17:16:26.7677292Z ##[endgroup]
+2026-10-22T17:16:26.8979722Z No official Ubuntu archive/security source URI was found
+2026-10-22T17:16:26.9034737Z ##[error]Process completed with exit code 1.
+2026-10-22T17:16:26.9420927Z ##[group]Run actions/upload-artifact@v4
+2026-10-22T17:16:26.9421209Z with:
+2026-10-22T17:16:26.9421476Z   name: current-qualification-aa37e57e3083fd22390796fd08dac1c9f7df6d2b
+2026-10-22T17:16:26.9422232Z   path: /home/runner/work/_temp/weft-fresh-host-evidence
+/home/runner/work/_temp/weft-fresh-hosts/fresh-host-evidence
+/home/runner/work/_temp/weft-formal-evidence
+/home/runner/work/_temp/weft-mutation-evidence
+
+2026-10-22T17:16:26.9422886Z   if-no-files-found: error
+2026-10-22T17:16:26.9423098Z   compression-level: 6
+2026-10-22T17:16:26.9423511Z   overwrite: false
+2026-10-22T17:16:26.9423708Z   include-hidden-files: false
+2026-10-22T17:16:26.9423921Z env:
+2026-10-22T17:16:26.9424098Z   CARGO_PROFILE_TEST_OPT_LEVEL: 1
+2026-10-22T17:16:26.9424332Z   CARGO_PROFILE_TEST_DEBUG_ASSERTIONS: true
+2026-10-22T17:16:26.9424580Z   CARGO_PROFILE_TEST_OVERFLOW_CHECKS: true
+2026-10-22T17:16:26.9424859Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.9425263Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-10-22T17:16:26.9425605Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.9425918Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.9426267Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-10-22T17:16:26.9426572Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-10-22T17:16:26.9426834Z ##[endgroup]
+2026-10-22T17:16:27.0815217Z (node:2190) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-22T17:16:27.0816059Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-22T17:16:27.0858308Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-22T17:16:27.0865186Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-22T17:16:27.0882124Z ##[error]No files were found with the provided path: /home/runner/work/_temp/weft-fresh-host-evidence
+/home/runner/work/_temp/weft-fresh-hosts/fresh-host-evidence
+/home/runner/work/_temp/weft-formal-evidence
+/home/runner/work/_temp/weft-mutation-evidence. No artifacts will be uploaded.
+2026-10-22T17:16:27.1807542Z Post job cleanup.
+2026-10-22T17:16:27.2528632Z [command]/usr/bin/git version
+2026-10-22T17:16:27.2563889Z git version 2.55.0
+2026-10-22T17:16:27.2599300Z Temporarily overriding HOME='/home/runner/work/_temp/f72534c8-84ee-4ab6-87e7-90c523621d8d' before making global git config changes
+2026-10-22T17:16:27.2600950Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-22T17:16:27.2605522Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/weft/weft
+2026-10-22T17:16:27.2710890Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-22T17:16:27.2751815Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-22T17:16:27.2995667Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-22T17:16:27.3138011Z http.https://github.com/.extraheader
+2026-10-22T17:16:27.3156595Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-22T17:16:27.3927755Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-22T17:16:27.4177349Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-22T17:16:27.4222284Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-22T17:16:27.4636743Z Cleaning up orphan processes
+2026-10-22T17:16:27.4966182Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

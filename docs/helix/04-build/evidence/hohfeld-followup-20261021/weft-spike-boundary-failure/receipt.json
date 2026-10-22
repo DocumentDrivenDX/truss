@@ -1,0 +1,29 @@
+{
+  "status": "failed-hosted-gate-repaired-locally",
+  "workflowRun": 39811016266,
+  "pullRequestHead": "c5a4537db6ba54e52a988c0f05b5df69d09991dd",
+  "actualCheckout": "c40909fe3e6d2a794aac740773ead806fdfcad57",
+  "failedTest": "weft-spike-core::numeric_corpus_uses_independent_expected_domains",
+  "cause": "Historical spike accepts UMF0.7; its shared fixture had already been updated to0.10. Public compiler behavior was not the failure.",
+  "fixCommit": "6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a",
+  "historicalFixtureSource": "ef1ce847de6f23f0b9991f9ef5501a6dfdd7a06d:docs/helix/03-test/fixtures/cases.json",
+  "historicalFixtureSha256": "5d13b1d0d77074193e678321406f57a9ce34e49cd413649f0f7f7210262c6306",
+  "historicalCases": 636,
+  "numericCases": 575,
+  "numericAccepted": 288,
+  "numericRefused": 287,
+  "localFocusedChecks": {
+    "spikeTests": 3,
+    "currentFrontendTests": 6,
+    "exactRetiredRequestsRefused": 575,
+    "currentIndependentCorpusCasesUnchanged": 636
+  },
+  "review": "Sol reviewed Luna test-only fix; no findings. Full candidate/qualified local workspace and hosted conformance rerun remain required.",
+  "compilerReleaseFreezeUnchanged": "86c092178bb8ca1a0d84edfebc175009d8862493",
+  "files": {
+    "formal-qualification.json": "d8c8e0faeeb91885dcc5bbe93bbe4a359b52edb65f7f7c71608af9538e0bb034",
+    "mutation-qualification.json": "78f255c55763f0e56def4898aa1cafbfe9f323432b2a6de9b01586080075b5fd",
+    "original-run.json": "dc783d7885db5987b918705cd39ce8e071ab409935eba4d820ff8eae1c4a532f",
+    "original-workspace-failure.log": "03bcada6d5cc1bb628547987158adc80054aa2a6af7a1223566ae3785e8f310d"
+  }
+}
