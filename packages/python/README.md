@@ -4,10 +4,18 @@ The source candidate is **v0.0.49**, adding explicit managed platform grants to
 the separate [v0.0.48 HF baseline](../../docs/helix/04-build/releases/v0.0.48.md).
 Final v0.0.49 lineage, installed-artifact and Linux publication qualification are
 pending; see the [v0.0.49 draft](../../docs/helix/04-build/releases/v0.0.49.md).
-The versioned installation commands below retain the v0.0.48 baseline; they do
-not install the managed-grants candidate or establish public availability.
+The installation and example commands below target v0.0.49. They require its
+qualified release assets and tag, which are not public yet; do not substitute
+v0.0.48 when you need managed-grants support.
 
-## Runtime migrations — v0.0.48
+<a id="runtime-migrations--v0048"></a>
+
+## Runtime migrations — v0.0.49
+
+This guide retains its historical v0.0.48 link anchor. The v0.0.49 candidate must
+also admit and qualify the actual public v0.0.48 wheel before release; that
+publication and final route qualification are pending. The existing admitted
+sources and migration procedure below remain the baseline.
 
 Truss supports the latest application runtime only. Previous databases move
 forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
@@ -340,10 +348,11 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.48
+## Install version 0.0.49
 
-Use the matching Truss and Weft release artifacts below. Source builds require
-the current version cohort; existing installations require explicit migration.
+The commands below select v0.0.49 and its matching dependencies. They require
+qualified v0.0.49 public assets, which are not available yet. Source builds use
+the current candidate cohort; existing installations require explicit migration.
 
 The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -488,10 +497,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.51 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.48'
+  'truss-toolkit[local,native,query]==0.0.49'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -507,10 +516,11 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.48 tag to obtain the examples, then run with a new directory:
+After the qualified v0.0.49 tag and assets are public, obtain the matching
+examples and run with a new directory:
 
 ```sh
-git clone --branch v0.0.48 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.49 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -528,15 +538,16 @@ previews retain their historical pins and none claims independent interchange.
 
 ## Run local PostgreSQL 18.6
 
-With `uv` installed, run the published `0.0.48` package in an isolated Python
-3.11 tool environment:
+With `uv` installed, the following command selects v0.0.49 in an isolated Python
+3.11 tool environment. Run it after the qualified v0.0.49 wheel and constraints
+asset are public; both remain pending:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.49/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.48' \
+  --from 'truss-toolkit[local,native]==0.0.49' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -590,10 +601,10 @@ PostgreSQL. Confirmed candidate status does not establish full security readines
 
 ### Managed platform grants — v0.0.49 candidate
 
-Managed-grantee support is available in the v0.0.49 source candidate; the
-v0.0.48 baseline commands do not include it. From a checkout containing the
-managed-grants change, an explicit fresh local install can pass one or more
-exact PostgreSQL role names:
+Managed-grantee support is available in the v0.0.49 source candidate; v0.0.48
+does not include it. The versioned commands above select the planned v0.0.49
+assets. From the current checkout, an explicit fresh local install can pass
+one or more exact PostgreSQL role names:
 
 ```sh
 ./scripts/truss-local \

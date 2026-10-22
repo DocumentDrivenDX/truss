@@ -492,6 +492,12 @@ it does not relabel any earlier artifact or failed diagnostic. The selected
 managed-grants version is v0.0.49. Preserve v0.0.48's separate HF release notes,
 source, immutable migration evidence and publication ownership.
 
+The active [operator guide](../../../packages/python/README.md#runtime-migrations--v0049)
+selects v0.0.49 in pip, example-tag and isolated `uvx`/constraints commands.
+It labels the qualified assets and tag as not yet public. The historical
+v0.0.48 follow-up section and migration link alias remain intact; final source48
+admission and release receipts are still pending.
+
 The integrated source retains the newer HF62 corpus, exact Weft0.4.51 compiler
 cohorts from source `86c092178bb8ca1a0d84edfebc175009d8862493`, reproducible archive
 generation and publisher compiler/source checks. The native manifest remains
