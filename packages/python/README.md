@@ -1,21 +1,20 @@
 # Truss Python toolkit
 
-The source candidate is **v0.0.49**, adding explicit managed platform grants to
-the separate [v0.0.48 HF baseline](../../docs/helix/04-build/releases/v0.0.48.md).
-Final v0.0.49 lineage, installed-artifact and Linux publication qualification are
-pending; see the [v0.0.49 draft](../../docs/helix/04-build/releases/v0.0.49.md).
-The installation and example commands below target v0.0.49. They require its
-qualified release assets and tag, which are not public yet; do not substitute
-v0.0.48 when you need managed-grants support.
+Version **0.0.49** adds explicit managed platform grants to the separate
+[v0.0.48 HF baseline](../../docs/helix/04-build/releases/v0.0.48.md). Consult the
+[v0.0.49 release notes](../../docs/helix/04-build/releases/v0.0.49.md) and linked
+qualification evidence for the published release status. The installation and
+example commands below require checksum-verified public v0.0.49 assets and their
+matching tag; do not substitute v0.0.48 when managed-grants support is required.
 
 <a id="runtime-migrations--v0048"></a>
 
 ## Runtime migrations — v0.0.49
 
-This guide retains its historical v0.0.48 link anchor. The v0.0.49 candidate must
-also admit and qualify the actual public v0.0.48 wheel before release; that
-publication and final route qualification are pending. The existing admitted
-sources and migration procedure below remain the baseline.
+This guide retains its historical v0.0.48 link anchor. The v0.0.49 migration
+route includes admission of the actual public v0.0.48 wheel; consult the v0.0.49
+release notes and linked qualification evidence for the published route status.
+The existing admitted sources and migration procedure below remain the baseline.
 
 Truss supports the latest application runtime only. Previous databases move
 forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
@@ -350,9 +349,12 @@ the separate registrar disclosure path.
 
 ## Install version 0.0.49
 
-The commands below select v0.0.49 and its matching dependencies. They require
-qualified v0.0.49 public assets, which are not available yet. Source builds use
-the current candidate cohort; existing installations require explicit migration.
+The commands below select v0.0.49 and its matching dependencies. Use them only
+with the publicly published v0.0.49 assets after verifying their published
+checksums. The v0.0.49 release notes and linked qualification evidence are the
+authority for the exact release status and supported cohort. Source builds must
+select a matching source and dependency cohort; existing installations require
+explicit migration.
 
 The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -516,8 +518,8 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-After the qualified v0.0.49 tag and assets are public, obtain the matching
-examples and run with a new directory:
+After the v0.0.49 tag and assets are public, verify their published checksums,
+then obtain the matching examples and run with a new directory:
 
 ```sh
 git clone --branch v0.0.49 --depth 1 https://github.com/DocumentDrivenDX/truss.git
@@ -539,8 +541,10 @@ previews retain their historical pins and none claims independent interchange.
 ## Run local PostgreSQL 18.6
 
 With `uv` installed, the following command selects v0.0.49 in an isolated Python
-3.11 tool environment. Run it after the qualified v0.0.49 wheel and constraints
-asset are public; both remain pending:
+3.11 tool environment. Run it only after the v0.0.49 wheel and constraints asset
+are publicly available and their published checksums have been verified. Consult
+the v0.0.49 release notes and linked qualification evidence for release status
+and supported platforms:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
@@ -597,14 +601,16 @@ Fresh owner/registrar role names come from the installation result; save them
 for access setup. A restart reports confirmed status without inventing those
 names. Ordinary-person registration and module access still require the role
 configuration described below. Without `--install`, the launcher only starts
-PostgreSQL. Confirmed candidate status does not establish full security readiness.
+PostgreSQL. Confirmed installation status does not by itself establish full
+security readiness; consult the qualification evidence for the selected release.
 
-### Managed platform grants — v0.0.49 candidate
+### Managed platform grants — v0.0.49
 
-Managed-grantee support is available in the v0.0.49 source candidate; v0.0.48
-does not include it. The versioned commands above select the planned v0.0.49
-assets. From the current checkout, an explicit fresh local install can pass
-one or more exact PostgreSQL role names:
+Managed-grantee support is part of the v0.0.49 interface; v0.0.48 does not
+include it. For a released deployment, use the checksum-verified v0.0.49 assets
+and consult that release's notes and qualification evidence for its status and
+supported cohort. From a matching source checkout, an explicit fresh local
+install can pass one or more exact PostgreSQL role names:
 
 ```sh
 ./scripts/truss-local \
@@ -627,7 +633,10 @@ outer transaction/transport failures. The local CLI writes a safe refusal JSON
 object and exits with status 1; other transaction/transport failures retain their
 original failure path.
 
-The earlier pre-integration local candidate wheel SHA-256 is
+The following records are historical pre-integration candidate evidence. They
+describe only the exact candidate identified by each receipt and do not establish
+the status of the released v0.0.49 artifacts. The earlier local candidate wheel
+SHA-256 is
 `7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4`,
 with native manifest
 `35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
@@ -641,12 +650,14 @@ qualifies supported evolution, contained unsupported-retirement refusal and late
 selected ACL changes without rewriting initial evidence.
 
 Those receipts qualify their exact earlier candidate, before integration of
-the newer HF62/compiler cohort and v0.0.48 migration source. Final v0.0.49
-wheel/archive hashes and installed/Linux receipts remain pending.
-The candidate does not claim Lakebase support. The retained legacy all-discovery
+the newer HF62/compiler cohort and v0.0.48 migration source. They are retained as
+historical evidence; consult the published v0.0.49 release notes and linked
+receipts for the final wheel/archive hashes and release qualification. None of
+these records establishes Lakebase support. The retained legacy all-discovery
 diagnostic remains incomplete and unqualified outside the mandatory supported
 campaign in [the Linux release workflow](../../.github/workflows/release.yml).
-That campaign and public-artifact verification must pass before release.
+Consult the published release evidence for the status and scope of that campaign
+and public-artifact verification.
 Arras adoption must bind the exact qualified Truss wheel and native target
 manifest together with its UMF/Weft dependency pins, use the qualified
 PostgreSQL 18.6 / psycopg 3.3.6 local profile for local evidence, and separately
