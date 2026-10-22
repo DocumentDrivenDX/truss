@@ -1845,3 +1845,10 @@ durable created identity. Its basis names original input/document digests,
 catalog revision, source epoch and observed native snapshot. Ordinals, sequence
 allocations and locks/CPU consumed during validation need not rewind. A successful
 observation does not promise that a later real application or outer commit succeeds.
+
+Receipt inclusion without a feed consumer uses the same denial-capable person
+read admission as object/query reads. No membership produces a typed authorization
+observation; a separately damaged original receipt-function EXECUTE grant remains
+a native42501 execution failure. Administrative installation-recovery remains an
+explicit private administrator API: lack of EXECUTE there is not reclassified as
+a person membership refusal.

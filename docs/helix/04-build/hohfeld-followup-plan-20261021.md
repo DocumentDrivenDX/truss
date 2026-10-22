@@ -633,6 +633,40 @@ Only current Weft51 consumers enter the runtime cohort; older consumer records
 remain evidence. Hosted Linux, exact published package adoption, review, merge
 and publication remain required before this checkpoint is delivery.
 
+### Release regression review and dependency resolution — 2026-10-22
+
+The broader installed release commands exposed stale42501/P1005 assertions,
+a historical compiler-cohort inventory, and preview race instrumentation still
+matching the private original function name. Corrected tests now require exact
+P1403/P1405/multiplicity outcomes and observe the actual public preview command.
+Both real snapshot/revocation races pass. Administrative installation recovery
+still requires its actual private EXECUTE grant; ordinary callers receive native
+42501 without installation names.
+
+One actual person-surface gap was corrected: receipt inclusion now uses a55th
+public guarded read invocation. No membership is distinct from a damaged original
+receipt-function grant, which a new native countercontrol independently proves.
+All27 affected native cases pass, no skips,89.874s. This refines only the unpublished
+candidate to native `c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0`;
+the prior2f23 candidate is archived with its passing component evidence, not
+admitted as a published source. Both native initializers and logical restore pass.
+The explicit independent corpus now contains61 cases. The80-case lineage gate and
+61-case extracted corpus must pass again against the new installed wheel.
+
+The Weft dependency is implemented and compiler-frozen at f0039979, with selected
+release ancestor770137be; main integration preserves separately gated managed UC
+work and its unqualified status. Its actual31-case native/Chromium corpus now
+includes an original document carrying document-level unknown content, Record
+umf.ddd and Field hohfeld.view payloads. The artifact retains the exact original
+source SHA in modelPins. Unknown selected Field extension meaning explicitly
+refuses WFT-TYPE; no stripping or relabeling claims model acceptance. The selected
+Truss runtime entrypoint owns this profile; generic compile_json lacks its backend
+registration. Linux x86/ARM packaging run39743904917 passes, but Truss selects only
+the x86 wheel for its upcoming native Linux gate. Exact public publication and
+clean installed adoption remain required. Two main-integration stale workspace
+controls (missing example feature and promotion of an old UMF0.7 success golden)
+were fixed without compiler behavior changes; the next full hosted run is required.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

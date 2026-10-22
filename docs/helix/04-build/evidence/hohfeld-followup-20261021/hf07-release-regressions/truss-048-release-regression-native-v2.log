@@ -1,0 +1,39 @@
+test_commit_token_readonly_reached_and_current_reader_authority (test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority) ... ok
+test_noop_token_is_stable_and_missing_evidence_is_unavailable (test_receipt_visibility_native.ReceiptVisibilityTests.test_noop_token_is_stable_and_missing_evidence_is_unavailable) ... ok
+test_native_preview_3073_refuses_without_effects (test_group_preview_native.GroupPreviewNativeTests.test_native_preview_3073_refuses_without_effects)
+@covers US-040-AC2: native preview enforces its independent ceiling. ... ok
+test_preview_accepts_153_heterogeneous_conditions (test_group_preview_native.GroupPreviewNativeTests.test_preview_accepts_153_heterogeneous_conditions)
+@covers US-040-AC1 / US-040-AC2: preview preserves the native batch ceiling. ... ok
+test_preview_accepts_3072_conditions (test_group_preview_native.GroupPreviewNativeTests.test_preview_accepts_3072_conditions)
+@covers US-040-AC1: the owned preview ceiling is accepted. ... ok
+test_preview_data_uses_one_snapshot_across_concurrent_update (test_group_preview_native.GroupPreviewNativeTests.test_preview_data_uses_one_snapshot_across_concurrent_update)
+@covers US-040-AC1: condition reads share the reported snapshot basis. ... ok
+test_preview_refuses_when_reader_is_revoked_during_observation (test_group_preview_native.GroupPreviewNativeTests.test_preview_refuses_when_reader_is_revoked_during_observation)
+@covers US-040-AC2: a mid-observation reader revocation withholds results. ... ok
+test_preview_runs_on_an_adopted_read_only_transaction (test_group_preview_native.GroupPreviewNativeTests.test_preview_runs_on_an_adopted_read_only_transaction)
+@covers US-040-AC1 / US-040-AC2: all five predicates work in READ ONLY. ... ok
+test_readonly_preview_observes_all_five_conditions_without_effects (test_group_preview_native.GroupPreviewNativeTests.test_readonly_preview_observes_all_five_conditions_without_effects)
+@covers US-040-AC1 / US-040-AC2: preview reports an observation only. ... ok
+test_minimal_status_admin_recovery_revocation_and_install_busy (test_lifecycle_native.LifecycleNativeTests.test_minimal_status_admin_recovery_revocation_and_install_busy) ... ok
+test_ordinary_person_cannot_recover_installation_role_names (test_lifecycle_native.LifecycleNativeTests.test_ordinary_person_cannot_recover_installation_role_names) ... ok
+test_person_status_reports_absent_installation_without_role_details (test_lifecycle_native.LifecycleNativeTests.test_person_status_reports_absent_installation_without_role_details) ... ok
+test_deferred_completion_rechecks_authorization (test_catalog_unchanged_native.CatalogUnchangedTests.test_deferred_completion_rechecks_authorization) ... ok
+test_pending_committed_retry_and_original_report_are_distinct (test_catalog_unchanged_native.CatalogUnchangedTests.test_pending_committed_retry_and_original_report_are_distinct) ... ok
+test_registration_retry_preserves_legacy_report_after_preparation_change (test_catalog_unchanged_native.CatalogUnchangedTests.test_registration_retry_preserves_legacy_report_after_preparation_change) ... ok
+test_rollback_and_suppressed_alias_do_not_publish_success (test_catalog_unchanged_native.CatalogUnchangedTests.test_rollback_and_suppressed_alias_do_not_publish_success) ... ok
+test_edge_writer_revoked_after_attempt_flush_aborts (test_edge_authority_native.EdgeAuthorityTests.test_edge_writer_revoked_after_attempt_flush_aborts) ... ok
+test_unsafe_actor_after_effect_and_result_writes_refuses (test_edge_authority_native.EdgeAuthorityTests.test_unsafe_actor_after_effect_and_result_writes_refuses) ... ok
+test_writer_revoked_after_attempt_constraint_flush_still_aborts (test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts) ... ok
+test_cached_query_schema_cannot_cache_permission_grants (test_schema_cache_native.SchemaCacheTests.test_cached_query_schema_cannot_cache_permission_grants) ... ok
+test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader (test_schema_cache_native.SchemaCacheTests.test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader) ... ok
+test_query_binding_cache_isolated_by_current_person (test_schema_cache_native.SchemaCacheTests.test_query_binding_cache_isolated_by_current_person) ... ok
+test_query_binding_validator_misses_rolled_back_reused_revision (test_schema_cache_native.SchemaCacheTests.test_query_binding_validator_misses_rolled_back_reused_revision) ... ok
+test_record_work_reuses_immutable_compiled_schema (test_schema_cache_native.SchemaCacheTests.test_record_work_reuses_immutable_compiled_schema) ... ok
+test_empty_edges_still_refuse_required_relationships (test_rootless_preparation_native.RootlessPreparationTests.test_empty_edges_still_refuse_required_relationships) ... ok
+test_singleton_and_batch_plans_equal_the_general_path (test_rootless_preparation_native.RootlessPreparationTests.test_singleton_and_batch_plans_equal_the_general_path) ... ok
+test_refuse_repair_accept_and_enforce_bounds (test_relationship_evolution_native.RelationshipEvolutionTests.test_refuse_repair_accept_and_enforce_bounds) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 89.874s
+
+OK

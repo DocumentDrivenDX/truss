@@ -57,8 +57,8 @@
     "load-audit-reader.sql": "d24a927e9c01a315ff2b24e4bda12207434fa3d476965149f1cff253e35740fc",
     "import-batches.sql": "97cf1f1b1012864df0a95c12ba693c5a935a515047ca4533041ee4c8fc3e80a1",
     "group-audit-reader.sql": "1b80d10290645cdc3d2e12c0f5dd2b3fa76c7ad51cd0effb6fa2d097bd468660",
-    "person-entrypoints.sql": "ac92ec819d508edbfb0af95cb7516a08453118d4abae514e75b1da49f5887131",
-    "person-entrypoints.json": "06659c45c55045ae3ddff9cb63a5d6f81a827520b7d287ceb8213e853d2be9fd",
+    "person-entrypoints.sql": "2c99d9894bf5ae278feb227419851107567e5ee0f2a1583e95113f68e29b5164",
+    "person-entrypoints.json": "13be01c73c4812cd2b5f3a8273db4ce8265ed91ae78e577b25d53ea9825ad26a",
     "group-recovery.sql": "a3fcbd45ea69595b88679903d20533e9bbe18c2f5864caa6a75f82985bdca300",
     "query-selective.sql": "8d2523ba89e3322f3a44e0e7567ef3d91bb0154f6a63dcb2b72a6d852bb5ac9d"
   },

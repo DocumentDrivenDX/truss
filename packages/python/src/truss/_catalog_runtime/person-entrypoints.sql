@@ -527,3 +527,12 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.person_writer_schema_basis(original_input bytea, original_documents bytea, expected_release text, expected_digest text) FROM PUBLIC;
 
+CREATE FUNCTION truss.person_reached(original_position bytea, maximum_evidence_bytes integer, expected_release text, expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.require_person_invocation('truss.reached(bytea,integer,text,text)'::regprocedure,'read');
+ RETURN truss.reached("original_position","maximum_evidence_bytes","expected_release","expected_digest");
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.person_reached(original_position bytea, maximum_evidence_bytes integer, expected_release text, expected_digest text) FROM PUBLIC;
+

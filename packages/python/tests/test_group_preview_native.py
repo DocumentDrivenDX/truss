@@ -30,7 +30,7 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
             def __enter__(self):self.inner.__enter__();return self
             def __exit__(self,*args):return self.inner.__exit__(*args)
             def execute(self,query,*args,**kwargs):
-                if isinstance(query,str) and 'truss.preview_group_conditions(' in query:
+                if isinstance(query,str) and 'truss.person_preview_group_conditions(' in query:
                     query='/* truss-preview-race */ '+query
                 self.inner.execute(query,*args,**kwargs)
                 return self

@@ -488,17 +488,17 @@ class CatalogReferenceAssembly:
             from .catalog_preparation import prepare_catalog
             return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
     @_active_operation
-    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation | InstallRefused]:
+    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=()) -> Outcome[PendingCatalogInstallation | InstallRefused]:
         self._available()
         from psycopg import sql
         from ._installation_privileges import (InstallationRoles, _name, protect_installation_with_cursor,
                                                 installation_administrator_with_cursor)
         manifest,digest,sources=_release()
         suffix=uuid4().hex[:16]
-        roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,registrar_role or 'truss_registrar_'+suffix)
+        roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,registrar_role or 'truss_registrar_'+suffix,tolerated_grantees)
         try:
             valid_roles=_name(roles.owner) and _name(roles.client) and roles.owner!=roles.client
-        except UnicodeError:
+        except (UnicodeError, ValueError, TypeError):
             valid_roles=False
         if not valid_roles:
             return Ok(InstallRefused(code='invalid_roles'))
@@ -573,10 +573,10 @@ class CatalogReferenceAssembly:
                 return refuse('role_exists')
             for source in sources:cursor.execute(source,prepare=False)
             privileges=protect_installation_with_cursor(cursor,roles)
-            cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,owner_oid,registrar_oid,genesis_at)
-                SELECT true,pg_catalog.gen_random_uuid(),%s,%s,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s,%s,accepted_at
+            cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,managed_grants,owner_oid,registrar_oid,genesis_at)
+                SELECT true,pg_catalog.gen_random_uuid(),%s,%s,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s,%s,accepted_at
                 FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
-                (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),privileges.owner_oid,privileges.client_oid),prepare=False)
+                (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),json.dumps(privileges.managed_grants),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
             from ._runtime_admission import person_entrypoints
             cursor.execute('GRANT USAGE ON SCHEMA truss TO PUBLIC',prepare=False)
@@ -590,7 +590,18 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
-        return self._host._run_operation(transaction,install)
+        result=self._host._run_operation(transaction,install)
+        from ._installation_privileges import _ThirdPartyGrantRefusal
+        if isinstance(result,Error):
+            attempt=getattr(getattr(self._host,'_custody',None),'last_attempt',None)
+            error=getattr(attempt,'error',None)
+            if (isinstance(error,_ThirdPartyGrantRefusal)
+                    and getattr(attempt,'phase',None)=='contained'
+                    and getattr(attempt,'cleanup_error',None) is None
+                    and result.error.code=='invalid_transaction'):
+                return Ok(InstallRefused(code='third_party_grant',role_name=error.role_name,
+                    object_class=error.object_class,phase=error.phase))
+        return result
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
         """Refuse installation upgrades without executing SQL or changing data."""
@@ -1125,7 +1136,7 @@ class CatalogReferenceAssembly:
         def observe(cursor,observed):
             _pin_cursor(cursor)
             if consumer_id is None:
-                cursor.execute('SELECT truss.reached(%s,%s,%s,%s)',(locator.original_bytes,maximum_evidence_bytes,manifest['releaseId'],digest),prepare=False)
+                cursor.execute('SELECT truss.person_reached(%s,%s,%s,%s)',(locator.original_bytes,maximum_evidence_bytes,manifest['releaseId'],digest),prepare=False)
             else:
                 cursor.execute('SELECT truss.feed_reached(%s,%s,%s,%s,%s)',(consumer_id,locator.original_bytes,maximum_evidence_bytes,manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(cursor.fetchone()[0]))

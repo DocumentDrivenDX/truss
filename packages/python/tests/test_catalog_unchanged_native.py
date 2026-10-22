@@ -100,7 +100,8 @@ class CatalogUnchangedTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='check'),Ok)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         host.detach()
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.commit()
+        with self.assertRaises(psycopg.ProgrammingError) as denied:connection.commit()
+        self.assertEqual(denied.exception.sqlstate,'P1403')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_unchanged_request').fetchone(),(0,))
 
 def prepared_documents(prepared):

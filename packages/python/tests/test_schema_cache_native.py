@@ -31,8 +31,9 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
         self.assertEqual(changed['outcome'],'snapshot')
         self.assertNotEqual(changed['validator'],first['validator'])
         self.admin.execute('REVOKE group_writer FROM consumer')
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+        with self.assertRaises(psycopg.ProgrammingError) as denied:
             with c.transaction():c.execute(query,(*parameters,first['validator']))
+        self.assertEqual(denied.exception.sqlstate,'P1403')
 
     def test_query_binding_cache_isolated_by_current_person(self):
         from truss import Ok,adopt_psycopg_host

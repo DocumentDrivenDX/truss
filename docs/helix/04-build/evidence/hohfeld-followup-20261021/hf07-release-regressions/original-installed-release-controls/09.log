@@ -1,0 +1,39 @@
+..................F...E...
+======================================================================
+ERROR: test_edge_writer_revoked_after_attempt_flush_aborts (test_edge_authority_native.EdgeAuthorityTests.test_edge_writer_revoked_after_attempt_flush_aborts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_edge_authority_native.py", line 23, in test_edge_writer_revoked_after_attempt_flush_aborts
+    connection.commit()
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 309, in commit
+    self.wait(self._commit_gen())
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 495, in wait
+    return waiting.wait(
+           ^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/waiting.pyx", line 255, in psycopg_binary._psycopg.wait_c
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 592, in _commit_gen
+    yield from self._exec_command(b"COMMIT")
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/_connection_base.py", line 487, in _exec_command
+    raise e.error_from_result(result, encoding=self.pgconn._encoding)
+psycopg.ProgrammingError: current qualified module writer required
+CONTEXT:  PL/pgSQL function truss.runtime_module_writer_qualified(text,text,oid) line 9 at RAISE
+SQL statement "SELECT truss.runtime_module_writer_qualified(owner_document,owner_module,current_actor)"
+PL/pgSQL function truss.runtime_object_commit_check() line 85 at PERFORM
+
+======================================================================
+FAIL: test_empty_edges_still_refuse_required_relationships (test_rootless_preparation_native.RootlessPreparationTests.test_empty_edges_still_refuse_required_relationships)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_rootless_preparation_native.py", line 63, in test_empty_edges_still_refuse_required_relationships
+    self.assertEqual(json.loads(base64.b64decode(result.value.failure.inner_error.bytes_base64))['nativeState'], 'P1005')
+AssertionError: 'P1405' != 'P1005'
+- P1405
+?   ^
++ P1005
+?   ^
+
+
+----------------------------------------------------------------------
+Ran 26 tests in 76.015s
+
+FAILED (failures=1, errors=1)

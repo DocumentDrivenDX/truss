@@ -29,6 +29,17 @@
     "source44-native-inventory.json": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
     "truss-048-audit-migration-gate.log": "38a90109257771dbf3299c953ff7c413d5bcbcea3ae981210b00d1a7a96362a7",
     "source47-native-inventory.json": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92",
-    "truss-048-audit-conformance-qualification.json": "5cae085ce17e2cb7dc6f8ee740f32b15069499837b15a6e70b2845f2cf37666e"
+    "truss-048-audit-conformance-qualification.json": "5cae085ce17e2cb7dc6f8ee740f32b15069499837b15a6e70b2845f2cf37666e",
+    "truss-048-audit-protection.log": "7c6df10408d8278c7121caaaf8d93b27f032a0e40118a88b3616330361a2f3e4",
+    "truss-048-audit-disclosure.log": "8eca2c22bc08c6b06264290b504d7407104c285a4b8b803ad15df4aeaf43b230"
+  },
+  "protectedBoundary": {
+    "passed": true,
+    "tests": 9,
+    "skipped": 0,
+    "seconds": 53.467,
+    "command": "TRUSS_DISCLOSURE_NATIVE_QUALIFICATION=1 python -m unittest test_current_disclosure_runtime_native -v",
+    "scope": "Five selected disclosure controls plus four inherited original protected-query controls; no new graph/SCRAM/context qualification",
+    "originalInvocationError": "Earlier misspelled test_current_disclosure_native module failed discovery after four query passes; original log retained"
   }
 }

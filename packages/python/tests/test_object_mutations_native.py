@@ -116,8 +116,9 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
         self.admin.execute('REVOKE group_writer FROM consumer')
         host.detach()
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+        with self.assertRaises(psycopg.ProgrammingError) as denied:
             connection.commit()
+        self.assertEqual(denied.exception.sqlstate,'P1403')
         connection.rollback()
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s AND type_id=%s',(int(identity.id),int(identity.type_id))).fetchone(),original)
 
@@ -139,8 +140,9 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
         self.admin.execute('REVOKE group_writer FROM consumer')
         host.detach()
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+        with self.assertRaises(psycopg.ProgrammingError) as denied:
             connection.commit()
+        self.assertEqual(denied.exception.sqlstate,'P1403')
         connection.rollback()
         for table in ('object','object_key_bucket','request_receipt','journal','runtime_object_attempt'):
             self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.'+table).fetchone(),(0,),table)

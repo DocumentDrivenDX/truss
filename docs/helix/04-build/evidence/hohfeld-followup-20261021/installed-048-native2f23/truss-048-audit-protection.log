@@ -1,0 +1,21 @@
+test_all_denied_population_returns_empty_rows (test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_all_denied_population_returns_empty_rows) ... ok
+test_empty_population_returns_empty_rows (test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_empty_population_returns_empty_rows) ... ok
+test_protected_activation_closes_legacy_data_facades (test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_protected_activation_closes_legacy_data_facades) ... ok
+test_public_masked_projection_with_authorized_exact_raw_predicate (test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_public_masked_projection_with_authorized_exact_raw_predicate) ... ok
+test_current_disclosure_native (unittest.loader._FailedTest.test_current_disclosure_native) ... ERROR
+
+======================================================================
+ERROR: test_current_disclosure_native (unittest.loader._FailedTest.test_current_disclosure_native)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_current_disclosure_native
+Traceback (most recent call last):
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'test_current_disclosure_native'
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 25.774s
+
+FAILED (errors=1)

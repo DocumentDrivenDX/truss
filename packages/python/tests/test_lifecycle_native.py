@@ -51,7 +51,10 @@ class LifecycleNativeTests(group_tests.PublicCreateGroupTests):
     def test_ordinary_person_cannot_recover_installation_role_names(self):
         connection, host, assembly, tx = self.ready()
         denied = assembly.admin_install_recovery_in_transaction(tx)
-        self.assertEqual(denied, Ok(LifecycleRefused(reason='unauthorized')))
+        from truss import Error
+        self.assertIsInstance(denied,Error)
+        self.assertEqual(denied.error.sql_state,'42501')
+        self.assertNotIn('runtime_owner',denied.error.message)
         host.detach()
         connection.rollback()
 

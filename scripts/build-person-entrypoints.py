@@ -15,7 +15,7 @@ modes={
 'query_export_objects':'read','query_export_edges':'read','query_export_page_objects':'read',
 'query_selected_objects':'read','query_seek_objects':'read',
 'query_object_attribution':'read','query_object_times':'read','query_object_load_id':'read',
-'group_context':'read','group_type_reference':'read','group_relationship_reference':'read','prepare_group':'read',
+'reached':'read','group_context':'read','group_type_reference':'read','group_relationship_reference':'read','prepare_group':'read',
 'get_object':'read','get_edge':'read','lookup_string_key':'read','page_objects':'read','page_edges':'read','traverse_objects':'read','preview_group_conditions':'read',
 'recover_group_request':'write','apply_group':'write','apply_group_prepared':'write','writer_schema_basis':'write',
 'import_context':'read','batched_import_context':'write','build_import_records':'write','process_import_chunk':'write','validate_batched_import_report':'write',

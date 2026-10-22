@@ -60,7 +60,7 @@ class RootlessPreparationTests(base.PublicCreateGroupTests):
         result = assembly.apply_in_transaction(tx, context.input((self.create(),), MapValue(entries=())), RequestNone(), documents=self.documents)
         self.assertIsInstance(result, Ok, repr(result))
         self.assertIsInstance(result.value, GroupFailed, repr(result))
-        self.assertEqual(json.loads(base64.b64decode(result.value.failure.inner_error.bytes_base64))['nativeState'], 'P1005')
+        self.assertEqual(json.loads(base64.b64decode(result.value.failure.inner_error.bytes_base64))['nativeState'], 'P1405')
         host.detach(); connection.commit()
         for table in ('object', 'edge', 'journal', 'runtime_object_attempt', 'runtime_owned_operation'):
             self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.' + table).fetchone(), (0,), table)

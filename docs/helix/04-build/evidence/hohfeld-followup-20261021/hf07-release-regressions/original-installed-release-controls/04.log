@@ -1,0 +1,32 @@
+...{"schema": "complex", "sourceBytes": 28466, "registrationSeconds": 0.09995908400742337, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 139264, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 155648, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "dense-edges", "sourceBytes": 24840, "registrationSeconds": 0.06529845803743228, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 139264, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "index-heavy", "sourceBytes": 30120, "registrationSeconds": 0.10618870897451416, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 81920, "rel_def": 32768, "runtime_definition_source": 196608, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "large", "sourceBytes": 24834, "registrationSeconds": 0.06644704099744558, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 139264, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "many-types", "sourceBytes": 2528639, "registrationSeconds": 1.8630478330305777, "storageBytesIncludingIndexesAndToast": {"schema_doc": 270336, "type_def": 499712, "prop_def": 3063808, "key_def": 434176, "rel_def": 237568, "runtime_definition_source": 7413760, "catalog_registration_request": 114688, "catalog_acceptance_report": 98304}}
+.{"schema": "node-heavy", "sourceBytes": 24839, "registrationSeconds": 0.0941957919858396, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 139264, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "nominal", "sourceBytes": 24836, "registrationSeconds": 0.09925441700033844, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 139264, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "skewed", "sourceBytes": 24835, "registrationSeconds": 0.0946106250048615, "storageBytesIncludingIndexesAndToast": {"schema_doc": 98304, "type_def": 65536, "prop_def": 122880, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 139264, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "small", "sourceBytes": 1225, "registrationSeconds": 0.08903470798395574, "storageBytesIncludingIndexesAndToast": {"schema_doc": 81920, "type_def": 65536, "prop_def": 81920, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 65536, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+...{"applicationSchema": {"recordTypes": 1000, "properties": 12000, "estimatedResidentBytes": 8124944, "sharedCacheRetainedBytes": 58274660, "retainedBudgetBytes": 134217728}}
+.{"schema": "type-heavy", "sourceBytes": 249839, "registrationSeconds": 0.2090574589674361, "storageBytesIncludingIndexesAndToast": {"schema_doc": 131072, "type_def": 114688, "prop_def": 417792, "key_def": 98304, "rel_def": 65536, "runtime_definition_source": 802816, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "wide", "sourceBytes": 224763, "registrationSeconds": 0.25714133301516995, "storageBytesIncludingIndexesAndToast": {"schema_doc": 139264, "type_def": 65536, "prop_def": 425984, "key_def": 49152, "rel_def": 32768, "runtime_definition_source": 655360, "catalog_registration_request": 114688, "catalog_acceptance_report": 49152}}
+.{"schema": "many-types", "sourceBytes": 2528639, "registrationSeconds": 1.952062875032425, "storageBytesIncludingIndexesAndToast": {"schema_doc": 270336, "type_def": 499712, "prop_def": 3063808, "key_def": 434176, "rel_def": 237568, "runtime_definition_source": 7413760, "catalog_registration_request": 114688, "catalog_acceptance_report": 98304}}
+{"completeViewBytes": 12456454, "definitions": 16000, "sharedSources": 1}
+...........{"records": 32, "applySeconds": 0.507632291992195, "commitSeconds": 0.035596792004071176, "graphValidationCalls": 64}
+......E........................................
+======================================================================
+ERROR: test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader (test_schema_cache_native.SchemaCacheTests.test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_schema_cache_native.py", line 35, in test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader
+    with c.transaction():c.execute(query,(*parameters,first['validator']))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-048-audit-installed-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.ProgrammingError: complete current query reader required
+CONTEXT:  PL/pgSQL function truss.query_binding_if_changed(jsonb,integer,integer,integer,text,text,text) line 25 at RAISE
+
+----------------------------------------------------------------------
+Ran 75 tests in 200.698s
+
+FAILED (errors=1)

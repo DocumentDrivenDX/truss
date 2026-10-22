@@ -1,0 +1,10 @@
+test_catalog_and_group_admission_refusals_are_typed (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_catalog_and_group_admission_refusals_are_typed) ... ok
+test_direct_object_key_and_edge_reads_return_typed_refusal (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_direct_object_key_and_edge_reads_return_typed_refusal) ... ok
+test_only_contained_authorization_refusals_are_translated (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_only_contained_authorization_refusals_are_translated) ... ok
+test_owned_edge_builder_returns_safe_outer_refusal_without_dereference (test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests.test_owned_edge_builder_returns_safe_outer_refusal_without_dereference) ... ok
+test_query_and_disclosure_cohorts_pair_platform_wheel_and_native_hashes (test_current_disclosure_cohort.DisclosureCohortTests.test_query_and_disclosure_cohorts_pair_platform_wheel_and_native_hashes) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.008s
+
+OK

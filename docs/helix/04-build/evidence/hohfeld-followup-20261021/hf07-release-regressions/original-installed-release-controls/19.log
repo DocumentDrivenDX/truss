@@ -1,0 +1,14 @@
+E.
+======================================================================
+ERROR: test_commit_token_readonly_reached_and_current_reader_authority (test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_receipt_visibility_native.py", line 66, in test_commit_token_readonly_reached_and_current_reader_authority
+    denied=assembly.reached_in_transaction(tx,token);self.assertEqual(denied.value.reason,'authorization')
+                                                                      ^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.476s
+
+FAILED (errors=1)

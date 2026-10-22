@@ -541,6 +541,16 @@
       "result": "bytea",
       "set": false,
       "volatility": "v"
+    },
+    {
+      "name": "reached",
+      "publicName": "person_reached",
+      "signature": "truss.reached(bytea,integer,text,text)",
+      "arguments": "original_position bytea, maximum_evidence_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
     }
   ]
 }
