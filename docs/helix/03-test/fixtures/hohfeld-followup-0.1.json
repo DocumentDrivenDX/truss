@@ -615,7 +615,7 @@
     "packages/python/tests/test_row_touch_observer_native.py": "dc01b68a5ae7fd80a5189627ff1a1d00e285b645bdfba8679db4e32c24ce4326",
     "packages/python/tests/test_row_touch_registry.py": "dd320f8da1a63d8b55a6450b75c98b767de9e66894bbd197ecc98f51304f9b39",
     "packages/python/tests/test_runtime_migrations.py": "c0a8741272929198bd8e4c35c737173c39de6ac71c8fbd756082be44dc1832e0",
-    "packages/python/tests/test_runtime_migrations_native.py": "a5c76ed092c4f9550c6d4ddb30112dbb07124c58d93c799c386247130dbe0f0f",
+    "packages/python/tests/test_runtime_migrations_native.py": "4509468c3d9867673e9135dccdb05b515b1bdabd0db9382f51a47c0471728d36",
     "packages/python/tests/test_runtime_migrations_subsequent_native.py": "43f431db4af400ab26090f1b95ee6cbf8062f26edef8a59bb2c78ade61dcae91",
     "packages/python/tests/test_runtime_release_cache.py": "24cff93ba1d8377d18d0a6c1eef86524d9079b6ebc0b08cda61fcb073b464fa6",
     "packages/python/tests/test_scalar_containers_native.py": "a5938166bd6491cabc16966aa40be1c2a48321c5b3acffdff0f55cc4bffc10b9",

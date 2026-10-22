@@ -1,0 +1,104 @@
+{
+  "scope": "Failed initial hosted Linux candidate qualification; original downloaded migration evidence and failed-step log retained without replacement.",
+  "workflowRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39843240107",
+  "sourceCommit": "247a505430ac7fd2a5ef7363dba88124c04b3c50",
+  "passed": false,
+  "tests": 106,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 0,
+  "failedCases": [
+    "source48MigrationTests.test_later_native_step_failure_rolls_back_initializer",
+    "source48MigrationTests.test_rollback_observation_waits_for_original_connection_close"
+  ],
+  "diagnosis": "Both source48 cursor fault injectors matched a catalog_accept_with_keys statement absent from the new short managed-grants edge. No failure was injected; the migration completed, so the rollback/close expectations failed. Fix targets the later current edge statement after its real ALTER and asserts injection occurred. Runtime code, rollback expectations and deadline limits are unchanged.",
+  "subsequentRun": "pending",
+  "retainedEvidence": {
+    "linux-branch-247-failure.log": {
+      "rawSha256": "3262051cc3bdece3cd59e80dad50267553843bf3d6a68fa55e02b03814e5f215",
+      "retained": "linux-branch-247-failure.log.gz",
+      "retainedSha256": "26555986c025ef822c75a06a8aab879e611c75ef262d606d27ca438310ffc502"
+    },
+    "linux-branch-247-run.json": {
+      "rawSha256": "c8c3669f3357ed1ef4135b0c708c59f1b4365dc1b677c2e1c123c5c8a7f0b608",
+      "retained": "linux-branch-247-run.json.gz",
+      "retainedSha256": "5b12516cfa5de8a389091429264b6da15bfa5eadd4c5aa537b7ba29986c84554"
+    },
+    "PriorPublishedReceiptTests-before-close.json": {
+      "rawSha256": "f1fb6432f3471038143fba8db455f2abc54925455a0e998286c7a625bc33754b",
+      "retained": "PriorPublishedReceiptTests-before-close.json.gz",
+      "retainedSha256": "95f44200adb35391a702c12f57a7ffec6dd43e9ac28fb31f122c24417aada24e"
+    },
+    "Published48ReceiptTests-before-close.json": {
+      "rawSha256": "49177a79ca384ce46186bb4b250f7eb9f492fc8bde70a50c64448dd37109df9f",
+      "retained": "Published48ReceiptTests-before-close.json.gz",
+      "retainedSha256": "5922bc5d0f61512df14f5b9c8d896e2dcdc2b8f57a401fb575ee7e6eb976649c"
+    },
+    "qualification.json": {
+      "rawSha256": "20728f928043812c0c6032fcbadbb3cc5befd7e7b861839201d9a28a512db261",
+      "retained": "qualification.json.gz",
+      "retainedSha256": "637bc5b18f3a2b7cd877d70663153a37cfe8c3bbd7422757ab6f292dafd03696"
+    },
+    "source44-native-inventory.json": {
+      "rawSha256": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+      "retained": "source44-native-inventory.json.gz",
+      "retainedSha256": "93b37f438c2381f820cd660aeb241abcfdf63802c4794d0e59c1bcaf47dede6f"
+    },
+    "source44-original-evidence.json": {
+      "rawSha256": "7be50ca2766bcb6064c23581c6ca3a5a46138b0877178c8327f5662f92e548a7",
+      "retained": "source44-original-evidence.json.gz",
+      "retainedSha256": "b1bb0b3992b37be278353e348461142a2c50b313cf8f8b9d7b4f095bc2335433"
+    },
+    "source44MigrationTests-before-close.json": {
+      "rawSha256": "2c8715c2de13b3b4cd2c0c218ddef3cf52e8ec56be6f361ab210c4ceb2abd68f",
+      "retained": "source44MigrationTests-before-close.json.gz",
+      "retainedSha256": "f410271f10735a6930e0bd0bf4a60d30c4a1f60898683a3e36c7f32ad40ad409"
+    },
+    "source46-native-inventory.json": {
+      "rawSha256": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+      "retained": "source46-native-inventory.json.gz",
+      "retainedSha256": "4ca7612fa5790f64a67c988e6c2bc76cecfa43dfdd864b3ef030e55ae8051a7f"
+    },
+    "source46-original-evidence.json": {
+      "rawSha256": "37febd18f0dc4f74e7ab8c25f7c9bf44a52cce660d9565350999d1af577424b5",
+      "retained": "source46-original-evidence.json.gz",
+      "retainedSha256": "940fa43b6fc982db4be1e6590912d9e3048a728d8f43fdc05239e2d0acf1185c"
+    },
+    "source46MigrationTests-before-close.json": {
+      "rawSha256": "bfddea5ddb870cbccc863bbde2da8cb5dff0737e55cd365eefa2987881bc46de",
+      "retained": "source46MigrationTests-before-close.json.gz",
+      "retainedSha256": "c2ae4b97328ae3cc8bd46f463480a4703ab1504280850820807c6238292a7929"
+    },
+    "source47-native-inventory.json": {
+      "rawSha256": "c53951359da8a9bd37ae909929f92142a4b7351d4b534c12144a541c84c5ad11",
+      "retained": "source47-native-inventory.json.gz",
+      "retainedSha256": "870048c0fc85913e28095a5247e0b5339d3c5afdd8806d838601c74c22e263a9"
+    },
+    "source47-original-evidence.json": {
+      "rawSha256": "e456639405bf0a6bc06b37f3ec677658e17fadff387cc5c9113299b3818fb01d",
+      "retained": "source47-original-evidence.json.gz",
+      "retainedSha256": "81c177186d8b6ef47fc60c88e9524d569b90b6a5154ebfb451d330f2ca438a77"
+    },
+    "source47MigrationTests-before-close.json": {
+      "rawSha256": "be1d1f58a587d7cd896115b30a5f4c67790bc08beb096f9efbbf70efdc03fe47",
+      "retained": "source47MigrationTests-before-close.json.gz",
+      "retainedSha256": "a084666828b49e1edf26a487f5ad438c737aa708111ca16aa44fe185424244cf"
+    },
+    "source48-native-inventory.json": {
+      "rawSha256": "5f8c5d4c412f4e1e0ee3e81a2608db3e0cd6f5ce2287d5afc5ba98156d51b363",
+      "retained": "source48-native-inventory.json.gz",
+      "retainedSha256": "d04a7307d19935f1ecd3ca1ab63c4bf6ae5008bb7e3704c2acd56031df45d945"
+    },
+    "source48-original-evidence.json": {
+      "rawSha256": "9d8a47acce6b2b54761d727c338e6d813349e4b50dee5802ac9a7df1d1ce3ee5",
+      "retained": "source48-original-evidence.json.gz",
+      "retainedSha256": "30920a29f564ee1fc3af564a2033fea1994e0d87b654d040bc2fb89fd85c427b"
+    },
+    "source48MigrationTests-before-close.json": {
+      "rawSha256": "813fb95b9ca40e0ec9ead24e12a33ddbddf7fbe9ceb5eefdc821c69be7190a15",
+      "retained": "source48MigrationTests-before-close.json.gz",
+      "retainedSha256": "8f63d149835e39bec361d78a89ec2dd54eef54e12d1fbe4fe7ddd895218121a0"
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}

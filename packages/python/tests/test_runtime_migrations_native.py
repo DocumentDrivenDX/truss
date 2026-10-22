@@ -426,13 +426,20 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         """@covers US-045-AC7"""
         prepared=self.tool.prepare();before=self.state()
         original_ledger=self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0]
+        injected=[]
+        alter_marker='ALTER TABLE truss.catalog_runtime_installation ADD COLUMN managed_grants jsonb'
+        later_statement='CREATE OR REPLACE FUNCTION truss.runtime_current_installation()'
         class FailingCursor(psycopg.Cursor):
             def execute(self,query,*args,**kwargs):
-                if isinstance(query,str) and query.startswith('CREATE OR REPLACE FUNCTION truss.catalog_accept_with_keys'):
+                if isinstance(query,str) and alter_marker in query and later_statement in query:
+                    prefix=query.split(later_statement,1)[0]
+                    super().execute(prefix,*args,**kwargs)
+                    injected.append(True)
                     return super().execute('SELECT 1/0')
                 return super().execute(query,*args,**kwargs)
         def connect():return psycopg.connect(**self.params,autocommit=True,options='-c statement_timeout=10000',cursor_factory=FailingCursor)
         result=RuntimeMigrations(connect,self.registry).apply(prepared.reference)
+        self.assertEqual(injected,[True],'failure must follow the managed_grants ALTER in the current migration edge')
         self.assertEqual(result.outcome,'rolled_back',result)
         self.assertEqual(self.state(),before)
         self.assertEqual(self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0],original_ledger)
@@ -496,9 +503,15 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         """@covers US-045-AC7: a rollback acknowledgment is not resource release."""
         from threading import Event,Thread
         closing=Event();release=Event();results=[];calls=0
+        injected=[]
+        alter_marker='ALTER TABLE truss.catalog_runtime_installation ADD COLUMN managed_grants jsonb'
+        later_statement='CREATE OR REPLACE FUNCTION truss.runtime_current_installation()'
         class FailLater(psycopg.Cursor):
             def execute(self,query,*args,**kwargs):
-                if isinstance(query,str) and query.startswith('CREATE OR REPLACE FUNCTION truss.catalog_accept_with_keys'):
+                if isinstance(query,str) and alter_marker in query and later_statement in query:
+                    prefix=query.split(later_statement,1)[0]
+                    super().execute(prefix,*args,**kwargs)
+                    injected.append(True)
                     return super().execute('SELECT 1/0')
                 return super().execute(query,*args,**kwargs)
         class ParkedClose(psycopg.Connection):
@@ -524,6 +537,7 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
             self.assertEqual(self.tool.reconcile(prepared.reference).outcome,'recovery_required')
         finally:release.set();thread.join(20)
         self.assertFalse(thread.is_alive());self.assertTrue(results)
+        self.assertEqual(injected,[True],'failure must follow the managed_grants ALTER in the current migration edge')
         self.assertEqual(results[0].outcome,'rolled_back',results)
         retained=self.registry.inspect(prepared.reference,self.tool.status()['context'])
         self.assertEqual(retained['observations'][-1]['resourceRelease'],'confirmed')

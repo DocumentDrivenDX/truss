@@ -49,3 +49,13 @@ The mandatory finite release campaign is defined by
 The historical broad all-discovery diagnostic remains incomplete and
 unqualified. Actual Lakebase acceptance, TLS/token behavior and consumer
 adoption remain separate gates; this packet makes no acceptance claim for them.
+
+The [first Linux v0.0.49 attempt](linux-attempt-1/receipt.json) retains its
+original 106-case migration failure: two source48 rollback fault injectors
+matched an old SQL statement absent from the new short edge, so no failure was
+injected. The corrected injectors execute the real managed-grants ALTER before
+failing at the subsequent function statement and explicitly assert injection.
+All original rollback, state, ledger and resource-close assertions and deadlines
+remain. Sol reviewed eight pure cursor controls across all four routes; only
+this producer digest changed, with the other 362 pins and 62 cases preserved.
+The hosted rerun and final local campaign remain pending.
