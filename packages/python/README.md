@@ -1,6 +1,6 @@
 # Truss Python toolkit
 
-## Runtime migrations — v0.0.47 candidate
+## Runtime migrations — v0.0.47
 
 Truss supports the latest application runtime only. Previous databases move
 forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
@@ -72,9 +72,11 @@ other restore/incarnation procedures need their own qualification.
 
 The release-blocking [migration gate](../../scripts/qualify-runtime-migrations.py)
 runs every admitted source against the installed latest wheel and refuses removed
-paths or changed published recipes. Exact local evidence and remaining hosted
-qualification are recorded in the [execution plan](../../docs/helix/04-build/runtime-migration-restoration-plan.md).
-This candidate has not been published by this change.
+paths or changed published recipes. Exact source-bound evidence and delivery status are recorded in the
+[execution plan](../../docs/helix/04-build/runtime-migration-restoration-plan.md).
+Published release assets include the Linux migration receipt, original native
+evidence archive, dependency pins and checksums; the tag workflow requires all
+selected installed-runtime gates before publication.
 
 
 Version 0.0.46 adds an explicit local PostgreSQL 18.6 launcher using private
@@ -327,7 +329,7 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.46
+## Install version 0.0.47
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the current version cohort; existing installations require explicit migration.

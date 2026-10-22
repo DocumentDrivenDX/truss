@@ -37,7 +37,9 @@ the predecessor-upgrade withdrawal. Old application runtimes and pre-0.10 source
 adapters stay retired. Historical manifests, recipes and test fixtures serve
 migration only. The owner subsequently authorized implementation in this chat. The v0.0.47
 candidate implements the bounded routes below; native qualification is reported
-from original run evidence, with hosted Linux qualification still pending.
+from original run evidence. Final installed migration qualification passes 52 cases
+without skips on macOS ARM64 and Linux x86_64; the complete Linux release/public-workload workflow also passes. Merge, tag
+publication and public clean-install verification are the remaining delivery gates.
 
 Governing behavior: [PRD](../01-frame/prd.md#owner-decision--forward-migrations-to-the-latest-release-2026-10-21),
 [ADR-008](../02-design/adr/ADR-008-trusted-embedding-host.md),
@@ -264,8 +266,8 @@ and its package-correspondence record retain exact source/proof/artifact binding
 Local corrected installed qualification passes 48 cases; 23 real atomic-capacity
 checks and the isolated 1,000-type case pass. A broader parallel local sweep hit an
 administrator shutdown and the stale second-reader fixture; it is retained as
-incomplete, with no full-suite claim. Required complete Linux release/public-workload
-qualification, merge, publication and public installed verification remain pending.
+incomplete, with no full-suite claim. These earlier results are superseded for
+delivery by the final Linux workflow below; they remain original scoped evidence.
 Native future multi-edge execution remains deferred until a real subsequent edge.
 
 Final review adds exact table/index inheritance (including external parents) and
@@ -277,8 +279,19 @@ ancestor without changing any previously observed facts, then requires pre-effec
 refusal. Review also moves confirmed rollback resource release after actual
 connection close and replaces truncated preview-race observation with a test-only
 marker on the real SQL statement. No production deadline or admission condition is
-weakened. Final installed migration matrix now has 52 cases; full Linux/public
-qualification and publication remain the delivery gates.
+weakened. Final installed migration matrix now has 52 cases.
+
+The complete [Linux release workflow 39699389717](https://github.com/DocumentDrivenDX/truss/actions/runs/39699389717)
+passes at source `885faa77397cbaa997b8e189638d630173f8ba3c`, including the original
+1,000-object/1,000-edge public workload under unchanged limits. The installed
+migration matrix passes all 52 cases without skips on Linux x86_64 and local
+macOS ARM64. [Hosted evidence](evidence/runtime-migrations-20261021/hosted-linux/39699389717/run.json),
+[package correspondence](evidence/runtime-migrations-20261021/hosted-linux/39699389717/package-correspondence.json)
+and [local installed evidence](evidence/runtime-migrations-20261021/final-installed-local/qualification.json)
+bind the final artifacts. All 445 runtime payload files in both wheel and source
+archive match source. Optional stress/large-capacity jobs and broad discovery
+are outside this result. Merge, tag publication and public installed verification
+remain pending.
 
 ## Exit criteria
 
@@ -287,6 +300,6 @@ qualification and publication remain the delivery gates.
 - [x] Future-release lineage/removal/immutability gate is blocking; latest tooling retains every admitted source path.
 - [x] Package guidance, public binding and current HELIX specifications capture latest-only runtime support and forward database migration.
 - [x] Local boundaries, package payload and focused regression checks pass for the recorded exact artifacts.
-- [ ] Complete hosted Linux release/public-workload workflow passes for the final migration candidate.
+- [x] Complete hosted Linux release/public-workload workflow passes for the final migration candidate.
 - [ ] Reviewed PR is merged, v0.0.47 is published and its public checksums/assets/clean installed migration gates are verified.
 - [ ] First real subsequent edge supplies native skip-release-chain proof; no fabricated future-release evidence.

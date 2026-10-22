@@ -3,8 +3,9 @@
 Current delivery: [restore runtime migrations](04-build/runtime-migration-restoration-plan.md).
 The latest runtime is the sole support target. Previous databases migrate forward;
 old application runtimes do not remain supported. The UMF 0.10 routes are implemented in the v0.0.47 candidate;
-local installed-package evidence and pending hosted qualification are recorded
-in that plan. The candidate is unpublished. The PRD/ADR-008 amendment supersedes earlier upgrade withdrawal.
+52 installed migration cases without skips on macOS ARM64 and Linux x86_64, plus
+the complete Linux release/public-workload gate, pass for the frozen runtime.
+Merge, tag publication and public-install verification are recorded in that plan. The PRD/ADR-008 amendment supersedes earlier upgrade withdrawal.
 
 
 The historical [Python SDK v0.0.42](04-build/releases/v0.0.42.md) added

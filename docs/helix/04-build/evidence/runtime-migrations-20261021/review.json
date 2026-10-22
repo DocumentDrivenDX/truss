@@ -1,7 +1,7 @@
 {
   "observedAt": "2026-10-21T23:25:55.512008+00:00",
   "reviewKind": "Manual semantic review; no independent reviewer or formal proof claimed",
-  "sourceCommit": "04dc2b8b0aee1ad270d543c6ddde62bb9b69e069",
+  "sourceCommit": "885faa77397cbaa997b8e189638d630173f8ba3c",
   "findings": [
     {
       "id": "RM-R01",
@@ -103,14 +103,13 @@
   },
   "openProductFindings": [],
   "remainingGates": [
-    "Complete full Linux release workflow and original public workload",
     "Merge reviewed PR, publish tag workflow, verify public assets and clean installed migration matrix"
   ],
   "deferredByScope": [
     "First real subsequent edge supplies native multi-edge skip-release proof",
     "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
   ],
-  "updatedAt": "2026-10-22T00:23:19.658884+00:00",
+  "updatedAt": "2026-10-22T00:50:31.040543+00:00",
   "localAdditionalEvidence": {
     "atomicCapacityTests": 23,
     "passed": true,
@@ -127,6 +126,14 @@
     "remainingPreviewObserverFailures": 2,
     "correctedPreviewRaceCasesPassed": 2
   },
-  "reviewedRuntimeSource": "Final native inventory producer hashes; only delivery evidence may follow",
-  "finalMigrationManifestSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0"
+  "reviewedRuntimeSource": "885faa77397cbaa997b8e189638d630173f8ba3c; exact hosted package payload verified; only delivery evidence follows",
+  "finalMigrationManifestSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0",
+  "finalInstalledQualification": {
+    "local": "final-installed-local/qualification.json",
+    "linux": "hosted-linux/39699389717/qualification.json",
+    "testsPerPlatform": 52,
+    "skippedPerPlatform": 0,
+    "runtimeFiles": 445,
+    "fullWorkflow": "success"
+  }
 }

@@ -42,7 +42,7 @@ separate. For development against the current checkout, use `./scripts/truss-loc
 The latest application runtime is the sole support target. Existing databases
 from the exact v0.0.44 and shared v0.0.45/46 tuples move forward through explicit
 transactional migration with original-attempt recovery. Startup never upgrades
-or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0047-candidate),
+or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0047),
 [release notes](docs/helix/04-build/releases/v0.0.47.md) and
 [qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
 Broad test discovery, managed-service support and performance certification
