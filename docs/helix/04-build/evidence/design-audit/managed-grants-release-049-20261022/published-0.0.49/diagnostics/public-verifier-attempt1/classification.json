@@ -1,0 +1,8 @@
+{
+  "attempt1QualificationSha256": "1fbbdb3fa2d56c4f6dd31a1a0c029216902f471f3035b820590fba376a48eee8",
+  "bootstrapDiagnosisSha256": "02a80fd5d78c1c3b646350265f9d3e19098fc9e7f456da5cdb9eba558c3c5585",
+  "classification": "unqualified bootstrap diagnostic",
+  "failure": "The first public checker attempt stopped while bootstrapping its fresh venv (ensurepip) before PostgreSQL/runtime qualification.",
+  "qualificationClaim": false,
+  "resolutionEvidence": "The unchanged verifier succeeded when invoked with the canonical Python 3.11 executable; output2 is the separate required post-publication proof."
+}

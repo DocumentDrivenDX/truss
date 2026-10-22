@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "scope": "Offline conditional publication projection rebased after actual native2888 Mac qualification; only authorized repository documentation changed, no deployment/signing/native checks",
+  "condition": "Apply only after actual v0.0.49 publication, final tag Linux and new native2888 macOS qualification, and independent public receipt verification",
+  "patchSha256": "289c5eb87b09f8e39013c974716d40de53f0b58165e38433ee09b818f92c4488",
+  "checklistSha256": "21dc02a802f5574c842909c07f5e3c7c6be34e56048314ff8d8d0378fdb48800",
+  "files": [
+    {
+      "path": "README.md",
+      "baseSha256": "e0d35f201511c85477c42d2258c98eddb09df98eb46dea238ec78fb58c02755d",
+      "preparedSha256": "1674366a1429a2369a010cb1578239671525097e48f87747b27bc74021bd66b7"
+    },
+    {
+      "path": "docs/helix/README.md",
+      "baseSha256": "a1430c15c172b25f124f454520d086564d1d648042ee553f0c961b4cf838ea42",
+      "preparedSha256": "a9ca8cf666b0da95b8619753db808a9f325ce1146c1f8ef18029e3bee26d7f78"
+    },
+    {
+      "path": "website/content/_index.md",
+      "baseSha256": "204bef026a4b14498eba142ebbf945785d6a5a4a713a125476cbab0764585186",
+      "preparedSha256": "fe23a276e2b146f090b620bffa2b5101582fc5342ed7b89841ecd847b5281fed"
+    },
+    {
+      "path": "website/content/start.md",
+      "baseSha256": "964f0067721c717645bebf7c5b884c73f50139f2e3d443b71a8f65804f3f4740",
+      "preparedSha256": "3b72104b7f319ce74273170415dff9ce24af033f9889f85217e21453ace41f3c"
+    },
+    {
+      "path": "website/content/evidence.md",
+      "baseSha256": "2ab03337ebe644d0e9ef35ca176a72cb864387061b76885f6f38114b10f1fab8",
+      "preparedSha256": "d4d9f4583c8e595b470963269915be5eddd7622f3d8b2731141f21691fcf1147"
+    },
+    {
+      "path": "website/content/model.md",
+      "baseSha256": "cd534d254056b2941558249eb55c9557fb41d03d56a1d52791299e6d3668a401",
+      "preparedSha256": "c42cd91d92f2721d99a54395017d748cf61e7dbaddd53de39004aa0a0b2ed418"
+    }
+  ],
+  "checks": {
+    "gitApplyCheck": true,
+    "repositoryClean": false,
+    "websiteFrontmatterPreserved": true,
+    "deliveryConstraintsPreserved": true,
+    "historical48ReceiptLinksRetained": true,
+    "localRepositoryTargetsExistExceptExplicitFutureReceipt": true,
+    "ambiguous2888Weft557VersionLabelsRemoved": true,
+    "repositoryChangesLimitedToAuthorizedDocs": true,
+    "approvedFutureProjectionUnchanged": true
+  },
+  "limitations": [
+    "Future receipt is not yet present; its exact schema/outcomes must be reviewed before application",
+    "No site build, source signing, live deployment, public download, or native qualification executed",
+    "Private/GitHub diagnostic wheel retention is limited; durable hashes are not a permanent public binary release",
+    "Older make-public49-patch.py predates this reviewed projection and must not overwrite it"
+  ],
+  "linksChecked": [
+    "LICENSE.md",
+    "conditional-future:docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json",
+    "docs/helix/../../packages/python/README.md",
+    "docs/helix/00-discover/README.md",
+    "docs/helix/00-discover/competitive-analysis.md",
+    "docs/helix/00-discover/naming-research.md",
+    "docs/helix/00-discover/product-vision.md",
+    "docs/helix/00-discover/vision-input.md",
+    "docs/helix/01-frame/concerns.md",
+    "docs/helix/01-frame/feature-registry.md",
+    "docs/helix/01-frame/prd.md",
+    "docs/helix/01-frame/research-plan.md",
+    "docs/helix/02-design/adr/ADR-001-language-and-portable-core.md",
+    "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+    "docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md",
+    "docs/helix/02-design/architecture.md",
+    "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+    "docs/helix/02-design/contracts/CONTRACT-008-layout-bootstrap.md",
+    "docs/helix/02-design/contracts/CONTRACT-009-group-planning-and-locks.md",
+    "docs/helix/02-design/contracts/CONTRACT-012-weft-storage-handoff.md",
+    "docs/helix/02-design/contracts/diagnostics.proposal.md",
+    "docs/helix/02-design/contracts/reference-configuration.proposal.md",
+    "docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json",
+    "docs/helix/02-design/contracts/weft-integration-iteration-feedback.proposal.md",
+    "docs/helix/02-design/contracts/weft-review-columns-v0.12.proposal.md",
+    "docs/helix/02-design/contracts/weft-review-installation-gap-matrix.proposal.md",
+    "docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json",
+    "docs/helix/02-design/models/truss-layout-qualified-property-0.15.proposal.umf.json",
+    "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json",
+    "docs/helix/02-design/package-delivery.proposal.md",
+    "docs/helix/02-design/python-integration.proposal.md",
+    "docs/helix/02-design/solution-designs",
+    "docs/helix/02-design/spikes/SPIKE-001-apache-age.md",
+    "docs/helix/02-design/spikes/SPIKE-002-storage-bake-off.md",
+    "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md",
+    "docs/helix/02-design/storage-layout-review.md",
+    "docs/helix/03-test/diagnostics-test-plan.md",
+    "docs/helix/03-test/performance/README.md",
+    "docs/helix/03-test/reference-configuration-test-plan.md",
+    "docs/helix/03-test/test-plan.md",
+    "docs/helix/04-build/consumer-readiness-handoff.md",
+    "docs/helix/04-build/corpus/public-python/0.9/README.md",
+    "docs/helix/04-build/current-design-closure.md",
+    "docs/helix/04-build/design-coordination.md",
+    "docs/helix/04-build/design-coverage.md",
+    "docs/helix/04-build/design-decision-queue.md",
+    "docs/helix/04-build/evidence/design-audit/admission-elevation-native.json",
+    "docs/helix/04-build/evidence/design-audit/capacity-cache-core-source.json",
+    "docs/helix/04-build/evidence/design-audit/pg8000-four-family-original-admission-native.json",
+    "docs/helix/04-build/evidence/design-audit/private-callable-inventory-native.json",
+    "docs/helix/04-build/evidence/design-audit/weft-f05f2df-truss-regression.json",
+    "docs/helix/04-build/evidence/design-audit/weft-post-integration-source-sync.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-driver30/receipt.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-uvx-two-instances/receipt.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json",
+    "docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/validation.json",
+    "docs/helix/04-build/evidence/inert-assembly/README.md",
+    "docs/helix/04-build/evidence/isolated-local-install-20261021/published-0.0.46/linux-public-workload-status.json",
+    "docs/helix/04-build/evidence/native-layout-capture.md",
+    "docs/helix/04-build/evidence/runtime-migrations-20261021/published-0.0.47/validation.json",
+    "docs/helix/04-build/evidence/weft-source-binding012/README.md",
+    "docs/helix/04-build/implementation-plan.md",
+    "docs/helix/04-build/local-runtime-installation-migration-plan.md",
+    "docs/helix/04-build/managed-platform-grants-plan.md",
+    "docs/helix/04-build/migration-consumer-deployment-handoff.md",
+    "docs/helix/04-build/operation-ordinal-issuer-handoff.md",
+    "docs/helix/04-build/python-migration-installation-handoff.md",
+    "docs/helix/04-build/releases/v0.0.39.md",
+    "docs/helix/04-build/releases/v0.0.42.md",
+    "docs/helix/04-build/releases/v0.0.48.md",
+    "docs/helix/04-build/releases/v0.0.49.md",
+    "docs/helix/04-build/runtime-migration-restoration-plan.md",
+    "docs/helix/README.md",
+    "packages/postgresql/README.md",
+    "packages/python/README.md",
+    "packages/python/examples/adopter_workflow.py",
+    "website/content/evidence.md",
+    "website/content/model.md",
+    "website/content/start.md"
+  ],
+  "reviewHistory": [
+    {
+      "patchSha256": "f78d8f3f583dbff538dbb6bfc252109549bef106d7e8ed51b1c3d7681ae32feb",
+      "files": [
+        {
+          "path": "README.md",
+          "baseSha256": "8578710ca4b6c6ef0b03bb4a7f6b11ea8dce1458a3c0d29feec229206ec38486",
+          "preparedSha256": "1674366a1429a2369a010cb1578239671525097e48f87747b27bc74021bd66b7"
+        },
+        {
+          "path": "docs/helix/README.md",
+          "baseSha256": "a5b6b6a57a730ceb0bb14f140d0ffa5fad7a709a7c5bbfac93eff057de838935",
+          "preparedSha256": "a9ca8cf666b0da95b8619753db808a9f325ce1146c1f8ef18029e3bee26d7f78"
+        },
+        {
+          "path": "website/content/_index.md",
+          "baseSha256": "204bef026a4b14498eba142ebbf945785d6a5a4a713a125476cbab0764585186",
+          "preparedSha256": "fe23a276e2b146f090b620bffa2b5101582fc5342ed7b89841ecd847b5281fed"
+        },
+        {
+          "path": "website/content/start.md",
+          "baseSha256": "964f0067721c717645bebf7c5b884c73f50139f2e3d443b71a8f65804f3f4740",
+          "preparedSha256": "3b72104b7f319ce74273170415dff9ce24af033f9889f85217e21453ace41f3c"
+        },
+        {
+          "path": "website/content/evidence.md",
+          "baseSha256": "2ab03337ebe644d0e9ef35ca176a72cb864387061b76885f6f38114b10f1fab8",
+          "preparedSha256": "d4d9f4583c8e595b470963269915be5eddd7622f3d8b2731141f21691fcf1147"
+        },
+        {
+          "path": "website/content/model.md",
+          "baseSha256": "cd534d254056b2941558249eb55c9557fb41d03d56a1d52791299e6d3668a401",
+          "preparedSha256": "c42cd91d92f2721d99a54395017d748cf61e7dbaddd53de39004aa0a0b2ed418"
+        }
+      ],
+      "checks": {
+        "gitApplyCheck": true,
+        "repositoryClean": false,
+        "websiteFrontmatterPreserved": true,
+        "deliveryConstraintsPreserved": true,
+        "historical48ReceiptLinksRetained": true,
+        "localRepositoryTargetsExistExceptExplicitFutureReceipt": true,
+        "ambiguous2888Weft557VersionLabelsRemoved": true,
+        "repositoryChangesLimitedToAuthorizedDocs": true,
+        "approvedFutureProjectionUnchanged": true
+      }
+    },
+    {
+      "scope": "Previous conditional patch base before final readiness wording",
+      "patchSha256": "4679e957c039e231622c9d73d8d2ed5dee754f8c0d98dfe26188f55dfae0bf5b"
+    }
+  ]
+}

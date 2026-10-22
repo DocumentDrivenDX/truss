@@ -1,0 +1,1 @@
+{"passed": true, "checks": {"nativeVersion": true, "unixSocketNoTcp": true, "pgvector": true, "retainedCommitRestart": true, "ownedStopConfirmed": true, "supportedDriverExactDeclaredSuite": true, "sharedDatabaseRoleBaselineRestored": true, "cleanupCollision21Controls": true}, "elapsedSeconds": 21.93068145797588}

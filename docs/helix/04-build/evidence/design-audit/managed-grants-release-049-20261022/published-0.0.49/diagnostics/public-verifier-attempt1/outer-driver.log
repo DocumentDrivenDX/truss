@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-managed-grants-049/verify-public-049.py", line 636, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/private/tmp/truss-managed-grants-049/verify-public-049.py", line 507, in main
+    venv.EnvBuilder(with_pip=True, clear=False).create(venv_path)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/venv/__init__.py", line 77, in create
+    self._setup_pip(context)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/venv/__init__.py", line 359, in _setup_pip
+    self._call_new_python(context, '-m', 'ensurepip', '--upgrade',
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/venv/__init__.py", line 355, in _call_new_python
+    subprocess.check_output(args, **kwargs)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/private/tmp/truss-managed-grants-049/published-049-verification-1/public-venv/bin/python3.11', '-m', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.

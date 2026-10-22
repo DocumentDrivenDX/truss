@@ -1,0 +1,36 @@
+{
+  "scope": "Independent actual post-public49 evidence and reconciled documentation review; no native execution or repository edits by reviewer",
+  "passed": true,
+  "tagCommit": "dd13e95804abc30202d449a756240c6a684ab942",
+  "publicPacketReceiptSha256": "105a822e88eb22ed6795f52de5e86010b04d32ff4e25b98da36d654c408e1762",
+  "publicVerifierReceiptSha256": "10100735efef8d8ac3d631f677bdcb3e2b996a380b81b8410d95b90c2768e277",
+  "publicWheelSha256": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+  "retainedFilesVerified": 55,
+  "publicAssetsVerified": 17,
+  "actualChecks": {
+    "allNineStepExitCodesAndLogDigests": true,
+    "retainedMembershipHashSizeAndOriginalByteClosure": true,
+    "retainedVerifierAndRetentionProducerPins": true,
+    "supportedDriverExactDeclaredAndExecuted30NoSkips": true,
+    "workerControls21ExactExpectedObserved": true,
+    "nativeVectorSocketRestartAndOwnedCleanup": true,
+    "standaloneHf62ZeroFailuresErrorsSkipsAndImportIsolation": true,
+    "formerWholeGroupAuditDeadlineCasePassesUnchanged": true,
+    "separateMacLinuxCompilerHashesSharedSourceFreeze": true,
+    "wholeInstalledPayloadPgserver1714Truss467Weft2": true,
+    "originalPublicAssetApiSizeDigestFullSumsClosure": true,
+    "sourceInputAndCheckerProducerPinsStillMatch": true,
+    "ownedCleanupAfterHelperTerminalNoOwnedPostgres": true,
+    "noRetainedPathIgnoredAtIntendedRepositoryDestination": true
+  },
+  "bounds": [
+    "Actual public Mac scope: driver30, worker21, HF62 and runtime/vector/socket/restart; not a new public-wheel managed130/migration106 rerun",
+    "Exact tag Linux published managed130/HF62/migration106 receipts retained separately",
+    "Original ensurepip attempt1 remains failed/unqualified; same bytes canonicalPython launcher resolution is separate",
+    "No full-engine/broad-discovery/generalp95 or actualLakebase/Arras acceptance claim"
+  ],
+  "approvedThreeFilePatchSha256": "7d836d9795caf4a7a1f8d127aba900b5de9816317564862256426cf520de0e74",
+  "threeFilePatchApplyCheck": true,
+  "checkoutTrackedSourceUnchanged": true,
+  "approvedAction": "Root may copy reviewed packet and apply reviewed six-file and three-file documentation patches; site/deployment and release-body repair retain their separate checks"
+}

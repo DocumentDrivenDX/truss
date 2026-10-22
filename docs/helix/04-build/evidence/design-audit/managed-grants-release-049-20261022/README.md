@@ -1,9 +1,19 @@
 # Managed platform grants v0.0.49 release qualification
 
 This packet supports [PLAN-MANAGED-GRANTS-001](../../../managed-platform-grants-plan.md)
-and [RELEASE-PYTHON-0.0.49](../../../releases/v0.0.49.md). Final publication is
-pending. Preliminary results below do not establish qualification of a public
-v0.0.49 package.
+and [RELEASE-PYTHON-0.0.49](../../../releases/v0.0.49.md). v0.0.49 is published. The final public tag, assets, checksums, installed Mac
+ARM64 verifier, and retained setup diagnostics are bound by the [retained public v0.0.49 proof](published-0.0.49/receipt.json).
+The public Truss artifacts include wheel SHA-256
+`7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182`, sdist
+`34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a`, and
+HF archive `ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6`.
+The retained receipt binds all 17 public Truss assets to API digests and
+checksums, tag commit `dd13e95804abc30202d449a756240c6a684ab942`, and the installed
+Mac ARM64 proof. That Mac verifier passed its 30 declared supported-driver
+tests, 21 worker collision/cleanup controls and HF62; the tag Linux campaign
+passed managed130, HF62 and migrations106. The dated sections below preserve earlier candidate
+checkpoints and their original limits; the public receipt is the current
+release-status authority.
 
 The [public Weft0.4.51 dependency audit](dependencies/public-weft-051/verification.json)
 verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
@@ -11,8 +21,8 @@ inventories. Public packaging metadata binds source557 separately from the
 tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
 cohorts; Linux aarch64 remains packaging-only. No native tests run in this
 dependency audit. Current native2888 macOS ARM64 and branch Linux qualification
-pass on the same exact wheel below. Final tag and public verification remain
-pending; historical native35fd results retain their original scopes.
+pass on the same exact wheel below. The final tag and public verifier now
+qualify the published assets in the [retained public v0.0.49 proof](published-0.0.49/receipt.json); historical native35fd results retain their original scopes.
 
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
@@ -43,7 +53,8 @@ It records the wheel, input files, installed payload, exact independent UMF
 oracle, Bun and PostgreSQL identities and verifies them again at completion.
 The lifecycle producer is retained unchanged in the same directory. The final
 local record below is separate from preliminary evidence. Current macOS and
-hosted branch Linux receipts pass; final tag and public-download gates remain open.
+hosted branch Linux receipts pass. The later exact tag and public-download
+gates are complete; see the [retained public v0.0.49 proof](published-0.0.49/receipt.json).
 
 The mandatory finite release campaign is defined by
 [the release workflow](../../../../../../.github/workflows/release.yml).
@@ -145,8 +156,9 @@ The next gate is a fresh complete artifact freeze and the 21-module/130-test
 managed campaign, HF62, strict protected controls, all four source migration and
 recovery routes, lifecycle and the original public workload on the new native
 identity. Full macOS ARM64 and branch Linux qualification now pass below.
-Final tag/public verification remain pending. No release,
-full-engine, all-discovery or Lakebase acceptance is claimed.
+At this earlier candidate checkpoint, the tag/public verification gates
+remained pending. They are now complete for the published assets in the [retained public v0.0.49 proof](published-0.0.49/receipt.json).
+No full-engine, all-discovery or Lakebase acceptance is claimed.
 
 The [automatic comparison at source4188](audit-diagnostic-39854667352/receipt.json)
 remains red because public48's original and instrumented cases reached the
@@ -190,8 +202,8 @@ retained privately. The input payload audit's original `nativeQualification:
 pending` field remains its pre-gate observation; the completed workflow and
 aggregate receipt record the subsequent Linux result. No original evidence is
 rewritten. This is a branch Linux pass; publication was skipped. Current2888 full
-Mac qualification also passes below. The final tag campaign and public-download
-verification remain pending, with no Lakebase or full-engine claim.
+Mac qualification also passes below. The later final tag campaign and public-
+download verification are recorded in the [retained public v0.0.49 proof](published-0.0.49/receipt.json). Lakebase and full-engine acceptance remain separate.
 
 ## Current installed macOS ARM64 qualification — native manifest `288801f7…`
 
@@ -218,9 +230,11 @@ binds 53 original outputs retained losslessly. [Scoped cleanup](./final-local-28
 confirms no campaign-owned or newly created PostgreSQL process remains;
 unrelated pre-existing servers were outside custody and unchanged. The
 [retention statement](./final-local-2888/retention.json)
-records that exact branch wheel/sdist/archive containers are private or held in
-GitHub artifacts subject to retention limits, rather than permanent public
-release assets. Their hashes and payload identities remain durable. Final tag
-Linux and independent public-download verification are still required; these
-selected platform results make no publication, full-engine, broad discovery,
-general p95 or actual Lakebase/Arras acceptance claim.
+records that the exact branch wheel/sdist/archive containers are private or held
+in GitHub artifacts subject to retention limits. These branch artifacts are
+distinct from the published wheel, sdist and HF archive, whose full identities
+are in the [public proof](published-0.0.49/receipt.json). The published proof
+records the post-public Mac verifier, including its driver/worker controls and
+HF62 result, plus the exact tag Linux qualification (managed130, HF62 and
+migrations106). These selected platform results make no full-engine, broad
+discovery, general p95 or actual Lakebase/Arras acceptance claim.

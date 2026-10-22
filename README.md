@@ -13,19 +13,16 @@ use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Sta
 
 ## Run a private local instance
 
-The source candidate is **v0.0.49**, adding explicit managed platform grants to
-the separate [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
-The [macOS ARM64 campaign at commit `19d7bbe5`](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
-and [hosted Linux campaign at commit `4188141f`](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
-pass on the same exact wheel and native manifest, including all four published
-migration sources. Final tag qualification and public v0.0.49 verification remain
-pending; see the
-[v0.0.49 release notes](docs/helix/04-build/releases/v0.0.49.md) for current status.
-The command below requires checksum-verified public v0.0.49 assets and their
-matching tag. Do not substitute v0.0.48 when you need managed-grants support.
+The published **v0.0.49** release adds managed platform-grant policy and
+install API/CLI support to the [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
+The [release notes](docs/helix/04-build/releases/v0.0.49.md) and
+[published verification receipt](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json)
+identify the exact artifacts and qualification limits. The command below uses
+checksum-verified public v0.0.49 assets and their matching tag; managed-grants
+support requires v0.0.49.
 
 With `uv` installed, run the v0.0.49 launcher in an isolated Python3.11 tool
-environment after its assets are qualified and public:
+environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
@@ -49,19 +46,19 @@ Tools still embed the Python library, connect with an ordinary identity and
 register UMF documents; public business-role and module-access configuration is
 separate. For development against the current checkout, use `./scripts/truss-local`.
 
-**Source candidate v0.0.49:** native `0.74-candidate`, Weft `0.4.51`, UMF core
-`0.10.0`. It adds managed platform grants to the v0.0.48 HF baseline. Final
-v0.0.49 installed qualification passes for the recorded macOS ARM64 commit `19d7bbe5`
-and Linux commit `4188141f` tuples on native manifest SHA-256 prefix `288801f7`.
-Final tag qualification and public verification remain pending. The latest
-application runtime is the sole support target. Existing
-databases from the exact v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48
-tuples move forward through explicit transactional migration with
+**Published v0.0.49:** native `0.74-candidate`, Weft `0.4.51`, UMF core
+`0.10.0`. The [release notes](docs/helix/04-build/releases/v0.0.49.md) and
+[published verification receipt](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json)
+bind native manifest SHA-256 prefix `288801f7`, four admitted migration sources
+(106 cases), HF62, the managed 21-module/130-test gate, the public Weft 0.4.51
+cohort from compiler source revision `55715373…`, and selected installed
+Linux/macOS qualification. Only the latest application runtime is supported.
+The latest tool provides offline, explicit transactional forward migration for
+the exact v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48 tuples, with
 original-attempt recovery and no release-age cutoff. Startup never upgrades or
 resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0049),
-[v0.0.49 draft](docs/helix/04-build/releases/v0.0.49.md), the historical
-[v0.0.48 release notes](docs/helix/04-build/releases/v0.0.48.md), and the
-[migration qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
+the historical [v0.0.48 release notes](docs/helix/04-build/releases/v0.0.48.md),
+and the [migration qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
 Actual Lakebase acceptance and broader managed-service support require separate
 qualification.
 

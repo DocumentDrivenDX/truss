@@ -1,23 +1,28 @@
 # truss project documentation
 
-[Managed platform grants](04-build/managed-platform-grants-plan.md) are implemented
-in the [v0.0.49 source candidate](04-build/releases/v0.0.49.md), with explicit
-retained grantee policy, typed contained refusals and lifecycle/migration
-consistency. The [macOS ARM64 campaign at commit `19d7bbe5`](04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
-and [hosted Linux campaign at commit `4188141f`](04-build/evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
-pass on the same exact wheel and native manifest SHA-256 prefix `288801f7`,
-including all four published migration sources. Final tag qualification and
-public-download verification remain pending; v0.0.49 is not yet published.
-Arras is the active consumer name; historical Praxis requests and snapshots
-retain their original provenance. Actual Lakebase support requires separate
-consumer/service qualification.
+[Managed platform grants](04-build/managed-platform-grants-plan.md) are included
+in the published [v0.0.49 release](04-build/releases/v0.0.49.md), with an
+explicit retained grantee policy, typed contained refusals, install API/CLI
+support, and lifecycle/migration consistency. The [published verification
+receipt](04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json)
+records native manifest SHA-256 prefix `288801f7`, four admitted migration sources (106 cases),
+HF62, the managed 21-module/130-test gate, the public Weft 0.4.51 cohort from compiler source revision `55715373…`, and selected
+installed Linux/macOS qualification. The release notes and receipt define the
+exact artifact tuple and limits. Arras is the active consumer name; historical
+Praxis requests and snapshots retain their original provenance. Actual Lakebase
+support requires separate consumer/service qualification.
 
-Current public delivery: [runtime migrations released in v0.0.48](04-build/runtime-migration-restoration-plan.md) and [release notes](04-build/releases/v0.0.48.md).
+Current public delivery: [v0.0.49 release notes](04-build/releases/v0.0.49.md)
+and [published verification](04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
 Only the latest application runtime is supported. Every admitted database retains
 an unexpired forward route to the latest runtime; previous application runtimes
-do not remain supported. The v0.0.48 public gate covers the exact UMF 0.10
-v0.0.44 source, shared v0.0.45/46 lineage and v0.0.47 predecessor on PostgreSQL
-18.6. Public Linux and clean macOS ARM64 receipts cover the 80-case migration gate,
+do not remain supported. The latest tool performs explicit offline transactional migration for the admitted
+v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48 tuples on PostgreSQL 18.6.
+Startup never upgrades or resets a database. The v0.0.49 evidence adds explicit managed platform
+grants while retaining the separately qualified predecessor lineage; consult
+its release notes and receipt for exact PostgreSQL, dependency, artifact and
+case boundaries. The v0.0.48 public gate covered the exact UMF 0.10 v0.0.44
+source, shared v0.0.45/46 lineage and v0.0.47 predecessor on PostgreSQL 18.6. Historical v0.0.48 Linux and clean macOS ARM64 receipts cover its 80-case migration gate,
 the 62-case independent archive and the selected driver and `uvx` checks:
 [Linux 80-case migration receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json), [macOS 80-case migration receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json),
 [Linux 62-case conformance receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json), [macOS 62-case conformance receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json),
