@@ -387,7 +387,7 @@
     "packages/python/tests/test_current_disclosure_api.py": "fdf7ee59dbc05ac6445e39f633ac23e13eed67b18914a1a1e82133010389331a",
     "packages/python/tests/test_current_disclosure_capture_closing.py": "d94ec928e70ec5ce95fcd9047605bd13795985d4c7c7f462602d27d2b2763c2b",
     "packages/python/tests/test_current_disclosure_codecs_native.py": "19de148b766e39257e9b04e9e8e0755fbba8a7f77d3b991908526e1335182bd6",
-    "packages/python/tests/test_current_disclosure_cohort.py": "f59c4edc922f14e8b94b5bbd2ad927cce5c0dadc3ae97facf33416a5909667e4",
+    "packages/python/tests/test_current_disclosure_cohort.py": "a9095b31316df8d5e73596c5928bdd390de4fabbffd53cb557c039384190786a",
     "packages/python/tests/test_current_disclosure_compiler_integration.py": "c7cd39a9fac99c0af14ddb7ddaad8ec2bfff7a43643fcb4ba64319a4fccbfd9c",
     "packages/python/tests/test_current_disclosure_context_capture.py": "33abf4fc9981f32245553a91e8a1188ac079957ca1e5e58ede449d31d9f51d44",
     "packages/python/tests/test_current_disclosure_context_native.py": "9bd7b5fa9c345bcb6774c05bdfad7761517ebe492e2b73b59fa3eab1a8974435",
@@ -693,15 +693,15 @@
   "compilerCohorts": [
     {
       "platform": "macos-arm64",
-      "sourceRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
-      "wheelSha256": "a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe",
-      "nativeModuleSha256": "93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2"
+      "sourceRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "wheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+      "nativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa"
     },
     {
       "platform": "linux-x86_64",
-      "sourceRevision": "86c092178bb8ca1a0d84edfebc175009d8862493",
-      "wheelSha256": "b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f",
-      "nativeModuleSha256": "cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a"
+      "sourceRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "wheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+      "nativeModuleSha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445"
     }
   ]
 }

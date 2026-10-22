@@ -1,0 +1,2 @@
+/private/tmp/truss-048-arras-source557-venv/bin/python scripts/run-hf-conformance.py --installed-package --output /private/tmp/truss-048-arras-source557-hf-evidence-refreshed/conformance.json
+Working directory: /private/tmp/truss-048-arras-source557-hf-conformance-refreshed

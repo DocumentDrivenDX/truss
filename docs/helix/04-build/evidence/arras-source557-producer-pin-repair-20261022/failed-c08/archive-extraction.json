@@ -1,0 +1,15 @@
+{
+  "archive": "/private/tmp/truss-048-arras-source557-conformance.zip",
+  "sha256": "c08c88f9b6c8c3184f56f6123f484b9360d28424f83541d4fd7b417714f3829a",
+  "zipEntries": 412,
+  "manifestFiles": 410,
+  "extractedFiles": 412,
+  "profileCases": 62,
+  "producerPins": 363,
+  "profile": "truss-hf-conformance/0.1",
+  "toolkitVersion": "0.0.48",
+  "compilerVersion": "0.4.51",
+  "sourceManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "root": "/private/tmp/truss-048-arras-source557-hf-conformance",
+  "allArchiveFilesMatchManifest": true
+}

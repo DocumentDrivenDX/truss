@@ -869,6 +869,55 @@ This closes only the local full-workspace gate for those source bytes. Hosted
 Linux conformance, browser/native packaging, installed Truss adoption, publication
 and public-release gates remain separate and are not credited from this run.
 
+### Selected Weft full-workspace follow-up — 2026-10-22
+
+The preceding full-workspace pass is evidence for integration source
+`6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a`; it does not close the selected
+Weft 0.4.51 source release gate. A later selected-source candidate run at
+`84bde6e6f1ebe406cf01f4b344c977739dbe0180`, with the restored historical B-001
+harness from `e43b7a8c`, failed one runtime `cfg(test)` assertion. Its retained
+B-006 request is UMF 0.7.0; the current envelope correctly returns `WFT-INPUT`
+without SQL, while the old test expected the historical compiled response.
+Selected Weft commit `56d5507c` corrects only that test expectation, retaining
+the old source request and golden unchanged. The original candidate log and the
+test correction are recorded in the [selected full-workspace evidence
+packet](evidence/hohfeld-followup-20261021/weft-full-workspace-arras-051-failure/README.md).
+
+The candidate attempt completed 42 result groups with 1,012 passed and one
+failed. The qualified attempt was deliberately stopped after 29 groups and 682
+passing tests; it has no terminal Cargo result and is not a pass. Both full
+selected-source variants must be rerun and exit successfully before a new final
+source freeze or final-source Mac/Linux build. The earlier `86c` Mac wheel and
+`616aa7b6` Linux packaging artifacts remain intact as historical evidence but
+are superseded as active final-release candidates. Do not transfer their
+compiler pins into Truss or claim a replacement binary/cohort from this update.
+
+After both suites pass, freeze the tested selected source, build the Mac wheel
+with the release workflow's Rust 1.90.0 and maturin 1.9.6 into a source-keyed
+fresh output directory, and use a dedicated `CARGO_TARGET_DIR` with
+`CARGO_INCREMENTAL=0`. Verify the exact wheel archive, RECORD, metadata, ABI,
+notices and embedded native-module digest with
+`scripts/release/verify-wheel-packaging.py`; retain the new wheel/native hashes
+and source correspondence without overwriting the `a21`/`86c` artifacts. Rebuild
+Linux only from the same new freeze, then refresh Truss's active source and Mac
+and Linux compiler cohort identities from those actual wheel bytes and rerun
+the installed-consumer and release gates. New builds, Truss pin changes, hosted
+overall conformance and public release remain pending; no new binary or release
+is credited here.
+
+### Candidate invocation source-start correction — 2026-10-22
+
+The candidate command began with Weft `HEAD` at `874e0f67255be297ee321024e8f6d180c668f951`
+and four dirty B-001 paths whose bytes match the later `e43b7a8c` commit.
+During the run, `HEAD` advanced through `e43b7a8c` to `84bde6e6`; the latter
+changed only the Ubuntu apt-source helper and the two CI workflow files. This
+clarifies the earlier packet's `selectedSourceRevision` field without changing
+its original logs or receipt. The separate [source-start provenance
+correction](evidence/hohfeld-followup-20261021/weft-full-workspace-arras-051-failure/source-start-provenance-correction.md)
+preserves the captured B-001 patch and per-file blob correspondence. The
+candidate result remains failed historical evidence; this clarification adds
+no suite pass, binary, cohort or release claim.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
@@ -904,3 +953,31 @@ Earlier embedder prose permitting nameless registration is superseded by the
 0.0.45 contract/release. Older planning statements that upgrades are forbidden
 are superseded by the restoration plan and actual v0.0.47 release evidence;
 original older release claims remain historical.
+
+
+### 2026-10-22 19:09 UTC — source-F local qualification complete
+
+The actual rebuilt Weft compiler/build source is
+`557153731e9f5d0583193a1189a07c6ed485d3d3`. The prior source-86 module differs
+and supplies no transferred native qualification. The new installed macOS ARM64
+candidate passes 80 migration cases, 62 independent archive cases, six cohort
+controls, 14 policy executions covering 10 distinct controls, and the original
+1,000-object/1,000-edge public workload. Final suites have no failures, errors or
+skips. All 455 runtime payloads match the original source, wheel and sdist built
+at `22ed3335`.
+
+The original sandboxed migration refusal, skipped policy run and enabled policy
+statement-timeout failure remain preserved. The serialized policy retry passes
+the same 2-second statement and 30-second operation limits; the timeout cause is
+unproven. The public workload separately retains its 10-second statement limit.
+The strict archive initially refused one stale producer hash after the expected
+compiler-cohort literals changed. A reviewed one-pin amendment preserves the
+prior source/corpus/archive/log and all unchanged expectations; its rebuilt
+archive passes all 363 producer checks and all 62 native cases.
+
+[Exact source-F evidence](evidence/hohfeld-followup-20261021/installed-048-arras-source557/receipt.json)
+and the [producer-pin repair](evidence/arras-source557-producer-pin-repair-20261022/README.md)
+retain the original bytes and explicit source correspondence. Public Weft
+publication/adoption, Truss tag-bound Linux gates and clean public-artifact
+verification remain open. Runtime support stays latest-only; admitted UMF 0.10
+sources migrate forward without a release-age cutoff.

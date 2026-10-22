@@ -1,0 +1,86 @@
+{
+  "status": "candidate-failed-qualified-cancelled",
+  "observedAt": "2026-10-22",
+  "platform": "macOS ARM64",
+  "rust": "1.90.0",
+  "selectedSourceRevision": "84bde6e6f1ebe406cf01f4b344c977739dbe0180",
+  "historicalB001HarnessRevision": "e43b7a8c68d870a88cba15349b63884dd64d578f",
+  "testOnlyCorrectionRevision": "56d5507c6b0169574277661dd85d8c5feb22e6a7",
+  "historicalB006Artifact": {
+    "path": "docs/helix/04-build/evidence/B-006-cross-module-native/compile.json",
+    "sha256": "f8492391b65b717be213fbafb6fbdbcb8c8d9fe7cec9d77461ee420464bf0560",
+    "umfVersion": "0.7.0",
+    "retainedUnchanged": true
+  },
+  "targetDirectory": "/private/tmp/weft-arras-051-full-target",
+  "candidate": {
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--features",
+      "weft-runtime/truss-postgresql-candidate,weft-runtime/ashlar-databricks-candidate,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+      "--locked",
+      "--offline"
+    ],
+    "exitCode": 101,
+    "groups": 42,
+    "passed": 1012,
+    "failed": 1,
+    "ignored": 0,
+    "filtered": 0,
+    "failedTest": "ashlar_tests::ashlar_feature_controls_registration_and_retains_public_artifact",
+    "failure": "Historical UMF 0.7.0 B-006 request now receives WFT-INPUT from the current source envelope; stale cfg(test) expectation asserted the historical compiled response.",
+    "log": {
+      "path": "original-candidate.log",
+      "sha256": "826d66f5c9baa2f7fe88ba685d34d8b5f30326ae99da8084a3820f33e593dbe3"
+    }
+  },
+  "qualified": {
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--features",
+      "weft-runtime/truss-postgresql-qualified,weft-runtime/ashlar-databricks-qualified,weft-runtime/test-original,weft-runtime/test-third,weft-postgresql/conformance-original",
+      "--locked",
+      "--offline"
+    ],
+    "status": "cancelled-before-completion",
+    "completedGroups": 29,
+    "passedBeforeCancellation": 682,
+    "reportedFailuresBeforeCancellation": 0,
+    "stopConfirmation": "Parent confirmed process group 27993 was deliberately stopped.",
+    "log": {
+      "path": "original-qualified-cancelled.log",
+      "sha256": "431cc820cb5d72b1373f92a6689acbfdf392bcb1e89494f2371aeb893583e293"
+    }
+  },
+  "testOnlyCorrectionPatch": {
+    "path": "test-only-ashlar-expectation-correction.patch",
+    "sha256": "cf718d06a6d7e91efdb8efd04598eec0b64bcecb40342e8b051f276ae3576f71"
+  },
+  "releaseCandidateSuperseded": {
+    "sourceFreeze": "86c092178bb8ca1a0d84edfebc175009d8862493",
+    "macWheelSha256": "a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe",
+    "macNativeModuleSha256": "93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2",
+    "linuxPackagingRun": 39811059843,
+    "linuxX8664WheelSha256": "b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f",
+    "linuxX8664NativeModuleSha256": "cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a",
+    "disposition": "Historical evidence retained; not an active final-release candidate."
+  },
+  "remainingGates": [
+    "Both repaired selected-source full-suite variants pass.",
+    "Create a new selected-source freeze after the suite results.",
+    "Build and verify a new Mac wheel and native module into fresh output paths.",
+    "Rebuild Linux artifacts from the new source freeze.",
+    "Refresh Truss active source and exact compiler cohort identities from actual new artifacts.",
+    "Run the exact installed Truss, hosted conformance and release gates for the new tuple."
+  ],
+  "claims": {
+    "replacementBinaryBuilt": false,
+    "newTrussCohortAdmitted": false,
+    "overallHostedConformancePassed": false,
+    "publicReleasePublished": false
+  }
+}

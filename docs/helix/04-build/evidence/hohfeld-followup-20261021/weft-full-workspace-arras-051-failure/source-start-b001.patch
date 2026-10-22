@@ -1,0 +1,71 @@
+diff --git a/spikes/b001/README.md b/spikes/b001/README.md
+index 95960f07..184d7d60 100644
+--- a/spikes/b001/README.md
++++ b/spikes/b001/README.md
+@@ -4,7 +4,7 @@ This experiment implements one shared Rust core, a PyO3 extension and a wasm-bin
+ 
+ Slice: one supplied UMF 0.7.0 owning document and selected module; one explicit source alias; one qualified column projection; optional WHERE equality-to-literal predicates combined by AND. Known required single fields: strings, booleans, integer widths 1–64 and decimal precision 1–28. The core gates sqlparser's broader syntax with a separate narrow grammar. Models retain their exact source text and unknown numbers/extensions; selected unsupported fields/facets refuse. Digests, SQL/request/model/token/JSON depth/value limits and duplicate keys have guards. This reader is a participating-subset experiment, **not complete UMF schema or semantic validation**. No joins, aggregates, module bundles, backend registry, public IR, complete diagnostics, policy obligations or production binding validation are implemented.
+ 
+-`check_native.py` adapts only the 575 numeric scenarios from the independent specification corpus to `spike.synthetic`; the original fixture files and expected values stay unchanged. It adds 22 spike scenarios for exact-value transport, unknown numbers, hostile strings, pin/version/type/grammar/limit/duplicate-key guards and atomic refusal. Reports compare byte-for-byte across Rust CLI, native Python and real Chromium. The Python-only smoke disables subprocesses and clears executable PATH. Browser initialization uses local routed resources; compilation runs with network APIs disabled and no Node globals. WASM imports are checked against the single reference-table initializer.
++`check_native.py` adapts the 575 original UMF 0.7.0 numeric scenarios to `spike.synthetic`; the complete source fixture and expected values are retained byte-for-byte in `fixtures/cases-umf070.json`, from the original 2026-10-05 B-001 source corpus at commit `ef1ce847de6f23f0b9991f9ef5501a6dfdd7a06d`. Its SHA-256 is `5d13b1d0d77074193e678321406f57a9ce34e49cd413649f0f7f7210262c6306`; it contains 636 cases and retains 288 compiled and 287 blocked numeric expectations. The current shared specification fixture is independently versioned and must not replace this 0.7.0 spike input. The harness adds 22 spike scenarios for exact-value transport, unknown numbers, hostile strings, pin/version/type/grammar/limit/duplicate-key guards and atomic refusal. Reports compare byte-for-byte across Rust CLI, native Python and real Chromium. The Python-only smoke disables subprocesses and clears executable PATH. Browser initialization uses local routed resources; compilation runs with network APIs disabled and no Node globals. WASM imports are checked against the single reference-table initializer.
+ 
+ ## Reproduce
+ 
+diff --git a/spikes/b001/check_native.py b/spikes/b001/check_native.py
+index 020a41f9..fb1e16d8 100644
+--- a/spikes/b001/check_native.py
++++ b/spikes/b001/check_native.py
+@@ -3,7 +3,7 @@ import copy, hashlib, json, os, pathlib, platform, subprocess, sys
+ import weft_spike
+ ROOT=pathlib.Path(__file__).resolve().parents[2]
+ OUT=ROOT/'target'/'b001';OUT.mkdir(parents=True,exist_ok=True)
+-corpus=json.loads((ROOT/'docs/helix/03-test/fixtures/cases.json').read_text())
++corpus=json.loads((ROOT/'spikes/b001/fixtures/cases-umf070.json').read_text())
+ def adapt(req):
+  r=copy.deepcopy(req);r['target']['backendId']='spike.synthetic';return r
+ cases=[{'id':c['id'],'request':json.dumps(adapt(c['request']),ensure_ascii=False),'expected':c['expected']} for c in corpus if c['category']=='numeric']
+diff --git a/spikes/b001/core/tests/boundary.rs b/spikes/b001/core/tests/boundary.rs
+index cdcc91b0..4b6c0ca4 100644
+--- a/spikes/b001/core/tests/boundary.rs
++++ b/spikes/b001/core/tests/boundary.rs
+@@ -1,12 +1,17 @@
+-use serde_json::{json, Value};
++use serde_json::{Value, json};
++use sha2::{Digest, Sha256};
+ use weft_spike_core::compile_json;
+ #[test]
+ fn numeric_corpus_uses_independent_expected_domains() {
+-    let cases: Value = serde_json::from_str(include_str!(
+-        "../../../../docs/helix/03-test/fixtures/cases.json"
+-    ))
+-    .unwrap();
++    let original_corpus = include_bytes!("../../fixtures/cases-umf070.json");
++    assert_eq!(
++        format!("{:x}", Sha256::digest(original_corpus)),
++        "5d13b1d0d77074193e678321406f57a9ce34e49cd413649f0f7f7210262c6306"
++    );
++    let cases: Value = serde_json::from_slice(original_corpus).unwrap();
+     let mut count = 0;
++    let mut compiled = 0;
++    let mut blocked = 0;
+     for case in cases
+         .as_array()
+         .unwrap()
+@@ -22,12 +27,17 @@ fn numeric_corpus_uses_independent_expected_domains() {
+             case["id"]
+         );
+         if response["status"] == "blocked" {
++            blocked += 1;
+             assert_eq!(response["code"], case["expected"]["code"], "{}", case["id"]);
+             assert!(response.get("sql").is_none());
++        } else {
++            compiled += 1;
+         }
+         count += 1;
+     }
+     assert_eq!(count, 575);
++    assert_eq!(compiled, 288);
++    assert_eq!(blocked, 287);
+ }
+ #[test]
+ fn duplicate_keys_are_not_discarded() {
