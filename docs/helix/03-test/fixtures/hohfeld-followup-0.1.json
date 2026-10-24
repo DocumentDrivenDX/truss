@@ -1,6 +1,6 @@
 {
   "profile": "truss-hf-conformance/0.1",
-  "toolkitVersion": "0.0.49",
+  "toolkitVersion": "0.0.50",
   "compilerVersion": "0.4.51",
   "umfVersion": "0.10.0",
   "postgresqlVersion": "18.6",

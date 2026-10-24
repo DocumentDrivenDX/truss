@@ -553,9 +553,9 @@ def _refuse_extension_membership(cursor, namespace, relations, routines, types):
         UNION ALL SELECT 'pg_catalog.pg_class'::regclass,unnest(%s::oid[])
         UNION ALL SELECT 'pg_catalog.pg_proc'::regclass,unnest(%s::oid[])
         UNION ALL SELECT 'pg_catalog.pg_type'::regclass,unnest(%s::oid[]))
-        SELECT DISTINCT c.classid,c.objid FROM candidates c
+        SELECT DISTINCT c.classid::oid,c.objid FROM candidates c
         JOIN pg_catalog.pg_depend d ON d.classid=c.classid AND d.objid=c.objid
-        WHERE d.deptype='e' ORDER BY c.classid,c.objid LIMIT 1''',
+        WHERE d.deptype='e' ORDER BY c.classid::oid,c.objid LIMIT 1''',
         (namespace, relation_oids, routine_oids, type_oids), prepare=False)
     rows = _rows_from_cursor(cursor)
     if any(len(row) != 2 or type(row[0]) is not int or type(row[1]) is not int

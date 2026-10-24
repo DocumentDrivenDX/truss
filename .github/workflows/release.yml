@@ -32,6 +32,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Check active HF release cohort bindings
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest test_release_cohort_binding -v
       - name: Check large-workload runner capacity controls
         env:
           PYTHONPATH: packages/python/tests
