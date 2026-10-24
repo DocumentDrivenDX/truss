@@ -124,6 +124,68 @@ ACL-entry ordering. Nonempty managed-policy and final-census ordering remain
 unchanged. The existing regression assertion is retained; the corrected source
 still requires its native rerun and complete final-source release gates.
 
+The `c1464cfe` local campaign passed all five batching controls and the unchanged
+schema-first managed-grant regression, with no skips and restored worker
+inventory after each phase. Both complete installation calls returned successful
+pending installations. The comparison harness then rejected both snapshots:
+PostgreSQL serializes native OID fields as JSON strings, while the harness
+incorrectly required integers. Its snapshot comparison also needs explicit
+treatment of the source-generated validator secret. The failed comparison
+(`d25b673df8f4587a80bd467059192118a300a47089b4118f14af5be24fff530d`)
+and stopped/removed-worker receipt
+(`ff7a7793a5e45cd61b1f867248f68a0515dc3d5e7d73ccc6ae3837c43d7a6a71`)
+remain immutable. The observed 3,409 and 114 execute calls are provisional
+measurements, not a completed equivalence or acceptance result.
+
+### Fresh-install comparison profile
+
+This one-off 0.0.50 repair comparison binds both phases to native manifest
+`288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4` and
+the original `runtime.sql` SHA-256
+`383b2280e20b3dd6bd31f7edc7654f83ebd7fefc1670739e24c3cf72c85c86cb`.
+Independent fresh installations contain per-install generated identities and
+secrets. The comparison may normalize only these named fields after
+validating their native meaning:
+
+- `catalog_runtime_installation.installation_id`, `.source_epoch` and
+  `.genesis_at`, plus the source-identical revision zero
+  `schema_rev.accepted_at`. Retain original values as per-run evidence.
+- `catalog_runtime_installation.owner_oid` and `.registrar_oid`. Require canonical nonzero unsigned
+  32-bit OID text and bind each value to its exact observed native role name;
+  retain the original OID/name evidence before comparing fixed role names.
+- The single `reader_catalog_validator_secret.secret` value. Require exactly
+  one row and the exact field set, native `bytea` length 32, canonical JSON hex,
+  and agreement with an independent native hex/length observation. Retain a
+  SHA-256 commitment to the original bytes and the source binding; never export
+  the secret. Compare an explicit generated-value marker only for this field.
+
+Both phases must pass these generation checks, and their validator-secret
+commitments must differ. Distinct commitments establish a fresh-value
+distinction, not an entropy-quality claim. Full canonical snapshot equality
+alone cannot pass qualification. Every other row and cardinality, native
+definition, ACL, role attribute, membership and sequence state remains exact;
+UUID or time defaults on empty tables receive no blanket normalization. Any
+additional difference fails closed and requires a separately justified profile
+change. This diagnostic profile changes no installed format or runtime API.
+Migration preservation checks remain unchanged and compare original data without
+this fresh-database normalization.
+
+The repaired diagnostic passes 39 focused pure controls. Independent review also
+passes all 18 measurement controls, including the actual snapshot collector with
+native-shaped JSON OID strings and negative identity cases, original generation
+evidence retention, secret redaction, exact public-0.0.49 helper absence and
+candidate helper requirements. These controls clear the source for the hosted
+campaign; they do not establish a successful native comparison or release gate.
+
+If the developer machine cannot complete this comparison reliably, the same
+driver and exact subjects may run serially on one owned worker in the existing
+Linux release job. Retain original 60-second limits, complete snapshots and
+explicit cleanup; bind the report to the candidate wheel/source payload and
+publication checks. This fresh 0.0.49 performance fixture is specific to the
+0.0.50 repair, not perpetual support for an old application runtime. All admitted
+database forward-migration gates remain mandatory in future releases. Arras's
+fresh installed Mac and actual Lakebase WAN acceptance remain separate gates.
+
 ## Scope
 
 Address the Lakebase installation blocker reported by the consumer now named Arras with an explicit,

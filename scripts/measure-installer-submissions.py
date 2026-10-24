@@ -22,6 +22,7 @@ import subprocess
 import sys
 import time
 import tomllib
+import traceback
 import zipfile
 from contextvars import ContextVar
 from datetime import UTC, datetime
@@ -41,6 +42,13 @@ BASELINE_VERSION = "0.0.49"
 BASELINE_WHEEL_SHA256 = (
     "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182"
 )
+RUNTIME_SQL_SHA256 = "383b2280e20b3dd6bd31f7edc7654f83ebd7fefc1670739e24c3cf72c85c86cb"
+NATIVE_MANIFEST_SHA256 = (
+    "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4"
+)
+_OID_MAX = (1 << 32) - 1
+_VALIDATOR_SECRET_TABLE = "truss.reader_catalog_validator_secret"
+_SNAPSHOT_PROFILE = "truss-fresh-install-snapshot/1"
 _ACTIVE_MEASUREMENT: ContextVar[dict[str, Any] | None] = ContextVar(
     "truss_installer_measurement", default=None
 )
@@ -59,6 +67,403 @@ def _canonical_bytes(value: Any) -> bytes:
 def _object(value: Any) -> dict[str, Any]:
     """Narrow JSON-derived values before inspecting a nested object."""
     return cast(dict[str, Any], value) if isinstance(value, dict) else {}
+
+
+def _canonical_oid_text(value: Any) -> int:
+    """Parse canonical PostgreSQL OID text without accepting lossy coercions."""
+    if type(value) is not str or not value or not value.isascii():
+        raise RuntimeError("Native OID text is not canonical ASCII")
+    if value[0] == "0" or not value.isdecimal():
+        raise RuntimeError("Native OID text is not canonical decimal")
+    parsed = int(value)
+    if parsed <= 0 or parsed > _OID_MAX or str(parsed) != value:
+        raise RuntimeError("Native OID text is outside the supported range")
+    return parsed
+
+
+def _safe_traceback_location(error: BaseException) -> dict[str, Any] | None:
+    frames = traceback.extract_tb(error.__traceback__)
+    local_frames = [
+        frame
+        for frame in frames
+        if Path(frame.filename).resolve() == Path(__file__).resolve()
+    ]
+    if not local_frames:
+        return None
+    frame = local_frames[-1]
+    return {
+        "basename": Path(frame.filename).name,
+        "function": frame.name,
+        "line": frame.lineno,
+    }
+
+
+def _validator_secret_evidence(
+    value: Any, *, runtime_sql_sha256: Any, native_manifest_sha256: Any
+) -> dict[str, Any]:
+    """Validate and project a secret commitment without retaining secret bytes."""
+    evidence = _object(value)
+    if set(evidence) != {
+        "status",
+        "table",
+        "column",
+        "rowCount",
+        "secretBytes",
+        "secretSha256",
+        "runtimeSqlSha256",
+        "nativeManifestSha256",
+    }:
+        raise ValueError("Validator secret evidence fields are not closed")
+    digest = evidence.get("secretSha256")
+    if (
+        evidence.get("status") != "validated"
+        or evidence.get("table") != _VALIDATOR_SECRET_TABLE
+        or evidence.get("column") != "secret"
+        or type(evidence.get("rowCount")) is not int
+        or evidence.get("rowCount") != 1
+        or type(evidence.get("secretBytes")) is not int
+        or evidence.get("secretBytes") != 32
+        or evidence.get("runtimeSqlSha256") != runtime_sql_sha256
+        or evidence.get("nativeManifestSha256") != native_manifest_sha256
+        or type(digest) is not str
+        or len(digest) != 64
+        or any(character not in "0123456789abcdef" for character in digest)
+    ):
+        raise ValueError("Validator secret evidence is invalid")
+    return evidence
+
+
+def _snapshot_evidence(
+    value: Any, *, runtime_sql_sha256: Any, native_manifest_sha256: Any
+) -> dict[str, Any]:
+    """Validate the closed original-identity and secret proof for one snapshot."""
+    evidence = _object(value)
+    expected_keys = {
+        "profile",
+        "nativeManifestSha256",
+        "runtimeSqlSha256",
+        "installationIdentity",
+        "schemaRevision",
+        "nativeRoleBindings",
+        "validatorSecret",
+    }
+    if set(evidence) != expected_keys:
+        raise ValueError("Installation snapshot evidence fields are not closed")
+    if (
+        evidence.get("profile") != _SNAPSHOT_PROFILE
+        or evidence.get("nativeManifestSha256") != native_manifest_sha256
+        or evidence.get("runtimeSqlSha256") != runtime_sql_sha256
+    ):
+        raise ValueError("Installation snapshot evidence source profile mismatch")
+    identity = _object(evidence.get("installationIdentity"))
+    if set(identity) != {
+        "installationId",
+        "sourceEpoch",
+        "genesisAt",
+        "ownerOid",
+        "registrarOid",
+    }:
+        raise ValueError("Installation identity evidence fields are not closed")
+    for key in ("installationId", "sourceEpoch"):
+        value_text = identity.get(key)
+        if type(value_text) is not str or str(UUID(value_text)) != value_text:
+            raise ValueError("Installation UUID evidence is invalid")
+    genesis_at = identity.get("genesisAt")
+    if type(genesis_at) is not str or datetime.fromisoformat(genesis_at).tzinfo is None:
+        raise ValueError("Installation genesis timestamp evidence is invalid")
+    owner_oid_text = identity.get("ownerOid")
+    registrar_oid_text = identity.get("registrarOid")
+    owner_oid = _canonical_oid_text(owner_oid_text)
+    registrar_oid = _canonical_oid_text(registrar_oid_text)
+    revision = _object(evidence.get("schemaRevision"))
+    if set(revision) != {"rev", "acceptedAt"}:
+        raise ValueError("Schema revision evidence fields are not closed")
+    if (
+        type(revision.get("rev")) is not int
+        or revision.get("rev") != 0
+        or revision.get("acceptedAt") != genesis_at
+    ):
+        raise ValueError("Schema revision evidence does not bind genesis")
+    accepted_at = revision.get("acceptedAt")
+    if (
+        type(accepted_at) is not str
+        or datetime.fromisoformat(accepted_at).tzinfo is None
+    ):
+        raise ValueError("Schema revision timestamp evidence is invalid")
+    bindings = _object(evidence.get("nativeRoleBindings"))
+    if set(bindings) != {"owner", "registrar"}:
+        raise ValueError("Native role binding inventory is not closed")
+    for label, oid, name in (
+        ("owner", owner_oid, OWNER_ROLE),
+        ("registrar", registrar_oid, CLIENT_ROLE),
+    ):
+        binding = _object(bindings.get(label))
+        if (
+            set(binding) != {"oid", "name"}
+            or binding.get("oid") != str(oid)
+            or binding.get("name") != name
+        ):
+            raise ValueError("Native role binding evidence is invalid")
+    secret = _validator_secret_evidence(
+        evidence.get("validatorSecret"),
+        runtime_sql_sha256=runtime_sql_sha256,
+        native_manifest_sha256=native_manifest_sha256,
+    )
+    return {
+        "profile": _SNAPSHOT_PROFILE,
+        "nativeManifestSha256": native_manifest_sha256,
+        "runtimeSqlSha256": runtime_sql_sha256,
+        "installationIdentity": dict(identity),
+        "schemaRevision": dict(revision),
+        "nativeRoleBindings": {
+            label: dict(_object(bindings[label])) for label in ("owner", "registrar")
+        },
+        "validatorSecret": secret,
+    }
+
+
+def _validate_snapshot_normalization(snapshot_value: Any, evidence_value: Any) -> None:
+    """Bind preserved evidence to each generated marker in the normalized rows."""
+    snapshot = _object(snapshot_value)
+    evidence = _object(evidence_value)
+    relation_rows = _object(snapshot.get("relationRows"))
+    identity = _object(evidence.get("installationIdentity"))
+    revision = _object(evidence.get("schemaRevision"))
+    secret = _object(evidence.get("validatorSecret"))
+    installation_rows = relation_rows.get("catalog_runtime_installation")
+    if (
+        not isinstance(installation_rows, list)
+        or len(installation_rows) != 1
+        or _object(installation_rows[0]).get("singleton") is not True
+    ):
+        raise ValueError("Normalized installation identity row is missing")
+    installed = _object(installation_rows[0])
+    expected_identity = {
+        "installation_id": "<generated:installation_id>",
+        "source_epoch": "<generated:source_epoch>",
+        "genesis_at": "<generated:genesis_at>",
+        "owner_oid": OWNER_ROLE,
+        "registrar_oid": CLIENT_ROLE,
+    }
+    if any(installed.get(key) != value for key, value in expected_identity.items()):
+        raise ValueError("Normalized installation identity markers mismatch")
+    if identity.get("ownerOid") != _object(evidence.get("nativeRoleBindings")).get(
+        "owner", {}
+    ).get("oid") or identity.get("registrarOid") != _object(
+        evidence.get("nativeRoleBindings")
+    ).get("registrar", {}).get("oid"):
+        raise ValueError("Installation role evidence does not bind its markers")
+    revision_rows = relation_rows.get("schema_rev")
+    if (
+        not isinstance(revision_rows, list)
+        or len(revision_rows) != 1
+        or type(_object(revision_rows[0]).get("rev")) is not int
+        or _object(revision_rows[0]).get("rev") != revision.get("rev")
+        or _object(revision_rows[0]).get("accepted_at") != "<generated:genesis_at>"
+        or revision.get("acceptedAt") != identity.get("genesisAt")
+    ):
+        raise ValueError("Normalized schema revision markers mismatch")
+    secret_rows = relation_rows.get("reader_catalog_validator_secret")
+    if secret.get("status") != "validated" or secret_rows != [
+        {"secret": "<validated-validator-secret>"}
+    ]:
+        raise ValueError("Normalized validator secret marker mismatch")
+
+
+def _bind_installation_role_oids(
+    oid_rows: Any, role_names_by_oid: dict[int, str]
+) -> tuple[int, int]:
+    if not isinstance(oid_rows, list) or len(oid_rows) != 1:
+        raise RuntimeError("Exact native installation role OIDs required")
+    owner_oid = _canonical_oid_text(oid_rows[0][0])
+    registrar_oid = _canonical_oid_text(oid_rows[0][1])
+    if (
+        role_names_by_oid.get(owner_oid) != OWNER_ROLE
+        or role_names_by_oid.get(registrar_oid) != CLIENT_ROLE
+    ):
+        raise RuntimeError("Native installation role OIDs do not bind fixed roles")
+    return owner_oid, registrar_oid
+
+
+def _native_validator_secret_evidence(
+    secret_rows: Any,
+    *,
+    runtime_sql_sha256: str,
+    native_manifest_sha256: str,
+) -> dict[str, Any]:
+    if not isinstance(secret_rows, list) or len(secret_rows) != 1:
+        raise RuntimeError("Exact native validator secret row required")
+    secret_hex, secret_bytes = secret_rows[0]
+    if (
+        type(secret_hex) is not str
+        or len(secret_hex) != 64
+        or any(character not in "0123456789abcdef" for character in secret_hex)
+        or type(secret_bytes) is not int
+        or secret_bytes != 32
+    ):
+        raise RuntimeError("Native validator secret encoding is invalid")
+    secret_raw = bytes.fromhex(secret_hex)
+    if len(secret_raw) != 32 or secret_raw.hex() != secret_hex:
+        raise RuntimeError("Native validator secret bytes are noncanonical")
+    return {
+        "status": "validated",
+        "table": _VALIDATOR_SECRET_TABLE,
+        "column": "secret",
+        "rowCount": 1,
+        "secretBytes": 32,
+        "secretSha256": _sha256(secret_raw),
+        "runtimeSqlSha256": runtime_sql_sha256,
+        "nativeManifestSha256": native_manifest_sha256,
+    }
+
+
+def _normalize_validator_secret_json_row(value: Any, secret_hex: str) -> dict[str, str]:
+    if (
+        type(value) is not dict
+        or set(value) != {"secret"}
+        or value.get("secret") != "\\x" + secret_hex
+    ):
+        raise RuntimeError("Validator secret snapshot row mismatch")
+    return {"secret": "<validated-validator-secret>"}
+
+
+def _wheel_package_payload(path: Path) -> dict[str, tuple[int, str]]:
+    with zipfile.ZipFile(path) as archive:
+        names = archive.namelist()
+        package_names = [name for name in names if name.startswith("truss/")]
+        if len(package_names) != len(set(package_names)):
+            raise ValueError("Candidate wheel has duplicate package members")
+        return {
+            name: (len(raw), _sha256(raw))
+            for name in package_names
+            for raw in [archive.read(name)]
+        }
+
+
+def _validate_published_comparison(
+    report: dict[str, Any],
+    *,
+    source_root: Path,
+    candidate_wheel: Path,
+    source_commit: str,
+    project_version: str,
+    target_manifest_sha256: str,
+) -> None:
+    """Rebind successful diagnostic facts to publisher inputs before release."""
+    measurements = _object(report.get("measurements"))
+    comparison = _object(report.get("comparison"))
+    snapshots: dict[str, str] = {}
+    normalized_snapshots: dict[str, bytes] = {}
+    secret_commitments: dict[str, str] = {}
+    for label in ("baseline", "candidate"):
+        measured = _object(measurements.get(label))
+        if measured.get("budgetsMs") != {"statement": 60000, "operation": 60000}:
+            raise ValueError("Installer comparison budget mismatch")
+        package = _object(measured.get("package"))
+        if _canonical_bytes(package.get("before")) != _canonical_bytes(
+            package.get("after")
+        ):
+            raise ValueError("Package identity changed during measurement")
+        package_before = _object(package.get("before"))
+        if (
+            package_before.get("runtimeSqlSha256") != RUNTIME_SQL_SHA256
+            or package_before.get("releaseSha256") != NATIVE_MANIFEST_SHA256
+        ):
+            raise ValueError("Measured native source profile mismatch")
+        if label == "baseline":
+            wheel_binding = _object(measured.get("baselineWheel"))
+            if (
+                package_before.get("environmentDistributionVersion") != BASELINE_VERSION
+                or wheel_binding.get("wheelSha256") != BASELINE_WHEEL_SHA256
+                or wheel_binding.get("distributionVersion") != BASELINE_VERSION
+                or wheel_binding.get("payloadMembersEqual") is not True
+            ):
+                raise ValueError("Public49 baseline source binding mismatch")
+        snapshot_evidence = _snapshot_evidence(
+            measured.get("snapshotEvidence"),
+            runtime_sql_sha256=package_before.get("runtimeSqlSha256"),
+            native_manifest_sha256=package_before.get("releaseSha256"),
+        )
+        _validate_snapshot_normalization(measured.get("snapshot"), snapshot_evidence)
+        secret_evidence = snapshot_evidence["validatorSecret"]
+        secret_commitments[label] = secret_evidence["secretSha256"]
+        snapshot = measured.get("snapshot")
+        if not isinstance(snapshot, dict):
+            raise TypeError("Measured native snapshot is missing")
+        relation_rows = _object(snapshot.get("relationRows"))
+        if relation_rows.get("reader_catalog_validator_secret") != [
+            {"secret": "<validated-validator-secret>"}
+        ]:
+            raise ValueError("Validator secret is not safely normalized")
+        installation_rows = relation_rows.get("catalog_runtime_installation")
+        if (
+            not isinstance(installation_rows, list)
+            or len(installation_rows) != 1
+            or _object(installation_rows[0]).get("owner_oid") != OWNER_ROLE
+            or _object(installation_rows[0]).get("registrar_oid") != CLIENT_ROLE
+        ):
+            raise ValueError("Installation role OID normalization is invalid")
+        snapshot_sha256 = _sha256(_canonical_bytes(snapshot))
+        normalized_snapshots[label] = _canonical_bytes(snapshot)
+        if measured.get("snapshotSha256") != snapshot_sha256:
+            raise ValueError("Measured snapshot digest mismatch")
+        if comparison.get(f"{label}SnapshotSha256") != snapshot_sha256:
+            raise ValueError("Comparison snapshot binding mismatch")
+        snapshots[label] = snapshot_sha256
+    if (
+        comparison.get("status") != "equal"
+        or comparison.get("snapshotEqual") is not True
+        or snapshots["baseline"] != snapshots["candidate"]
+        or normalized_snapshots["baseline"] != normalized_snapshots["candidate"]
+        or comparison.get("validatorSecretCommitmentsDistinct") is not True
+        or comparison.get("baselineValidatorSecretSha256")
+        != secret_commitments["baseline"]
+        or comparison.get("candidateValidatorSecretSha256")
+        != secret_commitments["candidate"]
+        or secret_commitments["baseline"] == secret_commitments["candidate"]
+    ):
+        raise ValueError("Native snapshot or validator secret comparison failed")
+
+    candidate = _object(measurements.get("candidate"))
+    candidate_package = _object(_object(candidate.get("package")).get("before"))
+    freeze = _object(candidate_package.get("sourceFreeze"))
+    if freeze.get("gitCommit") != source_commit:
+        raise ValueError("Candidate source commit mismatch")
+    if candidate_package.get("sourceProjectVersion") != project_version:
+        raise ValueError("Candidate source project version mismatch")
+    if candidate_package.get("releaseSha256") != target_manifest_sha256:
+        raise ValueError("Candidate runtime manifest mismatch")
+    if (
+        target_manifest_sha256 != NATIVE_MANIFEST_SHA256
+        or candidate_package.get("runtimeSqlSha256") != RUNTIME_SQL_SHA256
+    ):
+        raise ValueError("Candidate native runtime profile mismatch")
+    if freeze.get("sourceTree") != _tree_digest(source_root):
+        raise ValueError("Candidate source tree mismatch")
+
+    actual_payload = _wheel_package_payload(candidate_wheel)
+    expected_payload = {
+        f"truss/{path.relative_to(source_root).as_posix()}": (
+            path.stat().st_size,
+            _sha256(path.read_bytes()),
+        )
+        for path in source_root.rglob("*")
+        if path.is_file() and "__pycache__" not in path.parts
+    }
+    if actual_payload != expected_payload:
+        raise ValueError("Candidate wheel payload differs from publisher source")
+    module_members = {
+        "truss._installation_privileges": "truss/_installation_privileges.py",
+        "truss._installation_sql_batch": "truss/_installation_sql_batch.py",
+        "truss.catalog_runtime": "truss/catalog_runtime.py",
+        "truss.psycopg_host": "truss/psycopg_host.py",
+    }
+    module_hashes = _object(candidate_package.get("moduleSha256"))
+    if set(module_hashes) != set(module_members):
+        raise ValueError("Candidate module inventory mismatch")
+    for module, member in module_members.items():
+        if module_hashes.get(module) != actual_payload.get(member, (None, None))[1]:
+            raise ValueError("Candidate module hash mismatch")
 
 
 def _tree_digest(root: Path) -> dict[str, Any]:
@@ -116,9 +521,12 @@ def _module_hash(module: Any) -> str:
 
 def _require_server_version_profile(display_version: Any, numeric_version: Any) -> None:
     """Bind the package's display and numeric PostgreSQL 18.6 profile fields."""
-    if (type(display_version) is not str or display_version != '18.6'
-            or type(numeric_version) is not int
-            or numeric_version != int(EXPECTED_SERVER_VERSION)):
+    if (
+        type(display_version) is not str
+        or display_version != "18.6"
+        or type(numeric_version) is not int
+        or numeric_version != int(EXPECTED_SERVER_VERSION)
+    ):
         raise RuntimeError("Selected PostgreSQL 18.6 package profile required")
 
 
@@ -140,6 +548,9 @@ def _package_identity(
 
     manifest_bytes = (
         files("truss").joinpath("_catalog_runtime/manifest.json").read_bytes()
+    )
+    runtime_sql_bytes = (
+        files("truss").joinpath("_catalog_runtime/runtime.sql").read_bytes()
     )
     manifest, release_digest, source_units = catalog_runtime._release()
     source_unit_hashes = [_sha256(unit.encode("utf8")) for unit in source_units]
@@ -179,6 +590,7 @@ def _package_identity(
         "releaseId": manifest.get("releaseId"),
         "releaseSha256": release_digest,
         "manifestSha256": _sha256(manifest_bytes),
+        "runtimeSqlSha256": _sha256(runtime_sql_bytes),
         "releaseSourceUnitCount": len(source_units),
         "releaseSourceBytes": sum(len(unit.encode("utf8")) for unit in source_units),
         "releaseSourceUnitSha256": _sha256(_canonical_bytes(source_unit_hashes)),
@@ -257,6 +669,40 @@ def _verify_baseline_wheel(
     }
 
 
+def _load_ordered_ddl_module(
+    phase: str,
+    package: dict[str, Any],
+    baseline_wheel_binding: dict[str, Any] | None,
+) -> Any | None:
+    """Select the batching helper, permitting its absence only for verified49."""
+    module_name = "truss._installation_sql_batch"
+    try:
+        module = importlib.import_module(module_name)
+    except ModuleNotFoundError as error:
+        if error.name != module_name:
+            raise
+        module_hashes = _object(package.get("moduleSha256"))
+        if (
+            phase != "baseline"
+            or baseline_wheel_binding is None
+            or baseline_wheel_binding.get("wheelSha256") != BASELINE_WHEEL_SHA256
+            or baseline_wheel_binding.get("distributionVersion") != BASELINE_VERSION
+            or baseline_wheel_binding.get("payloadMembersEqual") is not True
+            or module_hashes.get(module_name) is not None
+        ):
+            raise RuntimeError(
+                "Ordered DDL helper is required for this phase"
+            ) from error
+        return None
+    if not callable(getattr(module, "execute_ordered_ddl", None)):
+        raise TypeError("Ordered DDL helper API is unavailable")
+    if phase == "baseline":
+        raise RuntimeError(
+            "Public49 baseline unexpectedly contains the batching helper"
+        )
+    return module
+
+
 def _json_rows(connection: Any, query: str) -> list[list[Any]]:
     rows = connection.execute(query, prepare=False).fetchall()
     return [list(row) for row in rows]
@@ -277,9 +723,20 @@ def _caller_state(connection: Any) -> list[Any]:
     return list(row)
 
 
-def _installation_snapshot(connection: Any) -> dict[str, Any]:
+def _installation_snapshot(
+    connection: Any,
+    *,
+    runtime_sql_sha256: str,
+    native_manifest_sha256: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Capture full installed identities/definitions/ACLs without native OIDs."""
     from psycopg import sql
+
+    if (
+        runtime_sql_sha256 != RUNTIME_SQL_SHA256
+        or native_manifest_sha256 != NATIVE_MANIFEST_SHA256
+    ):
+        raise RuntimeError("Selected native installation source profile required")
 
     connection.execute("SET LOCAL search_path = pg_catalog, pg_temp", prepare=False)
     snapshot: dict[str, Any] = {
@@ -551,14 +1008,35 @@ def _installation_snapshot(connection: Any) -> dict[str, Any]:
                ORDER BY c.relname"""
         ).fetchall()
     ]
-    role_names_by_oid = {
-        int(oid): role_name
-        for oid, role_name in connection.execute(
-            "SELECT oid::text,rolname::text FROM pg_catalog.pg_roles"
-        ).fetchall()
-    }
+    role_names_by_oid: dict[int, str] = {}
+    for oid_text, role_name in connection.execute(
+        "SELECT oid::text,rolname::text FROM pg_catalog.pg_roles"
+    ).fetchall():
+        oid = _canonical_oid_text(oid_text)
+        if type(role_name) is not str or oid in role_names_by_oid:
+            raise RuntimeError("Native role OID inventory is ambiguous")
+        role_names_by_oid[oid] = role_name
+    installation_oid_rows = connection.execute(
+        """SELECT owner_oid::text,registrar_oid::text
+           FROM truss.catalog_runtime_installation"""
+    ).fetchall()
+    owner_oid, registrar_oid = _bind_installation_role_oids(
+        installation_oid_rows, role_names_by_oid
+    )
+    secret_rows = connection.execute(
+        """SELECT pg_catalog.encode(secret,'hex'),pg_catalog.octet_length(secret)
+           FROM truss.reader_catalog_validator_secret"""
+    ).fetchall()
+    if len(secret_rows) != 1:
+        raise RuntimeError("Exact native validator secret row required")
+    secret_evidence = _native_validator_secret_evidence(
+        secret_rows,
+        runtime_sql_sha256=runtime_sql_sha256,
+        native_manifest_sha256=native_manifest_sha256,
+    )
     rows_by_relation: dict[str, list[Any]] = {}
-    installation_genesis_at: str | None = None
+    installation_identity: dict[str, str] | None = None
+    schema_revision_evidence: dict[str, Any] | None = None
     for relation_name in relation_names:
         raw_rows = connection.execute(
             sql.SQL(
@@ -575,13 +1053,18 @@ def _installation_snapshot(connection: Any) -> dict[str, Any]:
                     raise RuntimeError("Installation identity row must be an object")
                 if value.get("singleton") is not True:
                     raise RuntimeError("Exact installation identity row required")
-                for generated in ("installation_id", "source_epoch"):
+                identity_values: dict[str, str] = {}
+                for generated, evidence_key in (
+                    ("installation_id", "installationId"),
+                    ("source_epoch", "sourceEpoch"),
+                ):
                     identifier = value.get(generated)
                     if (
                         type(identifier) is not str
                         or str(UUID(identifier)) != identifier
                     ):
                         raise RuntimeError("Expected generated UUID identity field")
+                    identity_values[evidence_key] = identifier
                     value[generated] = f"<generated:{generated}>"
                 genesis_at = value.get("genesis_at")
                 if (
@@ -589,26 +1072,47 @@ def _installation_snapshot(connection: Any) -> dict[str, Any]:
                     or datetime.fromisoformat(genesis_at).tzinfo is None
                 ):
                     raise RuntimeError("Expected timezone-aware installation timestamp")
-                installation_genesis_at = genesis_at
+                identity_values["genesisAt"] = genesis_at
                 value["genesis_at"] = "<generated:genesis_at>"
                 for field_name, expected_role in (
                     ("owner_oid", OWNER_ROLE),
                     ("registrar_oid", CLIENT_ROLE),
                 ):
-                    role_oid = value.get(field_name)
-                    if (
-                        type(role_oid) is not int
-                        or role_names_by_oid.get(role_oid) != expected_role
-                    ):
+                    role_oid_text = value.get(field_name)
+                    if type(role_oid_text) is not str:
+                        raise RuntimeError("Installation role OID must be native text")
+                    role_oid = _canonical_oid_text(role_oid_text)
+                    expected_oid = (
+                        owner_oid if field_name == "owner_oid" else registrar_oid
+                    )
+                    if role_oid != expected_oid:
                         raise RuntimeError(
                             "Installation role identity did not match fixed role"
                         )
+                    identity_values[
+                        "ownerOid" if field_name == "owner_oid" else "registrarOid"
+                    ] = role_oid_text
                     value[field_name] = expected_role
+                installation_identity = identity_values
+            elif relation_name == "reader_catalog_validator_secret":
+                value = _normalize_validator_secret_json_row(value, secret_rows[0][0])
             normalized.append(value)
-        if relation_name == "catalog_runtime_installation" and len(normalized) != 1:
+        if (
+            relation_name
+            in {
+                "catalog_runtime_installation",
+                "schema_rev",
+                "reader_catalog_validator_secret",
+            }
+            and len(normalized) != 1
+        ):
             raise RuntimeError("Exactly one installed runtime identity row required")
         if relation_name == "schema_rev":
-            if len(normalized) != 1 or normalized[0].get("rev") != 0:
+            if (
+                len(normalized) != 1
+                or type(normalized[0].get("rev")) is not int
+                or normalized[0].get("rev") != 0
+            ):
                 raise RuntimeError("Exact fresh schema revision row required")
             if "accepted_at" not in normalized[0]:
                 raise RuntimeError("Generated schema revision timestamp missing")
@@ -622,15 +1126,17 @@ def _installation_snapshot(connection: Any) -> dict[str, Any]:
                 "SELECT pg_catalog.to_jsonb(accepted_at)::text "
                 "FROM truss.schema_rev WHERE rev=0"
             ).fetchone()
-            if source_revision is None or installation_genesis_at is None:
+            if source_revision is None or installation_identity is None:
                 raise RuntimeError("Installation timestamp source observation missing")
+            genesis_at = installation_identity["genesisAt"]
             # The released installer copies schema_rev.accepted_at directly into
             # genesis_at. Require that source-defined identity before normalization.
             if (
-                accepted_at != installation_genesis_at
-                or json.loads(source_revision[0]) != installation_genesis_at
+                accepted_at != genesis_at
+                or json.loads(source_revision[0]) != genesis_at
             ):
                 raise RuntimeError("Installation genesis timestamp source mismatch")
+            schema_revision_evidence = {"rev": 0, "acceptedAt": accepted_at}
             normalized[0]["accepted_at"] = "<generated:genesis_at>"
         rows_by_relation[relation_name] = normalized
     snapshot["relationRows"] = rows_by_relation
@@ -659,7 +1165,29 @@ def _installation_snapshot(connection: Any) -> dict[str, Any]:
     encoded = _canonical_bytes(snapshot)
     if len(encoded) > 64 * 1024 * 1024:
         raise RuntimeError("Installation snapshot exceeded its local diagnostic bound")
-    return snapshot
+    if installation_identity is None or schema_revision_evidence is None:
+        raise RuntimeError("Required installation provenance was not observed")
+    role_bindings = {
+        "owner": {"oid": installation_identity["ownerOid"], "name": OWNER_ROLE},
+        "registrar": {
+            "oid": installation_identity["registrarOid"],
+            "name": CLIENT_ROLE,
+        },
+    }
+    evidence = _snapshot_evidence(
+        {
+            "profile": _SNAPSHOT_PROFILE,
+            "nativeManifestSha256": native_manifest_sha256,
+            "runtimeSqlSha256": runtime_sql_sha256,
+            "installationIdentity": installation_identity,
+            "schemaRevision": schema_revision_evidence,
+            "nativeRoleBindings": role_bindings,
+            "validatorSecret": secret_evidence,
+        },
+        runtime_sql_sha256=runtime_sql_sha256,
+        native_manifest_sha256=native_manifest_sha256,
+    )
+    return snapshot, evidence
 
 
 def _measure_cursor_execute(psycopg: Any, recorder: dict[str, Any]) -> None:
@@ -686,36 +1214,59 @@ def _measure_cursor_execute(psycopg: Any, recorder: dict[str, Any]) -> None:
     recorder["cursorExecuteOriginal"] = original
 
     original_nextset = getattr(psycopg.Cursor, "nextset", None)
-    if original_nextset is not None:
-        def measured_nextset(cursor: Any, *args: Any, **kwargs: Any) -> Any:
-            active = _ACTIVE_MEASUREMENT.get()
-            if active is None:
-                return original_nextset(cursor, *args, **kwargs)
-            started = perf_counter_ns()
-            failed = False
-            try:
-                return original_nextset(cursor, *args, **kwargs)
-            except BaseException:
-                failed = True
-                raise
-            finally:
-                elapsed = perf_counter_ns() - started
-                active["cursorNextsetCount"] += 1
-                active["cursorNextsetElapsedNs"] += elapsed
-                active["cursorNextsetMaxNs"] = max(
-                    active["cursorNextsetMaxNs"], elapsed
-                )
-                if failed:
-                    active["cursorNextsetFailureCount"] += 1
+    if original_nextset is None:
+        raise RuntimeError("Stock psycopg Cursor.nextset API is required")
 
-        psycopg.Cursor.nextset = measured_nextset
-        recorder["cursorNextsetOriginal"] = original_nextset
+    def measured_nextset(cursor: Any, *args: Any, **kwargs: Any) -> Any:
+        active = _ACTIVE_MEASUREMENT.get()
+        if active is None:
+            return original_nextset(cursor, *args, **kwargs)
+        started = perf_counter_ns()
+        failed = False
+        try:
+            return original_nextset(cursor, *args, **kwargs)
+        except BaseException:
+            failed = True
+            raise
+        finally:
+            elapsed = perf_counter_ns() - started
+            active["cursorNextsetCount"] += 1
+            active["cursorNextsetElapsedNs"] += elapsed
+            active["cursorNextsetMaxNs"] = max(active["cursorNextsetMaxNs"], elapsed)
+            if failed:
+                active["cursorNextsetFailureCount"] += 1
+
+    psycopg.Cursor.nextset = measured_nextset
+    recorder["cursorNextsetOriginal"] = original_nextset
 
 
-def _measure_ordered_ddl(module: Any, recorder: dict[str, Any]) -> None:
-    original = getattr(module, "execute_ordered_ddl", None)
+def _measure_ordered_ddl(
+    batch_module: Any | None, alias_modules: tuple[Any, ...], recorder: dict[str, Any]
+) -> None:
+    target_module = batch_module
+    original = (
+        getattr(target_module, "execute_ordered_ddl", None)
+        if target_module is not None
+        else None
+    )
+    if original is None:
+        target_module = next(
+            (
+                module
+                for module in alias_modules
+                if callable(getattr(module, "execute_ordered_ddl", None))
+            ),
+            None,
+        )
+        original = (
+            getattr(target_module, "execute_ordered_ddl", None)
+            if target_module is not None
+            else None
+        )
     if original is None:
         return
+    if target_module is None:
+        raise RuntimeError("Ordered DDL instrumentation target is unavailable")
 
     def counted(cursor: Any, units: Any) -> Any:
         offered = 0
@@ -749,8 +1300,12 @@ def _measure_ordered_ddl(module: Any, recorder: dict[str, Any]) -> None:
                     active["cursorExecuteCount"] - before
                 )
 
-    module.execute_ordered_ddl = counted
-    recorder.setdefault("ddlOriginals", []).append((module, original))
+    target_module.execute_ordered_ddl = counted
+    recorder.setdefault("ddlOriginals", []).append((target_module, original))
+    for module in alias_modules:
+        if getattr(module, "execute_ordered_ddl", None) is original:
+            module.execute_ordered_ddl = counted
+            recorder["ddlOriginals"].append((module, original))
 
 
 def _restore_instrumentation(psycopg: Any, recorder: dict[str, Any]) -> None:
@@ -812,9 +1367,7 @@ def _call_measured_install(recorder: dict[str, Any], install: Any) -> Any:
         return install()
     finally:
         recorder["installElapsedNs"] = perf_counter_ns() - wall_started
-        recorder["installerProcessCpuElapsedNs"] = (
-            time.process_time_ns() - cpu_started
-        )
+        recorder["installerProcessCpuElapsedNs"] = time.process_time_ns() - cpu_started
 
 
 def _finish_measurement(
@@ -910,6 +1463,7 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
         baseline_wheel_binding = _verify_baseline_wheel(
             wheel_path, package, truss, privileges, catalog_runtime
         )
+    ddl_batch = _load_ordered_ddl_module(phase, package, baseline_wheel_binding)
     if phase == "baseline" and package["sourceFreeze"] is not None:
         raise RuntimeError(
             "Baseline must resolve from the installed distribution, not source"
@@ -952,6 +1506,7 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
         "nativeAbsence": {},
         "measurement": None,
         "snapshot": None,
+        "snapshotEvidence": None,
         "failureStage": None,
         "failureType": None,
     }
@@ -1006,8 +1561,7 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
         primary_error: BaseException | None = None
         try:
             _measure_cursor_execute(psycopg, recorder)
-            _measure_ordered_ddl(catalog_runtime, recorder)
-            _measure_ordered_ddl(privileges, recorder)
+            _measure_ordered_ddl(ddl_batch, (catalog_runtime, privileges), recorder)
             installed = _call_measured_install(
                 recorder,
                 lambda: assembly.install_in_transaction(
@@ -1018,9 +1572,7 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
             primary_error = error
             raise
         finally:
-            _finish_measurement(
-                psycopg, recorder, token, result, primary_error
-            )
+            _finish_measurement(psycopg, recorder, token, result, primary_error)
         if result["instrumentationHooksRestored"] is not True:
             raise RuntimeError("Measurement instrumentation was not restored")
         if isinstance(installed, Ok):
@@ -1060,7 +1612,15 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
             caller_after == result["caller"]["stateBeforeInstall"]
         )
         if installation_status == "success":
-            result["snapshot"] = _installation_snapshot(connection)
+            stage = "snapshot"
+            result["snapshot"], result["snapshotEvidence"] = _installation_snapshot(
+                connection,
+                runtime_sql_sha256=package["runtimeSqlSha256"],
+                native_manifest_sha256=package["releaseSha256"],
+            )
+            _validate_snapshot_normalization(
+                result["snapshot"], result["snapshotEvidence"]
+            )
             result["snapshotSha256"] = _sha256(_canonical_bytes(result["snapshot"]))
         result["caller"]["connectionQueryAfterInstall"] = connection.execute(
             "SELECT 42"
@@ -1102,6 +1662,7 @@ def _install_once(worker_root: Path, phase: str) -> dict[str, Any]:
         result["status"] = "failed"
         result["failureStage"] = stage
         result["failureType"] = type(error).__name__
+        result["failureLocation"] = _safe_traceback_location(error)
     finally:
         if host is not None:
             try:
@@ -1466,11 +2027,11 @@ def _orchestrate(output: Path, baseline_wheel: Path) -> int:
         },
         "scope": [
             "Two serial fresh DatabaseFixture databases on one owned PG18.6 worker.",
-            "Only the exact public Cursor.execute call is wrapped, delegated unchanged, and timed client-side.",
+            "The exact public Cursor.execute and Cursor.nextset calls are wrapped and delegated unchanged; client call latency and child-process CPU are measured only during the synchronous installer call.",
             "Instrumentation records no submitted SQL text, connection URI, or parameters. The normalized native snapshot includes installed routine definitions, but no server or wire timings.",
             "A captured source unit may contain multiple SQL statements; counts are units and Cursor.execute submissions, not parsed SQL statements.",
             "Both installation attempts use the explicitly reported 60000 ms statement and operation budgets and are fully rolled back.",
-            "The installed-object snapshot preserves rows and sequence states; it normalizes only generated installation_id/source_epoch UUIDs, genesis_at and its source-identical schema_rev.accepted_at, and owner/registrar OIDs after exact fixed-role binding.",
+            "The installed-object snapshot preserves rows and sequence states; it normalizes only generated installation_id/source_epoch UUIDs, genesis_at and its source-identical schema_rev.accepted_at, the two owner/registrar OIDs after canonical native OID/name binding, and the validated 32-byte reader validator secret to a fixed marker. The secret SHA-256 commitments are recorded separately and must differ across fresh installations.",
         ],
     }
     worker_error: Exception | None = None
@@ -1513,12 +2074,39 @@ def _orchestrate(output: Path, baseline_wheel: Path) -> int:
                 baseline.get("snapshot") is not None
                 and candidate.get("snapshot") is not None
             ):
-                same = baseline["snapshotSha256"] == candidate["snapshotSha256"]
+                baseline_package = _object(baseline.get("package"))
+                candidate_package = _object(candidate.get("package"))
+                baseline_before = _object(baseline_package.get("before"))
+                candidate_before = _object(candidate_package.get("before"))
+                baseline_evidence = _snapshot_evidence(
+                    baseline.get("snapshotEvidence"),
+                    runtime_sql_sha256=baseline_before.get("runtimeSqlSha256"),
+                    native_manifest_sha256=baseline_before.get("releaseSha256"),
+                )
+                candidate_evidence = _snapshot_evidence(
+                    candidate.get("snapshotEvidence"),
+                    runtime_sql_sha256=candidate_before.get("runtimeSqlSha256"),
+                    native_manifest_sha256=candidate_before.get("releaseSha256"),
+                )
+                baseline_secret = baseline_evidence["validatorSecret"]
+                candidate_secret = candidate_evidence["validatorSecret"]
+                baseline_snapshot = _canonical_bytes(baseline["snapshot"])
+                candidate_snapshot = _canonical_bytes(candidate["snapshot"])
+                same = (
+                    baseline_snapshot == candidate_snapshot
+                    and baseline["snapshotSha256"] == candidate["snapshotSha256"]
+                )
+                distinct_secrets = (
+                    baseline_secret["secretSha256"] != candidate_secret["secretSha256"]
+                )
                 report["comparison"] = {
-                    "status": "equal" if same else "different",
+                    "status": ("equal" if same and distinct_secrets else "different"),
                     "baselineSnapshotSha256": baseline["snapshotSha256"],
                     "candidateSnapshotSha256": candidate["snapshotSha256"],
                     "snapshotEqual": same,
+                    "baselineValidatorSecretSha256": baseline_secret["secretSha256"],
+                    "candidateValidatorSecretSha256": candidate_secret["secretSha256"],
+                    "validatorSecretCommitmentsDistinct": distinct_secrets,
                 }
         except BaseException as error:  # noqa: BLE001 - report only closed failure type
             if isinstance(error, Exception):
@@ -1594,6 +2182,7 @@ def _orchestrate(output: Path, baseline_wheel: Path) -> int:
             and baseline.get("instrumentationHooksRestored") is True
             and candidate.get("instrumentationHooksRestored") is True
             and comparison.get("snapshotEqual") is True
+            and comparison.get("validatorSecretCommitmentsDistinct") is True
             and report["workerBaselineRestored"] is True
             and report["workerCleanup"]
             in ("confirmed", "baseline_restored_external_owner")
