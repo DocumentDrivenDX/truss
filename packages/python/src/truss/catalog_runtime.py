@@ -491,6 +491,7 @@ class CatalogReferenceAssembly:
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=()) -> Outcome[PendingCatalogInstallation | InstallRefused]:
         self._available()
         from psycopg import sql
+        from ._installation_sql_batch import execute_ordered_ddl
         from ._installation_privileges import (InstallationRoles, _name, _policy_names,
                                                 _resolved_tolerated_roles,
                                                 protect_installation_with_cursor,
@@ -587,17 +588,18 @@ class CatalogReferenceAssembly:
                 ([roles.owner,roles.client],),prepare=False)
             if cursor.fetchone()[0]:
                 return refuse('role_exists')
-            for source in sources:cursor.execute(source,prepare=False)
+            execute_ordered_ddl(cursor,sources)
             privileges=protect_installation_with_cursor(cursor,roles,resolved_tolerated=resolved_tolerated)
             from ._runtime_admission import person_entrypoints
-            cursor.execute('GRANT USAGE ON SCHEMA truss TO PUBLIC',prepare=False)
+            final_grants=['GRANT USAGE ON SCHEMA truss TO PUBLIC']
             for entry in person_entrypoints():
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{}({}) TO PUBLIC').format(
-                    sql.Identifier(entry['publicName']),sql.SQL(entry['arguments'])),prepare=False)
+                final_grants.append(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{}({}) TO PUBLIC').format(
+                    sql.Identifier(entry['publicName']),sql.SQL(entry['arguments'])))
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,int,bytea)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)','reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)','person_runtime_status(text,text,jsonb)','admin_install_recovery()','grant_import_audit_access(text,text,text)'):
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute('GRANT EXECUTE ON FUNCTION truss.admin_install_recovery(),truss.grant_import_audit_access(text,text,text) TO CURRENT_USER',prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss installed runtime: exact active release and layout from truss.runtime_current_installation()'",prepare=False)
+                final_grants.append(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)))
+            final_grants.append('GRANT EXECUTE ON FUNCTION truss.admin_install_recovery(),truss.grant_import_audit_access(text,text,text) TO CURRENT_USER')
+            final_grants.append("COMMENT ON SCHEMA truss IS 'Truss installed runtime: exact active release and layout from truss.runtime_current_installation()'")
+            execute_ordered_ddl(cursor,final_grants)
             managed_grants=finalize_installation_grants(cursor,privileges,roles,
                 resolved_tolerated,actor[0])
             cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,managed_grants,owner_oid,registrar_oid,genesis_at)

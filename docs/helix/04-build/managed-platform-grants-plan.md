@@ -23,6 +23,208 @@ ddx:
 
 # Managed platform grants: assessment and delivery plan
 
+## Installer round-trip repair — 2026-10-24
+
+The owner authorized batching installer SQL and set-based verification, followed
+by a new immutable Truss release and fresh Arras Mac and actual Lakebase
+campaigns. The repair requires no additional authority, reduced checks or
+increased deadline. The owner subsequently authorized a separately bounded
+regional runner experiment for comparison. That experiment cannot replace the
+full actual Lakebase acceptance campaign across the WAN or make regional
+placement a deployment requirement. Arras must pass the WAN campaign with its
+existing operation deadlines and checks.
+
+The first public 0.0.49 diagnostic reached its original 60-second operation limit
+after 1,272 client execute submissions. A separately frozen repeat recorded
+1,203 submissions and 60.363352 seconds inside delegated `Cursor.execute` calls;
+the installer returned cancelled after 63.557889125 seconds including containment.
+Neither attempt reached the first or final verification phase, so neither is a
+complete installation baseline or managed-service acceptance. Client execute
+timing includes driver, network and server work and does not isolate their
+individual contributions. Batched result draining in `Cursor.nextset` must be
+reported separately; execute timing alone is not complete phase latency.
+
+The implementation keeps the exact ordered captured SQL units and quoted
+object-specific commands. A carrier contains at most 32 units and 128 KiB of
+UTF-8 text including separators. An already captured larger source unit runs
+alone, unchanged. Units may contain multiple native SQL statements; carrier
+counts must never be reported as native statement counts. Use the passed guarded
+stock psycopg cursor, no bind parameters, `prepare=False`, `binary=False`, and
+drain every command result. Reject any row-producing result; propagate original
+driver failures without retries or sequential fallback. The original host
+savepoint, caller transaction and operation-wide cancellation remain in force.
+
+Replace per-object extension and effective-privilege reads with bounded catalog
+queries keyed by the captured catalog class and OID. Preserve exact overload
+identities, unsupported-class refusals, inventory and owner checks, role flags,
+relation/sequence/column/routine/type/schema predicates, private defaults and
+tolerated-grantee identity and grant-option equality. Missing, duplicate or NULL
+required observations fail closed. Both verification phases remain: after
+ownership protection and after final installation grants/comments.
+
+| Slice | Dependency | Required evidence |
+| --- | --- | --- |
+| IB-1 | Existing CONTRACT-007/008 and Python boundary gate | Explicit private helper map; allowed caller and forbidden host/runtime import controls; ordered source and carrier boundary controls |
+| IB-2 | IB-1 | Native complete inventory/definition/owner/ACL comparison, overload/dependency/column/inherited-grant refusals, mid-batch error and original-deadline cancellation; caller work and settings preserved |
+| IB-3 | IB-2 | Matched public 0.0.49 and candidate fixture measurements: exact artifacts, captured units/command inventory, actual execute submissions, separate result-drain calls, client call/wall time and installer-process CPU, plus independently confirmed rollback/worker cleanup |
+| IB-4 | IB-3 | Independent review; full Linux release workflow and every admitted populated migration lineage; immutable publication and public clean-download verification |
+| IB-5 | Published IB-4 tuple | New exact Arras wheel and freeze; complete fresh installed Mac and actual Lakebase WAN campaigns at original deadlines; final PR #9 review/merge/release and exact published-byte verification; optional regional comparison does not close the WAN gate |
+
+The runtime remains latest-only. Databases from every admitted UMF 0.10 lineage
+retain forward migration to latest without an age cutoff; historical tools are
+not supported application runtimes. If native source identity is unchanged,
+verify the existing-current path explicitly rather than inventing a migration
+edge or rewriting historical manifests. No pre-0.10 compatibility is added.
+
+Execution is authorized. Spending/token estimates and a numerical ceiling were
+not supplied; runtime metering is unavailable here. Native fixtures own fresh
+socket-only workers and disposable database/roles. Existing public artifacts and
+failed diagnostics remain immutable. At this checkpoint implementation and
+offline controls are in progress; native, release and consumer gates above are
+open. A candidate code diff or local timing improvement cannot close IB-4/IB-5.
+
+### Diagnostic checkpoint — 2026-10-24
+
+The exact public 0.0.49 WAN repeat and independent fresh-process audit preserved
+the caller, removed the Truss schema, and matched all 33 role records and 18
+memberships to the pre-install baseline. The selected platform-role OIDs and all
+16 ordinary-actor/platform-role closure checks also matched. These are cleanup
+facts for a failed diagnostic, not a successful acceptance receipt.
+
+The local controlled attempt on product source `dcebf072` did not produce a
+usable matched measurement. Its paired test stopped before any test body when
+fresh database creation exceeded the existing fixture deadline. A later baseline
+child exceeded the diagnostic controller bound, and worker inventory verification
+failed; the complete owned cluster was then stopped and removed. Source and Git
+state remained unchanged. The failed receipt is retained with SHA-256
+`86915948498ccd4e79ff95b4287291913c9937c23245e18b5b351b7cc28b694b`.
+No reduction, speedup or native equivalence claim follows from that attempt.
+
+The refusal-control test also exposed an assertion path that skipped caller
+savepoint cleanup and contaminated the next case. Each control now fails fast,
+attempts rollback and all caller/native residue checks in `finally`, and retains
+the primary failure with safe callsite-only diagnostics. Both its original
+one-second statement and five-second operation limits remain unchanged. A
+cancelled column-grant check remains a failure requiring native reproduction;
+it is never recast as an accepted third-party-grant refusal.
+
+The corrected helper, set-fact, observer, measurement-profile and release-cohort
+pure controls pass 29 tests. Independent review also passed the 13 observer and
+measurement controls and injected a primary failure plus cleanup failure into
+the actual control method to verify original-error preservation, complete
+cleanup attempts and fail-fast behavior. These checks do not close native,
+matched-measurement, Linux release or consumer acceptance gates.
+
+The `dcebf072` Linux gate passed all five native batching controls, migration
+qualification and independent HF assertions, then found an existing managed
+grants regression: the empty-policy trigger test expected the public 0.0.49
+schema-first refusal but received a column-first refusal. The set census now
+preserves the strict empty pre-ownership path's legacy object/OID and native
+ACL-entry ordering. Nonempty managed-policy and final-census ordering remain
+unchanged. The existing regression assertion is retained; the corrected source
+still requires its native rerun and complete final-source release gates.
+
+The `c1464cfe` local campaign passed all five batching controls and the unchanged
+schema-first managed-grant regression, with no skips and restored worker
+inventory after each phase. Both complete installation calls returned successful
+pending installations. The comparison harness then rejected both snapshots:
+PostgreSQL serializes native OID fields as JSON strings, while the harness
+incorrectly required integers. Its snapshot comparison also needs explicit
+treatment of the source-generated validator secret. The failed comparison
+(`d25b673df8f4587a80bd467059192118a300a47089b4118f14af5be24fff530d`)
+and stopped/removed-worker receipt
+(`ff7a7793a5e45cd61b1f867248f68a0515dc3d5e7d73ccc6ae3837c43d7a6a71`)
+remain immutable. The observed 3,409 and 114 execute calls are provisional
+measurements, not a completed equivalence or acceptance result.
+
+### Fresh-install comparison profile
+
+This one-off 0.0.50 repair comparison binds both phases to native manifest
+`288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4` and
+the original `runtime.sql` SHA-256
+`383b2280e20b3dd6bd31f7edc7654f83ebd7fefc1670739e24c3cf72c85c86cb`.
+Independent fresh installations contain per-install generated identities and
+secrets. The comparison may normalize only these named fields after
+validating their native meaning:
+
+- `catalog_runtime_installation.installation_id`, `.source_epoch` and
+  `.genesis_at`, plus the source-identical revision zero
+  `schema_rev.accepted_at`. Retain original values as per-run evidence.
+- `catalog_runtime_installation.owner_oid` and `.registrar_oid`. Require canonical nonzero unsigned
+  32-bit OID text and bind each value to its exact observed native role name;
+  retain the original OID/name evidence before comparing fixed role names.
+- The single `reader_catalog_validator_secret.secret` value. Require exactly
+  one row and the exact field set, native `bytea` length 32, canonical JSON hex,
+  and agreement with an independent native hex/length observation. Retain a
+  SHA-256 commitment to the original bytes and the source binding; never export
+  the secret. Compare an explicit generated-value marker only for this field.
+
+Both phases must pass these generation checks, and their validator-secret
+commitments must differ. Distinct commitments establish a fresh-value
+distinction, not an entropy-quality claim. Full canonical snapshot equality
+alone cannot pass qualification. Every other row and cardinality, native
+definition, ACL, role attribute, membership and sequence state remains exact;
+UUID or time defaults on empty tables receive no blanket normalization. Any
+additional difference fails closed and requires a separately justified profile
+change. This diagnostic profile changes no installed format or runtime API.
+Migration preservation checks remain unchanged and compare original data without
+this fresh-database normalization.
+
+The subsequent exact-source `c67997f7` attempt completed both installations,
+captured both snapshots and passed caller rollback, fixture inventory and owned
+worker shutdown. Its comparison remains failed: exactly 520 cells differ, the
+names of 260 internally generated foreign-key triggers and the same names in
+their rendered definitions. All other captured fields match. Retain the
+original failed report (`83496508e8deb9c75427ef2ea006a5d1c56ec01abd0dfb5c8d37cf5418619723`)
+and shutdown receipt (`949a7a981e4db132e96c960be125dfa2c8995adc0b7fa5e87a1d5bb9b7750b14`);
+do not relabel that result.
+
+For the fixed native-2888/PostgreSQL-18.6 profile, comparison profile
+`truss-fresh-install-snapshot/2`
+also handles this finite native identity class. PostgreSQL [appends the actual
+trigger OID to an internally generated name](https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/src/backend/commands/trigger.c).
+Capture each trigger's actual native OID and foreign-key constraint linkage in
+the same catalog observation. Normalize only an internal foreign-key trigger
+whose exact `RI_ConstraintTrigger_a_` or `RI_ConstraintTrigger_c_` suffix equals
+that canonical native OID. Retain its original name, definition, OID, linkage and
+row position as closed evidence. Change only the exact initial quoted trigger
+name token in its rendered definition and its name field. The replacement
+retains the a/c prefix and the full SHA-256 of the canonical foreign-key identity
+(owning schema, owning relation, constraint name and exact definition). Cross-check the native
+constraint definition against its unique captured foreign-key constraint row;
+the trigger's table need not be the constraint's owning relation. This preserves
+the compared trigger-to-constraint association. Preserve all other definition
+bytes, enabled state and original row order.
+Require the complete 322-trigger inventory with exactly 260 such internal
+triggers, rejecting duplicate, missing or out-of-range evidence. All 62 other
+trigger rows remain exact. Collector and publication checks must validate the
+same evidence and normalized correspondence. This permits no general OID mask,
+sorting, row removal or additional generated-value class. A fresh source-bound
+run must pass; the failed attempt does not become qualification evidence.
+
+The finite trigger correction passes 40 focused pure controls, with independent
+review passing all 19 measurement controls against unchanged reviewed hashes.
+These include the actual collector path, native OID/FK-link failures, missing or
+duplicate evidence, distinct FK identities, changed definition tails and exact
+noninternal rows. A fresh actual comparison and complete Linux release workflow
+remain required.
+
+The repaired diagnostic passes 39 focused pure controls. Independent review also
+passes all 18 measurement controls, including the actual snapshot collector with
+native-shaped JSON OID strings and negative identity cases, original generation
+evidence retention, secret redaction, exact public-0.0.49 helper absence and
+candidate helper requirements. These controls clear the source for the hosted
+campaign; they do not establish a successful native comparison or release gate.
+
+If the developer machine cannot complete this comparison reliably, the same
+driver and exact subjects may run serially on one owned worker in the existing
+Linux release job. Retain original 60-second limits, complete snapshots and
+explicit cleanup; bind the report to the candidate wheel/source payload and
+publication checks. This fresh 0.0.49 performance fixture is specific to the
+0.0.50 repair, not perpetual support for an old application runtime. All admitted
+database forward-migration gates remain mandatory in future releases. Arras's
+fresh installed Mac and actual Lakebase WAN acceptance remain separate gates.
+
 ## Scope
 
 Address the Lakebase installation blocker reported by the consumer now named Arras with an explicit,

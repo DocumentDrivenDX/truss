@@ -26,6 +26,9 @@ from native_fixture import WorkerCluster
 ROOT = Path(__file__).resolve().parents[1]
 UMF_OWNER_REVISION = '5ba77cff91a121a44c82f6bce32a78d8842161b5'
 MODULES = (
+    'test_installation_sql_batch', 'test_installation_set_facts',
+    'test_installation_batching_native', 'test_installation_batching_observer',
+    'test_measure_installer_submissions',
     'test_managed_platform_grants_native', 'test_managed_grants_migration_native',
     'test_preparation_runtime_recipe', 'test_installation_privileges_native',
     'test_managed_installation_native', 'test_install_preflight_native',

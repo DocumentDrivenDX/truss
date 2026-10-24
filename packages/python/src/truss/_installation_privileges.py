@@ -4,11 +4,16 @@
 The trusted installer must quiesce administrative changes. The caller owns its
 transaction. Existing runtime profiles are not reinterpreted by this primitive.
 """
-from dataclasses import dataclass
+
 import json
+from dataclasses import dataclass
+
 from psycopg import sql
+
+from ._installation_sql_batch import execute_ordered_ddl
 from .execution import Error, ExecutionFailure, _UnsupportedProfileIncompatibility
 from .psycopg_host import PsycopgHost
+
 
 @dataclass(frozen=True, slots=True)
 class InstallationRoles:
@@ -94,11 +99,16 @@ def _resolved_tolerated_roles(cursor, names, *, owner, client, installer):
         return ()
     rows = _rows(cursor, '''SELECT oid,rolname::text FROM pg_catalog.pg_roles
         WHERE rolname=ANY(%s) ORDER BY rolname''', (list(names),))
-    resolved = {name: oid for oid, name in rows}
-    if len(resolved) != len(names) or set(resolved) != set(names):
+    if len(rows) != len(names) or any(
+        len(row) != 2 or type(row[0]) is not int or not 0 < row[0] < 2**32
+        or type(row[1]) is not str or not row[1]
+        for row in rows
+    ):
         raise ValueError('Every tolerated grantee must resolve to one current role')
-    if len(set(resolved.values())) != len(resolved):
-        raise ValueError('Tolerated grantee role identities must be distinct')
+    resolved = {name: oid for oid, name in rows}
+    if (len(resolved) != len(names) or set(resolved) != set(names)
+            or len(set(resolved.values())) != len(resolved)):
+        raise ValueError('Every tolerated grantee must resolve to one current role')
     return tuple((name, resolved[name]) for name in names)
 
 
@@ -113,6 +123,9 @@ def _role_name(cursor, oid):
 
 def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids, admitted_oids=()):
     """Classify a set-oriented ACL census and retain only selected-role evidence."""
+    legacy_empty_preflight_order = (
+        phase == 'pre_ownership' and not tolerated_oids and not admitted_oids
+    )
     cursor.execute('''WITH objects AS (
         SELECT 'schema'::text AS kind,n.oid,n.nspname::text AS name,NULL::text AS detail,
             n.nspowner AS owner,n.nspacl AS acl,'n'::"char" AS acl_kind
@@ -127,13 +140,15 @@ def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids
         UNION ALL SELECT 'type',t.oid,t.typname::text,NULL::text,t.typowner,t.typacl,'T'::"char"
         FROM pg_catalog.pg_type t WHERE t.typnamespace=%s), grants AS (
         SELECT o.kind,o.oid,o.name,o.detail,NULL::smallint AS attnum,NULL::text AS attname,
-            a.grantor,a.grantee,a.privilege_type,a.is_grantable
+            a.grantor,a.grantee,a.privilege_type,a.is_grantable,a.acl_ordinal
         FROM objects o CROSS JOIN LATERAL pg_catalog.aclexplode(
-            coalesce(o.acl,pg_catalog.acldefault(o.acl_kind,o.owner))) a
+            coalesce(o.acl,pg_catalog.acldefault(o.acl_kind,o.owner)))
+            WITH ORDINALITY AS a(grantor,grantee,privilege_type,is_grantable,acl_ordinal)
         UNION ALL SELECT 'column',a.attrelid,c.relname::text,NULL::text,a.attnum,a.attname::text,
-            x.grantor,x.grantee,x.privilege_type,x.is_grantable
+            x.grantor,x.grantee,x.privilege_type,x.is_grantable,x.acl_ordinal
         FROM pg_catalog.pg_attribute a JOIN pg_catalog.pg_class c ON c.oid=a.attrelid
-        CROSS JOIN LATERAL pg_catalog.aclexplode(a.attacl) x
+        CROSS JOIN LATERAL pg_catalog.aclexplode(a.attacl)
+            WITH ORDINALITY AS x(grantor,grantee,privilege_type,is_grantable,acl_ordinal)
         WHERE c.relnamespace=%s AND c.relkind IN ('r','p')
           AND a.attnum>0 AND NOT a.attisdropped AND a.attacl IS NOT NULL)
         SELECT g.kind,g.oid,g.name,g.detail,g.attnum,g.attname,g.grantor,g.grantee,
@@ -142,8 +157,25 @@ def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids
             CASE WHEN g.grantor=0 THEN 'PUBLIC' ELSE go.rolname::text END
         FROM grants g LEFT JOIN pg_catalog.pg_roles gr ON gr.oid=g.grantee
         LEFT JOIN pg_catalog.pg_roles go ON go.oid=g.grantor
-        ORDER BY g.kind,g.oid,g.attnum,g.grantee,g.grantor,g.privilege_type,g.is_grantable''',
-        (namespace, namespace, namespace, namespace, namespace), prepare=False)
+        ORDER BY
+            CASE WHEN %s THEN CASE
+                WHEN g.kind='schema' THEN 0
+                WHEN g.kind IN ('relation','sequence') THEN 1
+                WHEN g.kind='routine' THEN 2
+                WHEN g.kind='type' THEN 3
+                WHEN g.kind='column' THEN 4
+                ELSE 5 END ELSE 0 END,
+            CASE WHEN %s THEN g.oid END NULLS FIRST,
+            CASE WHEN %s THEN g.attnum END NULLS FIRST,
+            CASE WHEN %s THEN g.acl_ordinal END NULLS FIRST,
+            CASE WHEN %s THEN ''::text ELSE g.kind END,
+            g.oid,g.attnum,g.grantee,g.grantor,g.privilege_type,g.is_grantable''',
+        (namespace, namespace, namespace, namespace, namespace,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order), prepare=False)
     observations = []
     while True:
         batch = cursor.fetchmany(1024)
@@ -206,11 +238,11 @@ def finalize_installation_grants(cursor, report, roles, resolved_tolerated, inst
     after = _acl_observations(cursor, report.namespace_oid, phase='post_installation',
         installer_oid=installer_oid, tolerated_oids=tolerated_oids,
         admitted_oids=(report.owner_oid, report.client_oid))
-    for oid in tolerated_oids:
-        cursor.execute("SELECT pg_catalog.pg_has_role(%s,%s,'MEMBER')",
-            (report.client_oid,oid),prepare=False)
-        if cursor.fetchone() == (True,):
-            raise ValueError('Installation client can assume a tolerated raw-access role')
+    if tolerated_oids:
+        _exact_boolean_facts(cursor, '''SELECT role_oid,pg_catalog.pg_has_role(
+            %s,role_oid,'MEMBER') FROM unnest(%s::oid[]) roles(role_oid)
+            ORDER BY role_oid''', (report.client_oid, list(tolerated_oids)),
+            tolerated_oids, 'Installation client can assume a tolerated raw-access role')
     from ._runtime_admission import person_entrypoints
     public_signatures = [entry['publicName']+'('+entry['signature'].split('(',1)[1]
         for entry in person_entrypoints()]
@@ -226,15 +258,13 @@ def finalize_installation_grants(cursor, report, roles, resolved_tolerated, inst
     allowed=[]
     public_oids=[]
     client_oids=[]
-    for signature in signatures:
-        cursor.execute('SELECT pg_catalog.to_regprocedure(%s)::oid',('truss.'+signature,),prepare=False)
-        row=cursor.fetchone()
-        if row is not None and row[0] is not None:
-            allowed.append(row[0])
+    for signature, oid in zip(signatures, _resolve_signatures(cursor, signatures), strict=True):
+        if oid is not None:
+            allowed.append(oid)
             if signature in public_signatures:
-                public_oids.append(row[0])
+                public_oids.append(oid)
             elif signature in client_signatures:
-                client_oids.append(row[0])
+                client_oids.append(oid)
     _verify(cursor,report.namespace_oid,report.owner_oid,report.client_oid,report.original_objects,
         allowed_routines=allowed)
     _verify_final_acl_rows(cursor, report.namespace_oid, report.owner_oid,
@@ -297,20 +327,32 @@ def _verify_final_acl_rows(cursor, namespace, owner, client, installer, public_r
     for privilege in ('USAGE',):
         expected.add(('schema',namespace,0,privilege,False))
         expected.add(('schema',namespace,client,privilege,False))
-    cursor.execute('''SELECT oid FROM pg_catalog.pg_proc
-        WHERE pronamespace=%s AND oid=ANY(%s::oid[])''',(namespace,list(public_routines)),prepare=False)
-    for (oid,) in cursor.fetchall():
-        expected.add(('routine',oid,0,'EXECUTE',False))
-    cursor.execute('''SELECT oid FROM pg_catalog.pg_proc
-        WHERE pronamespace=%s AND oid=ANY(%s::oid[])''',(namespace,list(client_routines)),prepare=False)
-    for (oid,) in cursor.fetchall():
-        expected.add(('routine',oid,client,'EXECUTE',False))
-    admin_oids=set()
-    for signature in ('admin_install_recovery()', 'grant_import_audit_access(text,text,text)'):
-        cursor.execute('SELECT pg_catalog.to_regprocedure(%s)::oid',('truss.'+signature,),prepare=False)
-        row=cursor.fetchone()
-        if row is not None and row[0] is not None:
-            admin_oids.add(row[0])
+    public_ids = tuple(sorted(public_routines))
+    client_ids = tuple(sorted(client_routines))
+    requested_ids = (*public_ids, *client_ids)
+    if len(requested_ids) != len(set(requested_ids)):
+        raise ValueError('Resolved public routine identities overlap')
+    cursor.execute('''WITH requested(kind,oid) AS (
+        SELECT 'public'::text,unnest(%s::oid[])
+        UNION ALL SELECT 'client'::text,unnest(%s::oid[]))
+        SELECT r.kind,p.oid FROM requested r LEFT JOIN pg_catalog.pg_proc p
+          ON p.oid=r.oid AND p.pronamespace=%s ORDER BY r.kind,p.oid''',
+        (list(public_ids), list(client_ids), namespace), prepare=False)
+    routine_rows = _rows_from_cursor(cursor)
+    expected_routine_rows = tuple(
+        sorted((*[('public', oid) for oid in public_ids],
+                *[('client', oid) for oid in client_ids])))
+    if (any(len(row) != 2 for row in routine_rows)
+            or len(routine_rows) != len(expected_routine_rows)
+            or tuple(routine_rows) != expected_routine_rows):
+        raise ValueError('Resolved public routine identities changed')
+    for kind, oid in routine_rows:
+        expected.add(('routine',oid,0 if kind == 'public' else client,'EXECUTE',False))
+    admin_oids = {
+        oid for oid in _resolve_signatures(cursor,
+            ('admin_install_recovery()', 'grant_import_audit_access(text,text,text)'))
+        if oid is not None
+    }
     for oid in admin_oids:
         expected.add(('routine',oid,installer,'EXECUTE',False))
     observed_keys={(kind,oid,grantee,privilege,grantable)
@@ -437,6 +479,51 @@ def _rows(cursor, query, params=()):
     return rows
 
 
+def _exact_boolean_facts(cursor, query, params, expected_oids, refusal):
+    """Read one exact bounded OID inventory and reject missing/ambiguous facts."""
+    expected = tuple(sorted(expected_oids))
+    if len(expected) != len(set(expected)):
+        raise ValueError('Installation object identities are duplicated')
+    rows = _rows(cursor, query, params)
+    if (any(len(row) != 2 for row in rows)
+            or len(rows) != len(expected)
+            or tuple(row[0] for row in rows) != expected
+            or any(type(row[0]) is not int or type(row[1]) is not bool
+                   for row in rows)):
+        raise ValueError('Installation privilege observations are incomplete')
+    if any(row[1] for row in rows):
+        raise ValueError(refusal)
+
+
+def _resolve_signatures(cursor, signatures):
+    """Resolve a bounded ordered signature list without per-overload round trips."""
+    signatures = tuple(signatures)
+    if len(signatures) > 4096 or len(set(signatures)) != len(signatures):
+        raise ValueError('Installation routine signatures are duplicated or exceed bounds')
+    if not signatures:
+        return ()
+    cursor.execute('''WITH requested AS (
+        SELECT signature,ordinal FROM unnest(%s::text[]) WITH ORDINALITY r(signature,ordinal))
+        SELECT r.ordinal,r.signature,pg_catalog.to_regprocedure('truss.'||r.signature)::oid
+        FROM requested r ORDER BY r.ordinal''', (list(signatures),), prepare=False)
+    rows = _rows_from_cursor(cursor)
+    if (any(len(row) != 3 for row in rows)
+            or len(rows) != len(signatures)
+            or tuple((row[0], row[1]) for row in rows)
+                != tuple((index, signature) for index, signature in enumerate(signatures, 1))
+            or any(type(row[0]) is not int or type(row[1]) is not str
+                   or (row[2] is not None and type(row[2]) is not int) for row in rows)):
+        raise ValueError('Installation routine signature resolution is incomplete')
+    return tuple(row[2] for row in rows)
+
+
+def _rows_from_cursor(cursor):
+    rows = cursor.fetchmany(4097)
+    if len(rows) > 4096:
+        raise ValueError('Installation object limit exceeded')
+    return rows
+
+
 def _objects(cursor, namespace):
     relations = _rows(cursor, '''SELECT oid,relname,relkind,relowner,relacl
         FROM pg_catalog.pg_class WHERE relnamespace=%s ORDER BY oid''', (namespace,))
@@ -447,7 +534,59 @@ def _objects(cursor, namespace):
         FROM pg_catalog.pg_type WHERE typnamespace=%s ORDER BY oid''', (namespace,))
     if len(relations) + len(routines) + len(types) > 4096:
         raise ValueError('Installation object limit exceeded')
+    for inventory in (relations, routines, types):
+        object_oids = tuple(row[0] for row in inventory)
+        if (any(type(oid) is not int or not 0 < oid < 2**32 for oid in object_oids)
+                or len(object_oids) != len(set(object_oids))):
+            raise ValueError('Installation object identities are incomplete or duplicated')
     return relations, routines, types
+
+
+def _refuse_unsupported_classes(cursor, namespace):
+    """Check only the explicitly unsupported native classes in one catalog pass."""
+    cursor.execute('''SELECT object_class,object_oid FROM (
+        SELECT 'collation'::text object_class,oid object_oid
+          FROM pg_catalog.pg_collation WHERE collnamespace=%s
+        UNION ALL SELECT 'conversion',oid FROM pg_catalog.pg_conversion WHERE connamespace=%s
+        UNION ALL SELECT 'operator',oid FROM pg_catalog.pg_operator WHERE oprnamespace=%s
+        UNION ALL SELECT 'opclass',oid FROM pg_catalog.pg_opclass WHERE opcnamespace=%s
+        UNION ALL SELECT 'opfamily',oid FROM pg_catalog.pg_opfamily WHERE opfnamespace=%s
+        UNION ALL SELECT 'ts_config',oid FROM pg_catalog.pg_ts_config WHERE cfgnamespace=%s
+        UNION ALL SELECT 'ts_dict',oid FROM pg_catalog.pg_ts_dict WHERE dictnamespace=%s
+        UNION ALL SELECT 'ts_parser',oid FROM pg_catalog.pg_ts_parser WHERE prsnamespace=%s
+        UNION ALL SELECT 'ts_template',oid FROM pg_catalog.pg_ts_template WHERE tmplnamespace=%s
+        UNION ALL SELECT 'statistic_ext',oid FROM pg_catalog.pg_statistic_ext WHERE stxnamespace=%s
+        ) unsupported LIMIT 1''', (namespace,) * 10, prepare=False)
+    rows = _rows_from_cursor(cursor)
+    if rows:
+        if (len(rows[0]) != 2 or type(rows[0][0]) is not str
+                or type(rows[0][1]) is not int):
+            raise ValueError('Unsupported installation object class observation is invalid')
+        raise ValueError('Unsupported installation object class')
+
+
+def _refuse_extension_membership(cursor, namespace, relations, routines, types):
+    """Find extension membership for each explicitly captured object identity."""
+    relation_oids = [row[0] for row in relations]
+    routine_oids = [row[0] for row in routines]
+    type_oids = [row[0] for row in types]
+    cursor.execute('''WITH candidates(classid,objid) AS (
+        SELECT 'pg_catalog.pg_namespace'::regclass,%s::oid
+        UNION ALL SELECT 'pg_catalog.pg_class'::regclass,unnest(%s::oid[])
+        UNION ALL SELECT 'pg_catalog.pg_proc'::regclass,unnest(%s::oid[])
+        UNION ALL SELECT 'pg_catalog.pg_type'::regclass,unnest(%s::oid[]))
+        SELECT DISTINCT c.classid::oid,c.objid FROM candidates c
+        JOIN pg_catalog.pg_depend d ON d.classid=c.classid AND d.objid=c.objid
+        WHERE d.deptype='e' ORDER BY c.classid::oid,c.objid LIMIT 1''',
+        (namespace, relation_oids, routine_oids, type_oids), prepare=False)
+    rows = _rows_from_cursor(cursor)
+    if any(len(row) != 2 or type(row[0]) is not int or type(row[1]) is not int
+           for row in rows):
+        raise ValueError('Extension ownership observation is invalid')
+    if len(rows) != len(set(rows)):
+        raise ValueError('Extension ownership observations are duplicated')
+    if rows:
+        raise ValueError('Extension-owned installation object refused')
 
 
 def _verify(cursor, namespace, owner, client, original, *, allowed_routines=()):
@@ -467,28 +606,30 @@ def _verify(cursor, namespace, owner, client, original, *, allowed_routines=()):
         FROM pg_catalog.pg_namespace WHERE oid=%s''', (client,client,client,owner,namespace), prepare=False)
     if cursor.fetchone() != (owner,True,False,False):
         raise ValueError('Installation namespace or owner authority mismatch')
-    for oid,name,kind,*_ in relations:
-        if kind in ('i','I'):
-            continue
-        privileges = 'USAGE,SELECT,UPDATE' if kind == 'S' else 'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN'
-        fn = 'has_sequence_privilege' if kind == 'S' else 'has_table_privilege'
-        cursor.execute(sql.SQL('SELECT pg_catalog.{}(%s,%s,%s)').format(sql.Identifier(fn)), (client,oid,privileges), prepare=False)
-        if cursor.fetchone()[0]:
-            raise ValueError('Client relation privilege leaked')
-        if kind != 'S':
-            cursor.execute('''SELECT pg_catalog.has_any_column_privilege(%s,%s,'SELECT,INSERT,UPDATE,REFERENCES')''', (client,oid), prepare=False)
-            if cursor.fetchone()[0]:
-                raise ValueError('Client column privilege leaked')
-    for oid,*_ in routines:
-        if oid in allowed_routines:
-            continue
-        cursor.execute('SELECT pg_catalog.has_function_privilege(%s,%s,\'EXECUTE\')', (client,oid), prepare=False)
-        if cursor.fetchone()[0]:
-            raise ValueError('Client private routine privilege leaked')
-    for oid,*_ in types:
-        cursor.execute('SELECT pg_catalog.has_type_privilege(%s,%s,\'USAGE\')', (client,oid), prepare=False)
-        if cursor.fetchone()[0]:
-            raise ValueError('Client private type privilege leaked')
+    sequence_oids = [oid for oid, _, kind, *_ in relations if kind == 'S']
+    relation_oids = [oid for oid, _, kind, *_ in relations if kind not in ('S', 'i', 'I')]
+    _exact_boolean_facts(cursor, '''SELECT oid,pg_catalog.has_sequence_privilege(
+        %s,oid,'USAGE,SELECT,UPDATE') FROM pg_catalog.pg_class
+        WHERE oid=ANY(%s::oid[]) ORDER BY oid''',
+        (client, sequence_oids), sequence_oids, 'Client relation privilege leaked')
+    _exact_boolean_facts(cursor, '''SELECT oid,pg_catalog.has_table_privilege(
+        %s,oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+        FROM pg_catalog.pg_class WHERE oid=ANY(%s::oid[]) ORDER BY oid''',
+        (client, relation_oids), relation_oids, 'Client relation privilege leaked')
+    column_oids = [oid for oid, _, kind, *_ in relations if kind in ('r', 'p')]
+    _exact_boolean_facts(cursor, '''SELECT oid,pg_catalog.has_any_column_privilege(
+        %s,oid,'SELECT,INSERT,UPDATE,REFERENCES') FROM pg_catalog.pg_class
+        WHERE oid=ANY(%s::oid[]) ORDER BY oid''',
+        (client, column_oids), column_oids, 'Client column privilege leaked')
+    private_routines = [oid for oid, *_ in routines if oid not in allowed_routines]
+    _exact_boolean_facts(cursor, '''SELECT oid,pg_catalog.has_function_privilege(
+        %s,oid,'EXECUTE') FROM pg_catalog.pg_proc WHERE oid=ANY(%s::oid[]) ORDER BY oid''',
+        (client, private_routines), private_routines,
+        'Client private routine privilege leaked')
+    type_oids = [oid for oid, *_ in types]
+    _exact_boolean_facts(cursor, '''SELECT oid,pg_catalog.has_type_privilege(
+        %s,oid,'USAGE') FROM pg_catalog.pg_type WHERE oid=ANY(%s::oid[]) ORDER BY oid''',
+        (client, type_oids), type_oids, 'Client private type privilege leaked')
     cursor.execute("SELECT pg_catalog.has_schema_privilege(%s,%s,'USAGE WITH GRANT OPTION')", (client,namespace), prepare=False)
     if cursor.fetchone()[0]:
         raise ValueError('Client schema grant authority leaked')
@@ -579,46 +720,15 @@ def protect_installation_with_cursor(cursor, roles, *, resolved_tolerated=None):
             r[2]=='c' and r[5] in relation_ids or r[2]=='b' and r[6] in type_ids)
             for r in types):
         raise ValueError('Unsupported installation type or owner')
-    for catalog, field in [('pg_collation','collnamespace'),('pg_conversion','connamespace'),
-            ('pg_operator','oprnamespace'),('pg_opclass','opcnamespace'),('pg_opfamily','opfnamespace'),
-            ('pg_ts_config','cfgnamespace'),('pg_ts_dict','dictnamespace'),
-            ('pg_ts_parser','prsnamespace'),('pg_ts_template','tmplnamespace'),('pg_statistic_ext','stxnamespace')]:
-        if _rows(cursor,sql.SQL('SELECT oid FROM pg_catalog.{} WHERE {}=%s').format(sql.Identifier(catalog),sql.Identifier(field)), (namespace[0],)):
-            raise ValueError('Unsupported installation object class')
-    addresses = [('pg_namespace',namespace[0])] + [(c,row[0]) for c,rows in
-            [('pg_class',relations),('pg_proc',routines),('pg_type',types)] for row in rows]
-    for catalog, oid in addresses:
-        cursor.execute('''SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_depend
-            WHERE classid=%s::regclass AND objid=%s AND deptype='e')''', ('pg_catalog.'+catalog,oid), prepare=False)
-        if cursor.fetchone()[0]:
-            raise ValueError('Extension-owned installation object refused')
+    _refuse_unsupported_classes(cursor, namespace[0])
+    _refuse_extension_membership(cursor, namespace[0], relations, routines, types)
     columns = _rows(cursor,'''SELECT a.attrelid,a.attname,a.attacl FROM pg_catalog.pg_attribute a
         JOIN pg_catalog.pg_class c ON c.oid=a.attrelid
         WHERE c.relnamespace=%s AND c.relkind IN ('r','p') AND a.attnum>0 AND NOT a.attisdropped
         ORDER BY a.attrelid,a.attnum''',(namespace[0],))
     tolerated_oids = tuple(oid for _, oid in tolerated)
-    if tolerated:
-        pre_observations = _acl_observations(cursor, namespace[0], phase='pre_ownership',
-            installer_oid=actor[0], tolerated_oids=tolerated_oids)
-    else:
-        # Preserve the existing strict fast path when no policy is selected.
-        acls = [('schema',namespace[2])] + [('sequence' if row[2]=='S' else 'relation', row[4])
-            for row in relations if row[2] not in ('i','I')
-        ] + [('routine',row[4]) for row in routines] + [('type',row[4]) for row in types]
-        for object_class,acl in acls:
-            if acl is not None:
-                cursor.execute('SELECT grantee FROM pg_catalog.aclexplode(%s::aclitem[])', (acl,), prepare=False)
-                foreign=next((row[0] for row in cursor.fetchall() if row[0] not in (0,actor[0])),None)
-                if foreign is not None:
-                    raise _ThirdPartyGrantRefusal(_role_name(cursor,foreign), object_class, 'pre_ownership')
-        for _,_,acl in columns:
-            if acl is not None:
-                cursor.execute('SELECT grantee FROM pg_catalog.aclexplode(%s::aclitem[])',(acl,),prepare=False)
-                found=cursor.fetchall()
-                foreign=next((row[0] for row in found if row[0] not in (0,actor[0])),None)
-                if foreign is not None:
-                    raise _ThirdPartyGrantRefusal(_role_name(cursor,foreign), 'column', 'pre_ownership')
-        pre_observations = []
+    pre_observations = _acl_observations(cursor, namespace[0], phase='pre_ownership',
+        installer_oid=actor[0], tolerated_oids=tolerated_oids)
     for name in (roles.owner,roles.client):
         cursor.execute(sql.SQL('CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS').format(sql.Identifier(name)), prepare=False)
     owner = _rows(cursor,'SELECT oid FROM pg_catalog.pg_roles WHERE rolname=%s',(roles.owner,))[0][0]
@@ -635,30 +745,37 @@ def protect_installation_with_cursor(cursor, roles, *, resolved_tolerated=None):
     if not actor[2]:
         cursor.execute(sql.SQL('REVOKE CREATE ON DATABASE {} FROM {}').format(sql.Identifier(database),sql.Identifier(roles.owner)),prepare=False)
 
-    cursor.execute('REVOKE ALL ON SCHEMA truss FROM PUBLIC',prepare=False)
+    ddl = [sql.SQL('REVOKE ALL ON SCHEMA truss FROM PUBLIC')]
     for relation_oid,name,kind,*rest in relations:
         if kind in ('i','I'):continue
         kind_sql = sql.SQL('SEQUENCE' if kind=='S' else 'TABLE')
         qualified = sql.Identifier('truss',name)
-        cursor.execute(sql.SQL('ALTER {} {} OWNER TO {}').format(kind_sql,qualified,sql.Identifier(roles.owner)),prepare=False)
-        cursor.execute(sql.SQL('REVOKE ALL ON {} {} FROM PUBLIC').format(kind_sql,qualified),prepare=False)
+        ddl.append(sql.SQL('ALTER {} {} OWNER TO {}').format(
+            kind_sql,qualified,sql.Identifier(roles.owner)))
+        ddl.append(sql.SQL('REVOKE ALL ON {} {} FROM PUBLIC').format(kind_sql,qualified))
         names = [sql.Identifier(c[1]) for c in columns if c[0]==relation_oid]
         if names:
-            cursor.execute(sql.SQL('REVOKE ALL ({}) ON TABLE {} FROM PUBLIC').format(sql.SQL(',').join(names),qualified),prepare=False)
+            ddl.append(sql.SQL('REVOKE ALL ({}) ON TABLE {} FROM PUBLIC').format(
+                sql.SQL(',').join(names),qualified))
     for _,name,kind,_,_,args in routines:
         signature = sql.SQL('{}({})').format(sql.Identifier('truss',name),sql.SQL(args))
         kind_sql = sql.SQL('PROCEDURE' if kind=='p' else 'FUNCTION')
-        cursor.execute(sql.SQL('ALTER {} {} OWNER TO {}').format(kind_sql,signature,sql.Identifier(roles.owner)),prepare=False)
-        cursor.execute(sql.SQL('REVOKE ALL ON {} {} FROM PUBLIC').format(kind_sql,signature),prepare=False)
+        ddl.append(sql.SQL('ALTER {} {} OWNER TO {}').format(
+            kind_sql,signature,sql.Identifier(roles.owner)))
+        ddl.append(sql.SQL('REVOKE ALL ON {} {} FROM PUBLIC').format(kind_sql,signature))
     for _,name,kind,*_ in types:
         if kind=='b':continue
         kind_sql = sql.SQL('DOMAIN' if kind=='d' else 'TYPE')
         if kind in ('d','e'):
-            cursor.execute(sql.SQL('ALTER {} {} OWNER TO {}').format(kind_sql,sql.Identifier('truss',name),sql.Identifier(roles.owner)),prepare=False)
-        cursor.execute(sql.SQL('REVOKE ALL ON TYPE {} FROM PUBLIC').format(sql.Identifier('truss',name)),prepare=False)
+            ddl.append(sql.SQL('ALTER {} {} OWNER TO {}').format(
+                kind_sql,sql.Identifier('truss',name),sql.Identifier(roles.owner)))
+        ddl.append(sql.SQL('REVOKE ALL ON TYPE {} FROM PUBLIC').format(
+            sql.Identifier('truss',name)))
     for kind in ('FUNCTIONS','TYPES'):
-        cursor.execute(sql.SQL('ALTER DEFAULT PRIVILEGES FOR ROLE {} REVOKE ALL ON {} FROM PUBLIC').format(sql.Identifier(roles.owner),sql.SQL(kind)),prepare=False)
-    cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(roles.client)),prepare=False)
+        ddl.append(sql.SQL('ALTER DEFAULT PRIVILEGES FOR ROLE {} REVOKE ALL ON {} FROM PUBLIC').format(
+            sql.Identifier(roles.owner),sql.SQL(kind)))
+    ddl.append(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(roles.client)))
+    execute_ordered_ddl(cursor, ddl)
     report = _verify(cursor,namespace[0],owner,client,objects)
     if tolerated:
         post_observations = _acl_observations(cursor, namespace[0], phase='post_installation',
