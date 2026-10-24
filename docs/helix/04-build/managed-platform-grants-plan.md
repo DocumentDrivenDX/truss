@@ -170,6 +170,45 @@ change. This diagnostic profile changes no installed format or runtime API.
 Migration preservation checks remain unchanged and compare original data without
 this fresh-database normalization.
 
+The subsequent exact-source `c67997f7` attempt completed both installations,
+captured both snapshots and passed caller rollback, fixture inventory and owned
+worker shutdown. Its comparison remains failed: exactly 520 cells differ, the
+names of 260 internally generated foreign-key triggers and the same names in
+their rendered definitions. All other captured fields match. Retain the
+original failed report (`83496508e8deb9c75427ef2ea006a5d1c56ec01abd0dfb5c8d37cf5418619723`)
+and shutdown receipt (`949a7a981e4db132e96c960be125dfa2c8995adc0b7fa5e87a1d5bb9b7750b14`);
+do not relabel that result.
+
+For the fixed native-2888/PostgreSQL-18.6 profile, comparison profile
+`truss-fresh-install-snapshot/2`
+also handles this finite native identity class. PostgreSQL [appends the actual
+trigger OID to an internally generated name](https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/src/backend/commands/trigger.c).
+Capture each trigger's actual native OID and foreign-key constraint linkage in
+the same catalog observation. Normalize only an internal foreign-key trigger
+whose exact `RI_ConstraintTrigger_a_` or `RI_ConstraintTrigger_c_` suffix equals
+that canonical native OID. Retain its original name, definition, OID, linkage and
+row position as closed evidence. Change only the exact initial quoted trigger
+name token in its rendered definition and its name field. The replacement
+retains the a/c prefix and the full SHA-256 of the canonical foreign-key identity
+(owning schema, owning relation, constraint name and exact definition). Cross-check the native
+constraint definition against its unique captured foreign-key constraint row;
+the trigger's table need not be the constraint's owning relation. This preserves
+the compared trigger-to-constraint association. Preserve all other definition
+bytes, enabled state and original row order.
+Require the complete 322-trigger inventory with exactly 260 such internal
+triggers, rejecting duplicate, missing or out-of-range evidence. All 62 other
+trigger rows remain exact. Collector and publication checks must validate the
+same evidence and normalized correspondence. This permits no general OID mask,
+sorting, row removal or additional generated-value class. A fresh source-bound
+run must pass; the failed attempt does not become qualification evidence.
+
+The finite trigger correction passes 40 focused pure controls, with independent
+review passing all 19 measurement controls against unchanged reviewed hashes.
+These include the actual collector path, native OID/FK-link failures, missing or
+duplicate evidence, distinct FK identities, changed definition tails and exact
+noninternal rows. A fresh actual comparison and complete Linux release workflow
+remain required.
+
 The repaired diagnostic passes 39 focused pure controls. Independent review also
 passes all 18 measurement controls, including the actual snapshot collector with
 native-shaped JSON OID strings and negative identity cases, original generation

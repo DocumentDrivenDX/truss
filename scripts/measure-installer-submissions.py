@@ -16,6 +16,7 @@ import importlib
 import importlib.metadata
 import json
 import os
+import re
 import selectors
 import signal
 import subprocess
@@ -48,7 +49,11 @@ NATIVE_MANIFEST_SHA256 = (
 )
 _OID_MAX = (1 << 32) - 1
 _VALIDATOR_SECRET_TABLE = "truss.reader_catalog_validator_secret"
-_SNAPSHOT_PROFILE = "truss-fresh-install-snapshot/1"
+_SNAPSHOT_PROFILE = "truss-fresh-install-snapshot/2"
+_EXPECTED_TRIGGER_COUNT = 322
+_EXPECTED_INTERNAL_TRIGGER_COUNT = 260
+_EXPECTED_NONINTERNAL_TRIGGER_COUNT = 62
+_RI_TRIGGER_NAME = re.compile(r"RI_ConstraintTrigger_([ac])_([1-9][0-9]*)\Z")
 _ACTIVE_MEASUREMENT: ContextVar[dict[str, Any] | None] = ContextVar(
     "truss_installer_measurement", default=None
 )
@@ -79,6 +84,266 @@ def _canonical_oid_text(value: Any) -> int:
     if parsed <= 0 or parsed > _OID_MAX or str(parsed) != value:
         raise RuntimeError("Native OID text is outside the supported range")
     return parsed
+
+
+def _canonical_catalog_oid_text(value: Any, *, allow_zero: bool = False) -> int:
+    if allow_zero and type(value) is str and value == "0":
+        return 0
+    return _canonical_oid_text(value)
+
+
+def _foreign_key_trigger_marker(
+    action: str,
+    owning_schema: str,
+    owning_relation: str,
+    constraint_name: str,
+    constraint_definition: str,
+) -> str:
+    foreign_key_key = _canonical_bytes(
+        [owning_schema, owning_relation, constraint_name, constraint_definition]
+    )
+    foreign_key_digest = _sha256(foreign_key_key)
+    return f"RI_ConstraintTrigger_{action}_<native-oid-for-fk:{foreign_key_digest}>"
+
+
+def _internal_trigger_parts(
+    name: Any,
+    trigger_oid_text: Any,
+    owning_schema: Any,
+    owning_relation: Any,
+    constraint_name: Any,
+    constraint_definition: Any,
+) -> tuple[str, str]:
+    trigger_oid = _canonical_oid_text(trigger_oid_text)
+    if type(name) is not str:
+        raise ValueError("Internal trigger name is not text")
+    match = _RI_TRIGGER_NAME.fullmatch(name)
+    if match is None or match.group(2) != str(trigger_oid):
+        raise ValueError("Internal RI trigger name does not bind its native OID")
+    action = match.group(1)
+    if any(
+        type(value) is not str or not value
+        for value in (
+            owning_schema,
+            owning_relation,
+            constraint_name,
+            constraint_definition,
+        )
+    ):
+        raise ValueError("Internal trigger foreign-key identity is incomplete")
+    normalized_name = _foreign_key_trigger_marker(
+        action,
+        owning_schema,
+        owning_relation,
+        constraint_name,
+        constraint_definition,
+    )
+    return action, normalized_name
+
+
+def _normalized_internal_trigger_definition(
+    definition: Any, original_name: str, normalized_name: str
+) -> str:
+    quoted = f'"{original_name}"'
+    prefix = f"CREATE CONSTRAINT TRIGGER {quoted} "
+    if (
+        type(definition) is not str
+        or not definition.startswith(prefix)
+        or definition.count(quoted) != 1
+    ):
+        raise ValueError("Internal RI trigger definition name token is not exact")
+    return f'CREATE CONSTRAINT TRIGGER "{normalized_name}" ' + definition[len(prefix) :]
+
+
+def _validate_internal_trigger_evidence(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list) or len(value) != _EXPECTED_INTERNAL_TRIGGER_COUNT:
+        raise ValueError("Internal trigger evidence count mismatch")
+    expected_keys = {
+        "position",
+        "triggerOid",
+        "relationName",
+        "originalName",
+        "enabled",
+        "originalDefinition",
+        "tgconstraintOid",
+        "constraintOid",
+        "constraintRelation",
+        "constraintName",
+        "constraintType",
+        "constraintSchema",
+        "constraintDefinition",
+    }
+    result: list[dict[str, Any]] = []
+    positions: set[int] = set()
+    trigger_oids: set[int] = set()
+    for entry_value in value:
+        entry = _object(entry_value)
+        if set(entry) != expected_keys:
+            raise ValueError("Internal trigger evidence fields are not closed")
+        position = entry.get("position")
+        if (
+            type(position) is not int
+            or position < 0
+            or position >= _EXPECTED_TRIGGER_COUNT
+            or position in positions
+        ):
+            raise ValueError("Internal trigger evidence position is invalid")
+        positions.add(position)
+        trigger_oid = _canonical_oid_text(entry.get("triggerOid"))
+        if trigger_oid in trigger_oids:
+            raise ValueError("Duplicate internal trigger OID evidence")
+        trigger_oids.add(trigger_oid)
+        _, normalized_name = _internal_trigger_parts(
+            entry.get("originalName"),
+            entry.get("triggerOid"),
+            entry.get("constraintSchema"),
+            entry.get("constraintRelation"),
+            entry.get("constraintName"),
+            entry.get("constraintDefinition"),
+        )
+        if (
+            type(entry.get("relationName")) is not str
+            or not entry["relationName"]
+            or type(entry.get("enabled")) is not str
+            or type(entry.get("originalDefinition")) is not str
+            or type(entry.get("constraintRelation")) is not str
+            or not entry["constraintRelation"]
+            or type(entry.get("constraintName")) is not str
+            or not entry["constraintName"]
+            or entry.get("constraintSchema") != "truss"
+            or type(entry.get("constraintDefinition")) is not str
+            or not entry["constraintDefinition"]
+            or entry.get("constraintType") != "f"
+        ):
+            raise ValueError("Internal trigger evidence value is invalid")
+        tgconstraint_oid = _canonical_oid_text(entry.get("tgconstraintOid"))
+        constraint_oid = _canonical_oid_text(entry.get("constraintOid"))
+        if tgconstraint_oid != constraint_oid:
+            raise ValueError("Internal trigger foreign-key OID binding mismatch")
+        _normalized_internal_trigger_definition(
+            entry["originalDefinition"], entry["originalName"], normalized_name
+        )
+        result.append(dict(entry))
+    if [entry["position"] for entry in result] != sorted(positions):
+        raise ValueError("Internal trigger evidence order mismatch")
+    return result
+
+
+def _normalize_internal_trigger_rows(
+    value: Any, constraint_rows_value: Any
+) -> tuple[list[list[Any]], list[dict[str, Any]]]:
+    if not isinstance(value, list) or len(value) != _EXPECTED_TRIGGER_COUNT:
+        raise RuntimeError("Exact native trigger inventory required")
+    if not isinstance(constraint_rows_value, list):
+        raise TypeError("Native constraint inventory is unavailable")
+    constraint_links: set[tuple[str, str, str, str]] = set()
+    for row in constraint_rows_value:
+        if not isinstance(row, list) or len(row) < 3:
+            raise RuntimeError("Native constraint inventory row is malformed")
+        if len(row) >= 4 and all(type(item) is str for item in row[:4]):
+            constraint_links.add((row[0], row[1], row[2], row[3]))
+    normalized_rows: list[list[Any]] = []
+    evidence: list[dict[str, Any]] = []
+    seen_oids: set[int] = set()
+    internal_count = 0
+    noninternal_count = 0
+    for position, row_value in enumerate(value):
+        if not isinstance(row_value, list) or len(row_value) != 13:
+            raise RuntimeError("Native trigger row is malformed")
+        (
+            trigger_oid_text,
+            relation_name,
+            trigger_name,
+            enabled,
+            is_internal,
+            tgconstraint_oid_text,
+            constraint_oid_text,
+            constraint_relation,
+            constraint_name,
+            constraint_type,
+            constraint_schema,
+            constraint_definition,
+            definition,
+        ) = row_value
+        trigger_oid = _canonical_oid_text(trigger_oid_text)
+        if trigger_oid in seen_oids:
+            raise RuntimeError("Duplicate native trigger OID")
+        seen_oids.add(trigger_oid)
+        if (
+            type(relation_name) is not str
+            or not relation_name
+            or type(trigger_name) is not str
+            or not trigger_name
+            or type(enabled) is not str
+            or type(is_internal) is not bool
+            or type(definition) is not str
+        ):
+            raise RuntimeError("Native trigger row fields are invalid")
+        if not is_internal:
+            _canonical_catalog_oid_text(tgconstraint_oid_text, allow_zero=True)
+            normalized_rows.append(
+                [relation_name, trigger_name, enabled, False, definition]
+            )
+            noninternal_count += 1
+            continue
+        internal_count += 1
+        tgconstraint_oid = _canonical_oid_text(tgconstraint_oid_text)
+        constraint_oid = _canonical_oid_text(constraint_oid_text)
+        _, normalized_name = _internal_trigger_parts(
+            trigger_name,
+            trigger_oid_text,
+            constraint_schema,
+            constraint_relation,
+            constraint_name,
+            constraint_definition,
+        )
+        if (
+            tgconstraint_oid != constraint_oid
+            or constraint_type != "f"
+            or constraint_schema != "truss"
+            or type(constraint_relation) is not str
+            or type(constraint_name) is not str
+            or type(constraint_definition) is not str
+            or (
+                constraint_relation,
+                constraint_name,
+                constraint_type,
+                constraint_definition,
+            )
+            not in constraint_links
+        ):
+            raise RuntimeError(
+                "Internal trigger lacks its exact foreign-key constraint"
+            )
+        normalized_definition = _normalized_internal_trigger_definition(
+            definition, trigger_name, normalized_name
+        )
+        normalized_rows.append(
+            [relation_name, normalized_name, enabled, True, normalized_definition]
+        )
+        evidence.append(
+            {
+                "position": position,
+                "triggerOid": trigger_oid_text,
+                "relationName": relation_name,
+                "originalName": trigger_name,
+                "enabled": enabled,
+                "originalDefinition": definition,
+                "tgconstraintOid": tgconstraint_oid_text,
+                "constraintOid": constraint_oid_text,
+                "constraintRelation": constraint_relation,
+                "constraintName": constraint_name,
+                "constraintType": constraint_type,
+                "constraintSchema": constraint_schema,
+                "constraintDefinition": constraint_definition,
+            }
+        )
+    if (
+        internal_count != _EXPECTED_INTERNAL_TRIGGER_COUNT
+        or noninternal_count != _EXPECTED_NONINTERNAL_TRIGGER_COUNT
+    ):
+        raise RuntimeError("Native internal/noninternal trigger cohort mismatch")
+    return normalized_rows, _validate_internal_trigger_evidence(evidence)
 
 
 def _safe_traceback_location(error: BaseException) -> dict[str, Any] | None:
@@ -146,6 +411,7 @@ def _snapshot_evidence(
         "schemaRevision",
         "nativeRoleBindings",
         "validatorSecret",
+        "internalTriggers",
     }
     if set(evidence) != expected_keys:
         raise ValueError("Installation snapshot evidence fields are not closed")
@@ -209,6 +475,9 @@ def _snapshot_evidence(
         runtime_sql_sha256=runtime_sql_sha256,
         native_manifest_sha256=native_manifest_sha256,
     )
+    internal_triggers = _validate_internal_trigger_evidence(
+        evidence.get("internalTriggers")
+    )
     return {
         "profile": _SNAPSHOT_PROFILE,
         "nativeManifestSha256": native_manifest_sha256,
@@ -219,6 +488,7 @@ def _snapshot_evidence(
             label: dict(_object(bindings[label])) for label in ("owner", "registrar")
         },
         "validatorSecret": secret,
+        "internalTriggers": internal_triggers,
     }
 
 
@@ -230,6 +500,9 @@ def _validate_snapshot_normalization(snapshot_value: Any, evidence_value: Any) -
     identity = _object(evidence.get("installationIdentity"))
     revision = _object(evidence.get("schemaRevision"))
     secret = _object(evidence.get("validatorSecret"))
+    internal_trigger_evidence = _validate_internal_trigger_evidence(
+        evidence.get("internalTriggers")
+    )
     installation_rows = relation_rows.get("catalog_runtime_installation")
     if (
         not isinstance(installation_rows, list)
@@ -268,6 +541,75 @@ def _validate_snapshot_normalization(snapshot_value: Any, evidence_value: Any) -
         {"secret": "<validated-validator-secret>"}
     ]:
         raise ValueError("Normalized validator secret marker mismatch")
+    trigger_rows = snapshot.get("triggers")
+    if (
+        not isinstance(trigger_rows, list)
+        or len(trigger_rows) != _EXPECTED_TRIGGER_COUNT
+    ):
+        raise ValueError("Normalized trigger inventory count mismatch")
+    constraint_rows = snapshot.get("constraints")
+    if not isinstance(constraint_rows, list):
+        raise TypeError("Normalized foreign-key constraint inventory is missing")
+    evidence_by_position = {
+        entry["position"]: entry for entry in internal_trigger_evidence
+    }
+    internal_count = 0
+    noninternal_count = 0
+    for position, row in enumerate(trigger_rows):
+        if not isinstance(row, list) or len(row) != 5:
+            raise ValueError("Normalized trigger row shape mismatch")
+        if row[3] is True:
+            internal_count += 1
+            entry = evidence_by_position.get(position)
+            if entry is None:
+                raise ValueError("Normalized internal trigger evidence is missing")
+            _, normalized_name = _internal_trigger_parts(
+                entry["originalName"],
+                entry["triggerOid"],
+                entry["constraintSchema"],
+                entry["constraintRelation"],
+                entry["constraintName"],
+                entry["constraintDefinition"],
+            )
+            normalized_definition = _normalized_internal_trigger_definition(
+                entry["originalDefinition"], entry["originalName"], normalized_name
+            )
+            expected_row = [
+                entry["relationName"],
+                normalized_name,
+                entry["enabled"],
+                True,
+                normalized_definition,
+            ]
+            constraint_matches = [
+                constraint
+                for constraint in constraint_rows
+                if isinstance(constraint, list)
+                and len(constraint) >= 4
+                and constraint[0] == entry["constraintRelation"]
+                and constraint[1] == entry["constraintName"]
+                and constraint[2] == "f"
+                and constraint[3] == entry["constraintDefinition"]
+            ]
+            if row != expected_row or len(constraint_matches) != 1:
+                raise ValueError("Internal trigger foreign-key evidence mismatch")
+        elif row[3] is False:
+            noninternal_count += 1
+            if position in evidence_by_position:
+                raise ValueError("Noninternal trigger has internal evidence")
+            if any(
+                type(value) is not str for value in (row[0], row[1], row[2], row[4])
+            ):
+                raise ValueError("Noninternal trigger row was altered")
+        else:
+            raise ValueError("Normalized trigger internal flag is invalid")
+    if (
+        internal_count != _EXPECTED_INTERNAL_TRIGGER_COUNT
+        or noninternal_count != _EXPECTED_NONINTERNAL_TRIGGER_COUNT
+        or set(evidence_by_position)
+        != {position for position, row in enumerate(trigger_rows) if row[3] is True}
+    ):
+        raise ValueError("Normalized trigger cohort evidence mismatch")
 
 
 def _bind_installation_role_oids(
@@ -847,11 +1189,18 @@ def _installation_snapshot(
         "sequenceState": [],
         "triggers": _json_rows(
             connection,
-            """SELECT c.relname::text,t.tgname::text,t.tgenabled::text,
-                      t.tgisinternal,pg_catalog.pg_get_triggerdef(t.oid,false)
+            """SELECT t.oid::text,c.relname::text,t.tgname::text,t.tgenabled::text,
+                      t.tgisinternal,t.tgconstraint::text,con.oid::text,
+                      conrel.relname::text,con.conname::text,con.contype::text,
+                      con_ns.nspname::text,pg_catalog.pg_get_constraintdef(con.oid,true),
+                      pg_catalog.pg_get_triggerdef(t.oid,false)
                FROM pg_catalog.pg_trigger t
                JOIN pg_catalog.pg_class c ON c.oid=t.tgrelid
                JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+               LEFT JOIN pg_catalog.pg_constraint con
+                 ON con.oid=t.tgconstraint AND con.contype='f'
+               LEFT JOIN pg_catalog.pg_class conrel ON conrel.oid=con.conrelid
+               LEFT JOIN pg_catalog.pg_namespace con_ns ON con_ns.oid=conrel.relnamespace
                WHERE n.nspname='truss'
                ORDER BY c.relname,t.tgname""",
         ),
@@ -998,6 +1347,9 @@ def _installation_snapshot(
                         acl.grantor,acl.privilege_type""",
         ),
     }
+    snapshot["triggers"], internal_trigger_evidence = _normalize_internal_trigger_rows(
+        snapshot["triggers"], snapshot["constraints"]
+    )
     relation_names = [
         row[0]
         for row in connection.execute(
@@ -1183,6 +1535,7 @@ def _installation_snapshot(
             "schemaRevision": schema_revision_evidence,
             "nativeRoleBindings": role_bindings,
             "validatorSecret": secret_evidence,
+            "internalTriggers": internal_trigger_evidence,
         },
         runtime_sql_sha256=runtime_sql_sha256,
         native_manifest_sha256=native_manifest_sha256,
@@ -2031,7 +2384,7 @@ def _orchestrate(output: Path, baseline_wheel: Path) -> int:
             "Instrumentation records no submitted SQL text, connection URI, or parameters. The normalized native snapshot includes installed routine definitions, but no server or wire timings.",
             "A captured source unit may contain multiple SQL statements; counts are units and Cursor.execute submissions, not parsed SQL statements.",
             "Both installation attempts use the explicitly reported 60000 ms statement and operation budgets and are fully rolled back.",
-            "The installed-object snapshot preserves rows and sequence states; it normalizes only generated installation_id/source_epoch UUIDs, genesis_at and its source-identical schema_rev.accepted_at, the two owner/registrar OIDs after canonical native OID/name binding, and the validated 32-byte reader validator secret to a fixed marker. The secret SHA-256 commitments are recorded separately and must differ across fresh installations.",
+            "The installed-object snapshot preserves rows and sequence states; it normalizes only generated installation_id/source_epoch UUIDs, genesis_at and its source-identical schema_rev.accepted_at, owner/registrar OIDs after canonical native OID/name binding, the validated 32-byte reader validator secret, and the native OIDs of exactly 260 internal FK triggers into markers bound to each FK's schema, owning relation, constraint name, and definition. Their original trigger OID/name/definition and FK linkage are retained as closed evidence; the 62 noninternal trigger rows and all other definition bytes remain exact. Secret SHA-256 commitments are recorded separately and must differ across fresh installations.",
         ],
     }
     worker_error: Exception | None = None
