@@ -23,6 +23,55 @@ ddx:
 
 # Managed platform grants: assessment and delivery plan
 
+## Installer round-trip repair — 2026-10-24
+
+The owner authorized batching installer SQL and set-based verification, followed
+by a new immutable Truss release and fresh Arras Mac and actual Lakebase
+campaigns. No VM, additional authority, reduced checks or increased deadline is
+part of this repair. The public 0.0.49 diagnostic reached its original 60-second
+operation limit after 1,272 client execute submissions; it is a contained failed
+attempt, not managed-service acceptance. Client execute timing includes driver,
+network and server work and does not isolate their individual contributions.
+
+The implementation keeps the exact ordered captured SQL units and quoted
+object-specific commands. A carrier contains at most 32 units and 128 KiB of
+UTF-8 text including separators. An already captured larger source unit runs
+alone, unchanged. Units may contain multiple native SQL statements; carrier
+counts must never be reported as native statement counts. Use the passed guarded
+stock psycopg cursor, no bind parameters, `prepare=False`, `binary=False`, and
+drain every command result. Reject any row-producing result; propagate original
+driver failures without retries or sequential fallback. The original host
+savepoint, caller transaction and operation-wide cancellation remain in force.
+
+Replace per-object extension and effective-privilege reads with bounded catalog
+queries keyed by the captured catalog class and OID. Preserve exact overload
+identities, unsupported-class refusals, inventory and owner checks, role flags,
+relation/sequence/column/routine/type/schema predicates, private defaults and
+tolerated-grantee identity and grant-option equality. Missing, duplicate or NULL
+required observations fail closed. Both verification phases remain: after
+ownership protection and after final installation grants/comments.
+
+| Slice | Dependency | Required evidence |
+| --- | --- | --- |
+| IB-1 | Existing CONTRACT-007/008 and Python boundary gate | Explicit private helper map; allowed caller and forbidden host/runtime import controls; ordered source and carrier boundary controls |
+| IB-2 | IB-1 | Native complete inventory/definition/owner/ACL comparison, overload/dependency/column/inherited-grant refusals, mid-batch error and original-deadline cancellation; caller work and settings preserved |
+| IB-3 | IB-2 | Matched public 0.0.49 and candidate fixture measurements: exact artifacts, captured units/command inventory, actual execute submissions, client wait/wall time and independently confirmed rollback/worker cleanup |
+| IB-4 | IB-3 | Independent review; full Linux release workflow and every admitted populated migration lineage; immutable publication and public clean-download verification |
+| IB-5 | Published IB-4 tuple | New exact Arras wheel and freeze; complete fresh installed Mac and actual Lakebase campaigns; final PR #9 review/merge/release and exact published-byte verification |
+
+The runtime remains latest-only. Databases from every admitted UMF 0.10 lineage
+retain forward migration to latest without an age cutoff; historical tools are
+not supported application runtimes. If native source identity is unchanged,
+verify the existing-current path explicitly rather than inventing a migration
+edge or rewriting historical manifests. No pre-0.10 compatibility is added.
+
+Execution is authorized. Spending/token estimates and a numerical ceiling were
+not supplied; runtime metering is unavailable here. Native fixtures own fresh
+socket-only workers and disposable database/roles. Existing public artifacts and
+failed diagnostics remain immutable. At this checkpoint implementation and
+offline controls are in progress; native, release and consumer gates above are
+open. A candidate code diff or local timing improvement cannot close IB-4/IB-5.
+
 ## Scope
 
 Address the Lakebase installation blocker reported by the consumer now named Arras with an explicit,

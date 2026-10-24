@@ -29,6 +29,9 @@ def main():
     if not baseline['passed']:
         raise AssertionError(baseline['errors'])
     cases = [
+        ('installer-batch-allowed', '_installation_privileges.py', '\nfrom ._installation_sql_batch import execute_ordered_ddl\n', None),
+        ('batch-forbidden-host', '_installation_sql_batch.py', '\nfrom .psycopg_host import PsycopgHost\n', 'forbidden import truss.psycopg_host'),
+        ('batch-forbidden-runtime', '_installation_sql_batch.py', '\nfrom .catalog_runtime import CatalogRuntimeConfiguration\n', 'forbidden import truss.catalog_runtime'),
         ('migration-recipe-allowed', 'migrations.py', '\nfrom ._migration_recipe import load_recipe\n', None),
         ('query-forbidden-migration', '_query_runtime.py', '\nfrom ._migration_execute import execute\n', 'forbidden import truss._migration_execute'),
 
