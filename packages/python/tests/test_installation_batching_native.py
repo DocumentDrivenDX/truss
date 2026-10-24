@@ -10,8 +10,14 @@ from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
 
+import psycopg
 import truss._installation_privileges as privileges
 from psycopg import pq, sql
+from test_installation_batching_observer import (
+    PublicExecuteObserver,
+    _write_exclusive,
+    observe_baseline,
+)
 from test_psycopg_host_native import PsycopgHostNativeTests
 from truss import Error, Ok, PsycopgProfile, psycopg_host
 from truss._installation_privileges import (
@@ -209,9 +215,39 @@ class InstallationBatchingNativeTests(unittest.TestCase):
         before = self._source_fingerprint()
         self.connection.execute("SAVEPOINT caller_install_boundary")
 
-        baseline, baseline_measure = self._measure_install(
-            "unbatched-reference", self._unbatched_reference
-        )
+        observer = PublicExecuteObserver(psycopg.Cursor, self.connection)
+        evidence_path = os.environ.get("TRUSS_INSTALLATION_BATCHING_EVIDENCE")
+        source_hashes = {
+            name: hashlib.sha256(
+                path.read_bytes()
+            ).hexdigest()
+            for name, path in {
+                "_installation_privileges.py": ROOT
+                / "packages/python/src/truss/_installation_privileges.py",
+                "_installation_sql_batch.py": ROOT
+                / "packages/python/src/truss/_installation_sql_batch.py",
+                "test_installation_batching_native.py": Path(__file__),
+                "test_installation_batching_observer.py": Path(__file__).with_name(
+                    "test_installation_batching_observer.py"
+                ),
+            }.items()
+        }
+        with observer:
+            baseline, baseline_measure = observe_baseline(
+                observer,
+                lambda: self._measure_install(
+                    "unbatched-reference", self._unbatched_reference
+                ),
+                evidence_path=Path(evidence_path) if evidence_path else None,
+                source_hashes=source_hashes,
+                statement_timeout_ms=self.host._timeout,
+                operation_timeout_ms=self.host._deadline_ms,
+                succeeded=lambda value: (
+                    isinstance(value, tuple)
+                    and len(value) == 2
+                    and isinstance(value[0], Ok)
+                ),
+            )
         self.assertIsInstance(
             baseline, Ok, str(getattr(self.host._custody.last_attempt, "error", None))
         )
@@ -264,11 +300,23 @@ class InstallationBatchingNativeTests(unittest.TestCase):
             "baseline": baseline_measure,
             "candidate": candidate_measure,
         }
-        evidence_path = os.environ.get("TRUSS_INSTALLATION_BATCHING_EVIDENCE")
         if evidence_path:
-            Path(evidence_path).write_text(
-                json.dumps(report, sort_keys=True, indent=2) + "\n"
-            )
+            _write_exclusive(Path(evidence_path), report)
+
+    @staticmethod
+    def _safe_observer_summary(observer):
+        allowed = (
+            "phase", "ordinal", "phaseOrdinal", "source", "function", "line",
+            "subphase", "exceptionType", "sqlState", "elapsedNs",
+        )
+        snapshot = observer.snapshot()
+        safe = lambda event: {key: event[key] for key in allowed if key in event}
+        failed = [safe(event) for event in snapshot["events"] if "exceptionType" in event]
+        tail = [safe(event) for event in snapshot["events"][-3:]]
+        return (
+            f"observer failures={failed!r}; finalEvents={tail!r}; "
+            f"total={snapshot['totalObservedCalls']}; dropped={snapshot['droppedEvents']}"
+        )
 
     def test_preexisting_extra_column_inherited_and_extension_state_still_refuse(self):
         owner_role = "batch_external_owner_" + self.suffix
@@ -310,101 +358,167 @@ class InstallationBatchingNativeTests(unittest.TestCase):
             ),
         )
         for index, (label, mutation, expected) in enumerate(cases):
-            with self.subTest(control=label):
-                before = self._source_fingerprint()
-                savepoint = f"caller_control_{index}"
+            before = self._source_fingerprint()
+            savepoint = f"caller_control_{index}"
+            savepoint_created = False
+            primary_error = None
+            cleanup_errors = []
+            observer = None
+            try:
                 self.connection.execute(
                     sql.SQL("SAVEPOINT {}").format(sql.Identifier(savepoint))
                 )
-                self.connection.execute(mutation, prepare=False)
-                if expected == "inherited":
-                    self.assertTrue(
+                savepoint_created = True
+                observer = PublicExecuteObserver(psycopg.Cursor, self.connection)
+                with observer:
+                    with observer.phase(label):
+                        self.connection.execute(mutation, prepare=False)
+                        if expected == "inherited":
+                            self.assertTrue(
+                                self.connection.execute(
+                                    "SELECT pg_catalog.has_table_privilege(%s,%s,%s)",
+                                    (member_role, "truss.schema_head", "SELECT"),
+                                ).fetchone()[0]
+                            )
+                        result = protect_installation_in_transaction(
+                            self.host, self.tx, self._roles()
+                        )
+                        self.assertIsInstance(result, Error)
+                        self.assertEqual(
+                            result.error.code,
+                            "invalid_transaction",
+                            msg=self._safe_observer_summary(observer),
+                        )
+                        cause = self.host._custody.last_attempt.error
+                        if label == "extra-view":
+                            self.assertEqual(
+                                str(cause), "Unsupported installation relation or owner"
+                            )
+                        elif label == "extension-dependency":
+                            self.assertEqual(
+                                str(cause), "Extension-owned installation object refused"
+                            )
+                        else:
+                            self.assertEqual(
+                                getattr(cause, "object_class", None),
+                                "column" if label == "column-grant" else "relation",
+                            )
+                        self.assertEqual(
+                            self.connection.execute(
+                                "SELECT value FROM caller_sentinel"
+                            ).fetchall(),
+                            [("before-install",)],
+                        )
+                        self.assertEqual(
+                            self.connection.execute(
+                                "SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN (%s,%s)",
+                                (self.owner, self.client),
+                            ).fetchone()[0],
+                            0,
+                        )
+            except BaseException as error:
+                primary_error = error
+            finally:
+                if savepoint_created:
+                    try:
                         self.connection.execute(
-                            "SELECT pg_catalog.has_table_privilege(%s,%s,%s)",
-                            (member_role, "truss.schema_head", "SELECT"),
-                        ).fetchone()[0]
-                    )
-                result = protect_installation_in_transaction(
-                    self.host, self.tx, self._roles()
-                )
-                self.assertIsInstance(result, Error)
-                self.assertEqual(result.error.code, "invalid_transaction")
-                cause = self.host._custody.last_attempt.error
-                if label == "extra-view":
-                    self.assertEqual(
-                        str(cause), "Unsupported installation relation or owner"
-                    )
-                elif label == "extension-dependency":
-                    self.assertEqual(
-                        str(cause), "Extension-owned installation object refused"
-                    )
-                else:
-                    self.assertEqual(
-                        getattr(cause, "object_class", None),
-                        "column" if label == "column-grant" else "relation",
-                    )
-                self.assertEqual(
-                    self.connection.execute(
-                        "SELECT value FROM caller_sentinel"
-                    ).fetchall(),
-                    [("before-install",)],
-                )
-                self.assertEqual(
-                    self.connection.execute(
-                        "SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN (%s,%s)",
-                        (self.owner, self.client),
-                    ).fetchone()[0],
-                    0,
-                )
-                self.connection.execute(
-                    sql.SQL("ROLLBACK TO SAVEPOINT {}").format(
-                        sql.Identifier(savepoint)
-                    )
-                )
-                self.connection.execute(
-                    sql.SQL("RELEASE SAVEPOINT {}").format(sql.Identifier(savepoint))
-                )
-                self._assert_caller_state(before)
-                if label == "extra-view":
-                    self.assertIsNone(
+                            sql.SQL("ROLLBACK TO SAVEPOINT {}").format(
+                                sql.Identifier(savepoint)
+                            )
+                        )
                         self.connection.execute(
-                            "SELECT pg_catalog.to_regclass('truss.batch_extra_view')"
-                        ).fetchone()[0]
+                            sql.SQL("RELEASE SAVEPOINT {}").format(
+                                sql.Identifier(savepoint)
+                            )
+                        )
+                    except BaseException as error:
+                        cleanup_errors.append(error)
+
+                    checks = [
+                        lambda: self._assert_caller_state(before),
+                        lambda: self.assertEqual(
+                            self.connection.execute(
+                                "SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN (%s,%s)",
+                                (self.owner, self.client),
+                            ).fetchone()[0],
+                            0,
+                        ),
+                    ]
+                    if label == "extra-view":
+                        checks.append(
+                            lambda: self.assertIsNone(
+                                self.connection.execute(
+                                    "SELECT pg_catalog.to_regclass('truss.batch_extra_view')"
+                                ).fetchone()[0]
+                            )
+                        )
+                    elif label == "column-grant":
+                        checks.append(
+                            lambda: self.assertFalse(
+                                self.connection.execute(
+                                    "SELECT pg_catalog.has_column_privilege(%s,%s,%s,%s)",
+                                    (owner_role, "truss.schema_head", "id", "SELECT"),
+                                ).fetchone()[0]
+                            )
+                        )
+                    elif label == "inherited-grant":
+                        checks.extend(
+                            (
+                                lambda: self.assertFalse(
+                                    self.connection.execute(
+                                        "SELECT pg_catalog.has_table_privilege(%s,%s,%s)",
+                                        (member_role, "truss.schema_head", "SELECT"),
+                                    ).fetchone()[0]
+                                ),
+                                lambda: self.assertFalse(
+                                    self.connection.execute(
+                                        "SELECT pg_catalog.pg_has_role(%s,%s,'MEMBER')",
+                                        (member_role, owner_role),
+                                    ).fetchone()[0]
+                                ),
+                            )
+                        )
+                    else:
+                        checks.append(
+                            lambda: self.assertFalse(
+                                self.connection.execute(
+                                    """SELECT EXISTS (
+                                        SELECT 1 FROM pg_catalog.pg_depend d
+                                        JOIN pg_catalog.pg_extension e
+                                          ON d.refclassid='pg_catalog.pg_extension'::pg_catalog.regclass
+                                         AND d.refobjid=e.oid
+                                        WHERE e.extname='plpgsql'
+                                          AND d.classid='pg_catalog.pg_class'::pg_catalog.regclass
+                                          AND d.objid='truss.schema_head'::pg_catalog.regclass
+                                          AND d.deptype='e')"""
+                                ).fetchone()[0]
+                            )
+                        )
+                    for check in checks:
+                        try:
+                            check()
+                        except BaseException as error:
+                            cleanup_errors.append(error)
+
+            if primary_error is not None:
+                if cleanup_errors and hasattr(primary_error, "add_note"):
+                    primary_error.add_note(
+                        f"{label} caller savepoint/state cleanup also failed: "
+                        + ", ".join(type(error).__name__ for error in cleanup_errors)
                     )
-                elif label == "column-grant":
-                    self.assertFalse(
-                        self.connection.execute(
-                            "SELECT pg_catalog.has_column_privilege(%s,%s,%s,%s)",
-                            (owner_role, "truss.schema_head", "id", "SELECT"),
-                        ).fetchone()[0]
+                if hasattr(primary_error, "add_note"):
+                    detail = (
+                        self._safe_observer_summary(observer)
+                        if observer is not None
+                        else "observer unavailable before savepoint setup"
                     )
-                elif label == "inherited-grant":
-                    self.assertFalse(
-                        self.connection.execute(
-                            "SELECT pg_catalog.has_table_privilege(%s,%s,%s)",
-                            (member_role, "truss.schema_head", "SELECT"),
-                        ).fetchone()[0]
-                    )
-                    self.assertFalse(
-                        self.connection.execute(
-                            "SELECT pg_catalog.pg_has_role(%s,%s,'MEMBER')",
-                            (member_role, owner_role),
-                        ).fetchone()[0]
-                    )
-                else:
-                    self.assertFalse(
-                        self.connection.execute(
-                            """SELECT EXISTS (
-                                SELECT 1 FROM pg_catalog.pg_depend d
-                                JOIN pg_catalog.pg_extension e
-                                  ON d.refclassid='pg_catalog.pg_extension'::pg_catalog.regclass
-                                 AND d.refobjid=e.oid
-                                WHERE e.extname='plpgsql'
-                                  AND d.classid='pg_catalog.pg_class'::pg_catalog.regclass
-                                  AND d.objid='truss.schema_head'::pg_catalog.regclass
-                                  AND d.deptype='e')"""
-                        ).fetchone()[0]
-                    )
+                    primary_error.add_note(f"Refusal control: {label}; {detail}")
+                raise primary_error
+            if cleanup_errors:
+                error = cleanup_errors[0]
+                if hasattr(error, "add_note"):
+                    error.add_note(f"Refusal control: {label}")
+                raise error
 
     def test_mid_batch_statement_timeout_and_post_batch_drift_roll_back_to_caller_savepoint(
         self,

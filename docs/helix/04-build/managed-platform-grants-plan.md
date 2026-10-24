@@ -27,11 +27,22 @@ ddx:
 
 The owner authorized batching installer SQL and set-based verification, followed
 by a new immutable Truss release and fresh Arras Mac and actual Lakebase
-campaigns. No VM, additional authority, reduced checks or increased deadline is
-part of this repair. The public 0.0.49 diagnostic reached its original 60-second
-operation limit after 1,272 client execute submissions; it is a contained failed
-attempt, not managed-service acceptance. Client execute timing includes driver,
-network and server work and does not isolate their individual contributions.
+campaigns. The repair requires no additional authority, reduced checks or
+increased deadline. The owner subsequently authorized a separately bounded
+regional runner experiment for comparison. That experiment cannot replace the
+full actual Lakebase acceptance campaign across the WAN or make regional
+placement a deployment requirement. Arras must pass the WAN campaign with its
+existing operation deadlines and checks.
+
+The first public 0.0.49 diagnostic reached its original 60-second operation limit
+after 1,272 client execute submissions. A separately frozen repeat recorded
+1,203 submissions and 60.363352 seconds inside delegated `Cursor.execute` calls;
+the installer returned cancelled after 63.557889125 seconds including containment.
+Neither attempt reached the first or final verification phase, so neither is a
+complete installation baseline or managed-service acceptance. Client execute
+timing includes driver, network and server work and does not isolate their
+individual contributions. Batched result draining in `Cursor.nextset` must be
+reported separately; execute timing alone is not complete phase latency.
 
 The implementation keeps the exact ordered captured SQL units and quoted
 object-specific commands. A carrier contains at most 32 units and 128 KiB of
@@ -55,9 +66,9 @@ ownership protection and after final installation grants/comments.
 | --- | --- | --- |
 | IB-1 | Existing CONTRACT-007/008 and Python boundary gate | Explicit private helper map; allowed caller and forbidden host/runtime import controls; ordered source and carrier boundary controls |
 | IB-2 | IB-1 | Native complete inventory/definition/owner/ACL comparison, overload/dependency/column/inherited-grant refusals, mid-batch error and original-deadline cancellation; caller work and settings preserved |
-| IB-3 | IB-2 | Matched public 0.0.49 and candidate fixture measurements: exact artifacts, captured units/command inventory, actual execute submissions, client wait/wall time and independently confirmed rollback/worker cleanup |
+| IB-3 | IB-2 | Matched public 0.0.49 and candidate fixture measurements: exact artifacts, captured units/command inventory, actual execute submissions, separate result-drain calls, client call/wall time and installer-process CPU, plus independently confirmed rollback/worker cleanup |
 | IB-4 | IB-3 | Independent review; full Linux release workflow and every admitted populated migration lineage; immutable publication and public clean-download verification |
-| IB-5 | Published IB-4 tuple | New exact Arras wheel and freeze; complete fresh installed Mac and actual Lakebase campaigns; final PR #9 review/merge/release and exact published-byte verification |
+| IB-5 | Published IB-4 tuple | New exact Arras wheel and freeze; complete fresh installed Mac and actual Lakebase WAN campaigns at original deadlines; final PR #9 review/merge/release and exact published-byte verification; optional regional comparison does not close the WAN gate |
 
 The runtime remains latest-only. Databases from every admitted UMF 0.10 lineage
 retain forward migration to latest without an age cutoff; historical tools are
@@ -71,6 +82,38 @@ socket-only workers and disposable database/roles. Existing public artifacts and
 failed diagnostics remain immutable. At this checkpoint implementation and
 offline controls are in progress; native, release and consumer gates above are
 open. A candidate code diff or local timing improvement cannot close IB-4/IB-5.
+
+### Diagnostic checkpoint — 2026-10-24
+
+The exact public 0.0.49 WAN repeat and independent fresh-process audit preserved
+the caller, removed the Truss schema, and matched all 33 role records and 18
+memberships to the pre-install baseline. The selected platform-role OIDs and all
+16 ordinary-actor/platform-role closure checks also matched. These are cleanup
+facts for a failed diagnostic, not a successful acceptance receipt.
+
+The local controlled attempt on product source `dcebf072` did not produce a
+usable matched measurement. Its paired test stopped before any test body when
+fresh database creation exceeded the existing fixture deadline. A later baseline
+child exceeded the diagnostic controller bound, and worker inventory verification
+failed; the complete owned cluster was then stopped and removed. Source and Git
+state remained unchanged. The failed receipt is retained with SHA-256
+`86915948498ccd4e79ff95b4287291913c9937c23245e18b5b351b7cc28b694b`.
+No reduction, speedup or native equivalence claim follows from that attempt.
+
+The refusal-control test also exposed an assertion path that skipped caller
+savepoint cleanup and contaminated the next case. Each control now fails fast,
+attempts rollback and all caller/native residue checks in `finally`, and retains
+the primary failure with safe callsite-only diagnostics. Both its original
+one-second statement and five-second operation limits remain unchanged. A
+cancelled column-grant check remains a failure requiring native reproduction;
+it is never recast as an accepted third-party-grant refusal.
+
+The corrected helper, set-fact, observer, measurement-profile and release-cohort
+pure controls pass 29 tests. Independent review also passed the 13 observer and
+measurement controls and injected a primary failure plus cleanup failure into
+the actual control method to verify original-error preservation, complete
+cleanup attempts and fail-fast behavior. These checks do not close native,
+matched-measurement, Linux release or consumer acceptance gates.
 
 ## Scope
 
