@@ -115,6 +115,15 @@ the actual control method to verify original-error preservation, complete
 cleanup attempts and fail-fast behavior. These checks do not close native,
 matched-measurement, Linux release or consumer acceptance gates.
 
+The `dcebf072` Linux gate passed all five native batching controls, migration
+qualification and independent HF assertions, then found an existing managed
+grants regression: the empty-policy trigger test expected the public 0.0.49
+schema-first refusal but received a column-first refusal. The set census now
+preserves the strict empty pre-ownership path's legacy object/OID and native
+ACL-entry ordering. Nonempty managed-policy and final-census ordering remain
+unchanged. The existing regression assertion is retained; the corrected source
+still requires its native rerun and complete final-source release gates.
+
 ## Scope
 
 Address the Lakebase installation blocker reported by the consumer now named Arras with an explicit,

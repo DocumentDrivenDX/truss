@@ -123,6 +123,9 @@ def _role_name(cursor, oid):
 
 def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids, admitted_oids=()):
     """Classify a set-oriented ACL census and retain only selected-role evidence."""
+    legacy_empty_preflight_order = (
+        phase == 'pre_ownership' and not tolerated_oids and not admitted_oids
+    )
     cursor.execute('''WITH objects AS (
         SELECT 'schema'::text AS kind,n.oid,n.nspname::text AS name,NULL::text AS detail,
             n.nspowner AS owner,n.nspacl AS acl,'n'::"char" AS acl_kind
@@ -137,13 +140,15 @@ def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids
         UNION ALL SELECT 'type',t.oid,t.typname::text,NULL::text,t.typowner,t.typacl,'T'::"char"
         FROM pg_catalog.pg_type t WHERE t.typnamespace=%s), grants AS (
         SELECT o.kind,o.oid,o.name,o.detail,NULL::smallint AS attnum,NULL::text AS attname,
-            a.grantor,a.grantee,a.privilege_type,a.is_grantable
+            a.grantor,a.grantee,a.privilege_type,a.is_grantable,a.acl_ordinal
         FROM objects o CROSS JOIN LATERAL pg_catalog.aclexplode(
-            coalesce(o.acl,pg_catalog.acldefault(o.acl_kind,o.owner))) a
+            coalesce(o.acl,pg_catalog.acldefault(o.acl_kind,o.owner)))
+            WITH ORDINALITY AS a(grantor,grantee,privilege_type,is_grantable,acl_ordinal)
         UNION ALL SELECT 'column',a.attrelid,c.relname::text,NULL::text,a.attnum,a.attname::text,
-            x.grantor,x.grantee,x.privilege_type,x.is_grantable
+            x.grantor,x.grantee,x.privilege_type,x.is_grantable,x.acl_ordinal
         FROM pg_catalog.pg_attribute a JOIN pg_catalog.pg_class c ON c.oid=a.attrelid
-        CROSS JOIN LATERAL pg_catalog.aclexplode(a.attacl) x
+        CROSS JOIN LATERAL pg_catalog.aclexplode(a.attacl)
+            WITH ORDINALITY AS x(grantor,grantee,privilege_type,is_grantable,acl_ordinal)
         WHERE c.relnamespace=%s AND c.relkind IN ('r','p')
           AND a.attnum>0 AND NOT a.attisdropped AND a.attacl IS NOT NULL)
         SELECT g.kind,g.oid,g.name,g.detail,g.attnum,g.attname,g.grantor,g.grantee,
@@ -152,8 +157,25 @@ def _acl_observations(cursor, namespace, *, phase, installer_oid, tolerated_oids
             CASE WHEN g.grantor=0 THEN 'PUBLIC' ELSE go.rolname::text END
         FROM grants g LEFT JOIN pg_catalog.pg_roles gr ON gr.oid=g.grantee
         LEFT JOIN pg_catalog.pg_roles go ON go.oid=g.grantor
-        ORDER BY g.kind,g.oid,g.attnum,g.grantee,g.grantor,g.privilege_type,g.is_grantable''',
-        (namespace, namespace, namespace, namespace, namespace), prepare=False)
+        ORDER BY
+            CASE WHEN %s THEN CASE
+                WHEN g.kind='schema' THEN 0
+                WHEN g.kind IN ('relation','sequence') THEN 1
+                WHEN g.kind='routine' THEN 2
+                WHEN g.kind='type' THEN 3
+                WHEN g.kind='column' THEN 4
+                ELSE 5 END ELSE 0 END,
+            CASE WHEN %s THEN g.oid END NULLS FIRST,
+            CASE WHEN %s THEN g.attnum END NULLS FIRST,
+            CASE WHEN %s THEN g.acl_ordinal END NULLS FIRST,
+            CASE WHEN %s THEN ''::text ELSE g.kind END,
+            g.oid,g.attnum,g.grantee,g.grantor,g.privilege_type,g.is_grantable''',
+        (namespace, namespace, namespace, namespace, namespace,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order,
+         legacy_empty_preflight_order), prepare=False)
     observations = []
     while True:
         batch = cursor.fetchmany(1024)
