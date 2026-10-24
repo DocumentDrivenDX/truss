@@ -1,0 +1,234 @@
+{
+  "schema": "truss-published-release-proof/0.2",
+  "status": "verified",
+  "scope": "Actual public17assets and exact-tag Linux release gates; retained evidence is lossless. No new Mac native or Lakebase campaign is claimed.",
+  "tag": "v0.0.50",
+  "tagObject": "bd7ae4e7d83f462752527d5f468cfbb4d3f06236",
+  "tagCommit": "a687d0a226dad5745cbd909377bf99c7c1cddc66",
+  "sourceTree": "7c7a689702df42349a9ac4832c43f2e3d2d861a7",
+  "releaseUrl": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.50",
+  "publishedAt": "2026-10-24T06:32:49Z",
+  "workflowRunId": 40068606364,
+  "workflowUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/40068606364",
+  "publicFileVerification": {
+    "path": "verification.json",
+    "sha256": "81f6ee8ef5fb3689f65808a1a24fcc486e0f36c464735a0dd09cd31449260033",
+    "assets": 17,
+    "sha256sumsEntries": 16,
+    "nativeExecutionInThisFileVerifier": "not_run",
+    "lakebaseAcceptance": "not_run"
+  },
+  "package": {
+    "wheelSha256": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+    "sdistSha256": "60204fbb2b420e4600ebafa397e2742b46f06d6085936411dfa81f19aa7c5aaa",
+    "sourcePayloadFiles": 469,
+    "recordRows": 477,
+    "metadataReadmeVerificationSha256": "f4847529c781f048b92d468c210bef2469c4c3598f1bc062e26fb120424db1bb",
+    "wheelReadmeDeclared": false,
+    "wheelMetadataBodyBytes": 0
+  },
+  "runtime": {
+    "nativeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+    "migrationManifestSha256": "4c6baf0282e3d0b5492f070c9c07d89ff0c9a819e748f3820f60b11c1f51c7aa",
+    "retainedPublic49MigrationManifestSha256": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+    "weftVersion": "0.4.51",
+    "weftSourceRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3"
+  },
+  "exactTagLinuxGates": {
+    "packageJob": 120796997069,
+    "nativeJob": 120797178673,
+    "publishJob": 120802732118,
+    "allSucceeded": true,
+    "migrationTests": 107,
+    "hfDistinctTests": 62,
+    "managedTests": 174,
+    "managedModules": 26,
+    "managedSourceInputs": 743,
+    "comparisonExecuteCalls": [
+      3409,
+      114
+    ],
+    "comparisonScope": "matched installedpublic49 versus final-tag source50 diagnostic; not Arras/WAN timing or a general wall speedup"
+  },
+  "originalSmallWorkload": {
+    "reportSha256": "2f55e337dbed33e354f9d009205d6ebef15ee15267f667e1df8ac85794edf22b",
+    "nodes": 1000,
+    "edges": 1000,
+    "reads": 1000,
+    "updates": 200,
+    "reopenVerified": true,
+    "successfulSamples": 1358,
+    "sqlTimeoutSeconds": 10,
+    "operationTimeoutSeconds": 30,
+    "rawSourceWorkingTreeDirty": true,
+    "dirtyFlagClassification": "unclassified",
+    "performance": "provisional/no prior nominal baseline",
+    "limits": "observedatomic1000/configured1024; connection reopen is not serverrestart; no stress/named3/WAN/SLA claim"
+  },
+  "independentReview": "CLEAR: actual published asset/source/package/native/compiler/migration/managed/timing/custody audit; originalsmall artifact separately reviewed. Agent review does not represent separate human approval.",
+  "actualMacNativeQualification": "not_run",
+  "actualLakebaseAcceptance": "not_run",
+  "arrasIb5": "open: exact canonical Arras0.6.1Mac+actualWAN, normalPR9merge/release/publicbyteverification required",
+  "retainedFiles": [
+    {
+      "path": "verification.json",
+      "bytes": 6187,
+      "sha256": "81f6ee8ef5fb3689f65808a1a24fcc486e0f36c464735a0dd09cd31449260033"
+    },
+    {
+      "path": "metadata-readme-verification.json",
+      "bytes": 1649,
+      "sha256": "f4847529c781f048b92d468c210bef2469c4c3598f1bc062e26fb120424db1bb"
+    },
+    {
+      "path": "release-api.json",
+      "bytes": 33294,
+      "sha256": "ea92db2392fedd599804b42d7f904b07697357c0d7a0efd241f579897184e185"
+    },
+    {
+      "path": "remote-tag-refs.txt",
+      "bytes": 121,
+      "sha256": "331065b1a70dcefd2f60b49f6d5534e59183108ca0aa2f4b51f18a067f9c8689"
+    },
+    {
+      "path": "completed-run-api.json",
+      "bytes": 12498,
+      "sha256": "60c65e00decaf3d7d198e3608973bb649ad4519260790c51b3af994d7ca56dab"
+    },
+    {
+      "path": "completed-jobs-api.json",
+      "bytes": 22546,
+      "sha256": "86f312a04498b4a83939d75f359c0309f642be009868b46716b686a422b3c0a1"
+    },
+    {
+      "path": "workflow-artifacts-api.json",
+      "bytes": 4131,
+      "sha256": "0cc397930018772f697a483c18a7b6ca5ea37107ba48cce1e31d19fe536df280"
+    },
+    {
+      "path": "original-public-binding.json",
+      "bytes": 2056,
+      "sha256": "b73d198514717546c8c2dc1869ec7a1744d9e64f99e6658b8aa78fbfada94dd5"
+    },
+    {
+      "path": "public-assets/SHA256SUMS",
+      "bytes": 1576,
+      "sha256": "7fc005bda7cb81c47afac55a2c6716d5b3b205c214c6b897a74370879cd7732f"
+    },
+    {
+      "path": "public-assets/catalog-key-backfill-report-v0.1.md",
+      "bytes": 3701,
+      "sha256": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50"
+    },
+    {
+      "path": "public-assets/catalog-rebind-report-v0.2.md",
+      "bytes": 2407,
+      "sha256": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942"
+    },
+    {
+      "path": "public-assets/catalog-rebind-report-v0.4.md",
+      "bytes": 2919,
+      "sha256": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4"
+    },
+    {
+      "path": "public-assets/catalog-registration-summary-v0.1.md",
+      "bytes": 8717,
+      "sha256": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945"
+    },
+    {
+      "path": "public-assets/catalog-source-reference-v0.1.md",
+      "bytes": 3736,
+      "sha256": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7"
+    },
+    {
+      "path": "public-assets/hf-conformance-qualification.json",
+      "bytes": 15014,
+      "sha256": "9e2c4f70a62926a725f6d98b319c85c8fbffaa8796a9d77bb7bd546361c6e71d"
+    },
+    {
+      "path": "public-assets/isolated-runtime-constraints.txt",
+      "bytes": 361,
+      "sha256": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889"
+    },
+    {
+      "path": "public-assets/logical-query-abi.json",
+      "bytes": 7349,
+      "sha256": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96"
+    },
+    {
+      "path": "public-assets/managed-grants-qualification-evidence.tar.gz",
+      "bytes": 635360,
+      "sha256": "b75e645e94b2201920c84797713e96e2d8f092354499a7f3e221e271e5ce0253"
+    },
+    {
+      "path": "public-assets/managed-grants-qualification.json",
+      "bytes": 113719,
+      "sha256": "0c192a2ba439ffcf8b6843b23c01a2c0df44fbf93a72637c0c9c8916992587b1"
+    },
+    {
+      "path": "public-assets/migration-qualification-evidence.tar.gz",
+      "bytes": 1411874,
+      "sha256": "b37e7be9967e81c413297886a3099aa1a0ace715212c7a5753bfcbe4788dabab"
+    },
+    {
+      "path": "public-assets/migration-qualification.json",
+      "bytes": 2232,
+      "sha256": "4e1421196d442adccc133c0ff3116d34a2958f59a18162cf8ac19df7a66da072"
+    },
+    {
+      "path": "public-assets/release-pins.json",
+      "bytes": 5077,
+      "sha256": "ed35eb49b453f1ad9178e3875d9d7c3b762b24dc0697e98038f8fcabbaad5b88"
+    },
+    {
+      "path": "verifiers/verify-public50-artifacts.py",
+      "bytes": 47754,
+      "sha256": "f0f313ad9058076a9f5cc0d479fa2cb50bdc4002669308f7033a26ebf0235e08"
+    },
+    {
+      "path": "verifiers/verify-ci-0b61-package.py",
+      "bytes": 13175,
+      "sha256": "dc71d308a72cfbc1b04dd58eb96ef0de5d721790305e27dff3d68919bb8815a7"
+    },
+    {
+      "path": "verifiers/verify-ci-0b61-managed-comparison.py",
+      "bytes": 23716,
+      "sha256": "679f689aac48b97f77f5561b48c584e4d00cdf44363f94353ca7429b920ebe96"
+    }
+  ],
+  "losslessCompressedOriginalWorkflowFiles": [
+    {
+      "path": "original-public/report.json.gz",
+      "bytes": 17138,
+      "sha256": "7f3a173104b0ea70993c4ff90685171199c6d095ee9f6272a79c6b82541b25ff",
+      "originalBytes": 791591,
+      "originalSha256": "2f55e337dbed33e354f9d009205d6ebef15ee15267f667e1df8ac85794edf22b"
+    },
+    {
+      "path": "original-public/report.jsonl.gz",
+      "bytes": 9298,
+      "sha256": "387d28676b0103dbfa2ddde48165b517df7600470efdce7dd8b030501ce2c932",
+      "originalBytes": 454942,
+      "originalSha256": "c67375bd121266ebbde7004d98c94304b56928ec90978d3e5c75c36c41672dd5"
+    },
+    {
+      "path": "original-public/run.log.gz",
+      "bytes": 4168,
+      "sha256": "842c92721075df94a34b62d412661b369b1afbc2a34fc8ff986877a2b6e5aee4",
+      "originalBytes": 26719,
+      "originalSha256": "97d904736ccec6cc251404bc83802035911cfe295811c64d762300052813fbb2"
+    },
+    {
+      "path": "original-public/status.json.gz",
+      "bytes": 323,
+      "sha256": "f7e6d65b9da651d03f07fe5009fe86d736f03b5ade13f1222d1dfbc087e7f1e8",
+      "originalBytes": 538,
+      "originalSha256": "e0c41666d4918f69ad25f06635a03ab5be5fae9056c4067c4a0100d0e15a6d86"
+    }
+  ],
+  "excludedMaterial": [
+    "wheel/sdist/HF archive byte copies, identified by complete public API and SHA256SUMS records",
+    "virtual environments and extracted trees",
+    "API artifact ZIP digest was reported by GitHub, not independently recomputed from unpacked original-workflow download"
+  ]
+}

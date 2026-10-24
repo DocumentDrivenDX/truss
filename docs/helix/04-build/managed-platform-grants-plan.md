@@ -83,6 +83,26 @@ failed diagnostics remain immutable. At this checkpoint implementation and
 offline controls are in progress; native, release and consumer gates above are
 open. A candidate code diff or local timing improvement cannot close IB-4/IB-5.
 
+### Published IB-4 checkpoint — 2026-10-24
+
+IB-4 is complete for [Truss v0.0.50](releases/v0.0.50.md), source
+`a687d0a226dad5745cbd909377bf99c7c1cddc66`. The
+[retained public proof](evidence/design-audit/installer-batching-050-20261024/published-0.0.50/receipt.json)
+binds the immutable tag, all 17 downloaded assets, exact package payloads and
+the successful final-tag Linux release workflow. It preserves original
+107-case migration, HF62, 174-test/26-module managed and selected small-workload
+evidence, with the file-only verification and Linux execution scopes distinct.
+The source 0.0.49 tuple verifies as already current; no native migration edge or
+receipt is fabricated. Earlier diagnostics and captured measurements below
+retain their original versions and qualification limits.
+
+IB-5 remains open. Arras PR #9 now selects the actual public 0.0.50 wheel and
+requires one new canonical Arras 0.6.1 wheel for both full fresh-installed Mac
+and twelve-case actual Lakebase WAN campaigns, independent cleanup, normal
+review/merge, release and exact public-byte verification. Ordinary OAuth actor
+setup is reusable. No VM has been provisioned, and regional execution cannot
+replace the WAN gate or justify relaxing its checks or deadlines.
+
 ### Diagnostic checkpoint — 2026-10-24
 
 The exact public 0.0.49 WAN repeat and independent fresh-process audit preserved
