@@ -1,0 +1,36 @@
+{
+  "helperSha256": "dc71d308a72cfbc1b04dd58eb96ef0de5d721790305e27dff3d68919bb8815a7",
+  "metadata": {
+    "metadataBodyBytes": 0,
+    "metadataHeadersSha256": "c04b4f0ef702383bd834887fe977b31cc062361b5255171a96d0c68533f8ae9e",
+    "metadataPath": "truss_toolkit-0.0.50.dist-info/METADATA",
+    "name": "truss-toolkit",
+    "readmeDeclared": false,
+    "requiresDist": [
+      "fasteners==0.20; extra == \"local\"",
+      "jsonschema==4.26.0",
+      "mini-racer==0.14.1",
+      "pg8000==1.31.5; extra == \"experimental-pg8000\"",
+      "pgserver-pg18==18.6.1; extra == \"local\"",
+      "platformdirs==4.12.4; extra == \"local\"",
+      "psutil==7.2.2; extra == \"local\"",
+      "psycopg[binary]==3.3.6; extra == \"native\"",
+      "referencing==0.37.0",
+      "umf_access==0.1.0.dev5; extra == \"typed-sdk\"",
+      "weft-sql==0.4.51; extra == \"query\""
+    ],
+    "requiresPython": ">=3.11",
+    "version": "0.0.50"
+  },
+  "readme": {
+    "bytes": 75808,
+    "matchesSource": true,
+    "member": "truss_toolkit-0.0.50/README.md",
+    "sha256": "6ffe7c0249d00a9a696872259cecce44780c20da48cf19e093c07f384a3cac12"
+  },
+  "scope": "Additional actual public wheel METADATA and sdist README equality to final tag source only; generic frozen helper functions used without invoking their old candidate whole-wrapper. Full public17asset verification and CI/runtime/service evidence are separate.",
+  "sdistSha256": "60204fbb2b420e4600ebafa397e2742b46f06d6085936411dfa81f19aa7c5aaa",
+  "sourceCommit": "a687d0a226dad5745cbd909377bf99c7c1cddc66",
+  "status": "passed",
+  "wheelSha256": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00"
+}

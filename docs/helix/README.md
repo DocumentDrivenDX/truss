@@ -1,5 +1,14 @@
 # truss project documentation
 
+Current public delivery: [v0.0.50 release notes](04-build/releases/v0.0.50.md)
+and [verified public release evidence](04-build/evidence/design-audit/installer-batching-050-20261024/published-0.0.50/receipt.json).
+The installer batches ordered SQL submissions and catalog verification while
+preserving its checks, transaction ownership and deadlines. The exact-tag Linux
+release gate passed 107 migration cases, 62 independent conformance cases and
+174 managed-grant tests across 26 modules. Its selected small public workload
+also passed. These results have their recorded Linux scope; fresh Arras Mac and
+actual Lakebase WAN acceptance remain the separate IB-5 gate.
+
 [Managed platform grants](04-build/managed-platform-grants-plan.md) are included
 in the published [v0.0.49 release](04-build/releases/v0.0.49.md), with an
 explicit retained grantee policy, typed contained refusals, install API/CLI
@@ -12,12 +21,14 @@ exact artifact tuple and limits. Arras is the active consumer name; historical
 Praxis requests and snapshots retain their original provenance. Actual Lakebase
 support requires separate consumer/service qualification.
 
-Current public delivery: [v0.0.49 release notes](04-build/releases/v0.0.49.md)
-and [published verification](04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
+Historical [v0.0.49 release notes](04-build/releases/v0.0.49.md)
+and [published verification](04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json) retain their original scope.
 Only the latest application runtime is supported. Every admitted database retains
 an unexpired forward route to the latest runtime; previous application runtimes
-do not remain supported. The latest tool performs explicit offline transactional migration for the admitted
+do not remain supported. Pre-0.10 sources remain unsupported. The latest tool performs explicit offline transactional migration for the admitted
 v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48 tuples on PostgreSQL 18.6.
+The admitted v0.0.49 tuple has the same native manifest as v0.0.50 and passes
+existing-current verification without a fabricated migration edge or receipt.
 Startup never upgrades or resets a database. The v0.0.49 evidence adds explicit managed platform
 grants while retaining the separately qualified predecessor lineage; consult
 its release notes and receipt for exact PostgreSQL, dependency, artifact and

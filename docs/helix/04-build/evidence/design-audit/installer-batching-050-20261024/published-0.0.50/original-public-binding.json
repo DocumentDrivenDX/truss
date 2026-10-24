@@ -1,0 +1,46 @@
+{
+  "schema": "truss.public50-original-workload-binding/1",
+  "source": "a687d0a226dad5745cbd909377bf99c7c1cddc66",
+  "runId": 40068606364,
+  "artifact": {
+    "id": 12550722710,
+    "name": "original-public-workflow-ubuntu-24.04",
+    "size_in_bytes": 32004,
+    "url": "https://api.github.com/repos/DocumentDrivenDX/truss/actions/artifacts/12550722710",
+    "archive_download_url": "https://api.github.com/repos/DocumentDrivenDX/truss/actions/artifacts/12550722710/zip",
+    "expired": false,
+    "created_at": "2026-10-24T06:20:37Z",
+    "expires_at": "2027-01-22T06:02:19Z",
+    "updated_at": "2026-10-24T06:20:37Z",
+    "digest": "sha256:0d3b52317a523434259a5d6d87b8c1e80bb35dfaa51bf9fbb940bd9ba85eb538",
+    "workflow_run": {
+      "id": 40068606364,
+      "repository_id": 1384690689,
+      "head_repository_id": 1384690689,
+      "head_branch": "v0.0.50",
+      "head_sha": "a687d0a226dad5745cbd909377bf99c7c1cddc66"
+    }
+  },
+  "artifactApiDigestRecomputed": false,
+  "files": {
+    "report.json": {
+      "bytes": 791591,
+      "sha256": "2f55e337dbed33e354f9d009205d6ebef15ee15267f667e1df8ac85794edf22b"
+    },
+    "report.jsonl": {
+      "bytes": 454942,
+      "sha256": "c67375bd121266ebbde7004d98c94304b56928ec90978d3e5c75c36c41672dd5"
+    },
+    "run.log": {
+      "bytes": 26719,
+      "sha256": "97d904736ccec6cc251404bc83802035911cfe295811c64d762300052813fbb2"
+    },
+    "status.json": {
+      "bytes": 538,
+      "sha256": "e0c41666d4918f69ad25f06635a03ab5be5fae9056c4067c4a0100d0e15a6d86"
+    }
+  },
+  "independentReview": "CLEAR: source/native/installed0.0.50,1000nodes/1000edges/1000reads/200updates/reopen,1358allsamplesOK/zero summary failures; original10sSQL30soperation. Public7bwheel bound through same final-run managed/source/payload receipts, no direct wheel field invented.",
+  "rawSourceWorkingTreeDirty": true,
+  "scope": "selected small functional workflow; performance provisional/no prior nominal baseline; configured1024 vsobserved1000atomic; reopen notserverrestart; no stress/named3/WAN/SLA/localnative transfer"
+}
