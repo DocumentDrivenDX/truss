@@ -96,12 +96,32 @@ The source 0.0.49 tuple verifies as already current; no native migration edge or
 receipt is fabricated. Earlier diagnostics and captured measurements below
 retain their original versions and qualification limits.
 
-IB-5 remains open. Arras PR #9 now selects the actual public 0.0.50 wheel and
-requires one new canonical Arras 0.6.1 wheel for both full fresh-installed Mac
-and twelve-case actual Lakebase WAN campaigns, independent cleanup, normal
-review/merge, release and exact public-byte verification. Ordinary OAuth actor
-setup is reusable. No VM has been provisioned, and regional execution cannot
-replace the WAN gate or justify relaxing its checks or deadlines.
+### Published IB-5 checkpoint — 2026-10-25
+
+IB-5 is complete for the published Truss 0.0.50 / Arras 0.6.1 tuple. The
+[public Arras v0.6.1 release](https://github.com/DocumentDrivenDX/arras/releases/tag/v0.6.1) was built from merge commit
+`243f1ebaf8b32beb0abc30d0d4fdcd9dd7b5ea92` and binds canonical wheel SHA-256 `259e16c7d4c8f6c56d9930ee5f16e74c4ab6b2c8a3ecffdb7d8b306c77b60f18`. Exact-tag
+[release workflow run 40227314485](https://github.com/DocumentDrivenDX/arras/actions/runs/40227314485) passed every mandatory
+release and anonymous public-download job, including installed downstream and
+UMF repeats. All 17 public assets match the trusted assembly and schema-v2
+release evidence. The [retained public-repeat records](https://github.com/DocumentDrivenDX/arras/tree/3a7780a8d890ccca54bafe1df05b1257726fa890/docs/helix/04-build/evidence/truss050-adoption-20261024/public-release-qualification-20261025) preserve the actual post-download receipts; [original WAN evidence](https://github.com/DocumentDrivenDX/arras/tree/243f1ebaf8b32beb0abc30d0d4fdcd9dd7b5ea92/docs/helix/04-build/evidence/truss050-adoption-20261024/full-managed-20db-passed-20261025) preserves its execution and cleanup scope.
+
+The exact wheel's fresh macOS arm64 / CPython 3.11.9 campaign passed 64 cases
+with eight unchanged declared limits, seven replica-only cases inapplicable,
+seven verified native-wheel hashes, 172-file payload parity and cleanup. The
+original actual Lakebase WAN campaign on that same wheel passed all 12 cases with
+zero failures or blocked cases; original cleanup, independent audit, census and
+custody handback passed. The supplemental census found all three known process
+groups absent with zero exact owned-script matches and zero inspection denials.
+The direct supervisor PGID was not captured, so forced process-group cleanup is
+not claimed. Historical D11/D12 and the initial 2d baseline failure remain
+preserved as failed evidence.
+
+The runtime remains latest-only: every admitted UMF 0.10 lineage must forward
+migrate to latest without an age cutoff; historical migration tools are not
+supported application runtimes and no pre-0.10 compatibility is added. Ordinary
+OAuth actor setup remains reusable. No VM was provisioned, and regional
+execution did not replace or relax the WAN gate.
 
 ### Diagnostic checkpoint — 2026-10-24
 
