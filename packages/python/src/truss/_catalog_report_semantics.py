@@ -54,13 +54,16 @@ def compose_original_catalog_report_semantics(prepared,support):
     if inventory.get('state')!='supported':
         return {'state':'unavailable','reason':'unsupported_storage_definition'}
     memberships=[]
+    temporal=prepared.input().get('supportProfile')==support['profile'] and support['profile'].get('identity')=='truss-fresh-catalog-temporal-support'
     for document in prepared.input()['documents']:
         membership={'version':next(d.source()['umf'] for d in prepared.documents
             if d.document.document_id==document['documentId']),
             'interpretationProfile':document['umfProfile'],'supportedSubset':support['supportedSubset']}
         if membership not in memberships:memberships.append(membership)
-    return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/2.0',
-        'umf':memberships,'documentValidations':support['registrationSummary']['documents']}
+    return {'state':'source_fields_ready','sourceFormat':
+        'truss-registration-summary/2.1' if temporal else 'truss-registration-summary/2.0',
+        'umf':memberships,'documentValidations':support['registrationSummary']['documents'],
+        **({'ownerAccessProfile':support['registrationSummary']['ownerAccessProfile']} if temporal else {})}
 
 
 def compose_catalog_report_semantics(prepared,support,revision):

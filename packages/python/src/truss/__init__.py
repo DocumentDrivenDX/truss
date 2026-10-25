@@ -101,6 +101,9 @@ __all__ += ["ImportRuntimeContext","OwnedImportRuntimeContext"]
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 __all__ += ["ImportSourceFound","ImportSourceAbsent","ImportSourceUnavailable"]
 
+from .contracts import LocalTimestampValue
+__all__ += ["LocalTimestampValue"]
+
 from .catalog_runtime import PendingRuntimeUpgrade
 __all__ += ["PendingRuntimeUpgrade"]
 

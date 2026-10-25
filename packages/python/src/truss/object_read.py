@@ -2,7 +2,7 @@
 """Public logical identity reads with exact scalars and flat containers."""
 from dataclasses import dataclass, field
 from typing import Literal
-from .contracts import SequenceValue, MapValue, TextValue, TypedIdentity, QualifiedOwner
+from .contracts import SequenceValue, MapValue, TextValue, LocalTimestampValue, TypedIdentity, QualifiedOwner
 from .groups import RootlessOwnership, OwnedOwnership
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -18,8 +18,8 @@ class ScalarObject:
     record_revision: int
     created_at: str
     updated_at: str
-    values: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
-    retained: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    values: tuple[tuple[str, str | bool | TextValue | LocalTimestampValue | SequenceValue | MapValue | None], ...]
+    retained: tuple[tuple[str, str | bool | TextValue | LocalTimestampValue | SequenceValue | MapValue | None], ...]
     profile: Literal['truss-python-scalar-object/0.4'] = field(default='truss-python-scalar-object/0.4', init=False)
 
     @property
@@ -47,8 +47,8 @@ class LogicalObject:
     record_revision: int
     created_at: str
     updated_at: str
-    values: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
-    retained: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    values: tuple[tuple[str, str | bool | TextValue | LocalTimestampValue | SequenceValue | MapValue | None], ...]
+    retained: tuple[tuple[str, str | bool | TextValue | LocalTimestampValue | SequenceValue | MapValue | None], ...]
     ownership: OwnedOwnership
     profile: Literal['truss-python-logical-object/0.1'] = field(default='truss-python-logical-object/0.1', init=False)
 

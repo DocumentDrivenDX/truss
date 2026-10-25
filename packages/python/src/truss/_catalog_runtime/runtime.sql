@@ -322,11 +322,17 @@ END $$;
 
 CREATE FUNCTION truss.catalog_require_sources(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea) RETURNS void
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE input jsonb;documents jsonb;declarations jsonb;
+DECLARE input jsonb;documents jsonb;declarations jsonb;configuration jsonb;installed_configuration jsonb;
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.2.0' OR jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation())
+ configuration:=input-'interfaceVersion'-'documents';
+ SELECT preparation_configuration INTO STRICT installed_configuration FROM truss.runtime_current_installation();
+ IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.2.0' OR jsonb_typeof(input) IS DISTINCT FROM 'object'
+  OR NOT (configuration IS NOT DISTINCT FROM installed_configuration OR
+   (configuration-'supportProfile') IS NOT DISTINCT FROM (installed_configuration-'supportProfile')
+    AND configuration->'supportProfile' IS NOT DISTINCT FROM
+     '{"identity":"truss-fresh-catalog-temporal-support","version":"0.1","sha256":"af25c70162779100e94ec6cdefded1fa5146693dfa4e3aacb5b8c692d62406f2"}'::jsonb)
   OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
@@ -450,11 +456,16 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;compact boolean;violations bytea;key_candidates jsonb;verified_keys jsonb;
 BEGIN
  IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
- compact:=(convert_from(input_bytes,'UTF8')::jsonb)->>'interfaceVersion'='truss-acceptance-input/0.2.0';
+ -- Only the legacy DATE 0.2 preparation profile owns compact reconstruction.
+ -- Temporal prep 2.1 carries persisted owner-inspected descriptors and must
+ -- travel through the exact declarations supplied by that preparation.
+ compact:=(convert_from(input_bytes,'UTF8')::jsonb)->>'interfaceVersion'='truss-acceptance-input/0.2.0'
+  AND (convert_from(input_bytes,'UTF8')::jsonb)->'supportProfile'=
+   '{"identity":"truss-fresh-catalog-support","version":"0.20.0","sha256":"364335de9a0e6968106af189dcb11d5b4c86b2114361fcffd722c4154bf809cb"}'::jsonb;
  IF compact AND declarations_bytes<>''::bytea THEN RAISE EXCEPTION 'source-only catalog request required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.74-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.75-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -545,27 +556,36 @@ BEGIN
  END IF;
  -- Ordinary registration keeps one validation summary per original document.
  -- Semantic source/declaration checks and atomic publication remain native.
- IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' ='truss-registration-summary/2.0' THEN
+ IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' IN ('truss-registration-summary/2.0','truss-registration-summary/2.1') THEN
   DECLARE
    summary jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
    original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
    original_docs jsonb:=convert_from(documents_bytes,'UTF8')::jsonb;
-   doc jsonb; validation jsonb; selected_doc jsonb; ddd_profile jsonb; ddd_validation jsonb; ddd_known boolean; doc_index int:=0;
+   doc jsonb; validation jsonb; selected_doc jsonb; ddd_profile jsonb; ddd_validation jsonb; ddd_known boolean;
+   temporal_summary boolean:=(summary->>'sourceFormat')='truss-registration-summary/2.1'; access_admission jsonb; owner_access_profile jsonb; doc_index int:=0;
   BEGIN
-   IF (SELECT count(*) FROM jsonb_object_keys(summary))<>3
+   IF (SELECT count(*) FROM jsonb_object_keys(summary))<>(CASE WHEN temporal_summary THEN 4 ELSE 3 END)
     OR jsonb_typeof(summary->'umf') IS DISTINCT FROM 'array'
     OR jsonb_typeof(summary->'documentValidations') IS DISTINCT FROM 'array'
     OR jsonb_array_length(summary->'documentValidations')<>jsonb_array_length(original_docs)
+    OR temporal_summary IS DISTINCT FROM (original_input->'supportProfile'=
+      '{"identity":"truss-fresh-catalog-temporal-support","version":"0.1","sha256":"af25c70162779100e94ec6cdefded1fa5146693dfa4e3aacb5b8c692d62406f2"}'::jsonb)
+    OR temporal_summary AND (declarations_bytes=''::bytea OR jsonb_array_length(convert_from(declarations_bytes,'UTF8')::jsonb)=0)
+    OR NOT temporal_summary AND NOT compact
     OR original_input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb
-    OR original_input->'transforms' IS DISTINCT FROM '[]'::jsonb THEN
+    OR original_input->'transforms' IS DISTINCT FROM '[]'::jsonb
+    OR temporal_summary AND summary->'ownerAccessProfile' IS DISTINCT FROM
+      '{"profile":"truss.umf-access-admission-bridge/0.1-candidate","archiveSha256":"972396293616cf930a99c29249ff0490f131fc76c832931b6def2d3278f491cb","bundleSha256":"7f2a434b4b1bd0a2b8c1fe6ef47130f9f1543848a49445679c372d3fa6099856","manifestSha256":"5df7d94ab20d02c76b34016429207bb1d4fcb97f8c1e8d9fce234d1139725bcb"}'::jsonb
+    OR NOT temporal_summary AND summary ? 'ownerAccessProfile' THEN
     RAISE EXCEPTION 'original native registration summary required' USING ERRCODE='22023';END IF;
    FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
     validation:=summary->'documentValidations'->doc_index;
     selected_doc:=original_input->'documents'->doc_index;
     ddd_known:=((doc->>'originalText')::jsonb->'vocabularies'->'umf.ddd'->>'version')='0.1.0';
     ddd_profile:=validation->'dddProfile';ddd_validation:=validation->'dddValidation';
+    access_admission:=validation->'accessAdmission';owner_access_profile:=doc->'validation'->'accessAdmissionProfile';
     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>
-      (CASE WHEN ddd_known THEN 5 ELSE 3 END)
+      ((CASE WHEN ddd_known THEN 5 ELSE 3 END)+CASE WHEN temporal_summary THEN 1 ELSE 0 END)
       OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
       OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
       OR selected_doc->'ingress' IS DISTINCT FROM '{"kind":"native"}'::jsonb
@@ -573,6 +593,15 @@ BEGIN
       OR validation->'validation'->'valid' IS DISTINCT FROM 'true'::jsonb
       OR jsonb_typeof(validation->'validation'->'complete') IS DISTINCT FROM 'boolean'
       OR jsonb_typeof(validation->'validation'->'diagnostics') IS DISTINCT FROM 'array'
+      OR temporal_summary AND (access_admission IS DISTINCT FROM doc->'validation'->'accessAdmission'
+       OR jsonb_typeof(access_admission) IS DISTINCT FROM 'object'
+       OR (SELECT count(*) FROM jsonb_object_keys(access_admission))<>2
+       OR jsonb_typeof(access_admission->'records') IS DISTINCT FROM 'array'
+       OR access_admission->'diagnostics' IS DISTINCT FROM '[]'::jsonb
+       OR owner_access_profile IS DISTINCT FROM summary->'ownerAccessProfile'
+       )
+      OR NOT temporal_summary AND (validation ? 'accessAdmission'
+       OR doc->'validation' ? 'accessAdmission' OR doc->'validation' ? 'accessAdmissionProfile')
       OR ddd_known AND (ddd_profile IS DISTINCT FROM jsonb_build_object('identity','umf-ddd-document-validation',
        'version',original_input->'validatorProfile'->>'version','sha256',original_input->'validatorProfile'->>'sha256')
        OR ddd_profile IS DISTINCT FROM doc->'validation'->'dddProfile'

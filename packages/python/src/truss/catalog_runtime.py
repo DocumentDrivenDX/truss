@@ -33,7 +33,7 @@ from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewU
 from .imports import ImportInput,OwnedImportInput,OwnedObjectImportRecord,OwnedEdgeImportRecord,OwnedEdgeImportIdentity,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
 from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
 from .groups import AuthoredValue, UnauthorizedPerson
-from .contracts import MapValue, TextValue, BooleanValue, ObjectKeySelection
+from .contracts import MapValue, TextValue, LocalTimestampValue, BooleanValue, ObjectKeySelection
 from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
@@ -48,7 +48,7 @@ from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, _require_original_preparation
 from ._catalog_support import evaluate_catalog_support
-from ._catalog_source_reference import DATE10_PROFILE
+from ._catalog_source_reference import DATE10_PROFILE, TEMPORAL_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
 from .preview import GroupConditionPreviewInput, PreviewObserved, PreviewRefused
 from .lifecycle import (PersonRuntimeStatus, AdminInstallRecovery, LifecycleRefused, InstallRefused)
@@ -175,7 +175,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-temporal.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -190,16 +190,24 @@ def _verified_release():
     for entry in json.loads(public_profiles)['profiles']+json.loads(public_profiles).get('retainedProfiles',[]):
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('query-abi.json','preparation-baseline.json','person-entrypoints.json'):
+    for name in ('query-abi.json','query-temporal-abi.json','preparation-baseline.json','person-entrypoints.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original query/preparation baseline required')
     return original,sha256(original).hexdigest(),tuple(sources)
 
 
-def _configuration(source_version="0.10.0"):
+def _configuration(source_version="0.10.0",support_profile=DATE10_PROFILE):
     manifest,_,_=_release()
     from .catalog_preparation import _configuration as preparation_configuration
     if source_version!="0.10.0":raise ValueError("Only current UMF 0.10.0 source is supported")
-    return preparation_configuration(manifest)
+    return preparation_configuration(manifest,support_profile=support_profile)
+
+
+def _catalog_preparation_matches_current(prepared):
+    """Match only the two explicitly supported, exact preparation profiles."""
+    choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
+    support_profile=choices.get('supportProfile')
+    if support_profile not in (DATE10_PROFILE,TEMPORAL_PROFILE):return False
+    return choices==_configuration(support_profile=support_profile)
 
 
 def _active_operation(method):
@@ -220,15 +228,17 @@ def _object_result(raw,manifest,digest):
         raise ValueError('Exact selected installed runtime required')
     def logical(value):
         if type(value) is dict:
-            from .contracts import TextValue,NullValue,BooleanValue,SequenceValue,MapValue,MapEntry
+            from .contracts import TextValue,LocalTimestampValue,NullValue,BooleanValue,SequenceValue,MapValue,MapEntry
             def exact(cell):
                 if cell['kind']=='null':return NullValue()
                 if cell['kind']=='boolean':return BooleanValue(value=cell['value'])
                 if cell['kind']=='sequence':return SequenceValue(items=tuple(exact(child) for child in cell['items']))
                 if cell['kind']=='map':return MapValue(entries=tuple(MapEntry(key=entry['key'],value=exact(entry['value'])) for entry in cell['entries']))
+                if cell['kind']=='localTimestamp':return LocalTimestampValue(text=cell['text'])
                 return TextValue(kind=cell['kind'],text=cell['text'])
             if value['kind']=='sequence':return SequenceValue(items=tuple(exact(cell) for cell in value['items']))
             if value['kind']=='map':return MapValue(entries=tuple(MapEntry(key=entry['key'],value=exact(entry['value'])) for entry in value['entries']))
+            if value['kind']=='localTimestamp':return LocalTimestampValue(text=value['text'])
             return TextValue(kind=value['kind'],text=value['text'])
         return value
     object_class = ScalarObject
@@ -247,11 +257,12 @@ def _object_result(raw,manifest,digest):
 
 def _edge_result(value):
     from ._group_runtime import _identity
-    from .contracts import TextValue
+    from .contracts import TextValue,LocalTimestampValue
     def logical(cell):
         if cell['kind']=='null':return None
         if cell['kind']=='boolean':return cell['value']
         if cell['kind']=='string':return cell['text']
+        if cell['kind']=='localTimestamp':return LocalTimestampValue(text=cell['text'])
         return TextValue(kind=cell['kind'],text=cell['text'])
     return ScalarEdge(identity=_identity(value['identity']),source=_identity(value['source']),target=_identity(value['target']),
         version=int(value['recordVersion']),catalog_revision=int(value['executedCatalogRevision']),record_revision=int(value['catalogRevision']),created_at=value['createdAt'],updated_at=value['updatedAt'],
@@ -382,7 +393,7 @@ class CatalogReferenceAssembly:
             return CapabilityAvailable(capability=NativeCompiledExecutionCapability(selection=self.compiled_selection,_assembly=self))
 
     @_active_operation
-    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue|LocalTimestampValue] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
                              read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None,
                              engine_program: str | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
@@ -392,7 +403,7 @@ class CatalogReferenceAssembly:
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile,engine_program=engine_program,entity_projection=entity_projection)
 
     @_active_operation
-    def query_with_catalog_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
+    def query_with_catalog_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue|LocalTimestampValue] | None=None,
                              catalog_validator: str | None=None,maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
                              read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryCatalogRead | QueryRefused | QueryUnavailable]:
         """One adopted transaction/operation for current catalog, sources and query.
@@ -409,7 +420,7 @@ class CatalogReferenceAssembly:
     @_active_operation
     def query_catalog_sources_in_transaction(self, transaction: TransactionHandle, *, sql: str,
                                             document_ids: tuple[str, ...],
-                                            parameters: Mapping[str, str | int | bool | Decimal] | None = None,
+                                            parameters: Mapping[str, str | int | bool | Decimal | TextValue | LocalTimestampValue] | None = None,
                                             maximum_rows: int = 1000, maximum_scan_rows: int = 10000,
                                             maximum_bytes: int = 1048576) -> Outcome[QueryCatalogSources | QueryRefused | QueryUnavailable]:
         """Capture original native-admitted build inputs; never an execution permit."""
@@ -420,6 +431,21 @@ class CatalogReferenceAssembly:
                          maximum_scan_rows=maximum_scan_rows, maximum_bytes=maximum_bytes,
                          manifest=manifest, digest=digest, pin_cursor=_pin_cursor, read_profile=None,
                          capture_catalog=True)
+
+    @_active_operation
+    def query_temporal_catalog_sources_in_transaction(self, transaction: TransactionHandle, *, sql: str,
+                                                      document_ids: tuple[str, ...],
+                                                      parameters: Mapping[str, str | int | bool | Decimal | TextValue | LocalTimestampValue] | None = None,
+                                                      maximum_rows: int = 1000, maximum_scan_rows: int = 10000,
+                                                      maximum_bytes: int = 1048576) -> Outcome[QueryCatalogSources | QueryRefused | QueryUnavailable]:
+        """Capture explicit ABI 1.3 temporal compiler inputs; grants no execution authority."""
+        from ._query_runtime import run_query
+        manifest, digest, _ = _release()
+        return run_query(self._host, transaction, sql=sql, document_ids=document_ids,
+                         parameters={} if parameters is None else parameters, maximum_rows=maximum_rows,
+                         maximum_scan_rows=maximum_scan_rows, maximum_bytes=maximum_bytes,
+                         manifest=manifest, digest=digest, pin_cursor=_pin_cursor, read_profile=None,
+                         capture_catalog=True, temporal_binding=True)
 
     @_active_operation
     def query_current_in_transaction(self,transaction: TransactionHandle,*,executor: CurrentQueryExecutor,sql: str,
@@ -449,7 +475,7 @@ class CatalogReferenceAssembly:
             parameters={},maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
 
     @_active_operation
-    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
+    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue|LocalTimestampValue] | None=None,
                                   limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
                                   engine_program: str | None=None,maximum_rows: int | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
         from ._query_runtime import run_query
@@ -482,11 +508,15 @@ class CatalogReferenceAssembly:
             return AssemblyDisposed()
     def _available(self):
         if self._disposed:raise ValueError('Assembly disposed')
-    def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun',source_version:str | None=None) -> PreparedAcceptance:
+    def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun',source_version:str | None=None,
+                        support_profile: Mapping[str,str] | None=None) -> PreparedAcceptance:
         with self._lock:
             self._available()
             from .catalog_preparation import prepare_catalog
-            return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
+            if support_profile is None:
+                return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
+            return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable,
+                                   support_profile=support_profile)
     @_active_operation
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=()) -> Outcome[PendingCatalogInstallation | InstallRefused]:
         self._available()
@@ -674,9 +704,9 @@ class CatalogReferenceAssembly:
             except ValueError:reject('invalid_input','Original unchanged preparation required')
         def produce(ordinal):
             require_original()
-            choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
-            configuration=_configuration()
-            if choices!=configuration:reject('unsupported_profile','Exact current catalog preparation required')
+            try:matches_current=_catalog_preparation_matches_current(prepared)
+            except (KeyError,TypeError,ValueError):matches_current=False
+            if not matches_current:reject('unsupported_profile','Exact current catalog preparation required')
             try:valid_request=type(request_key) is str and 1<=len(request_key.encode('utf8'))<=1024 and '\0' not in request_key
             except UnicodeError:valid_request=False
             if not valid_request:reject('invalid_input','Stable request key required')
@@ -696,6 +726,15 @@ class CatalogReferenceAssembly:
                 require_original()
                 source={key:semantic[key] for key in ('sourceFormat','umf','documentValidations')}
                 return (prepared.input_bytes,prepared.archive_documents_bytes,b'',
+                    json.dumps(source,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode('utf8'),
+                    origin_bytes,request_key,str(-1 if expected_revision is None else expected_revision),expected_docs_bytes)
+            if semantic.get('sourceFormat')=='truss-registration-summary/2.1':
+                require_original()
+                source={key:semantic[key] for key in ('sourceFormat','umf','documentValidations','ownerAccessProfile')}
+                # Prep 2.1 carries owner-inspected per-field native descriptors
+                # that the native planner must consume verbatim. Unlike 2.0,
+                # it cannot use the compact source-only declaration reconstruction.
+                return (prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes,
                     json.dumps(source,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode('utf8'),
                     origin_bytes,request_key,str(-1 if expected_revision is None else expected_revision),expected_docs_bytes)
             evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
@@ -872,7 +911,7 @@ class CatalogReferenceAssembly:
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)',
                                       'person_runtime_status(text,text,jsonb)','preview_group_conditions(bytea,bytea,text,text)',
-                                      'query_binding(jsonb,int,int,int,text,text)','query_binding_if_changed(jsonb,int,int,int,text,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_selected_objects(jsonb,int,jsonb)','query_seek_objects(jsonb,int,text,text,int)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
+                                      'query_binding(jsonb,int,int,int,text,text)','query_temporal_binding(jsonb,int,int,int,text,text)','query_binding_if_changed(jsonb,int,int,int,text,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_temporal_objects(jsonb,int,jsonb)','query_temporal_page_objects(jsonb,int,text,jsonb)','query_temporal_instant_key(text)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_selected_objects(jsonb,int,jsonb)','query_seek_objects(jsonb,int,text,text,int)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
                                       'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)','lookup_import_source(jsonb,int,text,text)'):

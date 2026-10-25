@@ -3,7 +3,8 @@
 import unittest
 
 from truss._record_schema import SchemaCompilationError, compile_records
-from truss.contracts import BooleanValue, MapEntry, MapValue, NullValue, SequenceValue, TextValue
+from truss.contracts import (BooleanValue, LocalTimestampValue, MapEntry, MapValue,
+                             NullValue, SequenceValue, TextValue)
 from truss.groups import AuthoredValue
 
 
@@ -29,6 +30,39 @@ def item_chain():
 
 
 class RecordSchemaTests(unittest.TestCase):
+    def test_local_timestamp_is_a_distinct_singular_exact_cell(self):
+        source = {'documentId': 'doc', 'sha256': 'a' * 64,
+                  'record': {'module': 'm', 'element': 'R'},
+                  'fieldViewPointer': '/modules/0/elements/3/extensions/umf.access/fields/0'}
+        def local_prop(prop_id, name, element, nullability='required'):
+            return {'prop_id': prop_id, 'name': name, 'element': element,
+                    'declaration_module': 'm', 'home': 'json', 'scalar_type': 'localTimestamp',
+                    'nullability': nullability, 'cardinality': 'one', 'facets': {}, 'item': None,
+                    'native_temporal': {'profile': 'truss.local-timestamp/0.1', 'kind': 'local',
+                                        'source': {**source, 'field': {'module': 'm', 'element': element}}}}
+        local_schema = compile_records([{'typeId': '9', 'definitionPin': PIN, 'properties': [
+            local_prop(1, 'required_local', 'required_local'),
+            local_prop(2, 'optional_local', 'optional_local', nullability='absent-allowed'),
+            prop(3, 'legacy_instant', 'timestamp'),
+        ]}])
+        local = LocalTimestampValue(text='2024-11-03T01:30:00.123456')
+        patch = local_schema.prepare_patch('9', PIN, (
+            AuthoredValue(name='required_local', value=local),
+            AuthoredValue(name='legacy_instant', value=TextValue(kind='timestamp', text='2024-11-03T01:30:00.123456-04:00')),
+        ), mode='create')
+        self.assertTrue(patch.eligible)
+        self.assertEqual(patch.props_set['1'], {'kind': 'localTimestamp', 'text': local.text})
+        self.assertFalse(local_schema.validate_values('9', PIN, (
+            AuthoredValue(name='required_local', value=TextValue(kind='timestamp', text='2024-11-03T01:30:00.123456-04:00')),
+        )).valid)
+        with self.assertRaises(SchemaCompilationError):
+            compile_records([{'typeId': '10', 'definitionPin': PIN, 'properties': [
+                {'prop_id': 1, 'name': 'local_values', 'home': 'json', 'scalar_type': None,
+                 'nullability': 'required', 'cardinality': 'array', 'facets': {},
+                 'item': item_node('m', 'local', {'kind': 'field', 'nullability': 'required',
+                     'cardinality': 'one', 'scalarType': 'localTimestamp', 'facets': {}})},
+            ]}])
+
     def test_length_facets_count_unicode_scalars_and_decoded_binary_bytes(self):
         schema = compile_records([{'typeId': '8', 'definitionPin': PIN, 'properties': [
             prop(1, 'text', 'string', facets={'length': {'max': 2, 'unit': 'unicode-scalar'}}),

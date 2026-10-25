@@ -10,7 +10,7 @@ BEGIN
  family:=cell->>'kind';
  IF expected_family IS NOT NULL AND family IS DISTINCT FROM expected_family THEN RETURN false;END IF;
  IF family='boolean' THEN RETURN jsonb_typeof(cell->'value')='boolean' AND cell=jsonb_build_object('kind',family,'value',cell->'value');END IF;
- IF family NOT IN ('string','integer','decimal','timestamp','binary','date') OR jsonb_typeof(cell->'text') IS DISTINCT FROM 'string'
+ IF family NOT IN ('string','integer','decimal','timestamp','binary','date','localTimestamp') OR jsonb_typeof(cell->'text') IS DISTINCT FROM 'string'
   OR cell IS DISTINCT FROM jsonb_build_object('kind',family,'text',cell->'text') THEN RETURN false;END IF;
  token:=cell->>'text';
  IF octet_length(token)>1048576 THEN RETURN false;END IF;
@@ -22,6 +22,11 @@ BEGIN
   RETURN replace(encode(decode(token,'base64'),'base64'),chr(10),'')=token;
  ELSIF family='date' THEN
   IF token !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' OR substring(token,1,4)::int=0 THEN RETURN false;END IF;
+  calendar:=make_date(substring(token,1,4)::int,substring(token,6,2)::int,substring(token,9,2)::int);
+  RETURN true;
+ ELSIF family='localTimestamp' THEN
+  IF token !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{6}$'
+   OR substring(token,1,4)::int=0 OR substring(token,12,2)::int>23 OR substring(token,15,2)::int>59 OR substring(token,18,2)::int>59 THEN RETURN false;END IF;
   calendar:=make_date(substring(token,1,4)::int,substring(token,6,2)::int,substring(token,9,2)::int);
   RETURN true;
  ELSIF family='timestamp' THEN

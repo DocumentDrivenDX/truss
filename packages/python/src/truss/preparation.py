@@ -38,7 +38,7 @@ class DocumentInterpretation:
     def observation(self) -> dict[str, object]:
         """Fresh source and the exact current UMF validation result."""
         evidence=json.loads(self.observation_bytes)
-        if evidence.get('interfaceVersion')=='truss-registration-preparation/2.0':
+        if evidence.get('interfaceVersion') in ('truss-registration-preparation/2.0','truss-registration-preparation/2.1'):
             entry=next(d for d in evidence['documents'] if d['documentId']==self.document.document_id)
             if entry['contentSha256']!=sha256(self.document.content).hexdigest():raise ValueError('Original source digest required')
             result={'originalText':self.document.content.decode('utf8'),'source':self.source(),
@@ -67,11 +67,38 @@ class PreparedAcceptance:
     documents: tuple[DocumentInterpretation,...]
     provenance: PreparationProvenance
     report_evidence_bytes: bytes
+    access_admission_bytes: bytes | None = None
+    access_admission_manifest_sha256: str | None = None
 
     @property
     def declarations_bytes(self) -> bytes:
         """Compatibility projection, derived on demand from the one original source."""
-        return _json([_catalog_declarations(d.document.document_id,d.source()) for d in self.documents])
+        inspections={} if self.access_admission_bytes is None else {
+            entry['documentId']:entry for entry in json.loads(self.access_admission_bytes)['documents']}
+        result=[]
+        for d in self.documents:
+            declaration=_catalog_declarations(d.document.document_id,d.source())
+            evidence=inspections.get(d.document.document_id)
+            if evidence is not None:
+                declaration['accessAdmission']=evidence['inspection']
+                from ._catalog_access_admission import BRIDGE_ARCHIVE_SHA256,BRIDGE_BUNDLE_SHA256,BRIDGE_PROFILE
+                declaration['accessAdmissionProfile']={'profile':BRIDGE_PROFILE,
+                    'archiveSha256':BRIDGE_ARCHIVE_SHA256,'bundleSha256':BRIDGE_BUNDLE_SHA256,
+                    'manifestSha256':self.access_admission_manifest_sha256}
+                source=d.source()
+                for record in declaration['records']:
+                    matched=next((r for r in evidence['inspection']['records'] if r['ref']=={'module':record['moduleId'],'element':record['elementId']}),None)
+                    if matched is None:continue
+                    for field in record['fields']:
+                        selected=next((f for f in matched['fields'] if f['ref']==field['reference']),None)
+                        if selected is None or selected.get('temporal')!='local':continue
+                        field['nativeDescriptor']={'nativeScalarType':'localTimestamp','nativeTemporal':{
+                            'profile':'truss.local-timestamp/0.1','kind':'local','source':{
+                                'documentId':d.document.document_id,'sha256':evidence['contentSha256'],
+                                'record':dict(matched['ref']),'field':dict(selected['ref']),
+                                'fieldViewPointer':selected['viewPointer']}}}
+            result.append(declaration)
+        return _json(result)
 
     @property
     def archive_documents_bytes(self) -> bytes:
@@ -81,6 +108,9 @@ class PreparedAcceptance:
             entry=validations[document_id]
             result={'storageFormat':'truss-catalog-source/2','sourceValidation':entry['validation'],'transition':None}
             if 'dddProfile' in entry:result.update(dddProfile=entry['dddProfile'],dddValidation=entry['dddValidation'])
+            if 'accessAdmission' in entry:
+                result['accessAdmission']=entry['accessAdmission']
+                result['accessAdmissionProfile']=summary['ownerAccessProfile']
             return result
         return _json([{'documentId':d.document.document_id,'revision':d.document.document_revision,
             'umfVersion':d.source()['umf'],'originalText':d.document.content.decode('utf8'),
@@ -97,6 +127,8 @@ def _snapshot(prepared):
     if (type(prepared) is not PreparedAcceptance
             or any(type(getattr(prepared,name)) is not bytes for name in
                    ('input_bytes','report_evidence_bytes'))
+            or prepared.access_admission_bytes is not None and type(prepared.access_admission_bytes) is not bytes
+            or prepared.access_admission_manifest_sha256 is not None and type(prepared.access_admission_manifest_sha256) is not str
             or type(prepared.documents) is not tuple
             or type(prepared.provenance) is not PreparationProvenance):
         raise ValueError('Exact original preparation carrier required')
@@ -112,7 +144,7 @@ def _snapshot(prepared):
         expected=bool if name=='installation_profiles_verified' else str
         if type(getattr(prepared.provenance,name)) is not expected:
             raise ValueError('Exact original provenance carrier required')
-    return (prepared.input_bytes, prepared.report_evidence_bytes,
+    return (prepared.input_bytes, prepared.report_evidence_bytes,prepared.access_admission_bytes,prepared.access_admission_manifest_sha256,
             tuple((d.document.document_id, d.document.document_revision,
                    d.document.content, d.document.artifact_identity, d.observation_bytes)
                   for d in prepared.documents),
@@ -130,6 +162,33 @@ def _require_original_preparation(prepared):
     if (type(prepared) is not PreparedAcceptance or entry is None
             or entry[0]() is not prepared or entry[1] != _snapshot(prepared)):
         raise ValueError('Original unchanged UMF preparation required')
+
+
+def _with_access_admission(prepared,inspections,manifest_sha256):
+    """Issue a distinct preparation 2.1 carrying the pinned owner result."""
+    from dataclasses import replace
+    from ._catalog_access_admission import BRIDGE_ARCHIVE_SHA256,BRIDGE_BUNDLE_SHA256,BRIDGE_MANIFEST_SHA256,BRIDGE_PROFILE
+    _require_original_preparation(prepared)
+    if type(inspections) is not list or len(inspections)!=len(prepared.documents):
+        raise ValueError('Complete owner access inspection vector required')
+    documents=[]
+    for interpretation,inspection in zip(prepared.documents,inspections,strict=True):
+        if type(inspection) is not dict or set(inspection)!={'records','diagnostics'} or inspection['diagnostics']:
+            raise ValueError('Complete diagnostic-free owner access admission required')
+        documents.append({'documentId':interpretation.document.document_id,
+            'contentSha256':sha256(interpretation.document.content).hexdigest(),'inspection':inspection})
+    if manifest_sha256!=BRIDGE_MANIFEST_SHA256:
+        raise ValueError('Pinned owner bridge manifest required')
+    access_bytes=_json({'interfaceVersion':'truss-registration-preparation/2.1','owner':{
+        'profile':BRIDGE_PROFILE,'archiveSha256':BRIDGE_ARCHIVE_SHA256,'bundleSha256':BRIDGE_BUNDLE_SHA256,
+        'manifestSha256':manifest_sha256},'documents':documents})
+    report=json.loads(prepared.report_evidence_bytes)
+    report['interfaceVersion']='truss-registration-preparation/2.1'
+    report['ownerAccessProfile']=json.loads(access_bytes)['owner']
+    for entry,access in zip(report['documents'],documents,strict=True):entry['accessAdmission']=access['inspection']
+    updated=replace(prepared,report_evidence_bytes=_json(report),access_admission_bytes=access_bytes,
+        access_admission_manifest_sha256=manifest_sha256)
+    return _retain_original(updated)
 
 class PreparationRejected(ValueError):
     def __init__(self,reason: str,*,diagnostics: tuple[bytes, ...]=(),

@@ -337,6 +337,15 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.person_query_binding(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text) FROM PUBLIC;
 
+CREATE FUNCTION truss.person_query_temporal_binding(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.require_person_invocation('truss.query_temporal_binding(jsonb,integer,integer,integer,text,text)'::regprocedure,'read');
+ RETURN truss.query_temporal_binding("selected_documents","maximum_scan_rows","maximum_result_rows","maximum_bytes","expected_release","expected_digest");
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.person_query_temporal_binding(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text) FROM PUBLIC;
+
 CREATE FUNCTION truss.person_query_binding_if_changed(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text, validator text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 BEGIN
@@ -426,6 +435,24 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.person_query_page_objects(binding jsonb, selected_type integer, selected_key text) FROM PUBLIC;
+
+CREATE FUNCTION truss.person_query_temporal_objects(binding jsonb, selected_type integer, requirements jsonb) RETURNS TABLE(id bigint, props jsonb)
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.require_person_invocation('truss.query_temporal_objects(jsonb,integer,jsonb)'::regprocedure,'read');
+ RETURN QUERY SELECT * FROM truss.query_temporal_objects("binding","selected_type","requirements");
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.person_query_temporal_objects(binding jsonb, selected_type integer, requirements jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.person_query_temporal_page_objects(binding jsonb, selected_type integer, selected_key text, requirements jsonb) RETURNS TABLE(id bigint, props jsonb)
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.require_person_invocation('truss.query_temporal_page_objects(jsonb,integer,text,jsonb)'::regprocedure,'read');
+ RETURN QUERY SELECT * FROM truss.query_temporal_page_objects("binding","selected_type","selected_key","requirements");
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.person_query_temporal_page_objects(binding jsonb, selected_type integer, selected_key text, requirements jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.person_query_scope(binding jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$

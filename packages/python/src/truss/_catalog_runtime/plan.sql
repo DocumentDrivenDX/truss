@@ -286,6 +286,12 @@ BEGIN
     WHERE old_name.value#>>'{}' IS DISTINCT FROM candidate->>'prop_id') THEN
    RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
+   -- Derived temporal storage meaning is immutable for an existing Field. A
+   -- new owner selector cannot reinterpret retained timestamp cells, including
+   -- via an otherwise storage-neutral same-name or rename transition.
+   IF old->>'scalar_type' IS DISTINCT FROM candidate->>'scalar_type'
+    OR old->'native_temporal' IS DISTINCT FROM candidate->'native_temporal' THEN
+    RAISE EXCEPTION 'derived temporal storage meaning transition requires explicit support' USING ERRCODE='0A000';END IF;
    IF old->>'cardinality' IN ('array','map') THEN
     IF truss.catalog_item_meaning(old->'item') IS DISTINCT FROM truss.catalog_item_meaning(candidate->'item') THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
     candidate:=candidate||jsonb_build_object('item',old->'item');
@@ -439,6 +445,52 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_revision_plan(jsonb,jsonb) FROM PUBLIC;
 
+CREATE FUNCTION truss.catalog_valid_local_descriptor(field_input jsonb,record_input jsonb,document_input jsonb,owner_access jsonb) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE descriptor jsonb;temporal jsonb;source jsonb;record_ref jsonb;field_ref jsonb;view_path text;resolved_record jsonb;resolved_field jsonb;matches int;
+BEGIN
+ descriptor:=field_input->'nativeDescriptor';temporal:=descriptor->'nativeTemporal';source:=temporal->'source';
+ record_ref:=source->'record';field_ref:=source->'field';view_path:=source->>'fieldViewPointer';
+ IF jsonb_typeof(descriptor) IS DISTINCT FROM 'object' OR descriptor-ARRAY['nativeScalarType','nativeTemporal']<>'{}'::jsonb
+  OR descriptor->>'nativeScalarType' IS DISTINCT FROM 'localTimestamp'
+  OR jsonb_typeof(temporal) IS DISTINCT FROM 'object' OR temporal-ARRAY['profile','kind','source']<>'{}'::jsonb
+  OR temporal->>'profile' IS DISTINCT FROM 'truss.local-timestamp/0.1' OR temporal->>'kind' IS DISTINCT FROM 'local'
+  OR jsonb_typeof(source) IS DISTINCT FROM 'object' OR source-ARRAY['documentId','sha256','record','field','fieldViewPointer']<>'{}'::jsonb
+  OR source->>'documentId' IS DISTINCT FROM record_input->>'documentId'
+  OR source->>'sha256' IS DISTINCT FROM encode(sha256(convert_to(document_input->>'originalText','UTF8')),'hex')
+  OR jsonb_typeof(record_ref) IS DISTINCT FROM 'object' OR record_ref-ARRAY['module','element']<>'{}'::jsonb
+  OR record_ref->>'module' IS DISTINCT FROM record_input->>'moduleId' OR record_ref->>'element' IS DISTINCT FROM record_input->>'elementId'
+  OR jsonb_typeof(field_ref) IS DISTINCT FROM 'object' OR field_ref-ARRAY['module','element']<>'{}'::jsonb
+  OR field_ref->>'module' IS DISTINCT FROM field_input->>'fieldModule' OR field_ref->>'element' IS DISTINCT FROM field_input->>'fieldId'
+  OR jsonb_typeof(field_input->'declaration') IS DISTINCT FROM 'object'
+  OR field_input->'declaration'->>'kind' IS DISTINCT FROM 'field'
+  OR field_input->'declaration'->>'scalarType' IS DISTINCT FROM 'timestamp'
+  OR field_input->'declaration'->>'cardinality' IS DISTINCT FROM 'one'
+  OR field_input->'declaration'->>'nullability' NOT IN ('required','absent-allowed')
+  OR coalesce(field_input->'declaration'->'facets','{}'::jsonb)<>'{}'::jsonb
+  OR field_input->'declaration' ? 'allowedValues' OR field_input->'declaration' ? 'default' OR field_input->'declaration' ? 'itemType' THEN RETURN false;END IF;
+ IF jsonb_typeof(owner_access) IS DISTINCT FROM 'object' OR owner_access-ARRAY['records','diagnostics']<>'{}'::jsonb
+  OR jsonb_typeof(owner_access->'records') IS DISTINCT FROM 'array' OR owner_access->'diagnostics'<>'[]'::jsonb
+  OR view_path IS NULL OR octet_length(view_path)>8192 OR view_path !~ '^/modules/(0|[1-9][0-9]*)/extensions/umf\.access/views/(0|[1-9][0-9]*)/fields/(0|[1-9][0-9]*)$'
+  OR jsonb_typeof(document_input->'validation'->'accessAdmission') IS DISTINCT FROM 'object'
+  OR document_input->'validation'->'accessAdmissionProfile' IS DISTINCT FROM
+   '{"profile":"truss.umf-access-admission-bridge/0.1-candidate","archiveSha256":"972396293616cf930a99c29249ff0490f131fc76c832931b6def2d3278f491cb","bundleSha256":"7f2a434b4b1bd0a2b8c1fe6ef47130f9f1543848a49445679c372d3fa6099856","manifestSha256":"5df7d94ab20d02c76b34016429207bb1d4fcb97f8c1e8d9fce234d1139725bcb"}'::jsonb
+  OR document_input->'validation'->'accessAdmission' IS DISTINCT FROM owner_access THEN RETURN false;END IF;
+ SELECT count(*),(jsonb_agg(r.value)->0) INTO matches,resolved_record FROM jsonb_array_elements(owner_access->'records') r
+  WHERE r.value->'ref'=record_ref;
+ IF matches<>1 OR jsonb_typeof(resolved_record->'fields') IS DISTINCT FROM 'array' THEN RETURN false;END IF;
+ SELECT count(*),(jsonb_agg(f.value)->0) INTO matches,resolved_field FROM jsonb_array_elements(resolved_record->'fields') f
+  WHERE f.value->'ref'=field_ref AND f.value->>'viewPointer'=view_path;
+ IF matches<>1 OR resolved_field->>'temporal' IS DISTINCT FROM 'local'
+  OR jsonb_typeof(resolved_field->'row') IS DISTINCT FROM 'object'
+  OR (resolved_field->'row')-ARRAY['missing','null']<>'{}'::jsonb
+  OR jsonb_typeof(resolved_field->'row'->'missing') IS DISTINCT FROM 'boolean'
+  OR jsonb_typeof(resolved_field->'row'->'null') IS DISTINCT FROM 'boolean' THEN RETURN false;END IF;
+ RETURN true;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_valid_local_descriptor(jsonb,jsonb,jsonb,jsonb) FROM PUBLIC;
+
 CREATE FUNCTION truss.catalog_expected_records(declarations_bytes bytea,documents_bytes bytea,
  origin_bytes bytea,accepted_clock timestamptz,genesis_clock timestamptz,
  selected_revision int DEFAULT 1,type_offset int DEFAULT 0,property_offset int DEFAULT 0,relationship_offset int DEFAULT 0)
@@ -453,6 +505,44 @@ BEGIN
  IF jsonb_typeof(validated_declarations) IS DISTINCT FROM 'array' OR jsonb_typeof(validated_documents) IS DISTINCT FROM 'array'
   OR jsonb_typeof(validated_origin) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original record-plan shape required' USING ERRCODE='22023';END IF;
+ -- Prep 2.1's retained owner result is the authority for local-time meaning.
+ -- It must be byte-for-byte present in both original document validation and
+ -- the declaration packet, and every selected local Field must carry its
+ -- separately derived descriptor. Never silently fall back to timestamp.
+ IF EXISTS(
+  SELECT 1 FROM jsonb_array_elements(validated_documents) d
+  WHERE d.value->'validation'->'accessAdmissionProfile' IS NOT NULL
+   AND NOT EXISTS(
+    SELECT 1 FROM jsonb_array_elements(validated_declarations) a
+    CROSS JOIN LATERAL jsonb_array_elements(a.value->'records') r
+    WHERE r.value->>'documentId'=d.value->>'documentId'
+     AND a.value->'accessAdmission' IS NOT DISTINCT FROM d.value->'validation'->'accessAdmission'
+     AND a.value->'accessAdmissionProfile' IS NOT DISTINCT FROM d.value->'validation'->'accessAdmissionProfile'))
+  OR EXISTS(
+   SELECT 1 FROM jsonb_array_elements(validated_documents) d
+   CROSS JOIN LATERAL jsonb_array_elements(d.value->'validation'->'accessAdmission'->'records') owner_record
+   CROSS JOIN LATERAL jsonb_array_elements(owner_record.value->'fields') owner_field
+   WHERE d.value->'validation'->'accessAdmissionProfile' IS NOT NULL
+    AND owner_field.value->>'temporal'='local'
+    AND (SELECT count(*) FROM jsonb_array_elements(validated_declarations) a
+     CROSS JOIN LATERAL jsonb_array_elements(a.value->'records') r
+     CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') source_field
+     WHERE r.value->>'documentId'=d.value->>'documentId'
+      AND r.value->>'moduleId'=(owner_record.value->'ref'->>'module')
+      AND r.value->>'elementId'=(owner_record.value->'ref'->>'element')
+      AND a.value->'accessAdmission' IS NOT DISTINCT FROM d.value->'validation'->'accessAdmission'
+      AND a.value->'accessAdmissionProfile' IS NOT DISTINCT FROM d.value->'validation'->'accessAdmissionProfile'
+      AND source_field.value->'reference'=owner_field.value->'ref'
+      AND source_field.value ? 'nativeDescriptor')<>1) THEN
+  RAISE EXCEPTION 'owner-selected local timestamp descriptor required' USING ERRCODE='22023';END IF;
+ IF EXISTS(
+  SELECT 1 FROM jsonb_array_elements(validated_declarations) a
+  CROSS JOIN LATERAL jsonb_array_elements(a.value->'records') r
+  CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f
+  JOIN jsonb_array_elements(validated_documents) d ON d.value->>'documentId'=r.value->>'documentId'
+  WHERE f.value ? 'nativeDescriptor'
+   AND truss.catalog_valid_local_descriptor(f.value,r.value,d.value,a.value->'accessAdmission') IS NOT TRUE) THEN
+  RAISE EXCEPTION 'owner-inspected local timestamp descriptor must match exact original source' USING ERRCODE='22023';END IF;
  RETURN (WITH docs AS MATERIALIZED (
   SELECT d.value,d.ordinality::int-1 ord
   FROM jsonb_array_elements(validated_documents) WITH ORDINALITY d),
@@ -483,7 +573,7 @@ BEGIN
   SELECT f.type_id,f.prop_id,f.value->>'fieldModule' field_module,f.value->'declaration'->>'id' element_id,
    jsonb_build_object('prop_id',f.prop_id,'type_id',f.type_id,'element',f.value->'declaration'->>'id',
     'declaration_module',f.value->>'fieldModule','name',coalesce(f.value->'declaration'->>'name',f.value->'declaration'->>'id'),
-    'scalar_type',f.value->'declaration'->>'scalarType','nullability',f.value->'declaration'->>'nullability',
+    'scalar_type',coalesce(f.value->'nativeDescriptor'->>'nativeScalarType',f.value->'declaration'->>'scalarType'),'native_temporal',f.value->'nativeDescriptor'->'nativeTemporal','nullability',f.value->'declaration'->>'nullability',
     'cardinality',f.value->'declaration'->>'cardinality','facets',f.value->'declaration'->'facets',
     'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition_indexed(i.source_index,f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
     'home','json','since_rev',selected_revision,'doc_ord',f.ord,'definition_source_kind','accepted_document',
@@ -532,7 +622,12 @@ BEGIN
   'schema_rev',CASE WHEN selected_revision=1 THEN jsonb_build_array(jsonb_build_object('rev',0,'accepted_at',genesis_clock,'origin','{}'::jsonb)) ELSE '[]'::jsonb END
    ||jsonb_build_array(jsonb_build_object('rev',selected_revision,'accepted_at',accepted_clock,'origin',validated_origin)),
   'schema_doc',(SELECT coalesce(jsonb_agg(jsonb_build_object('rev',selected_revision,'ord',d.ord,'doc_id',d.value->>'documentId','doc_revision',d.value->>'revision',
-   'umf_version',d.value->>'umfVersion','content_sha256',encode(sha256(convert_to(d.value->>'originalText','UTF8')),'hex'),'document',d.value->>'originalText','validation',d.value->'validation') ORDER BY d.ord),'[]'::jsonb) FROM docs d),
+   'umf_version',d.value->>'umfVersion','content_sha256',encode(sha256(convert_to(d.value->>'originalText','UTF8')),'hex'),'document',d.value->>'originalText',
+   'validation',coalesce(d.value->'validation','{}'::jsonb)||CASE WHEN a.value ? 'accessAdmission' THEN jsonb_build_object(
+    'accessAdmission',a.value->'accessAdmission','accessAdmissionProfile',a.value->'accessAdmissionProfile') ELSE '{}'::jsonb END) ORDER BY d.ord),'[]'::jsonb)
+   FROM docs d LEFT JOIN LATERAL (
+     SELECT entry.value FROM jsonb_array_elements(validated_declarations) entry
+     WHERE entry.value->>'documentId'=d.value->>'documentId' LIMIT 1) a ON true),
   'type_def',(SELECT coalesce(jsonb_agg(value ORDER BY type_id),'[]'::jsonb) FROM type_rows),
   'prop_def',(SELECT coalesce(jsonb_agg(value ORDER BY prop_id),'[]'::jsonb) FROM prop_rows),
   'key_def',(SELECT coalesce(jsonb_agg(value ORDER BY type_id,key_num),'[]'::jsonb) FROM key_rows),

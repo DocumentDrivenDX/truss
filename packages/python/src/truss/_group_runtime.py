@@ -6,7 +6,7 @@ import base64
 import json
 import re
 import uuid
-from .contracts import SequenceValue,ABSENT, Absent, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
+from .contracts import SequenceValue,ABSENT, Absent, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, LocalTimestampValue, NullValue, BooleanValue
 from .execution import Ok, Error, ExecutionFailure, Outcome
 from .catalog_view import CatalogDefinitionReference
 from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership, OwnedOwnership,
@@ -59,6 +59,8 @@ class PreparedGroup:
 
 
 def _wire(value):
+    if type(value) is LocalTimestampValue:
+        return {'kind':'localTimestamp','text':value.text}
     if is_dataclass(value):
         result={}
         for member in fields(value):
@@ -387,7 +389,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         or len(input.preconditions)>(3072 if selected_owned else 128)
         or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations)):
         return Ok(GroupUnavailable(reason='resource'))
-    def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
+    def scalar(value):return type(value) in (NullValue,TextValue,LocalTimestampValue,BooleanValue)
     def container(value):
         pending=[(value,0)];count=0
         while pending:

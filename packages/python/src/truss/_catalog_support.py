@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-from ._catalog_source_reference import DATE10_PROFILE
+from ._catalog_source_reference import DATE10_PROFILE,TEMPORAL_PROFILE
 """Selected catalog metadata policy; incomplete support, never acceptance."""
 import base64
 from hashlib import sha256
@@ -17,9 +17,11 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected!=DATE10_PROFILE:
+    temporal=selected==TEMPORAL_PROFILE
+    if selected!=DATE10_PROFILE and not temporal:
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-current010.json').read_bytes()
+    policy_path='_profiles/fresh-catalog-temporal-support-0010.json' if temporal else '_profiles/fresh-catalog-support-current010.json'
+    policy=files('truss').joinpath(policy_path).read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -27,13 +29,27 @@ def evaluate_catalog_support(prepared):
         or any(d.source()['umf']!='0.10.0' for d in prepared.documents)):
         raise ValueError('Unselected catalog support source')
     evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
-    if evidence.get('interfaceVersion')!='truss-registration-preparation/2.0':
+    expected_interface='truss-registration-preparation/2.1' if temporal else 'truss-registration-preparation/2.0'
+    if evidence.get('interfaceVersion')!=expected_interface:
         raise ValueError('Current registration validation results required')
+    if temporal:
+        from ._catalog_access_admission import BRIDGE_ARCHIVE_SHA256,BRIDGE_BUNDLE_SHA256,BRIDGE_MANIFEST_SHA256
+        owner_profile={'profile':'truss.umf-access-admission-bridge/0.1-candidate',
+            'archiveSha256':BRIDGE_ARCHIVE_SHA256,'bundleSha256':BRIDGE_BUNDLE_SHA256,
+            'manifestSha256':BRIDGE_MANIFEST_SHA256}
+        if (prepared.access_admission_bytes is None or prepared.access_admission_manifest_sha256!=BRIDGE_MANIFEST_SHA256
+            or evidence.get('ownerAccessProfile')!=owner_profile
+            or json.loads(prepared.access_admission_bytes)!={'interfaceVersion':expected_interface,'owner':owner_profile,
+                'documents':[{'documentId':entry['documentId'],'contentSha256':entry['contentSha256'],
+                    'inspection':entry['accessAdmission']} for entry in evidence['documents']]}):
+            raise ValueError('Exact issued UMF access-admission preparation required')
     expected=[{'documentId':d.document.document_id,
         'contentSha256':sha256(d.document.content).hexdigest(),
         'validation':entry['validation'],**({'dddProfile':entry['dddProfile'],'dddValidation':entry['dddValidation']}
-            if 'dddProfile' in entry else {})} for d,entry in zip(prepared.documents,evidence['documents'])]
-    if evidence!={'interfaceVersion':'truss-registration-preparation/2.0','documents':expected}:
+            if 'dddProfile' in entry else {}),**({'accessAdmission':entry['accessAdmission']}
+            if temporal else {})} for d,entry in zip(prepared.documents,evidence['documents'])]
+    if evidence!={'interfaceVersion':expected_interface,'documents':expected,**({'ownerAccessProfile':owner_profile}
+            if temporal else {})}:
         raise ValueError('Original registration validation results required')
     source_elements={}
     staged=set()
@@ -44,7 +60,11 @@ def evaluate_catalog_support(prepared):
             for element in module['elements']:
                 source_elements[(document.document.document_id,module['id'],element['id'])]=element
     for document in json.loads(prepared.declarations_bytes):
+        access=document.get('accessAdmission')
+        if temporal and (type(access) is not dict or access.get('diagnostics') or type(access.get('records')) is not list):
+            raise ValueError('Diagnostic-free owner access admission required')
         for record in document['records']:
+            document_id=record['documentId']
             if record['membership']!='declared':
                 raise ValueError('Selected Record requires explicit original membership')
             property_names=set()
@@ -53,6 +73,24 @@ def evaluate_catalog_support(prepared):
                 source=source_elements.get(identity)
                 if source!=field['declaration']:
                     raise ValueError('Original staged Field source correspondence required')
+                if 'nativeDescriptor' in field:
+                    descriptor=field['nativeDescriptor']
+                    native_temporal=descriptor['nativeTemporal'];provenance=native_temporal['source']
+                    if (not temporal or descriptor!={'nativeScalarType':'localTimestamp','nativeTemporal':{
+                        'profile':'truss.local-timestamp/0.1','kind':'local','source':{
+                            'documentId':document_id,'sha256':sha256(next(d.document.content for d in prepared.documents if d.document.document_id==document_id)).hexdigest(),
+                            'record':{'module':record['moduleId'],'element':record['elementId']},
+                            'field':field['reference'],'fieldViewPointer':provenance['fieldViewPointer']}}}):
+                        raise ValueError('Exact fresh owner-derived local descriptor required')
+                    resolved=[(r,f) for r in access['records'] if r['ref']==provenance['record']
+                        for f in r['fields'] if f['ref']==field['reference'] and f['viewPointer']==provenance['fieldViewPointer']]
+                    if (len(resolved)!=1 or resolved[0][1].get('temporal')!='local'
+                        or provenance['sha256']!=sha256(next(d.document.content for d in prepared.documents if d.document.document_id==document_id)).hexdigest()):
+                        raise ValueError('Owner inspection local source correspondence required')
+                elif temporal:
+                    owner_selected=[f for r in access['records'] if r['ref']=={'module':record['moduleId'],'element':record['elementId']}
+                        for f in r['fields'] if f['ref']==field['reference']]
+                    if len(owner_selected)!=1:raise ValueError('Exact owner-inspected selected Field required')
                 for name in ('kind','nullability','cardinality'):
                     if type(source.get(name)) is not str or not 1<=len(source[name].encode('utf8'))<=4096:
                         raise ValueError('Selected Field requires explicit authored metadata')
@@ -90,7 +128,7 @@ def _whole_number(value):
 def _storage_support(prepared):
     """Check storage capabilities once over the validated current schema."""
     unavailable={'state':'unavailable','reason':'unsupported_storage_definition'}
-    scalar_families={'string','integer','decimal','boolean','timestamp','binary','date'}
+    scalar_families={'string','integer','decimal','boolean','timestamp','binary','date','localTimestamp'}
     annotations={'title','description','aliases','examples','semanticTypes'}
     for document in prepared.documents:
         source=document.source()

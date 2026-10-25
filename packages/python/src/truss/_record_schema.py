@@ -15,7 +15,8 @@ import re
 from collections.abc import Mapping
 from types import MappingProxyType
 
-from .contracts import BooleanValue, MapEntry, MapValue, NullValue, SequenceValue, TextValue
+from .contracts import (BooleanValue, LocalTimestampValue, MapEntry, MapValue,
+                        NullValue, SequenceValue, TextValue, validate_local_timestamp_text)
 
 _TOKEN_LIMIT = 1_048_576
 _VALUE_NODE_LIMIT = 4096
@@ -30,6 +31,8 @@ _TIMESTAMP_TOKEN = re.compile(
     r"[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}"
     r"(?:\.[0-9]+)?(?:[Zz]|[+-][0-9]{2}:[0-9]{2})\Z"
 )
+_SHA256_TEXT = re.compile(r'[0-9a-f]{64}\Z')
+_JSON_POINTER = re.compile(r'(/([^~]|~[01])*)+\Z')
 
 
 class SchemaCompilationError(ValueError):
@@ -178,13 +181,36 @@ def _compile_property(prop):
     if prop.get('home', 'json') != 'json' or nullability not in ('required', 'absent-allowed'):
         raise SchemaCompilationError('Property outside selected JSON value subset')
     facets = prop.get('facets') or {}
+    temporal = prop.get('native_temporal', prop.get('nativeTemporal'))
     if cardinality == 'one':
-        if family not in ('string', 'integer', 'decimal', 'boolean', 'timestamp', 'binary', 'date') or prop.get('item') is not None:
+        if family not in ('string', 'integer', 'decimal', 'boolean', 'timestamp', 'binary', 'date', 'localTimestamp') or prop.get('item') is not None:
             raise SchemaCompilationError('Supported singular scalar property required')
         compiled_facets = _check_facets(family, facets)
+        if family == 'localTimestamp':
+            source = temporal.get('source') if isinstance(temporal, Mapping) else None
+            if (compiled_facets or not isinstance(temporal, Mapping)
+                    or set(temporal) != {'profile', 'kind', 'source'}
+                    or temporal.get('profile') != 'truss.local-timestamp/0.1'
+                    or temporal.get('kind') != 'local'
+                    or not isinstance(source, Mapping)
+                    or set(source) != {'documentId', 'sha256', 'record', 'field', 'fieldViewPointer'}
+                    or type(source.get('documentId')) is not str or not source['documentId']
+                    or type(source.get('sha256')) is not str or not _SHA256_TEXT.fullmatch(source['sha256'])
+                    or type(source.get('fieldViewPointer')) is not str or not _JSON_POINTER.fullmatch(source['fieldViewPointer'])
+                    or not isinstance(source.get('record'), Mapping)
+                    or set(source['record']) != {'module', 'element'}
+                    or any(type(source['record'].get(key)) is not str or not source['record'][key] for key in ('module', 'element'))
+                    or not isinstance(source.get('field'), Mapping)
+                    or set(source['field']) != {'module', 'element'}
+                    or any(type(source['field'].get(key)) is not str or not source['field'][key] for key in ('module', 'element'))
+                    or source['field'].get('module') != prop.get('declaration_module', prop.get('declarationModule'))
+                    or source['field'].get('element') != prop.get('element')):
+                raise SchemaCompilationError('Exact derived local timestamp source metadata required')
+        elif temporal is not None:
+            raise SchemaCompilationError('Temporal source metadata must identify a local timestamp property')
         chain = ()
     elif cardinality in ('array', 'map'):
-        if family is not None or facets != {}:
+        if temporal is not None or family is not None or facets != {}:
             raise SchemaCompilationError('Unfaceted container property required')
         chain = _compile_chain(prop.get('item'))
         compiled_facets = MappingProxyType({})
@@ -394,6 +420,8 @@ def _wire_cell(value, *, _depth=0, _count=None):
         return None
     if type(value) is NullValue:
         return {'kind': 'null'} if _scalar(value, 'string', {}, True) else None
+    if type(value) is LocalTimestampValue:
+        return {'kind': 'localTimestamp', 'text': value.text} if _scalar(value, 'localTimestamp', {}, False) else None
     if type(value) in (BooleanValue, TextValue):
         family = 'boolean' if type(value) is BooleanValue else value.kind
         if family not in ('boolean', 'string', 'integer', 'decimal', 'timestamp', 'binary', 'date'):
@@ -451,6 +479,13 @@ def _scalar(value, family, facets, allow_null):
         return allow_null
     if family == 'boolean':
         return type(value) is BooleanValue and type(value.value) is bool
+    if family == 'localTimestamp':
+        if type(value) is not LocalTimestampValue or facets:
+            return False
+        try:
+            return validate_local_timestamp_text(value.text) == value.text
+        except ValueError:
+            return False
     if type(value) is not TextValue or value.kind != family or type(value.text) is not str:
         return False
     size = _text_bytes(value.text)

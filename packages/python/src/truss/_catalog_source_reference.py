@@ -1,11 +1,16 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Same-preparation source references for current UMF 0.10 catalogs."""
 DATE10_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.20.0', 'sha256': '364335de9a0e6968106af189dcb11d5b4c86b2114361fcffd722c4154bf809cb'}
+TEMPORAL_PROFILE={'identity': 'truss-fresh-catalog-temporal-support', 'version': '0.1', 'sha256': 'af25c70162779100e94ec6cdefded1fa5146693dfa4e3aacb5b8c692d62406f2'}
 SOURCE_REFERENCE_FORMAT='truss-catalog-source-reference/0.1'
 
 
 def compact_catalog_sources(prepared):
     return prepared.input()['supportProfile']==DATE10_PROFILE
+
+
+def temporal_catalog_profile(prepared):
+    return prepared.input()['supportProfile']==TEMPORAL_PROFILE
 
 
 def catalog_source_reference(prepared, document_id, basis='original'):

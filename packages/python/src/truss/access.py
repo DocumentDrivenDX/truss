@@ -7,12 +7,12 @@ Catalog custody never substitutes for Truss authorization or native query scope.
 from __future__ import annotations
 from collections.abc import Callable, Generator
 from contextlib import AbstractContextManager
-from datetime import timedelta
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from time import monotonic
 from typing import Any, TypeVar
-import hashlib,json,base64
-from .contracts import TextValue
+import hashlib,json,base64,re
+from .contracts import TextValue, LocalTimestampValue, validate_local_timestamp_text
 from pydantic import BaseModel
 from umf_access.adoption import TargetIdentity
 from umf_access.engine_catalog import EngineRead
@@ -47,7 +47,30 @@ def _read_profile(program, kind):
     """Closed owner compiler/version pairs; binary streams remain separate."""
     return (program.get('compiler'),program.get('version')) in (
         ('truss-runtime','weft.engine-'+kind+'/0.1'),
-        ('truss-runtime-binary','weft.engine-'+kind+'/0.2'))
+        ('truss-runtime-binary','weft.engine-'+kind+'/0.2'),
+        ('truss-runtime-temporal','weft.engine-'+kind+'/0.4'))
+
+
+def _engine_verification_sample(program):
+    request=program['request'];sample={}
+    for name,p in request['parameters'].items():
+        family,value=p['family'],p['value']
+        sample[name]={'string':lambda:value,'integer':lambda:int(value),'decimal':lambda:Decimal(value),'boolean':lambda:value=='true'}[family]()
+    if program.get('compiler')=='truss-runtime-temporal' and program.get('temporalProfile')=='umf.weft-binding-temporal/0.2':
+        temporal=request.get('temporalParameters')
+        if type(temporal)is not dict:raise ValueError('Original temporal parameter declarations required')
+        for name,descriptor in temporal.items():
+            if type(descriptor)is not dict or set(descriptor)!={'kind','value'} or type(descriptor.get('value'))is not str:
+                raise ValueError('Closed original temporal parameter declaration required')
+            kind,value=descriptor['kind'],descriptor['value']
+            if kind=='date' and re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}',value):sample[name]=date.fromisoformat(value)
+            elif kind=='local':
+                validate_local_timestamp_text(value)
+                sample[name]=datetime.fromisoformat(value)
+            elif kind=='instant' and re.fullmatch(r'-?(0|[1-9][0-9]*)',value) and value!='-0' and -62135596800000000<=int(value)<=253402300799999999:
+                sample[name]=datetime(1970,1,1,tzinfo=timezone.utc)+timedelta(microseconds=int(value))
+            else:raise ValueError('Exact selected temporal parameter sample required')
+    return sample
 
 
 def _related_key_models(value, decoder, key_model):
@@ -82,8 +105,11 @@ def _typed_rows(entry, program, native):
     if native.columns!=tuple(entry.result.model_fields):
         raise ValueError('Truss complete ordered output signature differs')
     binary=program.get('compiler')=='truss-runtime-binary'
+    temporal_native=(program.get('compiler')=='truss-runtime-temporal'
+                     and program.get('version') in ('weft.engine-read/0.4','weft.engine-page/0.4')
+                     and program.get('temporalProfile')=='umf.weft-binding-temporal/0.2')
     outputs=program.get('outputs',())
-    if binary and (not (_read_profile(program,'read') or _read_profile(program,'page'))
+    if (binary or temporal_native) and (not (_read_profile(program,'read') or _read_profile(program,'page'))
         or tuple(output.get('name') for output in outputs)!=native.columns):
         raise ValueError('Original complete Truss binary output signature required')
     related=None
@@ -105,10 +131,35 @@ def _typed_rows(entry, program, native):
             or artifact['modelPins']!=decoder['modelPins']):
             raise ValueError('Original Truss related-Key representation or source differs')
     result=[]
+    temporal_outputs={output['name']:output for output in outputs
+                      if type(output) is dict and 'decoder' in output} if temporal_native else {}
     for row in native.rows:
-        if len(row)!=len(native.columns) or not binary and any(isinstance(value,QueryAbsent) for value in row):
+        if len(row)!=len(native.columns) or not (binary or temporal_native) and any(isinstance(value,QueryAbsent) for value in row):
             raise ValueError('ADOPTION_MISMATCH: selected column absent or row shape differs')
         values=dict(zip(native.columns,row,strict=True))
+        if temporal_native:
+            from umf_access.engine_catalog import engine_value_from_native
+            from umf_access.types import MISSING
+            for output in temporal_outputs.values():
+                name=output['name'];value=values[name]
+                decoder=output.get('decoder')
+                if type(decoder) is not dict or set(decoder)!={'profile','kind'} or decoder.get('profile')!='truss-temporal/0.1':
+                    raise ValueError('Original Truss temporal output decoder required')
+                kind=decoder.get('kind')
+                if isinstance(value,QueryAbsent):
+                    value=MISSING
+                elif value is None:
+                    pass
+                elif kind=='local' and type(value) is LocalTimestampValue:
+                    value=value.text
+                elif kind in ('date','instant') and type(value) is TextValue:
+                    expected_kind='date' if kind=='date' else 'timestamp'
+                    if value.kind!=expected_kind:
+                        raise ValueError('Truss temporal native carrier differs from selected Field')
+                    value=value.text
+                else:
+                    raise ValueError('Truss temporal native carrier differs from selected Field')
+                values[name]=engine_value_from_native(value,output)
         if binary:
             from umf_access.types import MISSING
             for output in outputs:
@@ -203,16 +254,18 @@ class TrussTarget:
             if monotonic()>=deadline:raise TimedOut('deadline expired before engine release')
         if monotonic()>=deadline:raise TimedOut('deadline expired during engine release')
         return result
+    def read_native_temporal(self,entry:CatalogRead[P,R],parameters:P,*,timeout:timedelta|None=None)->list[R]:
+        """Dispatch only checked ABI1.3 engine reads through this owned target."""
+        if (not isinstance(entry,EngineRead) or not entry.requires_native_temporal_source
+            or not _read_profile(entry.artifact(),'read')):
+            raise ValueError('original native temporal engine read required')
+        return self.read(entry,parameters,timeout=timeout)
     def verify(self)->None:
         if not self.catalog_entries:raise ValueError('explicit engine catalog entries required')
         for entry in self.catalog_entries:
             # Verification runs the same original read and release path, never a
             # metadata-only authority shortcut. Samples are compiler inputs.
-            request=entry.artifact()['request'];sample={}
-            from decimal import Decimal
-            for name,p in request['parameters'].items():
-                family,value=p['family'],p['value']
-                sample[name]={'string':lambda:value,'integer':lambda:int(value),'decimal':lambda:Decimal(value),'boolean':lambda:value=='true'}[family]()
+            program=entry.artifact();sample=_engine_verification_sample(program)
             if _read_profile(entry.artifact(),'page'):self.page(entry,entry.parameters.model_validate(sample))
             else:self.read(entry,entry.parameters.model_validate(sample))
     def page(self,entry:CatalogRead[P,R],parameters:P,*,after:ReadContinuation|None=None,timeout:timedelta|None=None)->ReadPage[R]:
@@ -248,6 +301,12 @@ class TrussTarget:
             if monotonic()>=deadline:raise TimedOut('deadline expired before page release')
         if monotonic()>=deadline:raise TimedOut('deadline expired during page release')
         return result
+    def page_native_temporal(self,entry:CatalogRead[P,R],parameters:P,*,after:ReadContinuation|None=None,timeout:timedelta|None=None)->ReadPage[R]:
+        """Dispatch only checked ABI1.3 engine pages through this owned target."""
+        if (not isinstance(entry,EngineRead) or not entry.requires_native_temporal_source
+            or not _read_profile(entry.artifact(),'page')):
+            raise ValueError('original native temporal engine page required')
+        return self.page(entry,parameters,after=after,timeout=timeout)
     def stream(self,entry:CatalogRead[P,R],parameters:P,*,max_rows:int,timeout:timedelta|None=None)->Generator[R,None,None]:
         from .query_stream import QueryStreamTimedOut
         try:

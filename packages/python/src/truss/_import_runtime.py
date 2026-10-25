@@ -4,7 +4,7 @@ import base64,json
 from contextlib import nullcontext
 from hashlib import sha256
 from uuid import uuid4
-from .contracts import (SequenceValue,ABSENT,ProfilePin,SelectedMutationConfiguration,MapValue,MapEntry,TextValue,NullValue,BooleanValue)
+from .contracts import (SequenceValue,ABSENT,ProfilePin,SelectedMutationConfiguration,MapValue,MapEntry,TextValue,LocalTimestampValue,NullValue,BooleanValue)
 from .execution import Ok,Error,ExecutionFailure
 from .imports import (ImportInput,ObjectImportRecord,EdgeImportRecord,ImportReported,ImportInvalid,ImportExecutionFailed,
     ImportReport,ImportCounts,ImportCreated,ImportSkipped,ImportRejected,ImportAttemptUnknown,PendingBatch,RolledBackBatch,TransactionUnresolvedBatch)
@@ -48,6 +48,7 @@ def _cell(value,*,containers=False,recursive=False,_depth=0,_budget=None):
     if type(value) is not dict:raise ValueError('Exact scalar cell required')
     if value=={'kind':'null'}:return NullValue()
     if value.get('kind')=='boolean' and set(value)=={'kind','value'}:return BooleanValue(value=value['value'])
+    if value.get('kind')=='localTimestamp' and set(value)=={'kind','text'} and _depth==0:return LocalTimestampValue(text=value['text'])
     if value.get('kind') in ('string','integer','decimal','timestamp','binary','date') and set(value)=={'kind','text'}:return TextValue(kind=value['kind'],text=value['text'])
     if containers and value.get('kind')=='sequence' and set(value)=={'kind','items'} and type(value['items']) is list and len(value['items'])<=1024:
         return SequenceValue(items=tuple(_cell(item,containers=recursive,recursive=recursive,_depth=_depth+1,_budget=_budget) for item in value['items']))

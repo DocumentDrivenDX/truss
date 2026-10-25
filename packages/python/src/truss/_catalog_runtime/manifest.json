@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.74-candidate",
+  "releaseId": "truss-catalog-runtime/0.75-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -8,19 +8,19 @@
     "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
   },
   "files": {
-    "layout.sql": "fc2cdc8dfc80aef7f630a21ee9587751b9b026d9491832c0cdbb89c4a72feaa3",
+    "layout.sql": "0986574ec6b8560a6a913995f92647f5a33ef6914357b7e9dfef579d0dade787",
     "lineage.sql": "b808d39ae44cbeca21bd301ff069469cbcea54c6b8fe28eb27f22ce53ce5e2fa",
-    "plan.sql": "a6aa13e69b95696a39adb61a3bb9999fb48807abf2006fa0daa9dabe126a2437",
-    "runtime.sql": "383b2280e20b3dd6bd31f7edc7654f83ebd7fefc1670739e24c3cf72c85c86cb",
+    "plan.sql": "91b864ea6ed58a493e81135f8ca7575e1ae3e2b7476c6f2c962270da33e45d7f",
+    "runtime.sql": "5720944dc54e8bccc296064f21baea3024bf53f91c2c2196a13438f1254eafa2",
     "barrier.sql": "659c4d9dfe8c4cf33b40e2249d3668b1c283e1815f719a47990387d81423d80e",
     "view.sql": "857a2c62c284a2462a71acfae88a1fcab840982fe274bcf39a49555692a88614",
-    "read.sql": "8ff9f5b8bf48371a50f123da263c55bbf35038b967441e4f3ef8b0564a918df0",
+    "read.sql": "0bcd57497d9a965fd7047f282db714b7824d36f013caaccb7de21377c66148ac",
     "keys.sql": "7dd48722c66c0dd255b098d93b92297539746b1ac4a06fe623564c268d4ad226",
     "groups.sql": "dcdc317ce1d3844f1d16853576b21c6238de3fe752b4d86fe44d13b2a9f3df22",
     "group-profiles.json": "9a19eeafd78ae13a8baa884a58e22b1ec0f67c89899d9e66c826e595af7e160a",
-    "reader.sql": "df24b3281fa77061ea69e6e82d22e5aa07ce6811c60489e228bc8dd0cffbb353",
+    "reader.sql": "551f49c5e0a18f2b46321bd5922dbafde392974d1f054257f96be02cae33672a",
     "key-read.sql": "2426f781c3b740d7f2680f4733f88373d6ed7203b6e658f2118bfd3c49666bae",
-    "scalars.sql": "3ee4e9da7972bb801b643cf6c3a4e92f2e649cfb1b9fb38f2813edd22ced8ebf",
+    "scalars.sql": "5b1120bb46944da341323b18c7b68271e4839e604ad640c1094b006610201b48",
     "pages.sql": "ab13676c5ff071c6cd1107aae49b62cd29ee4b1a05571fe18e25ec0501c1aba0",
     "evolution.sql": "e143834204b34ca58fe3b69ff92b2959aa32e585cbb8bcad55a1e526f23e5ed8",
     "operations.sql": "1ecbfecc7642fdb2b21a7180bf4c7c7394587493061e71a9d87977a416cc7ffd",
@@ -31,13 +31,13 @@
     "history.sql": "1e7e93f688fb59ab51af0d7d71afda526628ea9088f8651e95d550376c221c2e",
     "migrations.sql": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
     "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
-    "query.sql": "af38c7bd4c59411cc2349926284564877e4ed4adb6871aaa6bb8131a4dfe2c5d",
+    "query.sql": "34cf25e2aed829d61f7a7dd54e2208b18f66addcb1887e3a18e1aef7ad141bd2",
     "entity-query.sql": "cf4296549c873659eebe2bb84278d07f4fb0da98b970d0b638ba11b20ed9bafc",
     "entity-times.sql": "c0eab24b02425b184c6cf9fef91d87377ece7c0fe3f82763ab5090f4b107ca5c",
     "entity-load.sql": "6100f2ce3783fd06f65e9d257cef4bc395d58b653e402121a9d18b47fe1eeb43",
     "feed-receipts.sql": "299716ead3943bbccea4c146cf010ca7a7b5ef42b9898a6c2d410eb4495108cb",
     "traversal.sql": "b9f78937685920ac1997ba21f86525cfb18dedff06254686bd04e4c8fa45a4f9",
-    "containers.sql": "b0a93427d28b412109613ad7cb709f613ead16eb6fe3d3e5ef2f5907c7345dd8",
+    "containers.sql": "3b75aef6a9eb011043fa3ff51ddf3010c56f16439189d7799de611c8b45ae7b3",
     "catalog-rebind.sql": "0d7aabd6c9eb48ddd9bd908b6786dac2c9e130d0736fe811cdc3f7ae2eabbeff",
     "catalog-rebind-storage.sql": "9b827d0ab7a9fc210ea3f1d7e65d459cdc0953707400cc070cd9f63b586a4d1e",
     "catalog-key-backfill.sql": "5894dfb700829a717142de0eba066310b8cc815b04851f35f665d9aa73e127b0",
@@ -57,12 +57,14 @@
     "load-audit-reader.sql": "d24a927e9c01a315ff2b24e4bda12207434fa3d476965149f1cff253e35740fc",
     "import-batches.sql": "97cf1f1b1012864df0a95c12ba693c5a935a515047ca4533041ee4c8fc3e80a1",
     "group-audit-reader.sql": "1b80d10290645cdc3d2e12c0f5dd2b3fa76c7ad51cd0effb6fa2d097bd468660",
-    "person-entrypoints.sql": "2c99d9894bf5ae278feb227419851107567e5ee0f2a1583e95113f68e29b5164",
-    "person-entrypoints.json": "13be01c73c4812cd2b5f3a8273db4ce8265ed91ae78e577b25d53ea9825ad26a",
+    "person-entrypoints.sql": "d6f1696f06f8de571dfd66b7cc2ddfe411eda2aa4f2a4f34fe9f64867c5ac06e",
+    "person-entrypoints.json": "b722919b2a805c0d42320d6889910f4b66885653dd436d98524d6c5912780752",
     "group-recovery.sql": "a3fcbd45ea69595b88679903d20533e9bbe18c2f5864caa6a75f82985bdca300",
     "query-selective.sql": "8d2523ba89e3322f3a44e0e7567ef3d91bb0154f6a63dcb2b72a6d852bb5ac9d",
     "managed-grants.sql": "0c14b6a10c896ca207604e0391fc5f3be8ba202705f77e42f69ab531626ca2ed",
-    "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca"
+    "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca",
+    "query-temporal-abi.json": "479a0ba01bf21e61163a0709c1a3b4dbaeb9d5db1a03791d2044857ae2de588d",
+    "query-temporal.sql": "924dc6c017cf6fcd0c4b74f44b34dc18813803bb25eb2769616366e585891dfc"
   },
-  "version": "0.74"
+  "version": "0.75"
 }

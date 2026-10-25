@@ -333,6 +333,16 @@
       "volatility": "v"
     },
     {
+      "name": "query_temporal_binding",
+      "publicName": "person_query_temporal_binding",
+      "signature": "truss.query_temporal_binding(jsonb,integer,integer,integer,text,text)",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
       "name": "query_binding_if_changed",
       "publicName": "person_query_binding_if_changed",
       "signature": "truss.query_binding_if_changed(jsonb,integer,integer,integer,text,text,text)",
@@ -427,6 +437,26 @@
       "publicName": "person_query_page_objects",
       "signature": "truss.query_page_objects(jsonb,integer,text)",
       "arguments": "binding jsonb, selected_type integer, selected_key text",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true,
+      "volatility": "s"
+    },
+    {
+      "name": "query_temporal_page_objects",
+      "publicName": "person_query_temporal_page_objects",
+      "signature": "truss.query_temporal_page_objects(jsonb,integer,text,jsonb)",
+      "arguments": "binding jsonb, selected_type integer, selected_key text, requirements jsonb",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true,
+      "volatility": "s"
+    },
+    {
+      "name": "query_temporal_objects",
+      "publicName": "person_query_temporal_objects",
+      "signature": "truss.query_temporal_objects(jsonb,integer,jsonb)",
+      "arguments": "binding jsonb, selected_type integer, requirements jsonb",
       "mode": "read",
       "result": "TABLE(id bigint, props jsonb)",
       "set": true,

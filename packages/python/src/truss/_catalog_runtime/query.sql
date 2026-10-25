@@ -57,6 +57,10 @@ REVOKE ALL ON FUNCTION truss.query_numeric_value(text,text) FROM PUBLIC;
 -- Fixed, independently authorized query sources; no arbitrary SQL gateway.
 -- Hash of the exact packaged query-abi.json descriptor bytes, independent of
 -- unrelated runtime implementation edits. Actual execution still pins runtime.
+CREATE FUNCTION truss.query_temporal_abi() RETURNS jsonb
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.3","sha256":"479a0ba01bf21e61163a0709c1a3b4dbaeb9d5db1a03791d2044857ae2de588d"}'::jsonb; $$;
+REVOKE ALL ON FUNCTION truss.query_temporal_abi() FROM PUBLIC;
+
 CREATE FUNCTION truss.query_abi() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.2","sha256":"8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96"}'::jsonb; $$;
 REVOKE ALL ON FUNCTION truss.query_abi() FROM PUBLIC;
@@ -68,16 +72,22 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.5'
- OR binding->'queryAbi' IS DISTINCT FROM truss.query_abi()
+ OR binding->'queryAbi' IS DISTINCT FROM truss.query_abi() AND binding->'queryAbi' IS DISTINCT FROM truss.query_temporal_abi()
  OR binding-ARRAY['interfaceVersion','queryAbi','schema','installationId','releaseId','releaseSha256','catalogRevision','documents','records','relationships','maximumScanRows','maximumResultRows','maximumBytes']<>'{}'::jsonb
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.74-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.75-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
  OR jsonb_typeof(binding->'records') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'records') NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected query context required' USING ERRCODE='0A000';END IF;
+ IF binding->'queryAbi'=truss.query_abi() AND EXISTS(
+  SELECT 1 FROM jsonb_array_elements(binding->'records') r
+  CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f
+  JOIN truss.prop_def p ON p.type_id=(r.value->>'typeId')::int AND p.prop_id=(f.value->>'propertyId')::int
+  WHERE p.scalar_type='localTimestamp') THEN
+  RAISE EXCEPTION 'ABI 1.2 does not describe selected local timestamp carriers' USING ERRCODE='0A000';END IF;
  IF jsonb_array_length(binding->'documents')=1 THEN
   SELECT metadata INTO compiled FROM truss.runtime_document_schema
    WHERE rev=(binding->>'catalogRevision')::int AND doc_id=binding->'documents'->0->>'documentId';
@@ -172,6 +182,43 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_binding(jsonb,int,int,int,text,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.query_temporal_binding(selected_documents jsonb,maximum_scan_rows int,maximum_result_rows int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;captured_revision int;selected_document_id text;archived jsonb;content text;source jsonb;modules jsonb:='[]';pins jsonb:='[]';records jsonb:='[]';relationships jsonb:='[]';binding jsonb;result bytea;
+BEGIN
+ PERFORM truss.runtime_person(false);
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected query release required' USING ERRCODE='0A000';END IF;
+ IF maximum_scan_rows IS NULL OR maximum_scan_rows NOT BETWEEN 1 AND 10000 OR maximum_result_rows IS NULL OR maximum_result_rows NOT BETWEEN 1 AND 10000 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216
+ OR jsonb_typeof(selected_documents) IS DISTINCT FROM 'array' OR jsonb_array_length(selected_documents) NOT BETWEEN 1 AND 32
+ OR EXISTS(SELECT 1 FROM jsonb_array_elements(selected_documents) v WHERE jsonb_typeof(v.value)<>'string')
+ OR (SELECT count(DISTINCT v.value) FROM jsonb_array_elements(selected_documents) v)<>jsonb_array_length(selected_documents) THEN RAISE EXCEPTION 'bounded original document selection required' USING ERRCODE='22023';END IF;
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
+ FOR selected_document_id IN SELECT value FROM jsonb_array_elements_text(selected_documents) LOOP
+  archived:=convert_from(truss.accepted_document(selected_document_id,maximum_bytes,expected_release,expected_digest),'UTF8')::jsonb;
+  content:=convert_from(decode(archived->>'contentBase64','base64'),'UTF8');source:=content::jsonb;
+  pins:=pins||jsonb_build_array(jsonb_build_object('documentId',selected_document_id,'revision',archived->>'documentRevision','sha256',archived->>'sha256'));
+  modules:=modules||jsonb_build_array(jsonb_build_object('documentJson',content,'pin',jsonb_build_object('documentId',selected_document_id,'revision',archived->>'documentRevision','sha256',archived->>'sha256','umfVersion',source->>'umf'),
+   'selectedModuleIds',(SELECT jsonb_agg(m.value->>'id' ORDER BY m.value->>'id') FROM jsonb_array_elements(source->'modules') m)));
+  records:=records||coalesce((SELECT jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',t.document_id,'revision',archived->>'documentRevision','module',t.module,'element',t.element),'typeId',t.type_id::text,
+    'keys',(SELECT coalesce(jsonb_agg(jsonb_build_object('keyId',k.key_id,'propertyIds',(SELECT jsonb_agg(p.prop_id::text ORDER BY p.n) FROM unnest(k.prop_ids) WITH ORDINALITY p(prop_id,n))) ORDER BY k.key_num),'[]') FROM truss.key_def k WHERE k.type_id=t.type_id AND k.retired_rev IS NULL),
+    'fields',(SELECT coalesce(jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',t.document_id,'revision',archived->>'documentRevision','module',p.declaration_module,'element',p.element),'propertyId',p.prop_id::text) ORDER BY p.prop_id),'[]') FROM truss.prop_def p WHERE p.type_id=t.type_id AND p.retired_rev IS NULL)) ORDER BY t.type_id)
+    FROM truss.type_def t WHERE t.document_id=selected_document_id AND t.retired_rev IS NULL AND NOT t.provisional AND t.kind='record'),'[]');
+  relationships:=relationships||coalesce((SELECT jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',r.document_id,'revision',archived->>'documentRevision','module',r.module,'relationship',r.rel_id),
+   'relationshipTypeId',r.rel_type_id::text,'sourceTypeId',e.source_type::text,'targetTypeId',e.target_type::text) ORDER BY r.rel_type_id)
+   FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id WHERE r.document_id=selected_document_id AND r.retired_rev IS NULL AND r.lifecycle IN ('independent','owned') AND r.directed AND NOT r.composition AND r.assoc_type_id IS NULL
+   AND (SELECT count(*) FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id)=1),'[]');
+ END LOOP;
+ binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.5','queryAbi',truss.query_temporal_abi(),'schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
+ 'documents',pins,'records',records,'relationships',relationships,'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes);
+ PERFORM truss.query_scope(binding);
+ result:=convert_to(jsonb_build_object('binding',binding,'bindingJson',binding::text,'modules',modules,'actorOid',(SELECT oid::text FROM pg_roles WHERE rolname=session_user))::text,'UTF8');
+ IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'query binding byte limit' USING ERRCODE='54000';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_temporal_binding(jsonb,int,int,int,text,text) FROM PUBLIC;
 
 -- A validator only identifies immutable input bytes. It never carries reader
 -- authority: complete current dependency visibility is checked on every call.
