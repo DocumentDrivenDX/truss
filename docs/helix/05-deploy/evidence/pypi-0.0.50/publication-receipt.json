@@ -1,0 +1,16 @@
+{
+  "distribution": "truss-toolkit",
+  "files": {
+    "truss_toolkit-0.0.50-py3-none-any.whl": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+    "truss_toolkit-0.0.50.tar.gz": "60204fbb2b420e4600ebafa397e2742b46f06d6085936411dfa81f19aa7c5aaa"
+  },
+  "oidc_trusted_publisher": true,
+  "publication_mode": "oidc_upload",
+  "registry": "pypi",
+  "registry_bytes_verified": true,
+  "schema": "pypi-publication-receipt.v1",
+  "source_sha": "a687d0a226dad5745cbd909377bf99c7c1cddc66",
+  "status": "passed",
+  "tag": "v0.0.50",
+  "version": "0.0.50"
+}
