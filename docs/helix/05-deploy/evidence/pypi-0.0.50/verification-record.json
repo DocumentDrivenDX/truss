@@ -1,0 +1,33 @@
+{
+  "all_three_jobs_passed": true,
+  "artifact_receipts": [
+    {
+      "id": 12666684902,
+      "name": "truss-pypi-consumer-0.0.50",
+      "sha256": "ab800c489dbd26ba51b11087373f43ea90d21240de2443f921dfd6fd2dd17e6e"
+    },
+    {
+      "id": 12666649907,
+      "name": "truss-pypi-publication-0.0.50",
+      "sha256": "feb2800b695f283805e2e3414b1f494a7b11be79e3e9bea49c73a4efc1b1c0bc"
+    }
+  ],
+  "artifact_zip_digests_verified": true,
+  "distribution": "truss-toolkit",
+  "files": {
+    "truss_toolkit-0.0.50-py3-none-any.whl": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+    "truss_toolkit-0.0.50.tar.gz": "60204fbb2b420e4600ebafa397e2742b46f06d6085936411dfa81f19aa7c5aaa"
+  },
+  "publication_mode": "oidc_upload",
+  "registry": "pypi",
+  "schema": "registry-release-verification.v1",
+  "scope": "Registry distribution and fresh public-index import of the existing qualified release. Existing platform and semantic qualification limits apply.",
+  "status": "passed",
+  "tag": "v0.0.50",
+  "tag_source_sha": "a687d0a226dad5745cbd909377bf99c7c1cddc66",
+  "version": "0.0.50",
+  "workflow_driver_sha": "dfb1b7bd6afb97d64feb617b2ac05277ef48ab4a",
+  "workflow_event": "workflow_dispatch",
+  "workflow_run_id": 40361086218,
+  "workflow_url": "https://github.com/DocumentDrivenDX/truss/actions/runs/40361086218"
+}

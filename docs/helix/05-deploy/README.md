@@ -2,7 +2,8 @@
 
 Document release readiness, deployment checks, monitoring, and operations.
 
-Status: not started; no release or distribution channel has been defined.
+GitHub release archives and the public PyPI channel are defined. Executed
+registry gates and their immutable source identities are recorded below.
 
 ## Public PyPI distribution
 
@@ -22,7 +23,20 @@ only initial absence is retried within a bounded visibility wait.
 
 A job without OIDC verifies a fresh public-index installation and retains its
 receipt separately from the upload/byte receipt. Configuration and local tests
-do not prove publication. Initial publisher grants and the qualified backfill
-are pending; actual public-byte and install receipts must pass before the
-public-index install claim is made. This changes distribution, not runtime
+do not prove publication. The approved publisher is configured, and actual
+public-byte and installed-consumer receipts are retained in the executed
+publication record below. This changes distribution, not runtime
 semantics, platform qualification or the latest-only support policy.
+
+## Executed PyPI publication
+
+On 2026-10-26, [run 40361086218](https://github.com/DocumentDrivenDX/truss/actions/runs/40361086218)
+published the unchanged `truss-toolkit==0.0.50` wheel and sdist through GitHub
+Actions OIDC. Exact PyPI-served bytes and a fresh public-index `[query]` install
+passed. Source, publication, consumer and verified artifact-digest records are
+retained under `evidence/pypi-0.0.50/`. The configured main-only publisher
+automatically consumes successful qualified tag/release producers.
+
+Every public registry upload, including historical backfills, executes in
+GitHub Actions bound to the verified immutable tag and GitHub release. Local
+preparation and verification do not authorize a local registry upload.
