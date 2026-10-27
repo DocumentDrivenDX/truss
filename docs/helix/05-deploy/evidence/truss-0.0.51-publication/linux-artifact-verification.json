@@ -1,0 +1,69 @@
+{
+  "scope": "Actual exact-tag Linux qualification at v0.0.51 source26c1b9171718ad0f6291b82f65c8cef0406886fb; not macOS execution or PyPI consumer evidence.",
+  "runId": 40549597103,
+  "source": "26c1b9171718ad0f6291b82f65c8cef0406886fb",
+  "artifacts": [
+    {
+      "id": 12756195193,
+      "name": "managed-grants-qualification-ubuntu-24.04",
+      "digest": "sha256:64870214dbb5546a7469a42a5d2e5e7823a6f1ece117b43029622f284ebf3570",
+      "size_in_bytes": 52061
+    },
+    {
+      "id": 12756116659,
+      "name": "original-public-workflow-ubuntu-24.04",
+      "digest": "sha256:e5bbd158a7d094c52c8902fe709036221787d965a2828ddf9f70816ee1b6f3f6",
+      "size_in_bytes": 32603
+    },
+    {
+      "id": 12755052277,
+      "name": "hf-conformance-qualification-ubuntu-24.04",
+      "digest": "sha256:e9f89cd4016c63348c5ef43b8c5b48e2cbd9687dba36f58f693cfe50fdeec9c2",
+      "size_in_bytes": 3937
+    },
+    {
+      "id": 12754493229,
+      "name": "runtime-migration-qualification-ubuntu-24.04",
+      "digest": "sha256:6b2514dd0eccfd6334c756cc0fb0219c43ef7116770f4746b8c380675f70a865",
+      "size_in_bytes": 1685286
+    },
+    {
+      "id": 12754007843,
+      "name": "python-package",
+      "digest": "sha256:b5bf83dc6eaefff17dd3aaa981dc4b1c66da895edd34800a47bbffae27eb1b41",
+      "size_in_bytes": 14044307
+    }
+  ],
+  "receipts": {
+    "managed-grants-qualification-ubuntu-24.04": {
+      "tests": 174,
+      "skipped": 0,
+      "passed": true,
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "sourceCommit": "26c1b9171718ad0f6291b82f65c8cef0406886fb"
+    },
+    "original-public-workflow-ubuntu-24.04": {
+      "functionalPassed": true,
+      "reportSha256": "56785c39823be45f1c25508d12840657fb38577821544bcb04ac02e31e2f3e3b"
+    },
+    "hf-conformance-qualification-ubuntu-24.04": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": true,
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "sourceCommit": "26c1b9171718ad0f6291b82f65c8cef0406886fb"
+    },
+    "runtime-migration-qualification-ubuntu-24.04": {
+      "tests": 108,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": true,
+      "platform": "linux",
+      "sourceCommit": "26c1b9171718ad0f6291b82f65c8cef0406886fb"
+    }
+  },
+  "status": "VERIFIED_ACTUAL_LINUX_SOURCE_QUALIFICATION"
+}

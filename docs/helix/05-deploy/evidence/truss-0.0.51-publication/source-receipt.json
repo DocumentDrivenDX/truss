@@ -1,0 +1,18 @@
+{
+  "distribution": "umf-truss",
+  "files": {
+    "umf_truss-0.0.51-py3-none-any.whl": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+    "umf_truss-0.0.51.tar.gz": "0f091b8c87428a003cf2a5cc68c3905fca66a3cd35e23d353b015346afd4718c"
+  },
+  "github_release_immutable": true,
+  "producer_run_id": 40549597103,
+  "producer_workflow_path": ".github/workflows/release.yml",
+  "release_pins_sha256": "6abf335276bd5e77447f5ad0911c05e3eaf113328824a6b0efa0e5fdf7d0c462",
+  "repository": "DocumentDrivenDX/truss",
+  "schema": "pypi-release-source.v1",
+  "source_sha": "26c1b9171718ad0f6291b82f65c8cef0406886fb",
+  "status": "verified",
+  "sums_sha256": "6fc962d33b3903723cc427a6969f14521d8be39616b7cdf956d0405a0c613579",
+  "tag": "v0.0.51",
+  "version": "0.0.51"
+}

@@ -1,0 +1,166 @@
+{
+  "schema": "registry-release-verification.v1",
+  "status": "passed",
+  "distribution": "umf-truss",
+  "version": "0.0.51",
+  "tag": "v0.0.51",
+  "tag_source_sha": "26c1b9171718ad0f6291b82f65c8cef0406886fb",
+  "producer_run_id": 40549597103,
+  "workflow_run_id": 40555332184,
+  "workflow_driver_sha": "26c1b9171718ad0f6291b82f65c8cef0406886fb",
+  "workflow_event": "workflow_run",
+  "workflow_url": "https://github.com/DocumentDrivenDX/truss/actions/runs/40555332184",
+  "release_id": 425804959,
+  "immutable": true,
+  "all_three_jobs_passed": true,
+  "publication_mode": "oidc_upload",
+  "artifact_zip_digests_verified": true,
+  "artifact_receipts": [
+    {
+      "id": 12757860220,
+      "name": "truss-pypi-release-0.0.51",
+      "digest": "sha256:9ce0faa211affd48dd8631041c5aac71274b385c1c8766f8200e2701c0da398d",
+      "size_in_bytes": 12899126
+    },
+    {
+      "id": 12757096566,
+      "name": "truss-pypi-publication-0.0.51",
+      "digest": "sha256:6c1fd07a82f47158d4fb9db0d775ea7e0acabc77cc5b796f1308e780b3ef8cf8",
+      "size_in_bytes": 1093
+    },
+    {
+      "id": 12757032021,
+      "name": "truss-pypi-consumer-0.0.51",
+      "digest": "sha256:622c9f4dac0b5c145156458fe7f5d2e3a07f06aad54539a746a7f51bb72548d2",
+      "size_in_bytes": 294
+    }
+  ],
+  "github_assets": [
+    {
+      "id": 682405376,
+      "name": "catalog-key-backfill-report-v0.1.md",
+      "size": 3701,
+      "digest": "sha256:fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50"
+    },
+    {
+      "id": 682405379,
+      "name": "catalog-rebind-report-v0.2.md",
+      "size": 2407,
+      "digest": "sha256:14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942"
+    },
+    {
+      "id": 682405380,
+      "name": "catalog-rebind-report-v0.4.md",
+      "size": 2919,
+      "digest": "sha256:38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4"
+    },
+    {
+      "id": 682405377,
+      "name": "catalog-registration-summary-v0.1.md",
+      "size": 8717,
+      "digest": "sha256:674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945"
+    },
+    {
+      "id": 682405391,
+      "name": "catalog-source-reference-v0.1.md",
+      "size": 3736,
+      "digest": "sha256:41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7"
+    },
+    {
+      "id": 682405392,
+      "name": "hf-conformance-qualification.json",
+      "size": 15049,
+      "digest": "sha256:6ca50e497cc091df849ecba0f9d0ad58078144a3914b058a82342ed21268458b"
+    },
+    {
+      "id": 682405395,
+      "name": "isolated-runtime-constraints.txt",
+      "size": 361,
+      "digest": "sha256:cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889"
+    },
+    {
+      "id": 682405397,
+      "name": "logical-query-abi.json",
+      "size": 7349,
+      "digest": "sha256:8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96"
+    },
+    {
+      "id": 682405401,
+      "name": "managed-grants-qualification-evidence.tar.gz",
+      "size": 51050,
+      "digest": "sha256:d832d299b54dc5aae2b6b4dcf39fbf2f1f3ec6119799eea29fbacb7778fa113c"
+    },
+    {
+      "id": 682405428,
+      "name": "managed-grants-qualification.json",
+      "size": 113939,
+      "digest": "sha256:7c26db4578a4d6d34ca4758a453c038a2144199a51b04019c88d9fffffba6700"
+    },
+    {
+      "id": 682405430,
+      "name": "migration-qualification-evidence.tar.gz",
+      "size": 1672420,
+      "digest": "sha256:4b6cb94e7296828ff72e0e0e5f4a304c4e2d3ae9e17e8002d084f9db746d4e68"
+    },
+    {
+      "id": 682405431,
+      "name": "migration-qualification.json",
+      "size": 2430,
+      "digest": "sha256:19efda70682c6fd3a6d6c7e8111fe347680005abdbbc99dda18634fc990b2192"
+    },
+    {
+      "id": 682405435,
+      "name": "release-pins.json",
+      "size": 5073,
+      "digest": "sha256:6abf335276bd5e77447f5ad0911c05e3eaf113328824a6b0efa0e5fdf7d0c462"
+    },
+    {
+      "id": 682405378,
+      "name": "SHA256SUMS",
+      "size": 1568,
+      "digest": "sha256:6fc962d33b3903723cc427a6969f14521d8be39616b7cdf956d0405a0c613579"
+    },
+    {
+      "id": 682405433,
+      "name": "truss-hf-conformance-0.0.51.zip",
+      "size": 1203908,
+      "digest": "sha256:88e945475d2710dfa69754e7daa2706863fe858cbb54d4e086836ac49f1b7eef"
+    },
+    {
+      "id": 682405445,
+      "name": "umf_truss-0.0.51-py3-none-any.whl",
+      "size": 6240193,
+      "digest": "sha256:eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57"
+    },
+    {
+      "id": 682405451,
+      "name": "umf_truss-0.0.51.tar.gz",
+      "size": 6712731,
+      "digest": "sha256:0f091b8c87428a003cf2a5cc68c3905fca66a3cd35e23d353b015346afd4718c"
+    }
+  ],
+  "files": {
+    "umf_truss-0.0.51-py3-none-any.whl": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+    "umf_truss-0.0.51.tar.gz": "0f091b8c87428a003cf2a5cc68c3905fca66a3cd35e23d353b015346afd4718c"
+  },
+  "public_files": [
+    {
+      "filename": "umf_truss-0.0.51-py3-none-any.whl",
+      "sha256": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+      "size": 6240193,
+      "url": "https://files.pythonhosted.org/packages/2a/53/e08b96413713a589e181078b4d000ec210729aee70c3402d66a747e71adf/umf_truss-0.0.51-py3-none-any.whl"
+    },
+    {
+      "filename": "umf_truss-0.0.51.tar.gz",
+      "sha256": "0f091b8c87428a003cf2a5cc68c3905fca66a3cd35e23d353b015346afd4718c",
+      "size": 6712731,
+      "url": "https://files.pythonhosted.org/packages/22/db/94596680e7f7968da0b0deda97e8f2fc3b9a20bc972d6fb50ff640dd4b44/umf_truss-0.0.51.tar.gz"
+    }
+  ],
+  "raw_receipt_sha256": {
+    "source-receipt.json": "cfff399b31032880705bb24f0b5139ba8bcdcf6ab36d7d928a1bfb63c101b3b7",
+    "publication-receipt.json": "c78aa13fa47b4af7afc6160e1680ef31f1f846461a36834497fee645fc4f51af",
+    "consumer-receipt.json": "d943f20c55aaae70cf123aa21d773e0f62a6e468994ffaad027aaf2b075a07d5"
+  },
+  "scope": "Exact-tag Linux producer, immutable GitHub assets, actual Actions OIDC upload, independently compared public PyPI bytes and fresh Linux public-index query consumer. No macOS execution or Lakebase acceptance."
+}

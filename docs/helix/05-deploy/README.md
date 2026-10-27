@@ -30,6 +30,15 @@ semantics, platform qualification or the latest-only support policy.
 
 ## Executed PyPI publication
 
+On 2026-10-27, the renamed `umf-truss==0.0.51` passed its
+[exact-tag Linux release](https://github.com/DocumentDrivenDX/truss/actions/runs/40549597103)
+and automatic [Actions OIDC publication](https://github.com/DocumentDrivenDX/truss/actions/runs/40555332184).
+All 17 GitHub release assets are actually immutable; independently downloaded
+PyPI wheel/sdist bytes match them. The fresh public-index `[query]` consumer
+imported Truss and the retained Weft 0.4.51 selection. Original receipts, source
+and driver identities and actual platform limits are retained in the
+[0.0.51 publication proof](evidence/truss-0.0.51-publication/README.md).
+
 On 2026-10-26, [run 40361086218](https://github.com/DocumentDrivenDX/truss/actions/runs/40361086218)
 published the unchanged `truss-toolkit==0.0.50` wheel and sdist through GitHub
 Actions OIDC. Exact PyPI-served bytes and a fresh public-index `[query]` install

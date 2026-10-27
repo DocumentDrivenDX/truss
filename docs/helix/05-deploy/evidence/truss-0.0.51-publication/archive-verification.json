@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "oldWheel": "truss_toolkit-0.0.50-py3-none-any.whl",
+  "oldWheelSha256": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+  "newWheel": "umf_truss-0.0.51-py3-none-any.whl",
+  "newWheelSha256": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+  "unchangedPayloadFiles": 468,
+  "changed": [
+    "truss/_migrations/manifest.json"
+  ],
+  "added": [
+    "truss/_migrations/4c6baf0282e3d0b5492f070c9c07d89ff0c9a819e748f3820f60b11c1f51c7aa.manifest.json"
+  ],
+  "deleted": [],
+  "allSharedExecutionPayloadBytesEqual": true,
+  "nativeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "scope": "Standard-library ZIP comparison only; no package import or native execution."
+}

@@ -15,8 +15,9 @@ python -m pip install 'umf-truss[native,query]==0.0.51'
 
 Use a fresh environment when changing distribution names; both packages provide
 `truss` imports. [Release notes](../../docs/helix/05-deploy/releases/v0.0.51.md)
-and [Linux qualification](../../docs/helix/05-deploy/evidence/truss-0.0.51-candidate-linux/README.md)
-record exact scope. CI runs on Linux only. Universal-wheel and macOS dependency
+and [published Linux/PyPI proof](../../docs/helix/05-deploy/evidence/truss-0.0.51-publication/README.md)
+record exact scope, immutable assets, actual OIDC publication and a fresh public-index
+query install. CI runs on Linux only. Universal-wheel and macOS dependency
 availability do not establish new 0.0.51 macOS native/migration qualification.
 Weft 0.4.55 adoption requires a separately qualified preserving archive migration.
 

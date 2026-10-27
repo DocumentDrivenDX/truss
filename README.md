@@ -11,7 +11,25 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-## Run a private local instance
+## Current Python release
+
+[`umf-truss==0.0.51`](https://pypi.org/project/umf-truss/0.0.51/) is published
+with the `truss` import and exact Weft 0.4.51 consumer identities. Install in a
+fresh environment when switching distribution names:
+
+```sh
+python -m pip install 'umf-truss[query]==0.0.51'
+```
+
+The [release notes](docs/helix/05-deploy/releases/v0.0.51.md) and
+[published proof](docs/helix/05-deploy/evidence/truss-0.0.51-publication/README.md)
+bind its 108 migration/existing-current cases, 62 HF cases, 174 managed-grant
+tests, remaining required installed Linux workflows and actual public-index
+publication. CI is Linux-only; available macOS dependency artifacts retain
+their historical qualification limits. Only the latest application runtime is
+supported, with explicit forward paths for every admitted database lineage.
+
+## Historical private-instance launcher — v0.0.49
 
 The published **v0.0.49** release adds managed platform-grant policy and
 install API/CLI support to the [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
