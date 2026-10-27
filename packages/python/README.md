@@ -1,5 +1,24 @@
 # Truss Python toolkit
 
+## 0.0.51 distribution candidate
+
+The candidate distribution is `umf-truss==0.0.51`; `import truss` and the CLI
+entry points are unchanged. It retains the 0.0.50 native SQL, runtime manifest, embedded UMF JavaScript
+assets and `weft-sql==0.4.51` dependency so existing
+query/disclosure source archives keep their selected identity. The Weft 0.4.55
+transition requires a separately qualified preserving archive migration. The
+migration index adds custody of the exact published 0.0.50 index and an original
+0.0.50 wheel fixture; it adds no physical migration edge.
+
+[Candidate release notes](../../docs/helix/05-deploy/releases/v0.0.51.md) define
+the required Linux-only qualification, Core publication prerequisite and PyPI
+publisher gate. The candidate is not published yet. The platform-neutral wheel
+will remain available to macOS, but no new macOS CI or 0.0.51 macOS installed,
+native or migration qualification is claimed. Use a fresh environment when
+changing distribution names; the old and renamed packages share `truss` imports.
+
+## Published 0.0.50 and historical installation instructions
+
 Version **0.0.50** reduces synchronous client submissions during fresh
 installation while preserving the original ordered SQL sources and checks. It
 uses the same PostgreSQL 18.6, psycopg 3.3.6, UMF 0.10 and Weft 0.4.51 cohort as

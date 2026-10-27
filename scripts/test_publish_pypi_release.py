@@ -94,8 +94,6 @@ class PublishPypiReleaseTests(unittest.TestCase):
         self.assertEqual(publisher.distribution_for_version("0.0.51"), "umf-truss")
         self.assertEqual(publisher.wheel_prefix_for_version("0.0.51"), "umf_truss-0.0.51-")
         self.assertEqual(publisher.distribution_for_version("0.1.0"), "umf-truss")
-        self.assertEqual(publisher.query_distribution_for_version("0.0.50"), "weft-sql")
-        self.assertEqual(publisher.query_distribution_for_version("0.0.51"), "umf-weft")
         with self.assertRaisesRegex(publisher.ReleaseError, "version must be numeric"):
             publisher.distribution_for_version("v0.0.51")
 

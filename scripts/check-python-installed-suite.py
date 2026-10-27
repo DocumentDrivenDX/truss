@@ -44,7 +44,7 @@ with zipfile.ZipFile(wheel) as archive:
   if original != (loaded/Path(name).name).read_bytes() or original != (root/'packages/python/src'/name).read_bytes():
    raise RuntimeError('Installed/wheel/source payload drift: '+name)
   modules.append({'path':name,'sha256':hashlib.sha256(original).hexdigest()})
-dependencies = {n:importlib.metadata.version(n) for n in [truss_distribution,RUNTIME_DISTRIBUTION,'fasteners','platformdirs','psutil','umf-weft']}
+dependencies = {n:importlib.metadata.version(n) for n in [truss_distribution,RUNTIME_DISTRIBUTION,'fasteners','platformdirs','psutil','weft-sql']}
 for name,version in {RUNTIME_DISTRIBUTION:RUNTIME_VERSION,'fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 expected_tests = unittest.defaultTestLoader.discover(str(root/'packages/python/tests')).countTestCases()

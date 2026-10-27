@@ -13,10 +13,10 @@ class DisclosureCohortTests(unittest.TestCase):
   import json
   from unittest.mock import patch
   expected={
-   'b411545189ed573dadd4fd121e00665391f700ebe37e4a5e4ce139a97c03d7e9':'47d388f2d908f897f9fc9005fc6ae082081782d77d35b24c27de0d615565d98d',
-   'b34ca17fa37412afa7b8e8bd86aac8ee67a3c895a9b253221e1d582b39073a85':'2f39a3e2bf356922a44fef0e88ffaae155d6d850e66d7f7e35d9209cd85c3760',
+   'e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487':'34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa',
+   'a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5':'ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445',
   }
-  revisions={'ea0fef0209aaf8e08ef165b6afe00b408873354f':'0.4.55'}
+  revisions={'557153731e9f5d0583193a1189a07c6ed485d3d3':'0.4.51'}
   for cohorts in (query_cohorts,disclosure_cohorts):
    self.assertEqual({row['weftWheelSha256']:row['weftModuleSha256'] for row in cohorts},expected)
    baseline={key:value for key,value in cohorts[0].items() if key not in ('weftWheelSha256','weftModuleSha256','weftRevision','weftVersion')}

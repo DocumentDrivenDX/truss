@@ -46,10 +46,6 @@ def wheel_prefix_for_version(version: str) -> str:
     return f"{normalized}-{version}-"
 
 
-def query_distribution_for_version(version: str) -> str:
-    return "weft-sql" if _version_tuple(version) <= (0, 0, 50) else "umf-weft"
-
-
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ReleaseError(message)

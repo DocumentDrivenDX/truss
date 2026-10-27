@@ -127,8 +127,8 @@ jobs:
           python - <<'PYTHON'
           import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
           requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
-          assert requirement.startswith('umf-weft==')
-          version=requirement.removeprefix('umf-weft==')
+          assert requirement.startswith('weft-sql==')
+          version=requirement.removeprefix('weft-sql==')
           assert version and all(part.isdecimal() for part in version.split('.'))
           subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
@@ -264,8 +264,8 @@ jobs:
           import importlib.metadata,pathlib,tomllib,truss,weft
           project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
           assert importlib.metadata.version(project['name'])==project['version']
-          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('umf-weft==')
-          assert importlib.metadata.version('umf-weft')==weft.__version__==expected_compiler
+          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
+          assert importlib.metadata.version('weft-sql')==weft.__version__==expected_compiler
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun /missing/bun
@@ -593,8 +593,8 @@ jobs:
           python - <<'PYTHON'
           import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
           requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
-          assert requirement.startswith('umf-weft==')
-          version=requirement.removeprefix('umf-weft==')
+          assert requirement.startswith('weft-sql==')
+          version=requirement.removeprefix('weft-sql==')
           assert version and all(part.isdecimal() for part in version.split('.'))
           subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
@@ -706,7 +706,7 @@ jobs:
           assert hf['corpusSha256']==hashlib.sha256(corpus_path.read_bytes()).hexdigest()
           assert hf['profile']==corpus['profile']
           assert hf['toolkit']==corpus['toolkitVersion']==project['version']
-          assert hf['compiler']==corpus['compilerVersion']==project['optional-dependencies']['query'][0].removeprefix('umf-weft==')
+          assert hf['compiler']==corpus['compilerVersion']==project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
           assert hf['tests']==len(corpus['cases']) and hf['failures']==hf['errors']==0
           compiler_cohorts=[c for c in corpus['compilerCohorts'] if c['nativeModuleSha256']==hf['compilerNativeModuleSha256'] and c['sourceRevision']==hf['compilerSourceRevision'] and c['platform']=='linux-x86_64']
           assert len(compiler_cohorts)==1
@@ -744,7 +744,7 @@ jobs:
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
           assert qualification['targetManifestSha256']==hashlib.sha256(manifest.read_bytes()).hexdigest()
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':project['name'],'version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('umf-weft=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':project['name'],'version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
           pins.update(hfConformanceProfile=hf['profile'],hfConformanceCorpusSha256=hf['corpusSha256'],hfConformanceArchive=next(root.glob('truss-hf-conformance-*.zip')).name,hfConformanceTests=hf['tests'])
           pins.update(weftSourceRevision=hf['compilerSourceRevision'],weftNativeModuleSha256=hf['compilerNativeModuleSha256'],weftWheelSha256=compiler_cohorts[0]['wheelSha256'])
           pins.update(localRuntimeConstraintsAsset=constraints.name,localRuntimeConstraintsSha256=hashlib.sha256(constraints.read_bytes()).hexdigest())
@@ -814,11 +814,8 @@ jobs:
           pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf010CatalogSupport={'identity':policy['identity'],'version':policy['version'],'sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf010CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
-          query_tree=ast.parse(pathlib.Path('packages/python/src/truss/_current_query_originals.py').read_text())
-          query_cohorts=next(n.value for n in query_tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='_CONSUMER_COHORTS' for t in n.targets))
-          compiler_sources={ast.literal_eval(value) for row in query_cohorts.elts for key,value in zip(row.keys,row.values) if isinstance(key,ast.Constant) and key.value=='weftRevision'}
-          assert compiler_sources=={hf['compilerSourceRevision']}
-          compiler_source=hf['compilerSourceRevision']
+          compiler_source=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('scripts/build-weft-runtime-python.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='REVISION' for t in n.targets))
+          assert compiler_source==hf['compilerSourceRevision']
           pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64'],currentQueryWeftSource=compiler_source)
           group_profiles=json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/group-profiles.json').read_bytes())['profiles']
           query_abi_bytes=pathlib.Path('packages/python/src/truss/_catalog_runtime/query-abi.json').read_bytes()

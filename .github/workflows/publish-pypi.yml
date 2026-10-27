@@ -33,7 +33,6 @@ jobs:
     outputs:
       version: ${{ steps.identity.outputs.version }}
       distribution: ${{ steps.identity.outputs.distribution }}
-      query_distribution: ${{ steps.identity.outputs.query_distribution }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -63,15 +62,15 @@ jobs:
             SUMS_SHA256=""
           fi
           VERSION="${TARGET_TAG#v}"
-          read -r DISTRIBUTION WHEEL_PREFIX QUERY_DISTRIBUTION < <(python - "$VERSION" <<'PY'
+          read -r DISTRIBUTION WHEEL_PREFIX < <(python - "$VERSION" <<'PY'
           import sys
-          from scripts.publish_pypi_release import distribution_for_version,wheel_prefix_for_version,query_distribution_for_version
+          from scripts.publish_pypi_release import distribution_for_version,wheel_prefix_for_version
           version=sys.argv[1]
-          print(distribution_for_version(version),wheel_prefix_for_version(version),query_distribution_for_version(version))
+          print(distribution_for_version(version),wheel_prefix_for_version(version))
           PY
           )
-          printf 'tag=%s\nsource_sha=%s\nsums_sha256=%s\nversion=%s\ndistribution=%s\nwheel_prefix=%s\nquery_distribution=%s\n' \
-            "$TARGET_TAG" "$SOURCE_SHA" "$SUMS_SHA256" "$VERSION" "$DISTRIBUTION" "$WHEEL_PREFIX" "$QUERY_DISTRIBUTION" >> "$GITHUB_OUTPUT"
+          printf 'tag=%s\nsource_sha=%s\nsums_sha256=%s\nversion=%s\ndistribution=%s\nwheel_prefix=%s\n' \
+            "$TARGET_TAG" "$SOURCE_SHA" "$SUMS_SHA256" "$VERSION" "$DISTRIBUTION" "$WHEEL_PREFIX" >> "$GITHUB_OUTPUT"
       - name: Read the immutable public release and tag objects
         env:
           GH_TOKEN: ${{ github.token }}
@@ -215,7 +214,6 @@ jobs:
         env:
           VERSION: ${{ needs.verify-release.outputs.version }}
           TRUSS_DISTRIBUTION: ${{ needs.verify-release.outputs.distribution }}
-          WEFT_DISTRIBUTION: ${{ needs.verify-release.outputs.query_distribution }}
           PIP_CONFIG_FILE: /dev/null
           PIP_INDEX_URL: ''
           PIP_EXTRA_INDEX_URL: ''
@@ -237,17 +235,22 @@ jobs:
           for item in report["install"]:
               url = item["download_info"]["url"]
               assert url.startswith("https://files.pythonhosted.org/"), url
+          requirements = importlib.metadata.requires(os.environ["TRUSS_DISTRIBUTION"])
+          query_pins = [item.partition(";")[0].strip() for item in requirements
+              if item.startswith(("weft-sql==", "umf-weft==")) and item.partition(";")[2].strip() == 'extra == "query"']
+          assert len(query_pins) == 1, "One exact declared query compiler required"
+          weft_distribution, expected_weft_version = query_pins[0].split("==")
           record = {
               "schema": "pypi-consumer-receipt.v1",
               "status": "passed",
               "index": "https://pypi.org/simple",
               "truss_distribution": os.environ["TRUSS_DISTRIBUTION"],
-              "weft_distribution": os.environ["WEFT_DISTRIBUTION"],
+              "weft_distribution": weft_distribution,
               "truss_version": importlib.metadata.version(os.environ["TRUSS_DISTRIBUTION"]),
-              "weft_version": importlib.metadata.version(os.environ["WEFT_DISTRIBUTION"]),
+              "weft_version": importlib.metadata.version(weft_distribution),
           }
           assert record["truss_version"] == os.environ["VERSION"]
-          assert record["weft_version"] == weft.__version__
+          assert record["weft_version"] == weft.__version__ == expected_weft_version
           assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
