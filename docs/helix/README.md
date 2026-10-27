@@ -5,8 +5,10 @@ Release 0.0.51 uses the `umf-truss` Python distribution while retaining the exac
 [release notes](05-deploy/releases/v0.0.51.md) and
 [candidate Linux qualification](05-deploy/evidence/truss-0.0.51-candidate-linux/README.md)
 record 108 lineage/existing-current cases, 62 independent HF cases, 174 managed-
-grant tests and the complete installed Linux workflow. Final-tag publication and
-registry receipts are distinct from that candidate evidence. macOS artifacts
+grant tests and the complete installed Linux workflow. The
+[final-tag and public PyPI proof](05-deploy/evidence/truss-0.0.51-publication/README.md)
+records the separate successful exact-tag gates, immutable assets, actual OIDC
+upload and fresh public-index query consumer. macOS artifacts
 retain their actual historical qualification limits; CI is Linux-only.
 
 Previous public delivery: [v0.0.50 release notes](04-build/releases/v0.0.50.md)

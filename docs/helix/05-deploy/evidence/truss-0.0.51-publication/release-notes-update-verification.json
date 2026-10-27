@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "releaseId": 425804959,
+  "tag": "v0.0.51",
+  "immutable": true,
+  "assetCount": 17,
+  "allAssetIdsNamesSizesDigestsUnchanged": true,
+  "publishedAtUnchanged": true,
+  "scope": "Current release body updated with verified final results; immutable tag/assets and historical releases not modified."
+}
