@@ -1,6 +1,15 @@
 # truss project documentation
 
-Current public delivery: [v0.0.50 release notes](04-build/releases/v0.0.50.md)
+Release 0.0.51 uses the `umf-truss` Python distribution while retaining the exact
+0.0.50 execution/owner/compiler tuple and latest-only runtime policy. Its
+[release notes](05-deploy/releases/v0.0.51.md) and
+[candidate Linux qualification](05-deploy/evidence/truss-0.0.51-candidate-linux/README.md)
+record 108 lineage/existing-current cases, 62 independent HF cases, 174 managed-
+grant tests and the complete installed Linux workflow. Final-tag publication and
+registry receipts are distinct from that candidate evidence. macOS artifacts
+retain their actual historical qualification limits; CI is Linux-only.
+
+Previous public delivery: [v0.0.50 release notes](04-build/releases/v0.0.50.md)
 and [verified public release evidence](04-build/evidence/design-audit/installer-batching-050-20261024/published-0.0.50/receipt.json).
 The installer batches ordered SQL submissions and catalog verification while
 preserving its checks, transaction ownership and deadlines. The exact-tag Linux

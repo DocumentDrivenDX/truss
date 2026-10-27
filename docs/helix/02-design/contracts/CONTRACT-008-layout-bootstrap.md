@@ -140,6 +140,12 @@ and the trusted embedding host boundary. No pre-0.10 adapter is required.
   application runtimes are never launched. Applied recipes are immutable; repairs
   append forward steps. Package-only updates with identical installed meaning
   require compatibility evidence, not an invented database migration.
+  Retained query/disclosure consumer archives are part of that installed meaning.
+  A compiler distribution, version, wheel or native-module change can require an
+  explicit preserving archive transition even when native SQL is unchanged.
+  Replacing the current cohort selection must not strand a registered archive.
+  Original identities remain migration inputs; they do not require perpetually
+  supporting earlier application runtimes or silently rewriting old evidence.
 - **RM-07 release gate:** a populated predecessor-to-latest test and all prior
   lineage-to-latest paths block release, including skip-release chains. Test
   rollback, concurrency, drift, lost acknowledgment and recovery. New schema or

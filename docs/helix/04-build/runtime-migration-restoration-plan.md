@@ -357,3 +357,22 @@ runtime. Public Linux and macOS evidence: [Linux 80-case migration receipt](evid
 proof; each later migration edge must satisfy the same lineage and publication
 gates. Only the latest application runtime remains supported, and admitted
 databases have no release-age expiry.
+
+
+### Package and consumer-archive boundary — 0.0.51
+
+The distribution-name candidate changes `truss-toolkit` to `umf-truss` while
+retaining the exact selected Weft 0.4.51 query/disclosure cohort and embedded UMF
+owner assets. Those archives persist the selected compiler identities. Adopting
+Weft 0.4.55 by replacing the runtime selection alone would make existing archives
+unusable, even though the physical runtime manifest is unchanged. That compiler
+transition therefore requires a separately qualified, explicit preserving archive
+migration before adoption; it is not part of the package-name release.
+
+The package-only path keeps one current runtime and one compiler selection. It
+archives the exact published 0.0.50 migration index and adds the real public
+0.0.50 wheel as an existing-current fixture without a fabricated physical edge
+or migration receipt. All older immutable conversion recipes and admitted routes
+remain present. Qualification must verify the current installed package, original
+archive custody and populated predecessor cases. Earlier application runtimes
+remain retired; retained source identities are migration evidence only.

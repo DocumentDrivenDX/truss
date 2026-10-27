@@ -1,0 +1,11 @@
+# Truss 0.0.51 candidate Linux qualification
+
+[Actions 40509075159](https://github.com/DocumentDrivenDX/truss/actions/runs/40509075159) passed the complete existing release workflow on source `f3fc953814f71fe4c8e4abaa86b762a51b53add0`. The native job and package job succeeded; tag publication, optional stress matrix and large-capacity jobs were outside this branch run. The selected small public workload ran inside the native gate and passed.
+
+The original receipts record 108 populated lineage/existing-current cases, 62 independent HF cases and 174 managed-grant tests, all with zero skips. All remaining installed native workflow steps passed. The profile is Linux x86_64, Python 3.11, PostgreSQL 18.6 and the recorded exact dependency/owner tuple. It is not Truss macOS qualification, managed Lakebase acceptance, registry publication or a final-tag receipt.
+
+The original 0.0.50 wheel is now an existing-current fixture. Archive comparison proves 468 execution payload files match that public wheel; only the migration index changes and one exact original-index file is added. The compiler remains Weft 0.4.51 so retained query/disclosure archives keep their exact identities. Weft 0.4.55 adoption requires an explicit preserving archive migration.
+
+`verification.json` records all five Actions artifact IDs, sizes and API ZIP digests; each downloaded ZIP matched its API digest/size. The raw migration, HF, managed-grant and public-workload receipts are retained unchanged and their SHA-256 hashes are listed. `archive-verification.json` identifies the exact candidate wheel and original predecessor. The final merged/tagged release receives a separate exact-tag Linux producer, followed by Actions OIDC publication and public-byte/fresh-consumer verification.
+
+Prior attempts retain their original outcomes: [40506947110](https://github.com/DocumentDrivenDX/truss/actions/runs/40506947110) stopped at the history guard before native tests; [40508154737](https://github.com/DocumentDrivenDX/truss/actions/runs/40508154737) passed all 108 migration cases but stopped before HF tests because the standalone archive omitted its imported metadata helper. The final run includes that helper and preserves all original assertions. No failed result was relabeled as passing.

@@ -1,21 +1,24 @@
 # Truss Python toolkit
 
-## 0.0.51 distribution candidate
+## Version 0.0.51
 
-The candidate distribution is `umf-truss==0.0.51`; `import truss` and the CLI
-entry points are unchanged. It retains the 0.0.50 native SQL, runtime manifest, embedded UMF JavaScript
-assets and `weft-sql==0.4.51` dependency so existing
-query/disclosure source archives keep their selected identity. The Weft 0.4.55
-transition requires a separately qualified preserving archive migration. The
-migration index adds custody of the exact published 0.0.50 index and an original
-0.0.50 wheel fixture; it adds no physical migration edge.
+The distribution is `umf-truss==0.0.51`; `import truss` and CLI entry points are
+unchanged. Native SQL, runtime manifest, embedded UMF JavaScript assets and the
+`weft-sql==0.4.51` dependency retain their 0.0.50 identities so existing
+query/disclosure source archives remain usable. The migration index adds exact
+published 0.0.50 custody and an original-wheel existing-current fixture, without
+a fabricated physical migration edge.
 
-[Candidate release notes](../../docs/helix/05-deploy/releases/v0.0.51.md) define
-the required Linux-only qualification, Core publication prerequisite and PyPI
-publisher gate. The candidate is not published yet. The platform-neutral wheel
-will remain available to macOS, but no new macOS CI or 0.0.51 macOS installed,
-native or migration qualification is claimed. Use a fresh environment when
-changing distribution names; the old and renamed packages share `truss` imports.
+```sh
+python -m pip install 'umf-truss[native,query]==0.0.51'
+```
+
+Use a fresh environment when changing distribution names; both packages provide
+`truss` imports. [Release notes](../../docs/helix/05-deploy/releases/v0.0.51.md)
+and [Linux qualification](../../docs/helix/05-deploy/evidence/truss-0.0.51-candidate-linux/README.md)
+record exact scope. CI runs on Linux only. Universal-wheel and macOS dependency
+availability do not establish new 0.0.51 macOS native/migration qualification.
+Weft 0.4.55 adoption requires a separately qualified preserving archive migration.
 
 ## Published 0.0.50 and historical installation instructions
 
