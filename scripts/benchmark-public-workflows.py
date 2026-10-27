@@ -75,6 +75,11 @@ selected_cases=args.matrix_case or args.samples
 if args.keep_failed_database and len(selected_cases)!=1:
     parser.error('--keep-failed-database requires exactly one selected case')
 root=args.truss_root.resolve()
+sys.path.insert(0,str(root/'scripts'))
+from publish_pypi_release import distribution_for_version
+import tomllib
+project_metadata=tomllib.loads((root/'packages/python/pyproject.toml').read_text())['project']
+truss_distribution=distribution_for_version(project_metadata['version'])
 sys.path[:0]=([str(root/'packages/python/src')] if not args.installed_package else [])+[str(root/'packages/python/tests')]
 import truss
 package_path=Path(truss.__file__).resolve()
@@ -83,7 +88,8 @@ if args.installed_package and package_path.is_relative_to(root/'packages/python/
 runtime_resource=importlib.resources.files('truss').joinpath('_catalog_runtime/manifest.json')
 runtime_manifest=runtime_resource.read_bytes()
 runtime_package={'mode':'installed' if args.installed_package else 'checkout','path':str(package_path),
-    'version':importlib.metadata.version('truss-toolkit') if args.installed_package else None,
+    'distribution':truss_distribution if args.installed_package else None,
+    'version':importlib.metadata.version(truss_distribution) if args.installed_package else None,
     'manifestPath':str(runtime_resource)}
 from truss import (Ok,ModuleAccessGrant,CatalogDocument,CatalogRuntimeConfiguration,
                    adopt_psycopg_host,create_reference_assembly,ObjectFound,EdgeFound)

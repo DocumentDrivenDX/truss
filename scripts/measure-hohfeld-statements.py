@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Measure original Hohfeld read/write workflows; test-only SQL text, never binds."""
-import sys,json,time,hashlib,importlib.metadata
+import sys,json,time,hashlib,importlib.metadata,tomllib
 from pathlib import Path
 from unittest.mock import patch
 import argparse
@@ -11,6 +11,11 @@ p.add_argument('--consumer-commit',required=True)
 p.add_argument('--output',type=Path,required=True)
 a=p.parse_args()
 assert len(a.consumer_commit)==40 and all(c in '0123456789abcdef' for c in a.consumer_commit)
+root=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'scripts'))
+from publish_pypi_release import distribution_for_version
+project=tomllib.loads((root/'packages/python/pyproject.toml').read_text())['project']
+truss_distribution=distribution_for_version(project['version'])
 sys.path[:0]=[str(a.consumer/'src'),str(a.consumer/'tests')]
 assert not any(__import__('shutil').which(name) for name in ('bun','node','nodejs')), 'Use Python-only deployment PATH'
 import psycopg,bench_latency as b
@@ -46,7 +51,7 @@ try:
 finally:world.close()
 import truss
 manifest=Path(truss.__file__).parent/'_catalog_runtime/manifest.json'
-out={'version':importlib.metadata.version('truss-toolkit'),'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'consumerCommit':a.consumer_commit,'platform':__import__('platform').platform(),'python':sys.version,'scope':'Unmodified original Hohfeld bench Ops over one warm kept person connection; setup/warmup/cleanup excluded; all driver SQL/control calls retained; server-internal work excluded','samples':results}
+out={'distribution':truss_distribution,'version':importlib.metadata.version(truss_distribution),'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'consumerCommit':a.consumer_commit,'platform':__import__('platform').platform(),'python':sys.version,'scope':'Unmodified original Hohfeld bench Ops over one warm kept person connection; setup/warmup/cleanup excluded; all driver SQL/control calls retained; server-internal work excluded','samples':results}
 a.output.parent.mkdir(parents=True,exist_ok=True)
 a.output.write_text(json.dumps(out,indent=2)+'\n')
 for sample in results:print(sample['operation'],len(sample['calls']),sample['driverWaitCalls'],round(sample['seconds'],3))

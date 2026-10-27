@@ -9,12 +9,17 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import tomllib
 import zipfile
 import unittest
 import os
 import pgserver
 import truss
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'scripts'))
+from publish_pypi_release import distribution_for_version
+project=tomllib.loads((root/'packages/python/pyproject.toml').read_text())['project']
+truss_distribution=distribution_for_version(project['version'])
 if len(sys.argv) not in (2,3,4) or (len(sys.argv)>=3 and sys.argv[2]!='--corrected-pgserver'):
  raise SystemExit('usage: check-python-installed-suite.py TRUSS_WHEEL [--corrected-pgserver [NEW_RECEIPT_FILENAME]]')
 corrected = True  # Historical flag remains a compatibility spelling.
@@ -39,7 +44,7 @@ with zipfile.ZipFile(wheel) as archive:
   if original != (loaded/Path(name).name).read_bytes() or original != (root/'packages/python/src'/name).read_bytes():
    raise RuntimeError('Installed/wheel/source payload drift: '+name)
   modules.append({'path':name,'sha256':hashlib.sha256(original).hexdigest()})
-dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit',RUNTIME_DISTRIBUTION,'fasteners','platformdirs','psutil','weft-sql']}
+dependencies = {n:importlib.metadata.version(n) for n in [truss_distribution,RUNTIME_DISTRIBUTION,'fasteners','platformdirs','psutil','weft-sql']}
 for name,version in {RUNTIME_DISTRIBUTION:RUNTIME_VERSION,'fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 expected_tests = unittest.defaultTestLoader.discover(str(root/'packages/python/tests')).countTestCases()

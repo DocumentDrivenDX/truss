@@ -8,6 +8,7 @@ import platform
 from pathlib import Path
 import subprocess
 import sys
+import tomllib
 import zipfile
 import weft
 import weft.weft as extension
@@ -16,6 +17,10 @@ import truss.weft as boundary_module
 from truss.weft import CompilerBoundary, CompileRefusal, WEFT_SOURCE
 
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(root/'scripts'))
+from publish_pypi_release import distribution_for_version
+project=tomllib.loads((root/'packages/python/pyproject.toml').read_text())['project']
+truss_distribution_name=distribution_for_version(project['version'])
 if len(sys.argv) not in (3,4):
  raise SystemExit('usage: check-weft-python-pin.py PYTHON_BUILD_MANIFEST CLI_BUILD_MANIFEST [TRUSS_WHEEL]')
 build = json.loads(Path(sys.argv[1]).read_bytes())
@@ -110,14 +115,14 @@ if len(sys.argv) == 4:
    assert payload == (loaded.parent/Path(name).name).read_bytes(), 'Installed Python source differs from wheel'
    assert payload == (root/'packages/python/src'/name).read_bytes(), 'Wheel differs from current source'
    delivered.append({'path':name,'sha256':hashlib.sha256(payload).hexdigest()})
- truss_distribution = importlib.metadata.distribution('truss-toolkit')
+ truss_distribution = importlib.metadata.distribution(truss_distribution_name)
  expected_local = {f'{name}=={version}; extra == "local"' for name, version in (
   (RUNTIME_DISTRIBUTION,RUNTIME_VERSION),('fasteners','0.20'),('platformdirs','4.12.4'),('psutil','7.2.2'))}
  assert {r for r in truss_distribution.requires if 'extra == "local"' in r} == expected_local
  truss_delivery = {
   'wheel':{'path':str(truss_wheel),'sha256':hashlib.sha256(truss_wheel.read_bytes()).hexdigest()},
   'loadedBoundary':str(loaded),'modules':delivered,'allModulePayloadsMatch':True,
-  'version':truss_distribution.version,'requiresDist':truss_distribution.requires,
+  'distribution':truss_distribution_name,'version':truss_distribution.version,'requiresDist':truss_distribution.requires,
   'installedDistributions':sorted(
    [{'name':d.metadata['Name'],'version':d.version} for d in importlib.metadata.distributions()],
    key=lambda d:d['name']),
