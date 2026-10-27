@@ -1,0 +1,18 @@
+{
+  "scope": "Exact candidate archive correspondence; no final tag or registry publication claim",
+  "runId": 40509075159,
+  "source": "f3fc953814f71fe4c8e4abaa86b762a51b53add0",
+  "wheel": "umf_truss-0.0.51-py3-none-any.whl",
+  "wheelSha256": "2f73b323a882a244fe5759ae9c2a06b7640b4a10731df968820ec621f3911253",
+  "original050WheelSha256": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+  "unchangedRuntimePayloadFiles": 468,
+  "changedPayloadFiles": [
+    "truss/_migrations/manifest.json"
+  ],
+  "addedPayloadFiles": [
+    "truss/_migrations/4c6baf0282e3d0b5492f070c9c07d89ff0c9a819e748f3820f60b11c1f51c7aa.manifest.json"
+  ],
+  "original050IndexRetainedExactly": true,
+  "queryDependency": "weft-sql==0.4.51",
+  "macOSNativeExecution": false
+}

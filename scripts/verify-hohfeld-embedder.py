@@ -17,6 +17,7 @@ from pathlib import Path
 import platform
 import shutil
 import sys
+import tomllib
 
 
 def main():
@@ -26,6 +27,11 @@ def main():
     parser.add_argument('--wheel',required=True,type=Path)
     parser.add_argument('--output',required=True,type=Path)
     args=parser.parse_args()
+    root=Path(__file__).resolve().parents[1]
+    sys.path.insert(0,str(root/'scripts'))
+    from publish_pypi_release import distribution_for_version
+    project=tomllib.loads((root/'packages/python/pyproject.toml').read_text())['project']
+    truss_distribution=distribution_for_version(project['version'])
     if shutil.which('bun') or shutil.which('node'):
         parser.error('Run deployment qualification with Bun and Node absent from PATH')
     sys.path[:0]=[str(args.consumer/'src'),str(args.consumer/'tests')]
@@ -47,7 +53,7 @@ def main():
         cluster.close()
     payload={'consumerCommit':args.consumer_commit,'corpusVersion':report.corpus_version,
         'python':platform.python_version(),'platform':platform.system()+'-'+platform.machine(),
-        'trussVersion':version('truss-toolkit'),'wheelSha256':sha256(args.wheel.read_bytes()).hexdigest(),
+        'trussDistribution':truss_distribution,'trussVersion':version(truss_distribution),'wheelSha256':sha256(args.wheel.read_bytes()).hexdigest(),
         'runtimeManifestSha256':sha256(files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes()).hexdigest(),
         'externalJavaScriptRuntimeRequired':False,'strengthenedExpectations':{fixed:prior_limit},
         'originalLimitRemovalWitness':asdict(original.results[0]),'report':asdict(report)}

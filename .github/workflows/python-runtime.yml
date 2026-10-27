@@ -23,7 +23,7 @@ jobs:
       - name: Build the Truss wheel with embedded owner assets
         run: python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
       - name: Install checksum-verified released PostgreSQL wheels
-        run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)"
+        run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name '*.whl' -print -quit)"
       - name: Verify installed owners without an external JavaScript runtime
         env:
           PYTHONPATH: packages/python/tests
@@ -38,7 +38,7 @@ jobs:
         run: |
           runtime_wheel=$(find /tmp/runtime-wheels -maxdepth 1 -name '*.whl' -print -quit)
           test -n "$runtime_wheel"
-          python scripts/check-local-runtime-smoke.py "$runtime_wheel" "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)" --run-id "ci-release-${{ github.run_id }}-${{ github.run_attempt }}"
+          python scripts/check-local-runtime-smoke.py "$runtime_wheel" "$(find /tmp/truss-wheels -maxdepth 1 -name '*.whl' -print -quit)" --run-id "ci-release-${{ github.run_id }}-${{ github.run_attempt }}"
       - name: Retain native checks and cleanup evidence
         if: always()
         uses: actions/upload-artifact@v4

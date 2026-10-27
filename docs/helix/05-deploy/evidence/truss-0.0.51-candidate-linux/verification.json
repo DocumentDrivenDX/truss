@@ -1,0 +1,83 @@
+{
+  "scope": "Actual source-bound Linux candidate qualification; not a tag, publication or macOS execution",
+  "runId": 40509075159,
+  "source": "f3fc953814f71fe4c8e4abaa86b762a51b53add0",
+  "artifacts": [
+    {
+      "id": 12738225085,
+      "name": "managed-grants-qualification-ubuntu-24.04",
+      "digest": "sha256:f15586b88fd3e30cac490e30b9eb9e171f319a01a2a56448f33d74a81b6ff4c1",
+      "size_in_bytes": 52049
+    },
+    {
+      "id": 12737891167,
+      "name": "original-public-workflow-ubuntu-24.04",
+      "digest": "sha256:eaaab0b47f25e12768c8e67da1cde9d8984229df55fee4897d0290859f2e902b",
+      "size_in_bytes": 31909
+    },
+    {
+      "id": 12736423524,
+      "name": "hf-conformance-qualification-ubuntu-24.04",
+      "digest": "sha256:b23db9ef1141a1569118d299d21c411642ddbcb3d285aa5e8fb691a584c3db75",
+      "size_in_bytes": 3924
+    },
+    {
+      "id": 12735973176,
+      "name": "python-package",
+      "digest": "sha256:28dd7e5b89bb7aa1fb056cd79b1039dc73e7067d55972678f74a3d58fd0d5c6d",
+      "size_in_bytes": 14047330
+    },
+    {
+      "id": 12735764732,
+      "name": "runtime-migration-qualification-ubuntu-24.04",
+      "digest": "sha256:54218e4b911bfddf79153fd0bdc0549937315d2a41d38aa49fc26b189f555717",
+      "size_in_bytes": 1685722
+    }
+  ],
+  "receipts": {
+    "managed-grants-qualification-ubuntu-24.04": {
+      "tests": 174,
+      "skipped": 0,
+      "passed": true,
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "sourceCommit": "f3fc953814f71fe4c8e4abaa86b762a51b53add0"
+    },
+    "original-public-workflow-ubuntu-24.04": {
+      "functionalPassed": true,
+      "reportSha256": "44e95880f6ba4ef2381a36931329954299f5e1c883351a07a6c0f98cfab6d037"
+    },
+    "hf-conformance-qualification-ubuntu-24.04": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": true,
+      "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+      "sourceCommit": "f3fc953814f71fe4c8e4abaa86b762a51b53add0"
+    },
+    "runtime-migration-qualification-ubuntu-24.04": {
+      "tests": 108,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": true,
+      "platform": "linux",
+      "sourceCommit": "f3fc953814f71fe4c8e4abaa86b762a51b53add0"
+    }
+  },
+  "status": "VERIFIED_ACTUAL_LINUX_SOURCE_QUALIFICATION",
+  "actualRunConclusion": "success",
+  "retainedReceiptSha256": {
+    "migration-qualification.json": "a0f12bf1c108b262dad589f4a8aa543375165e8925ab34aa52b60203ecc206f3",
+    "hf-qualification.json": "2a7cc5b34930f7518862466797678a2ed530c670136ee8194f314748f43151f4",
+    "managed-grants-qualification.json": "d2998cbbd7495ccde05a7b8a2adc096d31af80b920988666a4f5aad152fa99e6",
+    "public-workflow-report.json": "44e95880f6ba4ef2381a36931329954299f5e1c883351a07a6c0f98cfab6d037"
+  },
+  "limits": [
+    "Candidate source f3fc953814f71fe4c8e4abaa86b762a51b53add0 only; final release source/tag receives its own producer gate.",
+    "Linux x86_64 and recorded Python/PostgreSQL/dependency versions only.",
+    "No Truss 0.0.51 macOS runtime or migration execution; universal wheel availability is distinct from native qualification.",
+    "No Core 0.10.3 Python dependency adoption or Weft 0.4.55 archive transition.",
+    "No registry publication or public-index consumer is claimed by this candidate evidence."
+  ]
+}

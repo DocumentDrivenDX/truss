@@ -27,6 +27,25 @@ class ReleaseError(ValueError):
     pass
 
 
+def _version_tuple(version: str) -> tuple[int, int, int]:
+    if not re.fullmatch(
+        r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", version
+    ):
+        raise ReleaseError("version must be numeric X.Y.Z")
+    major, minor, patch = (int(part) for part in version.split("."))
+    return major, minor, patch
+
+
+def distribution_for_version(version: str) -> str:
+    """Keep immutable historical names while selecting the renamed cohort."""
+    return "truss-toolkit" if _version_tuple(version) <= (0, 0, 50) else "umf-truss"
+
+
+def wheel_prefix_for_version(version: str) -> str:
+    normalized = re.sub(r"[-_.]+", "_", distribution_for_version(version))
+    return f"{normalized}-{version}-"
+
+
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ReleaseError(message)
@@ -242,6 +261,13 @@ def prepare_release(
                 "selected release publication is outside its successful workflow run",
             )
     version = tag[1:]
+    _require(
+        distribution == distribution_for_version(version)
+        and wheel_prefix == wheel_prefix_for_version(version),
+        "distribution or wheel prefix differs from the versioned release cohort",
+    )
+    if distribution == "umf-truss":
+        _require(release.get("immutable") is True, "renamed release must be immutable")
     raw_assets = release.get("assets")
     _require(isinstance(raw_assets, list), "release asset inventory is missing")
     assets: dict[str, dict[str, Any]] = {}
@@ -337,6 +363,7 @@ def prepare_release(
         "version": version,
         "sums_sha256": _sha(sums_bytes),
         "release_pins_sha256": _sha(pin_bytes),
+        "github_release_immutable": release.get("immutable") is True,
         "files": files,
     }
     if producer_run is not None:

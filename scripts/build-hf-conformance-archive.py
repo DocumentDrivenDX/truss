@@ -5,7 +5,7 @@ import argparse,hashlib,json,zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',required=True,type=Path);a=p.parse_args()
-corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=json.loads(corpus.read_bytes());paths=[ROOT/name for name in profile['producers']]+[corpus,ROOT/'scripts/run-hf-conformance.py']
+corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=json.loads(corpus.read_bytes());paths=[ROOT/name for name in profile['producers']]+[corpus,ROOT/'scripts/run-hf-conformance.py',ROOT/'scripts/publish_pypi_release.py']
 paths += [p for p in (ROOT/'packages/python/tests/fixtures').rglob('*') if p.is_file() and '__pycache__' not in p.parts]
 paths += [ROOT/'packages/python'/name for name in ('LICENSE.md','LICENSE-MIT','LICENSE-APACHE')]
 archive_manifest={'profile':profile['profile'],'toolkitVersion':profile['toolkitVersion'],'nativeManifestSha256':profile['nativeManifestSha256'],'compilerVersion':profile['compilerVersion'],'files':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(paths))},'scope':'Independent synthetic native fixture corpus and runner, not a runtime distribution or permission to modify application databases'}

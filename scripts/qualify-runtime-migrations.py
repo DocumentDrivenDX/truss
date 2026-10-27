@@ -9,11 +9,16 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tomllib
 import unittest
 import urllib.request
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+from publish_pypi_release import distribution_for_version
+PROJECT=tomllib.loads((ROOT/'packages/python/pyproject.toml').read_text())['project']
+TRUSS_DISTRIBUTION=distribution_for_version(PROJECT['version'])
 
 
 def validate_previous_manifest(manifest, original):
@@ -33,7 +38,7 @@ def validate_previous_manifest(manifest, original):
 def check_history(manifest):
     tags=subprocess.check_output(['git','tag','--list','v*'],cwd=ROOT,text=True).splitlines()
     tags=[t for t in tags if all(p.isdecimal() for p in t[1:].split('.'))]
-    current=tuple(int(p) for p in importlib.metadata.version('truss-toolkit').split('.'))
+    current=tuple(int(p) for p in importlib.metadata.version(TRUSS_DISTRIBUTION).split('.'))
     for tag in sorted(tags,key=lambda t:tuple(map(int,t[1:].split('.'))),reverse=True):
         if tuple(map(int,tag[1:].split('.')))>=current:continue
         old=subprocess.run(['git','show',tag+':packages/python/src/truss/_migrations/manifest.json'],cwd=ROOT,capture_output=True)
@@ -110,7 +115,7 @@ def main():
     result=unittest.TextTestRunner(verbosity=2).run(suite)
     receipt={'scope':'Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage',
         'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),
-        'package':importlib.metadata.version('truss-toolkit'),'loadedPackage':str(Path(truss.__file__).resolve()),
+        'package':importlib.metadata.version(TRUSS_DISTRIBUTION),'distribution':TRUSS_DISTRIBUTION,'loadedPackage':str(Path(truss.__file__).resolve()),
         'platform':sys.platform,'python':sys.version,'recipeSha256':recipe_digest,
         'targetManifestSha256':manifest['target'],'sources':sorted(fixtures),
         'originalWheels':{label:{'filename':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for label,path in wheels.items()},

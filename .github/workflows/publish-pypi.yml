@@ -32,6 +32,7 @@ jobs:
     timeout-minutes: 15
     outputs:
       version: ${{ steps.identity.outputs.version }}
+      distribution: ${{ steps.identity.outputs.distribution }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -61,8 +62,15 @@ jobs:
             SUMS_SHA256=""
           fi
           VERSION="${TARGET_TAG#v}"
-          printf 'tag=%s\nsource_sha=%s\nsums_sha256=%s\nversion=%s\n' \
-            "$TARGET_TAG" "$SOURCE_SHA" "$SUMS_SHA256" "$VERSION" >> "$GITHUB_OUTPUT"
+          read -r DISTRIBUTION WHEEL_PREFIX < <(python - "$VERSION" <<'PY'
+          import sys
+          from scripts.publish_pypi_release import distribution_for_version,wheel_prefix_for_version
+          version=sys.argv[1]
+          print(distribution_for_version(version),wheel_prefix_for_version(version))
+          PY
+          )
+          printf 'tag=%s\nsource_sha=%s\nsums_sha256=%s\nversion=%s\ndistribution=%s\nwheel_prefix=%s\n' \
+            "$TARGET_TAG" "$SOURCE_SHA" "$SUMS_SHA256" "$VERSION" "$DISTRIBUTION" "$WHEEL_PREFIX" >> "$GITHUB_OUTPUT"
       - name: Read the immutable public release and tag objects
         env:
           GH_TOKEN: ${{ github.token }}
@@ -90,6 +98,8 @@ jobs:
           TAG: ${{ steps.identity.outputs.tag }}
           SOURCE_SHA: ${{ steps.identity.outputs.source_sha }}
           VERSION: ${{ steps.identity.outputs.version }}
+          DISTRIBUTION: ${{ steps.identity.outputs.distribution }}
+          WHEEL_PREFIX: ${{ steps.identity.outputs.wheel_prefix }}
           EXPECTED_SUMS_SHA256: ${{ steps.identity.outputs.sums_sha256 }}
           EVENT_NAME: ${{ github.event_name }}
         shell: bash
@@ -100,8 +110,8 @@ jobs:
           fi
           test "${#EXPECTED_SUMS_SHA256}" = 64
           ARGS=(prepare --repository "$GITHUB_REPOSITORY" --tag "$TAG" --source-sha "$SOURCE_SHA"
-            --expected-sums-sha256 "$EXPECTED_SUMS_SHA256" --distribution truss-toolkit
-            --wheel-prefix "truss_toolkit-$VERSION-" --wheel-count 1 --require-sdist
+            --expected-sums-sha256 "$EXPECTED_SUMS_SHA256" --distribution "$DISTRIBUTION"
+            --wheel-prefix "$WHEEL_PREFIX" --wheel-count 1 --require-sdist
             --release-json incoming/release.json --tag-ref-json incoming/tag-ref.json
             --assets-dir incoming/assets --output-dir dist --receipt dist/source-receipt.json)
           if [[ -f incoming/tag-object.json ]]; then ARGS+=(--tag-object-json incoming/tag-object.json); fi
@@ -109,7 +119,7 @@ jobs:
             ARGS+=(--producer-run-json incoming/producer-run.json --producer-workflow-path .github/workflows/release.yml)
           fi
           python scripts/publish_pypi_release.py "${ARGS[@]}"
-          printf 'version=%s\n' "$VERSION" >> "$GITHUB_OUTPUT"
+          printf 'version=%s\ndistribution=%s\n' "$VERSION" "$DISTRIBUTION" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
         with:
           name: truss-pypi-release-${{ steps.identity.outputs.version }}
@@ -145,7 +155,15 @@ jobs:
         if: steps.preflight.outputs.status == 'absent'
         run: |
           mkdir .verified-pypi-packages
-          cp dist/truss_toolkit-*.whl dist/truss_toolkit-*.tar.gz .verified-pypi-packages/
+          python - <<'PY'
+          import json,shutil
+          from pathlib import Path
+          receipt=json.loads(Path('dist/source-receipt.json').read_text())
+          for name in receipt['files']:
+              source=Path('dist',name)
+              if not source.is_file() or source.is_symlink(): raise SystemExit('verified archive is missing or unsafe')
+              shutil.copyfile(source,Path('.verified-pypi-packages',name))
+          PY
       - uses: pypa/gh-action-pypi-publish@release/v1
         id: pypi-upload
         if: steps.preflight.outputs.status == 'absent'
@@ -195,6 +213,7 @@ jobs:
       - name: Install the published Truss query extra from PyPI only
         env:
           VERSION: ${{ needs.verify-release.outputs.version }}
+          TRUSS_DISTRIBUTION: ${{ needs.verify-release.outputs.distribution }}
           PIP_CONFIG_FILE: /dev/null
           PIP_INDEX_URL: ''
           PIP_EXTRA_INDEX_URL: ''
@@ -205,7 +224,7 @@ jobs:
           python -m venv "$RUNNER_TEMP/pypi-consumer"
           "$RUNNER_TEMP/pypi-consumer/bin/python" -m pip --isolated install \
             --disable-pip-version-check --no-cache-dir --index-url https://pypi.org/simple \
-            --report "$RUNNER_TEMP/pip-install-report.json" "truss-toolkit[query]==$VERSION"
+            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query]==$VERSION"
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/pypi-consumer/bin/python" - <<'PY'
           import importlib.metadata, json, os
@@ -216,14 +235,23 @@ jobs:
           for item in report["install"]:
               url = item["download_info"]["url"]
               assert url.startswith("https://files.pythonhosted.org/"), url
+          requirements = importlib.metadata.requires(os.environ["TRUSS_DISTRIBUTION"])
+          query_pins = [item.partition(";")[0].strip() for item in requirements
+              if item.startswith(("weft-sql==", "umf-weft==")) and item.partition(";")[2].strip() == 'extra == "query"']
+          assert len(query_pins) == 1, "One exact declared query compiler required"
+          weft_distribution, expected_weft_version = query_pins[0].split("==")
           record = {
               "schema": "pypi-consumer-receipt.v1",
               "status": "passed",
               "index": "https://pypi.org/simple",
-              "truss_version": importlib.metadata.version("truss-toolkit"),
-              "weft_version": importlib.metadata.version("weft-sql"),
+              "truss_distribution": os.environ["TRUSS_DISTRIBUTION"],
+              "weft_distribution": weft_distribution,
+              "truss_version": importlib.metadata.version(os.environ["TRUSS_DISTRIBUTION"]),
+              "weft_version": importlib.metadata.version(weft_distribution),
           }
           assert record["truss_version"] == os.environ["VERSION"]
+          assert record["weft_version"] == weft.__version__ == expected_weft_version
+          assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )

@@ -88,6 +88,42 @@ class PublishPypiReleaseTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp.cleanup()
 
+    def test_distribution_transition_is_versioned_and_preserves_old_cohort(self) -> None:
+        self.assertEqual(publisher.distribution_for_version("0.0.50"), "truss-toolkit")
+        self.assertEqual(publisher.wheel_prefix_for_version("0.0.50"), "truss_toolkit-0.0.50-")
+        self.assertEqual(publisher.distribution_for_version("0.0.51"), "umf-truss")
+        self.assertEqual(publisher.wheel_prefix_for_version("0.0.51"), "umf_truss-0.0.51-")
+        self.assertEqual(publisher.distribution_for_version("0.1.0"), "umf-truss")
+        with self.assertRaisesRegex(publisher.ReleaseError, "version must be numeric"):
+            publisher.distribution_for_version("v0.0.51")
+
+    def test_new_distribution_archive_metadata_is_exact(self) -> None:
+        wheel_path = self.root / "umf_truss-0.0.51-py3-none-any.whl"
+        sdist_path = self.root / "umf_truss-0.0.51.tar.gz"
+        metadata = b"Metadata-Version: 2.4\nName: umf-truss\nVersion: 0.0.51\nRequires-Dist: jsonschema==4.26.0\n\n"
+        wheel_path.write_bytes(wheel(metadata))
+        sdist_path.write_bytes(sdist(metadata))
+        publisher.validate_archive(wheel_path, "umf-truss", "0.0.51")
+        publisher.validate_archive(sdist_path, "umf-truss", "0.0.51")
+        with self.assertRaisesRegex(publisher.ReleaseError, "distribution name differs"):
+            publisher.validate_archive(wheel_path, "truss-toolkit", "0.0.51")
+        with self.assertRaisesRegex(publisher.ReleaseError, "version differs"):
+            publisher.validate_archive(sdist_path, "umf-truss", "0.0.50")
+
+    def test_prepare_refuses_name_that_does_not_match_historical_version(self) -> None:
+        with self.assertRaisesRegex(publisher.ReleaseError, "versioned release cohort"):
+            self.prepare(distribution="umf-truss", wheel_prefix="umf_truss-0.0.50-")
+
+    def test_renamed_publication_refuses_mutable_or_unconfirmed_release(self) -> None:
+        release = {**self.release, "tag_name": "v0.0.51"}
+        ref = {"ref": "refs/tags/v0.0.51", "object": self.ref["object"]}
+        for value in (None, False):
+            with self.subTest(immutable=value), self.assertRaisesRegex(
+                publisher.ReleaseError, "renamed release must be immutable"
+            ):
+                self.prepare(release={**release, "immutable": value}, tag_ref=ref,
+                    tag="v0.0.51", distribution="umf-truss", wheel_prefix="umf_truss-0.0.51-")
+
     def prepare(self, **overrides: object) -> dict[str, object]:
         values: dict[str, object] = {
             "repository": "DocumentDrivenDX/truss",
