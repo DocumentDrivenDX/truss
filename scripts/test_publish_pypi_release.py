@@ -94,6 +94,8 @@ class PublishPypiReleaseTests(unittest.TestCase):
         self.assertEqual(publisher.distribution_for_version("0.0.51"), "umf-truss")
         self.assertEqual(publisher.wheel_prefix_for_version("0.0.51"), "umf_truss-0.0.51-")
         self.assertEqual(publisher.distribution_for_version("0.1.0"), "umf-truss")
+        self.assertEqual(publisher.query_distribution_for_version("0.0.50"), "weft-sql")
+        self.assertEqual(publisher.query_distribution_for_version("0.0.51"), "umf-weft")
         with self.assertRaisesRegex(publisher.ReleaseError, "version must be numeric"):
             publisher.distribution_for_version("v0.0.51")
 
@@ -113,6 +115,16 @@ class PublishPypiReleaseTests(unittest.TestCase):
     def test_prepare_refuses_name_that_does_not_match_historical_version(self) -> None:
         with self.assertRaisesRegex(publisher.ReleaseError, "versioned release cohort"):
             self.prepare(distribution="umf-truss", wheel_prefix="umf_truss-0.0.50-")
+
+    def test_renamed_publication_refuses_mutable_or_unconfirmed_release(self) -> None:
+        release = {**self.release, "tag_name": "v0.0.51"}
+        ref = {"ref": "refs/tags/v0.0.51", "object": self.ref["object"]}
+        for value in (None, False):
+            with self.subTest(immutable=value), self.assertRaisesRegex(
+                publisher.ReleaseError, "renamed release must be immutable"
+            ):
+                self.prepare(release={**release, "immutable": value}, tag_ref=ref,
+                    tag="v0.0.51", distribution="umf-truss", wheel_prefix="umf_truss-0.0.51-")
 
     def prepare(self, **overrides: object) -> dict[str, object]:
         values: dict[str, object] = {

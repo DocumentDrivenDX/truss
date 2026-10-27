@@ -46,6 +46,10 @@ def wheel_prefix_for_version(version: str) -> str:
     return f"{normalized}-{version}-"
 
 
+def query_distribution_for_version(version: str) -> str:
+    return "weft-sql" if _version_tuple(version) <= (0, 0, 50) else "umf-weft"
+
+
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ReleaseError(message)
@@ -266,6 +270,8 @@ def prepare_release(
         and wheel_prefix == wheel_prefix_for_version(version),
         "distribution or wheel prefix differs from the versioned release cohort",
     )
+    if distribution == "umf-truss":
+        _require(release.get("immutable") is True, "renamed release must be immutable")
     raw_assets = release.get("assets")
     _require(isinstance(raw_assets, list), "release asset inventory is missing")
     assets: dict[str, dict[str, Any]] = {}
@@ -361,6 +367,7 @@ def prepare_release(
         "version": version,
         "sums_sha256": _sha(sums_bytes),
         "release_pins_sha256": _sha(pin_bytes),
+        "github_release_immutable": release.get("immutable") is True,
         "files": files,
     }
     if producer_run is not None:

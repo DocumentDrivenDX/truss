@@ -19,8 +19,8 @@ class ReleaseCohortBindingTests(unittest.TestCase):
         cohort = json.loads(CORPUS.read_bytes())
         project = tomllib.loads(PROJECT.read_text())
         query_requirement = project['project']['optional-dependencies']['query'][0]
-        self.assertTrue(query_requirement.startswith('weft-sql=='))
-        compiler_version = query_requirement.removeprefix('weft-sql==')
+        self.assertTrue(query_requirement.startswith('umf-weft=='))
+        compiler_version = query_requirement.removeprefix('umf-weft==')
 
         self.assertEqual(cohort['toolkitVersion'], project['project']['version'])
         self.assertEqual(cohort['compilerVersion'], compiler_version)
