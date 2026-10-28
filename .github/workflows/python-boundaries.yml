@@ -18,6 +18,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Check actual Python source map
         run: python3 scripts/check-module-boundaries.py
       - name: Exercise allowed and forbidden controls
