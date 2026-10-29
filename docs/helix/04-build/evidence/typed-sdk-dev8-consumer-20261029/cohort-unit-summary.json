@@ -1,0 +1,10 @@
+{
+  "scope": "Cold stdlib fake-wheel/metadata controls only. No real SDK/native import or installation.",
+  "command": "PYTHONPATH=scripts python3 -m unittest test_typed_sdk_cohort -v",
+  "tests": 8,
+  "errors": 0,
+  "failures": 0,
+  "skips": 0,
+  "duration_seconds": 0.248,
+  "capture": "Summary of original tool output; original console output remains in the chat, not a raw log file."
+}

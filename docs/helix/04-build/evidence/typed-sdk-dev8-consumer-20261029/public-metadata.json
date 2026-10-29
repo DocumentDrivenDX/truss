@@ -1,0 +1,108 @@
+[
+  {
+    "label": "truss051",
+    "url": "https://pypi.org/pypi/umf-truss/0.0.51/json",
+    "status": 200,
+    "metadata_sha256": "7e4bb7852c62174b96653efaa2220eb4d108cd47c7a3280f89cf164d7558497f",
+    "name": "umf-truss",
+    "version": "0.0.51",
+    "requires_python": ">=3.11",
+    "requires_dist": [
+      "jsonschema==4.26.0",
+      "referencing==0.37.0",
+      "mini-racer==0.14.1",
+      "psycopg[binary]==3.3.6; extra == \"native\"",
+      "weft-sql==0.4.51; extra == \"query\"",
+      "umf_access==0.1.0.dev5; extra == \"typed-sdk\"",
+      "pg8000==1.31.5; extra == \"experimental-pg8000\"",
+      "pgserver-pg18==18.6.1; extra == \"local\"",
+      "fasteners==0.20; extra == \"local\"",
+      "platformdirs==4.12.4; extra == \"local\"",
+      "psutil==7.2.2; extra == \"local\""
+    ],
+    "artifacts": [
+      {
+        "name": "umf_truss-0.0.51-py3-none-any.whl",
+        "sha256": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+        "url": "https://files.pythonhosted.org/packages/2a/53/e08b96413713a589e181078b4d000ec210729aee70c3402d66a747e71adf/umf_truss-0.0.51-py3-none-any.whl",
+        "size": 6240193
+      },
+      {
+        "name": "umf_truss-0.0.51.tar.gz",
+        "sha256": "0f091b8c87428a003cf2a5cc68c3905fca66a3cd35e23d353b015346afd4718c",
+        "url": "https://files.pythonhosted.org/packages/22/db/94596680e7f7968da0b0deda97e8f2fc3b9a20bc972d6fb50ff640dd4b44/umf_truss-0.0.51.tar.gz",
+        "size": 6712731
+      }
+    ]
+  },
+  {
+    "label": "access5",
+    "url": "https://pypi.org/pypi/umf-access/0.1.0.dev5/json",
+    "status": 404
+  },
+  {
+    "label": "access8",
+    "url": "https://pypi.org/pypi/umf-access/0.1.0.dev8/json",
+    "status": 404
+  },
+  {
+    "label": "weft51",
+    "url": "https://pypi.org/pypi/weft-sql/0.4.51/json",
+    "status": 200,
+    "metadata_sha256": "9e8d9cd6fe073902eba3ea1b013aad245a26b03c2e9070822efac27d1cb1c079",
+    "name": "weft-sql",
+    "version": "0.4.51",
+    "requires_python": ">=3.9",
+    "requires_dist": null,
+    "artifacts": [
+      {
+        "name": "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "sha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+        "url": "https://files.pythonhosted.org/packages/6b/06/6664f9439c4f2e1da70371794a467fb4d15056710f76c03a2358ff128477/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "size": 10443518
+      },
+      {
+        "name": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "sha256": "42f846d689ace027d6bb2951f27c587660d4e5151285fe911ce7a3006d0001de",
+        "url": "https://files.pythonhosted.org/packages/6c/8c/d03c144554fe690f388353b974d4ff312bdd0b7d0a5584d802699af34700/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "size": 12376342
+      },
+      {
+        "name": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+        "url": "https://files.pythonhosted.org/packages/e8/c8/d3308b86b55a553bbe36176c93d6b906798ed692e61e217d5e193c16f055/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "size": 13531659
+      }
+    ]
+  },
+  {
+    "label": "weft56",
+    "url": "https://pypi.org/pypi/umf-weft/0.4.56/json",
+    "status": 200,
+    "metadata_sha256": "2a833fe5d9c727821aba9fafe080ca9070456d085a41333c28714deacd73bc6f",
+    "name": "umf-weft",
+    "version": "0.4.56",
+    "requires_python": ">=3.9",
+    "requires_dist": null,
+    "artifacts": [
+      {
+        "name": "umf_weft-0.4.56-cp39-abi3-macosx_11_0_arm64.whl",
+        "sha256": "68f9297b4b55df483b86d3041040991c4dadfb9b4d63afcff1420c43f93ae41d",
+        "url": "https://files.pythonhosted.org/packages/62/17/7e8b347c4c2ac81047b1913285324b3cc40282a57f1017a3294fe3a14934/umf_weft-0.4.56-cp39-abi3-macosx_11_0_arm64.whl",
+        "size": 11190603
+      },
+      {
+        "name": "umf_weft-0.4.56-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "sha256": "2de2156e283c34e45154f5d9fbc83a3eb1dd43fad497d787509d66cc96cfbe5a",
+        "url": "https://files.pythonhosted.org/packages/7b/94/8deba97d2ff43eed5145c4203b4f45bfa1fc52edad478aa2cb884bb3068f/umf_weft-0.4.56-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "size": 13144681
+      },
+      {
+        "name": "umf_weft-0.4.56-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "32f4c38d9a614dd4c3a367f8b24d5cd4ba41ec80c2a4a2e3423e2082a294dbdd",
+        "url": "https://files.pythonhosted.org/packages/d5/bf/306b6275b39d40bbaec100b9ebdeba220662061e907388f1c65121147dc4/umf_weft-0.4.56-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "size": 14358901
+      }
+    ]
+  }
+]

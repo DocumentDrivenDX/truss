@@ -2760,3 +2760,79 @@ other generic-decimal SQL domains and managed platforms are not enabled.
 Astra Ultra cleared the plan and runtime source; this is not performance or
 release qualification. Hosted release38974408702 still fails the original batch
 deadline on both platforms; publication remains blocked.
+
+
+## Access dev8 upgrade and new consumer release — 2026-10-29
+
+**Execution authority.** The human directed current-main consumer upgrades/new
+versions, explicitly rejecting a maintenance branch. This candidate is based on
+current main `42255e6613300402762c3ce1cb1c3e394504c0ad`, not a historical release
+branch. `umf-truss0.0.52` is reserved as the affected typed-extra consumer candidate;
+its PyPI version and v0.0.52 tag were absent. No tag/upload/release was performed.
+Latest-only runtime support and all admitted preserving forward routes remain in
+force. The SDK bump changes no SQL/immutable recipe/embedded owner or database
+layout; native manifest remains288801f7… and no fake migration edge is added.
+
+**Actual conflict and source change.** Published umf-truss0.0.51 METADATA declares
+Accessdev5 for typed-sdk and separately weft-sql0.4.51 for query. SDK0.5.8's exact
+Accessdev8 is the public SDK0.5.7 wheel unchanged, not a new or unpublished Access
+binary. The owner handoff SHA is
+`cbb04186b9c3046d057592674531da207dff0bcbaabea80eca23a4449f8e2de8`.
+Its local wheel and anonymous public asset match byte-for-byte. Static API/AST
+inspection supports the dependency update without an invented adapter shim;
+actual Truss acceptance remains required. The optional dependency now selects
+Accessdev8. The existing cohort gate binds actual Truss wheel extra requirements
+and refuses overlapping compiler namespace owners. The future registry consumer
+requires the typed extra and exact SDK SHA from0.0.52. Routine workflow controls
+remain cold stdlib fixture checks; full/native qualification stays explicit.
+
+[Inspection and control evidence](evidence/typed-sdk-dev8-consumer-20261029/README.md)
+retains exact public metadata, SDK handoff/hash/API comparisons and scoped unit
+outcomes (8 cohort controls; 14 workflow/publisher controls). No actual SDK,
+compiler or native code was imported/executed by these checks. Initial static
+inspection encountered package-form dsl and conditional MISSING exports; those
+are recorded as inspection limitations/corrections, not missing APIs.
+
+**Required installed/native gate — CLOSED, not run.** The shared20-minute/two-
+attempt allowance remains exhausted and cannot be reset. No Actions/cloud/new
+spending/macOS runtime CI/new agents or test lanes are authorized. On a separately
+authorized existing Linux slot, before releasing this candidate:
+
+1. Owner-publish the unchanged Accessdev8 wheel on public PyPI and verify served
+   SHA1a21c1…; both dev5/dev8 endpoints currently return404. SDK0.5.8 publication
+   itself is not needed to acquire the already public SDK0.5.7 Access artifact.
+2. Build the exact new Truss wheel/sdist; retain full source/tree/build/payload
+   hashes. Fresh Linux CPython3.11 installs MUST resolve the actual consumer's
+   `[native,query,typed-sdk]` extras from public PyPI with no wheelhouse/direct URL
+   overrides for those dependencies; verify pip report URLs/digests, pip check,
+   installed source/metadata correspondence and no duplicate Weft package owner.
+   The selected query wheel remains weft-sql0.4.51, not SDK058's umf-weft0.4.56.
+3. Run the existing bounded native typed-SDK read/page/stream and RelatedKeys
+   workflows against this exact installed Truss/Access/query tuple, with genuine
+   current-core generated fixtures and original profiles. Supply all original
+   consumer/SDK/compiler wheels and hashes to verify_cohort with
+   `--require-consumer`; no source shim or fixture relabeling can satisfy it.
+   Cover original catalog/parameter/result custody, missing/null/binary/exact
+   scalar carriers, authored keys, parallel occurrences, bounded pagination,
+   per-person revocation/refusal, real cursor cleanup and failed final settlement.
+   Named existing runners: check-typed-sdk-native.py (bounded streams-basic),
+   check-typed-sdk-related-native.py; existing binary/stream adapter controls are
+   additional unit proof, never substitutes for actual FETCH/public native calls.
+4. Run unchanged required exact-tag Linux release gates including all admitted
+   populated migration/existing-current routes. Confirm an actual0.0.51 database
+   opens as existing-current with preserved records/history/receipts/consumers;
+   same native tuple does not justify a fabricated migration. Retain cleanup and
+   original failure history. macOS artifact claims keep their actual limits.
+5. Only after qualified source/artifact/native acceptance, perform the normal
+   release and Actions OIDC path, immutable asset and served-byte verification,
+   then the newly required fresh public `[query,typed-sdk]` consumer gate. Until
+   all pass, this is an unreleased candidate and no full typed-extra support claim.
+
+**Arras disposition.** Current Arras0.6.3 pins Truss0.0.50/Core0.10.0 and does not
+request typed-sdk, so Access pin conflict alone does not justify an unaffected
+Arras bump. Its future adoption of the new Truss distribution/qualified artifact
+must update cohort/lock/release guards and independently rebind installed/native
+and actual managed acceptance. Generic SDK019 or Truss tests do not close those
+consumer gates. No historical Truss/Arras artifact is modified or maintained as
+an alternative supported runtime. Stack coordinates the owning Access publication
+and future bounded qualification; no arbitrary new sessions are contacted.

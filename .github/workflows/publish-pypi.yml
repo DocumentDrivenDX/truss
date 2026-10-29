@@ -210,7 +210,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install the published Truss query extra from PyPI only
+      - name: Select the versioned public consumer extras
+        env:
+          VERSION: ${{ needs.verify-release.outputs.version }}
+        run: |
+          python - <<'PY'
+          import os, re
+          version = os.environ['VERSION']
+          assert re.fullmatch(r'(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', version)
+          extras = 'query,typed-sdk' if tuple(map(int, version.split('.'))) >= (0, 0, 52) else 'query'
+          with open(os.environ['GITHUB_ENV'], 'a') as target:
+              target.write('TRUSS_CONSUMER_EXTRAS=' + extras + '\n')
+          PY
+      - name: Install the published Truss consumer extras from PyPI only
         env:
           VERSION: ${{ needs.verify-release.outputs.version }}
           TRUSS_DISTRIBUTION: ${{ needs.verify-release.outputs.distribution }}
@@ -224,10 +236,10 @@ jobs:
           python -m venv "$RUNNER_TEMP/pypi-consumer"
           "$RUNNER_TEMP/pypi-consumer/bin/python" -m pip --isolated install \
             --disable-pip-version-check --no-cache-dir --index-url https://pypi.org/simple \
-            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query]==$VERSION"
+            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[$TRUSS_CONSUMER_EXTRAS]==$VERSION"
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/pypi-consumer/bin/python" - <<'PY'
-          import importlib.metadata, json, os
+          import importlib.metadata, json, os, re
           from pathlib import Path
           import truss
           import weft
@@ -252,10 +264,35 @@ jobs:
           assert record["truss_version"] == os.environ["VERSION"]
           assert record["weft_version"] == weft.__version__ == expected_weft_version
           assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
+          # Both distributions own import `weft`; matching the last installed
+          # payload cannot make overlapping registered owners a valid cohort.
+          normalize = lambda name: re.sub(r'[-_.]+', '-', name).lower()
+          owners = [normalize(d.metadata.get('Name', '')) for d in importlib.metadata.distributions()
+              if normalize(d.metadata.get('Name', '')) in ('weft-sql', 'umf-weft')]
+          assert owners == [weft_distribution], 'Ambiguous Weft distribution ownership'
+          record['extras'] = os.environ['TRUSS_CONSUMER_EXTRAS'].split(',')
+          if 'typed-sdk' in record['extras']:
+              from truss.access import TrussTarget
+              import umf_access
+              sdk_pins = [item.partition(';')[0].strip() for item in requirements
+                  if normalize(item.partition('==')[0]) == 'umf-access'
+                  and item.partition(';')[2].strip() == 'extra == "typed-sdk"']
+              assert len(sdk_pins) == 1, 'One exact declared typed SDK required'
+              sdk_distribution, sdk_version = sdk_pins[0].split('==')
+              assert importlib.metadata.version(sdk_distribution) == sdk_version
+              sdk_files = [item for item in report['install']
+                  if normalize(item['metadata']['name']) == 'umf-access']
+              assert len(sdk_files) == 1
+              approved = {'0.1.0.dev8': '1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23'}
+              actual = sdk_files[0]['download_info']['archive_info']['hashes']['sha256']
+              assert sdk_version in approved and actual == approved[sdk_version], 'Unqualified SDK artifact'
+              record['typed_sdk'] = {'distribution': sdk_distribution, 'version': sdk_version,
+                  'sha256': actual, 'target_imported': TrussTarget.__module__ == 'truss.access'}
+              assert record['typed_sdk']['target_imported']
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )
-          print("fresh PyPI Truss query consumer imported Truss and Weft")
+          print("fresh PyPI Truss consumer resolved the selected extras and imported their owners")
           PY
       - uses: actions/upload-artifact@v4
         with:
