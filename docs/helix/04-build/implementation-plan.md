@@ -8464,3 +8464,33 @@ controls passed. The immediate stable0.0.38 update retains native0.70 SQL from
 0.0.37 and the full original stable release workflow. Main advances to0.0.39.dev0
 for the owned-graph tranche; its failed gates remain open. The release branch
 will be reconciled by history after its stable update is qualified and published.
+
+
+## Arras/Ashlar exact-publication comparison continuation — 2026-10-29
+
+The existing owner is authorized to implement/specify AS-0..AS-3; Arras local
+commit 162e352 preserves the first read bridge and source reconciliation.
+Source inspection identified a concrete unsafe shortcut: unsigned FeedCursor
+bytes plus current registration do not prove delivery/publication. The
+[comparison candidate](../02-design/contracts/receipt-position-and-reached.proposal.md#exact-retained-destination-boundary-comparison--as-0-candidate-2026-10-29)
+now defines reached_at_feed_receipt_in_transaction with exact original
+FeedAckReceipt custody, ordinary-person action-receipt authorization and a typed
+conditional source-boundary result. No source implementation/availability claim
+is made. Existing runtime feed authorization continues to require whole-feed
+reader authority; the new entrypoint must not relax it.
+
+Next native implementation: dedicated person-scoped protected entrypoint using
+original action-receipt admission plus exact immutable ACK-receipt lookup,
+matching old selected target instead of current ACK, closed Python/capability
+facade and comparison profile; then a new explicit runtime recipe/preserving
+migration for every admitted lineage. Historical 0.0.51 execution SQL, recipes,
+manifest/owners, Weft0.4.51 and supported pins remain unchanged. The initial
+no-ACK seed path stays unknown pending an explicit seed witness/profile.
+
+Ashlar's advancing-empty-interval publication candidate and reported 41 focused
+checks are owner-local and unqualified here. Arras must consume its actual
+committed source/receipts before claiming no-op coverage. Shared heavy/native
+budget is exhausted: no tests, attempts/resets, Actions, cloud, spend, release or
+new agents/lanes were launched for this specification. Static source/contract
+inspection only; all new native, installed, migration and managed gates remain
+open. Stack coordinates the existing Ashlar owner; no new review chain is opened.
