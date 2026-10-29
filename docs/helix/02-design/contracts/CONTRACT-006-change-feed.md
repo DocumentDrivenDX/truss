@@ -1118,3 +1118,15 @@ reconstruction, retention, authorization, retry or durable acknowledgement
 requirements. The first catalog release must state whether it supports feed;
 unimplemented feed capability stays unavailable and remains in the full product
 goal. Do not claim feed support from catalog commit or receipt persistence alone.
+
+
+## Selected destination boundary comparison — next-runtime work
+
+The [exact retained destination boundary candidate](receipt-position-and-reached.proposal.md#exact-retained-destination-boundary-comparison--as-0-candidate-2026-10-29)
+specifies the additive person-scoped API needed by the Arras/Ashlar integration.
+It compares an authoritative action receipt with an exact source-retained
+FeedAckReceipt, never the current consumer checkpoint or an unsigned cursor.
+The available comparison remains conditional source evidence; the destination
+must bind its own current-person, full coverage/seed and held-publication proof.
+This API is not implemented or qualified by runtime 0.0.51. The existing feed
+permissions and source ACK's lack of foreign visibility attestation remain in force.

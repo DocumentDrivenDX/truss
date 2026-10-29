@@ -320,3 +320,142 @@ The revised consumer's two Invalid cases are expected results, not current Truss
 native execution evidence. The locator decoder, fourteen wire-shape checks and
 consumer fake runner cannot close this classification. The linked RV-02/06/11–14 schedules
 require original native issuance/commit/cut/coverage/retention and security tests.
+
+
+## Exact retained destination boundary comparison — AS-0 candidate 2026-10-29
+
+This is the next-runtime library contract, not an operation available in 0.0.51.
+It supports the authorized Arras/Ashlar integration under CONTRACT-006 while
+retaining the existing authority receipt resolver. Truss owns source receipt
+issuance, commitment, authorization and ordering. Ashlar owns destination
+publication, full coverage/seed lineage, current reader policy and held snapshots.
+
+### Normative surface
+
+Proposed public assembly and receipt-visibility capability method:
+
+```python
+reached_at_feed_receipt_in_transaction(
+    transaction: TransactionHandle,
+    token: str,
+    *,
+    boundary: FeedAckReceipt,
+    maximum_token_bytes: int = 16384,
+    maximum_evidence_bytes: int = 1048576,
+) -> Outcome[FeedReceiptComparison | ReceiptVisibilityUnavailable]
+```
+
+`FeedReceiptComparison` is a frozen result with `included: bool`,
+`boundary: FeedAckReceipt`, `comparison_profile: ProfilePin`, and
+`outcome="available"`. The boundary is the exact admitted input, not a new
+checkpoint or today's consumer state. An unavailable result has no `included`.
+The native dispatcher returns the exact stored binding/cursor correspondence;
+the Python facade MUST check it against the complete original input before
+constructing the result. The new comparison profile requires an actual registered
+implementation/resource hash before availability can be advertised; no candidate
+hash is a qualified pin.
+
+The existing FeedAckReceipt fields remain unchanged: installation_id,
+source_epoch, consumer_id, registration_id, prior, next, feed_sha256,
+destination_id, request_sha256, publication_id, receipt_bytes, receipt_sha256.
+All strings, digests, bytes and cursor pairs MUST match the original immutable
+source-retained ACK receipt, including the complete opaque destination bytes.
+A bare FeedCursor is not accepted. Source cursor JSON is unsigned; canonical
+syntax/current registration/safe-xmin bounds alone cannot establish delivery.
+
+Token limits intersect 1..16384 characters and the original encoded/decoded
+wire limits; logical evidence limits are 1..16777216 bytes, default 1048576.
+Evidence accounting includes original token, original source receipt and attempt,
+both cursor byte strings, all binding strings and retained destination receipt;
+existing receipt/cursor bounds also apply. Over-budget work returns unavailable
+resource once. No internal retries, xid assignment, locks, writes or ACK occur.
+The caller supplies the existing original unassigned read-only transaction and
+external bounded connection/statement deadlines.
+
+### Source admission and comparison
+
+1. Admit the original handle/runtime profile, read-only unassigned transaction,
+   current ordinary person and resource limits. Validate the original opaque token
+   through Truss's canonical locator/retained receipt authority, never Arras code.
+2. Independently prove the original complete committed action receipt and current
+   receipt-scope read authority, using all existing `truss.reached` correspondence,
+   retention and final authorization checks. Missing, hidden, expired, rolled-back
+   or not observable receipt evidence MUST NOT yield false. A source visibility
+   result other than authoritative committed inclusion is unavailable here.
+3. Read the immutable retained ACK receipt by exact registration/prior/target
+   identity inside Truss. Match its complete original binding and receipt bytes,
+   not only hashes. Verify the registration still belongs to the selected current
+   installation/epoch and the original cursors are canonical for that registration.
+   A fabricated high cursor, changed bytes, duplicate/conflicting witness, unknown
+   registration or missing retained witness is unavailable observation_integrity
+   (or the existing disclosure-safe denial/retention projection), never included.
+   The result MUST NOT use the current consumer checkpoint as its frontier.
+4. Prove source transaction completeness from the original ACK admission: the
+   immutable receipt was created atomically with ACK after re-reading/re-hashing
+   the complete bounded source interval. An advancing empty_interval is eligible;
+   equal-cursor polls are not new coverage. Do not manufacture journal members
+   for no-op groups. The authoritative action writer xid comes from the admitted
+   retained action receipt; compare it with the exact admitted boundary only in
+   Truss's source-order implementation. `included` is true iff the complete
+   transaction is strictly below that boundary, false otherwise.
+5. Recheck current person/receipt authorization, installation/epoch/registration,
+   original witness identity and unchanged schema/profile before release.
+   Concurrent revocation, restore, registration replacement, evidence expiry or
+   uncertain execution returns the existing safe unavailable/execution outcome.
+
+The person requires authority to observe the original action receipt, not full
+feed-reader membership or access to every historical module. Existing full-feed
+read/enrollment/ACK permissions MUST remain unchanged. Implement a dedicated
+person-scoped comparison entrypoint; do not weaken runtime_feed_authorize or grant
+direct access to consumer/receipt tables to make it work. Possession of either
+receipt is not a read grant or an existence oracle.
+
+### Destination composition and seed boundary
+
+An available source comparison is conditional source-boundary evidence, not a
+foreign-commit attestation. Before Arras maps it to reached, Ashlar MUST authorize
+the current person and hold the exact immutable publication/full vector, validate
+the original publication/request/destination receipt correspondence, and prove
+complete contiguous predecessor or admitted seed coverage through this boundary,
+including all transaction members and advancing empty/no-op coverage. The same
+publication and its native versions MUST serve the rows and progress. Any missing
+coverage/policy/snapshot proof is unknown. Delivery, ACK, wall-clock time, a later
+publication or today's source checkpoint cannot substitute.
+
+Initial publications without a retained source ACK receipt remain unknown in this
+first API. A known prior publication with a retained witness can prove false for
+a later independently issued action receipt, then true after the following exact
+publication/ACK is admitted. A seed-only/no-ACK comparison requires a separately
+registered original seed witness/profile; there is no fabricated genesis receipt.
+Different epochs/registrations remain incomparable without explicit independently
+admitted lineage. No cross-epoch numeric ordering or implicit reseed is allowed.
+
+### Outcomes, compatibility and gates
+
+Reuse ReceiptVisibilityUnavailable's safe reasons: invalid_token only for
+canonical token syntax the source can classify; authorization/observation_integrity
+for denied or unobservable evidence; epoch_profile for incompatible authority,
+retention for admitted expired evidence, resource for limits, and not_yet only as
+unavailability. Never interpret unavailable(not_yet) as available false. The
+ordinary Outcome's execution uncertainty and quarantine behavior remain intact.
+No raw xid, action input, actor, native diagnostic, credentials or extra receipt
+contents are disclosed in an error.
+
+The new method is additive; existing reached_in_transaction and feed ACK APIs
+keep their semantics. Implementation changes the native runtime and therefore
+requires a new explicit runtime recipe/profile and preserving forward migration
+for every admitted predecessor. Do not edit historical SQL recipes/manifests or
+claim the rename-only 0.0.51 tuple supplies it. Support remains latest-only by
+migration; no historical runtime support promise is added.
+
+Required gates (not run): ordinary person allowed/denied/revoked; valid issued
+receipt behind/at/below an exact old/new publication witness; newer source ACK
+without newer selected destination publication; fabricated high cursor; forged
+binding/hash-only matching/changed opaque receipt; all-no-op receipt across an
+advancing empty interval; complete multi-member transaction; partial/aborted
+publication; missing/expired witness; restart/replay; original seed omission;
+foreign epoch/registration and restore; bounds; readonly/unassigned enforcement;
+no direct table grants; preserving migration and installed public facade. Ashlar
+must separately run rows+progress in the same held snapshot, UC row/column policy,
+current person deadlines and release/revocation controls. Static inspection and
+local doubles do not close any native/installed/managed gate.
