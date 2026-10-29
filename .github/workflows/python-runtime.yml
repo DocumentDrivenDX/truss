@@ -1,9 +1,6 @@
 name: Released Python runtime
+# Installed runtime and private database-wheel smoke stays an explicit qualification.
 on:
-  push:
-    paths: ['packages/python/**', 'scripts/**', '.github/workflows/python-runtime.yml']
-  pull_request:
-    paths: ['packages/python/**', 'scripts/**', '.github/workflows/python-runtime.yml']
   workflow_dispatch:
 permissions:
   contents: read

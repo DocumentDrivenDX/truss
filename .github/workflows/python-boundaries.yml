@@ -1,10 +1,14 @@
 name: Python module boundaries
 on:
   push:
+    branches: [main]
     paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
   pull_request:
     paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
   workflow_dispatch:
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
@@ -14,6 +18,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - name: Check actual Python source map
         run: python3 scripts/check-module-boundaries.py
       - name: Exercise allowed and forbidden controls
