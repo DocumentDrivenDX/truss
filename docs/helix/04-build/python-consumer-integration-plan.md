@@ -2793,10 +2793,17 @@ compiler or native code was imported/executed by these checks. Initial static
 inspection encountered package-form dsl and conditional MISSING exports; those
 are recorded as inspection limitations/corrections, not missing APIs.
 
-**Required installed/native gate — CLOSED, not run.** The shared20-minute/two-
-attempt allowance remains exhausted and cannot be reset. No Actions/cloud/new
-spending/macOS runtime CI/new agents or test lanes are authorized. On a separately
-authorized existing Linux slot, before releasing this candidate:
+**Required installed/native gate — local merge/test authorized, not run.**
+The previous shared20-minute/two-attempt allowance remains exhausted as recorded
+history. The human subsequently directed “Use the local merge +test path”,
+relayed by the existing Stack coordinator on2026-10-30. This authorizes the
+necessary local merge and qualification without relabeling previous attempts.
+Use the existing shared admission mechanism, a fresh occupancy check and serial
+bounded execution with at most two CPU-heavy workers. Preserve existing command
+timeouts and assertions; no unlimited runtime/retries, stress/scale campaign,
+Actions/cloud/new spending/macOS CI/new agents or test lanes are authorized.
+Do not overlap another owner's expensive job or mutate its admission state.
+Before releasing this candidate on the admitted existing Linux slot:
 
 1. Accessdev8 public artifact availability is accepted by the retained
    [subject](evidence/typed-sdk-dev8-consumer-20261029/access8-pypi-availability-subject.json)

@@ -41,7 +41,9 @@ Original failed/unknown upload readback, incomplete checker and null original
 postcheck remain unchanged. This retention performed no HTTP request, upload,
 credential lookup, dependency import, installation or native check. Public-index
 consumer installation, Truss behavior/cleanup and full release acceptance remain
-open under the existing resource hold; SDK0.5.8 qualification is separate.
+open; SDK0.5.8 qualification is separate. The previous exhausted allowance and
+later human authorization for the local merge/test path are both retained in the
+integration plan. Fresh shared-slot admission is required before an expensive run.
 
 The authorized release transport is local Twine with the established Keychain
 credential route. No new authentication or Actions run is needed for that route.
