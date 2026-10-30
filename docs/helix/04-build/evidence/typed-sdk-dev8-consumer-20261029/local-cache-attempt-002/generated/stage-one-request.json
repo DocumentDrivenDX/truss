@@ -1,0 +1,44 @@
+{
+  "contract": "umf-access-generate/0.1",
+  "sources": [
+    {
+      "id": "logical",
+      "format": "json",
+      "text": "{\n  \"umf\": \"0.10.0\",\n  \"id\": \"truss-typed-sdk-0052-consumer-fixture\",\n  \"vocabularies\": {\n    \"umf.access\": {\n      \"version\": \"0.1.0\"\n    }\n  },\n  \"modules\": [\n    {\n      \"id\": \"sales\",\n      \"namespace\": \"sales\",\n      \"elements\": [\n        {\n          \"id\": \"id\",\n          \"name\": \"id\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"cardinality\": \"one\",\n          \"nullability\": \"required\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"status\",\n          \"name\": \"status\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"cardinality\": \"one\",\n          \"nullability\": \"required\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"order\",\n          \"name\": \"order\",\n          \"kind\": \"record\",\n          \"members\": [\n            {\n              \"module\": \"sales\",\n              \"element\": \"id\"\n            },\n            {\n              \"module\": \"sales\",\n              \"element\": \"status\"\n            }\n          ],\n          \"keys\": [\n            {\n              \"id\": \"pk\",\n              \"name\": \"primary\",\n              \"primary\": true,\n              \"fields\": [\n                {\n                  \"module\": \"sales\",\n                  \"element\": \"id\"\n                }\n              ]\n            }\n          ],\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"customerId\",\n          \"name\": \"customerId\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"cardinality\": \"one\",\n          \"nullability\": \"required\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"customerName\",\n          \"name\": \"customerName\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"cardinality\": \"one\",\n          \"nullability\": \"required\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"customer\",\n          \"name\": \"customer\",\n          \"kind\": \"record\",\n          \"members\": [\n            {\n              \"module\": \"sales\",\n              \"element\": \"customerId\"\n            },\n            {\n              \"module\": \"sales\",\n              \"element\": \"customerName\"\n            }\n          ],\n          \"keys\": [\n            {\n              \"id\": \"pk\",\n              \"name\": \"primary\",\n              \"primary\": true,\n              \"fields\": [\n                {\n                  \"module\": \"sales\",\n                  \"element\": \"customerId\"\n                }\n              ]\n            }\n          ],\n          \"extensions\": {}\n        }\n      ],\n      \"relationships\": [\n        {\n          \"id\": \"customers\",\n          \"name\": \"customers\",\n          \"source\": [\n            {\n              \"module\": \"sales\",\n              \"element\": \"order\"\n            }\n          ],\n          \"target\": [\n            {\n              \"module\": \"sales\",\n              \"element\": \"customer\",\n              \"key\": \"pk\"\n            }\n          ],\n          \"sourceMultiplicity\": {\n            \"min\": 0,\n            \"max\": \"*\"\n          },\n          \"targetMultiplicity\": {\n            \"min\": 0,\n            \"max\": \"*\"\n          },\n          \"targetLifecycle\": \"independent\",\n          \"directed\": true\n        }\n      ],\n      \"extensions\": {\n        \"umf.access\": {\n          \"views\": [\n            {\n              \"record\": {\n                \"module\": \"sales\",\n                \"element\": \"order\"\n              },\n              \"selectedKey\": {\n                \"module\": \"sales\",\n                \"element\": \"order\",\n                \"key\": \"pk\"\n              },\n              \"fields\": [\n                {\n                  \"field\": {\n                    \"module\": \"sales\",\n                    \"element\": \"id\"\n                  },\n                  \"row\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"create\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"mutable\": false,\n                  \"generated\": false\n                },\n                {\n                  \"field\": {\n                    \"module\": \"sales\",\n                    \"element\": \"status\"\n                  },\n                  \"row\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"create\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"mutable\": true,\n                  \"generated\": false\n                }\n              ]\n            },\n            {\n              \"record\": {\n                \"module\": \"sales\",\n                \"element\": \"customer\"\n              },\n              \"selectedKey\": {\n                \"module\": \"sales\",\n                \"element\": \"customer\",\n                \"key\": \"pk\"\n              },\n              \"fields\": [\n                {\n                  \"field\": {\n                    \"module\": \"sales\",\n                    \"element\": \"customerId\"\n                  },\n                  \"row\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"create\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"mutable\": false,\n                  \"generated\": false\n                },\n                {\n                  \"field\": {\n                    \"module\": \"sales\",\n                    \"element\": \"customerName\"\n                  },\n                  \"row\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"create\": {\n                    \"missing\": false,\n                    \"null\": false\n                  },\n                  \"mutable\": true,\n                  \"generated\": false\n                }\n              ]\n            }\n          ],\n          \"columns\": [],\n          \"search\": [],\n          \"searchBindings\": []\n        }\n      }\n    }\n  ]\n}\n"
+    }
+  ],
+  "logical": "logical",
+  "bindings": [],
+  "records": [
+    {
+      "module": "sales",
+      "element": "order"
+    },
+    {
+      "module": "sales",
+      "element": "customer"
+    }
+  ],
+  "actions": [],
+  "projections": [
+    {
+      "name": "orderIdentity",
+      "record": {
+        "module": "sales",
+        "element": "order"
+      },
+      "fields": [
+        {
+          "module": "sales",
+          "element": "id"
+        }
+      ]
+    }
+  ],
+  "package": "native_sales",
+  "names": [],
+  "mode": "strict",
+  "profileId": "truss.consumer.fixture",
+  "profileVersion": "0.1.0",
+  "coreVersion": "0.10.0"
+}

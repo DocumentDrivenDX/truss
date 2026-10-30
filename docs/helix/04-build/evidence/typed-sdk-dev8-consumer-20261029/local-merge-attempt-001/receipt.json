@@ -1,0 +1,148 @@
+{
+  "scope": "Retained original local preparation and failed-operation receipts; no installed/native qualification",
+  "files": {
+    "bootstrap-failure.json": {
+      "sizeBytes": 724,
+      "sha256": "bbebe7a08ff014aa17cab0965f7825124a85fa1ea46e729e2bf8db811984abb9"
+    },
+    "bootstrap-cleanup.json": {
+      "sizeBytes": 137,
+      "sha256": "a2b07c402546cc497fe91661e33f8c9c2091b6e045b7038fafb23c52c0f997c9"
+    },
+    "operation-inputs.json": {
+      "sizeBytes": 534,
+      "sha256": "a9d42dbd1b52f011618c366e0ed15cc939d0dcdbf7f99c3fc8d5acda5a303d2d"
+    },
+    "generator-source-manifest.json": {
+      "sizeBytes": 219693,
+      "sha256": "11203c8037430a32dd7c3c93fad097554dc564f49fe2630dbb8a0e1cd85ad37c"
+    },
+    "toolchain.json": {
+      "sizeBytes": 276,
+      "sha256": "cd1873a2d124b08f6b4d6ae45eea2fdd8f256ccb47bc191efa7854c9d8003c2e"
+    },
+    "operation.stdout": {
+      "sizeBytes": 763,
+      "sha256": "f7568b30fe2f3127814cbfa4cf87df5e5da8c14f8de4dbdab3318ab231555ff0"
+    },
+    "operation.stderr": {
+      "sizeBytes": 152,
+      "sha256": "b1147cb5841b87f1888d23e40ba93c2531d31271164b9b705b89fc2786edcacb"
+    },
+    "operation-result.json": {
+      "sizeBytes": 1522,
+      "sha256": "8791087e1fbbe4c88b27a786ccdc05885b4cc7bcb976064bc3dd31a93e189d96"
+    },
+    "build-tools.stdout": {
+      "sizeBytes": 1021,
+      "sha256": "0e5444ab4e3e68856d6afc007a1bee86c8f0be2c6823fd83b115b2f5f6c57934"
+    },
+    "build-tools.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build-tools.result.json": {
+      "sizeBytes": 287,
+      "sha256": "89e74f2fca9b42671bf1f8e0c127c0d4c71c90c55a0a4f98cdec05bce41b01d2"
+    },
+    "build-package.stdout": {
+      "sizeBytes": 199633,
+      "sha256": "68b992305e9f010a4e2cf2ba9a3e4a7044cc18bc9738ee772c19dd6e42d79ac8"
+    },
+    "build-package.stderr": {
+      "sizeBytes": 119,
+      "sha256": "8995e8cc62d964b7fedcbe7e25c28a9639531d076bc4981c73e741bf687c51eb"
+    },
+    "build-package.result.json": {
+      "sizeBytes": 226,
+      "sha256": "1bf97fc559935b2874db4686305fd63480a3213290789592e73c7504447f7656"
+    },
+    "public-extras-install.stdout": {
+      "sizeBytes": 3384,
+      "sha256": "972e2b8cf3cc947d4665068c15d79e33c7c5c480e421682a2ace3af7959e7d23"
+    },
+    "public-extras-install.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "public-extras-install.result.json": {
+      "sizeBytes": 403,
+      "sha256": "80b304f798885555c106d3ebdd18bbc61fb8cdac98099731f328a45ebc2ed84b"
+    },
+    "built-artifact-source-comparison.json": {
+      "sizeBytes": 1125,
+      "sha256": "804b5ee50a6ce7820097422004b9760c03e0d3310ebc5bd478a22f80bb60c8fe"
+    },
+    "run-local-container.py": {
+      "sizeBytes": 2019,
+      "sha256": "caec9d6989ac6c67a7ca40e29e49775717df5d6f690d2cc47e7ec1430f73a31c"
+    },
+    "run-container.sh": {
+      "sizeBytes": 4310,
+      "sha256": "e8e152fd5ba2ac8bae09bf6441903787545b5469b9c62511cf0320a9c659b1b7"
+    },
+    "stage.py": {
+      "sizeBytes": 729,
+      "sha256": "017d4c43fe176cc6df4dfdc7fd5f6687338a8f2bb5625cadbef7fc08e289f73f"
+    },
+    "check-inputs.py": {
+      "sizeBytes": 2086,
+      "sha256": "76e6e7326b92c66950b9d3e36596669e30f96b4e68acc04786887c7b28bc2950"
+    },
+    "cold-controls.json": {
+      "sizeBytes": 381,
+      "sha256": "68c29387f9f146e793f57286760276114d0e025cd8bd7023b389ea3d5ad1a34b"
+    },
+    "cold-controls.stdout": {
+      "sizeBytes": 162,
+      "sha256": "e8c03ba932ec2023aebfc2a5998eef90f434352704abe93c6a35fef70bc30f7c"
+    },
+    "cold-controls.stderr": {
+      "sizeBytes": 122,
+      "sha256": "2eb0497999ac170e96e06e2d8f0ccbf33046a536f4107f5bff9a168ab0117d06"
+    },
+    "preflight.json": {
+      "sizeBytes": 677,
+      "sha256": "e53c39b7b72ef68f884f9cce66f0f82e5fd43eec09ab9554c106db805ed625c9"
+    }
+  },
+  "sharedRuns": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/private/tmp/truss-0052-local-qualification-20261030/operator.py"
+      ],
+      "elapsedSeconds": 0.296498042,
+      "exitCode": 1
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/private/tmp/truss-0052-local-qualification-20261030/run-local-container.py"
+      ],
+      "elapsedSeconds": 218.618935666,
+      "exitCode": 124
+    }
+  ],
+  "sharedActiveAtRetention": {
+    "command": [
+      "/bin/zsh",
+      "-c",
+      "export PATH=/Users/erik/.rustup/toolchains/1.90.0-aarch64-apple-darwin/bin:/opt/homebrew/bin:$PATH; export CARGO_TARGET_DIR=/private/tmp/umf-final-rust-target CARGO_INCREMENTAL=0; cargo test --locked --offline -p umf-core --lib > /private/tmp/umf-current-rust-library-tests-3.log 2>&1"
+    ],
+    "reservedSeconds": 602.0,
+    "startedUnix": 1793326386.211206
+  },
+  "bootstrapSourceFailureRetained": true,
+  "ownedContainerAbsent": true,
+  "sourceCommit": "feb2e60c500c9d326a9f69918fb246a5286df8c0",
+  "sourceTree": "07b231cc0e90216979216203e24c36fc2a784898",
+  "notRun": [
+    "complete public dependency installation",
+    "genuine fixture generation",
+    "installed source/cohort import checks",
+    "native typed read/page/stream/RelatedKeys",
+    "full migration/HF/managed release gates",
+    "tag/upload/fresh public consumer"
+  ]
+}

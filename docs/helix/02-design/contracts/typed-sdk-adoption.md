@@ -232,3 +232,52 @@ The optional development cohort now has a [passing public native workflow](../..
 This is macOS arm64/Python 3.14.8/psycopg 3.3.6/PostgreSQL 18.6/Bun 1.4.2 evidence. UMF's shared stream mapping fix is included in the pinned SDK; no Truss output shim is used. The compiler gate requires the actual Truss read/page compile and original-program check APIs for `0.4.42-dev.0`. Published Weft 0.4.40 remains the ordinary default; backend 0.4.41 and ordinary IR 0.2.7 checks remain exact. New navigation IR, ordered-page profiles, Graph, temporal, protected actions and publication remain outside this result.
 
 `scripts/check-typed-sdk-related-native.py` uses the original [schema fixture](../../../../packages/python/examples/typed_sdk_related_schema.json). Supply `--generated` from the pinned UMF generator with package `native_sales`, records `sales.order` and `sales.customer`, and projection `{name: "OrderIdentity", record: {module: "sales", element: "order"}, fields: [{module: "sales", element: "id"}]}`. Pass the same schema as `--model`, a fresh `--output`, the pgserver PostgreSQL 18.6 `--pg-bin`, and exact Bun 1.4.2 `--bun-executable`. The harness obtains SQL through the SDK's original capture/render API before native capture; it does not repair bindings or captured SQL.
+
+
+## Current-main Access dev8 consumer candidate — 2026-10-29
+
+The candidate `umf-truss0.0.52[typed-sdk]` selects
+`umf_access==0.1.0.dev8`; query independently remains `weft-sql==0.4.51`.
+It adds no Core Python dependency, native storage meaning, migration operation or
+new comparison API. The exact-publication comparison merged in PR42 remains a
+future specification. A generic SDK release number is not a Truss native profile.
+
+The selected Access wheel is the unchanged public SDK0.5.7 asset687343442,
+580062bytes, SHA256
+`1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23`.
+SDK0.5.8's owner handoff selects identical Access bytes and different wider SDK
+archive/cohort proof; that proof MUST NOT be relabeled Truss acceptance.
+Access declares Python>=3.11,<3.15, Pydantic>=2.13,<3 and typing-extensions>=4.16,<5.
+The typed extra is subject to that Python intersection; the base Truss declaration
+is not narrowed solely for an optional extra. No owner-authority/sql-containment
+extra is enabled by this change.
+
+Static inspection finds all directly imported Truss adapter API names retained;
+nine directly imported modules are byte-identical. `canonical_json` moves to a
+new dependency-free module with an identical function AST. The catalog CLI adds
+explicit support for distribution name `umf-weft` beside `weft-sql`; this does
+not select or qualify umf-weft0.4.56 for Truss. Both distributions install import
+`weft`, so the cohort MUST reject dual registered owners even if the last installed
+payload matches one selected wheel. A chosen compiler distribution/version is
+explicit; matching the import name is insufficient.
+
+The existing `typed_sdk_cohort` gate can now require the exact installed consumer
+wheel/hash with `--consumer-wheel`, `--consumer-wheel-sha256` and
+`--require-consumer`. Its selected SDK and compiler distributions/versions MUST
+match the actual installed consumer's exact typed-sdk/query extra requirements,
+as well as complete original wheel metadata, imported path and package bytes.
+Historical optional two-wheel correspondence remains available but MUST NOT be
+reported as consumer dependency acceptance. No gate returns native qualification
+from metadata/payload comparison alone.
+
+From0.0.52, the automatic public PyPI consumer gate requires both query and
+typed-sdk extras, exact declared SDK version, the selected Access artifact SHA,
+TrussTarget import and a single Weft distribution owner. Historical0.0.50/51
+gates retain their original query-only meaning. An unqualified SDK version or
+changed bytes fails; there is no fallback to an older SDK, candidate URL or extra
+index. This workflow edit is unrun source, not successful OIDC/installation proof.
+Public artifact availability and actual combined installation MUST be verified
+separately. The [retained availability evidence](../../04-build/evidence/typed-sdk-dev8-consumer-20261029/README.md)
+records both the initial missing PyPI version and the later accepted exact dev8
+served bytes. Neither artifact availability nor generic SDK evidence qualifies
+the installed Truss consumer.

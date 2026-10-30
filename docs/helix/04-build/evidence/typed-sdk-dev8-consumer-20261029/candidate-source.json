@@ -1,0 +1,20 @@
+{
+  "scope": "Current-main metadata/source candidate only; not a built/installed/native artifact.",
+  "base_source": "42255e6613300402762c3ce1cb1c3e394504c0ad",
+  "version": "0.0.52",
+  "typed_sdk": [
+    "umf_access==0.1.0.dev8"
+  ],
+  "query": [
+    "weft-sql==0.4.51"
+  ],
+  "release_status": "BLOCKED: Accessdev8 public PyPI absent; shared installed/native gate allowance closed.",
+  "source_files": {
+    "packages/python/pyproject.toml": "dc53af415a92b305fe21ec752d9a4fa2033b7a67cc72ca325b24d0271581545b",
+    "scripts/typed_sdk_cohort.py": "a045e8c69e04317df71483ab1d5a75e36042e5bbcb7b686ea92cd284a050f11b",
+    "scripts/test_typed_sdk_cohort.py": "ba1a98592459a0d86f08ab28b5e30c3362062d289b0c5a763a58ca28f544c9f3",
+    "scripts/test_typed_sdk_registry_workflow.py": "c0b57b3c72c525ff30a2235e7a1f064e7d4164c3aa728da39881e73e4e812cdd",
+    ".github/workflows/publish-pypi.yml": "f97d4fccdbf3208e97b0e28cb3c55d27c34fdc6a1df09fed020834ab273fcfd8",
+    ".github/workflows/pypi-validation.yml": "cb0e30da530d34086603cff78ae5facd0cadc9fbf15cef15613414d9d39195cc"
+  }
+}

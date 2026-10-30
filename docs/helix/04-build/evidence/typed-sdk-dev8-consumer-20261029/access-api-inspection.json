@@ -1,0 +1,176 @@
+{
+  "scope": "Static API/name and byte comparison only. No imported/installed/native proof.",
+  "handoff_sha256": "cbb04186b9c3046d057592674531da207dff0bcbaabea80eca23a4449f8e2de8",
+  "old_sha256": "e4c77075281f82c2d1b67eba432a718f847b186d1e0293b034dceb068d1a9a9d",
+  "new_sha256": "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23",
+  "modules": [
+    {
+      "module": "adoption",
+      "path": "umf_access/adoption.py",
+      "required": [
+        "TargetIdentity"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "a5bee5fca13c6b7d9b4de7d4750369ada9d86ab766e2a8f7bb0ac4272708c493",
+      "new_sha256": "a5bee5fca13c6b7d9b4de7d4750369ada9d86ab766e2a8f7bb0ac4272708c493",
+      "unchanged": true
+    },
+    {
+      "module": "engine_catalog",
+      "path": "umf_access/engine_catalog.py",
+      "required": [
+        "EngineRead"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "b79e8b42fddb9380643adcb2b05a09d6e16032b92b7f9c4835d7af48c537bb61",
+      "new_sha256": "b79e8b42fddb9380643adcb2b05a09d6e16032b92b7f9c4835d7af48c537bb61",
+      "unchanged": true
+    },
+    {
+      "module": "reviewed",
+      "path": "umf_access/reviewed.py",
+      "required": [
+        "CatalogRead"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "175526a3af2a9634e218355a6035181a3b21518f56f98118ee96a991a9133a84",
+      "new_sha256": "175526a3af2a9634e218355a6035181a3b21518f56f98118ee96a991a9133a84",
+      "unchanged": true
+    },
+    {
+      "module": "pages",
+      "path": "umf_access/pages.py",
+      "required": [
+        "ReadPage",
+        "ReadContinuation",
+        "StaleContinuation"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "47fb8eddeb91a0987efeb4e7e7dd7119b765fe4c3636f27e3f61c4f3e9da2234",
+      "new_sha256": "47fb8eddeb91a0987efeb4e7e7dd7119b765fe4c3636f27e3f61c4f3e9da2234",
+      "unchanged": true
+    },
+    {
+      "module": "codec_support",
+      "path": "umf_access/codec_support.py",
+      "required": [
+        "revalidate_model",
+        "validate_graph"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "ae6261e0b91d4ed8746c12bde48642f4e50a992af13ed4471e837050200a076f",
+      "new_sha256": "ae6261e0b91d4ed8746c12bde48642f4e50a992af13ed4471e837050200a076f",
+      "unchanged": true
+    },
+    {
+      "module": "postgres_read",
+      "path": "umf_access/postgres_read.py",
+      "required": [
+        "TimedOut"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "42eb9f310916b9fbcc134d9f1db6d8ee6fff6e9dfe092e1c4bfdab2f21b82931",
+      "new_sha256": "42eb9f310916b9fbcc134d9f1db6d8ee6fff6e9dfe092e1c4bfdab2f21b82931",
+      "unchanged": true
+    },
+    {
+      "module": "native_program",
+      "path": "umf_access/native_program.py",
+      "required": [
+        "program_json",
+        "canonical_json"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "32d633f32305787f1775c8e1b1a6e4d58a3d1c271b311e736d65fdce6ce173bc",
+      "new_sha256": "0d3e102e5a849a55d31b47574755f9193ce0a2a12d1c5eafb4920f8c7eb99333",
+      "unchanged": false
+    },
+    {
+      "module": "dsl",
+      "path": "umf_access/dsl/__init__.py",
+      "required": [
+        "RelatedKeys"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "6e53549c13931ed48fc4cebd5a28d2e7aa523707f3293261529efbde6fa846e2",
+      "new_sha256": "6e53549c13931ed48fc4cebd5a28d2e7aa523707f3293261529efbde6fa846e2",
+      "unchanged": true
+    },
+    {
+      "module": "related_keys",
+      "path": "umf_access/related_keys.py",
+      "required": [
+        "transport_spec"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "dff3862ac453c553288123436d16e71799b6f43669ee8879f6865b4178bc6324",
+      "new_sha256": "dff3862ac453c553288123436d16e71799b6f43669ee8879f6865b4178bc6324",
+      "unchanged": true
+    },
+    {
+      "module": "types",
+      "path": "umf_access/types.py",
+      "required": [
+        "MISSING"
+      ],
+      "unresolved_static_names": [],
+      "old_sha256": "0d4277a0d3329df6ac67929343fa0421c6a803fa2156c9f6e245aee970556064",
+      "new_sha256": "0d4277a0d3329df6ac67929343fa0421c6a803fa2156c9f6e245aee970556064",
+      "unchanged": true,
+      "name_resolution": "Conditional import/re-export MISSING exists in byte-identical types.py; no behavioral proof."
+    }
+  ],
+  "changed_files": [
+    "umf_access/build/catalog.py",
+    "umf_access/generated_core.py",
+    "umf_access/lifecycle/__init__.py",
+    "umf_access/lifecycle/catalog.py",
+    "umf_access/lifecycle/correspondence.py",
+    "umf_access/lifecycle/head.py",
+    "umf_access/lifecycle/ledger.py",
+    "umf_access/lifecycle/privileges.py",
+    "umf_access/lifecycle/witness.py",
+    "umf_access/native_program.py",
+    "umf_access/unified/session_policy.py",
+    "umf_access/unified/table_reads.py"
+  ],
+  "new_files": [
+    "umf_access/canonical.py",
+    "umf_access/lifecycle/_darwin_process_observer.c",
+    "umf_access/lifecycle/approval.py",
+    "umf_access/lifecycle/backfills.py",
+    "umf_access/lifecycle/cli.py",
+    "umf_access/lifecycle/concurrent.py",
+    "umf_access/lifecycle/conversion_policy.py",
+    "umf_access/lifecycle/generation_authority_bootstrap.py",
+    "umf_access/lifecycle/generation_authority_session.py",
+    "umf_access/lifecycle/generation_enrollment_authority.py",
+    "umf_access/lifecycle/generation_enrollment_ledger.py",
+    "umf_access/lifecycle/generation_ingress.py",
+    "umf_access/lifecycle/generation_root_registry.py",
+    "umf_access/lifecycle/host.py",
+    "umf_access/lifecycle/ingress_custody.py",
+    "umf_access/lifecycle/ingress_local_postgres.py",
+    "umf_access/lifecycle/ingress_store.py",
+    "umf_access/lifecycle/mixed.py",
+    "umf_access/lifecycle/owner_approval_core.py",
+    "umf_access/lifecycle/owner_authority.py",
+    "umf_access/lifecycle/owner_bootstrap.py",
+    "umf_access/lifecycle/owner_wire.py",
+    "umf_access/lifecycle/phase_fence.py",
+    "umf_access/lifecycle/phase_policy.py",
+    "umf_access/lifecycle/progress.py",
+    "umf_access/lifecycle/row_originals.py",
+    "umf_access/lifecycle/row_originals_creation.py",
+    "umf_access/lifecycle/row_originals_receipt.py",
+    "umf_access/lifecycle/sql_containment.py",
+    "umf_access/lifecycle/sql_containment_cli.py",
+    "umf_access/lifecycle/sql_containment_parser.py",
+    "umf_access/lifecycle/supervisor_journal_codec.py",
+    "umf_access/lifecycle/target_custody_codec.py"
+  ],
+  "removed_files": [],
+  "canonical_function_ast_equal": true,
+  "handoff_local_wheel_sha256": "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23",
+  "handoff_local_equals_public_asset": true
+}

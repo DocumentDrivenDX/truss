@@ -1,0 +1,276 @@
+{
+  "status": "PUBLIC_INSTALL_AND_GENERATION_PASS_NATIVE_RUNTIME_IDENTITY_FAIL",
+  "scope": "Original receipts; native typed catalog refused; no full consumer or release success",
+  "sourceCommit": "feb2e60c500c9d326a9f69918fb246a5286df8c0",
+  "sourceTree": "07b231cc0e90216979216203e24c36fc2a784898",
+  "files": {
+    "public-prefetch.stderr": {
+      "sizeBytes": 185,
+      "sha256": "5d5e5754af392d9b2a5e0d5afff360aed3930cf6ca6752e2ef839d8b0a768580"
+    },
+    "generate-current-models.stdout": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "local-runtime-install.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original-generator-dependencies.result.json": {
+      "sizeBytes": 186,
+      "sha256": "613e62d55081c30575ebdc6488d255e32b0dcaa5036cf07b2576ee4b2ade4ef9"
+    },
+    "prefetch-public.py": {
+      "sizeBytes": 1856,
+      "sha256": "7b9c10e0325b83ec68a99e04ce7c555fb1877b6c437b59d4fae25ec231cec15b"
+    },
+    "operation-inputs.json": {
+      "sizeBytes": 1496,
+      "sha256": "dacf385db72e3205c9320cd5b631160a82cdc51c4f9f5666994c8c96a5f8d045"
+    },
+    "run-cache-completion.py": {
+      "sizeBytes": 2865,
+      "sha256": "07dfdc1229a3551127171fbfc3648103313035f7cd64d25734c0a8ffdeafa246"
+    },
+    "public-prefetch.stdout": {
+      "sizeBytes": 8045,
+      "sha256": "3e8ac2c35d5e71a6e8eb5a713a416d2d9441c90087043d65310984b16a85f52a"
+    },
+    "generate-current-models.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "local-runtime-install.result.json": {
+      "sizeBytes": 288,
+      "sha256": "827cb4fbbe71009909015334193780863ed5e9ad59369e1f24da306e5baa16c3"
+    },
+    "local-runtime-install.stdout": {
+      "sizeBytes": 6486,
+      "sha256": "088145716b1f770509ab0aded0c9329177d872cdb178d5a121cb99a9bc99b2d1"
+    },
+    "original-generator-dependencies.stderr": {
+      "sizeBytes": 78,
+      "sha256": "f8551a9d321ad5c60f48e4400ac66b923c33e77d4d256720d442b1dee171ec07"
+    },
+    "operation.stderr": {
+      "sizeBytes": 182,
+      "sha256": "45f4ab920801996f99dedd2a1d5381430172bb2a81b22aef3a15c0fa12405702"
+    },
+    "pip-check.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pip-check.result.json": {
+      "sizeBytes": 151,
+      "sha256": "ad65631a89ea415c6cdcb9af9f82e5288d6a52c1d0668bce2ab8dee88918b1c0"
+    },
+    "public-extras-install.result.json": {
+      "sizeBytes": 400,
+      "sha256": "36feac67886dd755aec6c4038c8737b24cf9bba1739c20970b628ef33e3056e4"
+    },
+    "public-extras-install.stdout": {
+      "sizeBytes": 4137,
+      "sha256": "dd0b7cc28ff33d4ba26d1d1b02cf815febc0fc4dcac176cfaaa09278eb83892c"
+    },
+    "public-prefetch.result.json": {
+      "sizeBytes": 1046,
+      "sha256": "671ffe8b90ba7cbd564cc45f26ea52dc5b607ba60bdfa6366fb3e7774f6a12d2"
+    },
+    "verify-installed-payload-and-generated-shape.stdout": {
+      "sizeBytes": 170,
+      "sha256": "98f9a55c4f82aeb0824ee5a25b30d3c0cd16a793040ca60259042e10c39980b3"
+    },
+    "typed-native-basic.stdout": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "retain-original-dependencies.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typed-native-basic.result.json": {
+      "sizeBytes": 1155,
+      "sha256": "69b8c4dcce8082929e234ddebc3113e5f091e16dfb220f041c5108297ed434e4"
+    },
+    "verify-installed-payload-and-generated-shape.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "public-extras-install.stderr": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "typed-native-basic.stderr": {
+      "sizeBytes": 1097,
+      "sha256": "449a317e545bb83f99a0e391b3802b19ca723d4a2d39f039a35712cbd77c2400"
+    },
+    "retain-original-dependencies.stdout": {
+      "sizeBytes": 598,
+      "sha256": "78603d2750c49bb6f03bd254e4eaae4fb116494516b1077f93c87ee907f099ec"
+    },
+    "stage.py": {
+      "sizeBytes": 729,
+      "sha256": "017d4c43fe176cc6df4dfdc7fd5f6687338a8f2bb5625cadbef7fc08e289f73f"
+    },
+    "operation.stdout": {
+      "sizeBytes": 3739,
+      "sha256": "57dd28369cc99aba8e9624d86d1720ef2a64cfe593487f2d77cbae7439bc6d3c"
+    },
+    "runtime-identity-finding.json": {
+      "sizeBytes": 2224,
+      "sha256": "86b92b85a50423b33f9cba7c2c8347d99e880945a9b820b979addfe1d8409126"
+    },
+    "original-generator-dependencies.stdout": {
+      "sizeBytes": 91,
+      "sha256": "b04b9e86ea3931b6c2a032acea2b896528198bad2411a60ff1b9d3a37d0be4f7"
+    },
+    "operation-result.json": {
+      "sizeBytes": 2760,
+      "sha256": "d1ea10296d1f654b3031973f15105dd30935ffd03fdb71f23c691ccb2d270dfa"
+    },
+    "pip-check.stdout": {
+      "sizeBytes": 30,
+      "sha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09"
+    },
+    "check-inputs.py": {
+      "sizeBytes": 2360,
+      "sha256": "3f488aa646605d6c01146bbd283a09b52ba760e0229e46c56b3ed8ae07f63fb5"
+    },
+    "toolchain.json": {
+      "sizeBytes": 276,
+      "sha256": "cd1873a2d124b08f6b4d6ae45eea2fdd8f256ccb47bc191efa7854c9d8003c2e"
+    },
+    "source-review-plan.json": {
+      "sizeBytes": 2199,
+      "sha256": "25eb58ad89066d069d01698f41bc3e1f64a11e7fe3ef24cd4d859d2df59c2ba3"
+    },
+    "verify-installed-payload-and-generated-shape.result.json": {
+      "sizeBytes": 184,
+      "sha256": "0c6432c5437aeddf34b7c23aae23965eea1da33bee9a4455e5c5a0c72d52507d"
+    },
+    "run-container.sh": {
+      "sizeBytes": 4270,
+      "sha256": "0f21a65dde2add0e70796ebe9b3c87205a45d7c9618087a435fccc10fcf10210"
+    },
+    "public-install-report.json": {
+      "sizeBytes": 212794,
+      "sha256": "ae04af7efcb27133bd570890453dad098fd374abadd5fa8e856b8f6b62d7c408"
+    },
+    "retain-original-dependencies.result.json": {
+      "sizeBytes": 355,
+      "sha256": "62c969849fb0e66083df3dc4f83ac48fe512ea5b6d66b46da21aa17680183482"
+    },
+    "generate-current-models.result.json": {
+      "sizeBytes": 338,
+      "sha256": "69e5324600201aefe1d75ebf48f01e903b9457011792674823876e97bbe29fb7"
+    },
+    "generated/model-request.json": {
+      "sizeBytes": 6771,
+      "sha256": "a3e4e263b455eb7e9aba6889b1c81058375352669ea1b8b28b0eb36bf7b2570f"
+    },
+    "generated/generation.json": {
+      "sizeBytes": 1448,
+      "sha256": "0cdbde6f293f8221fa63562139b5e27967871b83e673058e6b857a1e2f002f6c"
+    },
+    "generated/stage-one-request.json": {
+      "sizeBytes": 7418,
+      "sha256": "2aea919744bbade14439d833c292539bc9a6922320ec82681ac28542bad66cf6"
+    },
+    "generated/profile.json": {
+      "sizeBytes": 1319,
+      "sha256": "1be4c67eb2b80eba0eda679f01cf9faaa69264fbf4922a091d550afd44d45c3d"
+    },
+    "generated/native_sales/models.py": {
+      "sizeBytes": 7151,
+      "sha256": "0cf5a89a7fbb4d37ea46c9b8ece531c06f5161b5df208c89fe19f567136021a1"
+    },
+    "generated/native_sales/fields.py": {
+      "sizeBytes": 7408,
+      "sha256": "c36f31df951ae77b187d6bf10cded38399189066fe3ea3838e8bff980dce4401"
+    },
+    "generated/native_sales/codecs.py": {
+      "sizeBytes": 2405,
+      "sha256": "06e5794f60560f094654f48657b04ab04b745db3e9fe12a3325406a5a7c02436"
+    },
+    "generated/native_sales/__init__.py": {
+      "sizeBytes": 348,
+      "sha256": "802f0f9b3b9ea7ab10b53d573e81dcf4533492df8d698859ef999711aa9a43bd"
+    },
+    "generated/native_sales/keys.py": {
+      "sizeBytes": 2600,
+      "sha256": "f58bb4b9eba4e70e9b23c6b4f872418c9b3c47db1f1d57fb01ef4bd66482dc17"
+    },
+    "generated/native_sales/py.typed": {
+      "sizeBytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "generated/native_sales/_umf/sources.json": {
+      "sizeBytes": 6706,
+      "sha256": "75c440fed3d67115df5c15f3e27968ba619ee1ccdb84260d673120a5765ec332"
+    },
+    "generated/native_sales/_umf/manifest.json": {
+      "sizeBytes": 38973,
+      "sha256": "abe41c0b876f0ee907d0e36053ff6455104ca684ac55a6844f764773af242d7f"
+    },
+    "native/basic/installed-cohort.json": {
+      "sizeBytes": 1755,
+      "sha256": "df0b401a77f8c5b9423984c903b4e7212ad6ef71d38fe3ddd416f8e94a26b06f"
+    },
+    "native/basic/native-lifecycle.log": {
+      "sizeBytes": 1263,
+      "sha256": "66a123c271d974c6eb602ed2561bfa0925f83527649ca17ab158ecfaf135d0b4"
+    },
+    "native/basic/postgres.log": {
+      "sizeBytes": 1231,
+      "sha256": "5327505b34d7d5bcac61ec0aeb8494130c9ee46de1f82069d86cde9acd9d35c9"
+    },
+    "native/basic/verification.json": {
+      "sizeBytes": 464,
+      "sha256": "4545f4452bfc20cbdb3258ed1f2e3803fba5e3141decbb7902aa15282805952d"
+    },
+    "native/basic/toolchain.json": {
+      "sizeBytes": 137,
+      "sha256": "aa8525e735d0f522e8911fb653592bf6b234376af43d75a801ea103727cc2b7f"
+    }
+  },
+  "sharedRuns": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/private/tmp/truss-0052-local-qualification-20261030/operator.py"
+      ],
+      "elapsedSeconds": 0.296498042,
+      "exitCode": 1
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/private/tmp/truss-0052-local-qualification-20261030/run-local-container.py"
+      ],
+      "elapsedSeconds": 218.618935666,
+      "exitCode": 124
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/private/tmp/truss-0052-local-qualification-20261030/cache-correction-002/run-cache-completion.py"
+      ],
+      "elapsedSeconds": 262.77312295900003,
+      "exitCode": 1
+    }
+  ],
+  "ownedContainerAbsent": true,
+  "ownedPostgresStopped": true,
+  "nativePassedCheckpoints": [
+    "current core 0.10 schema accepted through public API",
+    "instance created through public atomic group API",
+    "original public query remains usable with the explicitly selected SDK compiler cohort"
+  ],
+  "notRun": [
+    "typed read/page/stream after catalog construction",
+    "RelatedKeys workflow",
+    "full migration/HF/managed release gates",
+    "tag/upload/fresh public released consumer"
+  ],
+  "newSDKRuntimeOwnerFinding": "runtime-identity-finding.json"
+}

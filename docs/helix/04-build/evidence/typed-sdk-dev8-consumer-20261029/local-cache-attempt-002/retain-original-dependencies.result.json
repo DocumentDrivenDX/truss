@@ -1,0 +1,19 @@
+{
+  "stage": "retain-original-dependencies",
+  "command": [
+    "python",
+    "-m",
+    "pip",
+    "download",
+    "--only-binary=:all:",
+    "--no-deps",
+    "--index-url",
+    "https://pypi.org/simple",
+    "--dest",
+    "/out/originals",
+    "umf-access==0.1.0.dev8",
+    "weft-sql==0.4.51"
+  ],
+  "elapsedSeconds": 1.54412556393072,
+  "exitCode": 0
+}

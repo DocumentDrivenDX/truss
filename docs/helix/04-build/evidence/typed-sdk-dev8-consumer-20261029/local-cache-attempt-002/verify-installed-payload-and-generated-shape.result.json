@@ -1,0 +1,9 @@
+{
+  "stage": "verify-installed-payload-and-generated-shape",
+  "command": [
+    "python",
+    "/control/check-inputs.py"
+  ],
+  "elapsedSeconds": 1.7723774310434237,
+  "exitCode": 0
+}

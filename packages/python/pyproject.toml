@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 license = "MIT OR Apache-2.0"
 license-files = ["LICENSE.md", "LICENSE-MIT", "LICENSE-APACHE"]
 name = "umf-truss"
-version = "0.0.51"
+version = "0.0.52"
 description = "Experimental Truss Python embedding components"
 requires-python = ">=3.11"
 dependencies = ["jsonschema==4.26.0", "referencing==0.37.0", "mini-racer==0.14.1"]
@@ -18,7 +18,7 @@ truss-migrate = "truss.cli:migrate_main"
 [project.optional-dependencies]
 native = ["psycopg[binary]==3.3.6"]
 query = ["weft-sql==0.4.51"]
-typed-sdk = ["umf_access==0.1.0.dev5"]
+typed-sdk = ["umf_access==0.1.0.dev8"]
 experimental-pg8000 = ["pg8000==1.31.5"]
 local = ["pgserver-pg18==18.6.1", "fasteners==0.20", "platformdirs==4.12.4", "psutil==7.2.2"]
 

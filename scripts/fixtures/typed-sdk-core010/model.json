@@ -1,0 +1,239 @@
+{
+  "umf": "0.10.0",
+  "id": "truss-typed-sdk-0052-consumer-fixture",
+  "vocabularies": {
+    "umf.access": {
+      "version": "0.1.0"
+    }
+  },
+  "modules": [
+    {
+      "id": "sales",
+      "namespace": "sales",
+      "elements": [
+        {
+          "id": "id",
+          "name": "id",
+          "kind": "field",
+          "scalarType": "string",
+          "cardinality": "one",
+          "nullability": "required",
+          "extensions": {}
+        },
+        {
+          "id": "status",
+          "name": "status",
+          "kind": "field",
+          "scalarType": "string",
+          "cardinality": "one",
+          "nullability": "required",
+          "extensions": {}
+        },
+        {
+          "id": "order",
+          "name": "order",
+          "kind": "record",
+          "members": [
+            {
+              "module": "sales",
+              "element": "id"
+            },
+            {
+              "module": "sales",
+              "element": "status"
+            }
+          ],
+          "keys": [
+            {
+              "id": "pk",
+              "name": "primary",
+              "primary": true,
+              "fields": [
+                {
+                  "module": "sales",
+                  "element": "id"
+                }
+              ]
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "customerId",
+          "name": "customerId",
+          "kind": "field",
+          "scalarType": "string",
+          "cardinality": "one",
+          "nullability": "required",
+          "extensions": {}
+        },
+        {
+          "id": "customerName",
+          "name": "customerName",
+          "kind": "field",
+          "scalarType": "string",
+          "cardinality": "one",
+          "nullability": "required",
+          "extensions": {}
+        },
+        {
+          "id": "customer",
+          "name": "customer",
+          "kind": "record",
+          "members": [
+            {
+              "module": "sales",
+              "element": "customerId"
+            },
+            {
+              "module": "sales",
+              "element": "customerName"
+            }
+          ],
+          "keys": [
+            {
+              "id": "pk",
+              "name": "primary",
+              "primary": true,
+              "fields": [
+                {
+                  "module": "sales",
+                  "element": "customerId"
+                }
+              ]
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "relationships": [
+        {
+          "id": "customers",
+          "name": "customers",
+          "source": [
+            {
+              "module": "sales",
+              "element": "order"
+            }
+          ],
+          "target": [
+            {
+              "module": "sales",
+              "element": "customer",
+              "key": "pk"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": "*"
+          },
+          "targetLifecycle": "independent",
+          "directed": true
+        }
+      ],
+      "extensions": {
+        "umf.access": {
+          "views": [
+            {
+              "record": {
+                "module": "sales",
+                "element": "order"
+              },
+              "selectedKey": {
+                "module": "sales",
+                "element": "order",
+                "key": "pk"
+              },
+              "fields": [
+                {
+                  "field": {
+                    "module": "sales",
+                    "element": "id"
+                  },
+                  "row": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "create": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "mutable": false,
+                  "generated": false
+                },
+                {
+                  "field": {
+                    "module": "sales",
+                    "element": "status"
+                  },
+                  "row": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "create": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "mutable": true,
+                  "generated": false
+                }
+              ]
+            },
+            {
+              "record": {
+                "module": "sales",
+                "element": "customer"
+              },
+              "selectedKey": {
+                "module": "sales",
+                "element": "customer",
+                "key": "pk"
+              },
+              "fields": [
+                {
+                  "field": {
+                    "module": "sales",
+                    "element": "customerId"
+                  },
+                  "row": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "create": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "mutable": false,
+                  "generated": false
+                },
+                {
+                  "field": {
+                    "module": "sales",
+                    "element": "customerName"
+                  },
+                  "row": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "create": {
+                    "missing": false,
+                    "null": false
+                  },
+                  "mutable": true,
+                  "generated": false
+                }
+              ]
+            }
+          ],
+          "columns": [],
+          "search": [],
+          "searchBindings": []
+        }
+      }
+    }
+  ]
+}

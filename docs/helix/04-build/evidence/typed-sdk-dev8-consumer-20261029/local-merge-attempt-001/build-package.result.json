@@ -1,0 +1,14 @@
+{
+  "stage": "build-package",
+  "command": [
+    "python",
+    "-m",
+    "build",
+    "--no-isolation",
+    "--outdir",
+    "/out/artifacts",
+    "packages/python"
+  ],
+  "elapsedSeconds": 3.762143866973929,
+  "exitCode": 0
+}

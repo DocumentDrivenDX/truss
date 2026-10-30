@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/DocumentDrivenDX/umf/releases/download/umf-v0.5.7/umf_access-0.1.0.dev8-py3-none-any.whl",
+  "sha256": "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23",
+  "name": "umf_access",
+  "version": "0.1.0.dev8",
+  "requires_python": "<3.15,>=3.11",
+  "requires_dist": [
+    "pydantic<3,>=2.13",
+    "typing-extensions<5,>=4.16",
+    "cryptography==50.0.2; extra == 'owner-authority'",
+    "pglast==7.20; extra == 'sql-containment'"
+  ],
+  "package_files": 110
+}

@@ -1,0 +1,18 @@
+{
+  "status": "BOOTSTRAP_IMPORT_FAILURE_NO_DOCKER_LAUNCH",
+  "cause": "operator.py shadowed Python stdlib operator during interpreter imports",
+  "originalPath": "/private/tmp/truss-0052-local-qualification-20261030/operator.py",
+  "correctedPath": "/private/tmp/truss-0052-local-qualification-20261030/run-local-container.py",
+  "unchangedLauncherSourceSha256": "caec9d6989ac6c67a7ca40e29e49775717df5d6f690d2cc47e7ec1430f73a31c",
+  "sharedRun": {
+    "command": [
+      "/usr/bin/python3",
+      "/private/tmp/truss-0052-local-qualification-20261030/operator.py"
+    ],
+    "elapsedSeconds": 0.296498042,
+    "exitCode": 1
+  },
+  "dockerStarted": false,
+  "nativeOrInstalledGateStarted": false,
+  "automaticRetry": false
+}

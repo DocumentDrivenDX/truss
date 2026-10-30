@@ -1,0 +1,65 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--pull=never",
+    "--platform=linux/amd64",
+    "--name",
+    "truss0052-cached-qualification-20261030",
+    "--init",
+    "--cpus=2",
+    "--memory=4g",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/source,dst=/source,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/generator-source,dst=/generator-original,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/cache-correction-002,dst=/control,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/cache-correction-002,dst=/out",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/cache-correction-002/public-http-cache,dst=/public-cache,readonly",
+    "sha256:7e44ba6b5c483f84c0d630180ba4cd17a82f1bba950577bf1dc9200e7f26e556",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "324.836059876s",
+    "bash",
+    "/control/run-container.sh"
+  ],
+  "exitCode": 1,
+  "elapsedSeconds": 262.624925375,
+  "cleanup": {
+    "removeExit": 0,
+    "containerAbsent": true
+  },
+  "source": {
+    "sourceCommit": "feb2e60c500c9d326a9f69918fb246a5286df8c0",
+    "sourceTree": "07b231cc0e90216979216203e24c36fc2a784898",
+    "archiveSha256": "13df5da61a24c60e3549c600ae89d3afbffe736b4fb6a67058f9f4191fec6429",
+    "generatorSourceSha256": "842b5f657086ff35f256491271085e6c25225dafeb576de53b5a580119375493",
+    "image": "sha256:7e44ba6b5c483f84c0d630180ba4cd17a82f1bba950577bf1dc9200e7f26e556",
+    "cpuLimit": 2,
+    "maximumOperationSeconds": 381.084566292,
+    "automaticRetry": false,
+    "publicConsumerDependencySource": "https://pypi.org/simple",
+    "scope": "Prepared cache-assisted continuation, NOT EXECUTED",
+    "originalSourceRoot": "/private/tmp/truss-0052-local-qualification-20261030/source",
+    "originalGeneratorRoot": "/private/tmp/truss-0052-local-qualification-20261030/generator-source",
+    "originalBuiltArtifacts": [
+      {
+        "filename": "umf_truss-0.0.52-py3-none-any.whl",
+        "sizeBytes": 6243025,
+        "sha256": "7da7ac6aebb11adcaeda4930a8cababbf90853a1035bab0a2b73c642eed16fbe"
+      },
+      {
+        "filename": "umf_truss-0.0.52.tar.gz",
+        "sizeBytes": 6714429,
+        "sha256": "b4163371d5f08735019ef930e6bb9ae1f6853b97a35940b1a6597ec371d7c426"
+      }
+    ],
+    "consumerDependencyInstall": "public PyPI only, unchanged extra requirements, no find-links/no-index/direct dependency URL override",
+    "cache": "Standard pip HTTP cache populated by native-host cross-platform pip download; fresh Linux virtualenv still resolves canonical public URLs",
+    "installStageSeconds": 150
+  }
+}

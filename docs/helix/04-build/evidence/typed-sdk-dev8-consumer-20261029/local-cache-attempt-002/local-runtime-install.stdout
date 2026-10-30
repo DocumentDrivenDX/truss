@@ -1,0 +1,64 @@
+Looking in links: https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
+Collecting pgserver-pg18==18.6.1
+  Downloading https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 21.5 MB/s eta 0:00:00
+Saved /out/pg-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Successfully downloaded pgserver-pg18
+{"release": "https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2", "wheels": ["/out/pg-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"], "checksumsVerified": true}
+Looking in links: /out/pg-wheels
+Processing /out/artifacts/umf_truss-0.0.52-py3-none-any.whl (from umf-truss==0.0.52)
+Requirement already satisfied: jsonschema==4.26.0 in /tmp/testenv/lib/python3.11/site-packages (from umf-truss==0.0.52->umf-truss==0.0.52) (4.26.0)
+Requirement already satisfied: referencing==0.37.0 in /tmp/testenv/lib/python3.11/site-packages (from umf-truss==0.0.52->umf-truss==0.0.52) (0.37.0)
+Requirement already satisfied: mini-racer==0.14.1 in /tmp/testenv/lib/python3.11/site-packages (from umf-truss==0.0.52->umf-truss==0.0.52) (0.14.1)
+Requirement already satisfied: attrs>=22.2.0 in /tmp/testenv/lib/python3.11/site-packages (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52) (26.1.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /tmp/testenv/lib/python3.11/site-packages (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52) (2025.9.1)
+Requirement already satisfied: rpds-py>=0.25.0 in /tmp/testenv/lib/python3.11/site-packages (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52) (2026.9.1)
+Requirement already satisfied: typing-extensions>=4.4.0 in /tmp/testenv/lib/python3.11/site-packages (from referencing==0.37.0->umf-truss==0.0.52->umf-truss==0.0.52) (4.16.0)
+Requirement already satisfied: psycopg==3.3.6 in /tmp/testenv/lib/python3.11/site-packages (from psycopg[binary]==3.3.6; extra == "native"->umf-truss==0.0.52->umf-truss==0.0.52) (3.3.6)
+Collecting pg8000==1.31.5 (from umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading pg8000-1.31.5-py3-none-any.whl.metadata (88 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.8/88.8 kB 839.7 kB/s eta 0:00:00
+Processing /out/pg-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (from umf-truss==0.0.52->umf-truss==0.0.52)
+Collecting fasteners==0.20 (from umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading fasteners-0.20-py3-none-any.whl.metadata (4.8 kB)
+Collecting platformdirs==4.12.4 (from umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
+Collecting psutil==7.2.2 (from umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting python-dateutil>=2.8.2 (from pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading python_dateutil-3.0.0-py2.py3-none-any.whl.metadata (8.2 kB)
+Collecting scramp>=1.4.5 (from pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading scramp-1.5.0-py3-none-any.whl.metadata (34 kB)
+Requirement already satisfied: psycopg-binary==3.3.6 in /tmp/testenv/lib/python3.11/site-packages (from psycopg[binary]==3.3.6; extra == "native"->umf-truss==0.0.52->umf-truss==0.0.52) (3.3.6)
+Collecting six>=1.6 (from python-dateutil>=2.8.2->pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting tzdata (from python-dateutil>=2.8.2->pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting asn1crypto>=1.5.1 (from scramp>=1.4.5->pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+  Downloading asn1crypto-1.5.1-py2.py3-none-any.whl.metadata (13 kB)
+umf-truss is already installed with the same version as the provided wheel. Use --force-reinstall to force an installation of the wheel.
+Downloading fasteners-0.20-py3-none-any.whl (18 kB)
+Downloading pg8000-1.31.5-py3-none-any.whl (57 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.8/57.8 kB 1.6 MB/s eta 0:00:00
+Downloading platformdirs-4.12.4-py3-none-any.whl (32 kB)
+Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.6/155.6 kB 2.0 MB/s eta 0:00:00
+Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 94.7/94.7 kB 6.2 MB/s eta 0:00:00
+Downloading scramp-1.5.0-py3-none-any.whl (20 kB)
+Downloading asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 105.0/105.0 kB 5.3 MB/s eta 0:00:00
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 348.2/348.2 kB 4.0 MB/s eta 0:00:00
+Installing collected packages: asn1crypto, tzdata, six, scramp, psutil, platformdirs, fasteners, python-dateutil, pgserver-pg18, pg8000
+Successfully installed asn1crypto-1.5.1 fasteners-0.20 pg8000-1.31.5 pgserver-pg18-18.6.1 platformdirs-4.12.4 psutil-7.2.2 python-dateutil-3.0.0 scramp-1.5.0 six-1.17.0 tzdata-2026.6
+Looking in links: /out/pg-wheels
+Processing /out/pg-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Installing collected packages: pgserver-pg18
+  Attempting uninstall: pgserver-pg18
+    Found existing installation: pgserver-pg18 18.6.1
+    Uninstalling pgserver-pg18-18.6.1:
+      Successfully uninstalled pgserver-pg18-18.6.1
+Successfully installed pgserver-pg18-18.6.1
+No broken requirements found.

@@ -1,0 +1,28 @@
+{
+  "scope": "New current-core test generation; no native qualification",
+  "ownerSourceDigest": "842b5f657086ff35f256491271085e6c25225dafeb576de53b5a580119375493",
+  "modelSha256": "8a243c3eb6980c3528d490487220bff26ca6f5481b6b7d19ee71439fc5e4b7f4",
+  "validation": {
+    "valid": true,
+    "complete": false,
+    "diagnostics": [
+      {
+        "code": "UNKNOWN_EXTENSION",
+        "path": "/vocabularies/umf.access",
+        "message": "Exact extension version unavailable; content retained",
+        "severity": "warning"
+      }
+    ]
+  },
+  "inputDigest": "2afe420d9ceb17774b788653c3634fa00633e7f365194fd6d9b13aeaa5669474",
+  "files": {
+    "native_sales/__init__.py": "802f0f9b3b9ea7ab10b53d573e81dcf4533492df8d698859ef999711aa9a43bd",
+    "native_sales/_umf/manifest.json": "abe41c0b876f0ee907d0e36053ff6455104ca684ac55a6844f764773af242d7f",
+    "native_sales/_umf/sources.json": "75c440fed3d67115df5c15f3e27968ba619ee1ccdb84260d673120a5765ec332",
+    "native_sales/codecs.py": "06e5794f60560f094654f48657b04ab04b745db3e9fe12a3325406a5a7c02436",
+    "native_sales/fields.py": "c36f31df951ae77b187d6bf10cded38399189066fe3ea3838e8bff980dce4401",
+    "native_sales/keys.py": "f58bb4b9eba4e70e9b23c6b4f872418c9b3c47db1f1d57fb01ef4bd66482dc17",
+    "native_sales/models.py": "0cf5a89a7fbb4d37ea46c9b8ece531c06f5161b5df208c89fe19f567136021a1",
+    "native_sales/py.typed": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  }
+}

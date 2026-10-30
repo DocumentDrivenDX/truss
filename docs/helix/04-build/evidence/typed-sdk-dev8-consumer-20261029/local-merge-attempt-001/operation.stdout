@@ -1,0 +1,4 @@
+{"stage": "build-tools", "command": ["python", "-m", "pip", "install", "--only-binary=:all:", "--index-url", "https://pypi.org/simple", "build==1.3.0", "setuptools>=77", "wheel"], "elapsedSeconds": 2.5175761820282787, "exitCode": 0}
+{"stage": "build-package", "command": ["python", "-m", "build", "--no-isolation", "--outdir", "/out/artifacts", "packages/python"], "elapsedSeconds": 3.762143866973929, "exitCode": 0}
+{"stage": "public-extras-install", "command": ["python", "-m", "pip", "install", "--only-binary=:all:", "--index-url", "https://pypi.org/simple", "--report", "/out/public-install-report.json", "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl[native,query,typed-sdk]", "pydantic==2.13.5"], "elapsedSeconds": 150.07112756196875, "exitCode": 124}
+

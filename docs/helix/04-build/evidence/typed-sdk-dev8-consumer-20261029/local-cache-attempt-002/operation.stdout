@@ -1,0 +1,22 @@
+{"stage": "public-extras-install", "command": ["python", "-m", "pip", "install", "--only-binary=:all:", "--index-url", "https://pypi.org/simple", "--report", "/out/public-install-report.json", "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl[native,query,typed-sdk]", "pydantic==2.13.5"], "elapsedSeconds": 6.675290917046368, "exitCode": 0}
+{"stage": "retain-original-dependencies", "command": ["python", "-m", "pip", "download", "--only-binary=:all:", "--no-deps", "--index-url", "https://pypi.org/simple", "--dest", "/out/originals", "umf-access==0.1.0.dev8", "weft-sql==0.4.51"], "elapsedSeconds": 1.54412556393072, "exitCode": 0}
+{"stage": "pip-check", "command": ["python", "-m", "pip", "check"], "elapsedSeconds": 0.5555474970024079, "exitCode": 0}
+{"stage": "original-generator-dependencies", "command": ["bun", "install", "--cwd", "/tmp/generator"], "elapsedSeconds": 0.5277419399935752, "exitCode": 0}
+{"stage": "generate-current-models", "command": ["bun", "scripts/generate-typed-sdk-consumer-fixture.ts", "/tmp/generator", "scripts/fixtures/typed-sdk-core010", "/out/generated", "842b5f657086ff35f256491271085e6c25225dafeb576de53b5a580119375493"], "elapsedSeconds": 4.42804895399604, "exitCode": 0}
+{"stage": "verify-installed-payload-and-generated-shape", "command": ["python", "/control/check-inputs.py"], "elapsedSeconds": 1.7723774310434237, "exitCode": 0}
+{"stage": "local-runtime-install", "command": ["python", "scripts/install-local-runtime.py", "--wheelhouse", "/out/pg-wheels", "--truss-wheel", "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl"], "elapsedSeconds": 10.198551645036787, "exitCode": 0}
+{"stage": "typed-native-basic", "command": ["runuser", "-u", "nobody", "--", "/tmp/testenv/bin/python", "-B", "scripts/check-typed-sdk-native.py", "--streams-basic", "--output", "/out/native/basic", "--model-request", "/out/generated/model-request.json", "--generated", "/out/generated", "--bun-executable", "/usr/local/bun/bin/bun", "--sdk-wheel", "/out/originals/umf_access-0.1.0.dev8-py3-none-any.whl", "--sdk-wheel-sha256", "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23", "--weft-wheel", "/out/originals/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", "--weft-wheel-sha256", "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5", "--consumer-wheel", "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl", "--consumer-wheel-sha256", "7da7ac6aebb11adcaeda4930a8cababbf90853a1035bab0a2b73c642eed16fbe", "--require-consumer", "--pg-bin", "/tmp/testenv/lib/python3.11/site-packages/pgserver/pginstall/bin"], "elapsedSeconds": 110.28211011493113, "exitCode": 1}
+Traceback (most recent call last):
+  File "/tmp/work/scripts/check-typed-sdk-native.py", line 72, in <module>
+    request=json.loads(captured.request_json);entry=EngineRead.build(weft,request,parameters=Parameters,result=Order,method='truss-runtime')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/engine_catalog.py", line 377, in build
+    return cls.from_original(original, parameters=parameters, result=result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/engine_catalog.py", line 462, in from_original
+    "stageOne": _generation(parameters, result),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/reviewed.py", line 343, in _generation
+    raise ReadBuildError("CATALOG_STALE: installed runtime differs")
+umf_access.reviewed.ReadBuildError: CATALOG_STALE: installed runtime differs
+

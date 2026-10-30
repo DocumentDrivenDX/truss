@@ -1,0 +1,15 @@
+{
+  "scope": "Cold stdlib workflow/control fixtures only. No SDK import/installation/native process/Actions.",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_typed_sdk_registry_workflow",
+    "test_publish_pypi_release",
+    "-v"
+  ],
+  "exit_code": 0,
+  "duration_seconds": 0.355,
+  "stdout": "fresh PyPI Truss consumer resolved the selected extras and imported their owners\nfresh PyPI Truss consumer resolved the selected extras and imported their owners\n",
+  "stderr": "test_changed_artifact_or_unqualified_sdk_fails (test_typed_sdk_registry_workflow.RegistryExtraTests) ... ok\ntest_exact_sdk_artifact_and_separate_query_owner (test_typed_sdk_registry_workflow.RegistryExtraTests) ... ok\ntest_selection_preserves_historical_query_gate (test_typed_sdk_registry_workflow.RegistryExtraTests) ... ok\ntest_distribution_transition_is_versioned_and_preserves_old_cohort (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_new_distribution_archive_metadata_is_exact (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_prepare_binds_public_assets_tag_source_and_package_metadata (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_prepare_refuses_direct_url_metadata_and_wrong_distribution (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_prepare_refuses_name_that_does_not_match_historical_version (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_prepare_refuses_source_movement_and_github_digest_mismatch (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_producer_run_must_be_successful_and_from_allowed_release_workflow (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_registry_check_accepts_only_exact_public_file_bytes (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_renamed_publication_refuses_mutable_or_unconfirmed_release (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_sdist_validates_nested_package_metadata_as_well_as_root (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\ntest_visibility_wait_retries_absence_but_propagates_errors (test_publish_pypi_release.PublishPypiReleaseTests) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.144s\n\nOK\n"
+}

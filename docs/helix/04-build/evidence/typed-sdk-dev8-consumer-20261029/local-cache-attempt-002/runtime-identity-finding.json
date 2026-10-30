@@ -1,0 +1,80 @@
+{
+  "status": "GENERATED_RUNTIME_IDENTITY_MISMATCH",
+  "scope": "Post-run source/data inspection; no imports, SDK execution or test retry",
+  "wheel": {
+    "filename": "umf_access-0.1.0.dev8-py3-none-any.whl",
+    "sha256": "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23",
+    "declaredDistributionVersion": "0.1.0.dev8"
+  },
+  "runtimeTypesSourceSha256": "0d4277a0d3329df6ac67929343fa0421c6a803fa2156c9f6e245aee970556064",
+  "runtimeIdentity": [
+    "umf_access",
+    "0.1.0.dev0",
+    "umf-access-runtime/0.1"
+  ],
+  "guardSourceSha256": "175526a3af2a9634e218355a6035181a3b21518f56f98118ee96a991a9133a84",
+  "guard": "reviewed.py:_generation lines342-343 checks abi != RUNTIME_IDENTITY and refuses CATALOG_STALE: installed runtime differs",
+  "generatedModelsSha256": "0cf5a89a7fbb4d37ea46c9b8ece531c06f5161b5df208c89fe19f567136021a1",
+  "generatedClassRuntimeBindings": [
+    {
+      "class": "Order",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "OrderCreate",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "OrderPatch",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "OrderIdentity",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "Customer",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "CustomerCreate",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    },
+    {
+      "class": "CustomerPatch",
+      "runtimeAbi": [
+        "umf_access",
+        "0.1.0.dev8",
+        "umf-access-runtime/0.1"
+      ]
+    }
+  ],
+  "actualFailure": "typed-native-basic.stderr",
+  "guardBypassed": false,
+  "publicHistoricalArtifactChanged": false,
+  "ownerDecisionRequired": "SDK owner must resolve exact dependency/runtime ABI publication correspondence; no profile falsification or generated-file edits"
+}

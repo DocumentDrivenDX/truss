@@ -1,10 +1,10 @@
 name: PyPI publisher validation
 on:
   pull_request:
-    paths: ['scripts/**publish_pypi_release.py', '.github/workflows/*pypi*.yml']
+    paths: ['scripts/**publish_pypi_release.py', 'scripts/*typed_sdk*', '.github/workflows/*pypi*.yml']
   push:
     branches: [main]
-    paths: ['scripts/**publish_pypi_release.py', '.github/workflows/*pypi*.yml']
+    paths: ['scripts/**publish_pypi_release.py', 'scripts/*typed_sdk*', '.github/workflows/*pypi*.yml']
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -21,4 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m unittest scripts.test_publish_pypi_release -v
+      - name: Exercise cold publisher and consumer cohort controls
+        env:
+          PYTHONPATH: scripts
+        run: python -m unittest test_publish_pypi_release test_typed_sdk_cohort test_typed_sdk_registry_workflow -v

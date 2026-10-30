@@ -2760,3 +2760,123 @@ other generic-decimal SQL domains and managed platforms are not enabled.
 Astra Ultra cleared the plan and runtime source; this is not performance or
 release qualification. Hosted release38974408702 still fails the original batch
 deadline on both platforms; publication remains blocked.
+
+
+## Access dev8 upgrade and new consumer release — 2026-10-29
+
+**Execution authority.** The human directed current-main consumer upgrades/new
+versions, explicitly rejecting a maintenance branch. This candidate is based on
+current main `42255e6613300402762c3ce1cb1c3e394504c0ad`, not a historical release
+branch. `umf-truss0.0.52` is reserved as the affected typed-extra consumer candidate;
+its PyPI version and v0.0.52 tag were absent. No tag/upload/release was performed.
+Latest-only runtime support and all admitted preserving forward routes remain in
+force. The SDK bump changes no SQL/immutable recipe/embedded owner or database
+layout; native manifest remains288801f7… and no fake migration edge is added.
+Local merge preflight additionally archives the original0.0.51 migration index
+and admits its exact public wheel as an existing-current fixture. Existing SQL,
+edges, immutable recipes and owner/compiler archives remain unchanged. The
+independent HF corpus selects toolkit0.0.52 with unchanged producers/assertions;
+the new selection requires its own actual native execution.
+
+**Actual conflict and source change.** Published umf-truss0.0.51 METADATA declares
+Accessdev5 for typed-sdk and separately weft-sql0.4.51 for query. SDK0.5.8's exact
+Accessdev8 is the public SDK0.5.7 wheel unchanged, not a new or unpublished Access
+binary. The owner handoff SHA is
+`cbb04186b9c3046d057592674531da207dff0bcbaabea80eca23a4449f8e2de8`.
+Its local wheel and anonymous public asset match byte-for-byte. Static API/AST
+inspection supports the dependency update without an invented adapter shim;
+actual Truss acceptance remains required. The optional dependency now selects
+Accessdev8. The existing cohort gate binds actual Truss wheel extra requirements
+and refuses overlapping compiler namespace owners. The future registry consumer
+requires the typed extra and exact SDK SHA from0.0.52. Routine workflow controls
+remain cold stdlib fixture checks; full/native qualification stays explicit.
+
+[Inspection and control evidence](evidence/typed-sdk-dev8-consumer-20261029/README.md)
+retains exact public metadata, SDK handoff/hash/API comparisons and scoped unit
+outcomes (8 cohort controls; 14 workflow/publisher controls). No actual SDK,
+compiler or native code was imported/executed by these checks. Initial static
+inspection encountered package-form dsl and conditional MISSING exports; those
+are recorded as inspection limitations/corrections, not missing APIs.
+
+**Required installed/native gate — local merge/test authorized, not run.**
+The previous shared20-minute/two-attempt allowance remains exhausted as recorded
+history. The human subsequently directed “Use the local merge +test path”,
+relayed by the existing Stack coordinator on2026-10-30. This authorizes the
+necessary local merge and qualification without relabeling previous attempts.
+Use the existing shared admission mechanism, a fresh occupancy check and serial
+bounded execution with at most two CPU-heavy workers. Preserve existing command
+timeouts and assertions; no unlimited runtime/retries, stress/scale campaign,
+Actions/cloud/new spending/macOS CI/new agents or test lanes are authorized.
+Do not overlap another owner's expensive job or mutate its admission state.
+Before releasing this candidate on the admitted existing Linux slot:
+
+1. Accessdev8 public artifact availability is accepted by the retained
+   [subject](evidence/typed-sdk-dev8-consumer-20261029/access8-pypi-availability-subject.json)
+   and [independent disposition](evidence/typed-sdk-dev8-consumer-20261029/access8-pypi-availability-review.md).
+   The unauthenticated PyPI wheel GET returned HTTP200 at2026-10-30T01:21:10Z:
+   580062bytes, SHA2561a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23.
+   This is point-in-time served-byte evidence plus later independent current
+   custody. Preserve the original failed/unknown upload-readback and incomplete
+   checker statuses. No upload replay, credential lookup or additional HTTP is
+   needed for this prerequisite. Fresh public-index installation remains open.
+2. Build the exact new Truss wheel/sdist; retain full source/tree/build/payload
+   hashes. Fresh Linux CPython3.11 installs MUST resolve the actual consumer's
+   `[native,query,typed-sdk]` extras from public PyPI with no wheelhouse/direct URL
+   overrides for those dependencies; verify pip report URLs/digests, pip check,
+   installed source/metadata correspondence and no duplicate Weft package owner.
+   The selected query wheel remains weft-sql0.4.51, not SDK058's umf-weft0.4.56.
+3. Run the existing bounded native typed-SDK read/page/stream and RelatedKeys
+   workflows against this exact installed Truss/Access/query tuple, with genuine
+   current-core generated fixtures and original profiles. Supply all original
+   consumer/SDK/compiler wheels and hashes to verify_cohort with
+   `--require-consumer`; no source shim or fixture relabeling can satisfy it.
+   Cover original catalog/parameter/result custody, missing/null/binary/exact
+   scalar carriers, authored keys, parallel occurrences, bounded pagination,
+   per-person revocation/refusal, real cursor cleanup and failed final settlement.
+   Named existing runners: check-typed-sdk-native.py (bounded streams-basic),
+   check-typed-sdk-related-native.py; existing binary/stream adapter controls are
+   additional unit proof, never substitutes for actual FETCH/public native calls.
+4. Run unchanged required exact-tag Linux release gates including all admitted
+   populated migration/existing-current routes. Confirm an actual0.0.51 database
+   opens as existing-current with preserved records/history/receipts/consumers;
+   same native tuple does not justify a fabricated migration. Retain cleanup and
+   original failure history. macOS artifact claims keep their actual limits.
+5. Only after qualified source/artifact/native acceptance, perform the normal
+   release and the human-authorized local Twine/Keychain publication path,
+   immutable asset and served-byte verification, then the newly required fresh
+   public `[query,typed-sdk]` consumer gate. Actions OIDC is an available future
+   publishing mechanism, not a prerequisite for local publication. No new Actions
+   run is authorized. Until all gates pass, this is an unreleased candidate and
+   no full typed-extra support claim. Publication transport does not reset the
+   closed installed/native resource allowance or replace its acceptance gates.
+
+**Arras disposition.** Current Arras0.6.3 pins Truss0.0.50/Core0.10.0 and does not
+request typed-sdk, so Access pin conflict alone does not justify an unaffected
+Arras bump. Its future adoption of the new Truss distribution/qualified artifact
+must update cohort/lock/release guards and independently rebind installed/native
+and actual managed acceptance. Generic SDK019 or Truss tests do not close those
+consumer gates. No historical Truss/Arras artifact is modified or maintained as
+an alternative supported runtime. Stack coordinates the owning Access publication
+and future bounded qualification; no arbitrary new sessions are contacted.
+
+**Local continuation — 2026-10-30.** The first final-source operation built the
+wheel/sdist and retained471 exact source payload matches. Public dependency
+installation reached its150-second bound downloading mini-racer; installation,
+generation and native gates remain unrun. The shared runner recorded218.618935666
+seconds, original bootstrap failure0.296498042seconds, and confirmed owned
+container removal. [Original receipts](evidence/typed-sdk-dev8-consumer-20261029/local-merge-attempt-001/receipt.json)
+retain source/tree/artifact identities and accounting. No automatic retry,
+public main merge, tag or publication occurred. Coordinate any corrected bounded
+operation through the same shared admission; do not borrow another owner's
+remaining allowance or silently widen command deadlines.
+
+The admitted cache-assisted continuation subsequently passed fresh public extras
+installation, pip check, genuine Core0.10 generation, generated API/source/body
+correspondence and PG18.6.1 installation. Actual native catalog construction then
+refused: Accessdev8's published internal runtime identity remainsdev0 while its
+genuine generated model correctly pinsdev8. [Original continuation receipts and
+source finding](evidence/typed-sdk-dev8-consumer-20261029/local-cache-attempt-002/receipt.json)
+retain the failed gate, three preceding public native checkpoints, server stop,
+owned-container absence and262.773122959seconds of shared accounting. SDK owner
+resolution is required before retry; no guard weakening or false profile pin is
+admitted. RelatedKeys/full release gates remain open; no public merge or release.
