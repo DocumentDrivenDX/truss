@@ -1,0 +1,14 @@
+{
+  "exitCode": 0,
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "scripts.test_typed_sdk_cohort",
+    "scripts.test_typed_sdk_registry_workflow",
+    "scripts.test_publish_pypi_release"
+  ],
+  "sourceCommit": "78f77fea8945f90e7cca47ed4041951919a63202",
+  "scope": "macOS cold fixture controls only; no SDK/compiler import, installed/native or Linux proof"
+}

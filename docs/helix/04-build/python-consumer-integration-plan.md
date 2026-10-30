@@ -2858,3 +2858,14 @@ and actual managed acceptance. Generic SDK019 or Truss tests do not close those
 consumer gates. No historical Truss/Arras artifact is modified or maintained as
 an alternative supported runtime. Stack coordinates the owning Access publication
 and future bounded qualification; no arbitrary new sessions are contacted.
+
+**Local continuation — 2026-10-30.** The first final-source operation built the
+wheel/sdist and retained471 exact source payload matches. Public dependency
+installation reached its150-second bound downloading mini-racer; installation,
+generation and native gates remain unrun. The shared runner recorded218.618935666
+seconds, original bootstrap failure0.296498042seconds, and confirmed owned
+container removal. [Original receipts](evidence/typed-sdk-dev8-consumer-20261029/local-merge-attempt-001/receipt.json)
+retain source/tree/artifact identities and accounting. No automatic retry,
+public main merge, tag or publication occurred. Coordinate any corrected bounded
+operation through the same shared admission; do not borrow another owner's
+remaining allowance or silently widen command deadlines.

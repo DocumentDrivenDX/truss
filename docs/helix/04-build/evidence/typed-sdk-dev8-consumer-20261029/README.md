@@ -69,3 +69,36 @@ Release preflight corrected the corpus toolkit selection and retained the
 original0.0.51 migration index/wheel fixture. The original27 immutable artifacts,
 all migration edges and118 other previously inspected runtime resources remain
 unchanged; `release-source-preflight.json` records those static comparisons.
+
+## First local merged-source operation — 2026-10-30
+
+[Original receipt and file hashes](local-merge-attempt-001/receipt.json) bind
+source feb2e60c500c9d326a9f69918fb246a5286df8c0 and
+tree07b231cc0e90216979216203e24c36fc2a784898. The exact pinned image ran
+Linuxx86_64/glibc2.39/CPython3.11.17/Bun1.4.3 under local ARM OrbStack emulation.
+The bootstrap import failure consumed0.296498042seconds before Docker started;
+its filename correction and explicit coordinator disposition preserve that run.
+
+The corrected operation consumed218.618935666seconds in the shared runner.
+Build tools and wheel/sdist construction passed. Static post-run comparison
+verified471 exact source payloads in both archives. This data comparison did
+not import the package or execute a test. Original artifacts remain under
+`/private/tmp/truss-0052-local-qualification-20261030/artifacts`:
+
+| Artifact | Bytes | SHA-256 |
+| --- | ---: | --- |
+| umf_truss-0.0.52-py3-none-any.whl | 6243025 | 7da7ac6aebb11adcaeda4930a8cababbf90853a1035bab0a2b73c642eed16fbe |
+| umf_truss-0.0.52.tar.gz | 6714429 | b4163371d5f08735019ef930e6bb9ae1f6853b97a35940b1a6597ec371d7c426 |
+
+Fresh public dependency installation selected Accessdev8/Weft0.4.51 but timed
+out after150.071127562seconds while downloading mini-racer22.2MB from PyPI.
+It did not complete installation. Generation, generated API/import/cohort checks,
+native workflows and full release gates were not run. No PostgreSQL server was
+started. Owned container removal succeeded and Docker absence was checked;
+the shared runner finalized active=null. No automatic retry or publication ran.
+
+The22 cold fixture controls apply to earlier local merge78f77fea, not a new
+installed/native pass for this final source. The separate corrected release
+metadata control passed before the final merge. Full release qualification and
+normal public merge remain open; retain the failed download as a resource-bound
+attempt rather than claiming a dependency compatibility failure or success.

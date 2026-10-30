@@ -1,0 +1,18 @@
+{
+  "stage": "public-extras-install",
+  "command": [
+    "python",
+    "-m",
+    "pip",
+    "install",
+    "--only-binary=:all:",
+    "--index-url",
+    "https://pypi.org/simple",
+    "--report",
+    "/out/public-install-report.json",
+    "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl[native,query,typed-sdk]",
+    "pydantic==2.13.5"
+  ],
+  "elapsedSeconds": 150.07112756196875,
+  "exitCode": 124
+}

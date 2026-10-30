@@ -1,0 +1,44 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--pull=never",
+    "--name",
+    "truss0052-local-qualified-20261030",
+    "--init",
+    "--cpus=2",
+    "--memory=4g",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/source,dst=/source,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030/generator-source,dst=/generator-original,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030,dst=/control,readonly",
+    "--mount",
+    "type=bind,src=/private/tmp/truss-0052-local-qualification-20261030,dst=/out",
+    "sha256:7e44ba6b5c483f84c0d630180ba4cd17a82f1bba950577bf1dc9200e7f26e556",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5s",
+    "570s",
+    "bash",
+    "/control/run-container.sh"
+  ],
+  "exitCode": 124,
+  "elapsedSeconds": 218.479301458,
+  "cleanup": {
+    "removeExit": 0,
+    "containerAbsent": true
+  },
+  "source": {
+    "sourceCommit": "feb2e60c500c9d326a9f69918fb246a5286df8c0",
+    "sourceTree": "07b231cc0e90216979216203e24c36fc2a784898",
+    "archiveSha256": "13df5da61a24c60e3549c600ae89d3afbffe736b4fb6a67058f9f4191fec6429",
+    "generatorSourceSha256": "842b5f657086ff35f256491271085e6c25225dafeb576de53b5a580119375493",
+    "image": "sha256:7e44ba6b5c483f84c0d630180ba4cd17a82f1bba950577bf1dc9200e7f26e556",
+    "cpuLimit": 2,
+    "maximumOperationSeconds": 600,
+    "automaticRetry": false,
+    "publicConsumerDependencySource": "https://pypi.org/simple"
+  }
+}

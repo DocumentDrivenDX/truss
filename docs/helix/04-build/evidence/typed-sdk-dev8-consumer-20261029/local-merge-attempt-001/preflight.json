@@ -1,0 +1,20 @@
+{
+  "authority": "Human: Use the local merge +test path; relayed by existing Stack owner",
+  "previousAllowance": "exhausted; preserved, not reset",
+  "sourceCommit": "78f77fea8945f90e7cca47ed4041951919a63202",
+  "sourceTree": "09ef0df4557ea32b5d8d683f3e1d15169d6f9a5c",
+  "parents": [
+    "42255e6613300402762c3ce1cb1c3e394504c0ad",
+    "3abbb9aa0493290515db3dc1853666c461f177c0"
+  ],
+  "limits": {
+    "heavyJobs": "serial via existing shared admission",
+    "cpuHeavyWorkersMax": 2,
+    "actions": false,
+    "stressScale": false,
+    "paidInfrastructure": false,
+    "newAgents": false,
+    "publicationBeforeQualification": false
+  },
+  "startedUnix": 1793325096.503307
+}
