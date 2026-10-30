@@ -276,5 +276,8 @@ TrussTarget import and a single Weft distribution owner. Historical0.0.50/51
 gates retain their original query-only meaning. An unqualified SDK version or
 changed bytes fails; there is no fallback to an older SDK, candidate URL or extra
 index. This workflow edit is unrun source, not successful OIDC/installation proof.
-Actual PyPI Accessdev5/dev8 endpoints returned404 during inspection, so public
-combined installation and release remain blocked pending owner publication.
+Public artifact availability and actual combined installation MUST be verified
+separately. The [retained availability evidence](../../04-build/evidence/typed-sdk-dev8-consumer-20261029/README.md)
+records both the initial missing PyPI version and the later accepted exact dev8
+served bytes. Neither artifact availability nor generic SDK evidence qualifies
+the installed Truss consumer.

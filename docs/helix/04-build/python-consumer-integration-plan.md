@@ -2798,9 +2798,15 @@ attempt allowance remains exhausted and cannot be reset. No Actions/cloud/new
 spending/macOS runtime CI/new agents or test lanes are authorized. On a separately
 authorized existing Linux slot, before releasing this candidate:
 
-1. Owner-publish the unchanged Accessdev8 wheel on public PyPI and verify served
-   SHA1a21c1…; both dev5/dev8 endpoints currently return404. SDK0.5.8 publication
-   itself is not needed to acquire the already public SDK0.5.7 Access artifact.
+1. Accessdev8 public artifact availability is accepted by the retained
+   [subject](evidence/typed-sdk-dev8-consumer-20261029/access8-pypi-availability-subject.json)
+   and [independent disposition](evidence/typed-sdk-dev8-consumer-20261029/access8-pypi-availability-review.md).
+   The unauthenticated PyPI wheel GET returned HTTP200 at2026-10-30T01:21:10Z:
+   580062bytes, SHA2561a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23.
+   This is point-in-time served-byte evidence plus later independent current
+   custody. Preserve the original failed/unknown upload-readback and incomplete
+   checker statuses. No upload replay, credential lookup or additional HTTP is
+   needed for this prerequisite. Fresh public-index installation remains open.
 2. Build the exact new Truss wheel/sdist; retain full source/tree/build/payload
    hashes. Fresh Linux CPython3.11 installs MUST resolve the actual consumer's
    `[native,query,typed-sdk]` extras from public PyPI with no wheelhouse/direct URL
@@ -2824,9 +2830,13 @@ authorized existing Linux slot, before releasing this candidate:
    same native tuple does not justify a fabricated migration. Retain cleanup and
    original failure history. macOS artifact claims keep their actual limits.
 5. Only after qualified source/artifact/native acceptance, perform the normal
-   release and Actions OIDC path, immutable asset and served-byte verification,
-   then the newly required fresh public `[query,typed-sdk]` consumer gate. Until
-   all pass, this is an unreleased candidate and no full typed-extra support claim.
+   release and the human-authorized local Twine/Keychain publication path,
+   immutable asset and served-byte verification, then the newly required fresh
+   public `[query,typed-sdk]` consumer gate. Actions OIDC is an available future
+   publishing mechanism, not a prerequisite for local publication. No new Actions
+   run is authorized. Until all gates pass, this is an unreleased candidate and
+   no full typed-extra support claim. Publication transport does not reset the
+   closed installed/native resource allowance or replace its acceptance gates.
 
 **Arras disposition.** Current Arras0.6.3 pins Truss0.0.50/Core0.10.0 and does not
 request typed-sdk, so Access pin conflict alone does not justify an unaffected
