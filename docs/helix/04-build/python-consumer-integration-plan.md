@@ -2869,3 +2869,14 @@ retain source/tree/artifact identities and accounting. No automatic retry,
 public main merge, tag or publication occurred. Coordinate any corrected bounded
 operation through the same shared admission; do not borrow another owner's
 remaining allowance or silently widen command deadlines.
+
+The admitted cache-assisted continuation subsequently passed fresh public extras
+installation, pip check, genuine Core0.10 generation, generated API/source/body
+correspondence and PG18.6.1 installation. Actual native catalog construction then
+refused: Accessdev8's published internal runtime identity remainsdev0 while its
+genuine generated model correctly pinsdev8. [Original continuation receipts and
+source finding](evidence/typed-sdk-dev8-consumer-20261029/local-cache-attempt-002/receipt.json)
+retain the failed gate, three preceding public native checkpoints, server stop,
+owned-container absence and262.773122959seconds of shared accounting. SDK owner
+resolution is required before retry; no guard weakening or false profile pin is
+admitted. RelatedKeys/full release gates remain open; no public merge or release.

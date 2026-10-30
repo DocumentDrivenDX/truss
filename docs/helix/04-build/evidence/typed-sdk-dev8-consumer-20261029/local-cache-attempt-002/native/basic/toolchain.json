@@ -1,0 +1,6 @@
+{
+  "embeddedRuntime": "mini-racer==0.14.1",
+  "externalJavaScriptRuntimeRequired": false,
+  "python": "3.11.17",
+  "psycopg": "3.3.6"
+}

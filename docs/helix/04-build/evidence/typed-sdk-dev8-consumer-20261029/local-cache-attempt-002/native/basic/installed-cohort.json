@@ -1,0 +1,46 @@
+{
+  "python": "/tmp/testenv/bin/python",
+  "packages": {
+    "sdk": {
+      "distribution": "umf_access",
+      "version": "0.1.0.dev8",
+      "wheel": "/out/originals/umf_access-0.1.0.dev8-py3-none-any.whl",
+      "wheelSha256": "1a21c1ddd59f6b23e9f0b33228280564af0e96bb4d13699b89616d5143e4fd23",
+      "packageRoot": "/tmp/testenv/lib/python3.11/site-packages/umf_access",
+      "importFile": "/tmp/testenv/lib/python3.11/site-packages/umf_access/__init__.py",
+      "packageFiles": 110,
+      "moduleVersion": null
+    },
+    "weft": {
+      "distribution": "weft-sql",
+      "version": "0.4.51",
+      "wheel": "/out/originals/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "wheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+      "packageRoot": "/tmp/testenv/lib/python3.11/site-packages/weft",
+      "importFile": "/tmp/testenv/lib/python3.11/site-packages/weft/__init__.py",
+      "packageFiles": 2,
+      "moduleVersion": "0.4.51"
+    }
+  },
+  "consumer": {
+    "distribution": "umf-truss",
+    "version": "0.0.52",
+    "wheel": "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl",
+    "wheelSha256": "7da7ac6aebb11adcaeda4930a8cababbf90853a1035bab0a2b73c642eed16fbe",
+    "packageRoot": "/tmp/testenv/lib/python3.11/site-packages/truss",
+    "importFile": "/tmp/testenv/lib/python3.11/site-packages/truss/__init__.py",
+    "packageFiles": 471,
+    "moduleVersion": null,
+    "selectedExtras": {
+      "sdk": {
+        "distribution": "umf-access",
+        "version": "0.1.0.dev8"
+      },
+      "weft": {
+        "distribution": "weft-sql",
+        "version": "0.4.51"
+      }
+    }
+  },
+  "scope": "Exact installed wheel/dependency correspondence only; no native qualification"
+}

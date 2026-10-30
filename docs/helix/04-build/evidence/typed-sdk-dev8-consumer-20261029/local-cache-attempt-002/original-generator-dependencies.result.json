@@ -1,0 +1,11 @@
+{
+  "stage": "original-generator-dependencies",
+  "command": [
+    "bun",
+    "install",
+    "--cwd",
+    "/tmp/generator"
+  ],
+  "elapsedSeconds": 0.5277419399935752,
+  "exitCode": 0
+}

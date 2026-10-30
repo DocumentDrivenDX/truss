@@ -1,0 +1,13 @@
+{
+  "stage": "local-runtime-install",
+  "command": [
+    "python",
+    "scripts/install-local-runtime.py",
+    "--wheelhouse",
+    "/out/pg-wheels",
+    "--truss-wheel",
+    "/out/artifacts/umf_truss-0.0.52-py3-none-any.whl"
+  ],
+  "elapsedSeconds": 10.198551645036787,
+  "exitCode": 0
+}

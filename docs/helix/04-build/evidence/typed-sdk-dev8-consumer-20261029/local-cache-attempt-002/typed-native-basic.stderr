@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/tmp/work/scripts/check-typed-sdk-native.py", line 72, in <module>
+    request=json.loads(captured.request_json);entry=EngineRead.build(weft,request,parameters=Parameters,result=Order,method='truss-runtime')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/engine_catalog.py", line 377, in build
+    return cls.from_original(original, parameters=parameters, result=result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/engine_catalog.py", line 462, in from_original
+    "stageOne": _generation(parameters, result),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/testenv/lib/python3.11/site-packages/umf_access/reviewed.py", line 343, in _generation
+    raise ReadBuildError("CATALOG_STALE: installed runtime differs")
+umf_access.reviewed.ReadBuildError: CATALOG_STALE: installed runtime differs

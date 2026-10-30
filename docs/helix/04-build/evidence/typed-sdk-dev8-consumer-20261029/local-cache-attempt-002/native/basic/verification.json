@@ -1,0 +1,12 @@
+{
+  "generatedCatalogCoverage": false,
+  "streamCoverage": "basic",
+  "checks": [
+    "current core 0.10 schema accepted through public API",
+    "instance created through public atomic group API",
+    "original public query remains usable with the explicitly selected SDK compiler cohort"
+  ],
+  "ownedServerStopped": true,
+  "temporal": "HELD",
+  "scope": "Truss RC module ACL schema, instance and typed read; no protected current-policy/action qualification"
+}

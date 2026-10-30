@@ -1,0 +1,11 @@
+{
+  "stage": "pip-check",
+  "command": [
+    "python",
+    "-m",
+    "pip",
+    "check"
+  ],
+  "elapsedSeconds": 0.5555474970024079,
+  "exitCode": 0
+}

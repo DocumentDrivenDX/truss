@@ -102,3 +102,32 @@ installed/native pass for this final source. The separate corrected release
 metadata control passed before the final merge. Full release qualification and
 normal public merge remain open; retain the failed download as a resource-bound
 attempt rather than claiming a dependency compatibility failure or success.
+
+## Cache-assisted operation and actual ABI refusal
+
+[Original receipt](local-cache-attempt-002/receipt.json) retains the explicitly
+admitted continuation, its scripts, exact reviewed hashes, original outputs and
+generated files. The same source/artifacts were reused without rebuilding.
+Native-host public cache acquisition passed in30.883seconds. Fresh Linux
+`[native,query,typed-sdk]` public installation passed in6.675seconds; pip check,
+original dependency wheels, real Core0.10 generation, generated API shape,
+471 source payloads and canonical public-report URL/body hashes also passed.
+The unchanged checksum-verified PG18.6.1 runtime installer passed.
+
+The native workflow then failed after110.281seconds at EngineRead.build:
+`CATALOG_STALE: installed runtime differs`. The actual public schema acceptance,
+object creation and ordinary query passed before this refusal. Typed catalog,
+typed read/page/stream, RelatedKeys and full release gates did not pass.
+The server-stop receipt is true, the owned container was removed and its absence
+checked. Shared-runner time was262.773122959seconds; no automatic retry ran.
+
+[Source-only finding](local-cache-attempt-002/runtime-identity-finding.json)
+binds the original Access wheel and generated model files. Public dev8 METADATA
+selects0.1.0.dev8, but types.py hardcodes runtime identity
+`("umf_access","0.1.0.dev0","umf-access-runtime/0.1")`.
+The generated profile correctly selects dev8; every generated class declares
+the dev8 tuple. The original reviewed._generation guard refuses the mismatch.
+CONTRACT-067 defines runtimeAbi using the exact selected dependency version.
+The existing SDK owner must resolve that publication correspondence; do not
+falsify the profile, edit generated classes, bypass the guard or alter public
+dev8 bytes. Truss0.0.52 remains unqualified and unreleased.

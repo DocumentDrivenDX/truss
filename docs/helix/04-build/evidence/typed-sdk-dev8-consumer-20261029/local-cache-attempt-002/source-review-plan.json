@@ -1,0 +1,31 @@
+{
+  "status": "PREPARED_NOT_AUTHORIZED_OR_EXECUTED",
+  "command": [
+    "python3",
+    "/private/tmp/umf-shared-machine-budget/run.py",
+    "--seconds",
+    "381.084566292",
+    "--",
+    "/usr/bin/python3",
+    "/private/tmp/truss-0052-local-qualification-20261030/cache-correction-002/run-cache-completion.py"
+  ],
+  "files": {
+    "prefetch-public.py": "7b9c10e0325b83ec68a99e04ce7c555fb1877b6c437b59d4fae25ec231cec15b",
+    "operation-inputs.json": "dacf385db72e3205c9320cd5b631160a82cdc51c4f9f5666994c8c96a5f8d045",
+    "run-cache-completion.py": "07dfdc1229a3551127171fbfc3648103313035f7cd64d25734c0a8ffdeafa246",
+    "stage.py": "017d4c43fe176cc6df4dfdc7fd5f6687338a8f2bb5625cadbef7fc08e289f73f",
+    "check-inputs.py": "3f488aa646605d6c01146bbd283a09b52ba760e0229e46c56b3ed8ae07f63fb5",
+    "run-container.sh": "0f21a65dde2add0e70796ebe9b3c87205a45d7c9618087a435fccc10fcf10210"
+  },
+  "expectedStages": [
+    "Native-host public pip download into normal HTTP cache (<=90seconds)",
+    "Fresh pinned Linux virtualenv resolves same public requirements via canonical PyPI, install timeout remains150seconds",
+    "Verify original artifact/source payload, actual generated Core010 API, installed cohort",
+    "Existing PGserver installer/checksums and native basic/RelatedKeys/cleanup within remaining deadline"
+  ],
+  "cacheSemantics": "Only HTTP cache mounted to /public-cache readonly; copied to /tmp/pip-public-cache owned by container user. public-downloads is NEVER a find-links/index/direct dependency source. Its bodies must match the actual Linux pip public report hashes/URLs.",
+  "noRepeatedGreenBuild": true,
+  "deadline": "Entire381.084566292seconds includes prefetch; Docker gets measured remaining time less25seconds cleanup, at most340seconds; original stage limits unchanged.",
+  "scopeLimit": "Full migration/HF/managed/final release gates cannot be claimed within this affected-gate operation. PGserver acquisition and native stages have not been measured for this image; completeness under remaining envelope is unproven.",
+  "cleanup": "Owned container deadline+remove/readback, outer process cleanup; same shared lock/default state, no launch before recorded admission."
+}

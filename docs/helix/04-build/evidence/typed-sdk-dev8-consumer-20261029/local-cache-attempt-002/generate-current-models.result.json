@@ -1,0 +1,13 @@
+{
+  "stage": "generate-current-models",
+  "command": [
+    "bun",
+    "scripts/generate-typed-sdk-consumer-fixture.ts",
+    "/tmp/generator",
+    "scripts/fixtures/typed-sdk-core010",
+    "/out/generated",
+    "842b5f657086ff35f256491271085e6c25225dafeb576de53b5a580119375493"
+  ],
+  "elapsedSeconds": 4.42804895399604,
+  "exitCode": 0
+}

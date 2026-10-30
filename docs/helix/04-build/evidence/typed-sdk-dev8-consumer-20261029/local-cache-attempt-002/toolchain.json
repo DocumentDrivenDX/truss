@@ -1,0 +1,7 @@
+{
+  "platform": "Linux-7.2.9-orbstack-00391-g2b298d05fbd4-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+  "bun": "1.4.3",
+  "execution": "Local Linux amd64 emulation on ARM OrbStack; no macOS runtime proof"
+}

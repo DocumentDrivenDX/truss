@@ -1,0 +1,2 @@
+/tmp/testenv/lib/python3.11/site-packages/platformdirs/api.py:459: RuntimeDirWarning: XDG_RUNTIME_DIR is not set, falling back to /tmp/runtime-0
+  return Path(self.user_runtime_dir)

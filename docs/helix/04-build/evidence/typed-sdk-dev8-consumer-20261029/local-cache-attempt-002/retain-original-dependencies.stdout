@@ -1,0 +1,9 @@
+Collecting umf-access==0.1.0.dev8
+  Using cached umf_access-0.1.0.dev8-py3-none-any.whl.metadata (543 bytes)
+Collecting weft-sql==0.4.51
+  Using cached weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.6 kB)
+Using cached umf_access-0.1.0.dev8-py3-none-any.whl (580 kB)
+Using cached weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.5 MB)
+Saved /out/originals/umf_access-0.1.0.dev8-py3-none-any.whl
+Saved /out/originals/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Successfully downloaded umf-access weft-sql
