@@ -2772,6 +2772,11 @@ its PyPI version and v0.0.52 tag were absent. No tag/upload/release was performe
 Latest-only runtime support and all admitted preserving forward routes remain in
 force. The SDK bump changes no SQL/immutable recipe/embedded owner or database
 layout; native manifest remains288801f7… and no fake migration edge is added.
+Local merge preflight additionally archives the original0.0.51 migration index
+and admits its exact public wheel as an existing-current fixture. Existing SQL,
+edges, immutable recipes and owner/compiler archives remain unchanged. The
+independent HF corpus selects toolkit0.0.52 with unchanged producers/assertions;
+the new selection requires its own actual native execution.
 
 **Actual conflict and source change.** Published umf-truss0.0.51 METADATA declares
 Accessdev5 for typed-sdk and separately weft-sql0.4.51 for query. SDK0.5.8's exact

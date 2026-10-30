@@ -1,0 +1,18 @@
+{
+  "scope": "Static source release bindings; no native gate executed",
+  "original051ManifestSha256": "d1672e85ae0e89137986fc57669186af47e5826366bd430284aba9b7cf52c37d",
+  "unchangedOriginalImmutableArtifacts": 27,
+  "unchangedPreviouslyInspectedRuntimeResources": 118,
+  "changedInspectedResource": [
+    "packages/python/src/truss/_migrations/manifest.json"
+  ],
+  "edgesAndSourceTuplesAndTargetUnchanged": true,
+  "addedSameTargetPublicFixture": {
+    "filename": "umf_truss-0.0.51-py3-none-any.whl",
+    "runtimeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+    "sha256": "eb59141c48e94bb93ab7053e9e8725012eee1749e4432e9c71804d23abbdff57",
+    "tag": "v0.0.51"
+  },
+  "hfToolkitSelection": "0.0.52",
+  "hfProducersAndCasesUnchanged": true
+}
