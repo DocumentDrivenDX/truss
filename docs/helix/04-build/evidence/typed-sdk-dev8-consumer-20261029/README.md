@@ -48,3 +48,24 @@ integration plan. Fresh shared-slot admission is required before an expensive ru
 The authorized release transport is local Twine with the established Keychain
 credential route. No new authentication or Actions run is needed for that route.
 Qualification must still precede Truss publication.
+
+## Local qualification inputs
+
+`scripts/fixtures/typed-sdk-core010/model.json` is a new authored current-core
+test source: required string Order(id,status), Customer(customerId,customerName),
+their primary keys and directed many-to-many customers relationship. It selects
+the original runner's simple schema without changing its assertions or seeds.
+It carries no historical qualification. The stage-one request adds the id-only
+OrderIdentity projection and selects native_sales/Accessdev8 explicitly.
+
+`scripts/generate-typed-sdk-consumer-fixture.ts` invokes the original UMF
+generateAccessPackage API and current-core validator from the retained SDK owner
+source. It retains original model text, actual request/profile/validation,
+generated input digest and output hashes. No generated class is hand-authored
+or renamed. Actual generation and generated API checks execute only inside the
+admitted local operation; preparation alone proves no native behavior.
+
+Release preflight corrected the corpus toolkit selection and retained the
+original0.0.51 migration index/wheel fixture. The original27 immutable artifacts,
+all migration edges and118 other previously inspected runtime resources remain
+unchanged; `release-source-preflight.json` records those static comparisons.
