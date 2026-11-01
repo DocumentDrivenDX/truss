@@ -1,25 +1,27 @@
 # Truss Python toolkit
 
-## Version 0.0.51
+## Version 0.0.52 candidate
 
-The distribution is `umf-truss==0.0.51`; `import truss` and CLI entry points are
-unchanged. Native SQL, runtime manifest, embedded UMF JavaScript assets and the
-`weft-sql==0.4.51` dependency retain their 0.0.50 identities so existing
-query/disclosure source archives remain usable. The migration index adds exact
-published 0.0.50 custody and an original-wheel existing-current fixture, without
-a fabricated physical migration edge.
+The prepared distribution metadata is `umf-truss==0.0.52`; `import truss` and CLI
+entry points are unchanged. This candidate adds the Truss-owned feed source
+custody handle and the native 0.74-to-0.75 migration edge. Its selected runtime
+identity remains `truss-catalog-runtime/0.75-candidate`, manifest SHA-256
+`5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522`. External
+destination registration and protected ACK authority remain Ashlar-owned.
+The local candidate passed a bounded PostgreSQL 18.6 source lifecycle and one
+0.74-to-0.75 migration on an exact cold predecessor clone; it has not been
+published or platform-qualified through CI.
 
 ```sh
-python -m pip install 'umf-truss[native,query]==0.0.51'
+python -m pip install 'umf-truss[native,query]==0.0.52'
 ```
 
-Use a fresh environment when changing distribution names; both packages provide
-`truss` imports. [Release notes](../../docs/helix/05-deploy/releases/v0.0.51.md)
-and [published Linux/PyPI proof](../../docs/helix/05-deploy/evidence/truss-0.0.51-publication/README.md)
-record exact scope, immutable assets, actual OIDC publication and a fresh public-index
-query install. CI runs on Linux only. Universal-wheel and macOS dependency
-availability do not establish new 0.0.51 macOS native/migration qualification.
-Weft 0.4.55 adoption requires a separately qualified preserving archive migration.
+The command is for the eventual published release; this candidate has no public
+wheel yet. Use a fresh environment when changing Truss package versions. See the
+[0.0.52 candidate notes](../../docs/helix/05-deploy/releases/v0.0.52.md) and
+[custody qualification evidence](../../docs/helix/04-build/evidence/feed-source-custody-native-qualification-20261101.md)
+for exact scope. The selected local native evidence does not establish hosted CI,
+external destination ACK, or broader platform qualification.
 
 ## Published 0.0.50 and historical installation instructions
 
