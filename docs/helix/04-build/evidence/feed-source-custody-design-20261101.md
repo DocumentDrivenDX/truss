@@ -255,12 +255,42 @@ cohort validation passes, and the generated cohort loads through
 `load_recipe()` in a disposable copy of the Python package. The generated
 profile accounts for both new timezone-specific `journal_runtime_horizon`
 bounds while retaining the exact predecessor partition as the post-migration
-baseline. No migration SQL was applied to an existing source installation,
-and no generated migration cohort has been written into `_migrations/` pending
-Sol's review of these captures and the complete edge.
+baseline. Sol reviewed the captures and exact migration deltas; the generated
+cohort is now packaged locally in `_migrations/` and committed in isolated
+candidate commit `860d44e840e221ef7a6504a3f5bc3b000a6c5cb1` (not pushed or
+tagged). The `_migrations/manifest.json` SHA-256 is
+`67937f8e508a7ef90caeeeaef40cf6f240bed7b73d9a9fb758b99b0e07be3c12`; the
+forward edge artifact SHA-256 is
+`6c34bcb4d2068e0817347bb77da24f08b4adfaa7c91030612fd6985bfe643610`, and the
+target native profile SHA-256 is
+`7074b688354d6576d199bc1e635421a9174fd42f9dadcc7c870482483b79ca87`. The
+post-package `load_recipe()` check loads 32 artifacts, all five admitted
+sources and the exact 0.74 → 0.75 edge. Ten focused custody contract and
+generator checks pass by direct invocation; `git diff --check` passes.
 
-This remains a candidate, not a production-qualified release. Next steps are
-Sol's independent review of both native captures and the in-memory 0.74 → 0.75
-cohort, then a separately controlled local migration qualification against an
-installed 0.74 source database. The external destination/ACK authority remains
+A single disposable PostgreSQL 18.6 fixture was seeded through the actual
+0.74 source runtime and reached the candidate migration tool's read-only
+`RuntimeMigrations.status()` check. That check refused with
+`ValueError: Installed native definitions drifted or source unsupported`;
+the attempt stopped before prepare/apply, so no migration SQL or source
+custody call ran. The fixture and worker were cleaned on exit. The exact
+observed native inventory was not retained, so the mismatch is unresolved.
+One plausible cause is that a fresh November 1 installation has a
+`journal_runtime_horizon` bound outside the October 29 captured alternatives;
+this remains an inference, not a finding. The attempt record is
+`feed-source-custody-migration-preflight-20261101.json`.
+
+For the next bounded migration check, use a fresh cold copy of the stopped,
+accepted R15 PostgreSQL 18.6 / Truss 0.0.51 source identified by release
+manifest SHA `288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4`
+and tree SHA `e9083cf72e3471923bdc0af00c6edb2c8bf8787c278c8f3f8cdbd2f6a22e63f7`.
+Its receipts retain the single genesis feed consumer and confirm the original
+source remains untouched. The candidate copy must be verified against those
+receipts and remain separate from the original before start. A read-only
+`status()` refusal ends the attempt; only a matching source profile proceeds
+to one migration and the focused same-backend source-fence behavior check.
+
+This remains a candidate, not a production-qualified release. Sol's
+independent review of the packaged cohort and the next controlled local
+qualification remain open. The external destination/ACK authority remains
 Ashlar-owned throughout.
