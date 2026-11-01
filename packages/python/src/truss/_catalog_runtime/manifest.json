@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.74-candidate",
+  "releaseId": "truss-catalog-runtime/0.75-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -26,7 +26,7 @@
     "operations.sql": "1ecbfecc7642fdb2b21a7180bf4c7c7394587493061e71a9d87977a416cc7ffd",
     "preconditions.sql": "1adee214ab09da316f4360d9780f2b6187e626dd6c977785b2395b1f0f246773",
     "imports.sql": "605f63d4cfa6408d15be081eaa101a6473e3ab445e73f741138a7757391d73c3",
-    "feed.sql": "ebfa70c3b91221aff15c953130c437667f3c40748a6e76a9467a55e1d76c4787",
+    "feed.sql": "542b25ea8ebee1d92457503f86c7e882dadbc6b7c7f80a148ddcf5a35dee3007",
     "capability-profiles.json": "b93cd0a1136551e1f8c307ece409163209951fb83842b5e787672b373f410c53",
     "history.sql": "1e7e93f688fb59ab51af0d7d71afda526628ea9088f8651e95d550376c221c2e",
     "migrations.sql": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
@@ -35,7 +35,7 @@
     "entity-query.sql": "cf4296549c873659eebe2bb84278d07f4fb0da98b970d0b638ba11b20ed9bafc",
     "entity-times.sql": "c0eab24b02425b184c6cf9fef91d87377ece7c0fe3f82763ab5090f4b107ca5c",
     "entity-load.sql": "6100f2ce3783fd06f65e9d257cef4bc395d58b653e402121a9d18b47fe1eeb43",
-    "feed-receipts.sql": "299716ead3943bbccea4c146cf010ca7a7b5ef42b9898a6c2d410eb4495108cb",
+    "feed-receipts.sql": "00c3b5ba48764148fd87256bef8d80a2667189dec73f01f79337f01021c17923",
     "traversal.sql": "b9f78937685920ac1997ba21f86525cfb18dedff06254686bd04e4c8fa45a4f9",
     "containers.sql": "b0a93427d28b412109613ad7cb709f613ead16eb6fe3d3e5ef2f5907c7345dd8",
     "catalog-rebind.sql": "0d7aabd6c9eb48ddd9bd908b6786dac2c9e130d0736fe811cdc3f7ae2eabbeff",
@@ -62,7 +62,8 @@
     "group-recovery.sql": "a3fcbd45ea69595b88679903d20533e9bbe18c2f5864caa6a75f82985bdca300",
     "query-selective.sql": "8d2523ba89e3322f3a44e0e7567ef3d91bb0154f6a63dcb2b72a6d852bb5ac9d",
     "managed-grants.sql": "0c14b6a10c896ca207604e0391fc5f3be8ba202705f77e42f69ab531626ca2ed",
-    "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca"
+    "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca",
+    "feed-custody.sql": "d644f7b16c29a7c5cc28a6a46227bd8175efcf2f5833b795eb327e9e4032137b"
   },
-  "version": "0.74"
+  "version": "0.75"
 }

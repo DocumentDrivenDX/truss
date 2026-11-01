@@ -44,6 +44,7 @@ RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_cata
 DECLARE selected jsonb;stored truss.runtime_feed_ack_receipt%ROWTYPE;c truss.runtime_feed_consumer%ROWTYPE;ack jsonb;checkpoint bytea;
 BEGIN
  selected:=truss.feed_ack_receipt_binding(selected_consumer,prior,target,feed_sha,destination,request_sha,publication,receipt,expected_release,expected_digest);
+ PERFORM truss.runtime_feed_custody_assert_mutable(selected_consumer);
  SELECT * INTO STRICT c FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer FOR UPDATE NOWAIT;
  SELECT * INTO stored FROM truss.runtime_feed_ack_receipt WHERE registration_id=c.registration_id
  AND prior_sha256=encode(sha256(prior),'hex') AND target_sha256=encode(sha256(target),'hex');

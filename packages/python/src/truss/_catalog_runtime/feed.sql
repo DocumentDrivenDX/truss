@@ -289,6 +289,7 @@ LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SE
 DECLARE consumer truss.runtime_feed_consumer%ROWTYPE;result jsonb;frontier numeric;target_json jsonb;
 BEGIN
  PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
+ PERFORM truss.runtime_feed_custody_assert_mutable(selected_consumer);
  SELECT * INTO STRICT consumer FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer FOR UPDATE NOWAIT;
  IF consumer.checkpoint_bytes=target AND consumer.last_prior=expected_prior AND consumer.last_target=target AND consumer.last_payload_sha256=payload_sha256 THEN
   RETURN convert_to(jsonb_build_object('outcome','equal','checkpointBase64',replace(encode(target,'base64'),chr(10),''))::text,'UTF8');END IF;

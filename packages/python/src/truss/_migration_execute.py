@@ -32,6 +32,13 @@ def exclude(cursor):
     if not names:raise ValueError('Original installation missing')
     # One deterministic acquisition order, no internal retries or temporary bypass grants.
     cursor.execute(sql.SQL('LOCK TABLE {} IN ACCESS EXCLUSIVE MODE NOWAIT').format(sql.SQL(',').join(sql.Identifier('truss',n) for n in names)),prepare=False)
+    # Check only after locking. This closes the open/check race: an open that
+    # committed before the locks is visible here; an open still in flight
+    # prevents the NOWAIT locks; a later open cannot pass its consumer-row lock.
+    cursor.execute("SELECT pg_catalog.to_regclass('truss.runtime_feed_source_custody') IS NOT NULL",prepare=False)
+    if cursor.fetchone()[0]:
+        cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_feed_source_custody)',prepare=False)
+        if cursor.fetchone()[0]:raise ValueError('Active feed source custody prevents migration')
 
 
 def active(cursor):

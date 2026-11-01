@@ -176,3 +176,47 @@ The minimum next code change is one versioned, fully packaged runtime/migration 
 - Focused source tests: typed selection closure and immutability; phase/checkpoint table; preserved exact request/destination/ACK-scope bytes; wrong backend, changed registration/page/epoch, duplicate close, and no-ACK-retry behavior. Native tests, which are mandatory for the fence, remain a separate post-review gate.
 
 The code task cannot be called complete until the cohort can be loaded by `load_recipe()` and its target ACL/runtime profiles are internally consistent. It cannot be called production-qualified until Sol independently reviews the candidate and the controlled native qualification in the prior section proves lock persistence, same-backend bypass refusal, competing-session refusal, migration exclusion, truncate/DML guards, exact bound ACK, close and backend-death behavior. No native DB, ACK, cloud resource, push or tag has been used by this candidate.
+
+## Candidate source implementation update — supersedes earlier lock proposal
+
+The earlier session-advisory-lock proposal above was replaced in the working
+candidate after inventory and concurrency review. The current candidate uses
+the per-consumer row lock as its serialization primitive. Open obtains
+`runtime_feed_consumer FOR UPDATE NOWAIT` before checking/inserting private
+custody state. Existing consumer enrollment and both ACK writers already use
+that row lock; legacy and receipt ACK additionally refuse an active custody row.
+An always-enabled consumer DML trigger requires an unreturned transaction-local
+token matching the backend PID/start-bound private row. Open/renew/close and
+handle-bound ACK/reconcile compare the exact opaque request, destination
+registration and ACK-scope bytes. The random internal token is generated from
+a separate server-generated UUID, never returned to Python. Private table DML
+is revoked from PUBLIC; statement TRUNCATE guards cover consumer and receipt
+tables; stale cleanup requires the exact PID and `backend_start` pair to be
+absent.
+
+The migration race is closed by acquiring the global administration lock and
+then deterministic `ACCESS EXCLUSIVE NOWAIT` locks on all Truss relations
+before checking for active custody rows. Checking after table-lock acquisition
+is essential: an already committed open is visible and refused, an open still
+in progress blocks acquisition, and a later open cannot pass the consumer-row
+lock. A source-level test pins this ordering. This candidate does not use
+session advisory locks, and so the session unlock/unlock-all ACL analysis in
+the earlier proposal is no longer part of the chosen protocol.
+
+The candidate runtime manifest is now `truss-catalog-runtime/0.75-candidate`
+and pins the new source file; `scripts/build-feed-source-custody-runtime-manifest.py`
+rebuilds the content hashes. `_verified_release()` successfully validated the
+manifest and loaded 51 SQL sources. Three focused contract test functions
+passed under Python 3.11 by direct invocation. `git diff --check` passed. The
+pytest runner is unavailable in the isolated venv, and no SQL parser/native
+database execution has been performed.
+
+This is not yet installable/upgradable: the existing migration artifact
+generator only admits the older receipt/routine delta and has no target
+inventory, exact ACL profile, ownership/grant statements or forward edge for
+this new table/trigger/function cohort. Therefore the runtime API must remain a
+candidate and must not be called production. Next steps are Sol's independent
+review of the SQL/lock protocol, then extension of the native artifact builder
+to capture the 0.75 target and author a complete 0.74-to-0.75 edge, followed by
+controlled local native qualification. The external destination/ACK authority
+remains Ashlar-owned throughout.
