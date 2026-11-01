@@ -10,6 +10,7 @@ generator's source tests.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
@@ -106,7 +107,7 @@ def _validate_inventory(source, target):
     if new_triggers - old_triggers != NEW_TRIGGERS or old_triggers - new_triggers:
         raise ValueError('Custody target trigger delta is not the reviewed guard set')
 
-    filtered = {category: list(rows) for category, rows in after.items()}
+    filtered = copy.deepcopy(after)
     for category in ('columns', 'constraints'):
         filtered[category] = [row for row in filtered[category]
                               if row[0] != 'runtime_feed_source_custody']

@@ -2,6 +2,9 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import sys
+from types import ModuleType
+from unittest.mock import patch
 
 from truss._migration_recipe import plan_route
 
@@ -17,6 +20,38 @@ def _module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_inventory_validation_does_not_mutate_captured_target():
+    builder = _module()
+    source = json.loads((MIGRATIONS / f"{builder.SOURCE}.json").read_bytes())
+    target = copy.deepcopy(source)
+    inventory = target["inventory"]
+    rows = inventory["routines"]
+    for row in rows:
+        if row[0] in builder.CHANGED_ROUTINES:
+            row[2] += "\n-- custody fence"
+    for name in sorted(builder.NEW_ROUTINES):
+        rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
+    table = "runtime_feed_source_custody"
+    inventory["columns"].append([table, 1, "custody_id", "uuid", True])
+    inventory["constraints"].append([table, "runtime_feed_source_custody_pkey", "p"])
+    inventory["indexes"].append(["runtime_feed_source_custody_pkey", "CREATE UNIQUE INDEX"])
+    inventory["relations"].extend([
+        [table, "r"], ["runtime_feed_source_custody_pkey", "i"],
+    ])
+    inventory["triggers"].extend([
+        [relation, trigger, "A", False, "CREATE TRIGGER"]
+        for relation, trigger in builder.NEW_TRIGGERS
+    ])
+    captured = copy.deepcopy(inventory)
+
+    verifier = ModuleType("truss._migration_verify")
+    verifier.matches_inventory = lambda _inventory, _profile: True
+    with patch.dict(sys.modules, {"truss._migration_verify": verifier}):
+        builder._validate_inventory(source, target)
+
+    assert inventory == captured
 
 
 def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
