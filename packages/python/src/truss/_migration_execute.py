@@ -89,6 +89,17 @@ def execute(cursor,request,manifest,artifacts,recipe_digest,max_bytes,route):
         for (role,) in cursor.fetchall():
             for signature in recipe['moduleGrants']:
                 submit(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),'module_grant')
+        # Feed consumers are independently enrolled and may not appear in
+        # module_access. New exact feed capability signatures must therefore
+        # be granted to every retained consumer role by the versioned edge.
+        # Registration already installs these same grants for fresh consumers.
+        if recipe.get('feedGrants'):
+            cursor.execute('''SELECT DISTINCT r.rolname FROM truss.runtime_feed_consumer c
+                JOIN pg_roles r ON r.oid=c.reader_oid ORDER BY r.rolname''',prepare=False)
+            for (role,) in cursor.fetchall():
+                for signature in recipe['feedGrants']:
+                    submit(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(
+                        sql.SQL(signature),sql.Identifier(role)),'feed_grant')
         intermediate=profile_for(manifest,artifacts,edge['target'])
         verify_artifact(cursor,intermediate)
     # All predecessor tables/sequences, including immutable genesis, remain exact.

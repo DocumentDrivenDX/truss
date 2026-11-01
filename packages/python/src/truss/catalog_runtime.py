@@ -1711,6 +1711,7 @@ class CatalogReferenceAssembly:
     @_active_operation
     def renew_feed_source_custody_in_transaction(self,transaction: TransactionHandle,handle: FeedSourceCustodyHandle,
             *,phase: Literal['before_ack','ack_unresolved']) -> Outcome[FeedSourceObservation | FeedUnavailable]:
+        """Recheck and persist the custody phase; requires a writable transaction."""
         from .feed import FeedCursor,FeedUnavailable
         if not self._feed_source_handle_valid(handle) or phase not in ('before_ack','ack_unresolved'):
             return Ok(FeedUnavailable(reason='context'))
@@ -1782,6 +1783,7 @@ class CatalogReferenceAssembly:
     @_active_operation
     def reconcile_feed_ack_under_source_custody_in_transaction(self,transaction: TransactionHandle,
             handle: FeedSourceCustodyHandle,selection: FeedSourceSelection,*,receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]:
+        """Observe an uncertain ACK in a fresh read-only, unassigned transaction."""
         return self._feed_source_bound_receipt(transaction,handle,selection,receipt_bytes,reconcile=True)
 
     @_active_operation

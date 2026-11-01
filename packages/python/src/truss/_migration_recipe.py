@@ -52,6 +52,9 @@ def load_recipe():
         for field in ('steps','ownership','moduleGrants'):
             if type(candidate[field]) is not list or any(type(s) is not str or not s for s in candidate[field]):
                 raise ValueError('Exact ordered migration statements required')
+        feed_grants=candidate.get('feedGrants',[])
+        if type(feed_grants) is not list or any(type(s) is not str or not s for s in feed_grants):
+            raise ValueError('Exact feed-role grant signatures required')
         for endpoint in (edge['source'],edge['target']):
             if json.loads(artifacts[endpoint+'.json'])['sha256']!=endpoint:
                 raise ValueError('Exact endpoint inventory required')
