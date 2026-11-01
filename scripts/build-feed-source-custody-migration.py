@@ -35,11 +35,72 @@ NEW_ROUTINES = {
     'reconcile_feed_ack_under_source_custody',
     'close_feed_source_custody',
 }
-CHANGED_ROUTINES = {'acknowledge_feed', 'acknowledge_feed_with_receipt'}
+CHANGED_ROUTINES = {
+    ('acknowledge_feed', 'selected_consumer text, expected_prior bytea, target bytea, payload_sha256 text, expected_release text, expected_digest text'),
+    ('acknowledge_feed_with_receipt', 'selected_consumer text, prior bytea, target bytea, feed_sha text, destination text, request_sha text, publication text, receipt bytea, expected_release text, expected_digest text'),
+    ('catalog_accept_with_keys', 'input_bytes bytea, documents_bytes bytea, declarations_bytes bytea, source_bytes bytea, origin_bytes bytea, request_key text, key_receipts bytea, preview_mode boolean, expected_revision integer, expected_documents bytea'),
+    ('get_object', 'selected_document text, selected_module text, selected_record text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text'),
+    ('query_scope', 'binding jsonb'),
+}
 NEW_TRIGGERS = {
     ('runtime_feed_consumer', 'runtime_feed_source_custody_guard'),
     ('runtime_feed_consumer', 'runtime_feed_source_custody_consumer_truncate'),
     ('runtime_feed_ack_receipt', 'runtime_feed_source_custody_receipt_truncate'),
+}
+NEW_CUSTODY_COLUMNS = {
+    'custody_id', 'backend_pid', 'backend_start', 'opened_xid', 'consumer_id',
+    'registration_id', 'installation_id', 'source_epoch', 'release_id',
+    'release_sha256', 'prior_bytes', 'target_bytes', 'feed_sha256',
+    'payload_bytes', 'maximum_facts', 'maximum_bytes', 'request_bytes',
+    'destination_registration_bytes', 'ack_scope_bytes', 'destination_id',
+    'request_sha256', 'publication_id', 'internal_token',
+    'internal_token_sha256', 'phase', 'ack_xid', 'ack_receipt_bytes',
+}
+NEW_CUSTODY_CONSTRAINTS = {
+    'runtime_feed_source_custody_ack_scope_bytes_check',
+    'runtime_feed_source_custody_ack_scope_bytes_not_null',
+    'runtime_feed_source_custody_backend_pid_not_null',
+    'runtime_feed_source_custody_backend_start_not_null',
+    'runtime_feed_source_custody_consumer_id_key',
+    'runtime_feed_source_custody_consumer_id_not_null',
+    'runtime_feed_source_custody_custody_id_not_null',
+    'runtime_feed_source_custody_destination_id_not_null',
+    'runtime_feed_source_custody_destination_registration_b_not_null',
+    'runtime_feed_source_custody_destination_registration_byte_check',
+    'runtime_feed_source_custody_feed_sha256_check',
+    'runtime_feed_source_custody_feed_sha256_not_null',
+    'runtime_feed_source_custody_installation_id_not_null',
+    'runtime_feed_source_custody_internal_token_check',
+    'runtime_feed_source_custody_internal_token_not_null',
+    'runtime_feed_source_custody_internal_token_sha256_check',
+    'runtime_feed_source_custody_internal_token_sha256_not_null',
+    'runtime_feed_source_custody_maximum_bytes_check',
+    'runtime_feed_source_custody_maximum_bytes_not_null',
+    'runtime_feed_source_custody_maximum_facts_check',
+    'runtime_feed_source_custody_maximum_facts_not_null',
+    'runtime_feed_source_custody_opened_xid_not_null',
+    'runtime_feed_source_custody_payload_bytes_check',
+    'runtime_feed_source_custody_payload_bytes_not_null',
+    'runtime_feed_source_custody_phase_check',
+    'runtime_feed_source_custody_phase_not_null',
+    'runtime_feed_source_custody_pkey',
+    'runtime_feed_source_custody_prior_bytes_check',
+    'runtime_feed_source_custody_prior_bytes_not_null',
+    'runtime_feed_source_custody_publication_id_not_null',
+    'runtime_feed_source_custody_registration_id_not_null',
+    'runtime_feed_source_custody_release_id_not_null',
+    'runtime_feed_source_custody_release_sha256_check',
+    'runtime_feed_source_custody_release_sha256_not_null',
+    'runtime_feed_source_custody_request_bytes_check',
+    'runtime_feed_source_custody_request_bytes_not_null',
+    'runtime_feed_source_custody_request_sha256_not_null',
+    'runtime_feed_source_custody_source_epoch_not_null',
+    'runtime_feed_source_custody_target_bytes_check',
+    'runtime_feed_source_custody_target_bytes_not_null',
+}
+NEW_CUSTODY_INDEXES = {
+    'runtime_feed_source_custody_consumer_id_key',
+    'runtime_feed_source_custody_pkey',
 }
 FEED_GRANTS = [
     'open_feed_source_custody(text,bytea,bytea,text,bytea,integer,integer,bytea,bytea,bytea,text,text,text,text,text)',
@@ -89,15 +150,14 @@ def _validate_inventory(source, target):
     if before.keys() != after.keys():
         raise ValueError('Native inventory categories changed')
     old_routines, new_routines = routine_map(source), routine_map(target)
-    old_by_name = {key[0]: key for key in old_routines}
-    new_by_name = {key[0]: key for key in new_routines}
-    if set(old_by_name) - set(new_by_name):
+    old_by_name = {key[0] for key in old_routines}
+    new_by_name = {key[0] for key in new_routines}
+    if old_by_name - new_by_name:
         raise ValueError('Custody target removes a predecessor routine')
-    additions = set(new_by_name) - set(old_by_name)
-    if additions != NEW_ROUTINES:
-        raise ValueError(f'Unexpected custody routine additions: {sorted(additions)}')
-    changed = {name for name, old_key in old_by_name.items()
-               if old_routines[old_key] != new_routines[new_by_name[name]]}
+    additions = set(new_routines) - set(old_routines)
+    if {name for name, _arguments in additions} != NEW_ROUTINES or len(additions) != len(NEW_ROUTINES):
+        raise ValueError(f'Unexpected custody routine identities: {sorted(additions)}')
+    changed = {key for key in old_routines if old_routines[key] != new_routines[key]}
     if changed != CHANGED_ROUTINES:
         raise ValueError(f'Unexpected existing routine changes: {sorted(changed)}')
 
@@ -105,28 +165,40 @@ def _validate_inventory(source, target):
     new_tables = {row[0] for row in after['relations'] if row[1] in ('r', 'p')}
     if new_tables - old_tables != {'runtime_feed_source_custody'} or old_tables - new_tables:
         raise ValueError('Custody target must add exactly its private table')
+    custody_columns = {row[2] for row in after['columns'] if row[0] == 'runtime_feed_source_custody'}
+    custody_constraints = {row[1] for row in after['constraints'] if row[0] == 'runtime_feed_source_custody'}
+    custody_indexes = {row[0] for row in after['indexes'] if row[0].startswith('runtime_feed_source_custody')}
+    custody_relations = {row[0] for row in after['relations'] if row[0].startswith('runtime_feed_source_custody')}
+    if custody_columns != NEW_CUSTODY_COLUMNS or custody_constraints != NEW_CUSTODY_CONSTRAINTS \
+            or custody_indexes != NEW_CUSTODY_INDEXES \
+            or custody_relations != NEW_CUSTODY_INDEXES | {'runtime_feed_source_custody'}:
+        raise ValueError('Private custody table native shape differs from the exact reviewed schema')
     old_triggers = {(row[0], row[1]) for row in before['triggers']}
     new_triggers = {(row[0], row[1]) for row in after['triggers']}
     if new_triggers - old_triggers != NEW_TRIGGERS or old_triggers - new_triggers:
         raise ValueError('Custody target trigger delta is not the reviewed guard set')
 
     filtered = copy.deepcopy(after)
-    for category in ('columns', 'constraints'):
-        filtered[category] = [row for row in filtered[category]
-                              if row[0] != 'runtime_feed_source_custody']
+    filtered['columns'] = [row for row in filtered['columns']
+                           if row[0] != 'runtime_feed_source_custody'
+                           and row[0] not in NEW_CUSTODY_INDEXES]
+    filtered['constraints'] = [row for row in filtered['constraints']
+                               if row[0] != 'runtime_feed_source_custody']
     filtered['indexes'] = [row for row in filtered['indexes']
-                           if row[0] != 'runtime_feed_source_custody_pkey']
+                           if row[0] not in NEW_CUSTODY_INDEXES]
     filtered['relations'] = [row for row in filtered['relations']
-                             if row[0] not in ('runtime_feed_source_custody',
-                                               'runtime_feed_source_custody_pkey')]
+                             if row[0] not in NEW_CUSTODY_INDEXES | {'runtime_feed_source_custody'}]
     filtered['triggers'] = [row for row in filtered['triggers']
                             if (row[0], row[1]) not in NEW_TRIGGERS]
     filtered['routines'] = [row for row in filtered['routines']
                             if row[0] not in NEW_ROUTINES]
     for row in filtered['routines']:
-        if row[0] in CHANGED_ROUTINES:
-            key = next(key for key in old_routines if key[0] == row[0])
+        key = (row[0], row[1])
+        if key in CHANGED_ROUTINES:
             row[2] = old_routines[key]
+    old_horizon = next(row for row in before['relations'] if row[0] == 'journal_runtime_horizon')
+    filtered['relations'] = [old_horizon if row[0] == 'journal_runtime_horizon' else row
+                             for row in filtered['relations']]
     if not matches_inventory(filtered, source):
         raise ValueError('Custody target changes native inventory outside the reviewed delta')
 
@@ -146,7 +218,52 @@ def _validate_runtime_manifest(source, target):
         raise ValueError('Custody release changes unsupported runtime metadata')
 
 
-def _validate_acl(source, target):
+def _target_initialization_rule(source, target_ny, target_utc):
+    pinned = read_json(MIGRATIONS / 'manifest.json')
+    evidence = read_json(MIGRATIONS / pinned['initializationProfiles'])
+    source_rules = source.get('initializationAlternatives', [])
+    horizon = [rule for rule in source_rules
+               if rule['surface'] == 'relations' and rule['identity'] == ['journal_runtime_horizon']]
+    if len(horizon) != 1:
+        raise ValueError('One exact source journal horizon initialization rule is required')
+    if horizon[0] not in evidence['rules']:
+        raise ValueError('Source horizon variants lack pinned initialization evidence')
+    def horizon_row(profile):
+        rows = [row for row in profile['inventory']['relations'] if row[0] == 'journal_runtime_horizon']
+        if len(rows) != 1:
+            raise ValueError('One journal runtime horizon relation is required')
+        return rows[0]
+
+    ny_row, utc_row = horizon_row(target_ny), horizon_row(target_utc)
+    ny_inventory = copy.deepcopy(target_ny['inventory'])
+    utc_inventory = copy.deepcopy(target_utc['inventory'])
+    ny_inventory['relations'] = [row for row in ny_inventory['relations'] if row[0] != 'journal_runtime_horizon']
+    utc_inventory['relations'] = [row for row in utc_inventory['relations'] if row[0] != 'journal_runtime_horizon']
+    if ny_inventory != utc_inventory:
+        raise ValueError('Timezone captures differ outside the journal horizon relation')
+    variants = []
+    for row in [*horizon[0]['rows'], ny_row, utc_row]:
+        if row not in variants:
+            variants.append(row)
+    return {'identity': ['journal_runtime_horizon'], 'surface': 'relations', 'rows': variants}
+
+
+def _extended_initialization_evidence(pinned, target_digest, target_ny, target_utc, rule):
+    evidence = copy.deepcopy(read_json(MIGRATIONS / pinned['initializationProfiles']))
+    if rule not in evidence['rules']:
+        evidence['rules'].append(rule)
+    captures = {capture['initializationTimeZone']: capture for capture in evidence['captures']}
+    for timezone, target in (('America/New_York', target_ny), ('UTC', target_utc)):
+        capture = captures.get(timezone)
+        if capture is None:
+            raise ValueError('Pinned initialization evidence lacks a required timezone capture')
+        capture['inventories'][target_digest] = digest(canonical(target['inventory']))
+    raw = canonical(evidence) + b'\n'
+    name = f'native-initialization-profiles-{digest(raw)[:16]}.json'
+    return name, raw
+
+
+def _validate_acl(source, target, source_exact_acl):
     old_acl, new_acl = source['acl'], target['acl']
     if old_acl.keys() != new_acl.keys():
         raise ValueError('Native ACL role profile changed')
@@ -155,7 +272,9 @@ def _validate_acl(source, target):
             raise ValueError('Custody candidate removes a predecessor privilege')
     old_objects = {(entry[0], entry[1]) for values in old_acl.values() for entry in values}
     new_objects = {(entry[0], entry[1]) for values in new_acl.values() for entry in values}
-    allowed_names = NEW_ROUTINES | {'runtime_feed_source_custody'}
+    allowed_names = NEW_ROUTINES | {
+        'runtime_feed_source_custody', '_runtime_feed_source_custody',
+    }
     additions = new_objects - old_objects
     if any(name.split('(')[0] not in allowed_names for _kind, name in additions):
         raise ValueError('Custody candidate adds an unreviewed ACL object')
@@ -163,19 +282,32 @@ def _validate_acl(source, target):
         role: set(map(canonical, new_acl[role])) - set(map(canonical, old_acl[role]))
         for role in old_acl
     }
-    if any(additions_by_role[role] for role in old_acl if role not in ('owner', 'feed')):
+    allowed_public = {
+        canonical(['type', '_runtime_feed_source_custody', 'USAGE', False]),
+    }
+    if any(additions_by_role[role] for role in old_acl if role not in ('owner', 'feed', 'public')):
         raise ValueError('Custody target adds privileges outside owner/feed profiles')
+    if additions_by_role['public'] - allowed_public:
+        raise ValueError('PUBLIC receives an unreviewed custody privilege')
     if any(json.loads(row)[1].split('(')[0] not in allowed_names
            for row in additions_by_role['owner']):
         raise ValueError('Custody target widens owner grants on a predecessor object')
     if any(json.loads(row)[0] != 'routine'
            for row in additions_by_role['feed']):
         raise ValueError('Feed role receives a non-routine custody privilege')
-    normalize = lambda name: (name.split('(')[0], ''.join(name[name.find('(') + 1:-1].split()))
-    expected = {normalize(name) for name in FEED_GRANTS}
-    actual = {normalize(json.loads(row)[1]) for row in additions_by_role['feed']}
-    if actual != expected or any(json.loads(row)[2:] != ['EXECUTE', False]
-                                 for row in additions_by_role['feed']):
+    feed_object_names = {json.loads(row)[1].split('(')[0]
+                         for row in additions_by_role['feed']}
+    if feed_object_names != {signature.split('(')[0] for signature in FEED_GRANTS} \
+            or len(additions_by_role['feed']) != len(FEED_GRANTS):
+        raise ValueError('Feed ACL object delta differs from the five custody routines')
+    old_exact = {canonical(row) for row in source_exact_acl['feed']}
+    new_exact = {canonical(row) for row in target['exactAcl']['feed']}
+    added_exact = [json.loads(row.decode()) for row in new_exact - old_exact]
+    normalize = lambda signature: (signature.split('(')[0],
+                                   ''.join(signature[signature.find('(') + 1:-1].split()))
+    actual = {(normalize(row[1]), row[2], row[3]) for row in added_exact}
+    expected = {(normalize(signature), 'EXECUTE', False) for signature in FEED_GRANTS}
+    if actual != expected:
         raise ValueError('Feed role must receive exactly the five handle routine grants')
     if any(json.loads(row)[0] == 'schema' for row in additions_by_role['public']):
         raise ValueError('Custody target unexpectedly widens public schema privileges')
@@ -209,12 +341,13 @@ def _validate_pair(ny, utc, target_digest):
         raise ValueError('Target changes metadata-owner preparation configuration')
     _validate_runtime_manifest(source, target_ny)
     _validate_inventory(source, target_ny)
-    _validate_acl(source, target_ny)
+    _validate_acl(source, target_ny, exact['acl'])
     if target_ny['exactAcl'] != target_utc['exactAcl'] or target_ny['acl'] != target_utc['acl']:
         raise ValueError('Exact native ACL capture differs by initialization timezone')
-    target_profile = dict(target_ny)
+    initialization_rule = _target_initialization_rule(source, target_ny, target_utc)
+    target_profile = copy.deepcopy(target_ny)
     target_profile['definitionAlternatives'] = source.get('definitionAlternatives', [])
-    target_profile['initializationAlternatives'] = source.get('initializationAlternatives', [])
+    target_profile['initializationAlternatives'] = [initialization_rule]
     if not matches_inventory(target_utc['inventory'], target_profile):
         raise ValueError('UTC target inventory is outside qualified initialization alternatives')
 
@@ -224,7 +357,7 @@ def _validate_pair(ny, utc, target_digest):
     initialization = read_json(MIGRATIONS / pinned['initializationProfiles'])
     if any(rule not in initialization['rules'] for rule in source.get('initializationAlternatives', [])):
         raise ValueError('Source initialization variant no longer has pinned native evidence')
-    return source, target_ny
+    return source, target_ny, target_utc, initialization_rule
 
 
 def _ownership_statements():
@@ -243,8 +376,10 @@ def _ownership_statements():
     return statements
 
 
-def _package(source, target, target_digest):
+def _package(source, target, target_digest, target_utc=None, initialization_rule=None):
     pinned = read_json(MIGRATIONS / 'manifest.json')
+    target_utc = target if target_utc is None else target_utc
+    initialization_rule = initialization_rule or _target_initialization_rule(source, target, target_utc)
     old_manifest_raw = (MIGRATIONS / 'manifest.json').read_bytes()
     _pinned_artifacts(pinned)
     if pinned['target'] != SOURCE or digest((PACKAGE / '_catalog_runtime/manifest.json').read_bytes()) != target_digest:
@@ -257,11 +392,12 @@ def _package(source, target, target_digest):
     source_routines = routine_map(source)
     changed = []
     for key, definition in routine_map(target).items():
-        if key[0] in CHANGED_ROUTINES and source_routines.get(key) != definition:
+        if key in CHANGED_ROUTINES and source_routines.get(key) != definition:
             changed.append(definition)
-    if {next(name for name in CHANGED_ROUTINES if f'FUNCTION truss.{name}(' in value)
-            for value in changed} != CHANGED_ROUTINES:
-        raise ValueError('Both exact legacy ACK routine replacements are required')
+    changed_keys = {key for key, definition in routine_map(target).items()
+                    if key in CHANGED_ROUTINES and source_routines.get(key) != definition}
+    if changed_keys != CHANGED_ROUTINES:
+        raise ValueError('Exact reviewed existing routine identity delta required')
 
     sql_path = PACKAGE / '_catalog_runtime/feed-custody.sql'
     if target['manifest']['files'].get('feed-custody.sql') != digest(sql_path.read_bytes()):
@@ -272,25 +408,34 @@ def _package(source, target, target_digest):
               'ownership': _ownership_statements(), 'moduleGrants': [],
               'feedGrants': FEED_GRANTS}
 
-    target_profile = dict(target)
+    target_profile = copy.deepcopy(target)
     exact_acl = target_profile.pop('exactAcl')
     target_profile.pop('aclNameProfile', None)
     target_profile['definitionAlternatives'] = target.get('definitionAlternatives', [])
-    target_profile['initializationAlternatives'] = source.get('initializationAlternatives', [])
+    target_profile['initializationAlternatives'] = [initialization_rule]
+    source_horizon = next(row for row in source['inventory']['relations']
+                          if row[0] == 'journal_runtime_horizon')
+    target_profile['inventory']['relations'] = [
+        source_horizon if row[0] == 'journal_runtime_horizon' else row
+        for row in target_profile['inventory']['relations']]
     exact_acl_profile = {'acl': exact_acl, 'aclNameProfile': 'truss-native-acl-names/0.2',
                          'runtimeManifestSha256': target_digest}
     edge_name = f'edge-{SOURCE}-{target_digest}.json'
     target_name = f'{target_digest}.json'
     acl_name = f'{target_digest}.acl.json'
     archive_name = digest(old_manifest_raw) + '.manifest.json'
+    initialization_name, initialization_raw = _extended_initialization_evidence(
+        pinned, target_digest, target, target_utc, initialization_rule)
     generated = {edge_name: canonical(recipe) + b'\n',
                  target_name: canonical(target_profile) + b'\n',
                  acl_name: canonical(exact_acl_profile) + b'\n',
-                 archive_name: old_manifest_raw}
+                 archive_name: old_manifest_raw,
+                 initialization_name: initialization_raw}
 
     manifest = dict(pinned)
     manifest['target'] = target_digest
     manifest['targetRelease'] = target['manifest']['releaseId']
+    manifest['initializationProfiles'] = initialization_name
     manifest['sources'] = list(pinned['sources'])
     if SOURCE not in manifest['sources']:
         manifest['sources'].append(SOURCE)
@@ -377,12 +522,12 @@ def main():
 
     ny = read_json(args.output / 'America_New_York.json')
     utc = read_json(args.peer / 'UTC.json')
-    source, target = _validate_pair(ny, utc, target_digest)
+    source, target, target_utc, initialization_rule = _validate_pair(ny, utc, target_digest)
     if args.check_only:
-        _package(source, target, target_digest)
+        _package(source, target, target_digest, target_utc, initialization_rule)
         print('Source/target inventories, ACLs, captured timezone profiles, and edge are internally consistent; no files written.')
         return
-    manifest, generated = _package(source, target, target_digest)
+    manifest, generated = _package(source, target, target_digest, target_utc, initialization_rule)
     destination = MIGRATIONS if args.package else args.output / 'package'
     destination.mkdir(parents=True, exist_ok=True)
     for name, raw in generated.items():

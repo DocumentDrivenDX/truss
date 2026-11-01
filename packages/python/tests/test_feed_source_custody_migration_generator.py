@@ -29,17 +29,19 @@ def test_inventory_validation_does_not_mutate_captured_target():
     inventory = target["inventory"]
     rows = inventory["routines"]
     for row in rows:
-        if row[0] in builder.CHANGED_ROUTINES:
+        if (row[0], row[1]) in builder.CHANGED_ROUTINES:
             row[2] += "\n-- custody fence"
     for name in sorted(builder.NEW_ROUTINES):
         rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
     table = "runtime_feed_source_custody"
-    inventory["columns"].append([table, 1, "custody_id", "uuid", True])
-    inventory["constraints"].append([table, "runtime_feed_source_custody_pkey", "p"])
-    inventory["indexes"].append(["runtime_feed_source_custody_pkey", "CREATE UNIQUE INDEX"])
-    inventory["relations"].extend([
-        [table, "r"], ["runtime_feed_source_custody_pkey", "i"],
-    ])
+    for ordinal, name in enumerate(sorted(builder.NEW_CUSTODY_COLUMNS), 1):
+        inventory["columns"].append([table, ordinal, name])
+    inventory["constraints"].extend([[table, name, "c"]
+                                     for name in builder.NEW_CUSTODY_CONSTRAINTS])
+    inventory["indexes"].extend([[name, "CREATE UNIQUE INDEX"]
+                                 for name in builder.NEW_CUSTODY_INDEXES])
+    inventory["relations"].extend([[name, "i"] for name in builder.NEW_CUSTODY_INDEXES])
+    inventory["relations"].append([table, "r"])
     inventory["triggers"].extend([
         [relation, trigger, "A", False, "CREATE TRIGGER"]
         for relation, trigger in builder.NEW_TRIGGERS
@@ -52,6 +54,18 @@ def test_inventory_validation_does_not_mutate_captured_target():
         builder._validate_inventory(source, target)
 
     assert inventory == captured
+
+    unexpected = copy.deepcopy(target)
+    overload = next(row for row in unexpected["inventory"]["routines"]
+                    if row[0] == "catalog_accept_with_keys" and "expected_revision" not in row[1])
+    overload[2] += "\n-- unreviewed overload change"
+    with patch.dict(sys.modules, {"truss._migration_verify": verifier}):
+        try:
+            builder._validate_inventory(source, unexpected)
+        except ValueError as error:
+            assert "existing routine changes" in str(error)
+        else:
+            raise AssertionError("unreviewed catalog_accept_with_keys overload change must be refused")
 
 
 def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
@@ -67,7 +81,7 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     old = builder.routine_map(source)
     rows = target["inventory"]["routines"]
     for row in rows:
-        if row[0] in builder.CHANGED_ROUTINES:
+        if (row[0], row[1]) in builder.CHANGED_ROUTINES:
             row[2] += "\n-- custody fence"
     for name in sorted(builder.NEW_ROUTINES):
         rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
@@ -128,21 +142,27 @@ def test_runtime_delta_allows_only_custody_and_current_release_guard_sources():
 def test_acl_generator_requires_exact_five_feed_grants_and_rejects_admin_prune():
     builder = _module()
     source = json.loads((MIGRATIONS / f"{builder.SOURCE}.json").read_bytes())
+    source_exact = json.loads((MIGRATIONS / f"{builder.SOURCE}.acl.json").read_bytes())
     target = copy.deepcopy(source)
     target["acl"]["owner"].append(["relation", "runtime_feed_source_custody", "SELECT", False])
+    for type_name in ("runtime_feed_source_custody", "_runtime_feed_source_custody"):
+        target["acl"]["owner"].append(["type", type_name, "USAGE", False])
     for name in builder.NEW_ROUTINES:
         target["acl"]["owner"].append(["routine", f"{name}()", "EXECUTE", False])
+    target["acl"]["public"].append(["type", "_runtime_feed_source_custody", "USAGE", False])
+    target["exactAcl"] = copy.deepcopy(source_exact["acl"])
     for signature in builder.FEED_GRANTS:
         name, arguments = signature.split("(", 1)
         target["acl"]["feed"].append(
             ["routine", f"{name}({arguments.replace(',', ', ')}", "EXECUTE", False]
         )
-    builder._validate_acl(source, target)
+        target["exactAcl"]["feed"].append(["routine", signature, "EXECUTE", False])
+    builder._validate_acl(source, target, source_exact["acl"])
     target["acl"]["feed"].append(
         ["routine", "runtime_feed_custody_prune_stale()", "EXECUTE", False]
     )
     try:
-        builder._validate_acl(source, target)
+        builder._validate_acl(source, target, source_exact["acl"])
     except ValueError:
         pass
     else:
