@@ -52,6 +52,8 @@ def test_open_serializes_with_consumer_writers_and_checks_stale_backend_identity
     assert "FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer FOR UPDATE NOWAIT" in source
     assert "a.pid=stale.backend_pid AND a.backend_start=stale.backend_start" in source
     assert "selected_request_sha IS DISTINCT FROM encode(sha256(request_original),'hex')" in source
+    assert "opened_xid xid8 NOT NULL" in source
+    assert source.count("coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)") == 4
     assert "ALTER TABLE truss.runtime_feed_consumer ENABLE ALWAYS TRIGGER runtime_feed_source_custody_guard" in source
     assert "REVOKE ALL ON TABLE truss.runtime_feed_source_custody FROM PUBLIC" in source
 

@@ -5,6 +5,7 @@ CREATE TABLE truss.runtime_feed_source_custody (
  custody_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
  backend_pid integer NOT NULL,
  backend_start timestamptz NOT NULL,
+ opened_xid xid8 NOT NULL,
  consumer_id text NOT NULL UNIQUE,
  registration_id uuid NOT NULL,
  installation_id text NOT NULL,
@@ -165,11 +166,11 @@ BEGIN
   RAISE EXCEPTION 'exact feed installation, epoch and registration required' USING ERRCODE='55000';
  END IF;
  custody:=gen_random_uuid(); token:=gen_random_uuid()::text;
- INSERT INTO truss.runtime_feed_source_custody(custody_id,backend_pid,backend_start,consumer_id,registration_id,
+ INSERT INTO truss.runtime_feed_source_custody(custody_id,backend_pid,backend_start,opened_xid,consumer_id,registration_id,
   installation_id,source_epoch,release_id,release_sha256,prior_bytes,target_bytes,feed_sha256,payload_bytes,
   maximum_facts,maximum_bytes,request_bytes,destination_registration_bytes,ack_scope_bytes,destination_id,
   request_sha256,publication_id,internal_token,internal_token_sha256,phase)
- VALUES(custody,pg_backend_pid(),start_time,selected_consumer,consumer.registration_id,installation.installation_id,
+ VALUES(custody,pg_backend_pid(),start_time,pg_current_xact_id(),selected_consumer,consumer.registration_id,installation.installation_id,
   cursor->>'sourceEpoch',expected_release,expected_digest,expected_prior,expected_target,expected_feed_sha,
   selected_payload,maximum_facts,maximum_bytes,request_original,destination_registration,ack_scope,
   selected_destination,selected_request_sha,selected_publication,token,sha256(convert_to(token,'UTF8')),'before_ack');
@@ -194,6 +195,7 @@ BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
   OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
   OR active.destination_registration_bytes IS DISTINCT FROM destination_registration
@@ -245,6 +247,7 @@ BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody FOR UPDATE;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
   OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.consumer_id IS DISTINCT FROM selected_consumer
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
@@ -284,6 +287,7 @@ BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
   OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.consumer_id IS DISTINCT FROM selected_consumer
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
@@ -313,6 +317,7 @@ BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody FOR UPDATE;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
   OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
   OR active.destination_registration_bytes IS DISTINCT FROM destination_registration

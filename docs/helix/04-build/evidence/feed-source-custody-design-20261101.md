@@ -203,6 +203,13 @@ lock. A source-level test pins this ordering. This candidate does not use
 session advisory locks, and so the session unlock/unlock-all ACL analysis in
 the earlier proposal is no longer part of the chosen protocol.
 
+Each custody row also records the XID that created it. Renew, ACK, reconcile
+and close refuse when called from that same transaction, so open must commit
+before any follow-up handle operation; after commit, a later transaction on
+the same backend can use the handle. Reconciliation remains a fresh read-only,
+unassigned transaction because its check uses
+`pg_current_xact_id_if_assigned()` without assigning one.
+
 The candidate runtime manifest is now `truss-catalog-runtime/0.75-candidate`
 and pins the new source file; `scripts/build-feed-source-custody-runtime-manifest.py`
 rebuilds the content hashes. `_verified_release()` successfully validated the

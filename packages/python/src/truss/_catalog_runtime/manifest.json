@@ -63,7 +63,7 @@
     "query-selective.sql": "8d2523ba89e3322f3a44e0e7567ef3d91bb0154f6a63dcb2b72a6d852bb5ac9d",
     "managed-grants.sql": "0c14b6a10c896ca207604e0391fc5f3be8ba202705f77e42f69ab531626ca2ed",
     "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca",
-    "feed-custody.sql": "d644f7b16c29a7c5cc28a6a46227bd8175efcf2f5833b795eb327e9e4032137b"
+    "feed-custody.sql": "32e9398d4f9aec46e8642a96dfd6d2c3b900f46293bdc7229d3e108422431bf1"
   },
   "version": "0.75"
 }

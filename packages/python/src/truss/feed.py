@@ -97,7 +97,7 @@ class FeedSourceSelection:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class FeedSourceCustodyHandle:
-    """Opaque routing key for one backend-bound native custody row."""
+    """Opaque backend-bound row key; commit open before subsequent operations."""
     custody_id: str
     selection_sha256: str
     backend_pid: str = field(repr=False)
