@@ -1,0 +1,23 @@
+{
+  "qualification": "local-disposable-exact-R16b-0.74-to-0.75-candidate-migration",
+  "sourceCopyReceipt": "/private/tmp/ashlar-r19-truss051-delta-publication-20261101/receipts/source-copy-custody.json",
+  "sourceCopyReceiptSha256": "7a22632d87c38244a7810ad75cae627f9fe03e743f8baf043cd932f09b256cf3",
+  "sourceCopyTreeSha256": "b1ab6a55e3d13981e706b0cdb7ddd653ba7db9e241da6bef9ad4c16a47adc82e",
+  "sourceCopyFiles": 1255,
+  "sourceCopyBytes": 65754852,
+  "backupAndCloneComparedByteForByte": true,
+  "serverVersion": "18.6",
+  "sourceManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "statusBefore": "upgrade_required",
+  "targetManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+  "recipeManifestSha256": "41bf1e3f688f78b56c74acc32a6b08126157a6d15000fc257925fa0f5884b77b",
+  "migrationManifestSha256": "41bf1e3f688f78b56c74acc32a6b08126157a6d15000fc257925fa0f5884b77b",
+  "attemptId": "5e051981-8751-46c0-be0a-0a5240bab318",
+  "applyOutcome": "migrated",
+  "statusAfter": "current",
+  "targetVerifiedManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+  "migrationReceiptAttemptId": "5e051981-8751-46c0-be0a-0a5240bab318",
+  "orderedStepEvidenceSha256": "ebb685fefe3b455db9e8cffebd9178e385a6cc77c12db01399015d3ce4e4f80c",
+  "preservationSha256": "a5f7d9658ccef52464936303c06d322821486340940a1215a1fc6730addf4185",
+  "scope": "one .74-to-.75 local native migration on a fresh cold clone; no source ACK, no protected ACK, no cloud"
+}

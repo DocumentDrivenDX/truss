@@ -48,10 +48,17 @@ def test_source_custody_models_are_frozen_and_keep_original_selection():
         raise AssertionError("custody handle must be immutable")
 
 
-def test_open_serializes_with_consumer_writers_and_checks_stale_backend_identity():
+def test_open_serializes_with_consumer_writers_and_checks_exact_session_marker():
     source = SQL.read_text()
     assert "FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer FOR UPDATE NOWAIT" in source
-    assert "a.pid=stale.backend_pid AND a.backend_start=stale.backend_start" in source
+    assert "truss.runtime_feed_custody_lock_active(stale.backend_pid,stale.lock_key_a,stale.lock_key_b)" in source
+    assert "l.locktype='advisory'" in source
+    assert "l.database=(SELECT oid FROM pg_catalog.pg_database" in source
+    assert "l.classid=selected_key_a::oid AND l.objid=selected_key_b::oid AND l.objsubid=2" in source
+    assert "l.pid=selected_pid AND l.mode='ExclusiveLock' AND l.granted" in source
+    assert "FROM pg_catalog.pg_stat_activity" not in source
+    assert "lock_key_a integer NOT NULL" in source and "lock_key_b integer NOT NULL" in source
+    assert "'secretToken'" not in source
     assert "selected_request_sha IS DISTINCT FROM encode(sha256(request_original),'hex')" in source
     assert "(cursor->>'installationId') IS DISTINCT FROM installation.installation_id::text" in source
     assert "opened_xid xid8 NOT NULL" in source
@@ -86,3 +93,74 @@ def test_reregistration_serializes_on_the_same_consumer_row():
         "WHERE consumer_id=%s FOR UPDATE NOWAIT", registration
     )
     assert selection > registration
+
+
+def test_host_marker_is_reused_after_a_contained_rollback():
+    from types import SimpleNamespace
+    from truss.psycopg_host import PsycopgHost
+
+    class Cursor:
+        def __init__(self):
+            self.calls=[]
+        def execute(self, query, params, **kwargs):
+            self.calls.append((query,params,kwargs))
+            if query=='SELECT pg_catalog.pg_backend_pid()::pg_catalog.text':
+                self.admission=(('42','3/7','read_committed','read_write'),None,'10000')
+        def fetchone(self):
+            return (True,) if self.calls[-1][0]=='SELECT pg_catalog.pg_try_advisory_lock(%s,%s)' else ('42',)
+
+    host=object.__new__(PsycopgHost)
+    host._custody=SimpleNamespace(feed_source_lock_key=None,feed_source_session_token=None)
+    cursor=Cursor()
+    first=host._feed_source_lock_marker(cursor)
+    second=host._feed_source_lock_marker(cursor)
+    assert first==second
+    assert len(cursor.calls)==2
+    assert cursor.calls[1][0]=='SELECT pg_catalog.pg_backend_pid()::pg_catalog.text'
+    assert cursor.calls[0][0]=='SELECT pg_catalog.pg_try_advisory_lock(%s,%s)'
+    assert cursor.calls[0][1]==first[:2]
+    assert all(type(part) is int and 1<=part<=2147483647 for part in first[:2])
+    assert len(first[2])==64 and all(character in '0123456789abcdef' for character in first[2])
+    binding=host._feed_source_custody_binding()
+    assert binding==first and len(binding[2])==64
+    assert all(character in '0123456789abcdef' for character in binding[2])
+
+
+def test_connection_custody_marker_and_secret_are_not_handle_fields():
+    from dataclasses import fields
+    names={item.name for item in fields(FeedSourceCustodyHandle)}
+    assert not {'_token','_lock_key_a','_lock_key_b','secret_token'} & names
+
+
+def test_close_removes_the_row_but_leaves_session_liveness_to_connection_end():
+    source=SQL.read_text()
+    host=(ROOT / "src/truss/psycopg_host.py").read_text()
+    close=source.index("CREATE FUNCTION truss.close_feed_source_custody")
+    assert "DELETE FROM truss.runtime_feed_source_custody WHERE custody_id=custody" in source[close:]
+    assert "pg_advisory_unlock" not in source
+    assert "pg_advisory_unlock" not in host
+    assert "the original session may still be live" in host
+
+
+def test_every_custody_callback_binds_the_guarded_observation_not_callback_argument():
+    from types import SimpleNamespace
+    from truss.catalog_runtime import _feed_source_cursor_pid, _feed_source_cursor_matches
+
+    good=SimpleNamespace(admission=(('42','3/7','read_committed','read_write'),'99','10000'))
+    malformed=(SimpleNamespace(admission=None),SimpleNamespace(admission=(('0','3/7','read_committed','read_write'),None,'10000')),
+        SimpleNamespace(admission=(('42','3/7'),None,'10000')))
+    assert _feed_source_cursor_pid(good)=='42'
+    assert _feed_source_cursor_matches(good,'42')
+    assert not _feed_source_cursor_matches(good,'43')
+    assert all(_feed_source_cursor_pid(cursor) is None for cursor in malformed)
+
+    source=RUNTIME.read_text()
+    start=source.index('def open_feed_source_custody_in_transaction')
+    end=source.index('def acknowledge_feed_in_transaction',start)
+    custody=source[start:end]
+    assert 'observed[0][0]' not in custody
+    assert custody.count('_feed_source_cursor_pid(cursor)')==1
+    host_source=(ROOT / "src/truss/psycopg_host.py").read_text()
+    assert "session_pid = query == 'SELECT pg_catalog.pg_backend_pid()::pg_catalog.text'" in host_source
+    assert custody.count('_feed_source_cursor_matches(cursor,backend_pid)')==1
+    assert custody.count('_feed_source_cursor_matches(cursor,handle.backend_pid)')==3

@@ -1,0 +1,15 @@
+{
+  "qualification": "local-disposable-exact-R16b-0.74-to-0.75-first-attempt",
+  "sourceCopyTreeSha256": "b1ab6a55e3d13981e706b0cdb7ddd653ba7db9e241da6bef9ad4c16a47adc82e",
+  "sourceManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "targetManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+  "statusBefore": "upgrade_required",
+  "sourceProfileMatch": true,
+  "applyOutcome": "rolled_back",
+  "exactError": "Unexpected native owner or grant: routine runtime_feed_custody_lock_active(integer, integer, integer)",
+  "cause": "The migration ownership statements omitted the private helper even though target ACL inventory requires it to be owned and PUBLIC-revoked.",
+  "committed": false,
+  "acknowledgement": false,
+  "cloud": false,
+  "correction": "Add exact helper signature to the ownership generator, producing ALTER FUNCTION OWNER and REVOKE PUBLIC statements; the corrected fresh-clone run is recorded separately."
+}

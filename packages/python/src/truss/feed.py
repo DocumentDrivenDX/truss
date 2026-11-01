@@ -97,7 +97,12 @@ class FeedSourceSelection:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class FeedSourceCustodyHandle:
-    """Opaque backend-bound row key; commit open before subsequent operations."""
+    """Opaque session-bound row key; commit open before operations.
+
+    The host keeps the session marker and secret token outside this handle. The
+    marker survives open rollback and close; PostgreSQL releases it when the
+    borrowed connection ends, allowing stale-row cleanup.
+    """
     custody_id: str
     selection_sha256: str
     backend_pid: str = field(repr=False)

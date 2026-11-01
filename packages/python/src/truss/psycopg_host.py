@@ -144,6 +144,11 @@ class _ConnectionCustody:
     reservation: object = None
     retry_identity: tuple | None = None
     semantic_issuers: dict = field(default_factory=dict)
+    # One random session marker is shared by this connection's source custody
+    # rows. It intentionally survives transaction rollback and host detach; the
+    # server releases it only when the borrowed connection ends.
+    feed_source_lock_key: tuple[int, int] | None = None
+    feed_source_session_token: str | None = None
 
 
 class _HostPairReservation:
@@ -356,11 +361,13 @@ class _FunctionCursor(_AdmissionCursor):
         import re
         if self._host._custody.retry_identity == self._custody.identity:
             raise ValueError('Whole caller transaction must be retried')
+        session_lock = query == 'SELECT pg_catalog.pg_try_advisory_lock(%s,%s)'
+        session_pid = query == 'SELECT pg_catalog.pg_backend_pid()::pg_catalog.text'
         selected = (re.fullmatch(
             r'SELECT truss\.([a-z_0-9]+)\((?:%s(?:::[a-z_0-9]+)?(?:,\s*%s(?:::[a-z_0-9]+)?)*)?\)', query)
             if isinstance(query,str) else None)
         table_call = _MANAGED_TABLE_CALLS.get(query) if isinstance(query,str) else None
-        if ((table_call is None and (selected is None or selected[1] not in _MANAGED_FUNCTIONS))
+        if ((table_call is None and not session_lock and not session_pid and (selected is None or selected[1] not in _MANAGED_FUNCTIONS))
                 or kwargs.get('binary') or len(args) > 1):
             raise ValueError('One registered parameterized function SELECT required')
         payload_columns = None
@@ -372,6 +379,9 @@ class _FunctionCursor(_AdmissionCursor):
             payload_select = ('(p.value).*' if projection is None else
                               ','.join('(p.value).'+name+' AS '+name for name in projection))
             payload_query = 'SELECT '+expression
+        elif session_lock or session_pid:
+            payload_query = query
+            payload_select = 'p.value'
         else:
             payload_query = query
             payload_select = 'p.value'
@@ -520,6 +530,40 @@ class PsycopgHost:
     @property
     def profile(self):
         return self._profile
+
+    def _feed_source_lock_marker(self, cursor):
+        """Acquire one random, session-scoped liveness marker for this connection."""
+        if self._custody.feed_source_lock_key is not None:
+            token=self._custody.feed_source_session_token
+            if token is None:raise ValueError('Source custody session token unavailable')
+            key=self._custody.feed_source_lock_key
+            cursor.execute('SELECT pg_catalog.pg_backend_pid()::pg_catalog.text',(),prepare=False)
+            pid_row=cursor.fetchone()
+            observation=getattr(cursor,'admission',None)
+            if (type(pid_row) is not tuple or len(pid_row)!=1 or type(pid_row[0]) is not str
+                or type(observation) is not tuple or len(observation)!=3
+                or type(observation[0]) is not tuple or len(observation[0])!=4
+                or observation[0][0]!=pid_row[0]):
+                raise ValueError('Exact guarded source host observation required')
+            return key[0],key[1],token
+        from secrets import randbelow, token_hex
+        token=token_hex(32)
+        for _ in range(8):
+            key=(randbelow(2147483647)+1,randbelow(2147483647)+1)
+            cursor.execute('SELECT pg_catalog.pg_try_advisory_lock(%s,%s)',key,prepare=False)
+            if cursor.fetchone()==(True,):
+                # Session locks survive caller rollback. The marker has no row
+                # authority by itself and is reused rather than leaked per retry.
+                self._custody.feed_source_lock_key=key
+                self._custody.feed_source_session_token=token
+                return key[0], key[1], token
+        raise ValueError('Unique source custody session marker unavailable')
+
+    def _feed_source_custody_binding(self):
+        key=self._custody.feed_source_lock_key
+        token=self._custody.feed_source_session_token
+        if key is None or token is None:return None
+        return key[0],key[1],token
 
     def _status(self):
         from psycopg import pq
@@ -955,6 +999,9 @@ class PsycopgHost:
                     return False
             self._closed = True
             for custody in self._transactions.values(): custody.usable = False
+            # Do not unlock the source marker here: detach transfers no
+            # connection ownership, so the original session may still be live.
+            # The marker remains authoritative until PostgreSQL ends the session.
             with _registry_lock:
                 if self._custody.attached is not None and self._custody.attached() is self:
                     self._custody.attached = None

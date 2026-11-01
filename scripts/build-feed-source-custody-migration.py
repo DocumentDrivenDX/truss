@@ -26,6 +26,7 @@ SOURCE = '288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4'
 TARGET_RELEASE = 'truss-catalog-runtime/0.75-candidate'
 NEW_ROUTINES = {
     'runtime_feed_custody_assert_mutable',
+    'runtime_feed_custody_lock_active',
     'runtime_feed_custody_prune_stale',
     'runtime_feed_custody_consumer_guard',
     'runtime_feed_custody_truncate_guard',
@@ -34,6 +35,18 @@ NEW_ROUTINES = {
     'acknowledge_feed_under_source_custody',
     'reconcile_feed_ack_under_source_custody',
     'close_feed_source_custody',
+}
+NEW_ROUTINE_IDENTITIES = {
+    ('runtime_feed_custody_assert_mutable', 'selected_consumer text'),
+    ('runtime_feed_custody_lock_active', 'selected_pid integer, selected_key_a integer, selected_key_b integer'),
+    ('runtime_feed_custody_prune_stale', ''),
+    ('runtime_feed_custody_consumer_guard', ''),
+    ('runtime_feed_custody_truncate_guard', ''),
+    ('open_feed_source_custody', 'selected_consumer text, expected_prior bytea, expected_target bytea, expected_feed_sha text, selected_payload bytea, maximum_facts integer, maximum_bytes integer, request_original bytea, destination_registration bytea, ack_scope bytea, selected_destination text, selected_request_sha text, selected_publication text, expected_release text, expected_digest text, selected_lock_key_a integer, selected_lock_key_b integer, selected_token text'),
+    ('renew_feed_source_custody', 'custody uuid, request_original bytea, destination_registration bytea, ack_scope bytea, selected_phase text, expected_release text, expected_digest text, selected_lock_key_a integer, selected_lock_key_b integer, selected_token text'),
+    ('acknowledge_feed_under_source_custody', 'custody uuid, request_original bytea, destination_registration bytea, ack_scope bytea, selected_consumer text, prior bytea, target bytea, feed_sha text, destination text, request_sha text, publication text, receipt_bytes bytea, expected_release text, expected_digest text, selected_lock_key_a integer, selected_lock_key_b integer, selected_token text'),
+    ('reconcile_feed_ack_under_source_custody', 'custody uuid, request_original bytea, destination_registration bytea, ack_scope bytea, selected_consumer text, prior bytea, target bytea, feed_sha text, destination text, request_sha text, publication text, receipt_bytes bytea, expected_release text, expected_digest text, selected_lock_key_a integer, selected_lock_key_b integer, selected_token text'),
+    ('close_feed_source_custody', 'custody uuid, request_original bytea, destination_registration bytea, ack_scope bytea, committed boolean, expected_release text, expected_digest text, selected_lock_key_a integer, selected_lock_key_b integer, selected_token text'),
 }
 CHANGED_ROUTINES = {
     ('acknowledge_feed', 'selected_consumer text, expected_prior bytea, target bytea, payload_sha256 text, expected_release text, expected_digest text'),
@@ -48,7 +61,7 @@ NEW_TRIGGERS = {
     ('runtime_feed_ack_receipt', 'runtime_feed_source_custody_receipt_truncate'),
 }
 NEW_CUSTODY_COLUMNS = {
-    'custody_id', 'backend_pid', 'backend_start', 'opened_xid', 'consumer_id',
+    'custody_id', 'backend_pid', 'lock_key_a', 'lock_key_b', 'opened_xid', 'consumer_id',
     'registration_id', 'installation_id', 'source_epoch', 'release_id',
     'release_sha256', 'prior_bytes', 'target_bytes', 'feed_sha256',
     'payload_bytes', 'maximum_facts', 'maximum_bytes', 'request_bytes',
@@ -60,7 +73,10 @@ NEW_CUSTODY_CONSTRAINTS = {
     'runtime_feed_source_custody_ack_scope_bytes_check',
     'runtime_feed_source_custody_ack_scope_bytes_not_null',
     'runtime_feed_source_custody_backend_pid_not_null',
-    'runtime_feed_source_custody_backend_start_not_null',
+    'runtime_feed_source_custody_lock_key_a_check',
+    'runtime_feed_source_custody_lock_key_a_not_null',
+    'runtime_feed_source_custody_lock_key_b_check',
+    'runtime_feed_source_custody_lock_key_b_not_null',
     'runtime_feed_source_custody_consumer_id_key',
     'runtime_feed_source_custody_consumer_id_not_null',
     'runtime_feed_source_custody_custody_id_not_null',
@@ -103,11 +119,11 @@ NEW_CUSTODY_INDEXES = {
     'runtime_feed_source_custody_pkey',
 }
 FEED_GRANTS = [
-    'open_feed_source_custody(text,bytea,bytea,text,bytea,integer,integer,bytea,bytea,bytea,text,text,text,text,text)',
-    'renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text)',
-    'acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text)',
-    'reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text)',
-    'close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text)',
+    'open_feed_source_custody(text,bytea,bytea,text,bytea,integer,integer,bytea,bytea,bytea,text,text,text,text,text,integer,integer,text)',
+    'renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text,integer,integer,text)',
+    'acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,integer,integer,text)',
+    'reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,integer,integer,text)',
+    'close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text,integer,integer,text)',
 ]
 CUSTODY_CHANGED_SOURCES = {
     'feed.sql', 'feed-receipts.sql', 'runtime.sql', 'read.sql', 'query.sql',
@@ -155,7 +171,7 @@ def _validate_inventory(source, target):
     if old_by_name - new_by_name:
         raise ValueError('Custody target removes a predecessor routine')
     additions = set(new_routines) - set(old_routines)
-    if {name for name, _arguments in additions} != NEW_ROUTINES or len(additions) != len(NEW_ROUTINES):
+    if additions != NEW_ROUTINE_IDENTITIES:
         raise ValueError(f'Unexpected custody routine identities: {sorted(additions)}')
     changed = {key for key in old_routines if old_routines[key] != new_routines[key]}
     if changed != CHANGED_ROUTINES:
@@ -362,6 +378,7 @@ def _validate_pair(ny, utc, target_digest):
 
 def _ownership_statements():
     signatures = {
+        'runtime_feed_custody_lock_active(integer,integer,integer)',
         'runtime_feed_custody_assert_mutable(text)',
         'runtime_feed_custody_prune_stale()',
         'runtime_feed_custody_consumer_guard()',

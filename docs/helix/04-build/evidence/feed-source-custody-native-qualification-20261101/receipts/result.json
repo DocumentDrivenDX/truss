@@ -1,0 +1,26 @@
+{
+  "qualification": "local-disposable-fresh-install-0.75-custody-lifecycle",
+  "targetManifestSha256": null,
+  "receiptScope": "disposable Truss source ACK fixture receipt; no external destination ACK",
+  "openRollbackReopen": {
+    "sameMarker": true,
+    "exactMarkerCount": 1,
+    "pid": 48608,
+    "custodyId": "4658adeb-ba49-463c-85aa-47a43f14b710"
+  },
+  "closeRollbackRetainsRow": true,
+  "samePidWrongMarkerRenewSqlstate": "55P03",
+  "legacyAckSqlstate": "55P03",
+  "reregistrationMutationSqlstate": "55P03",
+  "connectionLossPrunedRows": 1,
+  "reopenAfterConnectionLoss": true,
+  "positiveLifecycle": {
+    "renewedPhase": "before_ack",
+    "ackOutcome": "advanced",
+    "reconcileOutcome": "matched",
+    "closeOutcome": "closed",
+    "receiptBytesSha256": "c750ea71c196b1526f5532a296ffce785eb9d27bf14a141b215b84d1b64e7b77"
+  },
+  "nativeServerVersion": "180006",
+  "runtimeManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522"
+}

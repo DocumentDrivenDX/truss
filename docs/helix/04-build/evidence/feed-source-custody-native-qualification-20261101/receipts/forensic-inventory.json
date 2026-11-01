@@ -1,0 +1,41 @@
+{
+  "qualification": "read-only-forensic-source-inventory-diagnostic",
+  "sourceManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "targetManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+  "nativeServer": "180006",
+  "databaseLocale": [
+    "C.UTF-8",
+    "C.UTF-8",
+    "c"
+  ],
+  "exactSourceProfileMatch": false,
+  "sourcePgdataTreeSha256": "938218b9d56c3aba05a6d4f5ae499dafa6ab920d0997f50b087ff82682c7608b",
+  "forensicPgdataTreeSha256": "938218b9d56c3aba05a6d4f5ae499dafa6ab920d0997f50b087ff82682c7608b",
+  "differences": {
+    "relations": {
+      "expectedRows": 179,
+      "observedRows": 179,
+      "missingCount": 1,
+      "extraCount": 1,
+      "missing": [
+        {
+          "sha256": "d0129f5939d06e28567c3e9fa3704849e47ca614005b3b000d1a8ee1808e41ac",
+          "row": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')\",\"heap\",null,null]"
+        }
+      ],
+      "extra": [
+        {
+          "sha256": "8bb8292be49387302b2109d72bcb386df7f1e21144b366ce5b7bd295bc81b72b",
+          "row": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 04:00:00+00') TO ('2027-12-01 05:00:00+00')\",\"heap\",null,null]"
+        }
+      ],
+      "sameSetDifferentOrder": false
+    }
+  },
+  "limits": [
+    "read-only SELECTs only",
+    "no migration prepare/apply",
+    "no ACK",
+    "disposable forensic copy"
+  ]
+}

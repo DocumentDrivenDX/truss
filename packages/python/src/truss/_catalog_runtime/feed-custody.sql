@@ -4,7 +4,8 @@
 CREATE TABLE truss.runtime_feed_source_custody (
  custody_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
  backend_pid integer NOT NULL,
- backend_start timestamptz NOT NULL,
+ lock_key_a integer NOT NULL CHECK(lock_key_a BETWEEN 1 AND 2147483647),
+ lock_key_b integer NOT NULL CHECK(lock_key_b BETWEEN 1 AND 2147483647),
  opened_xid xid8 NOT NULL,
  consumer_id text NOT NULL UNIQUE,
  registration_id uuid NOT NULL,
@@ -43,6 +44,21 @@ CREATE TABLE truss.runtime_feed_source_custody (
  CHECK(release_sha256 ~ '^[0-9a-f]{64}$'));
 REVOKE ALL ON TABLE truss.runtime_feed_source_custody FROM PUBLIC;
 
+-- A session-level two-int advisory lock is the liveness witness. pg_locks is
+-- globally observable and is matched on the complete lock identity, database,
+-- owning backend, mode and grant state; a reused PID alone cannot keep custody.
+CREATE FUNCTION truss.runtime_feed_custody_lock_active(selected_pid integer,
+ selected_key_a integer,selected_key_b integer)
+RETURNS boolean LANGUAGE sql VOLATILE SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+ SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_locks l
+  WHERE l.locktype='advisory' AND l.database=(SELECT oid FROM pg_catalog.pg_database
+    WHERE datname=pg_catalog.current_database())
+   AND l.classid=selected_key_a::oid AND l.objid=selected_key_b::oid AND l.objsubid=2
+   AND l.pid=selected_pid AND l.mode='ExclusiveLock' AND l.granted)
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_custody_lock_active(integer,integer,integer) FROM PUBLIC;
+
 CREATE FUNCTION truss.runtime_feed_custody_assert_mutable(selected_consumer text)
 RETURNS void LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
@@ -53,7 +69,7 @@ BEGIN
   supplied:=current_setting('truss.feed_source_custody_token',true);
   IF supplied IS NULL OR supplied='' OR sha256(convert_to(supplied,'UTF8')) IS DISTINCT FROM active.internal_token_sha256
   OR active.backend_pid IS DISTINCT FROM pg_backend_pid()
-   OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid()) THEN
+  OR NOT truss.runtime_feed_custody_lock_active(active.backend_pid,active.lock_key_a,active.lock_key_b) THEN
    RAISE EXCEPTION 'feed source custody fences this consumer' USING ERRCODE='55P03';
   END IF;
   RETURN;
@@ -70,8 +86,7 @@ SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE removed integer;
 BEGIN
  DELETE FROM truss.runtime_feed_source_custody c
- WHERE NOT EXISTS(SELECT 1 FROM pg_stat_activity a
-  WHERE a.pid=c.backend_pid AND a.backend_start=c.backend_start);
+ WHERE NOT truss.runtime_feed_custody_lock_active(c.backend_pid,c.lock_key_a,c.lock_key_b);
  GET DIAGNOSTICS removed=ROW_COUNT;
  RETURN removed;
 END;
@@ -128,12 +143,12 @@ CREATE FUNCTION truss.open_feed_source_custody(selected_consumer text,expected_p
  expected_target bytea,expected_feed_sha text,selected_payload bytea,maximum_facts integer,
  maximum_bytes integer,request_original bytea,destination_registration bytea,ack_scope bytea,
  selected_destination text,selected_request_sha text,selected_publication text,
- expected_release text,expected_digest text)
+ expected_release text,expected_digest text,selected_lock_key_a integer,selected_lock_key_b integer,selected_token text)
 RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE selected_page bytea; page jsonb; cursor jsonb; consumer truss.runtime_feed_consumer%ROWTYPE;
  registration uuid; installation truss.catalog_runtime_installation%ROWTYPE; custody uuid; token text;
- start_time timestamptz; stale truss.runtime_feed_source_custody%ROWTYPE;
+ stale truss.runtime_feed_source_custody%ROWTYPE;
 BEGIN
  IF selected_consumer IS NULL OR octet_length(selected_consumer) NOT BETWEEN 1 AND 4096
   OR expected_prior IS NULL OR expected_target IS NULL OR selected_payload IS NULL
@@ -152,15 +167,20 @@ BEGIN
  IF selected_request_sha IS DISTINCT FROM encode(sha256(request_original),'hex') THEN
   RAISE EXCEPTION 'request hash must bind original request bytes' USING ERRCODE='55000';
  END IF;
+ IF selected_lock_key_a IS NULL OR selected_lock_key_b IS NULL OR selected_token IS NULL
+  OR octet_length(selected_token) NOT BETWEEN 32 AND 128
+  OR selected_lock_key_a NOT BETWEEN 1 AND 2147483647 OR selected_lock_key_b NOT BETWEEN 1 AND 2147483647
+  OR NOT truss.runtime_feed_custody_lock_active(pg_backend_pid(),selected_lock_key_a,selected_lock_key_b) THEN
+  RAISE EXCEPTION 'original live source host marker required' USING ERRCODE='55P03';
+ END IF;
  PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
  -- Consumer row serialization closes the race with ACK/re-registration.
  SELECT * INTO STRICT consumer FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer FOR UPDATE NOWAIT;
- -- A private row can remain after a backend crash. Its exact pid/start pair is
- -- the only condition under which a new open may clean it up.
- start_time:=(SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid());
+ -- Session lock release is automatic on connection loss and survives a caller
+ -- rollback. It never depends on pid reuse or pg_stat_activity visibility.
  SELECT * INTO stale FROM truss.runtime_feed_source_custody WHERE consumer_id=selected_consumer;
  IF FOUND THEN
-  IF EXISTS(SELECT 1 FROM pg_stat_activity a WHERE a.pid=stale.backend_pid AND a.backend_start=stale.backend_start) THEN
+  IF truss.runtime_feed_custody_lock_active(stale.backend_pid,stale.lock_key_a,stale.lock_key_b) THEN
    RAISE EXCEPTION 'live feed source custody already exists' USING ERRCODE='55P03';
   END IF;
   DELETE FROM truss.runtime_feed_source_custody WHERE custody_id=stale.custody_id;
@@ -187,12 +207,12 @@ BEGIN
   OR (cursor->>'sourceEpoch') IS NULL OR (cursor->>'registrationId') IS DISTINCT FROM consumer.registration_id::text THEN
   RAISE EXCEPTION 'exact feed installation, epoch and registration required' USING ERRCODE='55000';
  END IF;
- custody:=gen_random_uuid(); token:=gen_random_uuid()::text;
- INSERT INTO truss.runtime_feed_source_custody(custody_id,backend_pid,backend_start,opened_xid,consumer_id,registration_id,
+ custody:=gen_random_uuid(); token:=selected_token;
+ INSERT INTO truss.runtime_feed_source_custody(custody_id,backend_pid,lock_key_a,lock_key_b,opened_xid,consumer_id,registration_id,
   installation_id,source_epoch,release_id,release_sha256,prior_bytes,target_bytes,feed_sha256,payload_bytes,
   maximum_facts,maximum_bytes,request_bytes,destination_registration_bytes,ack_scope_bytes,destination_id,
   request_sha256,publication_id,internal_token,internal_token_sha256,phase)
- VALUES(custody,pg_backend_pid(),start_time,pg_current_xact_id(),selected_consumer,consumer.registration_id,installation.installation_id,
+ VALUES(custody,pg_backend_pid(),selected_lock_key_a,selected_lock_key_b,pg_current_xact_id(),selected_consumer,consumer.registration_id,installation.installation_id,
   cursor->>'sourceEpoch',expected_release,expected_digest,expected_prior,expected_target,expected_feed_sha,
   selected_payload,maximum_facts,maximum_bytes,request_original,destination_registration,ack_scope,
   selected_destination,selected_request_sha,selected_publication,token,sha256(convert_to(token,'UTF8')),'before_ack');
@@ -205,10 +225,11 @@ BEGIN
    'ackScopeSha256',encode(sha256(ack_scope),'hex'))::text,'UTF8')),'hex'))::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.open_feed_source_custody(text,bytea,bytea,text,bytea,integer,integer,bytea,bytea,bytea,text,text,text,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.open_feed_source_custody(text,bytea,bytea,text,bytea,integer,integer,bytea,bytea,bytea,text,text,text,text,text,integer,integer,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.renew_feed_source_custody(custody uuid,request_original bytea,
- destination_registration bytea,ack_scope bytea,selected_phase text,expected_release text,expected_digest text)
+ destination_registration bytea,ack_scope bytea,selected_phase text,expected_release text,expected_digest text,
+ selected_lock_key_a integer,selected_lock_key_b integer,selected_token text)
 RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE active truss.runtime_feed_source_custody%ROWTYPE; consumer truss.runtime_feed_consumer%ROWTYPE;
@@ -216,7 +237,9 @@ DECLARE active truss.runtime_feed_source_custody%ROWTYPE; consumer truss.runtime
 BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
-  OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR active.lock_key_a IS DISTINCT FROM selected_lock_key_a OR active.lock_key_b IS DISTINCT FROM selected_lock_key_b
+  OR sha256(convert_to(selected_token,'UTF8')) IS DISTINCT FROM active.internal_token_sha256
+  OR NOT truss.runtime_feed_custody_lock_active(active.backend_pid,active.lock_key_a,active.lock_key_b)
   OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
@@ -256,19 +279,21 @@ BEGIN
   'nextBase64',replace(encode(active.target_bytes,'base64'),chr(10),''),'feedSha256',active.feed_sha256)::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text,integer,integer,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.acknowledge_feed_under_source_custody(custody uuid,request_original bytea,
  destination_registration bytea,ack_scope bytea,selected_consumer text,prior bytea,target bytea,
  feed_sha text,destination text,request_sha text,publication text,receipt_bytes bytea,
- expected_release text,expected_digest text)
+ expected_release text,expected_digest text,selected_lock_key_a integer,selected_lock_key_b integer,selected_token text)
 RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE active truss.runtime_feed_source_custody%ROWTYPE; result bytea;
 BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody FOR UPDATE;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
-  OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR active.lock_key_a IS DISTINCT FROM selected_lock_key_a OR active.lock_key_b IS DISTINCT FROM selected_lock_key_b
+  OR sha256(convert_to(selected_token,'UTF8')) IS DISTINCT FROM active.internal_token_sha256
+  OR NOT truss.runtime_feed_custody_lock_active(active.backend_pid,active.lock_key_a,active.lock_key_b)
   OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.consumer_id IS DISTINCT FROM selected_consumer
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
@@ -296,19 +321,21 @@ BEGIN
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,integer,integer,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.reconcile_feed_ack_under_source_custody(custody uuid,request_original bytea,
  destination_registration bytea,ack_scope bytea,selected_consumer text,prior bytea,target bytea,
  feed_sha text,destination text,request_sha text,publication text,receipt_bytes bytea,
- expected_release text,expected_digest text)
+ expected_release text,expected_digest text,selected_lock_key_a integer,selected_lock_key_b integer,selected_token text)
 RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE active truss.runtime_feed_source_custody%ROWTYPE; result bytea;
 BEGIN
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
-  OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR active.lock_key_a IS DISTINCT FROM selected_lock_key_a OR active.lock_key_b IS DISTINCT FROM selected_lock_key_b
+  OR sha256(convert_to(selected_token,'UTF8')) IS DISTINCT FROM active.internal_token_sha256
+  OR NOT truss.runtime_feed_custody_lock_active(active.backend_pid,active.lock_key_a,active.lock_key_b)
   OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.consumer_id IS DISTINCT FROM selected_consumer
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
@@ -327,10 +354,11 @@ BEGIN
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,integer,integer,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.close_feed_source_custody(custody uuid,request_original bytea,
- destination_registration bytea,ack_scope bytea,committed boolean,expected_release text,expected_digest text)
+ destination_registration bytea,ack_scope bytea,committed boolean,expected_release text,expected_digest text,
+ selected_lock_key_a integer,selected_lock_key_b integer,selected_token text)
 RETURNS boolean LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE active truss.runtime_feed_source_custody%ROWTYPE; current_checkpoint bytea; observed bytea; initial_xid xid8;
@@ -338,7 +366,9 @@ BEGIN
  initial_xid:=pg_current_xact_id_if_assigned();
  SELECT * INTO STRICT active FROM truss.runtime_feed_source_custody WHERE custody_id=custody FOR UPDATE;
  IF active.backend_pid IS DISTINCT FROM pg_backend_pid()
-  OR active.backend_start IS DISTINCT FROM (SELECT backend_start FROM pg_stat_activity WHERE pid=pg_backend_pid())
+  OR active.lock_key_a IS DISTINCT FROM selected_lock_key_a OR active.lock_key_b IS DISTINCT FROM selected_lock_key_b
+  OR sha256(convert_to(selected_token,'UTF8')) IS DISTINCT FROM active.internal_token_sha256
+  OR NOT truss.runtime_feed_custody_lock_active(active.backend_pid,active.lock_key_a,active.lock_key_b)
   OR coalesce(pg_current_xact_id_if_assigned()=active.opened_xid,false)
   OR active.release_id IS DISTINCT FROM expected_release OR active.release_sha256 IS DISTINCT FROM expected_digest
   OR active.request_bytes IS DISTINCT FROM request_original
@@ -371,4 +401,4 @@ BEGIN
  RETURN true;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text,integer,integer,text) FROM PUBLIC;

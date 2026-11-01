@@ -146,6 +146,20 @@ def _close_partial_group_grants(cursor):
             cursor.execute(sql.SQL('REVOKE EXECUTE ON FUNCTION truss.{} FROM {} CASCADE').format(sql.SQL(signature),role),prepare=False)
 
 
+def _feed_source_cursor_pid(cursor):
+    """Return a backend PID only from this call's guarded observation."""
+    import re
+    observation=getattr(cursor,'admission',None)
+    if (type(observation) is not tuple or len(observation)!=3
+        or type(observation[0]) is not tuple or len(observation[0])!=4):return None
+    pid=observation[0][0]
+    return pid if type(pid) is str and re.fullmatch(r'[1-9][0-9]{0,9}',pid) else None
+
+
+def _feed_source_cursor_matches(cursor, backend_pid):
+    return _feed_source_cursor_pid(cursor)==backend_pid
+
+
 def _pin_cursor(cursor):
     from psycopg.types.string import (TextLoader, ByteaLoader, StrDumperUnknown,
         StrBinaryDumper, BytesDumper, BytesBinaryDumper)
@@ -1549,7 +1563,7 @@ class CatalogReferenceAssembly:
                 checkpoint=bytes(cursor.fetchone()[0])
                 cursor.execute('UPDATE truss.runtime_feed_consumer SET checkpoint_bytes=%s WHERE consumer_id=%s',(checkpoint,consumer_id),prepare=False)
             cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(reader_role)),prepare=False)
-            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.feed_reached(text,bytea,int,text,text),truss.read_feed(text,int,int,text,text),truss.reread_feed(text,bytea,bytea,text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text),truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.open_feed_source_custody(text,bytea,bytea,text,bytea,int,int,bytea,bytea,bytea,text,text,text,text,text),truss.renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text),truss.acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text),truss.close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.feed_reached(text,bytea,int,text,text),truss.read_feed(text,int,int,text,text),truss.reread_feed(text,bytea,bytea,text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text),truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.open_feed_source_custody(text,bytea,bytea,text,bytea,int,int,bytea,bytea,bytea,text,text,text,text,text,int,int,text),truss.renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text,int,int,text),truss.acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,int,int,text),truss.reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text,int,int,text),truss.close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text,int,int,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return FeedConsumer(consumer_id=consumer_id,registration_id=registration,checkpoint=FeedCursor(content=checkpoint))
@@ -1684,28 +1698,34 @@ class CatalogReferenceAssembly:
             and type(handle.custody_id) is str and len(handle.custody_id)==36
             and type(handle.selection_sha256) is str and len(handle.selection_sha256)==64
             and type(handle.backend_pid) is str
+            and self._host._feed_source_custody_binding() is not None
             and self._feed_source_selection_valid(handle._selection)
             and handle._connection_identity==id(self._host.connection))
 
     @_active_operation
     def open_feed_source_custody_in_transaction(self,transaction: TransactionHandle,
             selection: FeedSourceSelection) -> Outcome[FeedSourceCustodyHandle | FeedUnavailable]:
-        """Open a backend-bound source fence; the caller still owns transaction settlement."""
+        """Open a session-bound source fence; caller still settles the transaction."""
         from .feed import FeedUnavailable
         if not self._feed_source_selection_valid(selection):return Ok(FeedUnavailable(reason='context'))
         page=selection.page;manifest,digest,_=_release()
         def open_handle(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.open_feed_source_custody(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            key_a,key_b,token=self._host._feed_source_lock_marker(cursor)
+            backend_pid=_feed_source_cursor_pid(cursor)
+            if backend_pid is None:raise ValueError('Exact guarded source host observation required')
+            cursor.execute('SELECT truss.open_feed_source_custody(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                 (page.consumer_id,page.prior.content,page.next.content,page.sha256,page.content,
                  selection.maximum_facts,selection.maximum_bytes,selection.request_bytes,
                  selection.destination_registration_bytes,selection.ack_scope_bytes,selection.destination_id,
-                 selection.request_sha256,selection.publication_id,manifest['releaseId'],digest),prepare=False)
+                 selection.request_sha256,selection.publication_id,manifest['releaseId'],digest,key_a,key_b,token),prepare=False)
+            if not _feed_source_cursor_matches(cursor,backend_pid):
+                raise ValueError('Original guarded source host changed during open')
             value=json.loads(bytes(cursor.fetchone()[0]))
             if (type(value.get('custodyId')) is not str or type(value.get('selectionSha256')) is not str
                 or len(value['selectionSha256'])!=64):raise ValueError('Exact native custody handle required')
             return FeedSourceCustodyHandle(custody_id=value['custodyId'],selection_sha256=value['selectionSha256'],
-                backend_pid=observed[0][0],_connection_identity=id(self._host.connection),_selection=selection)
+                backend_pid=backend_pid,_connection_identity=id(self._host.connection),_selection=selection)
         return self._feed_result(self._host._run_operation(transaction,open_handle,function_call=True))
 
     @_active_operation
@@ -1715,14 +1735,16 @@ class CatalogReferenceAssembly:
         from .feed import FeedCursor,FeedUnavailable
         if not self._feed_source_handle_valid(handle) or phase not in ('before_ack','ack_unresolved'):
             return Ok(FeedUnavailable(reason='context'))
+        key_a,key_b,token=self._host._feed_source_custody_binding()
         selection=handle._selection
         manifest,digest,_=_release()
         def renew(cursor,observed):
-            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.renew_feed_source_custody(%s,%s,%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.renew_feed_source_custody(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                 (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
-                 selection.ack_scope_bytes,phase,manifest['releaseId'],digest),prepare=False)
+                 selection.ack_scope_bytes,phase,manifest['releaseId'],digest,
+                 key_a,key_b,token),prepare=False)
+            if not _feed_source_cursor_matches(cursor,handle.backend_pid):return FeedUnavailable(reason='context')
             value=json.loads(bytes(cursor.fetchone()[0]))
             if value.get('phase')!=phase or value.get('receiptOutcome') not in ('missing','matched'):
                 raise ValueError('Exact feed custody renewal required')
@@ -1740,16 +1762,17 @@ class CatalogReferenceAssembly:
             or selection!=handle._selection
             or type(receipt_bytes) is not bytes or not 1<=len(receipt_bytes)<=1048576):
             return Ok(FeedUnavailable(reason='context'))
+        key_a,key_b,token=self._host._feed_source_custody_binding()
         page=selection.page;manifest,digest,_=_release()
         def apply(cursor,observed):
-            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
             _pin_cursor(cursor)
             routine='reconcile_feed_ack_under_source_custody' if reconcile else 'acknowledge_feed_under_source_custody'
-            cursor.execute('SELECT truss.'+routine+'(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.'+routine+'(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                 (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
                  selection.ack_scope_bytes,page.consumer_id,page.prior.content,page.next.content,page.sha256,
                  selection.destination_id,selection.request_sha256,selection.publication_id,receipt_bytes,
-                 manifest['releaseId'],digest),prepare=False)
+                 manifest['releaseId'],digest,key_a,key_b,token),prepare=False)
+            if not _feed_source_cursor_matches(cursor,handle.backend_pid):return FeedUnavailable(reason='context')
             value=json.loads(bytes(cursor.fetchone()[0]));binding=value.get('binding');retained=None
             checkpoint=FeedCursor(content=base64.b64decode(value['checkpointBase64'],validate=True))
             if binding is not None:
@@ -1793,13 +1816,15 @@ class CatalogReferenceAssembly:
         if (not self._feed_source_handle_valid(handle) or not self._feed_source_selection_valid(selection)
             or selection!=handle._selection
             or type(committed) is not bool):return Ok(FeedUnavailable(reason='context'))
+        key_a,key_b,token=self._host._feed_source_custody_binding()
         manifest,digest,_=_release()
         def close_handle(cursor,observed):
-            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.close_feed_source_custody(%s,%s,%s,%s,%s,%s,%s)',
+            cursor.execute('SELECT truss.close_feed_source_custody(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                 (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
-                 selection.ack_scope_bytes,committed,manifest['releaseId'],digest),prepare=False)
+                 selection.ack_scope_bytes,committed,manifest['releaseId'],digest,
+                 key_a,key_b,token),prepare=False)
+            if not _feed_source_cursor_matches(cursor,handle.backend_pid):return FeedUnavailable(reason='context')
             if cursor.fetchone()!=(True,):raise ValueError('Exact feed custody close required')
             return FeedSourceClosed()
         return self._feed_result(self._host._run_operation(transaction,close_handle,function_call=True))

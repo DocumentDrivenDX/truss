@@ -33,8 +33,8 @@ def test_inventory_validation_does_not_mutate_captured_target():
     for row in rows:
         if (row[0], row[1]) in builder.CHANGED_ROUTINES:
             row[2] += "\n-- custody fence"
-    for name in sorted(builder.NEW_ROUTINES):
-        rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
+    for name, arguments in sorted(builder.NEW_ROUTINE_IDENTITIES):
+        rows.append([name, arguments, f"CREATE FUNCTION truss.{name}() RETURNS void"])
     table = "runtime_feed_source_custody"
     for ordinal, name in enumerate(sorted(builder.NEW_CUSTODY_COLUMNS), 1):
         inventory["columns"].append([table, ordinal, name])
@@ -69,6 +69,19 @@ def test_inventory_validation_does_not_mutate_captured_target():
         else:
             raise AssertionError("unreviewed catalog_accept_with_keys overload change must be refused")
 
+    extra = copy.deepcopy(target)
+    extra["inventory"]["routines"].append([
+        "open_feed_source_custody", "unreviewed text",
+        "CREATE FUNCTION truss.open_feed_source_custody(unreviewed text)",
+    ])
+    with patch.dict(sys.modules, {"truss._migration_verify": verifier}):
+        try:
+            builder._validate_inventory(source, extra)
+        except ValueError as error:
+            assert "routine identities" in str(error)
+        else:
+            raise AssertionError("an extra custody overload must be refused")
+
 
 def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     builder = _module()
@@ -76,6 +89,10 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     target = copy.deepcopy(source)
     target_manifest_bytes = (RUNTIME / "manifest.json").read_bytes()
     target["manifest"] = json.loads(target_manifest_bytes)
+    target["manifest"]["files"]["feed-custody.sql"] = builder.digest(
+        (RUNTIME / "feed-custody.sql").read_bytes()
+    )
+    target_manifest_bytes = builder.canonical(target["manifest"]) + b"\n"
     target["sha256"] = builder.digest(target_manifest_bytes)
     target["exactAcl"] = json.loads(
         (MIGRATIONS / f"{builder.SOURCE}.acl.json").read_bytes()
@@ -85,8 +102,8 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     for row in rows:
         if (row[0], row[1]) in builder.CHANGED_ROUTINES:
             row[2] += "\n-- custody fence"
-    for name in sorted(builder.NEW_ROUTINES):
-        rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
+    for name, arguments in sorted(builder.NEW_ROUTINE_IDENTITIES):
+        rows.append([name, arguments, f"CREATE FUNCTION truss.{name}() RETURNS void"])
     target["acl"]["public"].append(
         ["type", "_runtime_feed_source_custody", "USAGE", False]
     )
@@ -102,12 +119,16 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     with tempfile.TemporaryDirectory(prefix="feed-custody-generator-") as directory:
         migrations = Path(directory) / "_migrations"
         shutil.copytree(MIGRATIONS, migrations)
+        package = Path(directory) / "package"
+        shutil.copytree(builder.PACKAGE, package)
+        (package / "_catalog_runtime/manifest.json").write_bytes(target_manifest_bytes)
         predecessor = next(
             path for path in migrations.glob("*.manifest.json")
             if json.loads(path.read_bytes()).get("target") == builder.SOURCE
         )
         (migrations / "manifest.json").write_bytes(predecessor.read_bytes())
         builder.MIGRATIONS = migrations
+        builder.PACKAGE = package
         manifest, generated = builder._package(source, target, target["sha256"])
     edge_name = f"edge-{builder.SOURCE}-{target['sha256']}.json"
     edge = json.loads(generated[edge_name])
@@ -118,6 +139,10 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     assert ["type", "_runtime_feed_source_custody", "USAGE", False] in target["acl"]["public"]
     assert any("runtime_feed_custody_prune_stale() OWNER TO {}" in sql
                for sql in edge["ownership"])
+    assert any("runtime_feed_custody_lock_active(integer,integer,integer) OWNER TO {}" in sql
+               for sql in edge["ownership"])
+    assert any("REVOKE ALL ON FUNCTION truss.runtime_feed_custody_lock_active(integer,integer,integer) FROM PUBLIC"
+               in sql for sql in edge["ownership"])
     assert "REVOKE ALL ON TYPE truss.runtime_feed_source_custody FROM PUBLIC" in edge["ownership"]
     assert "REVOKE ALL ON TYPE truss._runtime_feed_source_custody FROM PUBLIC" not in edge["ownership"]
     assert "feed-custody.sql" in target["manifest"]["files"]
