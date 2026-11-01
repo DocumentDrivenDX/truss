@@ -2,7 +2,9 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 import sys
+import tempfile
 from types import ModuleType
 from unittest.mock import patch
 
@@ -91,7 +93,19 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
         feed_acl.append(["routine", f"{name}({arguments.replace(',', ', ') }", "EXECUTE", False])
     target["definitionAlternatives"] = source.get("definitionAlternatives", [])
 
-    manifest, generated = builder._package(source, target, target["sha256"])
+    # `_package` is deliberately a one-shot predecessor→candidate operation.
+    # The checked-in manifest is now the packaged candidate, so run this unit
+    # against a temporary copy pinned to the archived predecessor manifest.
+    with tempfile.TemporaryDirectory(prefix="feed-custody-generator-") as directory:
+        migrations = Path(directory) / "_migrations"
+        shutil.copytree(MIGRATIONS, migrations)
+        predecessor = next(
+            path for path in migrations.glob("*.manifest.json")
+            if json.loads(path.read_bytes()).get("target") == builder.SOURCE
+        )
+        (migrations / "manifest.json").write_bytes(predecessor.read_bytes())
+        builder.MIGRATIONS = migrations
+        manifest, generated = builder._package(source, target, target["sha256"])
     edge_name = f"edge-{builder.SOURCE}-{target['sha256']}.json"
     edge = json.loads(generated[edge_name])
     assert edge["source"] == builder.SOURCE
