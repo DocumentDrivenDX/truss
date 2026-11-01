@@ -183,7 +183,7 @@ BEGIN
   RAISE EXCEPTION 'exact retained nonempty feed page required' USING ERRCODE='55000';
  END IF;
  cursor:=convert_from(expected_prior,'UTF8')::jsonb;
- IF (cursor->>'installationId') IS DISTINCT FROM installation.installation_id
+ IF (cursor->>'installationId') IS DISTINCT FROM installation.installation_id::text
   OR (cursor->>'sourceEpoch') IS NULL OR (cursor->>'registrationId') IS DISTINCT FROM consumer.registration_id::text THEN
   RAISE EXCEPTION 'exact feed installation, epoch and registration required' USING ERRCODE='55000';
  END IF;
