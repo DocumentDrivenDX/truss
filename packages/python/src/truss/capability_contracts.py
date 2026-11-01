@@ -18,7 +18,8 @@ from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
 from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue, OrderKey
-from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged, FeedUnavailable
+from .feed import (FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged,
+    FeedUnavailable,FeedSourceSelection,FeedSourceCustodyHandle,FeedSourceObservation,FeedSourceClosed)
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
@@ -29,6 +30,21 @@ from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext, Im
 
 
 class NativeRuntimeOperations(Protocol):
+    def open_feed_source_custody_in_transaction(self, transaction: TransactionHandle,
+            selection: FeedSourceSelection) -> Outcome[FeedSourceCustodyHandle | FeedUnavailable]: ...
+
+    def renew_feed_source_custody_in_transaction(self, transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle, *, phase: Literal['before_ack','ack_unresolved']) -> Outcome[FeedSourceObservation | FeedUnavailable]: ...
+
+    def acknowledge_feed_under_source_custody_in_transaction(self, transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle, selection: FeedSourceSelection, *, receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]: ...
+
+    def reconcile_feed_ack_under_source_custody_in_transaction(self, transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle, selection: FeedSourceSelection, *, receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]: ...
+
+    def close_feed_source_custody_in_transaction(self, transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle, selection: FeedSourceSelection, *, committed: bool) -> Outcome[FeedSourceClosed | FeedUnavailable]: ...
+
     def page_history_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,cursor: HistoryCursor | None=None,
                                     maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoryPage | HistoryUnavailable]: ...
 

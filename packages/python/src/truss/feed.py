@@ -75,3 +75,52 @@ class FeedAckReconciled:
     checkpoint: FeedCursor
     outcome: Literal['matched', 'missing', 'conflicting']
     receipt: FeedAckReceipt | None
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FeedSourceSelection:
+    """Exact Truss page plus opaque external-source-holder bindings.
+
+    Truss preserves destination registration and ACK scope bytes. Their meaning
+    and authority remain with the external source holder (Ashlar).
+    """
+    page: FeedPage
+    maximum_facts: int
+    maximum_bytes: int
+    request_bytes: bytes
+    destination_registration_bytes: bytes
+    ack_scope_bytes: bytes
+    destination_id: str
+    request_sha256: str
+    publication_id: str
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FeedSourceCustodyHandle:
+    """Opaque routing key for one backend-bound native custody row."""
+    custody_id: str
+    selection_sha256: str
+    backend_pid: str = field(repr=False)
+    _connection_identity: int = field(repr=False)
+    _selection: FeedSourceSelection = field(repr=False)
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FeedSourceObservation:
+    phase: Literal['before_ack', 'ack_unresolved']
+    checkpoint: FeedCursor
+    receipt_outcome: Literal['missing', 'matched']
+    consumer_id: str
+    registration_id: str
+    installation_id: str
+    source_epoch: str
+    release_id: str
+    release_sha256: str
+    prior: FeedCursor
+    next: FeedCursor
+    feed_sha256: str
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FeedSourceClosed:
+    durability: Literal['pending'] = field(default='pending', init=False)

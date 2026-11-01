@@ -21,7 +21,8 @@ from .imports import ImportInput, OwnedImportInput, ObjectImportRecord, EdgeImpo
 from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
 from .contracts import ObjectKeySelection
 from .groups import AuthoredValue, OrderKey
-from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged, FeedUnavailable
+from .feed import (FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged,
+    FeedUnavailable,FeedSourceSelection,FeedSourceCustodyHandle,FeedSourceObservation,FeedSourceClosed)
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
@@ -190,6 +191,28 @@ class NativeFeedCapability(_NativeCapability[Literal['feed']]):
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:
         return self._assembly.acknowledge_feed_in_transaction(transaction,page)
+
+    def open_feed_source_custody_in_transaction(self,transaction: TransactionHandle,
+                                                selection: FeedSourceSelection) -> Outcome[FeedSourceCustodyHandle | FeedUnavailable]:
+        return self._assembly.open_feed_source_custody_in_transaction(transaction,selection)
+
+    def renew_feed_source_custody_in_transaction(self,transaction: TransactionHandle,handle: FeedSourceCustodyHandle,
+                                                  *,phase: Literal['before_ack','ack_unresolved']) -> Outcome[FeedSourceObservation | FeedUnavailable]:
+        return self._assembly.renew_feed_source_custody_in_transaction(transaction,handle,phase=phase)
+
+    def acknowledge_feed_under_source_custody_in_transaction(self,transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle,selection: FeedSourceSelection,*,receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]:
+        return self._assembly.acknowledge_feed_under_source_custody_in_transaction(
+            transaction,handle,selection,receipt_bytes=receipt_bytes)
+
+    def reconcile_feed_ack_under_source_custody_in_transaction(self,transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle,selection: FeedSourceSelection,*,receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]:
+        return self._assembly.reconcile_feed_ack_under_source_custody_in_transaction(
+            transaction,handle,selection,receipt_bytes=receipt_bytes)
+
+    def close_feed_source_custody_in_transaction(self,transaction: TransactionHandle,handle: FeedSourceCustodyHandle,
+            selection: FeedSourceSelection,*,committed: bool) -> Outcome[FeedSourceClosed | FeedUnavailable]:
+        return self._assembly.close_feed_source_custody_in_transaction(transaction,handle,selection,committed=committed)
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)

@@ -26,7 +26,8 @@ from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
     HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
-from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
+from .feed import (FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage,FeedConsumer,FeedAcknowledged,
+    FeedUnavailable,FeedSourceSelection,FeedSourceCustodyHandle,FeedSourceObservation,FeedSourceClosed)
 from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable, _validate_validator
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
@@ -175,7 +176,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','feed-custody.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -1548,7 +1549,7 @@ class CatalogReferenceAssembly:
                 checkpoint=bytes(cursor.fetchone()[0])
                 cursor.execute('UPDATE truss.runtime_feed_consumer SET checkpoint_bytes=%s WHERE consumer_id=%s',(checkpoint,consumer_id),prepare=False)
             cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(reader_role)),prepare=False)
-            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.feed_reached(text,bytea,int,text,text),truss.read_feed(text,int,int,text,text),truss.reread_feed(text,bytea,bytea,text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text),truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.feed_reached(text,bytea,int,text,text),truss.read_feed(text,int,int,text,text),truss.reread_feed(text,bytea,bytea,text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text),truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text),truss.open_feed_source_custody(text,bytea,bytea,text,bytea,int,int,bytea,bytea,bytea,text,text,text,text,text),truss.renew_feed_source_custody(uuid,bytea,bytea,bytea,text,text,text),truss.acknowledge_feed_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text),truss.reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text),truss.close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return FeedConsumer(consumer_id=consumer_id,registration_id=registration,checkpoint=FeedCursor(content=checkpoint))
@@ -1655,6 +1656,151 @@ class CatalogReferenceAssembly:
             if retained is None or value['outcome'] not in ('advanced','equal'):raise ValueError('Exact pending ACK receipt result required')
             return FeedReceiptAcknowledged(receipt=retained,checkpoint=checkpoint,outcome=value['outcome'])
         return self._feed_result(self._host._run_operation(transaction,observe))
+
+    @staticmethod
+    def _feed_source_selection_valid(selection):
+        import re
+        try:
+            page=selection.page
+            return (type(selection) is FeedSourceSelection and type(page) is FeedPage
+                and type(page.content) is bytes and 1<=len(page.content)<=16777216
+                and type(page.sha256) is str and sha256(page.content).hexdigest()==page.sha256
+                and type(page.prior) is type(page.next) and type(page.prior.content) is bytes
+                and type(page.next.content) is bytes and page.outcome=='transaction'
+                and type(selection.maximum_facts) is int and 1<=selection.maximum_facts<=65536
+                and type(selection.maximum_bytes) is int and 1<=selection.maximum_bytes<=16777216
+                and all(type(value) is bytes and 1<=len(value)<=bound for value,bound in (
+                    (selection.request_bytes,16777216),(selection.destination_registration_bytes,1048576),
+                    (selection.ack_scope_bytes,1048576)))
+                and all(type(value) is str and '\0' not in value and 1<=len(value.encode('utf8'))<=bound
+                    for value,bound in ((selection.destination_id,1024),(selection.publication_id,4096)))
+                and type(selection.request_sha256) is str
+                and re.fullmatch('[0-9a-f]{64}',selection.request_sha256) is not None)
+        except (AttributeError,TypeError,UnicodeError):
+            return False
+
+    def _feed_source_handle_valid(self,handle):
+        return (type(handle) is FeedSourceCustodyHandle
+            and type(handle.custody_id) is str and len(handle.custody_id)==36
+            and type(handle.selection_sha256) is str and len(handle.selection_sha256)==64
+            and type(handle.backend_pid) is str
+            and self._feed_source_selection_valid(handle._selection)
+            and handle._connection_identity==id(self._host.connection))
+
+    @_active_operation
+    def open_feed_source_custody_in_transaction(self,transaction: TransactionHandle,
+            selection: FeedSourceSelection) -> Outcome[FeedSourceCustodyHandle | FeedUnavailable]:
+        """Open a backend-bound source fence; the caller still owns transaction settlement."""
+        from .feed import FeedUnavailable
+        if not self._feed_source_selection_valid(selection):return Ok(FeedUnavailable(reason='context'))
+        page=selection.page;manifest,digest,_=_release()
+        def open_handle(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.open_feed_source_custody(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                (page.consumer_id,page.prior.content,page.next.content,page.sha256,page.content,
+                 selection.maximum_facts,selection.maximum_bytes,selection.request_bytes,
+                 selection.destination_registration_bytes,selection.ack_scope_bytes,selection.destination_id,
+                 selection.request_sha256,selection.publication_id,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            if (type(value.get('custodyId')) is not str or type(value.get('selectionSha256')) is not str
+                or len(value['selectionSha256'])!=64):raise ValueError('Exact native custody handle required')
+            return FeedSourceCustodyHandle(custody_id=value['custodyId'],selection_sha256=value['selectionSha256'],
+                backend_pid=observed[0][0],_connection_identity=id(self._host.connection),_selection=selection)
+        return self._feed_result(self._host._run_operation(transaction,open_handle,function_call=True))
+
+    @_active_operation
+    def renew_feed_source_custody_in_transaction(self,transaction: TransactionHandle,handle: FeedSourceCustodyHandle,
+            *,phase: Literal['before_ack','ack_unresolved']) -> Outcome[FeedSourceObservation | FeedUnavailable]:
+        from .feed import FeedCursor,FeedUnavailable
+        if not self._feed_source_handle_valid(handle) or phase not in ('before_ack','ack_unresolved'):
+            return Ok(FeedUnavailable(reason='context'))
+        selection=handle._selection
+        manifest,digest,_=_release()
+        def renew(cursor,observed):
+            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.renew_feed_source_custody(%s,%s,%s,%s,%s,%s,%s)',
+                (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
+                 selection.ack_scope_bytes,phase,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            if value.get('phase')!=phase or value.get('receiptOutcome') not in ('missing','matched'):
+                raise ValueError('Exact feed custody renewal required')
+            return FeedSourceObservation(phase=phase,checkpoint=FeedCursor(content=base64.b64decode(value['checkpointBase64'],validate=True)),
+                receipt_outcome=value['receiptOutcome'],consumer_id=value['consumerId'],registration_id=value['registrationId'],
+                installation_id=value['installationId'],source_epoch=value['sourceEpoch'],release_id=value['releaseId'],
+                release_sha256=value['releaseSha256'],prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True)),
+                next=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True)),feed_sha256=value['feedSha256'])
+        return self._feed_result(self._host._run_operation(transaction,renew,function_call=True))
+
+    def _feed_source_bound_receipt(self,transaction,handle,selection,receipt_bytes,*,reconcile):
+        import re
+        from .feed import FeedCursor,FeedUnavailable
+        if (not self._feed_source_handle_valid(handle) or not self._feed_source_selection_valid(selection)
+            or selection!=handle._selection
+            or type(receipt_bytes) is not bytes or not 1<=len(receipt_bytes)<=1048576):
+            return Ok(FeedUnavailable(reason='context'))
+        page=selection.page;manifest,digest,_=_release()
+        def apply(cursor,observed):
+            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
+            _pin_cursor(cursor)
+            routine='reconcile_feed_ack_under_source_custody' if reconcile else 'acknowledge_feed_under_source_custody'
+            cursor.execute('SELECT truss.'+routine+'(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
+                 selection.ack_scope_bytes,page.consumer_id,page.prior.content,page.next.content,page.sha256,
+                 selection.destination_id,selection.request_sha256,selection.publication_id,receipt_bytes,
+                 manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]));binding=value.get('binding');retained=None
+            checkpoint=FeedCursor(content=base64.b64decode(value['checkpointBase64'],validate=True))
+            if binding is not None:
+                original=base64.b64decode(value['receiptBase64'],validate=True)
+                if (sha256(original).hexdigest()!=binding.get('receiptSha256')
+                    or (not reconcile and original!=receipt_bytes)
+                    or binding.get('consumerId')!=page.consumer_id or binding.get('registrationId')!=page.registration_id
+                    or binding.get('feedSha256')!=page.sha256 or binding.get('destinationId')!=selection.destination_id
+                    or binding.get('requestSha256')!=selection.request_sha256 or binding.get('publicationId')!=selection.publication_id):
+                    raise ValueError('Exact handle-bound receipt correspondence required')
+                retained=FeedAckReceipt(installation_id=binding['installationId'],source_epoch=binding['sourceEpoch'],
+                    consumer_id=binding['consumerId'],registration_id=binding['registrationId'],
+                    prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True)),
+                    next=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True)),feed_sha256=binding['feedSha256'],
+                    destination_id=binding['destinationId'],request_sha256=binding['requestSha256'],
+                    publication_id=binding['publicationId'],receipt_bytes=original,receipt_sha256=binding['receiptSha256'])
+            if reconcile:
+                if value.get('outcome') not in ('matched','missing','conflicting') or (retained is None)!=(value['outcome']=='missing'):
+                    raise ValueError('Exact bound ACK reconciliation required')
+                return FeedAckReconciled(checkpoint=checkpoint,outcome=value['outcome'],receipt=retained)
+            if retained is None or value.get('outcome') not in ('advanced','equal'):
+                raise ValueError('Exact bound source ACK result required')
+            return FeedReceiptAcknowledged(receipt=retained,checkpoint=checkpoint,outcome=value['outcome'])
+        return self._feed_result(self._host._run_operation(transaction,apply,function_call=True))
+
+    @_active_operation
+    def acknowledge_feed_under_source_custody_in_transaction(self,transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle,selection: FeedSourceSelection,*,receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]:
+        return self._feed_source_bound_receipt(transaction,handle,selection,receipt_bytes,reconcile=False)
+
+    @_active_operation
+    def reconcile_feed_ack_under_source_custody_in_transaction(self,transaction: TransactionHandle,
+            handle: FeedSourceCustodyHandle,selection: FeedSourceSelection,*,receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]:
+        return self._feed_source_bound_receipt(transaction,handle,selection,receipt_bytes,reconcile=True)
+
+    @_active_operation
+    def close_feed_source_custody_in_transaction(self,transaction: TransactionHandle,handle: FeedSourceCustodyHandle,
+            selection: FeedSourceSelection,*,committed: bool) -> Outcome[FeedSourceClosed | FeedUnavailable]:
+        from .feed import FeedUnavailable
+        if (not self._feed_source_handle_valid(handle) or not self._feed_source_selection_valid(selection)
+            or selection!=handle._selection
+            or type(committed) is not bool):return Ok(FeedUnavailable(reason='context'))
+        manifest,digest,_=_release()
+        def close_handle(cursor,observed):
+            if observed[0][0]!=handle.backend_pid:return FeedUnavailable(reason='context')
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.close_feed_source_custody(%s,%s,%s,%s,%s,%s,%s)',
+                (handle.custody_id,selection.request_bytes,selection.destination_registration_bytes,
+                 selection.ack_scope_bytes,committed,manifest['releaseId'],digest),prepare=False)
+            if cursor.fetchone()!=(True,):raise ValueError('Exact feed custody close required')
+            return FeedSourceClosed()
+        return self._feed_result(self._host._run_operation(transaction,close_handle,function_call=True))
 
     @_active_operation
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:

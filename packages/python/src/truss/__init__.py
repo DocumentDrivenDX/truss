@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Embeddable experimental Truss Python interface; see the declared runtime profile."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
-from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
+from .feed import (FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer,
+    FeedAcknowledged, FeedUnavailable,FeedSourceSelection,FeedSourceCustodyHandle,FeedSourceObservation,FeedSourceClosed)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
@@ -118,6 +119,7 @@ from .query import QueryReadPosition
 __all__ += ['QueryReadPosition']
 
 __all__ += ["FeedAckReceipt", "FeedReceiptAcknowledged", "FeedAckReconciled"]
+__all__ += ["FeedSourceSelection","FeedSourceCustodyHandle","FeedSourceObservation","FeedSourceClosed"]
 
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 __all__ += ["TraversalHop", "TraversalComplete", "TraversalLimited"]
