@@ -123,7 +123,7 @@ The installation profile revokes direct relation rights from public roles and th
 
 No second Python writer for `runtime_feed_consumer` was found. Two SQL routines advance its checkpoint; the owner enrollment path creates the initial registration/cursor. Migration is recipe-driven and obtains one global advisory gate plus all-table exclusive locks. Owner/superuser DDL outside the supported installer/migration path remains an explicit trusted-administrator boundary; no database lock can defend against a superuser that deliberately destroys the installed guard.
 
-## Minimal versioned SQL lock protocol and API diff
+## Initial lock protocol proposal (superseded by candidate update below)
 
 This is the proposed smallest complete protocol for supported Truss paths. It does not hold the existing global writer/install key for the handle lifetime.
 
@@ -146,7 +146,7 @@ No code-only read check provides this guarantee. After implementation, native te
 5. **Run controlled local native qualification only after the owner authorizes it.** Use the exact supported Truss runtime and its dedicated owned pgserver worker from the current installation/migration plan; never the shared default cluster. In a fresh database/roles, prove: open captures original registration/cursor; a competing ACK and re-registration refuse while held; feed page remains exact; handle's same-backend ACK commits once; another ACK cannot overtake; fresh transaction reconciliation returns exact receipt; pre/post-close phase rules work; outer commit response loss is reconciled without resubmission; rollback, backend termination and process restart release session locks but leave stale handle rows non-authoritative; migration waits/refuses under bounded policy; ordinary roles cannot forge rows, invoke private routines, disable triggers or bypass lock paths; cleanup restores inventory and stops the worker.
 6. **Independent review and publication.** Review source/SQL, lock ordering, installation membership, migration route and ACL closure independently. Compare source, wheel, installed module and generated native manifest hashes. Keep the evidence at component scope until complete profile review and ordinary source/ACK authority are admitted. No source mutation or ACK is needed to test refusal/fencing cases; a successful ACK case requires a separately authorized native test fixture and must not run as part of this current task.
 
-## Current blockers
+## Initial blockers (before candidate implementation)
 
 - The selected public API has no source lifetime, held session owner or close operation.
 - Existing reads do not fence checkpoint changes between calls; exact ACK CAS alone cannot prove the entire pre-ACK interval.
@@ -161,7 +161,7 @@ Until these blockers close, Truss 0.0.51 remains read/reread plus exact-receipt 
 
 Read-only review of Truss v0.0.51 source and its AGENTS.md, plus the cited Ashlar contracts, TD-009 and the two source-holder evidence records. The old `/private/tmp/truss-holder-v050` directory was inspected read-only; it contains no checked-out Python/SQL source. No native database was started, no tests were run, no source or ACK call was made, and no push occurred.
 
-## v0.0.51 candidate implementation disposition
+## Initial candidate disposition (superseded by implementation update below)
 
 The branch `codex/feed-source-custody-052` is a source-only design candidate. No runtime or SQL source was changed. The full fence is not an independently verifiable patch against the current release artifacts: `truss._migration_recipe.load_recipe()` verifies the exact active `_catalog_runtime/manifest.json`, every file named by it, the target configuration, every edge artifact, and exact ACL evidence for every endpoint. `_migration_execute.execute()` only runs the declared forward recipe and verifies source/target inventories, ACLs, preservation, ownership and target activation. A modified feed routine that is absent from a new target manifest cannot be installed into an existing 0.0.51 schema; adding a Python façade would falsely advertise enforcement.
 
