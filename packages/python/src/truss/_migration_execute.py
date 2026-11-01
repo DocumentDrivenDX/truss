@@ -37,6 +37,11 @@ def exclude(cursor):
     # prevents the NOWAIT locks; a later open cannot pass its consumer-row lock.
     cursor.execute("SELECT pg_catalog.to_regclass('truss.runtime_feed_source_custody') IS NOT NULL",prepare=False)
     if cursor.fetchone()[0]:
+        # Only exact dead backend identities are removable. This owner-controlled
+        # routine runs after relation locks so a live open cannot be mistaken
+        # for stale between the check and deletion.
+        cursor.execute('SELECT truss.runtime_feed_custody_prune_stale()',prepare=False)
+        cursor.fetchone()
         cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_feed_source_custody)',prepare=False)
         if cursor.fetchone()[0]:raise ValueError('Active feed source custody prevents migration')
 

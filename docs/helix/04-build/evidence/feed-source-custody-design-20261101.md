@@ -210,10 +210,21 @@ the same backend can use the handle. Reconciliation remains a fresh read-only,
 unassigned transaction because its check uses
 `pg_current_xact_id_if_assigned()` without assigning one.
 
+Sol's source review then identified and closed two additional edges. The
+consumer trigger now checks both `OLD.consumer_id` and `NEW.consumer_id` on
+UPDATE and rejects any identity rewrite; removal/re-registration still passes
+through the old-ID guard and cannot replace an active registration. Migration
+now invokes the owner-controlled stale-row pruner only after taking the full
+Truss relation locks. It deletes only rows whose exact `(backend_pid,
+backend_start)` is absent from `pg_stat_activity`, then refuses if any live
+custody remains. This provides an authorized migration recovery path for dead
+backend rows without expiring a live handle. The prune routine needs target
+ownership/EXECUTE assignment in the not-yet-generated 0.75 migration artifact.
+
 The candidate runtime manifest is now `truss-catalog-runtime/0.75-candidate`
 and pins the new source file; `scripts/build-feed-source-custody-runtime-manifest.py`
 rebuilds the content hashes. `_verified_release()` successfully validated the
-manifest and loaded 51 SQL sources. Three focused contract test functions
+manifest and loaded 51 SQL sources. Five focused contract test functions
 passed under Python 3.11 by direct invocation. `git diff --check` passed. The
 pytest runner is unavailable in the isolated venv, and no SQL parser/native
 database execution has been performed.

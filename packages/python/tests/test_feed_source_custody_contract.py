@@ -6,6 +6,7 @@ from truss.feed import FeedCursor, FeedPage, FeedSourceCustodyHandle, FeedSource
 ROOT = Path(__file__).resolve().parents[1]
 SQL = ROOT / "src/truss/_catalog_runtime/feed-custody.sql"
 MIGRATION = ROOT / "src/truss/_migration_execute.py"
+RUNTIME = ROOT / "src/truss/catalog_runtime.py"
 
 
 def test_source_custody_models_are_frozen_and_keep_original_selection():
@@ -61,5 +62,26 @@ def test_open_serializes_with_consumer_writers_and_checks_stale_backend_identity
 def test_migration_locks_every_truss_table_before_active_custody_check():
     source = MIGRATION.read_text()
     lock = source.index("LOCK TABLE {} IN ACCESS EXCLUSIVE MODE NOWAIT")
+    prune = source.index("SELECT truss.runtime_feed_custody_prune_stale()")
     check = source.index("SELECT EXISTS(SELECT 1 FROM truss.runtime_feed_source_custody)")
-    assert lock < check
+    assert lock < prune < check
+
+
+def test_consumer_identity_update_checks_both_sides_and_cannot_rekey():
+    source = SQL.read_text()
+    update = source.index("IF TG_OP='UPDATE' THEN")
+    old_check = source.index("runtime_feed_custody_assert_mutable(OLD.consumer_id)", update)
+    new_check = source.index("runtime_feed_custody_assert_mutable(NEW.consumer_id)", update)
+    immutable = source.index("OLD.consumer_id IS DISTINCT FROM NEW.consumer_id", update)
+    assert update < old_check < new_check < immutable
+    delete = source.index("IF TG_OP='DELETE' THEN")
+    assert "runtime_feed_custody_assert_mutable(OLD.consumer_id)" in source[delete:update]
+
+
+def test_reregistration_serializes_on_the_same_consumer_row():
+    source = RUNTIME.read_text()
+    registration = source.index("def register_feed_consumer_in_transaction")
+    selection = source.index(
+        "WHERE consumer_id=%s FOR UPDATE NOWAIT", registration
+    )
+    assert selection > registration

@@ -64,6 +64,20 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_feed_custody_assert_mutable(text) FROM PUBLIC;
 
+CREATE FUNCTION truss.runtime_feed_custody_prune_stale()
+RETURNS integer LANGUAGE plpgsql VOLATILE SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE removed integer;
+BEGIN
+ DELETE FROM truss.runtime_feed_source_custody c
+ WHERE NOT EXISTS(SELECT 1 FROM pg_stat_activity a
+  WHERE a.pid=c.backend_pid AND a.backend_start=c.backend_start);
+ GET DIAGNOSTICS removed=ROW_COUNT;
+ RETURN removed;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_custody_prune_stale() FROM PUBLIC;
+
 CREATE FUNCTION truss.runtime_feed_custody_consumer_guard()
 RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
@@ -71,6 +85,14 @@ BEGIN
  IF TG_OP='DELETE' THEN
   PERFORM truss.runtime_feed_custody_assert_mutable(OLD.consumer_id);
   RETURN OLD;
+ END IF;
+ IF TG_OP='UPDATE' THEN
+  PERFORM truss.runtime_feed_custody_assert_mutable(OLD.consumer_id);
+  PERFORM truss.runtime_feed_custody_assert_mutable(NEW.consumer_id);
+  IF OLD.consumer_id IS DISTINCT FROM NEW.consumer_id THEN
+   RAISE EXCEPTION 'feed consumer identity is immutable' USING ERRCODE='55000';
+  END IF;
+  RETURN NEW;
  END IF;
  PERFORM truss.runtime_feed_custody_assert_mutable(NEW.consumer_id);
  RETURN NEW;
