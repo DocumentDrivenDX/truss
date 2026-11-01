@@ -87,6 +87,9 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
             row[2] += "\n-- custody fence"
     for name in sorted(builder.NEW_ROUTINES):
         rows.append([name, "", f"CREATE FUNCTION truss.{name}() RETURNS void"])
+    target["acl"]["public"].append(
+        ["type", "_runtime_feed_source_custody", "USAGE", False]
+    )
     feed_acl = target["acl"]["feed"]
     for signature in builder.FEED_GRANTS:
         name, arguments = signature.split("(", 1)
@@ -112,8 +115,11 @@ def test_generated_edge_binds_new_target_owner_and_existing_feed_grants():
     assert edge["target"] == target["sha256"]
     assert edge["feedGrants"] == builder.FEED_GRANTS
     assert edge["moduleGrants"] == []
+    assert ["type", "_runtime_feed_source_custody", "USAGE", False] in target["acl"]["public"]
     assert any("runtime_feed_custody_prune_stale() OWNER TO {}" in sql
                for sql in edge["ownership"])
+    assert "REVOKE ALL ON TYPE truss.runtime_feed_source_custody FROM PUBLIC" in edge["ownership"]
+    assert "REVOKE ALL ON TYPE truss._runtime_feed_source_custody FROM PUBLIC" not in edge["ownership"]
     assert "feed-custody.sql" in target["manifest"]["files"]
     assert manifest["target"] == target["sha256"]
     assert builder.SOURCE in manifest["sources"]

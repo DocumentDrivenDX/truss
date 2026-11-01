@@ -369,7 +369,13 @@ def _ownership_statements():
         FEED_GRANTS[0], FEED_GRANTS[1], FEED_GRANTS[2], FEED_GRANTS[3], FEED_GRANTS[4],
     }
     statements = ['ALTER TABLE truss.runtime_feed_source_custody OWNER TO {}',
-                  'REVOKE ALL ON TABLE truss.runtime_feed_source_custody FROM PUBLIC']
+                  'REVOKE ALL ON TABLE truss.runtime_feed_source_custody FROM PUBLIC',
+                  # CREATE TABLE also creates a composite row type. The
+                  # installer revokes its default PUBLIC USAGE grant; the
+                  # migration must reproduce that private-type boundary.
+                  # PostgreSQL's companion array type retains its qualified
+                  # default PUBLIC USAGE entry in the captured target profile.
+                  'REVOKE ALL ON TYPE truss.runtime_feed_source_custody FROM PUBLIC']
     for signature in sorted(signatures):
         statements.extend((f'ALTER FUNCTION truss.{signature} OWNER TO {{}}',
                            f'REVOKE ALL ON FUNCTION truss.{signature} FROM PUBLIC'))
