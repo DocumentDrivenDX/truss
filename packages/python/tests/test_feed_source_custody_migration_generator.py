@@ -102,6 +102,29 @@ def test_feed_grants_are_applied_to_registered_feed_roles_outside_module_access(
     assert "'feedGrants'" in recipe
 
 
+def test_runtime_delta_allows_only_custody_and_current_release_guard_sources():
+    builder = _module()
+    old = {name: f"old-{name}" for name in builder.CUSTODY_CHANGED_SOURCES}
+    old.update({"untouched.sql": "same"})
+    source = {"manifest": {"files": old}}
+    target = {"manifest": {
+        "releaseId": builder.TARGET_RELEASE,
+        "files": {**old, "feed-custody.sql": "custody"},
+        "version": "0.75",
+        "layoutProfile": {"identity": "same"},
+    }}
+    source["manifest"]["version"] = "0.74"
+    source["manifest"]["layoutProfile"] = {"identity": "same"}
+    builder._validate_runtime_manifest(source, target)
+    target["manifest"]["files"]["untouched.sql"] = "unexpected-change"
+    try:
+        builder._validate_runtime_manifest(source, target)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("runtime manifest must reject changes outside custody source set")
+
+
 def test_acl_generator_requires_exact_five_feed_grants_and_rejects_admin_prune():
     builder = _module()
     source = json.loads((MIGRATIONS / f"{builder.SOURCE}.json").read_bytes())

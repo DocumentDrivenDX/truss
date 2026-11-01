@@ -21,6 +21,9 @@ def main() -> None:
         raise SystemExit("unexpected source runtime candidate lineage")
     manifest["releaseId"] = "truss-catalog-runtime/0.75-candidate"
     manifest["version"] = "0.75"
+    for name in ("runtime.sql", "read.sql", "query.sql"):
+        if name not in manifest["files"]:
+            raise SystemExit(f"missing pinned runtime source: {name}")
     manifest["files"]["feed-custody.sql"] = ""
     for name in sorted(manifest["files"]):
         path = RUNTIME / name

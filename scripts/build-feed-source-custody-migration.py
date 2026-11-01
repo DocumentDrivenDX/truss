@@ -48,6 +48,9 @@ FEED_GRANTS = [
     'reconcile_feed_ack_under_source_custody(uuid,bytea,bytea,bytea,text,bytea,bytea,text,text,text,text,bytea,text,text)',
     'close_feed_source_custody(uuid,bytea,bytea,bytea,boolean,text,text)',
 ]
+CUSTODY_CHANGED_SOURCES = {
+    'feed.sql', 'feed-receipts.sql', 'runtime.sql', 'read.sql', 'query.sql',
+}
 
 
 def canonical(value):
@@ -137,7 +140,7 @@ def _validate_runtime_manifest(source, target):
     if set(new_files) != expected_names:
         raise ValueError('0.75 must append only the feed-custody source file')
     for name, old_hash in old_files.items():
-        if name not in ('feed.sql', 'feed-receipts.sql') and new_files[name] != old_hash:
+        if name not in CUSTODY_CHANGED_SOURCES and new_files[name] != old_hash:
             raise ValueError('Unexpected runtime source change: ' + name)
     if new['version'] != '0.75' or new['layoutProfile'] != old['layoutProfile']:
         raise ValueError('Custody release changes unsupported runtime metadata')
