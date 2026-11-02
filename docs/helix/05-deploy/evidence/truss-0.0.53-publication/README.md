@@ -80,13 +80,27 @@ heads and all seven registered worktrees. Three history reconciliations bring
 the already-incorporated lean-CI,0.0.43 evidence and equivalent Linux-only CI
 branches into ancestry. The resulting tree equals the published tag exactly;
 no runtime changes are introduced by those merges. 21 local heads are then
-incorporated. The remaining heads are preserved for semantic review and
-qualification:
+incorporated. The two initially retained heads have different dispositions
+under the clarified owner rule: delete proven supersession and integrate real
+feature or implementation gaps.
 
 - `codex/consolidation-20261025-private-tmp-truss-pws03-20261023`,
   `8bc82edd270a0043cd48ef8073fb2ef755eb017b`.
 - `codex/embedder-e0-e1-release`,
   `a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955`.
+
+The [head disposition](historical-head-disposition.json) records the concrete
+evidence. The temporal snapshot contains an actual missing LocalTimestamp and
+temporal query/storage implementation. It remains active integration work;
+the earlier retirement-only interpretation is superseded. It must be ported
+and qualified with coherent current UMF/Weft owner interfaces. E0/E1 behavior,
+tests, verifier and historical evidence are already adopted or superseded;
+its obsolete local and remote refs were deleted after guarded checks. No old release branch
+will be forced over the qualified native runtime merely to change ancestry.
+
+The published 0.0.53 baseline remains verified. Its historical migration
+retirement is unchanged. Any future publication must represent qualified real
+implementation, not history-only changes.
 
 [PR43](https://github.com/DocumentDrivenDX/truss/pull/43) is closed as superseded.
 Its original dev8 ABI refusal, source and evidence remain on the preserved
@@ -94,7 +108,12 @@ branch at `21e3d303a07fb88c247efefa3a87183f210a466b`. The 0.0.53 baseline retain
 its existing optional dev5 pin and makes no dev8 adoption claim. Any future
 optional cohort needs separate version-coherent qualification.
 
-The primary checkout is unchanged. Six stale registrations, their original
-private indices, and all five residual directories containing files are
-retained. Missing `.git` markers are not treated as proof that working files
-are clean or disposable. No unique commit or uncommitted work was deleted.
+The primary checkout is unchanged. Six stale registrations were removed after
+checking their private indices and reflogs. Four residual directories were
+empty. The CI residue contained 20,202 files (2,485,406,524 bytes): 20,177
+matched current main and 25 matched incorporated history, with no unique file.
+Those five obsolete directories were removed; the sixth was already absent.
+Two otherwise unreferenced historical commits were reconciled into active
+closeout ancestry and pushed before pruning the final registration. Both
+reconciliation merges leave the file tree unchanged. No unique commit or
+uncommitted work was discarded; the temporal implementation remains protected.

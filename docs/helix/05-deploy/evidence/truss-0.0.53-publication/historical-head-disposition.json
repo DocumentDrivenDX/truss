@@ -1,0 +1,111 @@
+{
+  "schema": "truss-historical-head-disposition/0.1",
+  "decisionDate": "2026-11-02",
+  "governingDecision": "Drop all the old junk. We need a baseline as of now.",
+  "publishedBaseline": "v0.0.53",
+  "publishedSource": "d6efcb4fded2cb94393f4056d960f51008919383",
+  "assessmentBase": "181cc0f2cad3618a9227e55050d93068d33500a7",
+  "scope": "Final classification of the two retained unique local heads; this does not amend original qualification receipts or release assets",
+  "heads": [
+    {
+      "branch": "codex/consolidation-20261025-private-tmp-truss-pws03-20261023",
+      "commit": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
+      "classification": "active feature/implementation gap; integration required",
+      "requiredForCurrentBaseline": false,
+      "reason": "Current main has no LocalTimestamp carrier or local temporal query/storage ABI. The snapshot supplies substantive missing implementation, not merely obsolete release history. The clarified cleanup rule supersedes the prior retirement-only interpretation. Preserve and port this work onto the current baseline, consuming current authoritative UMF/Weft semantics and qualifying the resulting cohort; do not restore old package versions or retired migration semantics.",
+      "evidence": [
+        "Commit subject identifies the snapshot as unverified (2026-10-25)",
+        "At this commit: docs/helix/04-build/pws03-temporal-engine-plan.md Scope explicitly says no publication or consumer port is authorized",
+        "The same plan Shared Constraints and TX-0 through TX-6 require separate versioned native/preparation/compiler/SDK correspondence and installed/browser qualification",
+        "The published baseline keeps the existing native target, preparation 2.0 and Weft 0.4.51; its fresh-install contract does not require this temporal extension"
+      ],
+      "integrationAction": "Keep the unique branch and original integration inputs. Retarget and qualify the real temporal gap; no deletion and no archival-only closeout.",
+      "remainingOwnerDecisionForBaseline": "none; the published 0.0.53 baseline remains verified",
+      "futureReactivation": "Not a deferred archival candidate under the clarified rule: integration is now required. Publication is permitted only after actual coherent native/owner/compiler qualification, and never merely to change ancestry.",
+      "requiredForCurrentMainCloseout": true,
+      "dependencyFindings": [
+        "Published Weft v0.4.56 truss_runtime.rs still declares storage/query ABI 1.2 and selective-source backend interface 0.2.9; the snapshot requires additive ABI 1.3 and temporal source-guard composition.",
+        "Published UMF SDK0.10.2 has an opt-in CONTRACT-075 access-temporal token parser. Its package exports do not expose the historical access-admission subpath; the current authoritative admission surface must be mapped or implemented by its owner, not forked in Truss."
+      ]
+    },
+    {
+      "branch": "codex/embedder-e0-e1-release",
+      "commit": "a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955",
+      "classification": "proven superseded historical implementation and evidence",
+      "requiredForCurrentBaseline": false,
+      "reason": "This head closes the historical 0.0.43 E0/E1 delivery and corrects historical qualification wording. Current main already records that completed release and contains its required current behavior and release safeguards. Remaining non-ancestor commits are not a new baseline requirement. A wholesale history merge is not a proven zero-change operation: merge-tree reports conflicts in current native runtime, group/catalog code, tests, release workflow and contracts. Forcing that merge would risk restoring old versions, compiler/native captures or superseded compatibility claims.",
+      "adoptionEvidence": [
+        "Current docs/helix/04-build/embedder-e0-e1-plan.md Published v0.0.43 continuation records completed implementation, review, native/install qualification and public delivery through PR18",
+        "Current native preconditions.sql retains the owned-profile 3072-condition bound and legacy 128 bound",
+        "Current catalog_runtime.py retains the CatalogRefused-to-contained execution_obligation/42501 unauthorized refusal introduced by cdc09fa2",
+        "scripts/verify-weft-release-wheel.py and its test producer are byte-identical between this historical head and the published baseline",
+        "Current package data includes UMF dependency license files; the passing exact-tag workflow checks complete wheel/sdist source payloads",
+        "Current package README already contains the final head's separately scoped 0.0.41 and 0.0.42 qualification references",
+        "Exact-tag run 41495685215 passed the installed E1 group/admission regressions, frozen-wheel verifier, complete payload checks and full remaining installed-runtime workflow on the selected current Linux cohort"
+      ],
+      "integrationAction": "Deleted the local and remote obsolete branch after exact-head and active-checkout checks; current authoritative implementation and all already-adopted evidence remain intact.",
+      "remainingOwnerDecisionForBaseline": "none",
+      "futureReactivation": "A demonstrable current defect or a new feature request would need a focused change against the published baseline and its own qualification, rather than reopening the 0.0.43 release branch.",
+      "requiredForCurrentMainCloseout": false,
+      "supersessionAudit": {
+        "missingFiles": 0,
+        "oldTestMethodsMissingAtSamePaths": 0,
+        "allHistoricalEvidencePathsPresent": true,
+        "evidenceAndVerifierBytesCompared": true,
+        "currentBehaviorQualifiedByRun": 41495685215
+      }
+    }
+  ],
+  "preservation": {
+    "deleteBranches": "allowed for proven superseded work only",
+    "deleteCommits": false,
+    "deleteFiles": "allowed for proven superseded work only",
+    "pruneWorktreeMetadataOrIndices": "allowed only after proving no unique staged/current/shared work",
+    "originalSnapshot": "branch-disposition.json",
+    "policy": "Protect genuinely unique work and active/shared/current checkouts. Delete only proven superseded refs and paths with recorded checks. Original publication snapshots and immutable assets remain unchanged."
+  },
+  "currentReleaseRequiredWorkRemaining": false,
+  "newPublicationRequired": false,
+  "ownerDecisionPending": false,
+  "governingCleanupDecision": "If they are completely superseded, delete them with prejudice. If they represent feature or implementation gaps in the current main, we should merge them in.",
+  "currentMainGapIntegrationRemaining": true,
+  "completedCleanup": {
+    "inactiveLocalTopicBranchesDeleted": 19,
+    "localTopicDeletionProof": "Every deleted exact tip is an ancestor of freshly fetched origin/main 181cc0f2cad3618a9227e55050d93068d33500a7. Main, the active checkout and unique temporal work were excluded.",
+    "obsoleteWorktreeRegistrationsRemoved": 6,
+    "primaryCheckoutPreserved": "codex/managed-grants-049-closeout at 14e16ce852381fd376da1d2187fc941683903ab2",
+    "emptyResidualDirectoriesRemoved": 4,
+    "ciResidualDirectoryRemoved": "/private/tmp/ci-efficiency-truss",
+    "ciResidualFilesAudited": 20202,
+    "ciResidualBytesAudited": 2485406524,
+    "ciResidualFilesMatchingCurrentMain": 20177,
+    "ciResidualFilesMatchingIncorporatedHistory": 25,
+    "ciResidualUniqueFiles": 0,
+    "missingHistoricalWorktree": "/private/tmp/truss-hf048-release",
+    "historicalReflogCommitsPreservedInActiveCloseoutAncestry": [
+      "5234d703161db259b6849cc8c293abe25517b288",
+      "bd8aaa03dc350676cf9b97eefdf0cc54963b7782"
+    ],
+    "reconciliationMerges": ["27d59c9", "26dbf562"],
+    "reconciliationMergeTreesUnchanged": true,
+    "priorPruningRejection": "Automatic review initially refused pruning because two reflog-only commits could be lost. Both were subsequently reconciled into and pushed with active closeout history, with no file-tree changes; the guarded pruning retry then succeeded."
+  },
+  "temporalOwnerProbe": {
+    "platform": "macOS ARM64, Python 3.11",
+    "weftDistribution": "umf-weft==0.4.56 from public PyPI",
+    "umfDistribution": "umf-core==0.10.6 from checksummed official GitHub release wheel; not a PyPI adoption claim",
+    "umfWheelSha256": "e6219539dabcdfe9657bc09485ad991b3380ae306c658d0a51a35caac0196e36",
+    "missingWeftEntryPoints": [
+      "check_engine_temporal_read_shape_json",
+      "check_engine_temporal_page_shape_json",
+      "check_engine_temporal_read_json",
+      "check_engine_temporal_page_json"
+    ],
+    "ordinaryCompileEngineReadAvailable": true,
+    "umfTemporalProfile": "umf-access-temporal/0.1.0",
+    "umfCanonicalLocalResult": "2024-02-29T23:59:58.000001",
+    "scope": "Actual installed API probe. The canonical token parser does not qualify Field metadata admission, the Truss ABI 1.3 guarded source, or temporal compiler composition.",
+    "nextDependency": "Coordinate current authoritative UMF Field admission and additive Weft temporal ABI/checker composition with their existing owners; port the Truss snapshot against those exact interfaces and qualify native/installed/browser controls. No historical bundle or old runtime pin may substitute for that qualification.",
+    "missingUserAuthority": false
+  }
+}
