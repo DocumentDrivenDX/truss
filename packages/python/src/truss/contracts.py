@@ -6,7 +6,9 @@ UMF and the admitted value profile. These constructors do not verify artifacts,
 qualify database identities or manufacture accepted/committed evidence.
 """
 from dataclasses import dataclass, field, fields
+from datetime import date
 from enum import Enum
+import re
 from types import UnionType
 from typing import Generic, Literal, TypeAlias, TypeVar, Union, Unpack, get_args, get_origin, get_type_hints
 
@@ -85,6 +87,38 @@ class TextValue(_Carrier):
     kind: Literal['string', 'integer', 'decimal', 'binary', 'timestamp', 'date']
     text: str
 
+
+_LOCAL_TIMESTAMP_TEXT = re.compile(
+    r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}',
+    re.ASCII,
+)
+
+
+def validate_local_timestamp_text(text: str) -> str:
+    """Validate Truss's canonical local carrier without inferring a timezone."""
+    if type(text) is not str or len(text) != 26 or not text.isascii() or not _LOCAL_TIMESTAMP_TEXT.fullmatch(text):
+        raise ValueError('Canonical local timestamp text required')
+    try:
+        date.fromisoformat(text[:10])
+    except ValueError as error:
+        raise ValueError('Gregorian local timestamp date required') from error
+    hour, minute, second = (int(text[start:start + 2]) for start in (11, 14, 17))
+    if hour > 23 or minute > 59 or second > 59:
+        raise ValueError('Valid local timestamp clock time required')
+    return text
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class LocalTimestampValue(_Carrier):
+    """Canonical civil text; existing ExactValue/native profiles do not admit it."""
+    text: str
+    kind: Literal['localTimestamp'] = field(default='localTimestamp', init=False)
+
+    def __post_init__(self) -> None:
+        _Carrier.__post_init__(self)
+        validate_local_timestamp_text(self.text)
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class SequenceValue(_Carrier):
     items: tuple['ExactValue', ...]
@@ -144,7 +178,7 @@ class CapabilitySelection(_Carrier, Generic[Family]):
 
 __all__ = [
     'ABSENT', 'Absent', 'ProfilePin', 'ExactArtifact', 'QualifiedOwner', 'TypedIdentity',
-    'NullValue', 'BooleanValue', 'TextValue', 'SequenceValue', 'MapEntry', 'MapValue',
+    'NullValue', 'BooleanValue', 'TextValue', 'LocalTimestampValue', 'SequenceValue', 'MapEntry', 'MapValue',
     'RecordField', 'RecordValue', 'OpaqueValue', 'ExactValue', 'AbsentPresence',
     'PresentValue', 'Presence', 'CapabilityFamily', 'CapabilitySelection',
 ]
