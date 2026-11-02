@@ -1,0 +1,12 @@
+{
+  "index": "https://pypi.org/simple",
+  "legacy_exact_value_refusals": "passed",
+  "native_temporal_acceptance_qualified": false,
+  "schema": "pypi-consumer-receipt.v1",
+  "standalone_local_timestamp_carrier": "passed",
+  "status": "passed",
+  "truss_distribution": "umf-truss",
+  "truss_version": "0.0.54",
+  "weft_distribution": "weft-sql",
+  "weft_version": "0.4.51"
+}

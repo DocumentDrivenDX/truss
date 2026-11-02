@@ -1,0 +1,20 @@
+{
+  "scope": "Genuine temporal feature remains unqualified and is retained until owner acceptance",
+  "ref": "refs/heads/codex/consolidation-20261025-private-tmp-truss-pws03-20261023",
+  "localHead": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
+  "remoteHead": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
+  "restoredAbsentRemoteRef": true,
+  "historicalPushRunsNotCreditedAsReleaseOrTemporalQualification": [
+    {
+      "id": 41522714392,
+      "scope": "historical runtime smoke",
+      "conclusion": "success"
+    },
+    {
+      "id": 41522714578,
+      "scope": "historical boundary map",
+      "conclusion": "failure"
+    }
+  ],
+  "nativeTemporalAcceptanceQualified": false
+}
