@@ -15,14 +15,16 @@ import importlib.metadata
 import json
 import os
 from pathlib import Path
+import platform
 import subprocess
 import sys
 import traceback
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 TESTS = ROOT / "packages/python/tests"
 PUBLIC_TRUSS_054_WHEEL_SHA256 = "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52"
-PUBLIC_WEFT_056_WHEEL_SHA256_MACOS = "68f9297b4b55df483b86d3041040991c4dadfb9b4d63afcff1420c43f93ae41d"
+WEFT_056_CHECKSUM_URL = "https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.56/SHA256SUMS"
 
 
 def sha256(payload: bytes) -> str:
@@ -32,6 +34,82 @@ def sha256(payload: bytes) -> str:
 def payload_record(text: str) -> dict[str, object]:
     raw = text.encode("utf-8", errors="strict")
     return {"utf8": text, "base64": base64.b64encode(raw).decode("ascii"), "sha256": sha256(raw), "byteLength": len(raw)}
+
+
+def validate_payloads(value: object, location: str = "capture") -> int:
+    """Validate every redundant byte representation before any owner API call."""
+    fields = {"utf8", "base64", "sha256", "byteLength"}
+    if type(value) is dict:
+        if (fields - {"sha256"}).intersection(value):
+            if set(value) != fields or any(type(value[k]) is not str for k in fields - {"byteLength"}):
+                raise ValueError(f"Malformed payload at {location}")
+            raw = value["utf8"].encode("utf-8", errors="strict")
+            if (type(value["byteLength"]) is not int or value["byteLength"] != len(raw)
+                    or value["sha256"] != sha256(raw)
+                    or base64.b64decode(value["base64"], validate=True) != raw
+                    or base64.b64encode(raw).decode("ascii") != value["base64"]):
+                raise ValueError(f"Payload bytes/hash/length differ at {location}")
+            return 1
+        return sum(validate_payloads(child, f"{location}.{key}") for key, child in value.items())
+    if type(value) is list:
+        return sum(validate_payloads(child, f"{location}[{index}]") for index, child in enumerate(value))
+    return 0
+
+
+def refuse_existing_output(path: Path) -> None:
+    for candidate in (path, path.with_name(path.name + ".tmp"),
+                      path.with_name(path.name + ".run.json"), path.with_name(path.name + ".cleanup.json")):
+        if candidate.exists() or candidate.is_symlink():
+            raise ValueError(f"Existing probe output refused: {candidate}")
+
+
+def verify_wheel_module(wheel: Path, checksums: Path, installed_module: Path) -> dict[str, object]:
+    if not wheel.name.startswith("umf_weft-0.4.56-"):
+        raise ValueError("Public umf-weft 0.4.56 wheel required")
+    entries = {}
+    for line in checksums.read_text(encoding="utf-8").splitlines():
+        parts = line.split()
+        if len(parts) == 2:
+            filename = parts[1].lstrip("*")
+            if filename in entries:
+                raise ValueError(f"Duplicate checksum entry: {filename}")
+            entries[filename] = parts[0]
+    wheel_sha = sha256(wheel.read_bytes())
+    if entries.get(wheel.name) != wheel_sha:
+        raise ValueError("Candidate wheel differs from official release checksums")
+    with zipfile.ZipFile(wheel) as archive:
+        members = [name for name in archive.namelist()
+                   if name.startswith("weft/weft") and name.endswith((".so", ".pyd", ".dylib"))]
+        if len(members) != 1:
+            raise ValueError("Exactly one native Weft wheel module required")
+        native_sha = sha256(archive.read(members[0]))
+    if sha256(installed_module.read_bytes()) != native_sha:
+        raise ValueError("Installed Weft native module differs from verified candidate wheel")
+    return {"wheel": str(wheel), "wheelSha256": wheel_sha,
+            "checksums": str(checksums), "checksumsSha256": sha256(checksums.read_bytes()),
+            "officialChecksumsUrl": WEFT_056_CHECKSUM_URL,
+            "wheelNativeMember": members[0], "nativeModule": str(installed_module),
+            "nativeModuleSha256": native_sha}
+
+
+def confirm_native_stop(pg_ctl: Path, directory: Path, original_pid: int) -> dict[str, object]:
+    """Keep data intact until pg_ctl and the original process both prove stop."""
+    if type(original_pid) is not int or original_pid <= 0:
+        raise ValueError("Observed positive original postmaster PID required")
+    status = subprocess.run([str(pg_ctl), "-D", str(directory), "status"],
+                            capture_output=True, text=True, timeout=15, check=False)
+    pid_absent = False
+    try:
+        os.kill(original_pid, 0)
+    except ProcessLookupError:
+        pid_absent = True
+    except PermissionError:
+        pass
+    proof = {"originalPostmasterPid": original_pid, "originalPostmasterPidAbsent": pid_absent,
+             "pgCtlStatus": status.returncode, "pgCtlStdout": status.stdout,
+             "pgCtlStderr": status.stderr,
+             "confirmed": status.returncode == 3 and pid_absent}
+    return proof
 
 
 def classify(raw: object) -> dict[str, object]:
@@ -65,6 +143,8 @@ def _write_json(path: Path, value: object) -> None:
 
 
 def capture(args: argparse.Namespace) -> int:
+    refuse_existing_output(args.output.absolute())
+    output = args.output.resolve()
     if sys.version_info[:2] != (3, 11):
         raise RuntimeError(f"Python 3.11 required, got {sys.version.split()[0]}")
     if importlib.metadata.version("umf-truss") != "0.0.54":
@@ -101,7 +181,6 @@ def capture(args: argparse.Namespace) -> int:
                           "sumsFile": str(checksum_file), "sumsFileSha256": sha256(checksum_file.read_bytes())},
     }, sort_keys=True)
 
-    output = args.output.resolve()
     os.environ["TRUSS_T4A_CAPTURE_PATH"] = str(output)
     sys.path.insert(0, str(TESTS))
     import unittest
@@ -112,34 +191,46 @@ def capture(args: argparse.Namespace) -> int:
     suite = unittest.defaultTestLoader.loadTestsFromNames(names)
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     from test_weft_abi12_cohort_probe_native import WeftABI12CohortProbeNativeTests
-    runtime = getattr(WeftABI12CohortProbeNativeTests, "runtime", None)
-    runtime_root = getattr(WeftABI12CohortProbeNativeTests, "root", None)
-    runtime_directory = getattr(runtime, "directory", None)
+    cleanup = getattr(WeftABI12CohortProbeNativeTests, "cleanup_proof", {"confirmed": False})
     runtime_record = {
         "testsRun": result.testsRun,
         "failures": len(result.failures),
         "errors": len(result.errors),
         "skipped": len(result.skipped),
-        "passed": result.wasSuccessful(),
-        "runtimeDirectory": None if runtime_directory is None else str(runtime_directory),
-        "runtimeDirectoryAbsent": runtime_directory is not None and not runtime_directory.exists(),
-        "runtimeRootAbsent": runtime_root is not None and not runtime_root.exists(),
-        "runtimeServerStopped": runtime is not None and not runtime._server_process and not runtime._startup_pending,
-        "runtimeLeaseReleased": runtime is not None and runtime._lease is None,
-        "postmasterPidAbsent": runtime_directory is not None and not (runtime_directory / "postmaster.pid").exists(),
+        "passed": result.wasSuccessful() and result.testsRun == 2 and not result.skipped and cleanup.get("confirmed") is True,
+        "cleanup": cleanup,
     }
+    _write_json(output.with_name(output.name + ".run.json"), runtime_record)
     if output.is_file():
         record = json.loads(output.read_text(encoding="utf-8"))
         record["testRunAndCleanup"] = runtime_record
         _write_json(output, record)
     print(json.dumps({"captureOutput": str(output), "testRunAndCleanup": runtime_record}, sort_keys=True))
-    return 0 if result.wasSuccessful() else 1
+    return 0 if runtime_record["passed"] else 1
 
 
 def replay(args: argparse.Namespace) -> int:
+    refuse_existing_output(args.output.absolute())
     capture_path = args.capture.resolve()
     capture_bytes = capture_path.read_bytes()
-    captured = json.loads(capture_bytes)
+    def unique_members(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"Duplicate capture JSON member: {key}")
+            result[key] = value
+        return result
+    captured = json.loads(capture_bytes, object_pairs_hook=unique_members)
+    payload_count = validate_payloads(captured)
+    if type(captured) is not dict or captured.get("schema") != "truss.weft-abi12-native-capture/0.1" or payload_count < 10:
+        raise ValueError("Complete authentic capture payloads required")
+    test_run = captured["testRunAndCleanup"]
+    cleanup = test_run["cleanup"]
+    if (test_run.get("passed") is not True or test_run.get("testsRun") != 2
+            or any(test_run.get(key) != 0 for key in ("failures", "errors", "skipped"))
+            or cleanup.get("confirmed") is not True or cleanup.get("pgCtlStatus") != 3
+            or cleanup.get("originalPostmasterPidAbsent") is not True):
+        raise ValueError("Successful original baseline/capture and confirmed native cleanup required")
     request = captured["compilerCall"]["request"]["utf8"]
     page_size = captured["compilerCall"]["pageSize"]
     after = captured["compilerCall"]["after"]
@@ -148,6 +239,19 @@ def replay(args: argparse.Namespace) -> int:
     checker_call = captured["enginePage"]["checkerCall"]
     current_request = checker_call["currentRequest"]["utf8"]
     after_json = checker_call["afterJson"]["utf8"]
+    call = captured["compilerCall"]
+    for required_payload in (call["request"], call["arguments"][0], call["response"], call["bindingJson"],
+                             captured["enginePage"]["input"], captured["enginePage"]["program"],
+                             checker_call["program"], checker_call["currentRequest"],
+                             checker_call["afterJson"], checker_call["result"]):
+        if validate_payloads(required_payload) != 1:
+            raise ValueError("Required original payload record is missing")
+    if (call["arguments"] != [call["request"], page_size, after]
+            or type(page_size) is not int or page_size != 2 or after is not None
+            or json.loads(request)["target"]["bindingJson"] != call["bindingJson"]["utf8"]
+            or json.loads(engine_page_input)["request"] != json.loads(request)
+            or checker_call["program"] != captured["enginePage"]["program"]):
+        raise ValueError("Captured original compiler/binding/program argument correspondence differs")
 
     sys.path.insert(0, str(ROOT / "packages/python/src"))
     import truss
@@ -160,6 +264,7 @@ def replay(args: argparse.Namespace) -> int:
         raise RuntimeError("Replay must use this checkout's unmodified Truss source guard")
 
     native_path = Path(weft.weft.__file__).resolve()
+    candidate_provenance = verify_wheel_module(args.weft_wheel.resolve(), args.weft_checksums.resolve(), native_path)
     guard = query_runtime.compiler()
     report: dict[str, object] = {
         "schema": "truss.weft-abi12-cohort-probe/0.1",
@@ -167,14 +272,15 @@ def replay(args: argparse.Namespace) -> int:
         "captureFile": str(capture_path),
         "captureFileSha256": sha256(capture_bytes),
         "captureSourceCommit": captured["sourceCommit"],
+        "validatedPayloadCount": payload_count,
         "probeScript": {"path": str(Path(__file__).resolve()),
                         "sha256": sha256(Path(__file__).read_bytes())},
         "trussSource": {"path": str(Path(truss.__file__).resolve()),
                         "queryRuntimePath": str(Path(query_runtime.__file__).resolve()),
                         "queryRuntimeSha256": sha256(Path(query_runtime.__file__).read_bytes())},
         "candidate": {"distribution": "umf-weft", "version": importlib.metadata.version("umf-weft"),
-                      "nativeModule": str(native_path), "nativeModuleSha256": sha256(native_path.read_bytes()),
-                      "publishedWheelSha256MacOS": PUBLIC_WEFT_056_WHEEL_SHA256_MACOS},
+                      "python": sys.version, "platform": platform.platform(),
+                      **candidate_provenance},
         "guard": {"kind": "Truss-cohort-refusal" if guard is None else "unexpectedly-available",
                   "compilerReturnedNone": guard is None,
                   "sourceGuardVersion": weft.__version__},
@@ -234,6 +340,9 @@ def main() -> int:
     replay_parser = subparsers.add_parser("replay")
     replay_parser.add_argument("--capture", type=Path, required=True)
     replay_parser.add_argument("--output", type=Path, required=True)
+    replay_parser.add_argument("--weft-wheel", type=Path, required=True)
+    replay_parser.add_argument("--weft-checksums", type=Path, required=True,
+                               help="official v0.4.56 SHA256SUMS retained during runner setup")
     replay_parser.set_defaults(function=replay)
     args = parser.parse_args()
     try:

@@ -2,10 +2,16 @@ name: Released Python runtime
 # Installed runtime and private database-wheel smoke stays an explicit qualification.
 on:
   workflow_dispatch:
+    inputs:
+      weft_abi12_probe:
+        description: Run only the authentic public54/051 to Weft056 compatibility probe
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
   released-runtime:
+    if: ${{ !inputs.weft_abi12_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -42,4 +48,115 @@ jobs:
         with:
           name: released-runtime-evidence
           path: docs/helix/04-build/evidence/design-audit/ci-release-*
+          if-no-files-found: warn
+  weft-abi12-probe:
+    if: ${{ inputs.weft_abi12_probe }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.3'
+      - name: Fetch and verify exact public input wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          T4A_ROOT="$RUNNER_TEMP/weft-abi12-probe"
+          mkdir -p "$T4A_ROOT/evidence" "$T4A_ROOT/inputs/truss" "$T4A_ROOT/inputs/weft051" "$T4A_ROOT/inputs/weft056"
+          echo "T4A_ROOT=$T4A_ROOT" >> "$GITHUB_ENV"
+          python -m pip download --only-binary=:all: --no-deps --index-url https://pypi.org/simple \
+            --dest "$T4A_ROOT/inputs/truss" umf-truss==0.0.54 2>&1 | tee "$T4A_ROOT/evidence/download-truss.log"
+          for version in 0.4.51 0.4.56; do
+            if [ "$version" = 0.4.51 ]; then directory=weft051; distribution=weft-sql; else directory=weft056; distribution=umf-weft; fi
+            python -m pip download --only-binary=:all: --no-deps --no-index \
+              --find-links "https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v$version" \
+              --dest "$T4A_ROOT/inputs/$directory" "$distribution==$version" \
+              2>&1 | tee "$T4A_ROOT/evidence/download-$directory.log"
+            curl --fail --location --retry 2 \
+              "https://github.com/DocumentDrivenDX/weft/releases/download/v$version/SHA256SUMS" \
+              --output "$T4A_ROOT/inputs/$directory/SHA256SUMS"
+          done
+          python scripts/install-local-runtime.py --download-only --wheelhouse "$T4A_ROOT/inputs/runtime" \
+            2>&1 | tee "$T4A_ROOT/evidence/download-runtime.log"
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'weft-abi12-probe'
+          wheels={name:next((root/'inputs'/name).glob('*.whl')) for name in ('truss','weft051','weft056','runtime')}
+          assert hashlib.sha256(wheels['truss'].read_bytes()).hexdigest()=='4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52'
+          for name in ('weft051','weft056','runtime'):
+              entries={line.split()[1].lstrip('*'):line.split()[0] for line in (wheels[name].parent/'SHA256SUMS').read_text().splitlines() if line.strip()}
+              assert hashlib.sha256(wheels[name].read_bytes()).hexdigest()==entries[wheels[name].name]
+          inventory={name:{'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for name,path in wheels.items()}
+          (root/'evidence/input-wheels.json').write_text(json.dumps(inventory,indent=2)+'\n')
+          with open(os.environ['GITHUB_ENV'],'a') as output:
+              for name,path in wheels.items():output.write('T4A_'+name.upper()+'_WHEEL='+str(path)+'\n')
+          PY
+          python scripts/verify-weft-release-wheel.py "$T4A_ROOT"/inputs/weft051/*.whl \
+            2>&1 | tee "$T4A_ROOT/evidence/verify-weft051.log"
+      - name: Install separate original and replay environments
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/t4a054"
+          python -m venv "$RUNNER_TEMP/t4a056"
+          OLD_PYTHON="$RUNNER_TEMP/t4a054/bin/python"
+          REPLAY_PYTHON="$RUNNER_TEMP/t4a056/bin/python"
+          "$OLD_PYTHON" -m pip install --constraint packages/python/isolated-runtime-constraints.txt \
+            "$T4A_TRUSS_WHEEL" "$T4A_WEFT051_WHEEL" "$T4A_RUNTIME_WHEEL" \
+            'psycopg[binary]==3.3.6' fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 \
+            2>&1 | tee "$T4A_ROOT/evidence/install-public054.log"
+          "$REPLAY_PYTHON" -m pip install "$T4A_WEFT056_WHEEL" \
+            2>&1 | tee "$T4A_ROOT/evidence/install-weft056.log"
+          "$OLD_PYTHON" -m pip freeze > "$T4A_ROOT/evidence/public054-freeze.txt"
+          "$REPLAY_PYTHON" -m pip freeze > "$T4A_ROOT/evidence/weft056-freeze.txt"
+          echo "T4A_OLD_PYTHON=$OLD_PYTHON" >> "$GITHUB_ENV"
+          echo "T4A_REPLAY_PYTHON=$REPLAY_PYTHON" >> "$GITHUB_ENV"
+      - name: Check probe corruption and cleanup controls
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -o pipefail
+          "$T4A_OLD_PYTHON" -m unittest test_weft_abi12_cohort_probe_native.ProbeControlTests -v \
+            2>&1 | tee "$T4A_ROOT/evidence/probe-controls.log"
+      - name: Run only original cursor baseline and authentic capture companion
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+          TRUSS_BUN_EXECUTABLE: bun
+        shell: bash
+        run: |
+          set -o pipefail
+          "$T4A_OLD_PYTHON" scripts/probe-weft-abi12-cohort.py capture \
+            --output "$T4A_ROOT/evidence/public054-capture.json" \
+            --truss-wheel "$T4A_TRUSS_WHEEL" --weft-wheel "$T4A_WEFT051_WHEEL" \
+            --pgserver-wheel "$T4A_RUNTIME_WHEEL" \
+            --pgserver-checksums "$T4A_ROOT/inputs/runtime/SHA256SUMS" \
+            2>&1 | tee "$T4A_ROOT/evidence/public054-capture.log"
+      - name: Replay unchanged bytes through verified public Weft056
+        env:
+          PYTHONPATH: packages/python/src
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -o pipefail
+          "$T4A_REPLAY_PYTHON" scripts/probe-weft-abi12-cohort.py replay \
+            --capture "$T4A_ROOT/evidence/public054-capture.json" \
+            --output "$T4A_ROOT/evidence/weft056-replay.json" \
+            --weft-wheel "$T4A_WEFT056_WHEEL" \
+            --weft-checksums "$T4A_ROOT/inputs/weft056/SHA256SUMS" \
+            2>&1 | tee "$T4A_ROOT/evidence/weft056-replay.log"
+      - name: Always retain inputs, raw diagnostics, logs and cleanup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weft-abi12-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/weft-abi12-probe
           if-no-files-found: warn

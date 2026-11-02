@@ -1,0 +1,12 @@
+test_candidate_wheel_checksums_and_installed_module_must_agree (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_candidate_wheel_checksums_and_installed_module_must_agree) ... ok
+test_cleanup_observes_stop_before_deleting_owned_data (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_cleanup_observes_stop_before_deleting_owned_data) ... ok
+test_cleanup_retains_data_when_stop_proof_is_uncertain (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_cleanup_retains_data_when_stop_proof_is_uncertain) ... ok
+test_each_payload_representation_must_match (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_each_payload_representation_must_match) ... ok
+test_existing_outputs_refuse_before_capture_or_replay (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_existing_outputs_refuse_before_capture_or_replay) ... ok
+test_replay_rejects_corrupt_bytes_before_candidate_api_import (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_replay_rejects_corrupt_bytes_before_candidate_api_import) ... ok
+test_stop_requires_status_three_and_original_pid_absence (test_weft_abi12_cohort_probe_native.ProbeControlTests.test_stop_requires_status_three_and_original_pid_absence) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.114s
+
+OK
