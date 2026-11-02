@@ -1,0 +1,57 @@
+{
+  "schema": "truss-historical-head-disposition/0.1",
+  "decisionDate": "2026-11-02",
+  "governingDecision": "Drop all the old junk. We need a baseline as of now.",
+  "publishedBaseline": "v0.0.53",
+  "publishedSource": "d6efcb4fded2cb94393f4056d960f51008919383",
+  "assessmentBase": "181cc0f2cad3618a9227e55050d93068d33500a7",
+  "scope": "Final classification of the two retained unique local heads; this does not amend original qualification receipts or release assets",
+  "heads": [
+    {
+      "branch": "codex/consolidation-20261025-private-tmp-truss-pws03-20261023",
+      "commit": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
+      "classification": "retired historical work",
+      "requiredForCurrentBaseline": false,
+      "reason": "An explicitly unverified preservation snapshot of the isolated PWS-03 temporal extension, based on historical source 14e16ce8. Its own plan excludes publication and consumer porting. It changes native SQL/manifests, preparation to 2.1, introduces a distinct local timestamp carrier and temporal query ABI 1.3, and depends on coordinated UMF access dev6 and a separate Weft temporal compiler cohort. These are new feature/adoption obligations rather than missing fixes to the published fresh baseline. The owner-selected baseline retires this historical candidate from current delivery scope; no old migration or temporal-support promise is revived.",
+      "evidence": [
+        "Commit subject identifies the snapshot as unverified (2026-10-25)",
+        "At this commit: docs/helix/04-build/pws03-temporal-engine-plan.md Scope explicitly says no publication or consumer port is authorized",
+        "The same plan Shared Constraints and TX-0 through TX-6 require separate versioned native/preparation/compiler/SDK correspondence and installed/browser qualification",
+        "The published baseline keeps the existing native target, preparation 2.0 and Weft 0.4.51; its fresh-install contract does not require this temporal extension"
+      ],
+      "integrationAction": "No merge or cherry-pick. Retain the original local branch, commit, files and worktree index. Do not publish this unqualified candidate or replace the qualified runtime with it.",
+      "remainingOwnerDecisionForBaseline": "none",
+      "futureReactivation": "Only a new explicit decision to adopt the temporal feature would reopen its coordinated semantic review and qualification. No such decision is requested for branch closeout."
+    },
+    {
+      "branch": "codex/embedder-e0-e1-release",
+      "commit": "a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955",
+      "classification": "retired historical work; required behavior already adopted or superseded",
+      "requiredForCurrentBaseline": false,
+      "reason": "This head closes the historical 0.0.43 E0/E1 delivery and corrects historical qualification wording. Current main already records that completed release and contains its required current behavior and release safeguards. Remaining non-ancestor commits are not a new baseline requirement. A wholesale history merge is not a proven zero-change operation: merge-tree reports conflicts in current native runtime, group/catalog code, tests, release workflow and contracts. Forcing that merge would risk restoring old versions, compiler/native captures or superseded compatibility claims.",
+      "adoptionEvidence": [
+        "Current docs/helix/04-build/embedder-e0-e1-plan.md Published v0.0.43 continuation records completed implementation, review, native/install qualification and public delivery through PR18",
+        "Current native preconditions.sql retains the owned-profile 3072-condition bound and legacy 128 bound",
+        "Current catalog_runtime.py retains the CatalogRefused-to-contained execution_obligation/42501 unauthorized refusal introduced by cdc09fa2",
+        "scripts/verify-weft-release-wheel.py and its test producer are byte-identical between this historical head and the published baseline",
+        "Current package data includes UMF dependency license files; the passing exact-tag workflow checks complete wheel/sdist source payloads",
+        "Current package README already contains the final head's separately scoped 0.0.41 and 0.0.42 qualification references",
+        "Exact-tag run 41495685215 passed the installed E1 group/admission regressions, frozen-wheel verifier, complete payload checks and full remaining installed-runtime workflow on the selected current Linux cohort"
+      ],
+      "integrationAction": "No forced merge, old-source restoration or new release. Keep this historical head and all original evidence. Already-adopted zero-change histories were separately reconciled in PR46; this conflicting residual head is explicitly retired from current delivery scope.",
+      "remainingOwnerDecisionForBaseline": "none",
+      "futureReactivation": "A demonstrable current defect or a new feature request would need a focused change against the published baseline and its own qualification, rather than reopening the 0.0.43 release branch."
+    }
+  ],
+  "preservation": {
+    "deleteBranches": false,
+    "deleteCommits": false,
+    "deleteFiles": false,
+    "pruneWorktreeMetadataOrIndices": false,
+    "originalSnapshot": "branch-disposition.json",
+    "policy": "Retirement is a scope classification, not deletion or a claim that every historical patch has identical ancestry. Preserve all original refs, files, private indices and evidence."
+  },
+  "currentReleaseRequiredWorkRemaining": false,
+  "newPublicationRequired": false,
+  "ownerDecisionPending": false
+}

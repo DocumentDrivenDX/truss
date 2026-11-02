@@ -80,13 +80,26 @@ heads and all seven registered worktrees. Three history reconciliations bring
 the already-incorporated lean-CI,0.0.43 evidence and equivalent Linux-only CI
 branches into ancestry. The resulting tree equals the published tag exactly;
 no runtime changes are introduced by those merges. 21 local heads are then
-incorporated. The remaining heads are preserved for semantic review and
-qualification:
+incorporated. The remaining heads are preserved and explicitly retired from
+current baseline delivery scope:
 
 - `codex/consolidation-20261025-private-tmp-truss-pws03-20261023`,
   `8bc82edd270a0043cd48ef8073fb2ef755eb017b`.
 - `codex/embedder-e0-e1-release`,
   `a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955`.
+
+The [final head disposition](historical-head-disposition.json) records the
+concrete evidence and owner-decision boundary. The temporal snapshot is an
+unverified, separately versioned feature experiment whose own plan excludes
+publication. The E0/E1 head is historical 0.0.43 delivery work: its required
+behavior and safeguards are already adopted or superseded in the current
+qualified baseline. Its residual history does not merge without native/code
+conflicts, so no forced ancestry merge is made. Neither head is required work
+for 0.0.53. No owner decision remains for baseline closeout; an explicit future
+feature decision or demonstrated current defect would be a new work item.
+
+This classification leaves every commit, file and private index intact. It
+restores no retired migration semantics and requires no new package version.
 
 [PR43](https://github.com/DocumentDrivenDX/truss/pull/43) is closed as superseded.
 Its original dev8 ABI refusal, source and evidence remain on the preserved
