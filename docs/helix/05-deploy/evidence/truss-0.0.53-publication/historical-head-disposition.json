@@ -70,6 +70,8 @@
   "governingCleanupDecision": "If they are completely superseded, delete them with prejudice. If they represent feature or implementation gaps in the current main, we should merge them in.",
   "currentMainGapIntegrationRemaining": true,
   "completedCleanup": {
+    "inactiveLocalTopicBranchesDeleted": 19,
+    "localTopicDeletionProof": "Every deleted exact tip is an ancestor of freshly fetched origin/main 181cc0f2cad3618a9227e55050d93068d33500a7. Main, the active checkout and unique temporal work were excluded.",
     "obsoleteWorktreeRegistrationsRemoved": 6,
     "primaryCheckoutPreserved": "codex/managed-grants-049-closeout at 14e16ce852381fd376da1d2187fc941683903ab2",
     "emptyResidualDirectoriesRemoved": 4,
@@ -87,5 +89,23 @@
     "reconciliationMerges": ["27d59c9", "26dbf562"],
     "reconciliationMergeTreesUnchanged": true,
     "priorPruningRejection": "Automatic review initially refused pruning because two reflog-only commits could be lost. Both were subsequently reconciled into and pushed with active closeout history, with no file-tree changes; the guarded pruning retry then succeeded."
+  },
+  "temporalOwnerProbe": {
+    "platform": "macOS ARM64, Python 3.11",
+    "weftDistribution": "umf-weft==0.4.56 from public PyPI",
+    "umfDistribution": "umf-core==0.10.6 from checksummed official GitHub release wheel; not a PyPI adoption claim",
+    "umfWheelSha256": "e6219539dabcdfe9657bc09485ad991b3380ae306c658d0a51a35caac0196e36",
+    "missingWeftEntryPoints": [
+      "check_engine_temporal_read_shape_json",
+      "check_engine_temporal_page_shape_json",
+      "check_engine_temporal_read_json",
+      "check_engine_temporal_page_json"
+    ],
+    "ordinaryCompileEngineReadAvailable": true,
+    "umfTemporalProfile": "umf-access-temporal/0.1.0",
+    "umfCanonicalLocalResult": "2024-02-29T23:59:58.000001",
+    "scope": "Actual installed API probe. The canonical token parser does not qualify Field metadata admission, the Truss ABI 1.3 guarded source, or temporal compiler composition.",
+    "nextDependency": "Coordinate current authoritative UMF Field admission and additive Weft temporal ABI/checker composition with their existing owners; port the Truss snapshot against those exact interfaces and qualify native/installed/browser controls. No historical bundle or old runtime pin may substitute for that qualification.",
+    "missingUserAuthority": false
   }
 }
