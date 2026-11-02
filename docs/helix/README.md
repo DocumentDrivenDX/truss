@@ -9,6 +9,10 @@ active package and release acceptance scope. The older claims below remain
 historical release evidence. See the [0.0.53 release notes](05-deploy/releases/v0.0.53.md)
 for support boundaries and required actions.
 
+The [current temporal integration plan](04-build/temporal-current-baseline-plan.md)
+records the preserved feature gap, actual UMF/Weft owner interfaces, independent
+carrier prerequisite and remaining native/installed/browser qualification.
+
 Release 0.0.51 uses the `umf-truss` Python distribution while retaining the exact
 0.0.50 execution/owner/compiler tuple and latest-only runtime policy. Its
 [release notes](05-deploy/releases/v0.0.51.md) and

@@ -8,9 +8,11 @@ from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
     HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
 from .local_runtime import LocalPostgres, LocalRuntimeError, RuntimeInfo
+from .contracts import LocalTimestampValue
 
 __all__ = ["LocalPostgres", "LocalRuntimeError", "RuntimeInfo", "ExecutionFailure", "Ok", "Error", "Outcome",
            "TransactionHandle", "Isolation", "AccessMode"]
+__all__ += ["LocalTimestampValue"]
 __all__ += ["FeedCursor", "FeedPage", "FeedConsumer", "FeedAcknowledged", "FeedUnavailable"]
 __all__ += ["CapabilityAvailable", "NativeCatalogCapability", "NativeDirectReadCapability",
             "NativeImportCapability", "NativeFeedCapability", "NativeHistoryCapability"]

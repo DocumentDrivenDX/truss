@@ -1,0 +1,59 @@
+{
+  "schema": "truss-temporal-prerequisite/0.1",
+  "date": "2026-11-02",
+  "implementationSource": "ef0d323e",
+  "baselineSource": "704dd25eb0bb23319e2b990a0a147b691e11c0e0",
+  "originalTemporalSnapshot": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
+  "scope": "Standalone immutable local carrier, canonical text validation, existing-profile refusal, and current owner-interface inspection",
+  "temporalDatabaseSupportQualified": false,
+  "newPublication": false,
+  "sourceTests": {"passed": 31, "failed": 0},
+  "installedTests": {"passed": 31, "failed": 0},
+  "testModules": [
+    "test_local_timestamp_value.py",
+    "test_public_contracts.py",
+    "test_record_schema.py",
+    "test_import_contracts.py"
+  ],
+  "localPlatform": "macOS ARM64, CPython 3.11.17",
+  "localCandidateWheel": {
+    "classification": "Unpublished development wheel, not the public 0.0.53 wheel",
+    "name": "umf_truss-0.0.53-py3-none-any.whl",
+    "sha256": "9ffd43b33dac89ff7594ee329f34b3d9dcf8c5c007f56f3dc90e1d1dfb567297",
+    "sourceMatchedPayloadCount": 450,
+    "installedContractsSha256": "330938bbc03aeb9cd96fda7bfd5b8c7f91e5583f68dc5bca01d3b8dccddd1404",
+    "buildSelection": "Fresh tracked-source directory; the earlier working-directory build included ignored stale setuptools staging and was not selected",
+    "installSelection": "Fresh isolated environment, local wheel plus existing base dependencies from public PyPI; Python isolated mode, no source PYTHONPATH"
+  },
+  "boundaries": {
+    "localActualSourceMapPassed": true,
+    "importEdges": 1739,
+    "linuxControlRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/41517549989",
+    "linuxRunSource": "ef0d323e",
+    "linuxMapAndAll23ControlsPassed": true,
+    "localDuplicateControls": "Stopped the exact task-owned process after the unchanged-source hosted run passed; no local controls completion claim"
+  },
+  "helixValidation": {"blocking": 0, "warning": 0, "info": 0},
+  "unchangedNativeAndCompositionPaths": [
+    "packages/python/src/truss/_catalog_runtime",
+    "packages/python/src/truss/_migrations",
+    "packages/python/src/truss/_query_runtime.py",
+    "packages/python/src/truss/access.py"
+  ],
+  "installedOwnerProbe": {
+    "weft": "umf-weft==0.4.56, public PyPI",
+    "umf": "umf-core==0.10.6, official GitHub wheel",
+    "publicInspectionCall": {"ok": false, "errorCode": "REQUEST", "message": "Unknown codegen operation"},
+    "engine04ReadCompile": {"status": "blocked", "diagnostic": "WFT-ENGINE-READ", "message": "engine catalog version differs"},
+    "availableCanonicalProfile": "umf-access-temporal/0.1.0",
+    "localCanonicalSample": "2024-02-29T23:59:58.000001",
+    "scopeLimit": "Public 0.10.6 API probe plus separate source inspection of active 0.10.7; not a 0.10.7 installed-package or native qualification claim"
+  },
+  "remaining": [
+    "Owner public access inspection and inert temporal program custody",
+    "Owner temporal compile/check APIs and ABI1.3 guarded-source lowering",
+    "Resolve stale CONTRACT-082 reference and choose a new exact native identity",
+    "Truss prep2.1, native local storage/complete-source guard, target composition",
+    "Exact-cohort native, installed, security/snapshot and real browser acceptance"
+  ]
+}
