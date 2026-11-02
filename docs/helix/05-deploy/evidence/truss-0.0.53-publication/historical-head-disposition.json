@@ -10,23 +10,28 @@
     {
       "branch": "codex/consolidation-20261025-private-tmp-truss-pws03-20261023",
       "commit": "8bc82edd270a0043cd48ef8073fb2ef755eb017b",
-      "classification": "retired historical work",
+      "classification": "active feature/implementation gap; integration required",
       "requiredForCurrentBaseline": false,
-      "reason": "An explicitly unverified preservation snapshot of the isolated PWS-03 temporal extension, based on historical source 14e16ce8. Its own plan excludes publication and consumer porting. It changes native SQL/manifests, preparation to 2.1, introduces a distinct local timestamp carrier and temporal query ABI 1.3, and depends on coordinated UMF access dev6 and a separate Weft temporal compiler cohort. These are new feature/adoption obligations rather than missing fixes to the published fresh baseline. The owner-selected baseline retires this historical candidate from current delivery scope; no old migration or temporal-support promise is revived.",
+      "reason": "Current main has no LocalTimestamp carrier or local temporal query/storage ABI. The snapshot supplies substantive missing implementation, not merely obsolete release history. The clarified cleanup rule supersedes the prior retirement-only interpretation. Preserve and port this work onto the current baseline, consuming current authoritative UMF/Weft semantics and qualifying the resulting cohort; do not restore old package versions or retired migration semantics.",
       "evidence": [
         "Commit subject identifies the snapshot as unverified (2026-10-25)",
         "At this commit: docs/helix/04-build/pws03-temporal-engine-plan.md Scope explicitly says no publication or consumer port is authorized",
         "The same plan Shared Constraints and TX-0 through TX-6 require separate versioned native/preparation/compiler/SDK correspondence and installed/browser qualification",
         "The published baseline keeps the existing native target, preparation 2.0 and Weft 0.4.51; its fresh-install contract does not require this temporal extension"
       ],
-      "integrationAction": "No merge or cherry-pick. Retain the original local branch, commit, files and worktree index. Do not publish this unqualified candidate or replace the qualified runtime with it.",
-      "remainingOwnerDecisionForBaseline": "none",
-      "futureReactivation": "Only a new explicit decision to adopt the temporal feature would reopen its coordinated semantic review and qualification. No such decision is requested for branch closeout."
+      "integrationAction": "Keep the unique branch and original integration inputs. Retarget and qualify the real temporal gap; no deletion and no archival-only closeout.",
+      "remainingOwnerDecisionForBaseline": "none; the published 0.0.53 baseline remains verified",
+      "futureReactivation": "Not a deferred archival candidate under the clarified rule: integration is now required. Publication is permitted only after actual coherent native/owner/compiler qualification, and never merely to change ancestry.",
+      "requiredForCurrentMainCloseout": true,
+      "dependencyFindings": [
+        "Published Weft v0.4.56 truss_runtime.rs still declares storage/query ABI 1.2 and selective-source backend interface 0.2.9; the snapshot requires additive ABI 1.3 and temporal source-guard composition.",
+        "Published UMF SDK0.10.2 has an opt-in CONTRACT-075 access-temporal token parser. Its package exports do not expose the historical access-admission subpath; the current authoritative admission surface must be mapped or implemented by its owner, not forked in Truss."
+      ]
     },
     {
       "branch": "codex/embedder-e0-e1-release",
       "commit": "a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955",
-      "classification": "retired historical work; required behavior already adopted or superseded",
+      "classification": "proven superseded historical implementation and evidence",
       "requiredForCurrentBaseline": false,
       "reason": "This head closes the historical 0.0.43 E0/E1 delivery and corrects historical qualification wording. Current main already records that completed release and contains its required current behavior and release safeguards. Remaining non-ancestor commits are not a new baseline requirement. A wholesale history merge is not a proven zero-change operation: merge-tree reports conflicts in current native runtime, group/catalog code, tests, release workflow and contracts. Forcing that merge would risk restoring old versions, compiler/native captures or superseded compatibility claims.",
       "adoptionEvidence": [
@@ -38,20 +43,30 @@
         "Current package README already contains the final head's separately scoped 0.0.41 and 0.0.42 qualification references",
         "Exact-tag run 41495685215 passed the installed E1 group/admission regressions, frozen-wheel verifier, complete payload checks and full remaining installed-runtime workflow on the selected current Linux cohort"
       ],
-      "integrationAction": "No forced merge, old-source restoration or new release. Keep this historical head and all original evidence. Already-adopted zero-change histories were separately reconciled in PR46; this conflicting residual head is explicitly retired from current delivery scope.",
+      "integrationAction": "Eligible for deletion under the clarified owner rule after guarded ref and active-checkout checks; retain current authoritative implementation and all already-adopted evidence.",
       "remainingOwnerDecisionForBaseline": "none",
-      "futureReactivation": "A demonstrable current defect or a new feature request would need a focused change against the published baseline and its own qualification, rather than reopening the 0.0.43 release branch."
+      "futureReactivation": "A demonstrable current defect or a new feature request would need a focused change against the published baseline and its own qualification, rather than reopening the 0.0.43 release branch.",
+      "requiredForCurrentMainCloseout": false,
+      "supersessionAudit": {
+        "missingFiles": 0,
+        "oldTestMethodsMissingAtSamePaths": 0,
+        "allHistoricalEvidencePathsPresent": true,
+        "evidenceAndVerifierBytesCompared": true,
+        "currentBehaviorQualifiedByRun": 41495685215
+      }
     }
   ],
   "preservation": {
-    "deleteBranches": false,
+    "deleteBranches": "allowed for proven superseded work only",
     "deleteCommits": false,
-    "deleteFiles": false,
-    "pruneWorktreeMetadataOrIndices": false,
+    "deleteFiles": "allowed for proven superseded work only",
+    "pruneWorktreeMetadataOrIndices": "allowed only after proving no unique staged/current/shared work",
     "originalSnapshot": "branch-disposition.json",
-    "policy": "Retirement is a scope classification, not deletion or a claim that every historical patch has identical ancestry. Preserve all original refs, files, private indices and evidence."
+    "policy": "Protect genuinely unique work and active/shared/current checkouts. Delete only proven superseded refs and paths with recorded checks. Original publication snapshots and immutable assets remain unchanged."
   },
   "currentReleaseRequiredWorkRemaining": false,
   "newPublicationRequired": false,
-  "ownerDecisionPending": false
+  "ownerDecisionPending": false,
+  "governingCleanupDecision": "If they are completely superseded, delete them with prejudice. If they represent feature or implementation gaps in the current main, we should merge them in.",
+  "currentMainGapIntegrationRemaining": true
 }
