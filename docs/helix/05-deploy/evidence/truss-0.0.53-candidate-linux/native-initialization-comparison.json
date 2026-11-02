@@ -1,0 +1,265 @@
+{
+  "manifestSha256": "15c610f9ae691129f419849113b380fbd8c08a719ed758360a27285f25902c18",
+  "scope": "Exact native definition comparison only; no admission or migration qualification",
+  "sources": [
+    {
+      "source": "source44",
+      "runtimeManifestSha256": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+      "wheelSha256": "7cdea3af955feb11bd3cb4ca58b2f0cd9f336412d64de14bcba272711f1638d8",
+      "captureSha256": "42a6b25dd37d9435268047538c41ab6c14dd798fb9e9d91b6708582e0c8507e6",
+      "inventorySha256": "05e05bc7ce99620b0ad43a2f01d5d772e8e63cc0048fd035abd7f3ca33a89cfa",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source46",
+      "runtimeManifestSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+      "wheelSha256": "b2c09c8d9c4f8cc40330d2fab4b5ea7cfb26559d2231455c2b1658a92c0368dc",
+      "captureSha256": "3d041648f67243f42f03d09525367bb6ec48cc6ba8b1eacb3ab2b3dbff75304e",
+      "inventorySha256": "185ed5c90e74586db1a0b9f9ae5b032a034b16ce7790cba56ba643ee2ea20e4e",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source47",
+      "runtimeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+      "wheelSha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+      "captureSha256": "e2a4902c36196c3528a4b3504693a9fb3ef90a2257191a1e23710f9e25820915",
+      "inventorySha256": "36c62f2d2982e73b6a17eef16d449b3cde20f1f2d46bc892387a793bb33c86f2",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source48",
+      "runtimeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+      "wheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+      "captureSha256": "9b54147fffafbcf596e72b42ebef46a41790f6ed0f4c94c3961ebd28e45ee2f4",
+      "inventorySha256": "6fa9192bd02294a5e13479a702a6d0265b0bd5cd0856d65008a6e246d98d409f",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source49",
+      "runtimeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+      "wheelSha256": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+      "captureSha256": "4396c903001c38fe97e7c24effeaa5e452d7b9bdff51ae0aeb5298837c6888e7",
+      "inventorySha256": "ec49ba55b63cff5247ec039a970b43fe17a5989a402271c2cf9087cd5e922f47",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source50",
+      "runtimeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+      "wheelSha256": "7b0483bb0c624c98515cf38ec30bbbf1ca43c1250e8880e5d00d520b4b7eec00",
+      "captureSha256": "541d4705e7b41caea5f802c693f50c40cc8905d59567c7332a853f32da147940",
+      "inventorySha256": "ec49ba55b63cff5247ec039a970b43fe17a5989a402271c2cf9087cd5e922f47",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "source": "source52",
+      "runtimeManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+      "wheelSha256": "00d8b11abc83d9c84fa131ae6f3eef23ecad9d321d4b04a13641ed31c77e9747",
+      "captureSha256": "5ef8d45795fab515cd66585981a1cd943b8baba1b505ccab1c4e157f8c1d44fb",
+      "inventorySha256": "03a9b9c1b2e9a41a23e14eda3894d4a6b59b5299086272455c41eaf6dfbe8cdc",
+      "changes": [
+        {
+          "before": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ],
+          "after": [
+            "journal_runtime_horizon",
+            "r",
+            "p",
+            false,
+            false,
+            null,
+            true,
+            "FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')",
+            "heap",
+            null,
+            null
+          ]
+        }
+      ]
+    }
+  ]
+}
