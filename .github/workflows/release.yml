@@ -140,6 +140,39 @@ jobs:
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -maxdepth 1 -name '*.whl' -print -quit)"
+      - name: Qualify the installed standalone local carrier and retained refusals
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python - <<'PYTHON'
+          import hashlib,importlib.metadata,json,os,pathlib,tomllib,unittest,truss
+          project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
+          origin=pathlib.Path(truss.__file__).resolve()
+          assert not origin.is_relative_to(pathlib.Path('packages/python/src').resolve())
+          assert importlib.metadata.version(project['name'])==project['version']
+          modules=['test_local_timestamp_value','test_public_contracts','test_record_schema','test_import_contracts']
+          result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(modules))
+          wheel=next(pathlib.Path('dist').glob('*.whl'))
+          record={'profile':'truss-standalone-local-carrier/0.1','sourceCommit':os.environ['GITHUB_SHA'],
+              'distribution':project['name'],'version':project['version'],'installedOrigin':str(origin),
+              'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),
+              'installedContractsSha256':hashlib.sha256((origin.parent/'contracts.py').read_bytes()).hexdigest(),
+              'modules':modules,'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),
+              'passed':result.wasSuccessful() and not result.skipped and result.testsRun>=31,
+              'nativeTemporalAcceptanceQualified':False,
+              'scope':'Standalone canonical local carrier; current ExactValue, container and import profiles still refuse local values; no native temporal acceptance claim'}
+          output=pathlib.Path(os.environ['RUNNER_TEMP'])/'standalone-carrier';output.mkdir()
+          (output/'qualification.json').write_text(json.dumps(record,indent=2)+'\n')
+          assert record['passed'], 'Installed standalone carrier/refusal qualification failed'
+          PYTHON
+      - name: Retain standalone carrier qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: standalone-carrier-qualification-${{ matrix.os }}
+          path: ${{ runner.temp }}/standalone-carrier/qualification.json
+          if-no-files-found: error
       - name: Qualify the installed fresh baseline and refusal controls
         run: python scripts/qualify-runtime-migrations.py --installed-package --download --wheelhouse /tmp/truss-migration-wheels --output /tmp/truss-migration-evidence/qualification.json
       - name: Retain migration qualification
@@ -678,6 +711,10 @@ jobs:
         with:
           name: managed-grants-qualification-ubuntu-24.04
           path: /tmp/published-managed-grants
+      - uses: actions/download-artifact@v4
+        with:
+          name: standalone-carrier-qualification-ubuntu-24.04
+          path: /tmp/published-standalone-carrier
       - name: Record exact assets and publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -690,6 +727,14 @@ jobs:
           backend=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('packages/python/src/truss/_query_runtime.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='BACKEND' for t in n.targets))
           root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==4
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
+          carrier_path=pathlib.Path('/tmp/published-standalone-carrier/qualification.json')
+          carrier=json.loads(carrier_path.read_bytes())
+          assert carrier['passed'] and carrier['tests']>=31 and carrier['failures']==carrier['errors']==carrier['skipped']==0
+          assert carrier['sourceCommit']==os.environ['GITHUB_SHA'] and carrier['distribution']==project['name'] and carrier['version']==project['version']
+          assert carrier['wheelSha256']==hashlib.sha256(next(root.glob('*.whl')).read_bytes()).hexdigest()
+          assert carrier['installedContractsSha256']==hashlib.sha256(pathlib.Path('packages/python/src/truss/contracts.py').read_bytes()).hexdigest()
+          assert carrier['nativeTemporalAcceptanceQualified'] is False
+          (root/'standalone-carrier-qualification.json').write_bytes(carrier_path.read_bytes())
           evidence=pathlib.Path('/tmp/published-migration-evidence')
           qualification=json.loads((evidence/'qualification.json').read_bytes())
           migration_bytes=pathlib.Path('packages/python/src/truss/_migrations/manifest.json').read_bytes()
@@ -823,6 +868,8 @@ jobs:
           (root/'logical-query-abi.json').write_bytes(query_abi_bytes)
           pins.update(mutationProfile=next(p['pin'] for p in group_profiles if p['name']=='mutationProfile'),valueProfile=next(p['pin'] for p in group_profiles if p['name']=='valueProfile'),objectReadProfiles=['truss-python-scalar-object/0.4','truss-python-logical-object/0.1'],logicalQueryAbi={'identity':query_abi['identity'],'version':query_abi['version'],'sha256':hashlib.sha256(query_abi_bytes).hexdigest()})
           pins.update(compiledQueryCapability=next(p['pin'] for p in json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/capability-profiles.json').read_bytes())['profiles'] if p['name']=='weft_execution'))
+          assert query_abi['version']=='1.2', 'Standalone-carrier release must retain the existing native query ABI'
+          pins.update(standaloneLocalTimestampCarrier='truss.local-timestamp/0.1',standaloneLocalTimestampQualification='standalone-carrier-qualification.json',localTimestampNativeAcceptanceQualified=False)
           summary=pathlib.Path('docs/helix/02-design/contracts/catalog-registration-summary-v0.1.md')
           if summary.exists():
               (root/summary.name).write_bytes(summary.read_bytes())
