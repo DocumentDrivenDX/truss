@@ -197,13 +197,23 @@ snapshot, it is deliberately excluded from the current `ExactValue` union:
 current wire, container and native paths retain their closed acceptance scope.
 Four carrier/refusal tests, six existing public-contract tests, ten record-schema
 tests, eleven import-contract tests, and the updated 1739-import module boundary
-check pass locally. Full temporal support remains
-unqualified. Source/guard/compiler/target patches are not applied speculatively.
+check pass locally. The same 31 tests pass from a clean wheel in a fresh
+installed environment, with all 450 wheel payload files matched to source.
+[Linux run 41517549989](https://github.com/DocumentDrivenDX/truss/actions/runs/41517549989)
+passes the actual map and all 23 positive/negative boundary controls. The slow
+local duplicate of those controls was stopped after that unchanged-source pass;
+it is not credited as a local success. [Original scoped receipt](evidence/temporal-current-baseline-20261102/receipt.json).
+Full temporal support remains unqualified. Source/guard/compiler/target patches
+are not applied speculatively.
 
 ## Validation Plan
 
 For TC-2–6 reuse the original snapshot's native test modules, retargeted to the
-new owner cohort. Actual public acceptance/apply must create the local property;
+new owner cohort: `test_temporal_catalog_transport_native.py`,
+`test_local_timestamp_query_native.py`, `test_temporal_engine_native.py`,
+`test_temporal_source_guard_native.py`, `test_temporal_source_security_native.py`,
+`test_temporal_target_release_native.py`, and `test_access_temporal_codec.py`.
+Actual public acceptance/apply must create the local property;
 direct SQL seeds cannot substitute. Check descriptor removal, retained/replayed
 summary2.1, existing timestamp fidelity, complete-source invalid rows excluded
 by user filters, later invalid rows, source overflow, concurrent writer snapshot,
