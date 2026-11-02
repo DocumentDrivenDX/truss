@@ -1,0 +1,69 @@
+{
+  "schema": "truss.t4a-current054-local-native-attempt/0.1",
+  "checkout": "/private/tmp/umf-stack-release-truss",
+  "branch": "codex/temporal-completion",
+  "sourceCommit": "aef15a9b16b851fbe5a34fb3952c36f36206aef4",
+  "baselineEnvironment": {
+    "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+    "umfTruss": "0.0.54",
+    "trussOrigin": "/private/tmp/truss-temporal-current054-venv/lib/python3.11/site-packages/truss/__init__.py",
+    "publicTrussWheel": {
+      "file": "/private/tmp/umf_truss-0.0.54-py3-none-any.whl",
+      "sha256": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52"
+    },
+    "weftDistribution": "weft-sql",
+    "weftVersion": "0.4.51",
+    "weftNativeModule": "/private/tmp/truss-temporal-current054-venv/lib/python3.11/site-packages/weft/weft.abi3.so",
+    "weftNativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+    "pgserverPg18": "18.6.1",
+    "venv": "/private/tmp/truss-temporal-current054-venv"
+  },
+  "candidateEnvironment": {
+    "venv": "/private/tmp/truss-temporal-owner-probe",
+    "python": "3.11.17",
+    "distribution": "umf-weft",
+    "version": "0.4.56",
+    "nativeModule": "/private/tmp/truss-temporal-owner-probe/lib/python3.11/site-packages/weft/weft.abi3.so",
+    "publishedMacWheelSha256": "68f9297b4b55df483b86d3041040991c4dadfb9b4d63afcff1420c43f93ae41d"
+  },
+  "attempts": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun /private/tmp/truss-temporal-current054-venv/bin/python -m unittest test_query_stream_abi12_native.QueryStreamABI12Tests.test_actual_selected_cursor_decodes_all_batches_and_descriptors -v",
+      "log": "attempt-sandbox.log",
+      "outcome": "initdb blocked before test discovery by sandbox shmget permission; 0 tests ran",
+      "environmentCohortValid": false
+    },
+    {
+      "command": "same focused unittest with require_escalated execution",
+      "log": "attempt-escalated.log",
+      "outcome": "initdb timed out after 60 seconds in PostgreSQL single-user startup; 0 tests ran",
+      "environmentCohortValid": false
+    }
+  ],
+  "correctedPublicWheelEnvironment": "Public 0.0.54 wheel was installed after both attempts and verified against PyPI SHA; no further local native startup was retried per instruction.",
+  "cleanup": {
+    "recordedPid": 79557,
+    "pidProcessAbsent": true,
+    "pgCtlStatus": "no server running",
+    "runtimeDirectoryAbsent": true,
+    "leaseFileAbsent": true,
+    "temporaryDataPath": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-uwmy0xz9"
+  },
+  "hostedRunner": "ubuntu-24.04, existing release workflow native job (Python 3.11, Bun, checksum-verified pgserver 18.6.1); run only probe capture command, no full matrix",
+  "sourceSha256": {
+    "packages/python/tests/test_query_stream_abi12_native.py": "8589849a1567800a00e3f3c02c2cc4169dcd95c5989e282d64f6a9600b2974a2",
+    "packages/python/tests/test_compiled_query_native.py": "0641fbe4ff802ba563b5da20aacdf62b80b6127aa0123de54f443ecabbd9d3ee",
+    "packages/python/tests/test_group_create_native.py": "651dd53d798fca33084e58da951852880b453a9dd87442132431eab306a44802",
+    "packages/python/tests/test_catalog_runtime_native.py": "b349bc0549dd78eaf646cf0173f09bf2c81ab620873562567a534ae01b82936d",
+    "packages/python/src/truss/local_runtime.py": "7a0fce2fd418a3c239e7f6e847ac952d152d1967638251a4ebba2f5f29b90728",
+    "packages/python/src/truss/_query_runtime.py": "ea58d31ef2ec65e4886caeb6e72ecf2a66dbee1f2065bd6ce377f57c266b7523",
+    "scripts/probe-weft-abi12-cohort.py": "d7ece4a29f0a7a9132e08c180ee52dbea6d59fa662a1327aa6ab695226c18d96",
+    "packages/python/tests/test_weft_abi12_cohort_probe_native.py": "fc737998bb0a879047e6432e1b093e446ce86a4a7f6f387ff0871caf5c52fa5d"
+  },
+  "logSha256": {
+    "attempt-sandbox.log": "b894c61e4cd4081313b81f396ddff658a70ef98550c84a6a1905a00e25fa7ab2",
+    "attempt-escalated.log": "a7ecfefd1076db9e05ed861d27dc2923f7ab70d6e470b2272d76579de9450e01"
+  },
+  "verifiedPublicWheelInstallCommand": "UV_CACHE_DIR=/private/tmp/truss-temporal-uv-cache uv pip install --python /private/tmp/truss-temporal-current054-venv/bin/python --no-deps --reinstall-package umf-truss /private/tmp/umf_truss-0.0.54-py3-none-any.whl",
+  "validFocusedBaselineStatus": "NOT RUN: local initdb failed before test execution in both attempts; the public wheel was installed afterward and the local startup was not repeated."
+}
