@@ -95,7 +95,7 @@ temporal query/storage implementation. It remains active integration work;
 the earlier retirement-only interpretation is superseded. It must be ported
 and qualified with coherent current UMF/Weft owner interfaces. E0/E1 behavior,
 tests, verifier and historical evidence are already adopted or superseded;
-its obsolete refs are eligible for guarded deletion. No old release branch
+its obsolete local and remote refs were deleted after guarded checks. No old release branch
 will be forced over the qualified native runtime merely to change ancestry.
 
 The published 0.0.53 baseline remains verified. Its historical migration
@@ -108,7 +108,12 @@ branch at `21e3d303a07fb88c247efefa3a87183f210a466b`. The 0.0.53 baseline retain
 its existing optional dev5 pin and makes no dev8 adoption claim. Any future
 optional cohort needs separate version-coherent qualification.
 
-The primary checkout is unchanged. Six stale registrations, their original
-private indices, and all five residual directories containing files are
-retained. Missing `.git` markers are not treated as proof that working files
-are clean or disposable. No unique commit or uncommitted work was deleted.
+The primary checkout is unchanged. Six stale registrations were removed after
+checking their private indices and reflogs. Four residual directories were
+empty. The CI residue contained 20,202 files (2,485,406,524 bytes): 20,177
+matched current main and 25 matched incorporated history, with no unique file.
+Those five obsolete directories were removed; the sixth was already absent.
+Two otherwise unreferenced historical commits were reconciled into active
+closeout ancestry and pushed before pruning the final registration. Both
+reconciliation merges leave the file tree unchanged. No unique commit or
+uncommitted work was discarded; the temporal implementation remains protected.

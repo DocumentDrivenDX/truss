@@ -43,7 +43,7 @@
         "Current package README already contains the final head's separately scoped 0.0.41 and 0.0.42 qualification references",
         "Exact-tag run 41495685215 passed the installed E1 group/admission regressions, frozen-wheel verifier, complete payload checks and full remaining installed-runtime workflow on the selected current Linux cohort"
       ],
-      "integrationAction": "Eligible for deletion under the clarified owner rule after guarded ref and active-checkout checks; retain current authoritative implementation and all already-adopted evidence.",
+      "integrationAction": "Deleted the local and remote obsolete branch after exact-head and active-checkout checks; current authoritative implementation and all already-adopted evidence remain intact.",
       "remainingOwnerDecisionForBaseline": "none",
       "futureReactivation": "A demonstrable current defect or a new feature request would need a focused change against the published baseline and its own qualification, rather than reopening the 0.0.43 release branch.",
       "requiredForCurrentMainCloseout": false,
@@ -68,5 +68,24 @@
   "newPublicationRequired": false,
   "ownerDecisionPending": false,
   "governingCleanupDecision": "If they are completely superseded, delete them with prejudice. If they represent feature or implementation gaps in the current main, we should merge them in.",
-  "currentMainGapIntegrationRemaining": true
+  "currentMainGapIntegrationRemaining": true,
+  "completedCleanup": {
+    "obsoleteWorktreeRegistrationsRemoved": 6,
+    "primaryCheckoutPreserved": "codex/managed-grants-049-closeout at 14e16ce852381fd376da1d2187fc941683903ab2",
+    "emptyResidualDirectoriesRemoved": 4,
+    "ciResidualDirectoryRemoved": "/private/tmp/ci-efficiency-truss",
+    "ciResidualFilesAudited": 20202,
+    "ciResidualBytesAudited": 2485406524,
+    "ciResidualFilesMatchingCurrentMain": 20177,
+    "ciResidualFilesMatchingIncorporatedHistory": 25,
+    "ciResidualUniqueFiles": 0,
+    "missingHistoricalWorktree": "/private/tmp/truss-hf048-release",
+    "historicalReflogCommitsPreservedInActiveCloseoutAncestry": [
+      "5234d703161db259b6849cc8c293abe25517b288",
+      "bd8aaa03dc350676cf9b97eefdf0cc54963b7782"
+    ],
+    "reconciliationMerges": ["27d59c9", "26dbf562"],
+    "reconciliationMergeTreesUnchanged": true,
+    "priorPruningRejection": "Automatic review initially refused pruning because two reflog-only commits could be lost. Both were subsequently reconciled into and pushed with active closeout history, with no file-tree changes; the guarded pruning retry then succeeded."
+  }
 }
