@@ -15,6 +15,12 @@ NATIVE_MANIFEST = ROOT / 'packages/python/src/truss/_catalog_runtime/manifest.js
 
 
 class ReleaseCohortBindingTests(unittest.TestCase):
+    def test_independent_producer_bytes_match_the_selected_corpus(self):
+        cohort = json.loads(CORPUS.read_bytes())
+        for name, digest in cohort['producers'].items():
+            with self.subTest(producer=name):
+                self.assertEqual(hashlib.sha256((ROOT / name).read_bytes()).hexdigest(), digest)
+
     def test_hf_cohort_matches_active_package_and_native_source(self):
         cohort = json.loads(CORPUS.read_bytes())
         project = tomllib.loads(PROJECT.read_text())
