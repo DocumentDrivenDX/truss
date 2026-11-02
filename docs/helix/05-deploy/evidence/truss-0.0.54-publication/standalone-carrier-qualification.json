@@ -1,0 +1,22 @@
+{
+  "profile": "truss-standalone-local-carrier/0.1",
+  "sourceCommit": "da07d0b6e45f3b4bd0a918ebedcebd086a5b9b55",
+  "distribution": "umf-truss",
+  "version": "0.0.54",
+  "installedOrigin": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/__init__.py",
+  "wheelSha256": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52",
+  "installedContractsSha256": "330938bbc03aeb9cd96fda7bfd5b8c7f91e5583f68dc5bca01d3b8dccddd1404",
+  "modules": [
+    "test_local_timestamp_value",
+    "test_public_contracts",
+    "test_record_schema",
+    "test_import_contracts"
+  ],
+  "tests": 31,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "nativeTemporalAcceptanceQualified": false,
+  "scope": "Standalone canonical local carrier; current ExactValue, container and import profiles still refuse local values; no native temporal acceptance claim"
+}

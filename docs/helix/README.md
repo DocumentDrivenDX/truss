@@ -3,7 +3,10 @@
 Release 0.0.54 packages the standalone local timestamp carrier while retaining
 the existing native and value-profile refusals. Its
 [release notes](05-deploy/releases/v0.0.54.md) define the narrow scope;
-temporal database support remains unqualified.
+temporal database support remains unqualified. The
+[publication proof](05-deploy/evidence/truss-0.0.54-publication/README.md) records
+the complete exact-tag Linux gates, trusted PyPI delivery, verified public
+bytes, fresh consumers and original native cleanup.
 
 Release 0.0.53 establishes the owner-selected fresh-install baseline dated
 2026-11-02. Complete exact-tag Linux qualification, OIDC PyPI delivery, public

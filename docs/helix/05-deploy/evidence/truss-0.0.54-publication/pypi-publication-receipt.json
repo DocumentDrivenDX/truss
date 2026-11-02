@@ -1,0 +1,16 @@
+{
+  "distribution": "umf-truss",
+  "files": {
+    "umf_truss-0.0.54-py3-none-any.whl": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52",
+    "umf_truss-0.0.54.tar.gz": "28930d23b7783876c36f6d92594b03d2b043a4ad45f6f291f51a8c5b6d0682f0"
+  },
+  "oidc_trusted_publisher": true,
+  "publication_mode": "oidc_upload",
+  "registry": "pypi",
+  "registry_bytes_verified": true,
+  "schema": "pypi-publication-receipt.v1",
+  "source_sha": "da07d0b6e45f3b4bd0a918ebedcebd086a5b9b55",
+  "status": "passed",
+  "tag": "v0.0.54",
+  "version": "0.0.54"
+}
