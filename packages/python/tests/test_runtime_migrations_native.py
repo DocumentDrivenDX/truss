@@ -30,10 +30,7 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(tempfile.mkdtemp(prefix='truss-runtime-migrations-'))
         cls.runtime=LocalPostgres(cls.root/'data');cls.runtime.__enter__()
-        import shutil
-        cls.addClassCleanup(shutil.rmtree,cls.root)
-        cls.addClassCleanup(cls.runtime.close)
-        cls.addClassCleanup(cls.record_runtime_diagnostic,'before-close')
+        cls.addClassCleanup(cls.close_original_runtime)
         cls.uri=cls.runtime.info.connection_uri
         manifest,artifacts,_=load_recipe()
         cls.source_profile=json.loads(
@@ -85,6 +82,29 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
                 'differences':differences,'inventory':observed}
             Path(directory,cls.source_label+'-native-inventory.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
             if not diagnostic['matches']:print('Native inventory admission diagnostic: '+json.dumps({k:v for k,v in diagnostic.items() if k!='inventory'}),flush=True)
+
+    @classmethod
+    def close_original_runtime(cls):
+        import shutil
+        cls.record_runtime_diagnostic('before-close')
+        record={'source':cls.source_label,'class':cls.__name__,'passed':False}
+        try:
+            cls.runtime.close()
+            status=subprocess.run([str(cls.runtime.psql_path.with_name('pg_ctl')),
+                '-D',str(cls.runtime.directory),'status'],capture_output=True,text=True,timeout=15)
+            record.update({'pgCtlStatus':status.returncode,
+                'postmasterPidPresent':(cls.runtime.directory/'postmaster.pid').exists(),
+                'stdout':status.stdout,'stderr':status.stderr})
+            if status.returncode!=3 or record['postmasterPidPresent']:
+                raise AssertionError('Original migration PostgreSQL shutdown unconfirmed')
+            record['passed']=True
+        except BaseException as error:
+            record['error']=repr(error)
+            raise
+        finally:
+            if directory:=os.environ.get('TRUSS_MIGRATION_EVIDENCE_DIRECTORY'):
+                Path(directory,cls.__name__+'-cleanup.json').write_text(json.dumps(record,indent=2)+'\n')
+        shutil.rmtree(cls.root)
 
     @classmethod
     def record_runtime_diagnostic(cls,stage,test_id=None):
