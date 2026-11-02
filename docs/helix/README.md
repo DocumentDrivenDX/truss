@@ -1,5 +1,9 @@
 # truss project documentation
 
+The local 0.0.55 candidate adds a bounded install-only operation timeout for
+fresh catalog installation. It remains unpublished and does not change native
+SQL or the fresh-install baseline; see the [candidate notes](05-deploy/releases/v0.0.55.md).
+
 Release 0.0.54 packages the standalone local timestamp carrier while retaining
 the existing native and value-profile refusals. Its
 [release notes](05-deploy/releases/v0.0.54.md) define the narrow scope;

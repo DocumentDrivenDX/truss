@@ -1,5 +1,16 @@
 # Truss Python toolkit
 
+## Version 0.0.55: bounded fresh-install operation timeout
+
+The candidate adds `operation_timeout_ms` to
+`CatalogReferenceAssembly.install_in_transaction`. It defaults to the adopted
+host operation deadline; callers may select up to 180000 milliseconds for this
+one installation operation. The host statement timeout remains independently
+capped at 60000 milliseconds, active outer deadlines remain binding, and later
+operations keep the host's configured deadline. The override requests
+cancellation; it does not establish backend termination or transaction
+settlement.
+
 ## Version 0.0.54 standalone local carrier
 
 `from truss import LocalTimestampValue` constructs an immutable canonical civil
