@@ -1,0 +1,283 @@
+{
+  "schema": "truss-publication-proof/0.1",
+  "recordedAtUtc": "2026-11-02T18:36:36.418519+00:00",
+  "status": "passed",
+  "tag": "v0.0.53",
+  "sourceCommit": "d6efcb4fded2cb94393f4056d960f51008919383",
+  "distribution": "umf-truss",
+  "version": "0.0.53",
+  "release": {
+    "assets": [
+      {
+        "digest": "sha256:fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+        "name": "catalog-key-backfill-report-v0.1.md",
+        "size": 3701
+      },
+      {
+        "digest": "sha256:14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+        "name": "catalog-rebind-report-v0.2.md",
+        "size": 2407
+      },
+      {
+        "digest": "sha256:38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+        "name": "catalog-rebind-report-v0.4.md",
+        "size": 2919
+      },
+      {
+        "digest": "sha256:674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+        "name": "catalog-registration-summary-v0.1.md",
+        "size": 8717
+      },
+      {
+        "digest": "sha256:41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+        "name": "catalog-source-reference-v0.1.md",
+        "size": 3736
+      },
+      {
+        "digest": "sha256:6861b0facf4839996c27117594c68a8f5266e3220bcd65a29447efde2cea7323",
+        "name": "hf-conformance-qualification.json",
+        "size": 15048
+      },
+      {
+        "digest": "sha256:cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+        "name": "isolated-runtime-constraints.txt",
+        "size": 361
+      },
+      {
+        "digest": "sha256:8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+        "name": "logical-query-abi.json",
+        "size": 7349
+      },
+      {
+        "digest": "sha256:1ee4126efaf10042b5021e970222c61de3ee261b8716092d7b2c65fd68bb83c0",
+        "name": "managed-grants-qualification-evidence.tar.gz",
+        "size": 51391
+      },
+      {
+        "digest": "sha256:1cec18b2a0ced8b56c96acb406685f5d4f123219f1e6afa0055338f15fa5a9a6",
+        "name": "managed-grants-qualification.json",
+        "size": 114982
+      },
+      {
+        "digest": "sha256:c5d2a9cd657546614def215aff03dc7e4a129c8a2671d59140c90302d6064637",
+        "name": "migration-qualification-evidence.tar.gz",
+        "size": 267272
+      },
+      {
+        "digest": "sha256:b346b833da3abee144c94a05a9c25b96f4441009f463aa74b10819af780a9ff7",
+        "name": "migration-qualification.json",
+        "size": 1181
+      },
+      {
+        "digest": "sha256:179029effe02f4c443305be6be5a2a1cf35a8828e52ddf2cc92474052698a6f1",
+        "name": "release-pins.json",
+        "size": 5161
+      },
+      {
+        "digest": "sha256:5ecc04b84de5dcae108ee12a56aef9f1740c2a71189fc7217d321267d77563e4",
+        "name": "SHA256SUMS",
+        "size": 1568
+      },
+      {
+        "digest": "sha256:024eaa8ac2066ebb6e9424210408184f2ba9a9a3c32e6a9a8fce4e0925466721",
+        "name": "truss-hf-conformance-0.0.53.zip",
+        "size": 1204239
+      },
+      {
+        "digest": "sha256:a6c8568d676cd69675dc27d92fdfed2b85b69089ff0007d2b5bd2f5f48be6d89",
+        "name": "umf_truss-0.0.53-py3-none-any.whl",
+        "size": 4592071
+      },
+      {
+        "digest": "sha256:f66abb0d7d30e269bca1cf63ec34640c3f7c03f50a4f1819db36fa569cfa50c8",
+        "name": "umf_truss-0.0.53.tar.gz",
+        "size": 5089452
+      }
+    ],
+    "html_url": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.53",
+    "immutable": true,
+    "published_at": "2026-11-02T18:21:35Z",
+    "tag_name": "v0.0.53"
+  },
+  "releasePinsSha256": "179029effe02f4c443305be6be5a2a1cf35a8828e52ddf2cc92474052698a6f1",
+  "checksumManifestSha256": "5ecc04b84de5dcae108ee12a56aef9f1740c2a71189fc7217d321267d77563e4",
+  "checksumManifestEntries": 16,
+  "baseline": {
+    "historicalMigrationsSupported": false,
+    "historicalReceiptRecoverySupported": false,
+    "identity": "truss-fresh-install-baseline/2026-11-02",
+    "ownerDecision": "Drop all the old junk. We need a baseline as of now.",
+    "packageVersion": "0.0.53",
+    "retiredLineageThrough": "0.0.52"
+  },
+  "support": {
+    "runtimeSupport": "fresh-baseline-only",
+    "historicalMigrationsSupported": false,
+    "historicalReceiptRecoverySupported": false,
+    "qualifiedHostedPlatform": "Linux x86-64",
+    "postgresql": "18.6",
+    "umf": "0.10.0",
+    "weft": "0.4.51",
+    "limits": "Exact current native target and selected installed-runtime contract subset; no protected-profile completion, actual Lakebase or Ashlar production acceptance claim"
+  },
+  "qualification": {
+    "candidateRun": {
+      "id": 41492233903,
+      "sourceCommit": "e2bf5f2a2ada2f3dd1e8de73347edafbadb16f0a",
+      "conclusion": "success"
+    },
+    "exactTagRun": {
+      "conclusion": "success",
+      "head_sha": "d6efcb4fded2cb94393f4056d960f51008919383",
+      "html_url": "https://github.com/DocumentDrivenDX/truss/actions/runs/41495685215",
+      "id": 41495685215,
+      "run_started_at": "2026-11-02T17:55:26Z",
+      "status": "completed",
+      "updated_at": "2026-11-02T18:21:39Z"
+    },
+    "baselineTests": 6,
+    "hfTests": 62,
+    "managedGrantTests": 174,
+    "completeInstalledRuntimeWorkflowPassed": true,
+    "optionalStressCampaignsSelected": false,
+    "originalNativeCleanupConfirmed": true
+  },
+  "pypi": {
+    "workflow": {
+      "conclusion": "success",
+      "head_sha": "d6efcb4fded2cb94393f4056d960f51008919383",
+      "html_url": "https://github.com/DocumentDrivenDX/truss/actions/runs/41499832807",
+      "id": 41499832807,
+      "run_started_at": "2026-11-02T18:21:43Z",
+      "status": "completed",
+      "updated_at": "2026-11-02T18:25:02Z"
+    },
+    "publicationMode": "oidc_upload",
+    "publicBytesVerified": true,
+    "linuxPublicIndexConsumerPassed": true,
+    "files": {
+      "umf_truss-0.0.53-py3-none-any.whl": "a6c8568d676cd69675dc27d92fdfed2b85b69089ff0007d2b5bd2f5f48be6d89",
+      "umf_truss-0.0.53.tar.gz": "f66abb0d7d30e269bca1cf63ec34640c3f7c03f50a4f1819db36fa569cfa50c8"
+    }
+  },
+  "independentPublicNativeConsumer": {
+    "platform": "macOS arm64 / Python3.11.17",
+    "scope": "Fresh public PyPI native/query extras; existing checksum-verified host PostgreSQL wheel; six baseline controls and native cleanup only, not the complete hosted suite",
+    "passed": true,
+    "tests": 6,
+    "fullPipReportSha256": "9c51ce94dc12df3cec42bd8bc8cff3304419c6dca2e4bb378ad1e432bf9a4959",
+    "publicIndexOnly": true,
+    "trussWheelMatchesGitHub": true,
+    "weftNativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+    "weftWheelMatchesQualifiedCohort": true,
+    "installedPublicFiles": [
+      {
+        "distribution": "umf-truss",
+        "version": "0.0.53",
+        "url": "https://files.pythonhosted.org/packages/f6/34/a0f97f81de8c4bc2152c95fb8ddec2c73b979b8b28c7ae21d6ef81ce13a4/umf_truss-0.0.53-py3-none-any.whl",
+        "sha256": "a6c8568d676cd69675dc27d92fdfed2b85b69089ff0007d2b5bd2f5f48be6d89"
+      },
+      {
+        "distribution": "jsonschema",
+        "version": "4.26.0",
+        "url": "https://files.pythonhosted.org/packages/69/90/f63fb5873511e014207a475e2bb4e8b2e570d655b00ac19a9a0ca0a385ee/jsonschema-4.26.0-py3-none-any.whl",
+        "sha256": "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce"
+      },
+      {
+        "distribution": "mini-racer",
+        "version": "0.14.1",
+        "url": "https://files.pythonhosted.org/packages/09/bf/ecaad0c208b9d8bd8f2141f7fa5e520b66915945a2ed56c520524df75fcb/mini_racer-0.14.1-py3-none-macosx_11_0_arm64.whl",
+        "sha256": "56cc6965a1665a50d8d613bc43aa83b4cec6b1f09acc69dc4c2845dacb201463"
+      },
+      {
+        "distribution": "psycopg",
+        "version": "3.3.6",
+        "url": "https://files.pythonhosted.org/packages/4e/de/748bd7609c71cae5d737f0ba9192f19329f70180ecda8fff3cac02c5abe3/psycopg-3.3.6-py3-none-any.whl",
+        "sha256": "a1db9f7148b06a28606767efaca51fa6f9398c5c0a3810519be69d7000bdb631"
+      },
+      {
+        "distribution": "referencing",
+        "version": "0.37.0",
+        "url": "https://files.pythonhosted.org/packages/2c/58/ca301544e1fa93ed4f80d724bf5b194f6e4b945841c5bfd555878eea9fcb/referencing-0.37.0-py3-none-any.whl",
+        "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231"
+      },
+      {
+        "distribution": "weft-sql",
+        "version": "0.4.51",
+        "url": "https://files.pythonhosted.org/packages/6b/06/6664f9439c4f2e1da70371794a467fb4d15056710f76c03a2358ff128477/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "sha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487"
+      },
+      {
+        "distribution": "psycopg-binary",
+        "version": "3.3.6",
+        "url": "https://files.pythonhosted.org/packages/12/1d/1e06c0de7ed5aed898acb87544eac6ef0bc7d752a67ec6e5d6b835e9b40c/psycopg_binary-3.3.6-cp311-cp311-macosx_11_0_arm64.whl",
+        "sha256": "f0535693ce476a722b718b002d5d2c27d47e71ca945276ac194409c98e74c492"
+      },
+      {
+        "distribution": "attrs",
+        "version": "26.1.0",
+        "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+        "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+      },
+      {
+        "distribution": "jsonschema-specifications",
+        "version": "2025.9.1",
+        "url": "https://files.pythonhosted.org/packages/41/45/1a4ed80516f02155c51f51e8cedb3c1902296743db0bbc66608a0db2814f/jsonschema_specifications-2025.9.1-py3-none-any.whl",
+        "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe"
+      },
+      {
+        "distribution": "rpds-py",
+        "version": "2026.9.1",
+        "url": "https://files.pythonhosted.org/packages/9e/b2/632c3d034961149eff606e3e357547620a9ab37b849ae5815f67838753fd/rpds_py-2026.9.1-cp311-cp311-macosx_11_0_arm64.whl",
+        "sha256": "3231c4c0e521dafa5be0c9f114ee2c2ad46650836f2d72caa86801950c3e7044"
+      },
+      {
+        "distribution": "typing_extensions",
+        "version": "4.16.0",
+        "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+        "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+      }
+    ]
+  },
+  "preservedRelease052": {
+    "sourceCommit": "1d23bedfdfdc0901e16e1a0663882c765fe1068f",
+    "immutable": true,
+    "assetsMatchOriginalReadback": true,
+    "assets": [
+      {
+        "digest": "sha256:5bf3533b80e022bfe53f0ff9594c461f05fa137cd65cdc957f9792b5a8442534",
+        "name": "SHA256SUMS",
+        "size": 190
+      },
+      {
+        "digest": "sha256:00d8b11abc83d9c84fa131ae6f3eef23ecad9d321d4b04a13641ed31c77e9747",
+        "name": "umf_truss-0.0.52-py3-none-any.whl",
+        "size": 6844897
+      },
+      {
+        "digest": "sha256:a20c817501c58cda6add1b0e14ea64f1a5d44c3d683666cc3ff9c8f35a2c4b8c",
+        "name": "umf_truss-0.0.52.tar.gz",
+        "size": 7313742
+      }
+    ]
+  },
+  "reconciliation": {
+    "integrationHead": "4b7444b06c8b294566532188b470e2f7145243f7",
+    "integrationTreeEqualsPublishedTag": true,
+    "localHeads": 23,
+    "incorporatedLocalHeads": 21,
+    "remainingUniqueHeads": [
+      {
+        "branch": "codex/consolidation-20261025-private-tmp-truss-pws03-20261023",
+        "commit": "8bc82edd270a0043cd48ef8073fb2ef755eb017b"
+      },
+      {
+        "branch": "codex/embedder-e0-e1-release",
+        "commit": "a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955"
+      }
+    ],
+    "sdkDraft43": "closed as superseded; branch and original failed ABI evidence retained",
+    "worktreeRegistrationsRetained": 7,
+    "primaryCheckoutUnchanged": true
+  }
+}
