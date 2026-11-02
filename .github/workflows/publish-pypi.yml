@@ -252,6 +252,22 @@ jobs:
           assert record["truss_version"] == os.environ["VERSION"]
           assert record["weft_version"] == weft.__version__ == expected_weft_version
           assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
+          if tuple(map(int, record['truss_version'].split('.'))) >= (0, 0, 54):
+              from dataclasses import asdict
+              from truss.contracts import LocalTimestampValue,PresentValue,SequenceValue,TextValue
+              token='2024-02-29T23:59:58.000001'
+              local=truss.LocalTimestampValue(text=token)
+              assert type(local) is LocalTimestampValue
+              assert asdict(local)=={'text':token,'kind':'localTimestamp'}
+              for rejected in (lambda: LocalTimestampValue(text=token+'Z'),
+                  lambda: PresentValue(value=local),lambda: SequenceValue(items=(local,)),
+                  lambda: TextValue(kind='localTimestamp',text=token)):
+                  try: rejected()
+                  except ValueError: pass
+                  else: raise AssertionError('Unqualified local temporal value was admitted')
+              record['standalone_local_timestamp_carrier']='passed'
+              record['legacy_exact_value_refusals']='passed'
+              record['native_temporal_acceptance_qualified']=False
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )

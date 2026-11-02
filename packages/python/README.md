@@ -1,5 +1,14 @@
 # Truss Python toolkit
 
+## Version 0.0.54 standalone local carrier
+
+`from truss import LocalTimestampValue` constructs an immutable canonical civil
+timestamp such as `LocalTimestampValue(text='2024-02-29T23:59:58.000001')`.
+It requires exactly six fractional digits and no offset or zone. The carrier
+is a standalone prerequisite: existing ExactValue, container, import and native
+profiles still refuse it. Temporal native storage and query support remain
+unqualified. See the [0.0.54 release notes](../../docs/helix/05-deploy/releases/v0.0.54.md).
+
 ## Version 0.0.53 fresh baseline
 
 Owner direction on 2026-11-02 establishes a fresh-install baseline. The active
