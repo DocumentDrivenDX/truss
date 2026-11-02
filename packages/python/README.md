@@ -10,6 +10,11 @@ rebuild; startup never resets or upgrades them. Older version sections below
 retain their historical scope. The 0.0.53 release notes and receipts govern the
 current qualification claim.
 
+The [published 0.0.53 proof](../../docs/helix/05-deploy/evidence/truss-0.0.53-publication/README.md)
+records complete exact-tag Linux gates, actual OIDC PyPI upload, public-byte
+verification, fresh consumers and original native cleanup. Historical migration
+support is not restored by this publication.
+
 ## Version 0.0.52 candidate
 
 The prepared distribution metadata is `umf-truss==0.0.52`; `import truss` and CLI

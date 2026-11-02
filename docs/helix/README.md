@@ -1,10 +1,13 @@
 # truss project documentation
 
-Owner direction on 2026-11-02 resets the active 0.0.53 candidate to a fresh-install
-baseline. Earlier migration routes and historical receipt recovery are retired
-from the active package and release acceptance scope. The older claims below
-remain historical release evidence. See the [0.0.53 release notes](05-deploy/releases/v0.0.53.md)
-for the new baseline, qualification status and required actions.
+Release 0.0.53 establishes the owner-selected fresh-install baseline dated
+2026-11-02. Complete exact-tag Linux qualification, OIDC PyPI delivery, public
+byte verification and a fresh public consumer passed; see the
+[published proof](05-deploy/evidence/truss-0.0.53-publication/README.md).
+Earlier migration routes and historical receipt recovery are retired from the
+active package and release acceptance scope. The older claims below remain
+historical release evidence. See the [0.0.53 release notes](05-deploy/releases/v0.0.53.md)
+for support boundaries and required actions.
 
 Release 0.0.51 uses the `umf-truss` Python distribution while retaining the exact
 0.0.50 execution/owner/compiler tuple and latest-only runtime policy. Its
