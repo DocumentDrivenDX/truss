@@ -73,12 +73,12 @@ class CurrentBaselineNativeTests(unittest.TestCase):
             self.tool.verify()
         self.assertEqual(self.inventory(), damaged)
 
-    def test_unrecognized_runtime_identity_refuses_without_upgrade(self):
-        self.admin.execute("UPDATE truss.catalog_runtime_installation SET release_sha256=repeat('0',64)")
+    def test_native_runtime_identity_cannot_be_relabelled(self):
         before = self.admin.execute('SELECT release_sha256 FROM truss.catalog_runtime_installation').fetchall()
-        with self.assertRaises(ValueError):
-            self.tool.prepare()
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute("UPDATE truss.catalog_runtime_installation SET release_sha256=repeat('0',64)")
         self.assertEqual(self.admin.execute('SELECT release_sha256 FROM truss.catalog_runtime_installation').fetchall(), before)
+        self.assertEqual(self.tool.verify()['state'], 'current')
 
     def test_inventory_observation_preserves_session_timezone_and_bounds(self):
         before = self.inventory()
