@@ -32,7 +32,8 @@ class CurrentBaselineNativeTests(unittest.TestCase):
             admin.execute(psycopg.sql.SQL('CREATE DATABASE {}').format(psycopg.sql.Identifier(self.database)))
         self.addCleanup(self.drop_database)
         self.params = {**psycopg.conninfo.conninfo_to_dict(self.uri), 'dbname': self.database}
-        self.admin = psycopg.connect(**self.params, autocommit=True)
+        self.admin = psycopg.connect(**self.params, autocommit=True,
+            options='-c statement_timeout=10000')
         self.addCleanup(self.admin.close)
         self.admin.execute('BEGIN')
         host, engine, transaction = assembly(self.admin)
