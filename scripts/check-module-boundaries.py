@@ -148,7 +148,8 @@ ALLOWED = {
     # Ordered command carrier only; no host, transaction, role or runtime admission authority.
     '_installation_sql_batch': {'collections.abc','psycopg'},
     '_runtime_profile': {'json', 'importlib.resources'},
-    'psycopg_host': {'inspect', 'truss._operation_ordinal', 'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
+    # Native host owns random session-liveness markers; secrets never grants ACK authority.
+    'psycopg_host': {'secrets', 'inspect', 'truss._operation_ordinal', 'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
     '_psycopg_census_cut': {'inspect','truss._psycopg_epoch_cut','truss._psycopg_source_census'},
     '_psycopg_source_census': {'dataclasses','hashlib','importlib.resources','re','truss.execution','truss.psycopg_host','truss.catalog_runtime'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
