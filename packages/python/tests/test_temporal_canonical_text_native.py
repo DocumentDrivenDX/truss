@@ -2,6 +2,7 @@
 """F7 native scalar component; does not qualify temporal sources or enrollment."""
 from datetime import datetime, timedelta, timezone
 import json
+from hashlib import sha256
 import os
 from pathlib import Path
 import shutil
@@ -70,6 +71,34 @@ class TemporalCanonicalTextNativeTests(unittest.TestCase):
     def canonical(self, kind, token):
         return self.connection.execute('SELECT truss.query_temporal_canonical_text(%s,%s)', (kind, token)).fetchone()[0]
 
+    def test_shared_strict075_oracle_vectors(self):
+        raw = (Path(__file__).parent / 'fixtures/temporal/strict075.json').read_bytes()
+        self.assertEqual(sha256(raw).hexdigest(), '33e246d47ead263e9b2467b57a46811cdd3628d703d91b5f4fa564b1d207f9c2')
+        vectors = json.loads(raw)
+        self.assertEqual(vectors['profile'], 'umf-access-temporal/0.1.0')
+        self.assertEqual(len(vectors['cases']), 38)
+        for case in vectors['cases']:
+            with self.subTest(vector=case['id']):
+                if case['accept']:
+                    self.assertEqual(self.canonical(case['kind'], case['token']), case['expected']['canonicalText'])
+                else:
+                    with self.assertRaises(psycopg.Error) as caught:
+                        self.canonical(case['kind'], case['token'])
+                    self.assertEqual(caught.exception.sqlstate, '22023')
+
+    def test_ordinary_role_cannot_execute_helper(self):
+        self.connection.execute('CREATE ROLE temporal_unprivileged NOLOGIN')
+        self.connection.execute('GRANT USAGE ON SCHEMA truss TO temporal_unprivileged')
+        try:
+            self.connection.execute('SET ROLE temporal_unprivileged')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege) as caught:
+                self.canonical('date', '2000-02-29')
+            self.assertEqual(caught.exception.sqlstate, '42501')
+        finally:
+            self.connection.execute('RESET ROLE')
+            self.connection.execute('REVOKE USAGE ON SCHEMA truss FROM temporal_unprivileged')
+            self.connection.execute('DROP ROLE temporal_unprivileged')
+
     def test_contract075_canonical_vectors_and_original_text(self):
         vectors = (
             ('date', '0001-01-01', '0001-01-01'),
@@ -80,6 +109,10 @@ class TemporalCanonicalTextNativeTests(unittest.TestCase):
             ('local', '9999-12-31T23:59:59.999999', '9999-12-31T23:59:59.999999'),
             ('instant', '2024-01-01T01:30:00.123456+01:30', '2024-01-01T00:00:00.123456Z'),
             ('instant', '1969-12-31T23:59:59.5Z', '1969-12-31T23:59:59.500000Z'),
+            ('instant', '2023-12-31T23:59:59-00:01', '2024-01-01T00:00:59.000000Z'),
+            ('instant', '2024-01-01T00:00:00+00:01', '2023-12-31T23:59:00.000000Z'),
+            ('instant', '0001-01-01T23:59:00+23:59', '0001-01-01T00:00:00.000000Z'),
+            ('instant', '9999-12-31T00:00:59.999999-23:59', '9999-12-31T23:59:59.999999Z'),
             ('instant', '1970-01-01T00:00:00+00:01', '1969-12-31T23:59:00.000000Z'),
             ('instant', '2024-01-01T23:59:59.123456+23:59', '2024-01-01T00:00:59.123456Z'),
         )
@@ -113,11 +146,13 @@ class TemporalCanonicalTextNativeTests(unittest.TestCase):
             ('date', '2024-01-01\n'), ('date', '2024-01-01 '), ('date', '2024-01-01T00:00:00'),
             ('local', '2024-01-01T24:00:00'), ('local', '2024-01-01T00:60:00'),
             ('local', '2024-01-01T00:00:60'), ('local', '2024-01-01t00:00:00'),
+            ('local', '2024-01-01T00:00:00.0000000'),
             ('local', '2024-01-01T00:00:00.1234560'), ('local', '2024-01-01T00:00:00.'),
             ('local', '2024-01-01T00:00:00Z'), ('local', '2024-01-01T00:00:00.000000\r'),
             ('instant', '2024-01-01T00:00:00'), ('instant', '2024-01-01T00:00:00z'),
             ('instant', '2024-01-01T00:00:00-00:00'), ('instant', '2024-01-01T00:00:00+24:00'),
             ('instant', '2024-01-01T00:00:00+00:60'), ('instant', '2024-01-01T00:00:00+00:00:01'),
+            ('instant', '2024-01-01T00:00:00.0000000Z'),
             ('instant', '2024-01-01T00:00:00.1234560Z'), ('instant', '2024-01-01T00:00:00Z\n'),
             ('instant', '0001-01-01T00:00:00+00:01'), ('instant', '9999-12-31T23:59:59-00:01'),
             ('instant', '0' * 33),
