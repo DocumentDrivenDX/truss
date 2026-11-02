@@ -1,0 +1,217 @@
+{
+  "workflow_run": "https://github.com/DocumentDrivenDX/truss/actions/runs/41380256415",
+  "artifact_id": 13113167451,
+  "capture_limit": "Original full inventories remain in the workflow artifact; these diagnostics retain their hashes and exact sampled definition differences.",
+  "records": [
+    {
+      "file": "source44-native-inventory.json",
+      "sha256": "42a6b25dd37d9435268047538c41ab6c14dd798fb9e9d91b6708582e0c8507e6",
+      "source": "source44",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 174,
+          "observedRows": 174,
+          "expectedOnly": [
+            {
+              "sha256": "45a1b0d89a687532af78b520aea79dec6d01ab9ced88ef95c00386f465311be3",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source46-native-inventory.json",
+      "sha256": "3d041648f67243f42f03d09525367bb6ec48cc6ba8b1eacb3ab2b3dbff75304e",
+      "source": "source46",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 174,
+          "observedRows": 174,
+          "expectedOnly": [
+            {
+              "sha256": "45a1b0d89a687532af78b520aea79dec6d01ab9ced88ef95c00386f465311be3",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source47-native-inventory.json",
+      "sha256": "e2a4902c36196c3528a4b3504693a9fb3ef90a2257191a1e23710f9e25820915",
+      "source": "source47",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 176,
+          "observedRows": 176,
+          "expectedOnly": [
+            {
+              "sha256": "45a1b0d89a687532af78b520aea79dec6d01ab9ced88ef95c00386f465311be3",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source48-native-inventory.json",
+      "sha256": "9b54147fffafbcf596e72b42ebef46a41790f6ed0f4c94c3961ebd28e45ee2f4",
+      "source": "source48",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 179,
+          "observedRows": 179,
+          "expectedOnly": [
+            {
+              "sha256": "45a1b0d89a687532af78b520aea79dec6d01ab9ced88ef95c00386f465311be3",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 04:00:00+00') TO ('2027-11-01 04:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source49-native-inventory.json",
+      "sha256": "4396c903001c38fe97e7c24effeaa5e452d7b9bdff51ae0aeb5298837c6888e7",
+      "source": "source49",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 179,
+          "observedRows": 179,
+          "expectedOnly": [
+            {
+              "sha256": "d0129f5939d06e28567c3e9fa3704849e47ca614005b3b000d1a8ee1808e41ac",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source50-native-inventory.json",
+      "sha256": "541d4705e7b41caea5f802c693f50c40cc8905d59567c7332a853f32da147940",
+      "source": "source50",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": false,
+      "differences": {
+        "relations": {
+          "expectedRows": 179,
+          "observedRows": 179,
+          "expectedOnly": [
+            {
+              "sha256": "d0129f5939d06e28567c3e9fa3704849e47ca614005b3b000d1a8ee1808e41ac",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    },
+    {
+      "file": "source52-native-inventory.json",
+      "sha256": "5ef8d45795fab515cd66585981a1cd943b8baba1b505ccab1c4e157f8c1d44fb",
+      "source": "source52",
+      "locale": [
+        "C.UTF-8",
+        "C.UTF-8",
+        "c"
+      ],
+      "matches": true,
+      "differences": {
+        "relations": {
+          "expectedRows": 182,
+          "observedRows": 182,
+          "expectedOnly": [
+            {
+              "sha256": "d0129f5939d06e28567c3e9fa3704849e47ca614005b3b000d1a8ee1808e41ac",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "observedOnly": [
+            {
+              "sha256": "3257175735ec7f96ed748fb19cb0571da6628941ff51ad4de1ae1f3679d3709a",
+              "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-10-01 00:00:00+00') TO ('2027-12-01 00:00:00+00')\",\"heap\",null,null]"
+            }
+          ],
+          "orderingOnly": false
+        }
+      }
+    }
+  ]
+}

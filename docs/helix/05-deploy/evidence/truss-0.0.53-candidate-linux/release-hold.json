@@ -1,0 +1,19 @@
+{
+  "status": "held",
+  "candidate_version": "0.0.53",
+  "source_commit": "685dfb57",
+  "release_created": false,
+  "registry_published": false,
+  "gate": "all-forward-migration-lineage",
+  "evidence": "qualification.json",
+  "cause": "Fresh November 2026 predecessor installation partition bounds do not match the frozen admitted native profiles. Native refusal is preserved; no initialization, receipt or source inventory was relabelled.",
+  "passing_earlier_scope": {
+    "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/41379481836",
+    "tag": "v0.0.52",
+    "scope": "Installed Linux current-runtime, embedded owners and native PostgreSQL smoke/cleanup; not complete lineage acceptance."
+  },
+  "immutable_0052_issue": {
+    "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/41379657769",
+    "reason": "Missing release-pins.json prevents verified PyPI publication; existing immutable archives unchanged."
+  }
+}
