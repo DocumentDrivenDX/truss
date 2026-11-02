@@ -1,6 +1,20 @@
 
 
-## Current migration direction — 2026-10-21
+## Current baseline direction — 2026-11-02
+
+The owner explicitly directed: “Drop all the old junk. We need a baseline as of
+now.” For 0.0.53 this supersedes the earlier requirement to carry predecessor
+migration routes and recover historical migration receipts. The active package
+contains only the current native profile, no predecessor wheels and no migration
+edges. Qualification covers fresh installation, native verification, drift
+refusal, retained original initialization and confirmed owned-server cleanup.
+The complete installed Linux runtime, compiler, conformance, grants and public
+consumer gates remain required. This is a deliberate compatibility reset, not
+successful historical migration evidence. Existing databases are not reset or
+rewritten. Their data needs a separately qualified export/rebuild procedure.
+Published releases and archived original receipts retain their original scope.
+
+## Historical migration direction — 2026-10-21
 
 The [restoration plan](runtime-migration-restoration-plan.md) and PRD owner
 decision supersede earlier migration sequencing and compatibility assumptions

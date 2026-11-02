@@ -36,6 +36,10 @@ def validate_previous_manifest(manifest, original):
 
 
 def check_history(manifest):
+    if manifest.get('baseline',{}).get('identity')=='truss-fresh-install-baseline/2026-11-02':
+        if manifest['sources'] or manifest['edges'] or manifest['sourceWheels']:
+            raise AssertionError('Fresh baseline cannot advertise historical migration routes')
+        return None
     tags=subprocess.check_output(['git','tag','--list','v*'],cwd=ROOT,text=True).splitlines()
     tags=[t for t in tags if all(p.isdecimal() for p in t[1:].split('.'))]
     current=tuple(int(p) for p in importlib.metadata.version(TRUSS_DISTRIBUTION).split('.'))
@@ -61,6 +65,26 @@ def main():
     if args.installed_package and Path(truss.__file__).resolve().is_relative_to(ROOT/'packages/python/src'):
         raise AssertionError('Release gate must import the installed wheel')
     previous=check_history(manifest)
+    if manifest.get('baseline'):
+        sys.path.insert(0,str(ROOT/'packages/python/tests'))
+        import test_current_baseline
+        import test_current_baseline_native
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        os.environ['TRUSS_MIGRATION_EVIDENCE_DIRECTORY']=str(args.output.parent.resolve())
+        suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(module)
+            for module in (test_current_baseline,test_current_baseline_native))
+        result=unittest.TextTestRunner(verbosity=2).run(suite)
+        receipt={'scope':'Fresh installed baseline; PostgreSQL18.6, UMF0.10; no historical migrations',
+            'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),
+            'package':importlib.metadata.version(TRUSS_DISTRIBUTION),'distribution':TRUSS_DISTRIBUTION,
+            'loadedPackage':str(Path(truss.__file__).resolve()),'platform':sys.platform,'python':sys.version,
+            'recipeSha256':recipe_digest,'targetManifestSha256':manifest['target'],
+            'baseline':manifest['baseline'],'sources':[], 'originalWheels':{},
+            'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),
+            'skipped':len(result.skipped),'passed':result.wasSuccessful() and not result.skipped,
+            'limitations':['Fresh baseline only; earlier installation migration and receipt recovery are unsupported']}
+        args.output.write_text(json.dumps(receipt,indent=2)+'\n')
+        raise SystemExit(0 if receipt['passed'] else 1)
     args.wheelhouse.mkdir(parents=True,exist_ok=True)
     # No source can be dropped from the fixture matrix while it remains admitted.
     required=set(manifest['sources']);fixtures=set()

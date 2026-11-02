@@ -1,5 +1,15 @@
 # Truss Python toolkit
 
+## Version 0.0.53 fresh baseline
+
+Owner direction on 2026-11-02 establishes a fresh-install baseline. The active
+package no longer admits predecessor migration routes or historical receipt
+recovery. Install `umf-truss[native,query]==0.0.53` in a clean environment with a
+fresh database. Existing installations require a separately qualified export and
+rebuild; startup never resets or upgrades them. Older version sections below
+retain their historical scope. The 0.0.53 release notes and receipts govern the
+current qualification claim.
+
 ## Version 0.0.52 candidate
 
 The prepared distribution metadata is `umf-truss==0.0.52`; `import truss` and CLI

@@ -11,6 +11,13 @@ def load_recipe():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     if manifest['interfaceVersion']!='truss-runtime-migration/0.1':raise ValueError('Migration interface required')
+    if 'baseline' in manifest:
+        baseline=manifest['baseline']
+        if (baseline.get('identity')!='truss-fresh-install-baseline/2026-11-02'
+                or baseline.get('historicalMigrationsSupported') is not False
+                or baseline.get('historicalReceiptRecoverySupported') is not False
+                or manifest['sources'] or manifest['edges'] or manifest['sourceWheels']):
+            raise ValueError('Explicit fresh baseline without historical migration authority required')
     artifacts={}
     for name,digest in manifest['files'].items():
         if '/' in name or '..' in name:raise ValueError('Packaged artifact name required')
