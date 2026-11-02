@@ -33,6 +33,16 @@ cancellation, containment, retained-evidence and recovery obligations before
 dispatch. This handoff introduces no resettable timer or independent account;
 exact duration/clock/native producer pins remain inputs of the complete profile.
 
+The public fresh-install operation may select a bounded `operation_timeout_ms`
+up to 180000 milliseconds. Its default remains the adopted host deadline, and
+the override applies only to `install_in_transaction`; it does not change the
+host's default or later operations. The host statement timeout remains
+independently bounded at 60000 milliseconds, and an already active outer host
+operation deadline remains the tighter bound. This explicit installation cap
+requests cancellation but does not establish backend termination, rollback, or
+safe connection reuse; retain the ordinary containment and caller-settlement
+requirements below.
+
 | Boundary | Required behavior | What it establishes |
 | --- | --- | --- |
 | Before dispatch | Recheck original deadline, cancellation, exclusive connection/transaction and profile custody. Refuse exhausted admission once, with no control or business submission. | No new native work was submitted by that refusal. |

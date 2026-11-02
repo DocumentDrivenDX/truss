@@ -46,7 +46,7 @@ from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationR
 from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryEntityProjection,QueryCatalogSources,QueryCatalogRead
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
-from .psycopg_host import PsycopgHost
+from .psycopg_host import PsycopgHost, _MAX_INSTALL_OPERATION_TIMEOUT_MS
 from .preparation import CatalogDocument, PreparedAcceptance, _require_original_preparation
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_source_reference import DATE10_PROFILE
@@ -503,8 +503,20 @@ class CatalogReferenceAssembly:
             from .catalog_preparation import prepare_catalog
             return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
     @_active_operation
-    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=()) -> Outcome[PendingCatalogInstallation | InstallRefused]:
+    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=(),operation_timeout_ms: int | None=None) -> Outcome[PendingCatalogInstallation | InstallRefused]:
+        """Install on the original transaction, optionally with a longer bounded DDL operation.
+
+        The default uses the adopted host's configured operation timeout. An
+        explicit value can extend only this install operation to 180 seconds;
+        the host's statement timeout and every later operation retain their
+        existing limits.
+        """
         self._available()
+        if (operation_timeout_ms is not None
+                and (type(operation_timeout_ms) is not int
+                     or not 1 <= operation_timeout_ms <= _MAX_INSTALL_OPERATION_TIMEOUT_MS)):
+            return Error(ExecutionFailure('execution_obligation',
+                'Install operation timeout must be 1..180000 milliseconds'))
         from psycopg import sql
         from ._installation_sql_batch import execute_ordered_ddl
         from ._installation_privileges import (InstallationRoles, _name, _policy_names,
@@ -626,7 +638,8 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
-        result,attempt=self._host._run_operation_with_attempt(transaction,install)
+        result,attempt=self._host._run_operation_with_attempt(
+            transaction,install,operation_timeout_ms=operation_timeout_ms)
         from ._installation_privileges import _ThirdPartyGrantRefusal
         if isinstance(result,Error):
             error=getattr(attempt,'error',None)
