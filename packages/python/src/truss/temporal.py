@@ -165,6 +165,7 @@ class ObjectFound(_Carrier):
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectPageCursor(_Carrier):
+    original_bytes: bytes = field(repr=False)
     installation_id: str
     source_epoch: str
     release_sha256: str
@@ -180,6 +181,12 @@ class ObjectPageCursor(_Carrier):
     profile: Literal["truss-python-temporal-object-page/0.1"] = field(
         default="truss-python-temporal-object-page/0.1", init=False
     )
+
+
+    def __post_init__(self):
+        _Carrier.__post_init__(self)
+        if type(self.original_bytes) is not bytes or not 1 <= len(self.original_bytes) <= 65536:
+            raise ValueError("Original immutable native temporal page cursor bytes required")
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)

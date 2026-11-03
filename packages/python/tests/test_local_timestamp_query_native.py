@@ -135,6 +135,76 @@ class LocalTimestampQueryTests(fixture.TemporalNativeFixture):
         self.assertEqual(self.selected_read(selected,tx,identity).version,1)
         h.detach();c.rollback()
 
+    def test_public_direct_temporal_pages_keep_native_person_seal_and_live_authority(self):
+        from dataclasses import replace
+        from uuid import uuid4
+        import json
+        from truss.object_read import ObjectReadInvalid
+        c,h,a,tx=self.ready_temporal();selected=a.temporal_values()
+        local=LocalTimestampValue(text='2000-02-29T12:34:56.123456')
+        applied,_,_=self.run_group(selected,tx,(self.local_create('direct-page-local',local),),'direct-page-local')
+        self.assertIsInstance(applied,GroupSuccess,repr(applied));h.detach();c.commit()
+        c,h,a,tx=self.consumer();selected=a.temporal_values()
+        kwargs={'document_id':'adoc','module_id':'m','record_id':'A','limit':2}
+        first=selected.page_objects_in_transaction(tx,**kwargs)
+        self.assertIsInstance(first,Ok,repr(first));self.assertIsInstance(first.value,temporal.ObjectPage)
+        token=first.value.continuation;self.assertIsInstance(token,temporal.ObjectPageCursor)
+        native=json.loads(token.original_bytes);self.assertEqual(native['payload']['metadata']['afterId'],str(token.after_id))
+        ids=[obj.id for obj in first.value.objects];objects=list(first.value.objects);after=token
+        while after is not None:
+            result=selected.page_objects_in_transaction(tx,**kwargs,cursor=after)
+            self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,temporal.ObjectPage)
+            ids.extend(obj.id for obj in result.value.objects);objects.extend(result.value.objects);after=result.value.continuation
+        self.assertEqual(len(ids),7);self.assertEqual(len(set(ids)),7);self.assertEqual(ids,sorted(ids))
+        self.assertTrue(any(dict(obj.values).get('A-local')==local for obj in objects))
+        for modified in (replace(token,after_id=token.after_id+1),replace(token,source_epoch='other')):
+            result=selected.page_objects_in_transaction(tx,**kwargs,cursor=modified)
+            self.assertEqual(result,Ok(ObjectReadInvalid(code='cursor')))
+        manifest,digest,_=_release()
+        def native_page(connection,original):
+            with connection.cursor() as pinned:_pin_cursor(pinned)
+            return connection.execute('SELECT truss.person_page_temporal_objects(%s,%s,%s,%s,%s,%s,%s,%s)',
+                ('adoc','m','A',2,1048576,original,manifest['releaseId'],digest)).fetchone()[0]
+        changed=json.loads(token.original_bytes);changed['payload']['metadata']['afterId']=str(token.after_id+1)
+        for invalid in (json.dumps(changed).encode(),json.dumps(native['payload']['metadata']).encode()):
+            with self.assertRaises(psycopg.Error) as refused:
+                with c.transaction():native_page(c,invalid)
+            self.assertEqual(refused.exception.sqlstate,'P1002')
+        # A genuine native query continuation has a distinct sealed route.
+        binding,requirements=self.capture(c)
+        packet=json.dumps({'version':'weft.engine-temporal-after/0.2','selectedKey':{'module':'m','record':'A','key':'a-primary'},
+            'sortValues':[{'state':'present','value':'2000-02-29'}],'keyValues':['shared-key','row-0']})
+        query_token=c.execute('SELECT cursor_bytes FROM truss.person_query_temporal_cursor_encode(%s::jsonb,%s,%s,%s::jsonb)',
+            (binding,b'direct-query-route-separation',packet,'["date"]')).fetchone()[0]
+        with self.assertRaises(psycopg.Error) as refused:
+            with c.transaction():native_page(c,bytes(query_token))
+        self.assertEqual(refused.exception.sqlstate,'P1002')
+        role='direct_page_reader_'+uuid4().hex[:8]
+        self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} LOGIN').format(psycopg.sql.Identifier(role)))
+        self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
+        self.admin.execute(psycopg.sql.SQL('GRANT group_reader TO {} WITH SET FALSE').format(psycopg.sql.Identifier(role)))
+        params={**psycopg.conninfo.conninfo_to_dict(self.info.connection_uri),'user':role}
+        with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as other:
+            with other.transaction():
+                other_host=adopt_psycopg_host(other,statement_timeout_ms=10000,operation_timeout_ms=30000)
+                try:
+                    self.assertIsInstance(other_host.adopt_transaction(),Ok)
+                    self.assertIsNotNone(native_page(other,None),'Other authorized person must read its own first page')
+                    with self.assertRaises(psycopg.Error) as refused:
+                        with other.transaction():native_page(other,token.original_bytes)
+                    self.assertEqual(refused.exception.sqlstate,'P1002')
+                finally:other_host.detach()
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        try:
+            refused=selected.page_objects_in_transaction(tx,**kwargs,cursor=token)
+            self.assertEqual(refused,Ok(ObjectReadRefused()))
+        finally:self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
+        self.assertIsNotNone(native_page(c,token.original_bytes))
+        print('temporal-direct-page-native-custody '+json.dumps({'rows':len(ids),'distinctRows':len(set(ids)),
+            'cursorSha256':__import__('hashlib').sha256(token.original_bytes).hexdigest(),
+            'crossPersonState':'P1002','unsignedAndAlteredState':'P1002','queryRouteState':'P1002',
+            'revokedReadRows':0,'paging':'live per-call, no cross-page snapshot claim'},sort_keys=True))
+
     def test_public_accept_apply_read_all_temporal_families_and_presence(self):
         c, h, a, tx = self.ready_temporal()
         selected = a.temporal_values()

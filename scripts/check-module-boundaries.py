@@ -90,7 +90,7 @@ ALLOWED = {
     '_temporal_query_values': {'truss.contracts','truss.query','truss._query_runtime','truss._owner_evidence_json','datetime','umf_access.types','umf_access.values','truss._temporal_query_execution'},
     '_temporal_query_execution': {'collections.abc','hashlib','json','truss.execution','truss.query','truss.contracts','truss._query_runtime','truss._owner_evidence_json','truss._temporal_compiler','truss._temporal_profiles','truss._temporal_query_runtime','truss._temporal_query_values','umf_access.native_program','umf_access.values','truss._temporal_program_custody','psycopg','psycopg.rows','truss.psycopg_host'},
     '_temporal_query_runtime': {'collections.abc','decimal','hashlib','json','truss.execution','truss.query','truss._owner_evidence_json','truss._temporal_profiles'},
-    '_temporal_read': {'json','truss.contracts','truss.execution','truss.object_read','truss._temporal_profiles','truss._temporal_values','truss.temporal','truss.groups','truss._group_runtime','truss._owner_evidence_json','truss.catalog_runtime','truss.history'},
+    '_temporal_read': {'base64','json','truss.contracts','truss.execution','truss.object_read','truss._temporal_profiles','truss._temporal_values','truss.temporal','truss.groups','truss._group_runtime','truss._owner_evidence_json','truss.catalog_runtime','truss.history'},
     '_temporal_import': {'json','truss.contracts','truss.imports','truss.execution','truss._temporal_profiles','truss.temporal','truss.catalog_runtime','truss.groups','truss._import_runtime','truss._owned_import_runtime','truss._group_runtime'},
     '_temporal_profiles': {'hashlib','importlib.resources','json'},
     '_temporal_group': {'json','truss.contracts','truss.execution','truss.groups','truss._temporal_profiles','truss.catalog_runtime','truss.temporal','truss._group_runtime','truss._preview_runtime'},
@@ -116,7 +116,7 @@ ALLOWED = {
     '_query_stream_runtime': {'time','decimal','dataclasses','hashlib','json','uuid','weakref','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query','truss.query_stream','truss._query_runtime'},
     # Pure bounded compiler-result reuse; native scope remains in query execution.
     '_query_cache': {'collections','json','sys','threading'},
-    '_query_runtime': {'truss._temporal_query_execution','truss.reader_catalog','truss._query_cache','base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
+    '_query_runtime': {'importlib.metadata','truss._temporal_query_execution','truss.reader_catalog','truss._query_cache','base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._core10_catalog_release','subprocess','time'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     # Group preparation decodes the shared catalog reference contract; no catalog runtime dependency.
@@ -144,7 +144,7 @@ ALLOWED = {
     'object_read': {'truss.contracts','truss.groups','dataclasses','typing'},
     # Immutable application schema data only; no native I/O or authority cache.
     '_record_schema': {'collections.abc','dataclasses','datetime','base64','re','json','types','truss.contracts'},
-    '_record_preparation': {'hashlib','json','truss.contracts','truss.groups','truss._record_schema','truss._schema_memory'},
+    '_record_preparation': {'truss.temporal','truss._temporal_profiles','hashlib','json','truss.contracts','truss.groups','truss._record_schema','truss._schema_memory'},
     '_schema_memory': {'truss._record_schema','truss._catalog_view_build','truss.catalog_view','collections','collections.abc','dataclasses','hashlib','threading','types','json','sys','weakref'},
     'catalog_view': {'truss._schema_memory','base64','weakref','truss._catalog_view_build','dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'truss._schema_memory','base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},

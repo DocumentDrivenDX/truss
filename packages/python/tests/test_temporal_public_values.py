@@ -189,6 +189,7 @@ class TemporalPublicValueTests(unittest.TestCase):
         self.assertEqual(scalar.identity.owner.document_id, "doc")
         self.assertEqual(page.profile, "truss-python-temporal-object-page/0.1")
         cursor = ObjectPageCursor(
+            original_bytes=b"original-native-token",
             installation_id="install", source_epoch="epoch", release_sha256="b" * 64,
             document_id="doc", module_id="module", record_id="record", type_id=3,
             definition_pin="type-pin", catalog_revision=4, after_id=17,

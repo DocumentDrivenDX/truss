@@ -437,9 +437,9 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     def apply(cursor,observed):
         pin_cursor(cursor)
         prepared=None
-        if selected_owned and _schema_state is not None and not temporal:
+        if selected_owned and _schema_state is not None:
             from ._record_preparation import prepare_records
-            prepared=prepare_records(cursor,_schema_state,input,original_input,original_documents,manifest['releaseId'],digest)
+            prepared=prepare_records(cursor,_schema_state,input,original_input,original_documents,manifest['releaseId'],digest,temporal=temporal)
         if prepared is None:
             command='SELECT truss.person_apply_temporal_group(%s,%s,%s,%s,%s)' if temporal else 'SELECT truss.person_apply_group(%s,%s,%s,%s,%s)'
             cursor.execute(command,

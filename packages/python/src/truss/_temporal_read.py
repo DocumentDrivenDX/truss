@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Profile-bound PV1 reads; shared object/history native engines, no fallback."""
+import base64
 import json
 from .contracts import BooleanValue,TextValue,ProfilePin
 from .execution import Error,Ok
@@ -25,11 +26,24 @@ def _decimal_string(value,maximum,field):
 def decode_cursor(value,manifest,digest):
     from . import temporal as dto
     if (type(value) is not dict or set(value)!={'profile','installationId','sourceEpoch','releaseSha256',
-            'documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId','valueProfile','queryAbi'}
+            'documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId','valueProfile','queryAbi','originalCursorBase64'}
             or value['profile']!='truss-python-temporal-object-page/0.1' or value['releaseSha256']!=digest
             or value['valueProfile']!=profiles()['valueProfile'] or value['queryAbi']!=abi()):
         raise ValueError('Whole actual selected native cursor required')
-    return dto.ObjectPageCursor(installation_id=value['installationId'],source_epoch=value['sourceEpoch'],
+    encoded=value['originalCursorBase64']
+    if type(encoded) is not str:raise ValueError('Exact native cursor base64 required')
+    original=base64.b64decode(encoded,validate=True)
+    if not 1<=len(original)<=65536 or base64.b64encode(original).decode('ascii')!=encoded:
+        raise ValueError('Canonical lossless bounded native cursor base64 required')
+    # Custody comparison only: the native provider verifies its seal and person.
+    # Never regenerate these bytes from this metadata or claim Python admission.
+    from ._owner_evidence_json import decode_owner_evidence_json
+    envelope=decode_owner_evidence_json(original)
+    metadata={k:v for k,v in value.items() if k!='originalCursorBase64'}
+    if (type(envelope) is not dict or set(envelope)!={'payload','digest'}
+            or type(envelope['payload']) is not dict or envelope['payload'].get('metadata')!=metadata):
+        raise ValueError('Original native cursor and metadata correspondence required')
+    return dto.ObjectPageCursor(original_bytes=original,installation_id=value['installationId'],source_epoch=value['sourceEpoch'],
         release_sha256=value['releaseSha256'],document_id=value['documentId'],module_id=value['moduleId'],record_id=value['recordId'],
         type_id=_decimal_string(value['typeId'],_INT32_MAX,'cursor.typeId'),definition_pin=value['definitionPin'],
         catalog_revision=_decimal_string(value['catalogRevision'],_INT32_MAX,'cursor.catalogRevision'),
@@ -131,12 +145,20 @@ def _page(assembly,args,manifest,digest,pin_cursor):
         if (cursor.document_id,cursor.module_id,cursor.record_id)!=(args['document_id'],args['module_id'],args['record_id']):
             return Ok(ObjectReadInvalid(code='cursor_selection'))
         if _wire(cursor.value_profile)!=profiles()['valueProfile'] or _wire(cursor.query_abi)!=abi():return Ok(ObjectReadInvalid(code='cursor'))
-        value=_wire(cursor)
+        if type(cursor.original_bytes) is not bytes or not 1<=len(cursor.original_bytes)<=65536:
+            return Ok(ObjectReadInvalid(code='cursor'))
+        value={key:_wire(getattr(cursor,name)) for key,name in (
+            ('profile','profile'),('installationId','installation_id'),('sourceEpoch','source_epoch'),
+            ('releaseSha256','release_sha256'),('documentId','document_id'),('moduleId','module_id'),
+            ('recordId','record_id'),('typeId','type_id'),('definitionPin','definition_pin'),
+            ('catalogRevision','catalog_revision'),('afterId','after_id'),('valueProfile','value_profile'),('queryAbi','query_abi'))}
         for key,maximum in (('typeId',_INT32_MAX),('catalogRevision',_INT32_MAX),('afterId',_INT64_MAX)):
             if type(value[key]) is not int or not 1<=value[key]<=maximum:return Ok(ObjectReadInvalid(code='cursor'))
             value[key]=str(value[key])
-        original=json.dumps(value,ensure_ascii=True).encode()
-        if len(original)>65536:return Ok(ObjectReadInvalid(code='cursor'))
+        value['originalCursorBase64']=base64.b64encode(cursor.original_bytes).decode('ascii')
+        try:decode_cursor(value,manifest,digest)
+        except (ValueError,TypeError,KeyError,AttributeError):return Ok(ObjectReadInvalid(code='cursor'))
+        original=cursor.original_bytes
     def observe(native_cursor,observed):
         pin_cursor(native_cursor)
         native_cursor.execute('SELECT truss.person_page_temporal_objects(%s,%s,%s,%s,%s,%s,%s,%s)',

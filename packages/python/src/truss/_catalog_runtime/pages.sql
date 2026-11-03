@@ -5,6 +5,7 @@ CREATE FUNCTION truss.page_objects_at_profile(selected_document text,selected_mo
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_type truss.type_def%ROWTYPE;
  captured_revision int;source_pin record;cursor_value jsonb;after_id bigint:=0;candidate record;
+ cursor_envelope jsonb;cursor_payload jsonb;cursor_seal text;cursor_bytes bytea;cursor_actor oid;
  selected_profile text;result_document jsonb;objects jsonb:='[]';lookahead_root_owner jsonb;object_bytes bytea;object_value jsonb;continuation jsonb;result bytea;counted int:=0;last_id bigint;
 BEGIN
  selected_profile:=CASE WHEN temporal_profile THEN 'truss-python-temporal-object-page/0.1' ELSE 'truss-python-object-page/0.1' END;
@@ -31,6 +32,22 @@ BEGIN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536 OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
    RAISE EXCEPTION 'bounded original page cursor required' USING ERRCODE='22023';END IF;
   cursor_value:=convert_from(original_cursor,'UTF8')::jsonb;
+  IF temporal_profile THEN
+   cursor_actor:=truss.runtime_person(false);cursor_envelope:=cursor_value;cursor_payload:=cursor_envelope->'payload';
+   IF cursor_envelope-ARRAY['payload','digest']<>'{}'::jsonb
+    OR (SELECT count(*) FROM jsonb_object_keys(cursor_envelope))<>2
+    OR jsonb_typeof(cursor_payload) IS DISTINCT FROM 'object'
+    OR cursor_payload-ARRAY['profile','actorOid','metadata']<>'{}'::jsonb
+    OR (SELECT count(*) FROM jsonb_object_keys(cursor_payload))<>3
+    OR cursor_payload->>'profile' IS DISTINCT FROM 'truss-direct-temporal-page-cursor/0.1'
+    OR jsonb_typeof(cursor_payload->'metadata') IS DISTINCT FROM 'object' THEN
+    RAISE EXCEPTION 'original sealed direct temporal page cursor required' USING ERRCODE='P1002';END IF;
+   SELECT encode(sha256(s.secret||sha256(convert_to(cursor_payload::text,'UTF8'))),'hex') INTO STRICT cursor_seal
+    FROM truss.reader_catalog_validator_secret s;
+   IF cursor_envelope->>'digest' IS DISTINCT FROM cursor_seal OR cursor_payload->>'actorOid' IS DISTINCT FROM cursor_actor::text THEN
+    RAISE EXCEPTION 'original person and sealed direct page context required' USING ERRCODE='P1002';END IF;
+   cursor_value:=cursor_payload->'metadata';
+  END IF;
   IF (SELECT count(*) FROM jsonb_object_keys(cursor_value))<>(CASE WHEN temporal_profile THEN 13 ELSE 11 END)
    OR EXISTS(SELECT 1 FROM jsonb_each(cursor_value) e WHERE jsonb_typeof(e.value)<>'string' AND NOT (temporal_profile AND e.key IN ('valueProfile','queryAbi')))
    OR cursor_value-ARRAY['profile','installationId','sourceEpoch','releaseSha256','documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId']-(CASE WHEN temporal_profile THEN ARRAY['valueProfile','queryAbi'] ELSE ARRAY[]::text[] END)<>'{}'::jsonb
@@ -61,8 +78,17 @@ BEGIN
     'sourceEpoch',installation.source_epoch::text,'releaseSha256',installation.release_sha256,'documentId',selected_document,
     'moduleId',selected_module,'recordId',selected_record,'typeId',selected_type.type_id::text,'definitionPin',source_pin.definition_pin,
     'catalogRevision',captured_revision::text,'afterId',last_id::text);
-   IF temporal_profile THEN continuation:=continuation||jsonb_build_object('valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi());END IF;
-   IF octet_length(continuation::text)>65536 THEN RAISE EXCEPTION 'page cursor byte limit exceeded' USING ERRCODE='54000';END IF;
+   IF temporal_profile THEN
+    continuation:=continuation||jsonb_build_object('valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi());
+    cursor_payload:=jsonb_build_object('profile','truss-direct-temporal-page-cursor/0.1',
+     'actorOid',truss.runtime_person(false)::text,'metadata',continuation);
+    SELECT encode(sha256(s.secret||sha256(convert_to(cursor_payload::text,'UTF8'))),'hex') INTO STRICT cursor_seal
+     FROM truss.reader_catalog_validator_secret s;
+    cursor_bytes:=convert_to(jsonb_build_object('payload',cursor_payload,'digest',cursor_seal)::text,'UTF8');
+    IF octet_length(cursor_bytes)>65536 THEN RAISE EXCEPTION 'bounded native direct cursor required' USING ERRCODE='54000';END IF;
+    continuation:=continuation||jsonb_build_object('originalCursorBase64',replace(encode(cursor_bytes,'base64'),E'\n',''));
+   END IF;
+   IF NOT temporal_profile AND octet_length(continuation::text)>65536 THEN RAISE EXCEPTION 'page cursor byte limit exceeded' USING ERRCODE='54000';END IF;
    EXIT;
   END IF;
   object_bytes:=truss.get_object_at_profile(selected_document,selected_module,selected_record,candidate.id,maximum_bytes,expected_release,expected_digest,temporal_profile);

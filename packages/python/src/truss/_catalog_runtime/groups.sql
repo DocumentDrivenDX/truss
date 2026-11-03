@@ -944,18 +944,21 @@ REVOKE ALL ON FUNCTION truss.prepare_group(bytea,bytea,text,text) FROM PUBLIC;
 -- Cold, operation-scoped schema material for the Python immutable cache. This
 -- never exports unrelated documents or definitions and never decides an apply
 -- outcome: any unsupported or unauthorized case defers to the native path.
-CREATE FUNCTION truss.writer_schema_basis(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.writer_schema_basis_at_profile(original_input bytea,original_documents bytea,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;ops jsonb;operation jsonb;actor oid;installation truss.catalog_runtime_installation%ROWTYPE;
  selected_revision int;registration uuid;required_types int[];records jsonb;declaration_count bigint;result_bytes bytea;
 BEGIN
+ IF temporal_profile IS NULL THEN RETURN NULL;END IF;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
   OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304
   OR (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
   OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RETURN NULL;END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;ops:=input->'operations';
- IF input->>'interfaceVersion'<>'truss-group-input/0.1.0' OR input->'catalog'<>'{"selection":"current"}'::jsonb
-  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile')
+ IF temporal_profile AND input->'valueProfile' IS DISTINCT FROM truss.runtime_temporal_profiles()->'valueProfile' THEN RETURN NULL;END IF;
+ IF input->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) OR input->'catalog'<>'{"selection":"current"}'::jsonb
+  OR (CASE WHEN temporal_profile THEN input->'mutationProfile' IS DISTINCT FROM truss.runtime_temporal_profiles()->'mutationProfile' ELSE NOT truss.runtime_is_owned_profile(input->'mutationProfile') END)
   OR jsonb_typeof(ops)<>'array' OR jsonb_array_length(ops) NOT BETWEEN 1 AND 1024 THEN RETURN NULL;END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RETURN NULL;END IF;
@@ -1018,7 +1021,7 @@ BEGIN
  ), properties AS MATERIALIZED (
   SELECT p.type_id,jsonb_agg(jsonb_build_object('name',p.name,'prop_id',p.prop_id,'home',p.home,
    'cardinality',p.cardinality,'nullability',p.nullability,'scalar_type',p.scalar_type,
-   'facets',p.facets,'item',p.item) ORDER BY p.prop_id) rows
+   'facets',p.facets,'item',p.item)||(CASE WHEN temporal_profile THEN jsonb_build_object('native_temporal',p.native_temporal) ELSE '{}'::jsonb END) ORDER BY p.prop_id) rows
   FROM truss.prop_def p JOIN candidates c USING(type_id) WHERE p.retired_rev IS NULL GROUP BY p.type_id
  )
  SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',c.type_id::text,'definitionPin',c.definition_pin,
@@ -1032,11 +1035,18 @@ BEGIN
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM selected_revision THEN RETURN NULL;END IF;
  result_bytes:=convert_to(jsonb_build_object('basis',jsonb_build_object('installationId',installation.installation_id::text,
   'releaseSha256',installation.release_sha256,'sourceEpoch',installation.source_epoch::text,'catalogRevision',selected_revision,'registrationId',registration::text,
-  'documentsSha256',encode(sha256(original_documents),'hex')),'records',records)::text,'UTF8');
+  'documentsSha256',encode(sha256(original_documents),'hex'))||(CASE WHEN temporal_profile THEN truss.temporal_writer_basis_custody() ELSE '{}'::jsonb END),'records',records)::text,'UTF8');
  IF octet_length(result_bytes)>16777216 THEN RETURN NULL;END IF;
  RETURN result_bytes;
 EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE 'P1403' OR SQLSTATE '0A000' OR SQLSTATE '54000' OR SQLSTATE '55P03' OR SQLSTATE 'P0002' THEN
  RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.writer_schema_basis_at_profile(bytea,bytea,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.writer_schema_basis(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.writer_schema_basis_at_profile(original_input,original_documents,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.writer_schema_basis(bytea,bytea,text,text) FROM PUBLIC;

@@ -420,14 +420,27 @@ BEGIN
   SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
   SELECT rev INTO STRICT head_revision FROM truss.schema_head WHERE id=1;
   SELECT r.registration_id INTO STRICT head_registration FROM truss.catalog_registration_request r WHERE r.revision=head_revision;
-  IF app_prepared->>'profile' IS DISTINCT FROM 'truss-application-record-preparation/0.1'
-   OR app_prepared->'basis' IS DISTINCT FROM jsonb_build_object('installationId',installation.installation_id::text,
+  IF app_prepared->>'profile' IS DISTINCT FROM (CASE WHEN input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' THEN 'truss-python-temporal-record-patch/0.1' ELSE 'truss-application-record-preparation/0.1' END)
+   OR app_prepared->'basis' IS DISTINCT FROM (jsonb_build_object('installationId',installation.installation_id::text,
     'releaseSha256',installation.release_sha256,'sourceEpoch',installation.source_epoch::text,
-    'catalogRevision',head_revision,'registrationId',head_registration::text,'documentsSha256',encode(sha256(original_documents),'hex'))
+    'catalogRevision',head_revision,'registrationId',head_registration::text,'documentsSha256',encode(sha256(original_documents),'hex'))||(CASE WHEN input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' THEN truss.temporal_writer_basis_custody() ELSE '{}'::jsonb END))
    OR app_prepared->>'inputSha256' IS DISTINCT FROM encode(sha256(original_input),'hex')
    OR jsonb_typeof(app_prepared->'schemas') IS DISTINCT FROM 'object'
    OR jsonb_typeof(app_prepared->'operations') IS DISTINCT FROM 'array' THEN
    RAISE EXCEPTION 'prepared application basis changed' USING ERRCODE='55P03';END IF;
+  IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' THEN
+   IF jsonb_array_length(app_prepared->'operations')<>jsonb_array_length(input->'operations')
+    OR EXISTS(SELECT 1 FROM jsonb_each(app_prepared->'schemas') s
+     WHERE s.value IS DISTINCT FROM jsonb_build_object('definitionPin',
+      (SELECT t.metadata->>'typePin' FROM truss.runtime_type_schema t WHERE t.rev=head_revision AND t.type_id::text=s.key)))
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(app_prepared->'operations') WITH ORDINALITY p(value,ordinal)
+     WHERE jsonb_typeof(p.value) IS DISTINCT FROM 'object'
+      OR p.value-ARRAY['operationIndex','typeId','propsSet','retainedSet','propsUnset','retainedUnset']<>'{}'::jsonb
+      OR (SELECT count(*) FROM jsonb_object_keys(p.value))<>6
+      OR p.value->'operationIndex' IS DISTINCT FROM to_jsonb((p.ordinal-1)::int)
+      OR NOT (app_prepared->'schemas') ? (p.value->>'typeId')) THEN
+    RAISE EXCEPTION 'complete original temporal patch schema and operation inventory required' USING ERRCODE='22023';END IF;
+  END IF;
  END IF;
  INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
  VALUES(writer,person,original_input,original_documents,original_request,

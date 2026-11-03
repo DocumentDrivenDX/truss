@@ -1111,6 +1111,9 @@ BEGIN
     selected:='create:'||index;node_order:=array_append(node_order,selected);
     IF application_prepared IS NOT NULL THEN
      values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,NULL,NULL);
+     IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0'
+      AND values_image IS DISTINCT FROM truss.owned_object_values(selected_type.type_id,operation,NULL,NULL) THEN
+      RAISE EXCEPTION 'temporal patch must match original admitted values' USING ERRCODE='22023';END IF;
     ELSE values_image:=truss.owned_object_values(selected_type.type_id,operation,NULL,NULL);END IF;
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',selected_type.type_id::text,
      'definitionPin',operation->>'typeDefinitionPin','owner',jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module)),
@@ -1167,6 +1170,10 @@ BEGIN
      IF application_prepared IS NOT NULL AND state->'image'->>'rev'=revision::text THEN
       values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,
        state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb));
+      IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' AND values_image IS DISTINCT FROM
+       truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',
+        nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint) THEN
+       RAISE EXCEPTION 'temporal patch must match original admitted delta' USING ERRCODE='22023';END IF;
      ELSE values_image:=truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint);END IF;
      state:=jsonb_set(state,'{image,props}',values_image->'props');
      state:=jsonb_set(state,'{image,retained}',coalesce(nullif(values_image->'retained','{}'::jsonb),'null'::jsonb));

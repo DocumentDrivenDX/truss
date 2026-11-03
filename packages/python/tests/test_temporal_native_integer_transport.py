@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Canonical object/cursor integer wire controls; no native fixture is started."""
+import base64
 import copy
 import json
 import unittest
@@ -14,10 +15,18 @@ class TemporalNativeIntegerTransportTests(unittest.TestCase):
 
     def cursor(self):
         manifest,digest,obj=self.original()
-        return manifest,digest,{'profile':'truss-python-temporal-object-page/0.1','installationId':'installation',
+        value={'profile':'truss-python-temporal-object-page/0.1','installationId':'installation',
             'sourceEpoch':'epoch','releaseSha256':digest,'documentId':'doc','moduleId':'m','recordId':'r',
             'typeId':'3','definitionPin':'a'*64,'catalogRevision':'4','afterId':'17',
             'valueProfile':obj['valueProfile'],'queryAbi':obj['queryAbi']}
+        return manifest,digest,self.sealed(value)
+
+    def sealed(self,value):
+        value=copy.deepcopy(value);value.pop('originalCursorBase64',None)
+        # Pure transport fixture only; digest is not a native issuance claim.
+        raw=json.dumps({'payload':{'metadata':value},'digest':'component-only'}).encode()
+        value['originalCursorBase64']=base64.b64encode(raw).decode()
+        return value
 
     def bad_values(self,maximum):
         return (True,False,1,1.0,1.5,None,'','0','00','01','+1','-1','1.0','1e0',' 1','1 ','1\n',
@@ -60,7 +69,7 @@ class TemporalNativeIntegerTransportTests(unittest.TestCase):
             for field,maximum in (('typeId',2147483647),('catalogRevision',2147483647),('afterId',9223372036854775807)):
                 cursor[field]=str(maximum if upper else 1)
             decoded=decode_object(json.dumps(obj).encode(),manifest,digest).object
-            continuation=decode_cursor(cursor,manifest,digest)
+            continuation=decode_cursor(self.sealed(cursor),manifest,digest)
             self.assertEqual(decoded.id,9223372036854775807 if upper else 1)
             self.assertEqual(decoded.type_id,2147483647 if upper else 1)
             self.assertEqual(decoded.version,9223372036854775807 if upper else 1)
