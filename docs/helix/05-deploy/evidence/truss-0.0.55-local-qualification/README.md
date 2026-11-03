@@ -3,9 +3,10 @@
 This packet records the scoped local qualification evidence for package source commit
 `43b863053925d376030792c922b7098134890853`, with version-aligned release
 metadata at `71c3e14bbb97fc9f1c938587d535ab69d2032ba0`, plus the managed
-Ashlar A1 closeout. The scoped release is qualified for GitHub distribution;
-this packet is not a publication receipt. PyPI publication is outside this
-release.
+Ashlar A1 closeout. The scoped release was published to GitHub; this packet
+records qualification inputs and is not the publication receipt. See the
+[publication evidence](../truss-0.0.55-publication/README.md). PyPI publication
+is outside this release.
 
 ## Candidate artifacts
 

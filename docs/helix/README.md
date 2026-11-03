@@ -7,9 +7,10 @@ integration cohort is UMF SDK 0.10.2/Core 0.10.6, Weft 0.4.56, and Access
 source/ACK workflow, and the scoped managed Ashlar A1 gate passed. The managed
 closeout verified both A0/A1 ACKs and post-ACK cleanup; see its
 [qualification receipt](05-deploy/evidence/truss-0.0.55-local-qualification/managed-ashlar-a1-closeout.json).
-Full Truss-suite, Linux-native, and PyPI results are outside this scoped claim.
-Distribution is through the GitHub release assets; PyPI is outside this release.
-See the
+The [GitHub v0.0.55 release](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.55)
+is published. Full Truss-suite, Linux-native, and PyPI results are outside this
+scoped claim. Its [publication and download verification](05-deploy/evidence/truss-0.0.55-publication/README.md)
+records all six downloaded asset hashes. See the
 [release notes](05-deploy/releases/v0.0.55.md) and
 [local qualification evidence](05-deploy/evidence/truss-0.0.55-local-qualification/README.md).
 
