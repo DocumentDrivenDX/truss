@@ -271,6 +271,19 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_object_root(jsonb,truss.object) FROM PUBLIC;
 
+-- ABI1.2 cannot interpret the new physical local family as an ordinary
+-- timestamp. Check once per selected Record, including an empty source;
+-- ordinary capture and sibling Records retain their original behavior.
+CREATE FUNCTION truss.query_require_ordinary_record(selected_type int) RETURNS void
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type
+  AND p.retired_rev IS NULL AND p.scalar_type='localTimestamp') THEN
+  RAISE EXCEPTION 'explicit temporal ABI1.3 source required for local Record' USING ERRCODE='0A000';END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_require_ordinary_record(int) FROM PUBLIC;
+
 CREATE FUNCTION truss.query_objects(binding jsonb,selected_type int) RETURNS TABLE(id bigint,props jsonb)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;selected_row record;numeric_properties jsonb;numeric_valid boolean;
@@ -279,6 +292,7 @@ BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;
+ PERFORM truss.query_require_ordinary_record(selected_type);
  SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',p.prop_id::text,'scalarType',p.scalar_type) ORDER BY p.prop_id),'[]'::jsonb)
  INTO numeric_properties FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.scalar_type IN ('integer','decimal');
  FOR selected_row IN

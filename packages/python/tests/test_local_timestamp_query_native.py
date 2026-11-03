@@ -5,6 +5,8 @@ All happy-path values enter through public DTOs/facade operations. No native
 cell seed, fabricated owner result, or ordinary-provider fallback is used.
 """
 import os
+import json
+import psycopg
 
 from truss import (Ok, LocalTimestampValue, CatalogRuntimeConfiguration,
                    adopt_psycopg_host, create_reference_assembly, ObjectReadRefused,
@@ -12,7 +14,8 @@ from truss import (Ok, LocalTimestampValue, CatalogRuntimeConfiguration,
 from truss import temporal
 from truss.contracts import MapValue, NullValue, TextValue
 from truss.groups import (RootlessOwnership, StoredObjectReference, GroupSuccess,
-                          CommittedReceiptReplay, Delete,GroupFailed)
+                          CommittedReceiptReplay, Delete,GroupFailed,CreateObject,AuthoredValue)
+from truss.catalog_runtime import _release,_pin_cursor
 from truss.preview import GroupValidationObserved
 from truss.history import HistoryEntity, HistoryPage, HistoricalRecord
 from truss.imports import ImportReported, ImportCreated, ImportSkipped,ImportRejected
@@ -20,6 +23,47 @@ import temporal_native_fixture as fixture
 
 
 class LocalTimestampQueryTests(fixture.TemporalNativeFixture):
+    def test_ordinary_abi12_raw_sources_refuse_local_record_and_keep_sibling_record(self):
+        c,h,a,tx=self.ready_temporal()
+        reference=a.get_type_reference_in_transaction(tx,document_id='adoc',module_id='m',record_id='B')
+        self.assertIsInstance(reference,Ok,repr(reference))
+        sibling=CreateObject(type_definition_pin=reference.value.definition_pin,ownership=RootlessOwnership(),
+            values=(AuthoredValue(name='B-label',value=TextValue(kind='string',text='ordinary-sibling')),
+                    AuthoredValue(name='B-value',value=TextValue(kind='string',text='ordinary-key'))))
+        applied,_,_=self.run_group(a.temporal_values(),tx,(sibling,),'ordinary-sibling-on-temporal-runtime')
+        self.assertIsInstance(applied,GroupSuccess,repr(applied));sibling_type=int(applied.response.semantic.results[0].identity.type_id)
+        # Actual public native capture, no compiler version bypass or invented
+        # binding. Capturing ordinary metadata remains valid on this document.
+        manifest,digest,_=_release()
+        with c.cursor() as cursor:
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.person_query_binding(%s::jsonb,10000,1000,1048576,%s,%s)',
+                ('["adoc"]',manifest['releaseId'],digest))
+            bundle=json.loads(bytes(cursor.fetchone()[0]))
+        binding=bundle['bindingJson'];self.assertEqual(json.loads(binding)['queryAbi']['version'],'1.2')
+        for index,(source,extra) in enumerate((
+            ('query_objects',()),('query_page_objects',('a-primary',)),
+            ('query_export_objects',()),('query_export_page_objects',('a-primary',)),
+            ('query_selected_objects',(json.dumps({str(self.property_ids['A-label']):{'kind':'string','text':'no-match'}}),)),
+            ('query_seek_objects',('z-alt',None,2)))):
+            placeholders='%s::jsonb,%s'+',%s'*len(extra)
+            with self.subTest(source=source),self.assertRaises(psycopg.Error) as refused:
+                with c.transaction():
+                    with c.cursor(name='ordinary_local_'+str(index)) as cursor:
+                        cursor.execute(f'SELECT id FROM truss.person_{source}({placeholders}) LIMIT 1',
+                                       (binding,self.selected_type,*extra))
+                        self.fail('ABI1.2 exposed selected local Record: '+repr(cursor.fetchone()))
+            self.assertEqual(refused.exception.sqlstate,'0A000')
+        for source,extra in (('query_objects',()),('query_page_objects',('a-primary',)),
+                             ('query_export_objects',()),('query_export_page_objects',('a-primary',))):
+            placeholders='%s::jsonb,%s'+',%s'*len(extra)
+            actual=c.execute(f'SELECT id FROM truss.person_{source}({placeholders})',(binding,sibling_type,*extra)).fetchall()
+            self.assertEqual(len(actual),1)
+        # Explicit ABI1.3 source keeps the genuine temporal capability.
+        temporal_binding,requirements=self.capture(c)
+        self.assertEqual(len(c.execute('SELECT id FROM '+self.source(),self.source_arguments(temporal_binding,requirements)).fetchall()),6)
+        h.detach();c.rollback()
+
     def local_create(self, label, value):
         return temporal.CreateObject(type_definition_pin=self.type_reference.definition_pin,
             ownership=RootlessOwnership(), alias=label,

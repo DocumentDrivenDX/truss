@@ -10,6 +10,7 @@ BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;
+ PERFORM truss.query_require_ordinary_record(selected_type);
  FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'query value profile unavailable' USING ERRCODE='0A000';END IF;
  END LOOP;
