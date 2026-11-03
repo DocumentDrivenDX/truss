@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from unittest.mock import Mock,patch
+from unittest.mock import MagicMock,Mock,patch
 
 ROOT=Path(__file__).resolve().parents[3]
 spec=importlib.util.spec_from_file_location('temporal_enrollment_probe',ROOT/'scripts/probe-temporal-native-enrollment.py')
@@ -14,6 +14,48 @@ probe=importlib.util.module_from_spec(spec);spec.loader.exec_module(probe)
 
 
 class TemporalEnrollmentProbeTests(unittest.TestCase):
+    def result(self,tests=4):
+        result=unittest.TestResult();result.testsRun=tests
+        return result
+
+    def test_qualification_requires_exact_four_with_no_skips_or_expected_failures(self):
+        self.assertTrue(probe.qualification_result(self.result(),inventory_verified=True,cleanup_confirmed=True)['passed'])
+        for field in ('skipped','expectedFailures','unexpectedSuccesses','failures','errors'):
+            result=self.result();getattr(result,field).append(('case','detail'))
+            report=probe.qualification_result(result,inventory_verified=True,cleanup_confirmed=True)
+            with self.subTest(field=field):
+                self.assertFalse(report['passed'])
+                self.assertEqual(report['skips' if field=='skipped' else field],1)
+        for count in (0,3,5):
+            with self.subTest(count=count):
+                self.assertFalse(probe.qualification_result(self.result(count),inventory_verified=True,cleanup_confirmed=True)['passed'])
+
+    def test_qualification_requires_result_inventory_and_confirmed_cleanup(self):
+        for result,inventory,cleanup in ((None,True,True),(self.result(),False,True),(self.result(),True,False)):
+            with self.subTest(result=result,inventory=inventory,cleanup=cleanup):
+                self.assertFalse(probe.qualification_result(result,inventory_verified=inventory,cleanup_confirmed=cleanup)['passed'])
+
+    def test_report_and_exit_use_the_same_qualification_predicate(self):
+        for skipped in (False,True):
+            with self.subTest(skipped=skipped),tempfile.TemporaryDirectory() as directory:
+                result=self.result()
+                if skipped:result.skipped.append(('deliberate skipped case','reason'))
+                self.assertTrue(result.wasSuccessful(),'Sensitivity control: unittest allows skips')
+                worker=MagicMock();worker.__enter__.return_value=worker
+                worker.environment.return_value={'TRUSS_NATIVE_WORKER':'/nonexistent/unit-worker'}
+                worker.settings={};worker.baseline={};worker.original_pid=42;worker.cleanup_confirmed=True
+                with patch.object(probe,'evidence_directory',return_value=Path(directory)), \
+                     patch.object(probe,'ObservedWorker',return_value=worker), \
+                     patch.object(probe.unittest,'TextTestRunner') as runner,patch.dict(probe.os.environ,{},clear=True):
+                    runner.return_value.run.return_value=result
+                    exit_code=probe.main()
+                report=json.loads((Path(directory)/'selected-result.json').read_bytes())
+                self.assertEqual(exit_code,1 if skipped else 0)
+                self.assertEqual(report['passed'],not skipped)
+                self.assertEqual(report['skips'],int(skipped))
+                self.assertEqual(report['testsRun'],4)
+                worker.verify_clean.assert_called_once()
+
     def worker(self,root):
         worker=probe.ObservedWorker();worker.root=root;worker.original_pid=42
         worker.server=Mock();(root/'data').mkdir();(root/'data/retained').write_bytes(b'original')

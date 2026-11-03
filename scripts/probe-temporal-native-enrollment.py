@@ -58,6 +58,22 @@ class ObservedWorker(WorkerCluster):
             evidence_directory().joinpath('shared-worker-cleanup.json').write_text(json.dumps(proof,indent=2)+'\n')
 
 
+def qualification_result(result,*,inventory_verified,cleanup_confirmed):
+    counts={'testsRun':0 if result is None else result.testsRun,
+            'skips':0 if result is None else len(result.skipped),
+            'expectedFailures':0 if result is None else len(result.expectedFailures),
+            'unexpectedSuccesses':0 if result is None else len(result.unexpectedSuccesses),
+            'failures':0 if result is None else len(result.failures),
+            'errors':0 if result is None else len(result.errors),
+            'wasSuccessful':False if result is None else result.wasSuccessful(),
+            'inventoryVerified':inventory_verified,'cleanupConfirmed':cleanup_confirmed}
+    counts['passed']=bool(counts['testsRun']==4 and counts['skips']==0
+        and counts['expectedFailures']==0 and counts['unexpectedSuccesses']==0
+        and counts['failures']==0 and counts['errors']==0 and counts['wasSuccessful']
+        and inventory_verified and cleanup_confirmed)
+    return counts
+
+
 def main():
     evidence=evidence_directory()
     selection=('test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi',
@@ -83,13 +99,12 @@ def main():
             finally:
                 os.environ.pop('TRUSS_NATIVE_WORKER',None)
     finally:
+        summary=qualification_result(result,inventory_verified=inventory_verified,
+                                     cleanup_confirmed=getattr(worker,'cleanup_confirmed',False))
         evidence.joinpath('selected-result.json').write_text(json.dumps({
-            'selection':selection,'expectedCases':4,'testsRun':None if result is None else result.testsRun,
-            'passed':bool(result is not None and result.wasSuccessful() and inventory_verified and getattr(worker,'cleanup_confirmed',False)),
-            'inventoryVerified':inventory_verified,'cleanupConfirmed':getattr(worker,'cleanup_confirmed',False),
-            'failures':None if result is None else len(result.failures),'errors':None if result is None else len(result.errors),
+            'selection':selection,'expectedCases':4,**summary,
             'scope':'fresh installer and structural components ONLY; native public composition/cohort qualification OPEN'},indent=2)+'\n')
-    return 0 if result is not None and result.wasSuccessful() and inventory_verified and getattr(worker,'cleanup_confirmed',False) else 1
+    return 0 if summary['passed'] else 1
 
 
 if __name__=='__main__':raise SystemExit(main())
