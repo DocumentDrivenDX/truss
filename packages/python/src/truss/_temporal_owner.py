@@ -70,6 +70,8 @@ def _inspector():
         from umf.rust_codegen import CodegenEngine
         from umf import _rust
         import umf
+        if getattr(umf,'__version__',None)!=manifest['version']:
+            raise ValueError('Actual inspection runtime and distribution version must agree')
         owner=files('umf')
         expected=manifest['installedFiles']
         if type(expected) is not dict or not {'__init__.py','rust_codegen.py','_rust.py'}<=set(expected):

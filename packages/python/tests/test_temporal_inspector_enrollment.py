@@ -37,6 +37,7 @@ class TemporalInspectorEnrollmentTests(unittest.TestCase):
                        'sourceCommit':source_value['sourceCommit'],'installedFiles':entries,'maximumWork':1000000}
         self.write_manifest()
         self.module=ModuleType('umf');self.module.__file__=str(self.owner/'__init__.py');self.module.__path__=[str(self.owner)]
+        self.module.__version__='UNIT-not-a-release'
         self.codegen=ModuleType('umf.rust_codegen');self.bridge=ModuleType('umf._rust')
         self.bridge._rust_core=SimpleNamespace(__file__=str(self.owner/'_rust_core.unit.so'));self.module._rust=self.bridge
         self.modules={'umf':self.module,'umf.rust_codegen':self.codegen,'umf._rust':self.bridge}
@@ -145,12 +146,13 @@ class TemporalInspectorEnrollmentTests(unittest.TestCase):
 
     def test_source_binary_resource_and_budget_drift_refuse_before_engine_construction(self):
         self.install_fixture(self.engine_type())
-        for fault in ('binary','resource','source','budget','unloaded-native'):
+        for fault in ('binary','resource','source','budget','runtime-version','unloaded-native'):
             with self.subTest(fault=fault):
                 if fault=='binary':target=self.owner/'rust_codegen.py';old=target.read_bytes();target.write_bytes(old+b' changed')
                 elif fault=='resource':target=self.bundle/'resources/coreSchema.json';old=target.read_bytes();target.write_bytes(old+b' ')
                 elif fault=='source':target=self.bundle/'source.json';old=target.read_bytes();target.write_bytes(old+b' ')
                 elif fault=='budget':self.manifest['maximumWork']=True;self.write_manifest()
+                elif fault=='runtime-version':self.module.__version__='UNIT-different-runtime'
                 else:self.bridge._rust_core.__file__=str(self.root/'not-enrolled.so')
                 try:
                     with self.assertRaises(PreparationRejected):_inspector()
@@ -158,6 +160,7 @@ class TemporalInspectorEnrollmentTests(unittest.TestCase):
                 finally:
                     if fault in ('binary','resource','source'):target.write_bytes(old)
                     elif fault=='budget':self.manifest['maximumWork']=1000000;self.write_manifest()
+                    elif fault=='runtime-version':self.module.__version__='UNIT-not-a-release'
                     else:self.bridge._rust_core.__file__=str(self.owner/'_rust_core.unit.so')
 
     def test_source_resources_alone_never_claim_compiled_capability(self):

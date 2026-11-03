@@ -25,6 +25,8 @@ def compiler():
                 or metadata.version(manifest['distribution'])!=manifest['version']):return None
         import weft as owner
         from weft import weft as native
+        if getattr(owner,'__version__',None)!=manifest['version'] or getattr(native,'__version__',None)!=manifest['version']:
+            return None
         root=Path(owner.__file__).resolve().parent
         expected=manifest['installedFiles']
         if type(expected) is not dict or not expected:return None
