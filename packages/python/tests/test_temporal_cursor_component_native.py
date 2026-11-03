@@ -104,8 +104,13 @@ class TemporalCursorComponentNativeTests(fixture.TemporalNativeFixture):
                     self.assertEqual(caught.exception.sqlstate,'P1002')
                 finally:other_host.detach()
             self.admin.execute(psycopg.sql.SQL('REVOKE group_reader FROM {}').format(psycopg.sql.Identifier(role)))
-            with self.assertRaises(psycopg.errors.InsufficientPrivilege) as denied:
+            with self.assertRaises(psycopg.Error) as denied:
                 with other.transaction():self.decode(other,token)
+            self.assertEqual(denied.exception.sqlstate,'P1403')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege) as denied:
+                with other.transaction():
+                    other.execute('SELECT truss.query_temporal_cursor_decode(%s::jsonb,%s,%s)',
+                                  (self.binding,self.context,token))
             self.assertEqual(denied.exception.sqlstate,'42501')
         self.assertEqual(self.decode(c,token),after)
 

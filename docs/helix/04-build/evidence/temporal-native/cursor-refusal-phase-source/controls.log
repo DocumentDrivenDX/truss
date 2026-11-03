@@ -1,0 +1,9 @@
+temporal-shared-worker-cleanup {"confirmed": true, "dataDeleted": true, "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/tmpa_0xehkr/owned", "originalPostmasterPid": 42, "originalPostmasterPidAbsent": true, "pgCtlStatus": 3, "pgCtlStderr": "", "pgCtlStdout": "not running"}
+temporal-shared-worker-cleanup {"confirmed": false, "dataDeleted": false, "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/tmp969f56qf/owned"}
+temporal-shared-worker-cleanup {"confirmed": false, "dataDeleted": false, "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/tmpqh1e7l_3/owned", "originalPostmasterPid": 42, "originalPostmasterPidAbsent": true, "pgCtlStatus": 0, "pgCtlStderr": "", "pgCtlStdout": ""}
+temporal-shared-worker-cleanup {"confirmed": false, "dataDeleted": false, "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/tmpl7xmuwjt/owned", "originalPostmasterPid": 42, "originalPostmasterPidAbsent": false, "pgCtlStatus": 3, "pgCtlStderr": "", "pgCtlStdout": ""}
+temporal-shared-worker-cleanup {"confirmed": false, "dataDeleted": false, "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/tmpypkuwm6a/owned", "originalPostmasterPid": 42, "originalPostmasterPidAbsent": false, "pgCtlStatus": 3, "pgCtlStderr": "", "pgCtlStdout": ""}
+----------------------------------------------------------------------
+Ran 11 tests in 1.599s
+
+OK
