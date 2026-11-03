@@ -1,10 +1,11 @@
-# Truss 0.0.55 local qualification
+# Truss 0.0.55 qualification evidence
 
-This packet records the local candidate evidence for package source commit
+This packet records the scoped local qualification evidence for package source commit
 `43b863053925d376030792c922b7098134890853`, with version-aligned release
-metadata at `71c3e14bbb97fc9f1c938587d535ab69d2032ba0`. It is not a publication receipt.
-No v0.0.55 tag, GitHub release, hosted release workflow or PyPI upload has
-occurred.
+metadata at `71c3e14bbb97fc9f1c938587d535ab69d2032ba0`, plus the managed
+Ashlar A1 closeout. The scoped release is qualified for GitHub distribution;
+this packet is not a publication receipt. PyPI publication is outside this
+release.
 
 ## Candidate artifacts
 
@@ -74,14 +75,28 @@ The worker's native Weft results were returned in memory but not serialized into
 a completion receipt after the later adapter exception; the closeout records
 the result values and this evidence limit.
 
+## Managed Ashlar A1 qualification
+
+The selected managed Ashlar A1 gate passed on Databricks Serverless Spark
+4.2.0. The R25 continuation reused the durable A0 terminal proof and matched
+ACK, then published and verified the already-committed A1 source transaction. The
+A1 protected ACK matched, post-ACK close succeeded, and cleanup stopped the
+source and pin PostgreSQL owners and removed the owned Volume, six tables, and
+schema. A0 publication/ACK and the A1 seed were not replayed. The exact public-
+safe result is [`managed-ashlar-a1-closeout.json`](managed-ashlar-a1-closeout.json),
+SHA-256 `e00e83d87d6cc8f3c78de074d7f91010c1fa467ff048a00b21e6cc410abc19a0`.
+This qualifies only the recorded managed runtime/profile and recovery path; it
+does not claim the full Truss suite, Linux native support, or PyPI publication.
+
 ## Qualification boundary
 
 This evidence covers the selected local macOS ARM64/Python 3.12.14,
-PostgreSQL 18.6.1 and fresh-install profile only. It does not claim the full
-Truss suite, exact-tag CI, general platform support, managed-service or
-production acceptance, backend termination on timeout, safe reuse after
-cancellation, historical upgrade/recovery, or public PyPI/GitHub delivery.
-The fresh-install-only baseline and its existing refusals remain unchanged.
+`pgserver-pg18==18.6.1` running PostgreSQL 18.6, and fresh-install profile
+only. It does not claim the full Truss suite, exact-tag CI, general platform
+support beyond the exact managed profile above, backend termination on timeout,
+safe reuse after cancellation, historical upgrade/recovery, or PyPI
+publication. The fresh-install-only baseline and its existing refusals remain
+unchanged.
 
 ## Local bundle verification
 
@@ -96,5 +111,6 @@ python3 scripts/release-qualification/verify_local_bundle.py \
   --bundle-root /private/tmp/truss055-local-publish-run/local-release-bundle
 ```
 
-This validates hashes and source relationships only. Final release pins and
-publication remain pending the separate managed Ashlar gate and owner review.
+This validates hashes and source relationships only. The managed gate receipt
+is now retained above; final release pins bind the reviewed release commit and
+tag before any GitHub draft is staged. No PyPI upload is part of this scope.

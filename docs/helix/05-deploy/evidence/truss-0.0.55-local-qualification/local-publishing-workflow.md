@@ -1,9 +1,10 @@
 # Truss 0.0.55 local publishing workflow
 
 This procedure stages the exact locally qualified artifacts without invoking
-GitHub Actions. The current bundle is for review only: the managed Ashlar gate
-has not completed, so it is not a publishable release set and no tag/release
-command should run yet.
+GitHub Actions. The managed Ashlar gate has passed for the scoped profile
+recorded in `managed-ashlar-a1-closeout.json`. The existing candidate bundle is
+an earlier review snapshot; final pins must bind the reviewed release commit
+and local tag before a GitHub draft is staged.
 
 ## Verify the staged candidate
 
@@ -29,28 +30,33 @@ not run tests, use a database, create a tag, or publish assets.
 The component-reuse binding and macOS manifest are the review record for this
 subset. The .54 HF, migration and grants test results remain historical; they
 must be bundled under their original identities rather than rewritten as .55
-passes. The current macOS result is separate from Ashlar's managed Linux trial
-and does not claim Truss Linux native qualification.
+passes. The current macOS result is separate from the selected managed
+Databricks Serverless Spark 4.2.0 result and does not claim Truss Linux native
+qualification.
 
 ## Review the prepared local asset set
 
-The private review bundle contains the four qualified files and the candidate
-`release-pins.json`; its `assets/SHA256SUMS` covers all five files.
+The private review bundle contains the four qualified files and the historical
+candidate `release-pins.json`; its `assets/SHA256SUMS` covers all five files.
 The repository-side `dist/SHA256SUMS` and local qualification checksum record
-the same names and hashes. These are review inputs only. They do not create a
-tag, draft, release, or publishable status.
+the same names and hashes. This historical candidate snapshot does not create a
+tag, draft, release, or final release pins.
 
-## Refresh the release asset set after the managed gate
+## Refresh the release asset set after the reviewed tag
 
-After the managed Ashlar result and final owner review, the release owner should
-make a fresh release-asset directory from the verified candidate assets. Refresh
-`release-pins.json` and `SHA256SUMS`, then include current receipts, the macOS
+After the reviewed release commit and local tag exist, the release owner should
+make a fresh release-asset directory from the verified candidate payloads.
+Refresh `release-pins.json` and `SHA256SUMS`, then include current receipts, the macOS
 qualification manifest, the component-reuse binding, and the exact published
 .54 receipts required to support the approved reuse statement. Keep each
 receipt's original source commit, wheel hash, and platform. Do not substitute
 old receipts for current evidence on changed host/installation behavior.
 
-Before tagging, verify the final pin's version, source commit, distribution,
+Bind the scoped managed Ashlar closeout receipt at its repository-relative path
+in the final pins. Keep the claim limited to that recorded profile. It does not
+add a full-suite, Linux-native, or PyPI qualification.
+
+Before staging a draft, verify the final pin's version, source commit, distribution,
 wheel/sdist/HF hashes, runtime and migration manifests, current macOS scope,
 and historical-receipt references against the contents of that directory.
 Keep the candidate wheel and sdist hashes listed in the release notes unchanged.
