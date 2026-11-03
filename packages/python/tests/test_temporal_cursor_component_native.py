@@ -71,7 +71,10 @@ class TemporalCursorComponentNativeTests(fixture.TemporalNativeFixture):
                 row=self.admin.execute("SELECT proowner,provolatile,prosecdef,pg_get_functiondef(oid),"
                     "EXISTS(SELECT 1 FROM aclexplode(coalesce(proacl,acldefault('f',proowner))) a WHERE grantee=0 AND privilege_type='EXECUTE') "
                     "FROM pg_proc WHERE oid=%s::regprocedure",(signature,)).fetchone()
-                self.assertEqual((row[0],row[1],row[2],row[4]),(owner,'v',True,False))
+                # Installer exposes person shims to PUBLIC; the native
+                # invocation guard checks each actor's underlying privilege.
+                # Underlying functions themselves must remain non-PUBLIC.
+                self.assertEqual((row[0],row[1],row[2],row[4]),(owner,'v',True,prefix=='person_'))
                 inventory.append({'signature':signature,'ownerOid':owner,'definition':row[3],'publicExecute':row[4]})
         print('temporal-cursor-component-inventory '+json.dumps({'release':_release()[0]['releaseId'],
             'manifestSha256':_release()[1],'functions':inventory,'scope':'native cursor custody only'},sort_keys=True))
@@ -89,11 +92,12 @@ class TemporalCursorComponentNativeTests(fixture.TemporalNativeFixture):
         self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
         self.admin.execute(psycopg.sql.SQL('GRANT group_reader TO {} WITH SET FALSE').format(psycopg.sql.Identifier(role)))
         params={**psycopg.conninfo.conninfo_to_dict(self.info.connection_uri),'user':role}
-        with psycopg.connect(**params,autocommit=True) as other:
+        with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as other:
             with other.transaction():
-                other_host=adopt_psycopg_host(other)
+                other_host=adopt_psycopg_host(other,statement_timeout_ms=10000,operation_timeout_ms=30000)
                 try:
-                    self.assertIsInstance(other_host.adopt_transaction(),Ok)
+                    admitted=other_host.adopt_transaction()
+                    self.assertIsInstance(admitted,Ok,repr(admitted)+' '+str(other_host._custody.last_attempt.error))
                     with other.cursor() as pinned:_pin_cursor(pinned)
                     with self.assertRaises(psycopg.Error) as caught:
                         with other.transaction():self.decode(other,token)
