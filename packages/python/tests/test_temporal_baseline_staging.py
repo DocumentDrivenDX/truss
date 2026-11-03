@@ -18,11 +18,10 @@ class TemporalBaselineStagingTests(unittest.TestCase):
 
     def test_only_exact_observed_native_horizon_bounds_may_differ(self):
         left=self.inventory();right=copy.deepcopy(left)
-        self.assertEqual(assembler.initialization_rules(left,right),[])
+        for observed in (left,right):
+            with self.assertRaisesRegex(ValueError,'custody'):assembler.initialization_rules(left,observed)
         right['relations'][0][7]='native-bound-B'
-        rules=assembler.initialization_rules(left,right)
-        self.assertEqual(len(rules),1)
-        self.assertEqual(rules[0]['rows'],[left['relations'][0],right['relations'][0]])
+        with self.assertRaisesRegex(ValueError,'custody'):assembler.initialization_rules(left,right)
         self.assertEqual(left,self.inventory(),'Original native observation is never rewritten')
 
     def test_definition_acl_membership_or_nonbound_relation_differences_refuse(self):

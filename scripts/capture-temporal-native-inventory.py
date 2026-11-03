@@ -33,9 +33,10 @@ def main():
     if not output.is_relative_to(evidence.resolve()):raise ValueError('Owned native evidence directory required')
     output.mkdir(parents=True,exist_ok=False)
     if os.environ.get('TRUSS_NATIVE_WORKER'):raise ValueError('Initializer capture requires its own serial owned lease')
-    from temporal_qualification_support import assert_qualification_checkout,commit_tree
+    from temporal_qualification_support import assert_qualification_checkout,commit_tree,journal_custody_inputs
     source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     source_tree=commit_tree(ROOT,source_commit)
+    custody_inputs=journal_custody_inputs(ROOT,source_commit)
     source_identity=assert_qualification_checkout(ROOT,source_commit,source_tree,evidence_roots=(*args.evidence_root,output))
     if os.environ.get('GITHUB_SHA',source_commit)!=source_commit:raise ValueError('Actual checkout/runner source mismatch')
     from typed_sdk_cohort import _installed_wheel
@@ -92,6 +93,16 @@ def main():
                     connection.execute("SET TimeZone='UTC'") # Observation only AFTER original initializer.
                     with connection.cursor() as cursor:
                         ctx,owner,registrar,_=context(cursor);inventory=structure(cursor);rolemap=roles(cursor,owner,registrar)
+                        from truss._initialization_custody import verify_stored,source_policy
+                        from truss._installation_privileges import verify_initialization_custody_privileges
+                        verify_initialization_custody_privileges(cursor,owner,(registrar,))
+                        horizon=[r for r in inventory['relations'] if r[0]=='journal_runtime_horizon'][0]
+                        custody=verify_stored(cursor,{'manifest':manifest,'sha256':digest},horizon)
+                        witness=json.loads(custody.raw)
+                        original_custody={'policy':source_policy(manifest),'witnessHex':custody.raw.hex(),'sha256':custody.digest,
+                            'nativeDerivation':{'beforeUtc':witness['clockBeforeUtc'],'afterUtc':witness['clockAfterUtc'],'timeZone':witness['timeZone'],
+                            'pairs':witness['candidateBoundPairs'],'bounds':list(custody.candidate_bounds),'installerSha256':witness['installerSha256']}}
+                        output.joinpath('initialization-custody.json').write_bytes(custody.raw)
                         grants={k:[] for k in ('owner','registrar','administrator','reader','writer','feed','audit','public')}
                         raw_acl=acl(cursor,full_names=True)
                         for kind,name,objowner,grantee,priv,grantable,grantor in raw_acl:
@@ -103,12 +114,13 @@ def main():
                     actual=connection.execute('SELECT release_id,release_sha256 FROM truss.catalog_runtime_installation').fetchone()
                     if actual!=(manifest['releaseId'],digest):raise RuntimeError('Actual installation/source identity mismatch')
                     observed={'sha256':digest,'manifest':manifest,'inventory':inventory,'acl':grants,
-                        'rawAcl':raw_acl,'aclNameProfile':'truss-native-acl-names/0.2','configuration':configuration,'managedGrants':managed,
+                        'initializationCustody':original_custody,'rawAcl':raw_acl,'aclNameProfile':'truss-native-acl-names/0.2','configuration':configuration,'managedGrants':managed,
                         'initializationTimeZone':initialization_zone,'observationTimeZone':'UTC'}
                     output.joinpath('native-profile-observation.json').write_text(json.dumps(observed,indent=2)+'\n')
                 if (runtime.directory/'log').is_file():shutil.copyfile(runtime.directory/'log',output/'original-postgres.log')
             shutil.rmtree(owned) # Monitor confirms actual pg_ctl3 + original PID absence BEFORE deletion.
         assert_qualification_checkout(ROOT,source_commit,source_tree,evidence_roots=(*args.evidence_root,output))
+        if journal_custody_inputs(ROOT,source_commit)!=custody_inputs:raise ValueError('Custody code/schema/governing inputs changed during capture')
     except BaseException as caught:
         error={'class':type(caught).__module__+'.'+type(caught).__qualname__,'message':str(caught)}
         raise
@@ -119,7 +131,7 @@ def main():
             'cleanupConfirmed':monitor.confirmed,'error':error,
             'passed':observed is not None and monitor.confirmed and error is None,
             'producerSha256':sha256(Path(__file__).read_bytes()).hexdigest(),
-            'nonMigrationPackageFiles':nonmigration,
+            'nonMigrationPackageFiles':nonmigration,'journalCustodyInputs':custody_inputs,
             'sourceCommit':source_commit,'sourceTree':source_tree,'sourceIdentity':source_identity,
             'sysPlatform':sys.platform,'machine':platform.machine(),'pythonMajorMinor':list(sys.version_info[:2]),
             'profileSha256':sha256(output.joinpath('native-profile-observation.json').read_bytes()).hexdigest() if observed is not None else None,

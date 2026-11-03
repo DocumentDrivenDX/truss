@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-from temporal_qualification_support import assert_qualification_checkout,commit_tree,validate_capture_transition
+from temporal_qualification_support import assert_qualification_checkout,commit_tree,validate_capture_transition,journal_custody_inputs,_JH_INPUTS
 
 
 class TemporalQualificationProvenanceTests(unittest.TestCase):
@@ -126,3 +126,29 @@ class TemporalQualificationProvenanceTests(unittest.TestCase):
             (evidence/'escaped.py').symlink_to(external)
             with self.assertRaises(ValueError):
                 assert_qualification_checkout(self.root,self.capture,self.capture_tree,evidence_roots=[evidence])
+
+    def prepare_journal_inputs(self):
+        for name in _JH_INPUTS:
+            if not (self.root/name).exists():self.write(name,'original custody input\n')
+        self.capture,self.capture_tree=self.commit()
+        self.receipt.update(sourceCommit=self.capture,sourceTree=self.capture_tree,
+            sourceIdentity={'commit':self.capture,'tree':self.capture_tree,'qualificationInputsClean':True},
+            journalCustodyInputs=journal_custody_inputs(self.root,self.capture))
+
+    def test_journal_governing_inputs_cannot_use_planner_or_missing_receipt_exemption(self):
+        self.prepare_journal_inputs()
+        self.assertEqual(len(journal_custody_inputs(self.root,self.capture)),len(_JH_INPUTS))
+        self.baseline();c,t=self.commit()
+        self.assertEqual(self.validate(c,t)['captureCommit'],self.capture)
+        missing=dict(self.receipt);missing.pop('journalCustodyInputs')
+        with self.assertRaisesRegex(ValueError,'Custody code/schema/plan'):self.validate(c,t,missing)
+        self.write('docs/helix/04-build/temporal-native-qualification-plan.md','dirty governance')
+        with self.assertRaises(ValueError):assert_qualification_checkout(self.root,c,t)
+        with self.assertRaises(ValueError):self.validate(c,t)
+
+    def test_changed_then_reverted_journal_governance_requires_fresh_capture(self):
+        self.prepare_journal_inputs();name='docs/helix/04-build/temporal-native-qualification-plan.md'
+        self.write(name,'intervening changed governance');self.commit()
+        self.write(name,'original custody input\n');self.commit()
+        self.baseline();c,t=self.commit()
+        with self.assertRaisesRegex(ValueError,'requires a new source capture'):self.validate(c,t)

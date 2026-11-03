@@ -1,0 +1,43 @@
+{
+  "scope": "Original final-R receipt-byte/source-tree/SDK pins correspondence only; NO binary import/resolver/enrollment/PG execution",
+  "passed": true,
+  "handoff": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-final-R-component-handoff.json",
+  "handoffSha256": "95eef30decbd39516b3126e50de289941ab058a82999d8605759d749adf58763",
+  "sourceCommit": "c623b94b66b0b46d492d457c62faddc896e2e452",
+  "sourceTree": "cc552d691c92c7abdd44fdf4e4ca585936ae68c5",
+  "actualJobID": 126094501575,
+  "runID": 41686658658,
+  "originalAttempt": 1,
+  "actualJobConclusion": "success",
+  "overallRunConclusion": "cancelled",
+  "wheel": {
+    "path": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/umf_weft-0.4.57-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "sha256": "120bb6840163914778618e8509d2e70cd6a49f9902a4d5a7f361390515480ac5"
+  },
+  "nativeModule": {
+    "path": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/weft.abi3.so",
+    "sha256": "28889097ebb1ecd684235c841034390064c21b42bcba10420041f8cfb2402f21"
+  },
+  "shimSha256": "cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d",
+  "actualControls": {
+    "temporal": 14,
+    "ordinaryPaddedRouting": 5,
+    "SDK": 42
+  },
+  "originalRecords": {
+    "component": {
+      "path": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/component.json",
+      "sha256": "a10a8961da065c5b39f77a0181ad3d474ece4c1e2c5de151d616e293d52f0c6f"
+    },
+    "sdk42": {
+      "path": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/sdk-smoke.json",
+      "sha256": "93a3910abd94baaa2e68387be666ad29f24b1c4092667629db7be11ea30b72f7"
+    },
+    "installedPackaging": {
+      "path": "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/packaging.json",
+      "sha256": "0d5565fa0277aca1f0ba0215d786f51f8a28dcd6b0777d6c97005803dd0ea00b"
+    }
+  },
+  "ready": false,
+  "productionApplied": false
+}

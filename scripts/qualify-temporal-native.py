@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""TP001 one serial installed-candidate campaign. Default is collection ONLY.
+"""TP001 one serial installed-candidate campaign: original119 + closed JH10. Default is collection ONLY.
 
 No installation/build, dependency override, source repair, publish, matrix or
 implicit dispatch occurs here. Execute only after exact source/selection review
@@ -25,7 +25,7 @@ from zipfile import ZipFile
 from temporal_qualification_support import collect_exact,flatten,strict_result,RecordedResult,OwnedNativeCleanup,assert_qualification_checkout,validate_capture_transition
 ROOT=Path(__file__).resolve().parents[1]
 LEDGER=Path(__file__).with_name('temporal-native-case-ledger.json')
-EXPECTED={'temporal':39,'public54':1,'ordinary':11,'hf':62,'baseline':6}
+EXPECTED={'temporal':39,'public54':1,'ordinary':11,'hf':62,'baseline':6,'journal':10}
 
 
 def ledger():
@@ -118,7 +118,7 @@ def preflight(admission):
         raw=files('truss').joinpath('_temporal_owner/'+filename).read_bytes();m=json.loads(raw)
         if m['sourceCommit']!=source:raise ValueError('Enrolled actual owner source differs from admitted artifact closure')
     from truss._migration_recipe import load_recipe
-    from truss._migration_verify import matches_inventory
+    from truss._initialization_custody import static_inventory_matches,validate_observation
     recipe,artifacts,_=load_recipe()
     if (recipe['target']!=digest or recipe['targetRelease']!=native['releaseId'] or not recipe.get('baseline')
             or recipe['sources'] or recipe['edges'] or recipe['sourceWheels']):
@@ -140,7 +140,8 @@ def preflight(admission):
         raw_profile=path.with_name('native-profile-observation.json').read_bytes()
         if sha256(raw_profile).hexdigest()!=receipt['profileSha256']:raise ValueError('Original native capture bytes differ')
         captured=json.loads(raw_profile)
-        if captured['sha256']!=digest or not matches_inventory(captured['inventory'],profile):raise ValueError('Fresh observed inventory is not the admitted candidate profile')
+        validate_observation(captured)
+        if captured['sha256']!=digest or not static_inventory_matches(captured['inventory'],profile):raise ValueError('Fresh observed inventory is not the admitted candidate profile')
         proof=json.loads(path.with_name('cleanup.json').read_bytes())['clusters']
         if not proof or not all(r.get('confirmed') is True and r.get('dataDeleted') is True and r.get('pgCtlStatus')==3 and r.get('originalPostmasterPidAbsent') is True for r in proof):
             raise ValueError('Actual original PID absence and pg_ctl3 BEFORE delete required')
@@ -196,7 +197,7 @@ def run_child(stage,value,admission,output):
         def __init__(self,*args,**kwargs):
             super().__init__(*args,**kwargs);created.append(self)
     try:
-        if stage=='temporal':
+        if stage in ('temporal','journal'):
             import importlib.util
             spec=importlib.util.spec_from_file_location('temporal_component_probe',ROOT/'scripts/probe-temporal-native-enrollment.py')
             probe=importlib.util.module_from_spec(spec);spec.loader.exec_module(probe)
@@ -273,7 +274,7 @@ def run_child(stage,value,admission,output):
         if error is not None:report['passed']=False
         report.update(stage=stage,expectedIds=ids,expectedCases=len(ids),error=error,
             observations=[] if result is None else result.observations,nativeEvidence=str(native_evidence),
-            inventoryScope='shared worker baseline restored' if stage=='temporal' else 'isolated owned clusters stopped and deleted; no cluster reused')
+            inventoryScope='shared worker baseline restored' if stage in ('temporal','journal') else 'isolated owned clusters stopped and deleted; no cluster reused')
         (output/'result.json').write_text(json.dumps(report,indent=2)+'\n')
     return 0 if report['passed'] else 1
 

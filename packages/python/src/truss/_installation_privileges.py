@@ -777,6 +777,8 @@ def protect_installation_with_cursor(cursor, roles, *, resolved_tolerated=None):
     ddl.append(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(roles.client)))
     execute_ordered_ddl(cursor, ddl)
     report = _verify(cursor,namespace[0],owner,client,objects)
+    if any(r[1]=='runtime_initialization_custody' for r in relations):
+        verify_initialization_custody_privileges(cursor,owner,(client,))
     if tolerated:
         post_observations = _acl_observations(cursor, namespace[0], phase='post_installation',
             installer_oid=actor[0], tolerated_oids=tolerated_oids,
@@ -791,3 +793,23 @@ def protect_installation_with_cursor(cursor, roles, *, resolved_tolerated=None):
         raise ValueError('Caller search path restoration failed')
     return InstallationPrivilegeReport(report.namespace_oid, report.owner_oid,
         report.client_oid, report.relations, report.routines, report.types, managed_grants,objects)
+
+
+def verify_initialization_custody_privileges(cursor,owner_oid,ordinary_oids):
+    """Exact new private relation classification; no managed-role exception."""
+    cursor.execute("""SELECT c.oid,c.relowner,c.relkind,c.relpersistence,c.relrowsecurity,c.relforcerowsecurity,c.relispartition,c.relhasrules,
+        EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(c.relacl,pg_catalog.acldefault('r',c.relowner))) a WHERE a.grantee=0)
+        FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+        WHERE n.nspname='truss' AND c.relname='runtime_initialization_custody'""",prepare=False)
+    row=cursor.fetchone()
+    if row is None or row[1:]!=(owner_oid,'r','p',False,False,False,False,False):raise ValueError('Private initialization custody relation/owner/PUBLIC rights drifted')
+    oid=row[0]
+    cursor.execute("""SELECT t.typowner,EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(t.typacl,pg_catalog.acldefault('T',t.typowner))) a WHERE a.grantee=0)
+        FROM pg_catalog.pg_type t WHERE t.typrelid=%s""",(oid,),prepare=False)
+    if cursor.fetchone()!=(owner_oid,False):raise ValueError('Private initialization custody row-type rights drifted')
+    cursor.execute("""SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_attribute a CROSS JOIN LATERAL pg_catalog.aclexplode(a.attacl) p
+        WHERE a.attrelid=%s AND p.grantee=0)""",(oid,),prepare=False)
+    if cursor.fetchone()!=(False,):raise ValueError('PUBLIC custody column rights drifted')
+    for ordinary in ordinary_oids:
+        cursor.execute("SELECT pg_catalog.has_table_privilege(%s,%s,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN'),pg_catalog.has_any_column_privilege(%s,%s,'SELECT,INSERT,UPDATE,REFERENCES')",(ordinary,oid,ordinary,oid),prepare=False)
+        if cursor.fetchone()!=(False,False):raise ValueError('Ordinary effective custody privilege leaked')

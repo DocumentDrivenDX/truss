@@ -17,6 +17,17 @@ ddx:
       kind: informs
 ---
 
+## Native journal horizon initialization admission
+
+The fresh0.76 profile uses the
+[private initialization custody contract](journal-horizon-initialization-custody.md)
+for the single `journal_runtime_horizon` partition-bound field. Original literal
+bounds and their independently custodied initialization window/zone remain
+immutable. Future verification uses that retained window, not the current month.
+This changes no event time, history, value, source or position meaning. It never
+extends an existing horizon, invents a default partition, changes initialization
+SQL/clocks, admits unrelated relation drift or creates automatic maintenance.
+
 # Contract: Journal
 
 ## Selected group audit and load-attempt projection

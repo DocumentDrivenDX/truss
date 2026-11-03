@@ -2,6 +2,7 @@
 """Component intake source/refusal controls; no installed native owner emulation."""
 from hashlib import sha256
 import ast
+import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -75,3 +76,37 @@ class TemporalComponentIntakeTests(unittest.TestCase):
         self.assertEqual(capture['compilerCall']['arguments'][0],capture['compilerCall']['request'])
         self.assertGreater(probe.validate_payloads(capture),9)
         self.assertEqual(json.loads(raw)['enginePage']['checkerCall']['program'],capture['enginePage']['program'])
+
+    def test_final_r_original_component_records_bind_tree_lock_stages_and_sdk(self):
+        spec=importlib.util.spec_from_file_location('final_enrollment',ROOT/'scripts/prepare-temporal-binary-enrollment.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        # Transport sensitivity fixture only: no invented module, wheel or
+        # installed capability. Actual original receipts are checked separately.
+        source='1'*40;tree='2'*40;core='3'*40;lock='4'*64
+        pins={'wheelSha256':'5'*64,'nativeModuleSha256':'6'*64,'shimSha256':'7'*64}
+        w={'schema':'weft-final-R-linux-x86-component-handoff/1','sourceCommit':source,'sourceTree':tree,
+            'actualJobConclusion':'success','originalAttempt':1,'runID':42,
+            'component':{'path':'component','sha256':'8'*64},'sdk42':{'path':'sdk','sha256':'9'*64},
+            'installedPackaging':{'path':'packaging','sha256':'a'*64},'wheel':{'sha256':pins['wheelSha256']},
+            'nativeModule':{'sha256':pins['nativeModuleSha256']},'shimSha256':pins['shimSha256'],
+            'actualControls':{'temporal':14,'ordinaryPaddedRouting':5,'SDK':42}}
+        component={'status':'passed','sourceCommit':source,'sourceTree':tree,'canonicalUmf':core,
+            'cargoLockSha256':lock,'target':'x86_64-unknown-linux-gnu','workflowCommit':source,
+            'producerRunId':42,'producerRunAttempt':'1','temporalCases':14,'routingControls':5,'sdkControls':42,
+            'sdkReportSha256':'9'*64,'packagingReportSha256':'a'*64,**pins,
+            'stageResults':[{'name':n,'exitCode':0} for n in ('normal-install','pip-check','packaging','native-origin','temporal14','routing5','sdk42')]}
+        sdk={'sourceCommit':source,'version':'0.4.57','controls':42,'pinsBeforeAfter':pins}
+        packaging={'status':'passed','version':'0.4.57',**pins}
+        records={'component':component,'sdk':sdk,'packaging':packaging}
+        with patch.object(module,'record',side_effect=lambda path,digest:records[path]):
+            self.assertEqual(module.final_weft_component(w,source,core,lock),sdk)
+        mutations=[('component','sourceTree','f'*40),('component','cargoLockSha256','f'*64),
+            ('component','workflowCommit','f'*40),('component','producerRunId',43),
+            ('component','routingControls',4),('sdk','controls',41),('packaging','status','failed'),
+            ('sdk','pinsBeforeAfter',{**pins,'shimSha256':'f'*64}),
+            ('component','stageResults',component['stageResults'][:-1]),
+            ('component','stageResults',[{**r,'exitCode':1} for r in component['stageResults']])]
+        for report,key,value in mutations:
+            altered=copy.deepcopy(records);altered[report][key]=value
+            with self.subTest(report=report,key=key),patch.object(module,'record',side_effect=lambda path,digest:altered[path]),self.assertRaises(ValueError):
+                module.final_weft_component(w,source,core,lock)

@@ -12,7 +12,7 @@ on:
         type: boolean
         default: false
       temporal_candidate_phase:
-        description: Inventory captures are not qualification; qualify119 requires reviewed final baseline/admission
+        description: Inventory captures are not qualification; qualify119 preserves original119 plus closed JH cases; reviewed final baseline/admission required
         type: choice
         options: [none, intake, inventory, qualify119]
         default: none
@@ -426,7 +426,7 @@ jobs:
           python -m venv "$TN_ROOT/public054-env"
           "$TN_ROOT/public054-env/bin/python" -m pip install --no-index --only-binary=:all:             --find-links "$TN_ROOT/inputs/wheelhouse" "$TN_PUBLIC054_WHEEL[local,native]"             2>&1 | tee "$TN_ROOT/evidence/public054-install.log"
           "$TN_ROOT/public054-env/bin/python" -m pip check > "$TN_ROOT/evidence/public054-pip-check.log"
-      - name: Execute only the reviewed exact119 campaign after genuine final admission
+      - name: Execute only reviewed original119 plus closed JH after genuine final admission
         if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
         shell: bash
         run: |

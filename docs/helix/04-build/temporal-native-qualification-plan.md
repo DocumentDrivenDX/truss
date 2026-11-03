@@ -20,6 +20,18 @@ ddx:
       kind: informed_by
 ---
 
+## Calendar custody prerequisite before timezone capture
+
+The [horizon custody contract](../02-design/contracts/journal-horizon-initialization-custody.md)
+and [bounded build plan](journal-horizon-custody-plan.md) govern new0.76 native
+initialization admission. A finite UTC/NY literal-row pair cannot qualify future
+calendar initializations. Complete its protected witness, source/ACL/verifier and
+STP-045 JH controls before actual capture admission. Capture both original native
+inventories with actual window/zone custody; retain their literal bounds. Assemble
+only the new profile's explicit dynamic policy. Native0.75 artifacts and retired
+lineage remain immutable. This prerequisite strengthens the two-zone and coherent
+campaign gates below; source review does not admit PG execution.
+
 # Temporal native qualification plan
 
 ## Scope and strategy

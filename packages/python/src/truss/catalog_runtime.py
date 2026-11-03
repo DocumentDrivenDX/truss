@@ -190,7 +190,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','temporal-storage.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','query-temporal.sql','temporal-profiles.sql','temporal-cells.sql','temporal-preparation.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query-temporal-abi.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','feed-custody.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','query-temporal-sources.sql','query-temporal-cursor.sql','temporal-values.sql','person-entrypoints.sql','query-temporal-entrypoints.sql','temporal-values-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
+    for name in ('layout.sql','temporal-storage.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','query-temporal.sql','temporal-profiles.sql','temporal-cells.sql','temporal-preparation.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query-temporal-abi.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','feed-custody.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','query-temporal-sources.sql','query-temporal-cursor.sql','temporal-values.sql','person-entrypoints.sql','query-temporal-entrypoints.sql','temporal-values-entrypoints.sql','initialization-custody.sql','managed-grants.sql','audit-reader-accumulation.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -527,6 +527,7 @@ class CatalogReferenceAssembly:
         self._available()
         from psycopg import sql
         from ._installation_sql_batch import execute_ordered_ddl
+        from ._initialization_custody import bracket,store,source_policy,InitializationCustodyRefused
         from ._installation_privileges import (InstallationRoles, _name, _policy_names,
                                                 _resolved_tolerated_roles,
                                                 protect_installation_with_cursor,
@@ -623,7 +624,13 @@ class CatalogReferenceAssembly:
                 ([roles.owner,roles.client],),prepare=False)
             if cursor.fetchone()[0]:
                 return refuse('role_exists')
-            execute_ordered_ddl(cursor,sources)
+            try:
+                source_policy(manifest)
+                cursor.execute("SELECT pg_catalog.current_setting('TimeZone')",prepare=False)
+                if cursor.fetchone()[0] not in ('UTC','America/New_York'):return refuse('incompatible')
+            except ValueError:
+                return refuse('incompatible')
+            observations=bracket(cursor,sources,manifest,execute_ordered_ddl)
             privileges=protect_installation_with_cursor(cursor,roles,resolved_tolerated=resolved_tolerated)
             from ._runtime_admission import person_entrypoints
             final_grants=['GRANT USAGE ON SCHEMA truss TO PUBLIC']
@@ -643,6 +650,7 @@ class CatalogReferenceAssembly:
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),
                  json.dumps(managed_grants,ensure_ascii=False,separators=(',',':')),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
+            store(cursor,identity,privileges.owner_oid,manifest,digest,observations)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -650,6 +658,9 @@ class CatalogReferenceAssembly:
         from ._installation_privileges import _ThirdPartyGrantRefusal
         if isinstance(result,Error):
             error=getattr(attempt,'error',None)
+            if (isinstance(error,InitializationCustodyRefused) and getattr(attempt,'phase',None)=='contained'
+                    and getattr(attempt,'cleanup_error',None) is None and result.error.code=='invalid_transaction'):
+                return Ok(InstallRefused(code='incompatible'))
             if (isinstance(error,_ThirdPartyGrantRefusal)
                     and getattr(attempt,'phase',None)=='contained'
                     and getattr(attempt,'cleanup_error',None) is None

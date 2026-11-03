@@ -1,0 +1,134 @@
+{
+  "scope": "JH1\u20133 and authentic final-R intake SOURCE review ONLY. UNQUALIFIED. No commit pending Sol SOURCEPASS.",
+  "committedBase": "4e0b1c32d8ca208d656609789c06c12bb5f06398",
+  "originalInitializerSHA256": "8d213c5b1243b2839c1ca6a465a709f20b5e03048da184bd58dea87d04ec95dc",
+  "draftNativeManifestSHA256": "be18814830f21b74a78004624d19bb13a99c09ff9e9a5a9975d1d83a03e9517a",
+  "governingInputs": {
+    "docs/helix/02-design/contracts/journal-horizon-initialization-custody.md": "7451f766c91ca28c58fdb78320e201b4d4e9d92b55e44f504728ff85d1dfb3c1",
+    "docs/helix/02-design/contracts/journal-horizon-initialization-custody-0.1.schema.json": "4e5cd88be2eff7152f744053323103dc758f9e3922cee780e5653ae64fc112c4",
+    "docs/helix/04-build/journal-horizon-custody-plan.md": "4df89deceabefe20c7061de77fc15f863d2c46cc9b2fd2daeeb7b10b6f94e4eb",
+    "docs/helix/02-design/contracts/CONTRACT-008-layout-bootstrap.md": "07a05b6509bcd813e8f85102c7a5f9d3cec1d3d9df2f5baabc8c2990fae3a07b",
+    "docs/helix/02-design/contracts/CONTRACT-002-journal.md": "83dc2f6892d17a086e6a9d5e1880d1872df548d8342f9cf582dc7e6a1a809938",
+    "docs/helix/03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md": "7a6e29b60565a2cd83902e6e15c11b3cd9b8ab3bee995918b5944616cea3aa28",
+    "docs/helix/04-build/temporal-native-qualification-plan.md": "652ef929f2d0cfaf9fe8c221c1738aee8322e916d912252dd63fa66f4b37ae63",
+    "docs/helix/04-build/temporal-current-baseline-plan.md": "7e95825b77df7f1ca40a3899b7de172a71830807302b48d39e1ffba9fc1f4f80"
+  },
+  "preservedKeplerNativeFileSHA256": "667dd654218adb9f2587e873e586c80587a0580445442f07205ed955b16dd10c",
+  "pureControls": {
+    "testsRun": 50,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "scope": "source-only; not native calendar/installation proof"
+  },
+  "boundaryControls": {
+    "baselineEdges": 1920,
+    "controls": 23,
+    "passed": true
+  },
+  "SQLGrammar": {
+    "newDDLStatements": 4,
+    "derivationStatements": 1,
+    "scope": "parser only; not installed PostgreSQL execution"
+  },
+  "original119CasesByteEquivalent": true,
+  "expectedCounts": {
+    "temporal": 39,
+    "public54": 1,
+    "ordinary": 11,
+    "hf": 62,
+    "baseline": 6,
+    "journal": 10
+  },
+  "expectedTotal": 129,
+  "separateJournalCases": [
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_authored_month_year_leap_and_dst_endpoint_vectors"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_rollover_exact_three_pairs_and_forbidden_new_old"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_invalid_noncanonical_nonfinite_reversed_and_oversized_windows_refuse"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_unsupported_zone_and_endpoint_overflow_refuse"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_retained_zone_restored_on_success_and_native_refusal"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_parameter_derivation_never_observes_current_clock"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_original_witness_and_ordinary_effective_privilege_denials"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_resigned_cross_context_candidates_literal_bound_and_static_drift_refuse"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_reconnect_observer_zones_backup_and_original_custody_preserved"
+    },
+    {
+      "gate": "JH-T01\u201309",
+      "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_postddl_custody_refusal_is_contained_and_preserves_prior_caller_work"
+    }
+  ],
+  "nativeCasesExecuted": 0,
+  "newCaptures": 0,
+  "productionEnrollmentsApplied": false,
+  "normalResolverExecuted": false,
+  "hostedDispatches": 0,
+  "inputBundleReady": false,
+  "evidence": {
+    "original-finite-assembler-red.log": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/original-finite-assembler-red.log",
+      "sha256": "17e67894b2994a1d83e353fc090f36d794dd09a793e47c303a2c9dd2fa0ecc4c"
+    },
+    "source-controls.log": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/source-controls.log",
+      "sha256": "2fcf6a68076a48c8ab9e7860d8718026cfcc6cd955dffc75bb4c96c8011ef44f"
+    },
+    "source-grammar.json": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/source-grammar.json",
+      "sha256": "7735deb69b6c1df66874ad2879d05bf3b501e99ad2476b922148c0fa0a84eb74"
+    },
+    "module-boundaries.log": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/module-boundaries.log",
+      "sha256": "9a77f07be31ce41b38e0c847435d7651055aae9eee21080894db88633a898601"
+    },
+    "module-boundary-controls.json": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/module-boundary-controls.json",
+      "sha256": "ab72792f860e9c153eaf0a1787d761e32904d7d52fb91a896f1be3af396dbeb0"
+    },
+    "actual-dirty-source-refusal.json": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/actual-dirty-source-refusal.json",
+      "sha256": "40b653d2855fa8edf1391ba0b39314727268600f5e0416fb3bbf709e69fef7e9"
+    },
+    "source-census.json": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/source-census.json",
+      "sha256": "3a51d87f6bffdbc7cea604f65f02c4a44d446371e635997e1223b4f43bd58688"
+    },
+    "final-R-original-receipt-correspondence.json": {
+      "path": "/private/tmp/umf-stack-release-truss/docs/helix/04-build/evidence/temporal-native/journal-horizon-custody-source/final-R-original-receipt-correspondence.json",
+      "sha256": "657ca35545ecd6c204d26118bd24311f0b9568f16d0427e7dc729d8fa9f095a2"
+    }
+  },
+  "nextGates": [
+    "Sol source review of immutable patch snapshot including original eight governed inputs",
+    "Commit exact approved source/docs, then generate/review actual final-R/Core enrollment bytes and clean Truss commit/tree/input bundle",
+    "Explicit hosted combined normal-resolver no-PG intake; actual installed payload/module/resource/ordinary raw diagnostics retained separately from adoption",
+    "Separate reviewed inventory admission: exactly two serial unchanged UTC/New_York fresh initializers with witness/literal/source custody and pg_ctl3+original PID absence before delete",
+    "Reviewed genuine new baseline and migration-only descendant; full129 strict zeroSkip/xfail/xpass+inventory+cleanup campaign only after complete cohort admission",
+    "Final reviewed merges/exact tag/public bytes/fresh consumer proof; no current release claim"
+  ]
+}

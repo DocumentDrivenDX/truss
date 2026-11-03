@@ -44,16 +44,53 @@ def wheel_payload(entry,package):
     return payload
 
 
+
+def final_weft_component(w,source,canonical_source,lock):
+    """Authenticate original final-R component records; never upgrade scope."""
+    if (w.get('schema')!='weft-final-R-linux-x86-component-handoff/1'
+        or w.get('sourceCommit')!=source or w.get('actualJobConclusion')!='success'
+        or w.get('originalAttempt')!=1):raise ValueError('Actual original final-R Linux job required')
+    exact(w['sourceTree'],40)
+    component=record(w['component']['path'],w['component']['sha256'])
+    sdk=record(w['sdk42']['path'],w['sdk42']['sha256'])
+    packaging=record(w['installedPackaging']['path'],w['installedPackaging']['sha256'])
+    if (component['status']!='passed' or component['sourceCommit']!=source
+        or component['sourceTree']!=w['sourceTree'] or component['canonicalUmf']!=canonical_source
+        or component['cargoLockSha256']!=exact(lock,64)
+        or component['target']!='x86_64-unknown-linux-gnu'
+        or component['workflowCommit']!=source
+        or component['producerRunId']!=w['runID']
+        or str(component['producerRunAttempt'])!=str(w['originalAttempt'])):
+        raise ValueError('Original component source/tree/producer/lock differs')
+    expected={'temporal':14,'ordinaryPaddedRouting':5,'SDK':42}
+    if (w['actualControls']!=expected or component['temporalCases']!=14
+        or component['routingControls']!=5 or component['sdkControls']!=42):
+        raise ValueError('Exact installed component counts required')
+    stages=component['stageResults']
+    if len({r['name'] for r in stages})!=len(stages) or any(type(r['exitCode']) is not int or r['exitCode']!=0 for r in stages):
+        raise ValueError('Original installed stage failure or duplication')
+    if not {'normal-install','pip-check','packaging','native-origin','temporal14','routing5','sdk42'}<={r['name'] for r in stages}:
+        raise ValueError('Missing actual installed component stages')
+    pins={'wheelSha256':w['wheel']['sha256'],'nativeModuleSha256':w['nativeModule']['sha256'],'shimSha256':w['shimSha256']}
+    if (any(component[k]!=v for k,v in pins.items())
+        or sdk['sourceCommit']!=source or sdk['version']!='0.4.57' or sdk['controls']!=42
+        or sdk['pinsBeforeAfter']!=pins
+        or component['sdkReportSha256']!=w['sdk42']['sha256']
+        or component['packagingReportSha256']!=w['installedPackaging']['sha256']
+        or packaging['status']!='passed' or packaging['version']!='0.4.57'
+        or any(packaging[k]!=pins[k] for k in ('wheelSha256','nativeModuleSha256'))):
+        raise ValueError('Actual SDK/packaging/native/shim correspondence differs')
+    return sdk
+
+
 def prepare(core_path,core_sha,weft_path,weft_sha,weft_source,output,*,weft_lock):
     source=exact(weft_source,40)
     if source==SUPERSEDED_WEFT:raise ValueError('Known superseded d526 cannot select final main-R intake; no wasted resolver/captures')
     output=Path(output)
     if output.exists():raise ValueError('Refuse existing enrollment review output')
     h=record(core_path,core_sha);w=record(weft_path,weft_sha)
-    if w['artifactSource']!=source or w['canonicalUMF']!=h['sourceS']:raise ValueError('Actual final source closure differs')
     exact(h['sourceS'],40);exact(h['sourceTree'],40)
-    if w['frozenLockSHA256']!=exact(weft_lock,64):raise ValueError('Final reviewed canonical lock closure differs')
-    if (w['temporalCasesPassed']!=14 or w['routingControlsPassed']!=5 or w['SDKSmokeControlsPassed']!=42 or w['normalInstall'] is not True or w['pipCheckPassed'] is not True):raise ValueError('Actual installed W Linux component controls required')
+    final_weft_component(w,source,h['sourceS'],weft_lock)
     q=h['actualComponentQualification']
     if (q['inspectionCases']!=17 or q['inspectionCalls']!=51 or q['Saga']['cases']!=19 or q['Saga']['passed']!=19 or q['lifecycle']['tests']!=2 or q['lifecycle']['passed']!=2):raise ValueError('Exact actual Core installed component controls required')
     selected=h['artifacts']['repairedCoreWheel'];core_files=wheel_payload(selected,'umf');weft_files=wheel_payload(w['wheel'],'weft')
@@ -61,10 +98,7 @@ def prepare(core_path,core_sha,weft_path,weft_sha,weft_source,output,*,weft_lock
     if actual!=core_files:raise ValueError('Actual Core installed roster and wheel differ')
     if core_files.get('_rust_core.abi3.so')!=h['nativeMembers']['umf/_rust_core.abi3.so']['sha256']:raise ValueError('Core actual loaded module correspondence differs')
     if weft_files.get('weft.abi3.so')!=w['nativeModule']['sha256']:raise ValueError('W actual loaded module correspondence differs')
-    # The original component report hashes the SDK receipt, including before/
-    # after wheel, native and shim correspondence. Re-read those actual bytes.
-    sdk_path=Path(w['SDKSmokeReport']);sdk_row=next(row for row in w['allFiles'] if row['path']==str(sdk_path));sdk=record(sdk_path,sdk_row['sha256']);pins=sdk['pinsBeforeAfter']
-    if (sdk['controls']!=42 or pins['wheelSha256']!=w['wheel']['sha256'] or pins['nativeModuleSha256']!=weft_files['weft.abi3.so'] or pins['shimSha256']!=weft_files['__init__.py']):raise ValueError('Actual installed SDK/native/shim custody differs')
+    if weft_files.get('__init__.py')!=w['shimSha256']:raise ValueError('W actual installed shim correspondence differs')
     bundle=ROOT/'packages/python/src/truss/_temporal_owner';source_raw=(bundle/'source.json').read_bytes();resources=json.loads(source_raw)
     if resources['sourceCommit']!=h['sourceS']:raise ValueError('Truss canonical resource source differs')
     for entry in resources['resources'].values():
@@ -78,7 +112,7 @@ def prepare(core_path,core_sha,weft_path,weft_sha,weft_source,output,*,weft_lock
     native_raw=json.dumps(manifest,indent=2)+'\n';native_sha=sha256(native_raw.encode()).hexdigest()
     cohort=json.loads((ROOT/'scripts/truss-release-cohort.json').read_bytes())
     if cohort['qualified'] is not None:raise ValueError('Unexpected active identity seal; review intervening source instead of overwriting')
-    cohort['qualified']={'evidenceScope':'Complete actual installed-Linux component identity seal for inventory observation ONLY; NOT full runtime/cohort/release qualification','coreSourceRevision':h['sourceS'],'weftSourceRevision':source,'nativeManifestSha256':native_sha,'compilerCohorts':[{'platform':'linux-x86_64','sourceRevision':source,'wheelFilename':Path(w['wheel']['path']).name,'wheelSha256':w['wheel']['sha256'],'nativeModuleSha256':w['nativeModule']['sha256']}],'remainingGates':['Core3.13/rebuilt and Weft WASM/browser receipts require separate full-cohort reconciliation','Truss combined311 resolver/intake','reviewed original2TZ inventories/fresh baseline','full-cohort119/HF62/ordinaryABI1.2/current6','exact-tag/public bytes/fresh consumers/release']}
+    cohort['qualified']={'evidenceScope':'Complete actual installed-Linux component identity seal for inventory observation ONLY; NOT full runtime/cohort/release qualification','coreSourceRevision':h['sourceS'],'weftSourceRevision':source,'nativeManifestSha256':native_sha,'compilerCohorts':[{'platform':'linux-x86_64','sourceRevision':source,'wheelFilename':Path(w['wheel']['path']).name,'wheelSha256':w['wheel']['sha256'],'nativeModuleSha256':w['nativeModule']['sha256']}],'remainingGates':['Complete three-platform Weft final-R and full owner cohort reconciliation','Truss combined311 resolver/intake','reviewed original2TZ inventories/fresh baseline','original119 plus closedJH10/HF62/ordinaryABI1.2/current6','exact-tag/public bytes/fresh consumers/release']}
     # Writes ONLY a new review directory. Nothing here enrolls production bytes.
     output.mkdir(parents=True,exist_ok=False)
     for name,raw in outputs.items():(output/name).write_text(raw)

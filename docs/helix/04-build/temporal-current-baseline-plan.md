@@ -12,6 +12,17 @@ ddx:
       kind: informed_by
 ---
 
+## Calendar-safe current-baseline requirement
+
+The selected fresh0.76 target must implement the
+[journal horizon custody contract](../02-design/contracts/journal-horizon-initialization-custody.md)
+through its [bounded plan](journal-horizon-custody-plan.md) before two-zone PG
+capture. Original initializer bytes/clocks remain unchanged. A trusted native
+installation window and zone, protected original-bound custody and exact static
+inventory/ACL comparison replace finite calendar-row admission only for the new
+target. Verification uses original custody, never today's month. This creates no
+historical migration, horizon extension or support claim from synthetic dates.
+
 # Temporal integration against the current baseline
 
 ## Scope

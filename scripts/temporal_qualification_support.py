@@ -6,6 +6,7 @@ here. Existing test methods and native initializer bytes execute unchanged.
 """
 from contextlib import ExitStack
 from pathlib import Path
+from hashlib import sha256
 import json
 import os
 import shutil
@@ -177,6 +178,41 @@ _PLANNER_PATHS={
  *('docs/helix/04-build/'+name for name in ('embedder-temporal-delivery-plan.md',
  'temporal-coherent-source-integration-plan.md','temporal-dependency-cohort-plan.md',
  'temporal-interface-freeze.md','temporal-native-qualification-plan.md','temporal-public-values-addendum.md'))}
+_JH_INPUTS=(
+ 'packages/python/src/truss/_initialization_custody.py',
+ 'packages/python/src/truss/_catalog_runtime/initialization-custody.sql',
+ 'packages/python/src/truss/_catalog_runtime/initialization-custody.schema.json',
+ 'packages/python/src/truss/_catalog_runtime/groups.sql',
+ 'packages/python/src/truss/_catalog_runtime/manifest.json',
+ 'packages/python/src/truss/catalog_runtime.py',
+ 'packages/python/src/truss/_installation_privileges.py',
+ 'packages/python/src/truss/_migration_verify.py','packages/python/src/truss/_migration_recipe.py',
+ 'packages/python/src/truss/migrations.py',
+ 'scripts/capture-temporal-native-inventory.py','scripts/assemble-temporal-native-baseline.py',
+ 'scripts/qualify-temporal-native.py','scripts/temporal-native-case-ledger.json',
+ 'scripts/temporal_qualification_support.py','scripts/check-module-boundaries.py',
+ 'packages/python/tests/test_initialization_custody.py',
+ 'packages/python/tests/test_initialization_custody_native.py',
+ 'packages/python/tests/test_initialization_custody_derivation_native.py',
+ 'docs/helix/02-design/contracts/journal-horizon-initialization-custody.md',
+ 'docs/helix/02-design/contracts/journal-horizon-initialization-custody-0.1.schema.json',
+ 'docs/helix/04-build/journal-horizon-custody-plan.md',
+ 'docs/helix/02-design/contracts/CONTRACT-008-layout-bootstrap.md',
+ 'docs/helix/02-design/contracts/CONTRACT-002-journal.md',
+ 'docs/helix/03-test/test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md',
+ 'docs/helix/04-build/temporal-native-qualification-plan.md',
+ 'docs/helix/04-build/temporal-current-baseline-plan.md')
+
+
+def journal_custody_inputs(root,commit):
+    root=Path(root);result={}
+    for name in _JH_INPUTS:
+        original=_git(root,'show',commit+':'+name);actual=(root/name).read_bytes()
+        if actual!=original:raise ValueError('Custody code/schema/governance differs from actual committed source: '+name)
+        result[name]=sha256(original).hexdigest()
+    return result
+
+
 _INPUT_ROOTS=('packages/python/src/truss','packages/python/tests','scripts','.github/workflows','docs/helix/03-test','tests')
 _MIGRATIONS='packages/python/src/truss/_migrations/'
 _SEAL='scripts/truss-release-cohort.json'
@@ -202,6 +238,7 @@ def assert_qualification_checkout(root,commit,tree,*,evidence_roots=()):
     outside this checkout. They never authorize changes to tracked input bytes.
     """
     root=Path(root).resolve()
+    jh=(root/'packages/python/src/truss/_initialization_custody.py').is_file()
     actual=_git(root,'rev-parse','HEAD').decode().strip()
     actual_tree=commit_tree(root,actual)
     if actual!=commit or actual_tree!=tree:raise ValueError('Actual admitted qualification commit/tree differs')
@@ -224,15 +261,15 @@ def assert_qualification_checkout(root,commit,tree,*,evidence_roots=()):
         outputs.append(resolved)
     changed=set(_git(root,'diff','--name-only','-z','HEAD','--').decode().split('\0'))
     changed.update(_git(root,'diff','--cached','--name-only','-z','HEAD','--').decode().split('\0'))
-    dirty=sorted(p for p in changed if p and p not in _PLANNER_PATHS)
+    dirty=sorted(p for p in changed if p and (p not in _PLANNER_PATHS or jh and p in _JH_INPUTS))
     if dirty:raise ValueError('Dirty tracked qualification inputs versus admitted HEAD: '+repr(dirty))
     # All untracked files, plus ignored files under executable/data input roots.
     untracked=set(_git(root,'ls-files','--others','--exclude-standard','-z').decode().split('\0'))
-    untracked.update(_git(root,'ls-files','--others','--ignored','--exclude-standard','-z','--',*_INPUT_ROOTS).decode().split('\0'))
+    untracked.update(_git(root,'ls-files','--others','--ignored','--exclude-standard','-z','--',*_INPUT_ROOTS,*(_JH_INPUTS if jh else ())).decode().split('\0'))
     unknown=[]
     for name in sorted(untracked-{''}):
         path=Path(name)
-        if name in _PLANNER_PATHS or name.startswith('docs/helix/04-build/evidence/temporal-completion-current-owner-audit-20261102/'):continue
+        if (name in _PLANNER_PATHS and not (jh and name in _JH_INPUTS)) or name.startswith('docs/helix/04-build/evidence/temporal-completion-current-owner-audit-20261102/'):continue
         if '__pycache__' in path.parts and path.suffix=='.pyc':continue
         lexical=root/path;resolved=lexical.resolve()
         if any(lexical.is_relative_to(location) and resolved.is_relative_to(target) for location,target in checkout_outputs):continue
@@ -245,6 +282,11 @@ def validate_capture_transition(root,receipt,final_commit,final_tree,*,native_di
     """Preserve original capture provenance; allow reviewed fresh-artifact descendants only."""
     root=Path(root).resolve();capture=receipt.get('sourceCommit');tree=receipt.get('sourceTree')
     identity=receipt.get('sourceIdentity',{})
+    jh=(root/'packages/python/src/truss/_initialization_custody.py').is_file()
+    if jh or receipt.get('journalCustodyInputs') is not None:
+        original_inputs=journal_custody_inputs(root,capture)
+        if receipt.get('journalCustodyInputs')!=original_inputs or journal_custody_inputs(root,final_commit)!=original_inputs:
+            raise ValueError('Custody code/schema/plan changes require a new original capture')
     if identity.get('commit')!=capture or identity.get('tree')!=tree or identity.get('qualificationInputsClean') is not True:
         raise ValueError('Original capture must attest clean qualification inputs at its own commit/tree')
     if commit_tree(root,capture)!=tree or commit_tree(root,final_commit)!=final_tree:
@@ -260,7 +302,7 @@ def validate_capture_transition(root,receipt,final_commit,final_tree,*,native_di
     # Inspect EVERY intervening commit, including merge-parent diffs, so a
     # non-migration change subsequently reverted cannot masquerade as equality.
     changed=set(_git(root,'log','--format=','--name-only','-m','--full-history',capture+'..'+final_commit,
-                     '--','packages/python',_SEAL).decode().splitlines())-{''}
+                     '--','packages/python',_SEAL,*(_JH_INPUTS if jh else ())).decode().splitlines())-{''}
     manifest=json.loads(_git(root,'show',final_commit+':'+_MIGRATIONS+'manifest.json'))
     if (manifest.get('target')!=native_digest or manifest.get('targetRelease')!='truss-catalog-runtime/0.76-temporal-candidate'
             or not manifest.get('baseline') or manifest.get('sources')!=[] or manifest.get('edges')!=[] or manifest.get('sourceWheels')!={}):

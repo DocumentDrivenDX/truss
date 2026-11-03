@@ -15,6 +15,28 @@ ddx:
       kind: informed_by
 ---
 
+## Fresh0.76 initialization custody assertions — JH-T01–09
+
+The [custody contract](../../02-design/contracts/journal-horizon-initialization-custody.md)
+and [execution plan](../../04-build/journal-horizon-custody-plan.md) govern these
+additive controls. Existing temporal/native and refusal assertions remain required.
+
+| Test | Required independent assertion |
+| --- | --- |
+| JH-T01 | Original groups source bytes/order and both clock calls unchanged; actual backend pre/post queries bracket one original unit, same zone/transaction; no fabricated clock. |
+| JH-T02 | Authored native-SQL parameter cases cover ordinary and later months, December/January, leap February, and both NY DST offsets. Expected UTC endpoints are independently specified; no fixed-day/month or reused-offset approximation passes. |
+| JH-T03 | A same-month window has one pair; a month-boundary window has exactly old/old, old/new, new/new. New/old, wrong month and widened endpoints refuse. No initializer executes under a simulated server clock. |
+| JH-T04 | Null/infinite/invalid/noncanonical times, reverse or >300-second window, unsupported/changed zone, different backend/transaction/context, wrong helper/source/profile and Boolean-integer substitutions refuse. |
+| JH-T05 | Ordinary PUBLIC/registrar/reader/writer/audit/feed direct writes, forged witness input and exposed mutation-helper attempts fail; missing/extra/cross-installation/digest-tampered custody, modified original row or resigned inconsistent candidate set close verification. Fully privileged administrator forgery is explicitly outside the stated trust claim. |
+| JH-T06 | Other relation cells, indexes/routines/constraints and ACL/default/effective grants remain exact. Alter horizon bounds or witness independently; refuse without repair. Neither a familiar bound nor a self-hash bypasses protected custody. |
+| JH-T07 | Post-DDL refusal rolls back schema/roles/custody through original containment, preserving prior caller work where guaranteed; uncertain cleanup/commit never yields a successful contained refusal. Existing old54/retired installation and migration attempts leave all native state unchanged. |
+| JH-T08 | Commit/reconnect and observe under UTC/NY/Auckland; original witness bytes and bounds stay unchanged. Verification does not consult its current clock. Backup retains original witness/bounds; unqualified identity-remapped restore refuses. Preserve initialized pairs through any later separately qualified migration; no route is added here. |
+| JH-T09 | Two actual installed Linux UTC/NY initializers capture native clock endpoints, private witness/source/manifest/candidate pairs, raw inventory/ACL and original bound text. Verify shutdown pg_ctl3 + original PID absence before deletion. Later-month parameter cases are derivation evidence, not substituted native captures. |
+
+Update the coherent driver's exact case selection with these real controls and
+retain all existing TN/HF62/ordinary/baseline requirements. No execution PASS is
+established by adding names. Source/profile/witness changes precede both captures.
+
 ## Managed platform grant assertions — MG-T01–08, 2026-10-22
 
 FR-41/43/44/48, CONTRACT-007/008 and ADR-008 govern these planned controls.

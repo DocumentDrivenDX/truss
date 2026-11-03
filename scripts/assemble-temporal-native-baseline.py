@@ -17,22 +17,18 @@ ROOT=Path(__file__).resolve().parents[1]
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True).encode()
 
 
-def initialization_rules(left,right):
-    if left.keys()!=right.keys():raise ValueError('Native inventory category membership differs')
-    rules=[]
-    for category,rows in left.items():
-        other=right[category]
-        if rows==other:continue
-        if category!='relations' or len(rows)!=len(other):raise ValueError('Unreviewed native initializer definition difference: '+category)
-        for before,after in zip(rows,other,strict=True):
-            if before==after:continue
-            if (len(before)<8 or len(before)!=len(after) or before[0]!='journal_runtime_horizon'
-                    or before[:7]+before[8:]!=after[:7]+after[8:]):
-                raise ValueError('Unreviewed native initializer difference')
-            rules.append({'surface':'relations','identity':['journal_runtime_horizon'],
-                'rows':sorted([before,after],key=canonical)})
-    if len(rules)>1:raise ValueError('At most the exact observed horizon pair permitted')
-    return rules
+def initialization_rules(left,right,*,profiles=None):
+    # A pair of familiar literal rows is not calendar authority, even when both
+    # are identical. This new-target assembler requires original private custody.
+    if profiles is None or len(profiles)!=2:raise ValueError('Private initialization custody from two original native captures required')
+    from truss._initialization_custody import validate_observation,static_inventory_matches
+    policies=[]
+    for profile in profiles:
+        policy,_=validate_observation(profile);policies.append(policy)
+    if policies[0]!=policies[1]:raise ValueError('Original custody source policies differ')
+    baseline={**profiles[0],'initializationPolicies':[policies[0]],'initializationAlternatives':[],'definitionAlternatives':[]}
+    if not static_inventory_matches(right,baseline):raise ValueError('Native definitions outside the exact original horizon bound differ')
+    return policies
 
 
 def assemble(selections,output):
@@ -54,7 +50,8 @@ def assemble(selections,output):
                 or receipt.get('sysPlatform')!='linux' or receipt.get('machine')!='x86_64' or receipt.get('pythonMajorMinor')!=[3,11]
 ):
             raise ValueError('Successful genuine original-source capture and cleanup proof required')
-        from temporal_qualification_support import commit_tree,_git
+        from temporal_qualification_support import commit_tree,_git,journal_custody_inputs
+        if receipt.get('journalCustodyInputs')!=journal_custody_inputs(ROOT,receipt['sourceCommit']):raise ValueError('Original custody code/schema/governing input hashes required')
         if commit_tree(ROOT,receipt.get('sourceCommit'))!=receipt.get('sourceTree'):
             raise ValueError('Original initializer commit/tree required')
         if sha256(_git(ROOT,'show',receipt['sourceCommit']+':scripts/capture-temporal-native-inventory.py')).hexdigest()!=receipt.get('producerSha256'):
@@ -65,6 +62,7 @@ def assemble(selections,output):
         body=path.with_name('native-profile-observation.json').read_bytes()
         if sha256(body).hexdigest()!=receipt['profileSha256']:raise ValueError('Original native profile bytes changed')
         profile=json.loads(body)
+        if path.with_name('initialization-custody.json').read_bytes()!=bytes.fromhex(profile['initializationCustody']['witnessHex']):raise ValueError('Original protected witness bytes differ')
         if profile['manifest']['releaseId']!='truss-catalog-runtime/0.76-temporal-candidate' or receipt['runtimeManifestSha256']!=profile['sha256']:
             raise ValueError('Fresh actual0.76 target required')
         original_manifest=path.with_name('original-runtime-manifest.json').read_bytes()
@@ -83,16 +81,19 @@ def assemble(selections,output):
     for key in ('sha256','manifest','configuration','acl','aclNameProfile'):
         if left[1][key]!=right[1][key]:raise ValueError('Initializer source/configuration/ACL differs: '+key)
     if left[1]['aclNameProfile']!='truss-native-acl-names/0.2':raise ValueError('Complete exact native ACL names required')
-    rules=initialization_rules(left[1]['inventory'],right[1]['inventory'])
+    policies=initialization_rules(left[1]['inventory'],right[1]['inventory'],profiles=[left[1],right[1]])
     target=dict(left[1]);target.pop('rawAcl',None)
-    target['definitionAlternatives']=[];target['initializationAlternatives']=rules
+    target['definitionAlternatives']=[];target['initializationAlternatives']=[];target['initializationPolicies']=policies
     digest=target['sha256'];profile_name=digest+'.json';selected_files[profile_name]=canonical(target)
     proof={'scope':'Exact fresh0.76 initializer observations only; no timezone conversion, widened initializer or historical admission',
-        'observationTimeZone':'UTC','qualifiedTimeZones':['America/New_York','UTC'],'rules':rules,
+        'observationTimeZone':'UTC','qualifiedTimeZones':['America/New_York','UTC'],'rules':[],'policies':policies,'witnessSchema':policies[0]['witnessSchemaSha256']+'.schema.json',
         'captures':selections,'sourceCommit':left[0]['sourceCommit'],'sourceTree':left[0]['sourceTree'],
         'assemblyCommit':assembly_commit,'assemblyTree':assembly_tree,'runtimeManifestSha256':digest,'sourceWheels':{}}
     initialization='native076-initialization-'+sha256(canonical(proof)).hexdigest()[:16]+'.json'
     selected_files[initialization]=canonical(proof)
+    schema=ROOT/'packages/python/src/truss/_catalog_runtime/initialization-custody.schema.json'
+    if sha256(schema.read_bytes()).hexdigest()!=policies[0]['witnessSchemaSha256']:raise ValueError('Qualified original witness schema differs')
+    selected_files[proof['witnessSchema']]=schema.read_bytes()
     original=ROOT/'packages/python/src/truss/_migrations';old=json.loads((original/'manifest.json').read_bytes())
     # Retain the original receipt model and generic deparse rule catalog BYTES.
     # This fresh target admits NO deparse alternatives, old runtime, or edge.

@@ -78,7 +78,10 @@
     "temporal-values.sql": "4b665092590a7d7ea3c84e023f12e4cf2a8dce5f6e9738bbad065e5da65edb0a",
     "temporal-values-entrypoints.sql": "3388192b5055b4ca71d3142cf1889dc4b007d4300d6f10ff2faf37eff40174af",
     "../_temporal_owner/source.json": "6e7bf3be7648c50d5a23ac34f76e667ed473296cc8cf3598347469176033cf70",
-    "query-temporal-cursor.sql": "29be4de2d22cbf3c7ca97cbf927ac7a7f1cd3e62d30f7463aa2bd1e5cd3ba77e"
+    "query-temporal-cursor.sql": "29be4de2d22cbf3c7ca97cbf927ac7a7f1cd3e62d30f7463aa2bd1e5cd3ba77e",
+    "initialization-custody.sql": "a1dce4728ccaa5c78c46484e204d20d21a4e324ffbbc9a4e2125f11e65259644",
+    "initialization-custody.schema.json": "4e5cd88be2eff7152f744053323103dc758f9e3922cee780e5653ae64fc112c4",
+    "../_initialization_custody.py": "00c7a641df000f5e9405a8c7ded614970e4b4c13b549d77934b2314efe14905c"
   },
   "version": "0.76"
 }

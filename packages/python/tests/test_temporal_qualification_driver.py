@@ -46,7 +46,9 @@ class TemporalQualificationDriverTests(unittest.TestCase):
                 with self.subTest(invalid=invalid),self.assertRaises(ValueError):collect_exact(invalid)
 
     def test_governed_census_preserves_original_hf_cases_and_ordinary_overlap_only_once(self):
-        selected=driver.ledger();self.assertEqual(sum(selected['expectedCounts'].values()),119)
+        selected=driver.ledger();self.assertEqual(sum(selected['expectedCounts'].values()),129)
+        self.assertEqual(selected['expectedCounts']['journal'],10)
+        self.assertEqual(sum(v for k,v in selected['expectedCounts'].items() if k!='journal'),119)
         original=json.loads((ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json').read_bytes())
         self.assertEqual([(r['id'],r['test']) for r in selected['stages']['hf']],[(r['id'],r['test']) for r in original['cases']])
         self.assertEqual(len(selected['ordinaryCoveredOnceByHF']),3)

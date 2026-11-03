@@ -549,6 +549,48 @@
         "gate": "TN12/current-six",
         "test": "test_current_baseline_native.CurrentBaselineNativeTests.test_native_runtime_identity_cannot_be_relabelled"
       }
+    ],
+    "journal": [
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_authored_month_year_leap_and_dst_endpoint_vectors"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_rollover_exact_three_pairs_and_forbidden_new_old"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_invalid_noncanonical_nonfinite_reversed_and_oversized_windows_refuse"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_unsupported_zone_and_endpoint_overflow_refuse"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_retained_zone_restored_on_success_and_native_refusal"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_derivation_native.InitializationCustodyDerivationNativeTests.test_parameter_derivation_never_observes_current_clock"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_original_witness_and_ordinary_effective_privilege_denials"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_resigned_cross_context_candidates_literal_bound_and_static_drift_refuse"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_reconnect_observer_zones_backup_and_original_custody_preserved"
+      },
+      {
+        "gate": "JH-T01\u201309",
+        "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_postddl_custody_refusal_is_contained_and_preserves_prior_caller_work"
+      }
     ]
   },
   "ordinaryCoveredOnceByHF": [
@@ -561,7 +603,8 @@
     "public54": 1,
     "ordinary": 11,
     "hf": 62,
-    "baseline": 6
+    "baseline": 6,
+    "journal": 10
   },
   "qualificationBoundaries": {
     "TN00": "Exact unchanged F7 source6b3154ba.. Linux41550448558 seven-case receipt retained; current installed owner/ACL/body/guarded scalar execution binds same helper in TN01/05/09. No repeat standalone helper campaign.",
