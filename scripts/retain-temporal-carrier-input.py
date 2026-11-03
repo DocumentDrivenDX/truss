@@ -54,19 +54,39 @@ def source():
     return {'commit':exact_sha(commit,40),'tree':exact_sha(tree,40)}
 
 
+
+def require_action_token():
+    # GH_TOKEN is injected only in the reviewed authentication/download step.
+    # Never let gh silently fall back to an ambient local credential store.
+    if os.environ.get('GITHUB_ACTIONS')!='true' or not os.environ.get('GH_TOKEN'):
+        raise ValueError('Only explicit action-scoped github.token authentication permitted')
+
+
+def get_command(endpoint):
+    require_action_token()
+    # A job token with draft-read capability must never become a general API
+    # transport. Keep the original repository and exact GET endpoints closed.
+    if type(endpoint) is not str:raise ValueError('Only closed carrier GET endpoints permitted')
+    match=re.fullmatch(r'releases/([1-9][0-9]{0,19})(?:/assets\?per_page=100)?|releases/assets/([1-9][0-9]{0,19})',endpoint)
+    if match is None:raise ValueError('Only closed carrier GET endpoints permitted')
+    exact_int(match.group(1) or match.group(2))
+    return ['gh','api','--method','GET',f'repos/{REPO}/'+endpoint]
+
+
 def api(endpoint,target):
     # Host and repository are closed, credentials remain in GH_TOKEN only.
+    command=get_command(endpoint)
     with Path(target).open('wb') as stream:
-        subprocess.run(['gh','api',f'repos/{REPO}/'+endpoint],stdout=stream,check=True,timeout=180)
+        subprocess.run(command,stdout=stream,check=True,timeout=180)
     return parsed(Path(target).read_bytes())
 
 
 def download(asset,target,size,digest):
     if asset.get('state')!='uploaded' or type(asset.get('size')) is not int or asset['size']!=size or asset.get('digest')!='sha256:'+digest:
         raise ValueError('Original asset metadata size/digest differs')
+    command=get_command(f'releases/assets/{asset["id"]}')
     with Path(target).open('wb') as stream:
-        subprocess.run(['gh','api',f'repos/{REPO}/releases/assets/{asset["id"]}',
-            '-H','Accept: application/octet-stream'],stdout=stream,check=True,timeout=180)
+        subprocess.run(command+['-H','Accept: application/octet-stream'],stdout=stream,check=True,timeout=180)
     if Path(target).stat().st_size!=size or file_sha(target)!=digest:raise ValueError('Actual carrier asset bytes differ')
 
 
@@ -98,6 +118,7 @@ def retain():
     temporary=Path(os.environ['RUNNER_TEMP']);proof=temporary/'carrier-proof';proof.mkdir(exist_ok=False)
     output=temporary/'temporal-input-retained'
     if output.exists():raise ValueError('Refuse stale retained output')
+    require_action_token()
     controller=source();release_id=exact_int(os.environ['TN_RELEASE_ID']);bundle_id=exact_int(os.environ['TN_BUNDLE_ASSET_ID']);manifest_id=exact_int(os.environ['TN_MANIFEST_ASSET_ID'])
     bundle_size=exact_int(os.environ['TN_BUNDLE_SIZE'],MAX_BUNDLE);manifest_size=exact_int(os.environ['TN_MANIFEST_SIZE'],MAX_MANIFEST)
     bundle_sha=exact_sha(os.environ['TN_BUNDLE_SHA256']);manifest_sha=exact_sha(os.environ['TN_MANIFEST_SHA256'])
