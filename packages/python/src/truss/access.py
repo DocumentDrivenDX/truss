@@ -204,7 +204,7 @@ class TrussTarget:
                 with assembly._lock:
                     assembly._available()
                     manifest,digest,_=_release()
-                    outcome=run_read(assembly._host,transaction,engine_program=entry.originals(),
+                    outcome=run_read(assembly._host,transaction,engine_program=entry.artifact_json,
                         sql=request['sql'],document_ids=documents,parameters=values.model_dump(mode='python'),
                         maximum_rows=binding['maximumResultRows'],maximum_scan_rows=binding['maximumScanRows'],
                         maximum_bytes=binding['maximumBytes'],manifest=manifest,digest=digest,pin_cursor=_pin_cursor,
@@ -265,7 +265,7 @@ class TrussTarget:
                 with assembly._lock:
                     assembly._available()
                     manifest,digest,_=_release()
-                    outcome=run_page(assembly._host,transaction,engine_program=entry.originals(),
+                    outcome=run_page(assembly._host,transaction,engine_program=entry.artifact_json,
                         sql=request['sql'],document_ids=documents,parameters=values.model_dump(mode='python'),
                         page_size=program['pageSize'],page_cursor=cursor,maximum_rows=binding['maximumResultRows'],
                         maximum_scan_rows=binding['maximumScanRows'],maximum_bytes=binding['maximumBytes'],
