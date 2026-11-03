@@ -1,7 +1,12 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Construction controls for the explicit public temporal DTO namespace."""
 from dataclasses import FrozenInstanceError
+import base64
+import json
+import sys
+from types import ModuleType
 import unittest
+from unittest.mock import Mock
 
 from truss.contracts import (
     LocalTimestampValue,
@@ -28,9 +33,18 @@ from truss.temporal import (
     AuthoredValue,
     CreateObject,
     GroupSemanticInput,
+    GroupRuntimeContext,
+    ImportCatalogPin,
+    ImportRuntimeContext,
+    ObjectFound,
+    ObjectPage,
+    ObjectPageCursor,
     PropertyEquals,
     RequestIdentity,
     RequestPresent,
+    TemporalValues,
+    ScalarObject,
+    OwnedImportRuntimeContext,
     UpdateObject,
 )
 
@@ -63,6 +77,13 @@ class TemporalPublicValueTests(unittest.TestCase):
     def test_local_value_cannot_be_nested_in_existing_containers(self):
         with self.assertRaises(ValueError):
             SequenceValue(items=(self.local,))
+        with self.assertRaises(ValueError):
+            ScalarObject(
+                document_id="doc", module_id="module", record_id="record", id=17,
+                type_id=3, definition_pin="type-pin", version=2, catalog_revision=4,
+                record_revision=5, created_at="created", updated_at="updated",
+                values=(), retained=(("unknown", self.local),),
+            )
         with self.assertRaises(ValueError):
             MapEntry(key="seen_at", value=self.local)
         ordinary_map = MapValue(
@@ -153,6 +174,75 @@ class TemporalPublicValueTests(unittest.TestCase):
             request.identity.interface_version, "truss-request-identity/0.1.0"
         )
 
+    def test_temporal_read_dtos_admit_local_only_as_a_top_level_value(self):
+        scalar = ScalarObject(
+            document_id="doc", module_id="module", record_id="record", id=17,
+            type_id=3, definition_pin="type-pin", version=2, catalog_revision=4,
+            record_revision=5, created_at="created", updated_at="updated",
+            values=(("seen_at", self.local), ("nullable", None)), retained=(),
+        )
+        found = ObjectFound(object=scalar)
+        page = ObjectPage(objects=(scalar,), catalog_revision=4, continuation=None)
+        self.assertIs(found.object.values[0][1], self.local)
+        self.assertEqual(scalar.identity.owner.document_id, "doc")
+        self.assertEqual(page.profile, "truss-python-temporal-object-page/0.1")
+        cursor = ObjectPageCursor(
+            installation_id="install", source_epoch="epoch", release_sha256="b" * 64,
+            document_id="doc", module_id="module", record_id="record", type_id=3,
+            definition_pin="type-pin", catalog_revision=4, after_id=17,
+            value_profile=self.profile, query_abi=self.profile,
+        )
+        self.assertIs(cursor.value_profile, self.profile)
+        with self.assertRaises(ValueError):
+            SequenceValue(items=(self.local,))
+
+    def test_temporal_group_context_builds_selected_input_and_request(self):
+        context = GroupRuntimeContext(
+            layout_profile=self.profile, mutation_profile=self.profile,
+            value_profile=self.profile, request_fingerprint_profile=self.profile,
+            authorized_scope_identity="scope", source_epoch="epoch", history_profile="history",
+            query_abi=self.profile, release_id="release", release_sha256="c" * 64,
+        )
+        operation = CreateObject(
+            type_definition_pin="type-pin",
+            values=(AuthoredValue(name="seen_at", value=self.local),),
+            ownership=RootlessOwnership(),
+        )
+        group_input = context.input((operation,), MapValue(entries=()))
+        request = context.request("request")
+        self.assertEqual(group_input.interface_version, "truss-group-temporal-input/0.1.0")
+        self.assertEqual(request.identity.input_profile, group_input.interface_version)
+        self.assertEqual(context.query_abi, self.profile)
+
+    def test_temporal_import_context_builds_exact_temporal_payload_wire(self):
+        catalog = ImportCatalogPin(revision="4", model_bundle_sha256="d" * 64)
+        context = ImportRuntimeContext(
+            layout_profile=self.profile, import_profile=self.profile, value_profile=self.profile,
+            payload_profile=self.profile, catalog=catalog, query_abi=self.profile,
+            release_id="release", release_sha256="c" * 64,
+        )
+        authored = AuthoredValue(name="seen_at", value=self.local)
+        payload = context.object_payload((authored,))
+        wire = json.loads(base64.b64decode(payload.bytes_base64))
+        self.assertEqual(wire["interfaceVersion"], "truss-import-temporal-payload/0.1.0")
+        self.assertEqual(wire["values"][0]["value"], {
+            "text": "2024-11-03T01:30:00.123456", "kind": "localTimestamp",
+        })
+        imported = context.input((), load_id="load", asserted_origin=MapValue(entries=()))
+        self.assertEqual(imported.interface_version, "truss-import-temporal-input/0.1.0")
+        with self.assertRaises(ValueError):
+            imported.__class__(layout_profile=self.profile, import_profile=self.profile,
+                value_profile=self.profile, catalog=catalog, load_id="load",
+                asserted_origin=MapValue(entries=()), records=(object(),))
+
+        owned = OwnedImportRuntimeContext(
+            layout_profile=self.profile, import_profile=self.profile, value_profile=self.profile,
+            payload_profile=self.profile, catalog=catalog, query_abi=self.profile,
+            release_id="release", release_sha256="c" * 64,
+        )
+        owned_wire = json.loads(base64.b64decode(owned.object_payload((authored,)).bytes_base64))
+        self.assertEqual(owned_wire["interfaceVersion"], "truss-owned-import-temporal-payload/0.1.0")
+
     def test_temporal_edge_values_are_not_admitted_by_edge_dto(self):
         with self.assertRaises(ValueError):
             CreateEdge(
@@ -169,6 +259,120 @@ class TemporalPublicValueTests(unittest.TestCase):
         )
         self.assertEqual(ordinary_sequence.kind, "sequence")
         self.assertIsInstance(NullValue(), NullValue)
+
+    def test_facade_constructor_is_inert_and_dispatch_is_exact(self):
+        calls = []
+        result = object()
+
+        class AssemblyProbe:
+            def _temporal_values_operation(self, operation, arguments):
+                calls.append((operation, arguments))
+                return result
+
+        assembly = AssemblyProbe()
+        facade = TemporalValues(assembly)
+        self.assertIs(facade._assembly, assembly)
+        self.assertEqual(calls, [])
+        with self.assertRaises(TypeError):
+            facade.complete_in_transaction(object(), unexpected=True)
+
+        transaction = object()
+        prepared = object()
+        input_value = object()
+        request = object()
+        docs = (object(),)
+        entity = object()
+        cursor = object()
+        source = object()
+        invocations = (
+            ("prepare_catalog", (docs,), {}, {"documents": docs, "bun_executable": "bun", "source_version": None}),
+            ("accept_in_transaction", (transaction, prepared), {"request_key": "r"}, {
+                "transaction": transaction, "prepared": prepared, "request_key": "r",
+                "origin_bytes": b"{}", "bun_executable": "bun", "expected_revision": None,
+                "expected_documents": (),
+            }),
+            ("group_context_in_transaction", (transaction,), {}, {"transaction": transaction}),
+            ("apply_in_transaction", (transaction, input_value, request), {}, {
+                "transaction": transaction, "input": input_value, "request": request,
+                "documents": (), "bun_executable": "bun",
+            }),
+            ("dry_run_in_transaction", (transaction, input_value), {}, {
+                "transaction": transaction, "input": input_value, "documents": (),
+            }),
+            ("complete_in_transaction", (transaction,), {}, {"transaction": transaction}),
+            ("import_context_in_transaction", (transaction,), {}, {"transaction": transaction}),
+            ("owned_import_context_in_transaction", (transaction,), {}, {"transaction": transaction}),
+            ("object_import_record_in_transaction", (transaction,), {
+                "document_id": "d", "module_id": "m", "record_id": "r", "values": (),
+            }, {"transaction": transaction, "document_id": "d", "module_id": "m",
+                "record_id": "r", "values": (), "source": None}),
+            ("owned_object_import_record_in_transaction", (transaction,), {
+                "document_id": "d", "module_id": "m", "record_id": "r", "values": (),
+            }, {"transaction": transaction, "document_id": "d", "module_id": "m",
+                "record_id": "r", "values": (), "root": None, "source": None}),
+            ("import_in_transaction", (transaction, input_value), {"documents": docs}, {
+                "transaction": transaction, "input": input_value, "documents": docs,
+                "bun_executable": "bun",
+            }),
+            ("get_object_in_transaction", (transaction,), {
+                "document_id": "d", "module_id": "m", "record_id": "r", "object_id": 4,
+            }, {"transaction": transaction, "document_id": "d", "module_id": "m",
+                "record_id": "r", "object_id": 4, "maximum_bytes": 1048576}),
+            ("page_objects_in_transaction", (transaction,), {
+                "document_id": "d", "module_id": "m", "record_id": "r",
+            }, {"transaction": transaction, "document_id": "d", "module_id": "m",
+                "record_id": "r", "limit": 100, "cursor": None, "maximum_bytes": 1048576}),
+            ("lookup_key_in_transaction", (transaction,), {
+                "document_id": "d", "module_id": "m", "record_id": "r", "key_id": "k",
+                "values": (),
+            }, {"transaction": transaction, "document_id": "d", "module_id": "m",
+                "record_id": "r", "key_id": "k", "values": (), "original_document": None,
+                "maximum_bytes": 1048576, "bun_executable": "bun"}),
+            ("page_history_in_transaction", (transaction,), {"entity": entity}, {
+                "transaction": transaction, "entity": entity, "cursor": None,
+                "maximum_events": 4096, "maximum_bytes": 8388608,
+            }),
+            ("reconstruct_in_transaction", (transaction,), {"entity": entity, "version": 3}, {
+                "transaction": transaction, "entity": entity, "version": 3,
+                "maximum_events": 4096, "maximum_bytes": 8388608,
+            }),
+            ("recover_group_request_in_transaction", (transaction, source), {}, {
+                "transaction": transaction, "frame": source,
+            }),
+        )
+        for operation, args, kwargs, expected in invocations:
+            with self.subTest(operation=operation):
+                calls.clear()
+                returned = getattr(facade, operation)(*args, **kwargs)
+                self.assertIs(returned, result)
+                self.assertEqual(calls, [(operation, expected)])
+
+    def test_freeze_group_request_uses_only_temporal_runtime_delegate(self):
+        returned = object()
+        freezer = Mock(return_value=returned)
+        runtime = ModuleType("truss._temporal_runtime")
+        runtime.freeze_group_request = freezer
+        documents = (object(),)
+        semantic_input = GroupSemanticInput(
+            layout_profile=self.profile,
+            mutation_profile=self.profile,
+            value_profile=self.profile,
+            catalog=CurrentCatalog(),
+            operations=(CreateObject(
+                type_definition_pin="type-pin", values=(), ownership=RootlessOwnership()
+            ),),
+            asserted_origin=MapValue(entries=()),
+        )
+        from truss.temporal import RequestPresent, RequestIdentity, freeze_group_request
+
+        request = RequestPresent(identity=RequestIdentity(
+            authorized_scope_identity="scope", request_id="req"
+        ))
+        with unittest.mock.patch.dict(sys.modules, {"truss._temporal_runtime": runtime}):
+            self.assertIs(
+                freeze_group_request(semantic_input, request, documents=documents), returned
+            )
+        freezer.assert_called_once_with(semantic_input, request, documents=documents)
 
 
 if __name__ == "__main__":
