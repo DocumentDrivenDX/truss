@@ -47,8 +47,9 @@ class PackagingCohortTests(unittest.TestCase):
         self.assertEqual(cohort.check_project()['weft'], {'distribution': 'umf-weft', 'version': '0.4.57'})
 
     def test_missing_real_qualified_identity_refuses(self):
+        selection=self.selection();selection['qualified']=None
         with self.assertRaisesRegex(ValueError, 'deferred'):
-            self.load(self.selection())
+            self.load(selection)
 
     def test_old_distribution_or_unselected_version_refuses(self):
         for key, field, value in [('weft', 'distribution', 'weft-sql'),
@@ -127,7 +128,8 @@ class PackagingCohortTests(unittest.TestCase):
             selection.write_text(json.dumps(row))
             with self.assertRaisesRegex(ValueError, 'metadata differs'):
                 verify.verify_wheel(wheel, root / 'unused', selection)
-            selection.write_text(json.dumps(self.selection()))
+            deferred=self.selection();deferred['qualified']=None
+            selection.write_text(json.dumps(deferred))
             with self.assertRaisesRegex(ValueError, 'deferred'):
                 verify.verify_wheel(wheel, root / 'unused', selection)
 

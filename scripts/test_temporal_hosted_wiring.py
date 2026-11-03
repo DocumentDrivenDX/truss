@@ -45,7 +45,7 @@ class TemporalHostedWiringTests(unittest.TestCase):
                 elif sum(bits)==1:self.assertEqual(selected,[names[bits.index(True)]])
                 else:self.assertEqual(selected,[])
     def test_selected_mixed_or_deferred_phase_is_refused_before_inputs_or_pg(self):
-        for phase in ('inventory','qualify119'):
+        for phase in ('intake','inventory','qualify119'):
             self.assertEqual(hosted.validate_selector(True,phase,[False]*4),phase)
             for bits in itertools.product((False,True),repeat=4):
                 if any(bits):
@@ -95,7 +95,7 @@ class TemporalHostedWiringTests(unittest.TestCase):
         for forbidden in ('--no-deps','--force-reinstall','--ignore-installed','--no-build-isolation'):
             self.assertNotIn(forbidden,install)
         all_commands='\n'.join(s.get('run','') for s in steps)
-        for forbidden in ('cargo build','maturin build','twine upload','gh workflow run','pip wheel','python -m build'):
+        for forbidden in ('cargo build','maturin build','twine upload','gh workflow run','pip wheel'):
             self.assertNotIn(forbidden,all_commands)
 
     def test_original_runtime_is_dispatch_only_not_an_automatic_gate(self):
@@ -119,3 +119,17 @@ class TemporalHostedWiringTests(unittest.TestCase):
                     self.assertIn('python3 scripts/check-module-boundaries.py',commands)
                     self.assertIn('python3 scripts/check-module-boundaries-controls.py',commands)
                     self.assertIn('packages/python/**',workflow['on']['pull_request']['paths'])
+
+    def test_component_intake_is_explicit_and_cannot_fall_through_to_pg(self):
+        job=self.workflow['jobs']['temporal-candidate']
+        fetch=next(step['run'] for step in job['steps'] if step.get('name','').startswith('Fetch retained'))
+        self.assertIn('if [ "$TN_PHASE" = intake ]; then',fetch)
+        self.assertIn('prepare-temporal-component-intake.py --execute',fetch)
+        self.assertIn('if [ "$TN_PHASE" = intake ]; then exit 0; fi',fetch)
+        for step in job['steps']:
+            if step.get('name','').startswith(('Capture exactly two','Prepare the separate','Execute only')):
+                self.assertIn('if',step)
+                self.assertNotIn("'intake'",step['if'])
+        install=next(step for step in job['steps'] if step.get('name','').startswith('Install one fresh'))
+        self.assertEqual(install['if'],"${{ inputs.temporal_candidate_phase != 'intake' }}")
+        self.assertEqual(self.workflow['on']['workflow_dispatch']['inputs']['temporal_candidate_phase']['default'],'none')

@@ -1,0 +1,24 @@
+======================================================================
+FAIL: test_missing_real_qualified_identity_refuses (test_packaging_cohort.PackagingCohortTests.test_missing_real_qualified_identity_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_packaging_cohort.py", line 50, in test_missing_real_qualified_identity_refuses
+    with self.assertRaisesRegex(ValueError, 'deferred'):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_qualified_wheel_requires_metadata_archive_and_native_pair (test_packaging_cohort.PackagingCohortTests.test_qualified_wheel_requires_metadata_archive_and_native_pair)
+----------------------------------------------------------------------
+ValueError: Wheel filename does not select one qualified compiler cohort
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_packaging_cohort.py", line 131, in test_qualified_wheel_requires_metadata_archive_and_native_pair
+    with self.assertRaisesRegex(ValueError, 'deferred'):
+AssertionError: "deferred" does not match "Wheel filename does not select one qualified compiler cohort"
+
+----------------------------------------------------------------------
+Ran 25 tests in 3.182s
+
+FAILED (failures=2)

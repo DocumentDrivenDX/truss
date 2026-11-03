@@ -29,7 +29,7 @@ def relative(value):
 
 
 def validate_selector(selected,phase,legacy):
-    if selected is not True or phase not in ('inventory','qualify119') or any(value is not False for value in legacy):
+    if selected is not True or phase not in ('intake','inventory','qualify119') or any(value is not False for value in legacy):
         raise ValueError('Select only the explicit candidate phase; all other expensive selectors must be false')
     return phase
 

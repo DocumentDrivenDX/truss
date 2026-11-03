@@ -14,7 +14,7 @@ on:
       temporal_candidate_phase:
         description: Inventory captures are not qualification; qualify119 requires reviewed final baseline/admission
         type: choice
-        options: [none, inventory, qualify119]
+        options: [none, intake, inventory, qualify119]
         default: none
       temporal_input_repository:
         description: Repository retaining the reviewed owner-input bundle
@@ -356,7 +356,16 @@ jobs:
         run: |
           set -euo pipefail
           gh api "repos/$TN_INPUT_REPOSITORY/actions/artifacts/$TN_INPUT_ARTIFACT_ID/zip" > "$TN_ROOT/input.zip"
-          python scripts/prepare-temporal-hosted-input.py --archive "$TN_ROOT/input.zip"             --sha256 "$TN_INPUT_ARTIFACT_SHA256" --phase "$TN_PHASE" --output "$TN_ROOT/inputs"             > "$TN_ROOT/evidence/verified-input.json"
+          if [ "$TN_PHASE" = intake ]; then
+            python scripts/prepare-temporal-component-intake.py --execute --archive "$TN_ROOT/input.zip" \
+              --sha256 "$TN_INPUT_ARTIFACT_SHA256" --output "$TN_ROOT/component-intake" \
+              > "$TN_ROOT/evidence/component-intake.log" 2>&1
+          else
+            python scripts/prepare-temporal-hosted-input.py --archive "$TN_ROOT/input.zip" \
+              --sha256 "$TN_INPUT_ARTIFACT_SHA256" --phase "$TN_PHASE" --output "$TN_ROOT/inputs" \
+              > "$TN_ROOT/evidence/verified-input.json"
+          fi
+          if [ "$TN_PHASE" = intake ]; then exit 0; fi
           python - <<'PYCODE'
           import json,os,pathlib
           selected=json.loads((pathlib.Path(os.environ['TN_ROOT'])/'inputs/verified-input.json').read_bytes())
@@ -365,6 +374,7 @@ jobs:
               output.write(key+'='+value+'\n')
           PYCODE
       - name: Install one fresh candidate environment through the normal resolver
+        if: ${{ inputs.temporal_candidate_phase != 'intake' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -422,6 +432,13 @@ jobs:
         run: |
           set -euo pipefail
           env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/qualify-temporal-native.py             --execute --admission "$TN_ADMISSION" --output "$TN_ROOT/evidence/campaign"             2>&1 | tee "$TN_ROOT/evidence/campaign.log"
+      - name: Retain pending inventory input for a separate actual admission review
+        if: ${{ always() && inputs.temporal_candidate_phase == 'intake' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: temporal-inventory-input-pending-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/temporal-candidate/component-intake/inventory-bundle
+          if-no-files-found: warn
       - name: Always retain inputs, raw observations, failures and cleanup
         if: always()
         uses: actions/upload-artifact@v4

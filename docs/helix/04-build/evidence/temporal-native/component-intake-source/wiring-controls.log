@@ -1,0 +1,15 @@
+test_actual_candidate_shell_and_embedded_python_parse (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_actual_candidate_shell_and_embedded_python_parse) ... ok
+test_all_flags_default_false_and_actual_yaml_jobs_are_exclusive (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_all_flags_default_false_and_actual_yaml_jobs_are_exclusive) ... ok
+test_candidate_installs_original_wheels_without_dependency_suppression (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_candidate_installs_original_wheels_without_dependency_suppression) ... ok
+test_component_intake_is_explicit_and_cannot_fall_through_to_pg (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_component_intake_is_explicit_and_cannot_fall_through_to_pg) ... ok
+test_digest_and_path_refusals_do_not_allow_placeholder_or_escape (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_digest_and_path_refusals_do_not_allow_placeholder_or_escape) ... ok
+test_existing_automatic_boundary_and_publisher_gates_preserved (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_existing_automatic_boundary_and_publisher_gates_preserved) ... ok
+test_one_linux_python311_job_no_matrix_serial_inventory_and_always_artifacts (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_one_linux_python311_job_no_matrix_serial_inventory_and_always_artifacts) ... ok
+test_original_runtime_is_dispatch_only_not_an_automatic_gate (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_original_runtime_is_dispatch_only_not_an_automatic_gate) ... ok
+test_selected_mixed_or_deferred_phase_is_refused_before_inputs_or_pg (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_selected_mixed_or_deferred_phase_is_refused_before_inputs_or_pg) ... ok
+test_unfilled_template_and_unsealed_identities_refuse_without_output (test_temporal_hosted_wiring.TemporalHostedWiringTests.test_unfilled_template_and_unsealed_identities_refuse_without_output) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.088s
+
+OK
