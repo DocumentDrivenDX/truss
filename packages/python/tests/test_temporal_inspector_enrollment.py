@@ -83,7 +83,7 @@ class TemporalInspectorEnrollmentTests(unittest.TestCase):
         self.assertEqual(maximum,1000000);self.assertEqual(len(resources),9)
         self.assertTrue(callable(engine.inspect_access_views));self.assertTrue(callable(engine.call))
         self.assertEqual(json.loads((self.bundle/'source.json').read_bytes())['sourceCommit'],
-                         'f629cda829223fb889d1faf25a2543e40689146d')
+                         'e3f38ef6f05ae636d2837f9d69f8d6805222664b')
 
     def test_public_preparation_retains_whole_owner_result_and_original_noncompact_source(self):
         self.install_fixture(self.engine_type())
@@ -178,3 +178,24 @@ class TemporalInspectorEnrollmentTests(unittest.TestCase):
         self.assertEqual((self.bundle/'source.json').read_bytes(),original)
         self.assertEqual(self.manifest['sourceSha256'],sha256(original).hexdigest())
         self.assertEqual(pin['version'],'UNIT-not-a-release')
+
+    def test_archived_pr95_resource_bytes_refuse_in_canonical_S_bundle_before_engine(self):
+        self.install_fixture(self.engine_type())
+        archived=ROOT/'docs/helix/04-build/evidence/temporal-native/canonical-S-resource-adoption-source/original-pr95'
+        original=json.loads((archived/'source.json').read_bytes())
+        self.assertEqual(original['sourceCommit'],'f629cda829223fb889d1faf25a2543e40689146d')
+        selected=json.loads((self.bundle/'source.json').read_bytes())
+        changed=[]
+        for name,entry in selected['resources'].items():
+            old=(archived/entry['file']).read_bytes();target=self.bundle/entry['file'];current=target.read_bytes()
+            self.assertEqual(sha256(old).hexdigest(),original['resources'][name]['sha256'])
+            self.assertEqual(sha256(current).hexdigest(),entry['sha256'])
+            if old==current:continue
+            changed.append(name)
+            with self.subTest(resource=name):
+                target.write_bytes(old)
+                try:
+                    with self.assertRaises(PreparationRejected):_inspector()
+                    self.assertEqual(self.constructed,[])
+                finally:target.write_bytes(current)
+        self.assertEqual(set(changed),{'coreSchema','referenceSchema','packageSchema','constraints','domainPolicy'})
