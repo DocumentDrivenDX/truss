@@ -93,3 +93,36 @@ class TemporalQualificationProvenanceTests(unittest.TestCase):
         self.write('.gitignore','scripts/ignored.py\n');c,t=self.commit()
         self.write('scripts/ignored.py','unreviewed input')
         with self.assertRaisesRegex(ValueError,'Uncommitted'):assert_qualification_checkout(self.root,c,t)
+
+    def executable_evidence_symlink_refuses(self,*,ignored):
+        link_name='scripts/evidence-input.py'
+        c,t=self.capture,self.capture_tree
+        if ignored:
+            self.write('.gitignore',link_name+'\n');c,t=self.commit()
+        for external in (False,True):
+            with self.subTest(ignored=ignored,externalEvidence=external),tempfile.TemporaryDirectory() as directory:
+                evidence=Path(directory).resolve() if external else self.root/'docs/helix/04-build/evidence/design-audit/symlink-run'
+                evidence.mkdir(parents=True,exist_ok=True)
+                payload=evidence/'generated.py';payload.write_text('# generated evidence, not executable input\n')
+                self.assertTrue(assert_qualification_checkout(self.root,c,t,evidence_roots=[evidence])['qualificationInputsClean'])
+                link=self.root/link_name;link.symlink_to(payload)
+                try:
+                    with self.assertRaisesRegex(ValueError,'scripts/evidence-input.py'):
+                        assert_qualification_checkout(self.root,c,t,evidence_roots=[evidence])
+                finally:
+                    link.unlink();payload.unlink()
+                    if not external:evidence.rmdir()
+
+    def test_untracked_executable_symlink_to_approved_evidence_refuses(self):
+        self.executable_evidence_symlink_refuses(ignored=False)
+
+    def test_ignored_executable_symlink_to_approved_evidence_refuses(self):
+        self.executable_evidence_symlink_refuses(ignored=True)
+
+    def test_lexical_evidence_file_cannot_resolve_outside_approved_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            external=Path(directory)/'external.py';external.write_text('# external\n')
+            evidence=self.root/'docs/helix/04-build/evidence/design-audit/escape-run';evidence.mkdir(parents=True)
+            (evidence/'escaped.py').symlink_to(external)
+            with self.assertRaises(ValueError):
+                assert_qualification_checkout(self.root,self.capture,self.capture_tree,evidence_roots=[evidence])

@@ -205,16 +205,23 @@ def assert_qualification_checkout(root,commit,tree,*,evidence_roots=()):
     actual=_git(root,'rev-parse','HEAD').decode().strip()
     actual_tree=commit_tree(root,actual)
     if actual!=commit or actual_tree!=tree:raise ValueError('Actual admitted qualification commit/tree differs')
-    outputs=[]
+    outputs=[];checkout_outputs=[]
     for selected in evidence_roots:
-        path=Path(selected).resolve()
-        if root.is_relative_to(path):raise ValueError('Evidence output cannot contain the qualification checkout')
-        if path.is_relative_to(root):
-            relative=path.relative_to(root)
-            base=Path('docs/helix/04-build/evidence/design-audit')
-            if relative==base or not relative.is_relative_to(base):
-                raise ValueError('Evidence output must be separately scoped below design-audit')
-        outputs.append(path)
+        # Preserve lexical location BEFORE resolving symlinks. External output
+        # roots are recorded but never exempt an input located in this checkout.
+        lexical=Path(os.path.abspath(selected));resolved=lexical.resolve()
+        for path in (lexical,resolved):
+            if root.is_relative_to(path):raise ValueError('Evidence output cannot contain the qualification checkout')
+            if path.is_relative_to(root):
+                relative=path.relative_to(root)
+                base=Path('docs/helix/04-build/evidence/design-audit')
+                if relative==base or not relative.is_relative_to(base):
+                    raise ValueError('Evidence output must be separately scoped below design-audit')
+        if lexical.is_relative_to(root):
+            if not resolved.is_relative_to(root/'docs/helix/04-build/evidence/design-audit'):
+                raise ValueError('Checkout evidence root must resolve within design-audit')
+            checkout_outputs.append((lexical,resolved))
+        outputs.append(resolved)
     changed=set(_git(root,'diff','--name-only','-z','HEAD','--').decode().split('\0'))
     changed.update(_git(root,'diff','--cached','--name-only','-z','HEAD','--').decode().split('\0'))
     dirty=sorted(p for p in changed if p and p not in _PLANNER_PATHS)
@@ -227,7 +234,8 @@ def assert_qualification_checkout(root,commit,tree,*,evidence_roots=()):
         path=Path(name)
         if name in _PLANNER_PATHS or name.startswith('docs/helix/04-build/evidence/temporal-completion-current-owner-audit-20261102/'):continue
         if '__pycache__' in path.parts and path.suffix=='.pyc':continue
-        if any((root/path).resolve().is_relative_to(p) for p in outputs):continue
+        lexical=root/path;resolved=lexical.resolve()
+        if any(lexical.is_relative_to(location) and resolved.is_relative_to(target) for location,target in checkout_outputs):continue
         unknown.append(name)
     if unknown:raise ValueError('Uncommitted qualification inputs outside scoped evidence: '+repr(unknown))
     return {'commit':actual,'tree':actual_tree,'qualificationInputsClean':True,'generatedEvidenceRoots':[str(p) for p in outputs]}
