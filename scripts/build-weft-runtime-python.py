@@ -12,7 +12,8 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = '557153731e9f5d0583193a1189a07c6ed485d3d3'
+from release_cohort import load_cohort
+# No source pin is emitted before the actual coherent cohort is qualified.
 
 
 def check_wheel(wheel: Path, expected_version: str):
@@ -31,7 +32,7 @@ root = Path(sys.argv[1]).resolve()
 for module in (weft, native):
     if not Path(module.__file__).resolve().is_relative_to(root):
         raise RuntimeError('Weft imported outside the temporary wheel installation')
-if weft.__version__ != sys.argv[2] or importlib.metadata.version('weft-sql') != sys.argv[2]:
+if weft.__version__ != sys.argv[2] or importlib.metadata.version('umf-weft') != sys.argv[2]:
     raise RuntimeError('Unexpected Weft wheel version')
 for name in ('compile_truss_runtime_json', 'compile_truss_runtime_page_json', 'prepare_application_lineage'):
     if not callable(getattr(weft, name, None)):
@@ -50,10 +51,11 @@ def main():
     parser.add_argument('--profile', choices=('release', 'dev'), default='release',
                         help='Explicit Cargo build profile; no automatic fallback')
     args = parser.parse_args()
+    revision = load_cohort(require_qualified=True)['qualified']['weftSourceRevision']
     output = args.output.resolve()
     if output.exists() and any(output.iterdir()):
         parser.error('Build directory must be new or empty')
-    archive = subprocess.check_output(['git', '-C', str(args.repository.resolve()), 'archive', REVISION])
+    archive = subprocess.check_output(['git', '-C', str(args.repository.resolve()), 'archive', revision])
     output.mkdir(parents=True, exist_ok=True)
     with tarfile.open(fileobj=io.BytesIO(archive)) as tree:
         for member in tree.getmembers():
@@ -75,9 +77,11 @@ def main():
     wheels = list((output / 'wheels').glob('*.whl'))
     if len(wheels) != 1:
         raise RuntimeError('Expected one Weft Python wheel')
+    if project['project']['name'] != 'umf-weft' or project['project']['version'] != '0.4.57':
+        raise RuntimeError('Selected umf-weft 0.4.57 producer required')
     expected_version = project['project']['version']
     check_wheel(wheels[0], expected_version)
-    print(f'Weft source: {REVISION}\nProfile: {args.profile}\nWheel: {wheels[0]}\nNative import and public API availability: passed')
+    print(f'Weft source: {revision}\nProfile: {args.profile}\nWheel: {wheels[0]}\nNative import and public API availability: passed')
 
 
 if __name__ == '__main__':
