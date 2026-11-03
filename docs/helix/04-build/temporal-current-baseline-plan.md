@@ -173,6 +173,29 @@ native and Chromium parity on the selected package bytes.
 
 ## Implementation Slices
 
+### Current delivery and installation selection
+
+The [embedder and temporal delivery plan](embedder-temporal-delivery-plan.md)
+adds the current delivery gates. The temporal native release is fresh-only under
+the current installation baseline policy. It does not ship a 0.0.54-to-new-native
+migration. Use the real public 0.0.54 wheel to create a populated negative-control
+installation and prove new-tool refusal without modifying any existing property,
+cell, source, history, ACL or retained request. Keep retired 0.0.47/48 lineage
+refused; no automatic startup migration, reset or clock manipulation is allowed.
+The current-only six baseline controls remain; do not revive the retired matrix.
+
+Truss 0.0.54 pins `weft-sql==0.4.51`; public Weft 0.4.56 uses `umf-weft` and
+different selected envelopes. A new owner cohort requires authentic default
+ABI1.2 capture/compiler/checker/decoder execution and native regression adoption
+alongside all 62 original HF semantic assertions. Inventory distribution-name
+assumptions in package, release and qualification tooling. Retain original inputs
+and audit actual producer deltas before updating hashes. No version-only repin or
+relabel supplies compatibility, native acceptance or archive migration evidence.
+This adoption gate precedes TC-5/6 qualification and is tracked as T4A in the
+delivery plan. Reserve `truss-catalog-runtime/0.76-temporal-candidate` as the
+new native identity; compute its actual manifest and ABI digests from reviewed
+source bytes. Both conflicting native0.75 inputs remain distinct and unchanged.
+
 | Slice | Owner | Dependency | Required observable gate |
 | --- | --- | --- | --- |
 | TC-0 | Truss | None | Standalone immutable LocalTimestampValue and canonical26 validator; old ExactValue/import/native paths still refuse it. |
