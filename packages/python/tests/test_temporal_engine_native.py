@@ -205,9 +205,20 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
         entry,parameters=self.entry(row,sql,parameters_type=Parameters,parameters=values,temporal_parameters={
             'minimum_day':{'kind':'date','value':'2024-01-03'},'since':{'kind':'instant','value':'1970-01-01T00:00:00Z'},
             'wall':{'kind':'local','value':'2000-02-29T12:34:56.000001'}})
-        actual=self.target(entry).read(entry,parameters)
+        target=self.target(entry);original=entry.artifact_json
+        actual=target.read(entry,parameters)
         self.assertEqual([getattr(v,names['A-label']) for v in actual],['row-2','row-4'])
+        # Reuse this exact compiled entry: changing only runtime parameters
+        # must change results without recapturing or rebuilding its program.
+        changed=Parameters(minimum_day=date(2024,1,5),since=datetime(2024,1,1,tzinfo=timezone.utc),
+                           wall=datetime(2000,2,29,12,34,56,1))
+        self.assertEqual([getattr(v,names['A-label']) for v in target.read(entry,changed)],['row-4'])
+        self.assertEqual(entry.artifact_json,original)
+        self.assertEqual([getattr(v,names['A-label']) for v in target.read(entry,parameters)],['row-2','row-4'])
         self.assertEqual(set(entry.artifact()['request']['temporalParameters']),{'minimum_day','since','wall'})
+        self.assertEqual(entry.artifact_json,original)
+        print('temporal-native-parameter-reuse '+json.dumps({'wholeWrapperSha256':sha256(original.encode()).hexdigest(),
+            'compiledEntries':1,'runtimeReads':3,'expectedLabels':[['row-2','row-4'],['row-4'],['row-2','row-4']]},sort_keys=True))
 
     def test_full_pages_match_independent_native_order_oracle_all_directions_and_null_orders(self):
         from umf_access.types import MISSING
@@ -237,6 +248,33 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
                         by_label={getattr(v,names['A-label']):getattr(v,names['A-local']) for v in actual}
                         self.assertIsNone(by_label['row-1']);self.assertIs(by_label['row-3'],MISSING)
                         self.assertIs(by_label['row-5'],MISSING)
+
+    def test_date_and_instant_pages_match_independent_native_order_permutations(self):
+        row=self.ready_engine();names={element:name for module,element,name in row.UMF_FIELDS}
+        known_dates=tuple(date(2024,1,index+1) for index in range(6))
+        known_instants=(datetime(1969,12,31,23,59,59,999999,tzinfo=timezone.utc),
+            datetime(1970,1,1,tzinfo=timezone.utc),datetime(1970,1,1,0,0,9,tzinfo=timezone.utc),
+            datetime(1970,1,1,0,0,10,tzinfo=timezone.utc),datetime(2024,1,1,tzinfo=timezone.utc),
+            datetime(2024,1,1,tzinfo=timezone.utc))
+        for element,pg_type,values in (('A-date','date',known_dates),('A-instant','timestamptz',known_instants)):
+            projection=self.projection(row,{'A-label',element})
+            oracle_values=tuple(v for index,value in enumerate(values) for v in (f'row-{index}','shared-key',value))
+            oracle='SELECT label FROM (VALUES '+','.join([f'(%s::text,%s::text,%s::{pg_type})']*6)+') v(label,prefix,value)'
+            for direction in ('ASC','DESC'):
+                for nulls in ('FIRST','LAST'):
+                    for key in ('a-primary','z-alt'):
+                        with self.subTest(element=element,direction=direction,nulls=nulls,key=key):
+                            sql='SELECT '+','.join(quoted(e)+' AS '+quoted(n) for m,e,n in projection.UMF_FIELDS)+ \
+                                ' FROM "A" ORDER BY '+quoted(element)+f' {direction} NULLS {nulls}'
+                            page,parameters=self.entry(projection,sql,page=True,key=key)
+                            expected=[v[0] for v in self.admin.execute(oracle+
+                                f' ORDER BY value {direction} NULLS {nulls},prefix ASC,label ASC',oracle_values).fetchall()]
+                            target=self.target(page);actual=[];after=None
+                            for index in range(4):
+                                batch=target.page(page,parameters,after=after);actual.extend(batch.items);after=batch.next_after
+                                if after is None:break
+                            self.assertIsNone(after);self.assertEqual(len(actual),6)
+                            self.assertEqual([getattr(v,names['A-label']) for v in actual],expected)
 
     def test_actual_sdk_page_refuses_tuple_token_context_and_other_actor_before_data_sql(self):
         from unittest.mock import patch
