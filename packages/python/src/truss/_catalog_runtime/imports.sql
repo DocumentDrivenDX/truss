@@ -73,7 +73,7 @@ DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata jsonb;key_row tr
 BEGIN
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique import identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
- IF identity->'profile'=CASE WHEN temporal_profile THEN truss.runtime_temporal_profiles()->'ownedImportProfile' ELSE truss.runtime_import_profiles()->'ownedImportProfile' END
+ IF identity->'profile'=(CASE WHEN temporal_profile THEN truss.runtime_temporal_profiles()->'ownedImportProfile' ELSE truss.runtime_import_profiles()->'ownedImportProfile' END)
   AND identity-ARRAY['profile','identity']='{}'::jsonb THEN
   owned_selection:=true;identity:=identity->'identity';
  END IF;

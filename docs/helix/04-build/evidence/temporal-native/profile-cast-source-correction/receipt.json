@@ -1,0 +1,42 @@
+{
+  "failedRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/41572650960",
+  "failedSource": "7578e4e3df5a23ab8130215389807ef691320ed8",
+  "artifactId": 13201952698,
+  "cause": "Malformed mechanical runtime_is_owned_profile conversion: two ::function typecasts and one ::NOT; three additional ungrouped CASE conditions discovered by whole installer scan",
+  "correction": "Invoke runtime_is_owned_profile with original convert_from(... )::jsonb mutationProfile; retain NOT outside call. Group CASE only. No predicate/coverage/caps/ledger changes.",
+  "syntaxBefore": [
+    {
+      "file": "group-recovery.sql",
+      "function": "truss.recover_group_request_at_profile",
+      "stage": "PLpgSQL",
+      "error": "syntax error at end of input"
+    },
+    {
+      "file": "imports.sql",
+      "function": "truss.import_object_identity_at_profile",
+      "stage": "PLpgSQL",
+      "error": "syntax error at end of input"
+    },
+    {
+      "file": "operations.sql",
+      "function": "truss.reached",
+      "stage": "PLpgSQL",
+      "error": "syntax error at or near \"NOT\""
+    },
+    {
+      "file": "operations.sql",
+      "function": "truss.apply_group_prepared_at_profile",
+      "stage": "PLpgSQL",
+      "error": "syntax error at end of input"
+    }
+  ],
+  "syntaxAfter": {
+    "sqlFiles": 61,
+    "functions": 442,
+    "plpgsqlBodies": 407,
+    "errors": []
+  },
+  "limitation": "pglast8.7 catalog-free grammar diagnostic uses explicit rowtype stand-ins; actual PG compile/native4case proof still required",
+  "controls": "20 focused numeric/custody/probe controls pass; eight pure inspector controls pass separately",
+  "localNative": "No launch: Herschel running shared single-worker job. No duplicate CI/local campaign."
+}

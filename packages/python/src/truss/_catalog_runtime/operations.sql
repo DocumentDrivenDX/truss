@@ -1385,12 +1385,12 @@ BEGIN
   IF NOT attempt.complete OR attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false)
    OR attempt.next_index<>jsonb_array_length(convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations')
    OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete current mutation attempt required' USING ERRCODE='55000';END IF;
-  IF convert_from(attempt.input_bytes,'UTF8')::truss.runtime_is_owned_profile(jsonb->'mutationProfile') THEN PERFORM truss.runtime_owned_group_validate(attempt.id,false);END IF;
+  IF truss.runtime_is_owned_profile(convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile') THEN PERFORM truss.runtime_owned_group_validate(attempt.id,false);END IF;
   IF attempt.receipt_id IS NOT NULL THEN
    SELECT * INTO STRICT endpoint FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
    IF attempt.expected_receipt IS NOT NULL THEN
     IF to_jsonb(endpoint) IS DISTINCT FROM attempt.expected_receipt THEN RAISE EXCEPTION 'exact original group receipt required' USING ERRCODE='55000';END IF;
-   ELSIF convert_from(attempt.input_bytes,'UTF8')::truss.runtime_is_owned_profile(jsonb->'mutationProfile') THEN
+   ELSIF truss.runtime_is_owned_profile(convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile') THEN
     IF endpoint.storage_row_id IS DISTINCT FROM attempt.receipt_id OR endpoint.namespace_identity_utf8 IS DISTINCT FROM convert_to(attempt.context->>'authorizedScopeIdentity','UTF8')
      OR endpoint.request_id_utf8 IS DISTINCT FROM convert_to(convert_from(attempt.request_bytes,'UTF8')::jsonb->'identity'->>'requestId','UTF8')
      OR endpoint.original_writer_xid IS DISTINCT FROM attempt.writer_xid OR endpoint.lifecycle_generation<>0
@@ -2319,7 +2319,7 @@ BEGIN
   OR receipt.lifecycle_generation<>0 OR receipt.payload_state IS DISTINCT FROM 'complete'
   OR receipt.expired_identity_bytes IS NOT NULL OR receipt.expiry_writer_xid IS NOT NULL OR receipt.expiry_writer_context_bytes IS NOT NULL
   OR attempt.expected_receipt IS NOT NULL AND to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt
-  OR attempt.expected_receipt IS NULL AND convert_from(attempt.input_bytes,'UTF8')::NOT truss.runtime_is_owned_profile(jsonb->'mutationProfile')
+  OR attempt.expected_receipt IS NULL AND NOT truss.runtime_is_owned_profile(convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile')
   OR attempt.position_bytes IS DISTINCT FROM original_position
   OR original_position IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
   OR decode(payload->>'inputBase64','base64') IS DISTINCT FROM attempt.input_bytes
@@ -2346,7 +2346,7 @@ BEGIN
   OR (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded selected provider input required' USING ERRCODE='22023';END IF;
  IF (convert_from(original_input,'UTF8')::jsonb)->>'interfaceVersion' IS DISTINCT FROM
-  CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END THEN
+  (CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) THEN
   RAISE EXCEPTION 'exact explicit group provider required' USING ERRCODE='0A000';END IF;
  IF temporal_profile THEN
   PERFORM truss.require_temporal_capability(expected_release,expected_digest);

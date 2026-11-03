@@ -47,7 +47,7 @@ BEGIN
   OR (convert_from(original_request,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded original request frame required' USING ERRCODE='22023';END IF;
  IF (convert_from(original_input,'UTF8')::jsonb)->>'interfaceVersion' IS DISTINCT FROM
-  CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END THEN
+  (CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) THEN
   RAISE EXCEPTION 'original frozen recovery provider required' USING ERRCODE='0A000';END IF;
  IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  request:=convert_from(original_request,'UTF8')::jsonb;
