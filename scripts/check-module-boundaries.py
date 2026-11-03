@@ -80,6 +80,9 @@ ALLOWED = {
     'catalog_preparation': {'hashlib','importlib.resources','json','truss.preparation','truss._catalog_source_reference','truss._catalog_support','truss._catalog_report_semantics'},
     'catalog_report_sources': {'base64','dataclasses','decimal','hashlib','json'},
     '_catalog_source_reference': set(),
+    # F8 storage correspondence and explicit scalar transport; no native I/O or resolver.
+    '_temporal_preparation': {'hashlib','json','importlib.resources','truss.preparation','truss._owner_evidence_json','truss._catalog_source_reference'},
+    '_temporal_values': {'truss.contracts','truss._record_schema'},
     '_security_preparation_authority': {'dataclasses','hashlib','importlib.resources','uuid','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_security_catalog_read_cut_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_security_catalog_subject_helpers': {'json'},
@@ -206,7 +209,7 @@ ALLOWED = {
     'host': {'typing', 'truss.execution', 'truss._host_call_recovery', 'dataclasses', 'truss._native_bootstrap', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._host_control_custody', 'truss._host_session'},
     'assembly': {'truss.catalog_runtime','__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution', 'truss.psycopg_host', 'truss.installation'},
     'assembly_contracts': {'dataclasses', 'typing', 'truss.contracts'},
-    'preparation': {'truss.catalog_preparation','truss._embedded','weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._core10_catalog_release', 'truss._umf_runtime_release', 'truss._acceptance_json'},
+    'preparation': {'truss._temporal_preparation','truss.catalog_preparation','truss._embedded','weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._core10_catalog_release', 'truss._umf_runtime_release', 'truss._acceptance_json'},
     '_acceptance_json': {'json'},
     '_catalog_support': {'truss._catalog_source_reference','base64','hashlib','importlib.resources','json','truss.preparation','truss._owner_evidence_json'},
     '_owner_evidence_json': {'json','decimal'},

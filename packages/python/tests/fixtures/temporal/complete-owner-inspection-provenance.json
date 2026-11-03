@@ -1,0 +1,13 @@
+{
+  "repository": "DocumentDrivenDX/umf",
+  "commit": "01151c1915392a7d1e85e78c500b95e326c5265a",
+  "scope": "DEV canonical TS source operation, not released inspector wheel",
+  "command": "bun /private/tmp/truss-temporal-owner-inspection-probe.ts",
+  "resultSha256": "3017ab6b23ce33601b04c66399f85ff6809fb9fb4a211d6df7a00462240a0c32",
+  "sourceFiles": {
+    "src/compilation/admission/access/index.ts": "900cb7644eafe8638f4529ea93ce1373f33402c5b0268da14bf90d951b5b82f1",
+    "tests/rust-core/fixtures/access-inspection/cases.json": "2e939f0d0f68f71a6b78c38e4fcd151e7b363513311f1aed170f9576333cbdc3"
+  },
+  "inputTransformation": "Original date-instant-local corpus document plus explicit Truss field/record names equal to original IDs; canonical inspector invoked on the complete resulting document with all original records selected.",
+  "probeScriptSha256": "561b9454d4e99a3dba02c42f3dc6c02f8968abe4190c372e39bedefd83b12f60"
+}
