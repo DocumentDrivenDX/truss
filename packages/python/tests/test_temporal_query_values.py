@@ -5,6 +5,7 @@ from decimal import Decimal
 import json
 import unittest
 from unittest.mock import patch
+from hashlib import sha256
 
 from truss import LocalTimestampValue
 from truss.contracts import TextValue
@@ -79,6 +80,28 @@ class TemporalQueryValueTests(unittest.TestCase):
         with patch('truss._temporal_compiler.files',return_value=Missing()), \
              patch('truss._temporal_compiler.metadata.version',side_effect=AssertionError('ambient version considered')):
             self.assertIsNone(compiler())
+
+    def test_selected_compiler_refuses_dual_weft_distribution_before_import(self):
+        from truss._temporal_compiler import CHECKERS
+        import builtins
+        # Deliberately UNIT metadata only: this exercises refusal before any
+        # compiler import, never a synthetic successful owner enrollment.
+        raw=json.dumps({'distribution':'umf-weft','version':'UNIT','sourceCommit':'0'*40,
+            'installedFiles':{},'checkers':CHECKERS}).encode()
+        class UnitFile:
+            def joinpath(self,*args):return self
+            def read_bytes(self):return raw
+        original_import=builtins.__import__
+        def no_compiler_import(name,*args,**kwargs):
+            if name=='weft':raise AssertionError('Co-installed compiler must refuse before import')
+            return original_import(name,*args,**kwargs)
+        with patch('truss._temporal_compiler.files',return_value=UnitFile()), \
+             patch('truss.catalog_runtime._release',return_value=({'files':{'../_temporal_owner/compiler.json':sha256(raw).hexdigest()}},'UNIT',())), \
+             patch('truss._temporal_compiler.metadata.version',return_value='UNIT'), \
+             patch('truss._temporal_compiler.metadata.distribution',return_value=object()) as legacy, \
+             patch('builtins.__import__',side_effect=no_compiler_import):
+            self.assertIsNone(compiler())
+        legacy.assert_called_once_with('weft-sql')
 
     def test_ordinary_read_and_page_never_retry_explicit_engine04(self):
         from truss._query_runtime import run_query

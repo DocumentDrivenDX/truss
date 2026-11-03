@@ -8,8 +8,8 @@ import tempfile
 from types import SimpleNamespace
 import psycopg
 from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, Ok, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
-from truss.contracts import TextValue
-from truss.groups import AuthoredValue, CreateObject, RootlessOwnership, GroupSuccess
+from truss.contracts import TextValue,MapValue
+from truss.groups import AuthoredValue, CreateObject, RootlessOwnership, GroupSuccess,RequestNone
 from truss.catalog_runtime import _release,_pin_cursor
 import test_object_mutations_native as ordinary_fixture
 import test_temporal_canonical_text_native as scalar_fixture
@@ -19,6 +19,21 @@ class TemporalNativeFixture(ordinary_fixture.ObjectMutationTests):
     for _name in tuple(n for n in dir(ordinary_fixture.ObjectMutationTests) if n.startswith('test_')):
         locals()[_name] = None
     cleanup_owned_runtime = classmethod(scalar_fixture.TemporalCanonicalTextNativeTests.cleanup_owned_runtime.__func__)
+
+    def run_group(self,assembly,tx,operations,request_id=None):
+        context=assembly.group_context_in_transaction(tx)
+        self.assertIsInstance(context,Ok,repr(context))
+        self.assertTrue(callable(getattr(context.value,'input',None)),repr(context))
+        original=context.value.input(operations,MapValue(entries=()))
+        request=RequestNone() if request_id is None else context.value.request(request_id)
+        result=assembly.apply_in_transaction(tx,original,request,documents=self.documents,
+            bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        if not isinstance(result,Ok):
+            # Facade errors must retain the actual underlying host diagnosis;
+            # looking for facade._host would replace it with AttributeError.
+            underlying=getattr(assembly,'_assembly',assembly)
+            self.fail(repr(result)+' '+str(underlying._host._custody.last_attempt.error))
+        return result.value,original,request
 
     @classmethod
     def setUpClass(cls):
@@ -36,7 +51,7 @@ class TemporalNativeFixture(ordinary_fixture.ObjectMutationTests):
             cls.original_pid = int((cls.runtime.directory / 'postmaster.pid').read_text().splitlines()[0])
             cls.info = cls.runtime.info
 
-    def ready_temporal(self, mutate_source=None):
+    def ready_temporal(self, mutate_source=None, *, additional_module_grants=()):
         self.install()
         fixture_path = Path(__file__).parent / 'fixtures/temporal/native-guard-owner-inspection.json'
         raw = fixture_path.read_bytes()
@@ -55,7 +70,8 @@ class TemporalNativeFixture(ordinary_fixture.ObjectMutationTests):
         self.assertIsInstance(accepted, Ok, repr(accepted))
         self.assertEqual(accepted.value.revision, 1)
         host.detach(); connection.commit()
-        for role in ('group_reader', 'group_writer'):
+        grants=(ModuleAccessGrant('adoc','m','group_reader','group_writer'),*additional_module_grants)
+        for role in dict.fromkeys(role for grant in grants for role in (grant.reader_role,grant.writer_role)):
             self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
             self.addCleanup(self.admin.execute, psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
         self.admin.execute('BEGIN')
@@ -63,13 +79,13 @@ class TemporalNativeFixture(ordinary_fixture.ObjectMutationTests):
         try:
             admin_tx = admin_host.adopt_transaction().value
             admin_assembly = create_reference_assembly(CatalogRuntimeConfiguration(), admin_host).value
-            configured = admin_assembly.configure_module_access_in_transaction(admin_tx,
-                (ModuleAccessGrant('adoc', 'm', 'group_reader', 'group_writer'),))
+            configured = admin_assembly.configure_module_access_in_transaction(admin_tx,grants)
             self.assertIsInstance(configured, Ok, repr(configured))
         finally:
             admin_host.detach()
         self.admin.commit()
-        self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(
+            psycopg.sql.SQL(',').join(psycopg.sql.Identifier(role) for role in dict.fromkeys(g.writer_role for g in grants))))
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         connection, host, assembly, transaction = self.consumer()
         reference = assembly.get_type_reference_in_transaction(transaction, document_id='adoc', module_id='m', record_id='A')

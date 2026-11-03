@@ -4,11 +4,69 @@ import copy
 import json
 from uuid import uuid4
 import psycopg
+from truss import ModuleAccessGrant,Ok
+from truss import temporal
+from truss.contracts import TextValue,LocalTimestampValue
+from truss.groups import (CreateObject,AuthoredValue,RootlessOwnership,OwnedOwnership,AliasObjectReference,
+                          CreateEdge,NullOrderKey,GroupSuccess)
 from truss.catalog_runtime import _release
 import temporal_native_fixture as fixture
 
 
 class TemporalSourceSecurityNativeTests(fixture.TemporalNativeFixture):
+    def test_actual_owned_temporal_child_requires_current_aggregate_root_module_reader(self):
+        def root_module(source):
+            module=source['modules'][0]
+            elements=[e for e in module['elements'] if e['id']=='B' or e['id'].startswith('B-')]
+            module['elements']=[e for e in module['elements'] if e not in elements]
+            record=next(e for e in elements if e['kind']=='record')
+            for reference in record['members']+[f for k in record['keys'] for f in k['fields']]:reference['module']='roots'
+            views=module['extensions']['umf.access']['views']
+            view=next(v for v in views if v['record']['element']=='B');views.remove(view)
+            view['record']['module']='roots';view['selectedKey']['module']='roots'
+            for field in view['fields']:field['field']['module']='roots'
+            for relation in module.get('relationships',[]):
+                for endpoint in relation['source']+relation['target']:
+                    if endpoint['element']=='B':endpoint['module']='roots'
+            module.setdefault('relationships',[]).append({'id':'children','name':'children',
+                'source':[{'module':'roots','element':'B'}],'target':[{'module':'m','element':'A','key':'a-primary'}],
+                'sourceMultiplicity':{'min':0,'max':1},'targetMultiplicity':{'min':0,'max':4},
+                'targetLifecycle':'owned','directed':True})
+            source['modules'].append({'id':'roots','namespace':'roots','elements':elements,'relationships':[],
+                'extensions':{'umf.access':{'views':[view],'columns':[],'search':[],'searchBindings':[]}}})
+        c,h,a,tx=self.ready_temporal(root_module,additional_module_grants=(
+            ModuleAccessGrant('adoc','roots','temporal_roots_reader','temporal_roots_writer'),))
+        root=a.get_type_reference_in_transaction(tx,document_id='adoc',module_id='roots',record_id='B')
+        relation=a.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='children')
+        self.assertIsInstance(root,Ok,repr(root));self.assertIsInstance(relation,Ok,repr(relation))
+        operations=(CreateObject(type_definition_pin=root.value.definition_pin,ownership=RootlessOwnership(),alias='root',
+            values=tuple(AuthoredValue(name='B-'+name,value=TextValue(kind='string',text=value)) for name,value in
+                         (('label','temporal-root'),('value','root-key')))),
+            temporal.CreateObject(type_definition_pin=self.type_reference.definition_pin,alias='child',
+                ownership=OwnedOwnership(root=AliasObjectReference(alias='root')),
+                values=tuple(temporal.AuthoredValue(name='A-'+name,value=value) for name,value in (
+                    ('label',TextValue(kind='string',text='owned-temporal-child')),('value',TextValue(kind='string',text='shared-key')),
+                    ('date',TextValue(kind='date',text='2000-02-29')),('instant',TextValue(kind='timestamp',text='2000-01-01T00:00:00Z')),
+                    ('local',LocalTimestampValue(text='2000-02-29T00:00:00.000001')),('payload',TextValue(kind='string',text='owned'))))),
+            CreateEdge(relationship_definition_pin=relation.value.definition_pin,source=AliasObjectReference(alias='root'),
+                       target=AliasObjectReference(alias='child'),values=(),order_key=NullOrderKey()))
+        applied,_,_=self.run_group(a.temporal_values(),tx,operations,'public-temporal-owned-root')
+        self.assertIsInstance(applied,GroupSuccess,repr(applied));h.detach();c.commit();c,h,a,tx=self.consumer()
+        binding,requirements=self.capture(c)
+        for page in (False,True):
+            self.assertEqual(len(c.execute('SELECT id FROM '+self.source(page),self.source_arguments(binding,requirements,page)).fetchall()),7)
+        self.admin.execute('REVOKE temporal_roots_writer FROM consumer')
+        try:
+            for page in (False,True):
+                with self.subTest(source='page' if page else 'read'),self.assertRaises(psycopg.Error) as refused:
+                    with c.transaction():
+                        with c.cursor(name='temporal_root_'+uuid4().hex[:8]) as cursor:
+                            cursor.execute('SELECT id FROM '+self.source(page)+' LIMIT 1',self.source_arguments(binding,requirements,page))
+                            self.fail('Revoked actual aggregate-root authority published first row: '+repr(cursor.fetchone()))
+                self.assertEqual(refused.exception.sqlstate,'P1403')
+        finally:self.admin.execute('GRANT temporal_roots_writer TO consumer WITH SET FALSE')
+        self.assertEqual(len(c.execute('SELECT id FROM '+self.source(),self.source_arguments(binding,requirements)).fetchall()),7)
+
     def test_native_temporal_cached_and_uncached_source_keep_exact_descriptor_basis(self):
         """TN08 cache present/miss on actual public acceptance, not mock rows."""
         c,h,a,tx=self.ready_temporal();binding,requirements=self.capture(c)

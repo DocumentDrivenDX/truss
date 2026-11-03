@@ -23,6 +23,11 @@ def compiler():
                 or type(manifest['sourceCommit']) is not str or len(manifest['sourceCommit'])!=40
                 or any(c not in '0123456789abcdef' for c in manifest['sourceCommit'])
                 or metadata.version(manifest['distribution'])!=manifest['version']):return None
+        # The selected successor has one distribution owning import ``weft``.
+        # Same-directory payload hashes cannot make dual package ownership safe.
+        try:metadata.distribution('weft-sql')
+        except metadata.PackageNotFoundError:pass
+        else:return None
         import weft as owner
         from weft import weft as native
         if getattr(owner,'__version__',None)!=manifest['version'] or getattr(native,'__version__',None)!=manifest['version']:
