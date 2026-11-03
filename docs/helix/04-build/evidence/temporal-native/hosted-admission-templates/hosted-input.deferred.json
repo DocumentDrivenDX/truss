@@ -1,0 +1,87 @@
+{
+  "schema": "truss-temporal-hosted-input/1",
+  "ready": false,
+  "phase": null,
+  "sourceCommit": null,
+  "sourceTree": null,
+  "candidateWheel": null,
+  "admission": null,
+  "files": null,
+  "wheels": {
+    "truss": {
+      "path": null,
+      "sha256": null
+    },
+    "core": {
+      "path": null,
+      "sha256": null
+    },
+    "access": {
+      "path": null,
+      "sha256": null
+    },
+    "weft": {
+      "path": null,
+      "sha256": null
+    }
+  },
+  "ownerIdentities": {
+    "core": {
+      "sourceCommit": null,
+      "wheelPath": null,
+      "wheelSha256": null,
+      "modulePath": null,
+      "moduleSha256": null,
+      "resourceSourceCommit": null,
+      "resourceManifestSha256": null,
+      "resources": {
+        "coreSchema": {
+          "path": null,
+          "sha256": null
+        },
+        "referenceSchema": {
+          "path": null,
+          "sha256": null
+        },
+        "packageSchema": {
+          "path": null,
+          "sha256": null
+        },
+        "constraints": {
+          "path": null,
+          "sha256": null
+        },
+        "domainPolicy": {
+          "path": null,
+          "sha256": null
+        },
+        "tablesPackage": {
+          "path": null,
+          "sha256": null
+        },
+        "actionsPackage": {
+          "path": null,
+          "sha256": null
+        },
+        "bindingPackage": {
+          "path": null,
+          "sha256": null
+        },
+        "stableBindingPackage": {
+          "path": null,
+          "sha256": null
+        }
+      }
+    },
+    "weft": {
+      "sourceCommit": null,
+      "wheelPath": null,
+      "wheelSha256": null,
+      "modulePath": null,
+      "moduleSha256": null
+    },
+    "truss": {
+      "nativeManifestSha256": null
+    }
+  }
+}

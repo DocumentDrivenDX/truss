@@ -3,6 +3,31 @@ name: Released Python runtime
 on:
   workflow_dispatch:
     inputs:
+      released_runtime_probe:
+        description: Run only the existing released-runtime smoke gate
+        type: boolean
+        default: false
+      temporal_candidate_probe:
+        description: Select only the reviewed coherent candidate phase (actual pinned artifact inputs required)
+        type: boolean
+        default: false
+      temporal_candidate_phase:
+        description: Inventory captures are not qualification; qualify119 requires reviewed final baseline/admission
+        type: choice
+        options: [none, inventory, qualify119]
+        default: none
+      temporal_input_repository:
+        description: Repository retaining the reviewed owner-input bundle
+        type: string
+        default: DocumentDrivenDX/truss
+      temporal_input_artifact_id:
+        description: Actual retained GitHub Actions input artifact ID; no source rebuild
+        type: string
+        default: ''
+      temporal_input_artifact_sha256:
+        description: Actual immutable downloaded artifact ZIP SHA256
+        type: string
+        default: ''
       temporal_native_probe:
         description: Run only fresh temporal native enrollment and three native cursor custody controls
         type: boolean
@@ -19,7 +44,7 @@ permissions:
   contents: read
 jobs:
   released-runtime:
-    if: ${{ !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
+    if: ${{ inputs.released_runtime_probe && !inputs.temporal_candidate_probe && !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -58,7 +83,7 @@ jobs:
           path: docs/helix/04-build/evidence/design-audit/ci-release-*
           if-no-files-found: warn
   weft-abi12-probe:
-    if: ${{ inputs.weft_abi12_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
+    if: ${{ inputs.weft_abi12_probe && !inputs.released_runtime_probe && !inputs.temporal_candidate_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -96,10 +121,10 @@ jobs:
           import hashlib,json,os,pathlib
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'weft-abi12-probe'
           wheels={name:next((root/'inputs'/name).glob('*.whl')) for name in ('truss','weft051','weft056','runtime')}
-          assert hashlib.sha256(wheels['truss'].read_bytes()).hexdigest()=='4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52'
+          if not (hashlib.sha256(wheels['truss'].read_bytes()).hexdigest()=='4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52'):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
           for name in ('weft051','weft056','runtime'):
               entries={line.split()[1].lstrip('*'):line.split()[0] for line in (wheels[name].parent/'SHA256SUMS').read_text().splitlines() if line.strip()}
-              assert hashlib.sha256(wheels[name].read_bytes()).hexdigest()==entries[wheels[name].name]
+              if not (hashlib.sha256(wheels[name].read_bytes()).hexdigest()==entries[wheels[name].name]):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
           inventory={name:{'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for name,path in wheels.items()}
           (root/'evidence/input-wheels.json').write_text(json.dumps(inventory,indent=2)+'\n')
           with open(os.environ['GITHUB_ENV'],'a') as output:
@@ -169,7 +194,7 @@ jobs:
           path: ${{ runner.temp }}/weft-abi12-probe
           if-no-files-found: warn
   temporal-scalar-probe:
-    if: ${{ inputs.temporal_scalar_probe && !inputs.weft_abi12_probe && !inputs.temporal_native_probe }}
+    if: ${{ inputs.temporal_scalar_probe && !inputs.released_runtime_probe && !inputs.temporal_candidate_probe && !inputs.weft_abi12_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -218,7 +243,7 @@ jobs:
             ${{ runner.temp }}/temporal-scalar-probe/evidence
           if-no-files-found: warn
   temporal-native-probe:
-    if: ${{ inputs.temporal_native_probe && !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe }}
+    if: ${{ inputs.temporal_native_probe && !inputs.released_runtime_probe && !inputs.temporal_candidate_probe && !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -278,4 +303,136 @@ jobs:
             ${{ runner.temp }}/temporal-native-probe/inputs
             ${{ runner.temp }}/temporal-native-probe/evidence
             docs/helix/04-build/evidence/design-audit/temporal-enrollment-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+
+  temporal-candidate:
+    if: ${{ inputs.temporal_candidate_probe }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    permissions:
+      contents: read
+      actions: read
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      TN_PHASE: ${{ inputs.temporal_candidate_phase }}
+      TN_INPUT_REPOSITORY: ${{ inputs.temporal_input_repository }}
+      TN_INPUT_ARTIFACT_ID: ${{ inputs.temporal_input_artifact_id }}
+      TN_INPUT_ARTIFACT_SHA256: ${{ inputs.temporal_input_artifact_sha256 }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refuse unselected, mixed or deferred candidate inputs before provisioning
+        env:
+          TN_SELECTED: ${{ inputs.temporal_candidate_probe }}
+          TN_RELEASED: ${{ inputs.released_runtime_probe }}
+          TN_WEFT: ${{ inputs.weft_abi12_probe }}
+          TN_SCALAR: ${{ inputs.temporal_scalar_probe }}
+          TN_NATIVE: ${{ inputs.temporal_native_probe }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          import importlib.util,json,os,re
+          spec=importlib.util.spec_from_file_location('hosted','scripts/prepare-temporal-hosted-input.py')
+          module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+          module.validate_selector(json.loads(os.environ['TN_SELECTED']),os.environ['TN_PHASE'],
+            [json.loads(os.environ[k]) for k in ('TN_RELEASED','TN_WEFT','TN_SCALAR','TN_NATIVE')])
+          module.digest(os.environ['TN_INPUT_ARTIFACT_SHA256'])
+          if not (re.fullmatch('[1-9][0-9]{0,19}',os.environ['TN_INPUT_ARTIFACT_ID'])):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (os.environ['TN_INPUT_REPOSITORY'] in ('DocumentDrivenDX/truss','DocumentDrivenDX/umf','DocumentDrivenDX/weft')):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          PYCODE
+          TN_ROOT="$RUNNER_TEMP/temporal-candidate"
+          mkdir -p "$TN_ROOT/evidence"
+          echo "TN_ROOT=$TN_ROOT" >> "$GITHUB_ENV"
+      - name: Fetch retained actual input bytes and verify complete source-bound manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/$TN_INPUT_REPOSITORY/actions/artifacts/$TN_INPUT_ARTIFACT_ID/zip" > "$TN_ROOT/input.zip"
+          python scripts/prepare-temporal-hosted-input.py --archive "$TN_ROOT/input.zip"             --sha256 "$TN_INPUT_ARTIFACT_SHA256" --phase "$TN_PHASE" --output "$TN_ROOT/inputs"             > "$TN_ROOT/evidence/verified-input.json"
+          python - <<'PYCODE'
+          import json,os,pathlib
+          selected=json.loads((pathlib.Path(os.environ['TN_ROOT'])/'inputs/verified-input.json').read_bytes())
+          with open(os.environ['GITHUB_ENV'],'a') as output:
+            for key,value in (('TN_CAPTURE_WHEEL',selected['candidateWheel']),('TN_CAPTURE_WHEEL_SHA256',selected['candidateWheelSha256']),('TN_ADMISSION',selected.get('admission',''))):
+              output.write(key+'='+value+'\n')
+          PYCODE
+      - name: Install one fresh candidate environment through the normal resolver
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv "$TN_ROOT/candidate-env"
+          "$TN_ROOT/candidate-env/bin/python" -m pip install --no-index --only-binary=:all:             --find-links "$TN_ROOT/inputs/wheelhouse" "$TN_CAPTURE_WHEEL[local,native,query,typed-sdk]" pg8000==1.31.5             2>&1 | tee "$TN_ROOT/evidence/candidate-install.log"
+          "$TN_ROOT/candidate-env/bin/python" -m pip check 2>&1 | tee "$TN_ROOT/evidence/pip-check.log"
+          "$TN_ROOT/candidate-env/bin/python" -m pip freeze > "$TN_ROOT/evidence/freeze.txt"
+          env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/prepare-temporal-hosted-input.py             --verify-installed "$TN_ROOT/inputs" > "$TN_ROOT/evidence/actual-owner-identities.json"
+      - name: Capture exactly two serial actual initializers (inventory only)
+        if: ${{ inputs.temporal_candidate_phase == 'inventory' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TN_CAPTURE_ROOT="$GITHUB_WORKSPACE/docs/helix/04-build/evidence/design-audit/temporal-candidate-inventory"
+          for zone in UTC America/New_York; do
+            if [ "$zone" = UTC ]; then label=utc; else label=new-york; fi
+            env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/capture-temporal-native-inventory.py               --candidate-wheel "$TN_CAPTURE_WHEEL" --wheel-sha256 "$TN_CAPTURE_WHEEL_SHA256"               --evidence-root "$TN_CAPTURE_ROOT" --initialization-time-zone "$zone" --output "$TN_CAPTURE_ROOT/$label"               2>&1 | tee "$TN_ROOT/evidence/inventory-$label.log"
+          done
+          python - <<'PYCODE'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['GITHUB_WORKSPACE'])/'docs/helix/04-build/evidence/design-audit/temporal-candidate-inventory'
+          records=[json.loads((root/label/'receipt.json').read_bytes()) for label in ('utc','new-york')]
+          if not (len(records)==2 and {r['initializationTimeZone'] for r in records}=={'UTC','America/New_York'}):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (all(r['passed'] is True and r['cleanupConfirmed'] is True for r in records)):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (records[0]['sourceCommit']==records[1]['sourceCommit']==os.environ['GITHUB_SHA']):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (records[0]['sourceTree']==records[1]['sourceTree']):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (records[0]['runtimeManifestSha256']==records[1]['runtimeManifestSha256']):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (records[0]['nonMigrationPackageFiles']==records[1]['nonMigrationPackageFiles']):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          pins=[{'path':str(root/label/'receipt.json'),'sha256':hashlib.sha256((root/label/'receipt.json').read_bytes()).hexdigest()} for label in ('utc','new-york')]
+          output=pathlib.Path(os.environ['TN_ROOT'])/'evidence'
+          (output/'actual-capture-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
+          (output/'inventory-result.json').write_text(json.dumps({'scope':'Two serial raw initializer inventory observations only; NOT119case qualification or baseline approval','expectedCaptures':2,'actualCaptures':2,'passed':True,'captures':records},indent=2)+'\n')
+          PYCODE
+      - name: Prepare the separate immutable public54 fixture environment
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path(os.environ['TN_ROOT'])/'inputs'
+          admission=json.loads(pathlib.Path(os.environ['TN_ADMISSION']).read_bytes())
+          wheel=pathlib.Path(admission['public054Wheel'])
+          if not (wheel.resolve().is_relative_to(root.resolve())):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (hashlib.sha256(wheel.read_bytes()).hexdigest()=='4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52'):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          if not (admission['public054Python']==str(pathlib.Path(os.environ['TN_ROOT'])/'public054-env/bin/python')):raise ValueError('Actual admitted selector, inventory or fixture identity differs')
+          with open(os.environ['GITHUB_ENV'],'a') as output:output.write('TN_PUBLIC054_WHEEL='+str(wheel)+'\n')
+          PYCODE
+          python -m venv "$TN_ROOT/public054-env"
+          "$TN_ROOT/public054-env/bin/python" -m pip install --no-index --only-binary=:all:             --find-links "$TN_ROOT/inputs/wheelhouse" "$TN_PUBLIC054_WHEEL[local,native]"             2>&1 | tee "$TN_ROOT/evidence/public054-install.log"
+          "$TN_ROOT/public054-env/bin/python" -m pip check > "$TN_ROOT/evidence/public054-pip-check.log"
+      - name: Execute only the reviewed exact119 campaign after genuine final admission
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/qualify-temporal-native.py             --execute --admission "$TN_ADMISSION" --output "$TN_ROOT/evidence/campaign"             2>&1 | tee "$TN_ROOT/evidence/campaign.log"
+      - name: Always retain inputs, raw observations, failures and cleanup
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: temporal-candidate-${{ inputs.temporal_candidate_phase }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/temporal-candidate
+            docs/helix/04-build/evidence/design-audit/temporal-candidate-*
+            /tmp/truss-nw-*
+            /tmp/truss-temporal-init-*
+            /tmp/truss-current-baseline-*
+            /tmp/truss-temporal-public054-refusal-*
+            /tmp/truss-public-catalog-*
           if-no-files-found: warn
