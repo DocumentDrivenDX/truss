@@ -1,0 +1,86 @@
+name: Retain owned temporal input carrier
+on:
+  workflow_dispatch:
+    inputs:
+      retain_only:
+        description: Retain exact owned unpublished carrier bytes only, no intake or qualification
+        type: boolean
+        default: false
+      carrier_release_id:
+        type: string
+        required: true
+      bundle_asset_id:
+        type: string
+        required: true
+      manifest_asset_id:
+        type: string
+        required: true
+      bundle_sha256:
+        type: string
+        required: true
+      bundle_size:
+        type: string
+        required: true
+      manifest_sha256:
+        type: string
+        required: true
+      manifest_size:
+        type: string
+        required: true
+      ownership_marker:
+        type: string
+        required: true
+permissions:
+  contents: read
+jobs:
+  retain-only:
+    if: inputs.retain_only == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate exact owned carrier and retain original17 entries
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TN_RELEASE_ID: ${{ inputs.carrier_release_id }}
+          TN_BUNDLE_ASSET_ID: ${{ inputs.bundle_asset_id }}
+          TN_MANIFEST_ASSET_ID: ${{ inputs.manifest_asset_id }}
+          TN_BUNDLE_SHA256: ${{ inputs.bundle_sha256 }}
+          TN_BUNDLE_SIZE: ${{ inputs.bundle_size }}
+          TN_MANIFEST_SHA256: ${{ inputs.manifest_sha256 }}
+          TN_MANIFEST_SIZE: ${{ inputs.manifest_size }}
+          TN_OWNERSHIP_MARKER: ${{ inputs.ownership_marker }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python scripts/retain-temporal-carrier-input.py
+      - name: Retain extracted original contents at artifact root
+        id: retained
+        uses: actions/upload-artifact@v4
+        with:
+          name: reviewed-temporal-component-input-${{ github.sha }}
+          path: ${{ runner.temp }}/temporal-input-retained/
+          if-no-files-found: error
+          compression-level: 0
+      - name: Record returned Actions transport identity separately
+        env:
+          ARTIFACT_ID: ${{ steps.retained.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.retained.outputs.artifact-digest }}
+          ARTIFACT_URL: ${{ steps.retained.outputs.artifact-url }}
+        run: |
+          python - <<'PYCODE'
+          import json,os,pathlib
+          pathlib.Path(os.environ['RUNNER_TEMP'],'carrier-proof','actions-upload-result.json').write_text(json.dumps({k:os.environ[k] for k in ('ARTIFACT_ID','ARTIFACT_DIGEST','ARTIFACT_URL','GITHUB_SHA','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT','GITHUB_JOB')},indent=2)+'\n')
+          PYCODE
+      - name: Always retain transport metadata and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: temporal-carrier-transport-proof-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/carrier-proof/*.json
+          if-no-files-found: warn
