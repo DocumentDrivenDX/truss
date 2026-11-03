@@ -296,6 +296,21 @@ class OwnedImportInput(_Carrier):
     )
 
 
+def _validate_object_payload(
+    values: tuple[AuthoredValue | OrdinaryAuthoredValue, ...],
+    source: MapValue | None,
+    root: ObjectKeySelection | None = None,
+) -> None:
+    if type(values) is not tuple or any(
+        type(value) not in (AuthoredValue, OrdinaryAuthoredValue) for value in values
+    ):
+        raise ValueError("Exact tuple of authored value DTOs required")
+    if source is not None and type(source) is not MapValue:
+        raise ValueError("Exact source MapValue required")
+    if root is not None and type(root) is not ObjectKeySelection:
+        raise ValueError("Exact root ObjectKeySelection required")
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ImportRuntimeContext(_Carrier):
     layout_profile: ProfilePin
@@ -315,6 +330,7 @@ class ImportRuntimeContext(_Carrier):
 
     def object_payload(self, values: tuple[AuthoredValue | OrdinaryAuthoredValue, ...], *,
                        source: MapValue | None = None) -> ExactArtifact:
+        _validate_object_payload(values, source)
         value = {"interfaceVersion": "truss-import-temporal-payload/0.1.0",
                  "kind": "object", "values": _wire(values), "ownership": {"state": "rootless"}}
         if source is not None:
@@ -342,6 +358,7 @@ class OwnedImportRuntimeContext(_Carrier):
     def object_payload(self, values: tuple[AuthoredValue | OrdinaryAuthoredValue, ...], *,
                        root: ObjectKeySelection | None = None,
                        source: MapValue | None = None) -> ExactArtifact:
+        _validate_object_payload(values, source, root)
         ownership = {"state": "rootless"} if root is None else {"state": "owned", "root": _wire(root)}
         value = {"interfaceVersion": "truss-owned-import-temporal-payload/0.1.0",
                  "kind": "object", "values": _wire(values), "ownership": ownership}

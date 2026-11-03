@@ -6,7 +6,7 @@ import json
 import sys
 from types import ModuleType
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from truss.contracts import (
     LocalTimestampValue,
@@ -14,8 +14,10 @@ from truss.contracts import (
     MapValue,
     NullValue,
     ObjectKeyComponent,
+    ObjectKeySelection,
     ProfilePin,
     QualifiedOwner,
+    ReadTypeReference,
     SequenceValue,
     TextValue,
     TypedIdentity,
@@ -242,6 +244,109 @@ class TemporalPublicValueTests(unittest.TestCase):
         )
         owned_wire = json.loads(base64.b64decode(owned.object_payload((authored,)).bytes_base64))
         self.assertEqual(owned_wire["interfaceVersion"], "truss-owned-import-temporal-payload/0.1.0")
+
+    def _payload_contexts(self):
+        fields = dict(
+            layout_profile=self.profile, import_profile=self.profile, value_profile=self.profile,
+            payload_profile=self.profile,
+            catalog=ImportCatalogPin(revision="4", model_bundle_sha256="d" * 64),
+            query_abi=self.profile, release_id="release", release_sha256="c" * 64,
+        )
+        return ImportRuntimeContext(**fields), OwnedImportRuntimeContext(**fields)
+
+    def _payload_root(self, cls=ObjectKeySelection):
+        return cls(
+            type=ReadTypeReference(type_id="3", definition_pin="type-pin",
+                owner=QualifiedOwner(document_id="doc", module_id="module")),
+            key_number="1", key_definition_pin="key-pin", key_encoding_profile=self.profile,
+            components=(ObjectKeyComponent(property_id="id", definition_pin="id-pin",
+                value=TextValue(kind="string", text="key")),),
+        )
+
+    def test_payload_values_and_source_refuse_substitutes_before_serialization(self):
+        class AuthoredSubclass(AuthoredValue):
+            pass
+
+        class OrdinaryAuthoredSubclass(OrdinaryAuthoredValue):
+            pass
+
+        class TupleSubclass(tuple):
+            pass
+
+        class MapSubclass(MapValue):
+            pass
+
+        authored = AuthoredValue(name="seen_at", value=self.local)
+        invalid_values = (
+            {"name": "seen_at", "value": self.local},
+            [authored], TupleSubclass((authored,)), self.local,
+            ({"name": "seen_at", "value": self.local},), ([authored],), (self.local,),
+            (AuthoredSubclass(name="seen_at", value=self.local),),
+            (OrdinaryAuthoredSubclass(name="nullable", value=NullValue()),),
+        )
+        invalid_sources = ({}, [], self.local, MapSubclass(entries=()))
+        for context in self._payload_contexts():
+            cases = [("values", value, None) for value in invalid_values]
+            cases += [("source", (authored,), source) for source in invalid_sources]
+            for boundary, values, source in cases:
+                with self.subTest(context=type(context).__name__, boundary=boundary,
+                                  candidate=type(values if boundary == "values" else source).__name__):
+                    with patch("truss.temporal._wire") as wire, \
+                         patch("truss.temporal._bytes") as encode, \
+                         patch("truss.temporal._artifact") as artifact:
+                        with self.assertRaises(ValueError):
+                            context.object_payload(values, source=source)
+                        wire.assert_not_called()
+                        encode.assert_not_called()
+                        artifact.assert_not_called()
+
+    def test_owned_payload_root_refuses_substitutes_before_serialization(self):
+        class RootSubclass(ObjectKeySelection):
+            pass
+
+        _, context = self._payload_contexts()
+        values = (AuthoredValue(name="seen_at", value=self.local),)
+        for root in ({}, [], self.local, MapValue(entries=()), self._payload_root(RootSubclass)):
+            with self.subTest(root=type(root).__name__):
+                with patch("truss.temporal._wire") as wire, \
+                     patch("truss.temporal._bytes") as encode, \
+                     patch("truss.temporal._artifact") as artifact:
+                    with self.assertRaises(ValueError):
+                        context.object_payload(values, root=root)
+                    wire.assert_not_called()
+                    encode.assert_not_called()
+                    artifact.assert_not_called()
+
+    def test_payload_builders_preserve_valid_mixed_values_source_and_root(self):
+        source = MapValue(entries=(MapEntry(key="original",
+            value=TextValue(kind="string", text="unchanged source")),))
+        values = (
+            AuthoredValue(name="seen_at", value=self.local),
+            OrdinaryAuthoredValue(name="nullable", value=NullValue()),
+            AuthoredValue(name="items", value=SequenceValue(items=(NullValue(),))),
+            OrdinaryAuthoredValue(name="empty_map", value=MapValue(entries=())),
+        )
+        for context in self._payload_contexts():
+            with self.subTest(context=type(context).__name__):
+                kwargs = {"source": source}
+                if type(context) is OwnedImportRuntimeContext:
+                    kwargs["root"] = self._payload_root()
+                artifact = context.object_payload(values, **kwargs)
+                wire = json.loads(base64.b64decode(artifact.bytes_base64))
+                self.assertEqual(wire["values"], [
+                    {"name": "seen_at", "value": {"kind": "localTimestamp", "text": self.local.text}},
+                    {"name": "nullable", "value": {"kind": "null"}},
+                    {"name": "items", "value": {"kind": "sequence", "items": [{"kind": "null"}]}},
+                    {"name": "empty_map", "value": {"kind": "map", "entries": []}},
+                ])
+                self.assertEqual(wire["source"], {"kind": "map", "entries": [
+                    {"key": "original", "value": {"kind": "string", "text": "unchanged source"}},
+                ]})
+                if type(context) is OwnedImportRuntimeContext:
+                    self.assertEqual(wire["ownership"]["state"], "owned")
+                    self.assertEqual(wire["ownership"]["root"]["operation"], "object_key")
+                else:
+                    self.assertEqual(wire["ownership"], {"state": "rootless"})
 
     def test_temporal_edge_values_are_not_admitted_by_edge_dto(self):
         with self.assertRaises(ValueError):
