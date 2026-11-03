@@ -230,6 +230,12 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
               maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None, engine_program=None, capture_catalog=False,
               read_catalog=False,catalog_validator=None,entity_projection=None):
+    if engine_program is not None:
+        from ._temporal_query_execution import selected
+        if selected(engine_program):
+            # The selected SDK executor owns temporal checker/native custody.
+            # Ordinary query/page entrypoints never retry this with ABI1.2.
+            return Ok(QueryRefused(code='unsupported_query'))
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)

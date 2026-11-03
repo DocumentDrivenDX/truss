@@ -27,11 +27,12 @@ class TemporalEnrollmentNativeTests(fixture.TemporalNativeFixture):
         self.assertEqual(self.admin.execute('SELECT truss.runtime_temporal_profiles()').fetchone()[0],profiles())
         declarations=[entry for entry in person_entrypoints() if entry['name'] in (
             'query_temporal_binding','query_temporal_objects','query_temporal_page_objects',
+            'query_temporal_cursor_encode','query_temporal_cursor_decode',
             'temporal_group_context','apply_temporal_group','apply_temporal_group_prepared',
             'get_temporal_object','lookup_temporal_key','page_temporal_objects',
             'temporal_import_context','temporal_import_key_selection','temporal_import_object_identity',
             'recover_temporal_group_request','temporal_writer_schema_basis','temporal_scope')]
-        self.assertEqual(len(declarations),15)
+        self.assertEqual(len(declarations),17)
         observed=[]
         for entry in declarations:
             for name in (entry['name'],'person_'+entry['name']):

@@ -72,11 +72,13 @@
     "query-temporal-abi.json": "0ecf5aa206dfcfcba21581fc328d7d073b48dbc8b61b2fc199278cf5f3e31b0b",
     "query-temporal-sources.sql": "ce4695bb5c521d1ab426793fa5214968011a70a8a1733dd2064f3fe66000bcd2",
     "query-temporal-entrypoints.sql": "b630f42b873695b630f1718783f4bcf2fc151eef8b52ed6c3c72a63d6950126e",
-    "temporal-person-entrypoints.json": "d43337f862ebc27f78e00cbab3df2f59a45aed1facadc5acd3dbd08ee79fae8f",
+    "temporal-person-entrypoints.json": "b696f874f2bb4161b4933a56773b6026ae35d4d22ca1477e62967765763df82d",
     "temporal-profiles.sql": "432eb642c659a4650f21f172e5487ce934d1452c52850870a1ea27c494028887",
     "temporal-profiles.json": "a25c0da62b23b9e47a2e4ee262de0559ce4b11b40954584781fe86195e881da1",
     "temporal-values.sql": "f837e405e6d2daad0f2b8e0b52a925efd22386c3fa69917abd1b736b5cc5c1e2",
-    "temporal-values-entrypoints.sql": "3388192b5055b4ca71d3142cf1889dc4b007d4300d6f10ff2faf37eff40174af"
+    "temporal-values-entrypoints.sql": "3388192b5055b4ca71d3142cf1889dc4b007d4300d6f10ff2faf37eff40174af",
+    "../_temporal_owner/source.json": "2b6b91ef7706973b835929fb135b811efba7471f4771754752fcb32822d4df5a",
+    "query-temporal-cursor.sql": "29be4de2d22cbf3c7ca97cbf927ac7a7f1cd3e62d30f7463aa2bd1e5cd3ba77e"
   },
   "version": "0.76"
 }

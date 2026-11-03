@@ -151,6 +151,26 @@
       "result": "void",
       "set": false,
       "volatility": "v"
+    },
+    {
+      "name": "query_temporal_cursor_encode",
+      "publicName": "person_query_temporal_cursor_encode",
+      "signature": "truss.query_temporal_cursor_encode(jsonb,bytea,text,jsonb)",
+      "arguments": "binding jsonb,original_context bytea,original_after text,sort_kinds jsonb",
+      "mode": "read",
+      "result": "TABLE(cursor_bytes bytea, after_json text)",
+      "set": true,
+      "volatility": "v"
+    },
+    {
+      "name": "query_temporal_cursor_decode",
+      "publicName": "person_query_temporal_cursor_decode",
+      "signature": "truss.query_temporal_cursor_decode(jsonb,bytea,bytea)",
+      "arguments": "binding jsonb,original_context bytea,original_cursor bytea",
+      "mode": "read",
+      "result": "text",
+      "set": false,
+      "volatility": "v"
     }
   ]
 }

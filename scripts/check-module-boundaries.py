@@ -26,7 +26,7 @@ ALLOWED = {
     # Isolated owner delivery and framing only; no SQL, host custody or native admission.
     '_embedded': {'functools','hashlib','importlib.resources','importlib.metadata','json','gzip','struct','subprocess','threading','time','py_mini_racer','truss._embedded_release','truss._current_query_pipe','truss._current_disclosure_pipe'},
     '_embedded_release': set(),
-    "access": {"base64","truss.contracts","umf_access.types","umf_access.dsl","umf_access.related_keys","truss.query_stream","hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
+    "access": {"truss._temporal_query_values","truss._temporal_query_execution","truss.catalog_runtime","base64","truss.contracts","umf_access.types","umf_access.dsl","umf_access.related_keys","truss.query_stream","hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
     # Explicit registered action composition; public native groups and owned psycopg lifecycle only.
     'action_transport': {'time','__future__','dataclasses','enum','hashlib','inspect','json','collections.abc','types','typing','truss.groups','psycopg','truss.psycopg_host','truss.execution'},
     # Original-context/native correspondence data only; no witness admission.
@@ -85,12 +85,16 @@ ALLOWED = {
     '_temporal_values': {'truss.contracts','truss._record_schema'},
     '_temporal_runtime': {'truss.imports','collections.abc','truss.execution','truss._temporal_owner','truss._temporal_group','truss._temporal_import','truss._temporal_read','truss._group_runtime'},
     'temporal': {'__future__','dataclasses','typing','truss.contracts','truss.groups','truss.execution','truss.preparation','truss.catalog_results','truss.history','truss.imports','truss.object_read','truss._group_runtime','truss._temporal_runtime'},
+    '_temporal_program_custody': {'truss._owner_evidence_json'},
+    '_temporal_compiler': {'hashlib','importlib','importlib.resources','pathlib','truss._owner_evidence_json','truss.catalog_runtime','weft','weft.weft'},
+    '_temporal_query_values': {'truss.contracts','truss.query','truss._query_runtime','truss._owner_evidence_json','datetime','umf_access.types','umf_access.values','truss._temporal_query_execution'},
+    '_temporal_query_execution': {'collections.abc','hashlib','json','truss.execution','truss.query','truss.contracts','truss._query_runtime','truss._owner_evidence_json','truss._temporal_compiler','truss._temporal_profiles','truss._temporal_query_runtime','truss._temporal_query_values','umf_access.native_program','umf_access.values','truss._temporal_program_custody','psycopg','psycopg.rows','truss.psycopg_host'},
     '_temporal_query_runtime': {'collections.abc','decimal','hashlib','json','truss.execution','truss.query','truss._owner_evidence_json','truss._temporal_profiles'},
     '_temporal_read': {'json','truss.contracts','truss.execution','truss.object_read','truss._temporal_profiles','truss._temporal_values','truss.temporal','truss.groups','truss._group_runtime','truss._owner_evidence_json','truss.catalog_runtime','truss.history'},
     '_temporal_import': {'json','truss.contracts','truss.imports','truss.execution','truss._temporal_profiles','truss.temporal','truss.catalog_runtime','truss.groups','truss._import_runtime','truss._owned_import_runtime','truss._group_runtime'},
     '_temporal_profiles': {'hashlib','importlib.resources','json'},
     '_temporal_group': {'json','truss.contracts','truss.execution','truss.groups','truss._temporal_profiles','truss.catalog_runtime','truss.temporal','truss._group_runtime','truss._preview_runtime'},
-    '_temporal_owner': {'hashlib','importlib','importlib.resources','json','truss.preparation','truss.catalog_preparation','truss._owner_evidence_json','truss._temporal_preparation','truss.catalog_runtime','umf.rust_codegen','umf'},
+    '_temporal_owner': {'pathlib','sys','umf._rust','hashlib','importlib','importlib.resources','json','truss.preparation','truss.catalog_preparation','truss._owner_evidence_json','truss._temporal_preparation','truss.catalog_runtime','umf.rust_codegen','umf'},
     '_security_preparation_authority': {'dataclasses','hashlib','importlib.resources','uuid','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_security_catalog_read_cut_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_security_catalog_subject_helpers': {'json'},
@@ -112,7 +116,7 @@ ALLOWED = {
     '_query_stream_runtime': {'time','decimal','dataclasses','hashlib','json','uuid','weakref','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query','truss.query_stream','truss._query_runtime'},
     # Pure bounded compiler-result reuse; native scope remains in query execution.
     '_query_cache': {'collections','json','sys','threading'},
-    '_query_runtime': {'truss.reader_catalog','truss._query_cache','base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
+    '_query_runtime': {'truss._temporal_query_execution','truss.reader_catalog','truss._query_cache','base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._core10_catalog_release','subprocess','time'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     # Group preparation decodes the shared catalog reference contract; no catalog runtime dependency.

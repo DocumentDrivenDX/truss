@@ -40,5 +40,9 @@ class TemporalCandidateSourceTests(unittest.TestCase):
                   'apply_temporal_group','apply_temporal_group_prepared','temporal_import_context','temporal_import_key_selection',
                   'temporal_import_object_identity','temporal_writer_schema_basis','get_temporal_object','page_temporal_objects'}
         self.assertTrue(required<={e['name'] for e in temporal})
-        self.assertEqual({e['name']: e['volatility'] for e in temporal if e['name'].startswith('query_temporal_')}, {
+        self.assertEqual({e['name']: e['volatility'] for e in temporal if e['name'] in (
+            'query_temporal_binding','query_temporal_objects','query_temporal_page_objects')}, {
             'query_temporal_binding': 'v', 'query_temporal_objects': 's', 'query_temporal_page_objects': 's'})
+        self.assertEqual({e['name']:e['volatility'] for e in temporal if e['name'] in (
+            'query_temporal_cursor_encode','query_temporal_cursor_decode')}, {
+            'query_temporal_cursor_encode':'v','query_temporal_cursor_decode':'v'})
