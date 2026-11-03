@@ -48,7 +48,7 @@ BEGIN
    OR packet->>'resultSha256' IS DISTINCT FROM encode(sha256(convert_to(packet->>'resultJson','UTF8')),'hex') THEN
    RAISE EXCEPTION 'original temporal source and owner result digests required' USING ERRCODE='22023';END IF;
   IF packet->'ownerProfile' IS NULL OR jsonb_typeof(packet->'ownerProfile') IS DISTINCT FROM 'object'
-   OR packet->'ownerProfile'-ARRAY['identity','version','sha256']<>'{}'::jsonb
+   OR (packet->'ownerProfile')-ARRAY['identity','version','sha256']<>'{}'::jsonb
    OR jsonb_typeof(packet->'ownerProfile'->'identity') IS DISTINCT FROM 'string'
    OR jsonb_typeof(packet->'ownerProfile'->'version') IS DISTINCT FROM 'string'
    OR (packet->'ownerProfile'->>'sha256' ~ '^[0-9a-f]{64}$') IS NOT TRUE
@@ -92,7 +92,7 @@ BEGIN
       RAISE EXCEPTION 'temporal Key fields are outside selected profile' USING ERRCODE='0A000';END IF;
      authored_view:=truss.catalog_temporal_pointer(source,field_view->>'viewPointer');
      IF authored_view->'field' IS DISTINCT FROM field_view->'ref' OR authored_view->'row' IS DISTINCT FROM field_view->'row'
-      OR jsonb_typeof(field_view->'row') IS DISTINCT FROM 'object' OR field_view->'row'-ARRAY['missing','null']<>'{}'::jsonb
+      OR jsonb_typeof(field_view->'row') IS DISTINCT FROM 'object' OR (field_view->'row')-ARRAY['missing','null']<>'{}'::jsonb
       OR jsonb_typeof(field_view->'row'->'missing') IS DISTINCT FROM 'boolean' OR jsonb_typeof(field_view->'row'->'null') IS DISTINCT FROM 'boolean' THEN
       RAISE EXCEPTION 'original temporal FieldView presence required' USING ERRCODE='22023';END IF;
     END IF;

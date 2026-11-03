@@ -58,7 +58,7 @@ BEGIN
   IF NOT FOUND OR property.scalar_type IS DISTINCT FROM CASE kind WHEN 'local' THEN 'localTimestamp' WHEN 'instant' THEN 'timestamp' ELSE 'date' END
    OR property.cardinality IS DISTINCT FROM 'one' OR coalesce(property.facets,'{}')<>'{}'::jsonb
    OR jsonb_typeof(owner_field->'row') IS DISTINCT FROM 'object'
-   OR owner_field->'row'-ARRAY['missing','null']<>'{}'::jsonb
+   OR (owner_field->'row')-ARRAY['missing','null']<>'{}'::jsonb
    OR jsonb_typeof(owner_field->'row'->'missing') IS DISTINCT FROM 'boolean'
    OR jsonb_typeof(owner_field->'row'->'null') IS DISTINCT FROM 'boolean' THEN
    RAISE EXCEPTION 'original temporal family and row presence required' USING ERRCODE='22023';END IF;
