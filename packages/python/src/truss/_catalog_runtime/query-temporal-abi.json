@@ -1,0 +1,72 @@
+{
+  "interfaceVersion": "truss-query-abi-descriptor/0.1",
+  "identity": "truss-postgresql-logical-query",
+  "version": "1.3",
+  "postgresVersion": "180006",
+  "bindingInterfaceVersion": "truss-runtime-binding/0.5",
+  "schema": "truss",
+  "functions": [
+    {
+      "signature": "truss.person_query_temporal_binding(jsonb,int,int,int,text,text)",
+      "returns": "bytea",
+      "volatility": "volatile"
+    },
+    {
+      "signature": "truss.person_query_temporal_objects(jsonb,int,jsonb)",
+      "returns": [
+        [
+          "id",
+          "bigint"
+        ],
+        [
+          "props",
+          "jsonb"
+        ]
+      ],
+      "volatility": "stable"
+    },
+    {
+      "signature": "truss.person_query_temporal_page_objects(jsonb,int,text,jsonb)",
+      "returns": [
+        [
+          "id",
+          "bigint"
+        ],
+        [
+          "props",
+          "jsonb"
+        ]
+      ],
+      "volatility": "stable"
+    },
+    {
+      "signature": "truss.query_temporal_canonical_text(text,text)",
+      "returns": "text",
+      "volatility": "immutable",
+      "security": "invoker"
+    }
+  ],
+  "sourceValues": {
+    "guard": "truss.temporal-source-guard/0.2",
+    "kinds": [
+      "date",
+      "instant",
+      "local"
+    ],
+    "canonicalWidths": {
+      "date": 10,
+      "instant": 27,
+      "local": 26
+    },
+    "localCell": "localTimestamp",
+    "source": "complete original bounded selected record; all temporal members validated in owner member order before first result; raw cell text retained",
+    "comparison": "strict CONTRACT075 canonical tokens under C collation"
+  },
+  "execution": {
+    "snapshot": "STABLE public and private data sources; one caller statement snapshot including own pending writes under READ COMMITTED; full PL/pgSQL tuplestore before caller predicates",
+    "authority": "original enrolled person and original private owner/EXECUTE checked by person shims; current document/module/root authority and final scope rechecked; no privileged caller substitution",
+    "limits": "captured scan/byte limits apply to complete selected source and root witnesses; overflow refuses whole source",
+    "selectedKey": "exact captured authored Key and actual native key_id; required non-null string components only; no seek/filter pushdown",
+    "installation": "fresh native0.76 only; ordinary query_abi1.2 unchanged"
+  }
+}

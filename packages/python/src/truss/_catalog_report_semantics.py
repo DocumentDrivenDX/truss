@@ -59,7 +59,8 @@ def compose_original_catalog_report_semantics(prepared,support):
             if d.document.document_id==document['documentId']),
             'interpretationProfile':document['umfProfile'],'supportedSubset':support['supportedSubset']}
         if membership not in memberships:memberships.append(membership)
-    return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/2.0',
+    temporal=support['registrationSummary']['interfaceVersion']=='truss-registration-preparation/2.1'
+    return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/2.1' if temporal else 'truss-registration-summary/2.0',
         'umf':memberships,'documentValidations':support['registrationSummary']['documents']}
 
 

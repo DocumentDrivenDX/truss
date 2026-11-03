@@ -128,6 +128,10 @@ def _temporal_declarations(document, packet):
             presence = field['row']
             if type(presence) is not dict or set(presence) != {'missing', 'null'} or any(type(v) is not bool for v in presence.values()):
                 raise ValueError('Original owner row presence required')
+            kind = 'date' if field.get('scalarType')=='date' else field.get('temporal')
+            if kind in ('date','instant','local') and (original.get('cardinality')!='one'
+                    or original.get('facets',{})!={} or 'allowedValues' in original or 'default' in original):
+                raise ValueError('Selected temporal scalar refinements are outside profile')
             if field.get('temporal') != 'local':
                 continue
             view = _pointer(source, field['viewPointer'])

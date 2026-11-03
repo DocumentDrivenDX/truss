@@ -105,6 +105,11 @@ class TemporalPreparationCustodyTests(unittest.TestCase):
             result_bytes=json.dumps(case['result'], ensure_ascii=True).encode())
         temporal = retain_temporal_preparation(ordinary, (packet,))
         self.assertEqual(temporal.input()['supportProfile'], support_profile())
+        from truss._catalog_support import evaluate_catalog_support
+        from truss._catalog_report_semantics import compose_original_catalog_report_semantics
+        support=evaluate_catalog_support(temporal)
+        self.assertEqual(support['state'],'evaluated')
+        self.assertEqual(compose_original_catalog_report_semantics(temporal,support)['sourceFormat'],'truss-registration-summary/2.1')
         self.assertTrue(compact_catalog_sources(ordinary))
         self.assertFalse(compact_catalog_sources(temporal))
         self.assertEqual(catalog_source_artifact(temporal, document.document_id),

@@ -43,7 +43,7 @@ BEGIN
   RAISE EXCEPTION 'catalog authorization requires READ COMMITTED' USING ERRCODE='0A000'; END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF current_setting('truss.runtime_digest',true) IS DISTINCT FROM installation.release_sha256 THEN
-  RAISE EXCEPTION 'latest runtime required; explicitly migrate the installation' USING ERRCODE='0A000'; END IF;
+  RAISE EXCEPTION 'selected fresh runtime required; existing installation tuple is unsupported' USING ERRCODE='0A000'; END IF;
  SELECT oid,rolcanlogin,rolsuper,rolcreaterole,rolcreatedb,rolreplication,rolbypassrls INTO STRICT actor
  FROM pg_roles WHERE rolname=session_user;
  -- Read membership rows under the current snapshot instead of a role cache
@@ -326,7 +326,9 @@ DECLARE input jsonb;documents jsonb;declarations jsonb;
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.2.0' OR jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation())
+ IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.2.0' OR jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents'-'supportProfile') IS DISTINCT FROM (SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())
+  OR (input->'supportProfile' IS DISTINCT FROM (SELECT preparation_configuration->'supportProfile' FROM truss.runtime_current_installation())
+   AND input->'supportProfile' IS DISTINCT FROM truss.catalog_temporal_support_profile())
   OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
@@ -447,14 +449,19 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; assignments text;identity_column text;conflict_columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
  expected_docs jsonb; expected_doc jsonb;
- prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;compact boolean;violations bytea;key_candidates jsonb;verified_keys jsonb;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;compact boolean;temporal boolean;violations bytea;key_candidates jsonb;verified_keys jsonb;
 BEGIN
  IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
- compact:=(convert_from(input_bytes,'UTF8')::jsonb)->>'interfaceVersion'='truss-acceptance-input/0.2.0';
+ temporal:=(convert_from(input_bytes,'UTF8')::jsonb)->'supportProfile' IS NOT DISTINCT FROM truss.catalog_temporal_support_profile();
+ compact:=NOT temporal;
+ IF temporal AND (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' IS DISTINCT FROM 'truss-registration-summary/2.1'
+  OR NOT temporal AND (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' IS DISTINCT FROM 'truss-registration-summary/2.0' THEN
+  RAISE EXCEPTION 'exact temporal support and noncompact summary tuple required' USING ERRCODE='22023';END IF;
  IF compact AND declarations_bytes<>''::bytea THEN RAISE EXCEPTION 'source-only catalog request required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.75-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF temporal THEN PERFORM truss.require_temporal_capability(installation.release_id,installation.release_sha256);END IF;
+ IF installation.release_id<>'truss-catalog-runtime/0.76-temporal-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -491,7 +498,11 @@ BEGIN
     WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(expected_docs) e WHERE e.value->>'documentId'=d.value->>'documentId')) THEN
    RAISE EXCEPTION 'exact submitted document expectation set required' USING ERRCODE='22023';END IF;
  END IF;
- IF compact THEN declarations_bytes:=truss.runtime_owned_catalog_declarations(documents_bytes);END IF;
+ IF compact THEN declarations_bytes:=truss.runtime_owned_catalog_declarations(documents_bytes);
+ ELSE
+  PERFORM truss.catalog_temporal_declarations_valid(convert_from(documents_bytes,'UTF8')::jsonb,convert_from(declarations_bytes,'UTF8')::jsonb,
+   jsonb_build_object('interfaceVersion','truss-registration-preparation/2.1','documents',(convert_from(source_bytes,'UTF8')::jsonb)->'documentValidations'));
+ END IF;
  -- Bound concurrency without an automatic retry loop.
  SELECT rev INTO STRICT prior_revision FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
  prior_expected:=truss.catalog_all_expected_records();
@@ -545,7 +556,7 @@ BEGIN
  END IF;
  -- Ordinary registration keeps one validation summary per original document.
  -- Semantic source/declaration checks and atomic publication remain native.
- IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' ='truss-registration-summary/2.0' THEN
+ IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' IN ('truss-registration-summary/2.0','truss-registration-summary/2.1') THEN
   DECLARE
    summary jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
    original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
@@ -565,7 +576,10 @@ BEGIN
     ddd_known:=((doc->>'originalText')::jsonb->'vocabularies'->'umf.ddd'->>'version')='0.1.0';
     ddd_profile:=validation->'dddProfile';ddd_validation:=validation->'dddValidation';
     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>
-      (CASE WHEN ddd_known THEN 5 ELSE 3 END)
+      (CASE WHEN ddd_known THEN 5 ELSE 3 END)+CASE WHEN temporal THEN 1 ELSE 0 END
+      OR temporal AND (validation->'inspection' IS DISTINCT FROM doc->'validation'->'inspection'
+       OR doc->'validation'->>'storageFormat' IS DISTINCT FROM 'truss-catalog-source/2.1')
+      OR NOT temporal AND (validation ? 'inspection' OR doc->'validation' ? 'inspection')
       OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
       OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
       OR selected_doc->'ingress' IS DISTINCT FROM '{"kind":"native"}'::jsonb

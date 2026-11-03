@@ -371,21 +371,33 @@ def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationsh
     return host._run_operation(transaction,observe, function_call=True)
 
 
-def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None,_schema_state=None):
-    if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
+def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None,_schema_state=None,temporal=False):
+    input_class,request_class=GroupSemanticInput,RequestPresent
+    creates,updates=(CreateObject,),(UpdateObject,)
+    if temporal:
+        from .temporal import GroupSemanticInput as TemporalInput, RequestPresent as TemporalRequest, CreateObject as TemporalCreate, UpdateObject as TemporalUpdate
+        input_class,request_class=TemporalInput,TemporalRequest
+        creates,updates=(CreateObject,TemporalCreate),(UpdateObject,TemporalUpdate)
+    if type(input) is not input_class or type(request) not in (RequestNone,request_class):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
     selected_owned = input.mutation_profile == ProfilePin(identity='truss-owned-scalar-graph',version='0.1',sha256='5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde')
+    if temporal:
+        from ._temporal_profiles import profiles
+        selected=profiles()
+        if (_wire(input.mutation_profile)!=selected['mutationProfile'] or _wire(input.value_profile)!=selected['valueProfile']):
+            return Ok(GroupUnavailable(reason='profile'))
+        selected_owned=True
     def ownership(value):
         return (type(value) is RootlessOwnership or selected_owned and type(value) is OwnedOwnership
                 and type(value.root) in (StoredObjectReference,AliasObjectReference))
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
-        or any(not (type(op) is CreateObject and ownership(op.ownership) or type(op) is UpdateObject and (op.ownership_change is ABSENT or selected_owned and ownership(op.ownership_change)) and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
+        or any(not (type(op) in creates and ownership(op.ownership) or type(op) in updates and (op.ownership_change is ABSENT or selected_owned and ownership(op.ownership_change)) and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
     if type(input.preconditions) is not tuple:
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"preconditions_shape"}'))))
     if (not 1<=len(input.operations)<=(1024 if selected_owned else 128)
         or len(input.preconditions)>(3072 if selected_owned else 128)
-        or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations)):
+        or any(len(op.values if type(op) in creates+(CreateEdge,) else op.set if type(op) in updates+(UpdateEdge,) else ())>1024 for op in input.operations)):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
     def container(value):
@@ -393,6 +405,9 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         while pending:
             member,depth=pending.pop();count+=1
             if depth>32 or count>4096:return False
+            if depth==0 and temporal:
+                from .contracts import LocalTimestampValue
+                if type(member) is LocalTimestampValue:continue
             if scalar(member):continue
             if type(member) is SequenceValue:
                 if type(member.items) is not tuple or len(member.items)>1024:return False
@@ -406,7 +421,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             if count+len(pending)>4096:return False
         return True
     def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not (container(v.value) if type(op) in (CreateObject,UpdateObject) else scalar(v.value)) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
+    if any(not (container(v.value) if type(op) in creates+updates else scalar(v.value)) for op in input.operations for v in (op.values if type(op) in creates+(CreateEdge,) else op.set if type(op) in updates+(UpdateEdge,) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))
@@ -422,17 +437,19 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     def apply(cursor,observed):
         pin_cursor(cursor)
         prepared=None
-        if selected_owned and _schema_state is not None:
+        if selected_owned and _schema_state is not None and not temporal:
             from ._record_preparation import prepare_records
             prepared=prepare_records(cursor,_schema_state,input,original_input,original_documents,manifest['releaseId'],digest)
         if prepared is None:
-            cursor.execute('SELECT truss.person_apply_group(%s,%s,%s,%s,%s)',
+            command='SELECT truss.person_apply_temporal_group(%s,%s,%s,%s,%s)' if temporal else 'SELECT truss.person_apply_group(%s,%s,%s,%s,%s)'
+            cursor.execute(command,
                 (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
         else:
-            cursor.execute('SELECT truss.person_apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)',
+            command='SELECT truss.person_apply_temporal_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)' if temporal else 'SELECT truss.person_apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)'
+            cursor.execute(command,
                 (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(prepared).decode('utf8')),prepare=False)
         raw=bytes(cursor.fetchone()[0])
-        result=_result(raw,request_present=type(request) is RequestPresent)
+        result=_result(raw,request_present=type(request) is request_class)
         if (_attempt_capture is not None and type(result) is GroupSuccess
                 and type(result.response) is AppliedPending):
             decoded=_decode_group_result(raw)
@@ -442,6 +459,8 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return result
     if _cursor is not None:return Ok(apply(_cursor,None))
     result=host._run_operation(transaction,apply, function_call=True)
+    if temporal and isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state in ('42883','3F000'):
+        return Ok(GroupUnavailable(reason='profile'))
     # Revocation can remove EXECUTE before the native facade can return its
     # typed refusal. Only translate a permission failure the host contained;
     # unresolved transaction/connection failures retain their execution outcome.
@@ -487,18 +506,28 @@ def _frame_invalid(code):
     return InvalidGroupInput(diagnostic_profile=_REQUEST_FRAME_DIAGNOSTIC,
         diagnostic=_artifact(_bytes({'code':code})))
 
-def freeze_group_request(input,request,*,documents):
+def freeze_group_request(input,request,*,documents,temporal=False):
     """Pure existing native-wire serialization before Truss state resolution.
 
     This freezes consumed wire inputs, not application-specific lookup semantics.
     Retain the returned immutable frame, including source/request artifacts.
     """
     from .groups import FrozenGroupRequest
-    if (type(input) is not GroupSemanticInput or type(request) is not RequestPresent
+    input_type,request_type=GroupSemanticInput,RequestPresent
+    if temporal:
+        from .temporal import GroupSemanticInput as TemporalInput, RequestPresent as TemporalRequest
+        input_type,request_type=TemporalInput,TemporalRequest
+    if (type(input) is not input_type or type(request) is not request_type
         or type(documents) is not tuple or not 1<=len(documents)<=512
         or any(type(d) is not CatalogDocument or type(d.content) is not bytes for d in documents)
         or len({d.document_id for d in documents})!=len(documents)):
         return Ok(_frame_invalid('request_present_original_sources'))
+    if temporal:
+        from ._temporal_profiles import profiles
+        selected=profiles()
+        if (_wire(input.mutation_profile)!=selected['mutationProfile'] or _wire(input.value_profile)!=selected['valueProfile']
+            or request.identity.input_profile!='truss-group-temporal-input/0.1.0'):
+            return Ok(_frame_invalid('temporal_request_profiles'))
     if sum(len(d.content) for d in documents)>4194304:
         return Ok(_frame_invalid('source_resource'))
     try:
@@ -520,7 +549,7 @@ def _request_artifact(artifact,maximum):
         raise ValueError('Exact original artifact required')
     return raw
 
-def recover_group_request(host,transaction,frame,manifest,digest,pin_cursor):
+def recover_group_request(host,transaction,frame,manifest,digest,pin_cursor,*,temporal=False):
     from .groups import FrozenGroupRequest
     if type(frame) is not FrozenGroupRequest:
         return Ok(GroupFailed(failure=_frame_invalid('frame_type')))
@@ -528,11 +557,18 @@ def recover_group_request(host,transaction,frame,manifest,digest,pin_cursor):
         original_input=_request_artifact(frame.input,1048576)
         original_request=_request_artifact(frame.request,65536)
         original_sources=_request_artifact(frame.documents,4194304)
+        from ._acceptance_json import decode_acceptance_json
+        selected=decode_acceptance_json(original_input)
+        request_wire=decode_acceptance_json(original_request)
+        expected='truss-group-temporal-input/0.1.0' if temporal else 'truss-group-input/0.1.0'
+        if selected.get('interfaceVersion')!=expected or request_wire.get('identity',{}).get('inputProfile')!=expected:
+            raise ValueError('Original frozen request provider mismatch')
     except (ValueError,TypeError,UnicodeError,base64.binascii.Error):
         return Ok(GroupFailed(failure=_frame_invalid('frame_integrity')))
     def observe(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.person_recover_group_request(%s,%s,%s,%s,%s)',
+        command='SELECT truss.person_recover_temporal_group_request(%s,%s,%s,%s,%s)' if temporal else 'SELECT truss.person_recover_group_request(%s,%s,%s,%s,%s)'
+        cursor.execute(command,
             (original_input,original_sources,original_request,manifest['releaseId'],digest),prepare=False)
         return _result(bytes(cursor.fetchone()[0]),request_present=True)
     result=host._run_operation(transaction,observe,function_call=True)

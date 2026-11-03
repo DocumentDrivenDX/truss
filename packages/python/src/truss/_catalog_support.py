@@ -17,9 +17,11 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected!=DATE10_PROFILE:
+    from ._temporal_preparation import support_profile, temporal_declarations
+    temporal=selected==support_profile()
+    if selected!=DATE10_PROFILE and not temporal:
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-current010.json').read_bytes()
+    policy=files('truss').joinpath('_profiles/fresh-catalog-temporal-support.json' if temporal else '_profiles/fresh-catalog-support-current010.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -27,14 +29,19 @@ def evaluate_catalog_support(prepared):
         or any(d.source()['umf']!='0.10.0' for d in prepared.documents)):
         raise ValueError('Unselected catalog support source')
     evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
-    if evidence.get('interfaceVersion')!='truss-registration-preparation/2.0':
+    if evidence.get('interfaceVersion')!=('truss-registration-preparation/2.1' if temporal else 'truss-registration-preparation/2.0'):
         raise ValueError('Current registration validation results required')
     expected=[{'documentId':d.document.document_id,
         'contentSha256':sha256(d.document.content).hexdigest(),
         'validation':entry['validation'],**({'dddProfile':entry['dddProfile'],'dddValidation':entry['dddValidation']}
-            if 'dddProfile' in entry else {})} for d,entry in zip(prepared.documents,evidence['documents'])]
-    if evidence!={'interfaceVersion':'truss-registration-preparation/2.0','documents':expected}:
+            if 'dddProfile' in entry else {}),**({'inspection':entry['inspection']} if temporal else {})} for d,entry in zip(prepared.documents,evidence['documents'])]
+    if evidence!={'interfaceVersion':'truss-registration-preparation/2.1' if temporal else 'truss-registration-preparation/2.0','documents':expected}:
         raise ValueError('Original registration validation results required')
+    if temporal:
+        for document,entry in zip(prepared.documents,evidence['documents'],strict=True):
+            original=temporal_declarations(document.document,entry['inspection'])
+            if len(original['records'])!=sum(e['kind']=='record' for m in document.source()['modules'] for e in m['elements']):
+                raise ValueError('Complete original temporal Record inspection required')
     source_elements={}
     staged=set()
     unresolved=[]

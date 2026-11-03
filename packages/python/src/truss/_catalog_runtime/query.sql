@@ -61,18 +61,19 @@ CREATE FUNCTION truss.query_abi() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.2","sha256":"8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96"}'::jsonb; $$;
 REVOKE ALL ON FUNCTION truss.query_abi() FROM PUBLIC;
 
-CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
+CREATE FUNCTION truss.query_scope_at_abi(binding jsonb,expected_query_abi jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;selected_key jsonb;key_definition truss.key_def%ROWTYPE;current_actor oid;compiled jsonb;
 BEGIN
  current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.5'
- OR binding->'queryAbi' IS DISTINCT FROM truss.query_abi()
+ OR expected_query_abi IS NULL OR expected_query_abi NOT IN (truss.query_abi(),truss.query_temporal_abi())
+ OR binding->'queryAbi' IS DISTINCT FROM expected_query_abi
  OR binding-ARRAY['interfaceVersion','queryAbi','schema','installationId','releaseId','releaseSha256','catalogRevision','documents','records','relationships','maximumScanRows','maximumResultRows','maximumBytes']<>'{}'::jsonb
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.75-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.76-temporal-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -134,9 +135,17 @@ BEGIN
  END LOOP;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.query_scope_at_abi(jsonb,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ PERFORM truss.query_scope_at_abi(binding,truss.query_abi());
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.query_scope(jsonb) FROM PUBLIC;
 
-CREATE FUNCTION truss.query_binding(selected_documents jsonb,maximum_scan_rows int,maximum_result_rows int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.query_binding_at_abi(selected_documents jsonb,maximum_scan_rows int,maximum_result_rows int,maximum_bytes int,expected_release text,expected_digest text,expected_query_abi jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;captured_revision int;selected_document_id text;archived jsonb;content text;source jsonb;modules jsonb:='[]';pins jsonb:='[]';records jsonb:='[]';relationships jsonb:='[]';binding jsonb;result bytea;
 BEGIN
@@ -163,12 +172,20 @@ BEGIN
    FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id WHERE r.document_id=selected_document_id AND r.retired_rev IS NULL AND r.lifecycle IN ('independent','owned') AND r.directed AND NOT r.composition AND r.assoc_type_id IS NULL
    AND (SELECT count(*) FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id)=1),'[]');
  END LOOP;
- binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.5','queryAbi',truss.query_abi(),'schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
+ binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.5','queryAbi',expected_query_abi,'schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
  'documents',pins,'records',records,'relationships',relationships,'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes);
- PERFORM truss.query_scope(binding);
+ PERFORM truss.query_scope_at_abi(binding,expected_query_abi);
  result:=convert_to(jsonb_build_object('binding',binding,'bindingJson',binding::text,'modules',modules,'actorOid',(SELECT oid::text FROM pg_roles WHERE rolname=session_user))::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'query binding byte limit' USING ERRCODE='54000';END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_binding_at_abi(jsonb,int,int,int,text,text,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.query_binding(selected_documents jsonb,maximum_scan_rows int,maximum_result_rows int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.query_binding_at_abi(selected_documents,maximum_scan_rows,maximum_result_rows,maximum_bytes,expected_release,expected_digest,truss.query_abi());
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_binding(jsonb,int,int,int,text,text) FROM PUBLIC;

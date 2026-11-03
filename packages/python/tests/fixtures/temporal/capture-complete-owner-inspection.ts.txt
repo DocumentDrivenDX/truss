@@ -3,6 +3,7 @@ import { inspectAccessViews } from '/private/tmp/umf-temporal-inspection/src/com
 const cases=JSON.parse(readFileSync('/private/tmp/umf-temporal-inspection/tests/rust-core/fixtures/access-inspection/cases.json','utf8'));
 const document=cases.cases.find((row:any)=>row.id==='date-instant-local').request.document;
 for (const module of document.modules) for (const element of module.elements) if (element.kind==='field' || element.kind==='record') element.name=element.id;
+for (const module of document.modules) for (const element of module.elements) if (element.facets?.integerWidth?.bits===32) element.facets.integerWidth.bits=64;
 const selected=document.modules.flatMap((module:any)=>module.elements.filter((element:any)=>element.kind==='record').map((element:any)=>({module:module.id,element:element.id})));
 const request={document,selected,bindings:[],sourceId:'logical'};
 process.stdout.write(JSON.stringify({request,result:inspectAccessViews(document,selected,[],'logical')},null,2)+'\n');

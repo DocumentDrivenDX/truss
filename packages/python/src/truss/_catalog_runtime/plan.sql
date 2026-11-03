@@ -286,6 +286,9 @@ BEGIN
     WHERE old_name.value#>>'{}' IS DISTINCT FROM candidate->>'prop_id') THEN
    RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
+   IF (old->>'scalar_type'='localTimestamp' OR row->>'scalar_type'='localTimestamp')
+    AND old->>'scalar_type' IS DISTINCT FROM row->>'scalar_type' THEN
+    RAISE EXCEPTION 'existing temporal property family cannot be reinterpreted' USING ERRCODE='0A000';END IF;
    IF old->>'cardinality' IN ('array','map') THEN
     IF truss.catalog_item_meaning(old->'item') IS DISTINCT FROM truss.catalog_item_meaning(candidate->'item') THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
     candidate:=candidate||jsonb_build_object('item',old->'item');
@@ -483,7 +486,8 @@ BEGIN
   SELECT f.type_id,f.prop_id,f.value->>'fieldModule' field_module,f.value->'declaration'->>'id' element_id,
    jsonb_build_object('prop_id',f.prop_id,'type_id',f.type_id,'element',f.value->'declaration'->>'id',
     'declaration_module',f.value->>'fieldModule','name',coalesce(f.value->'declaration'->>'name',f.value->'declaration'->>'id'),
-    'scalar_type',f.value->'declaration'->>'scalarType','nullability',f.value->'declaration'->>'nullability',
+    'scalar_type',coalesce(f.value->'nativeDescriptor'->>'nativeScalarType',f.value->'declaration'->>'scalarType'),
+    'native_temporal',f.value->'nativeDescriptor'->'nativeTemporal','nullability',f.value->'declaration'->>'nullability',
     'cardinality',f.value->'declaration'->>'cardinality','facets',f.value->'declaration'->'facets',
     'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition_indexed(i.source_index,f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
     'home','json','since_rev',selected_revision,'doc_ord',f.ord,'definition_source_kind','accepted_document',

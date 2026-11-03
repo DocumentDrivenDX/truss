@@ -6,12 +6,15 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_profiles() FROM PUBLIC;
 
 ALTER TABLE truss.catalog_runtime_installation ADD COLUMN import_policy_generation bigint NOT NULL DEFAULT 1 CHECK(import_policy_generation=1);
-CREATE FUNCTION truss.import_context(expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.import_context_at_profile(expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;bundle text;profiles jsonb;
 BEGIN
- context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
+ context:=convert_from(truss.group_context_qualified_at_profile(expected_release,expected_digest,truss.runtime_person(false),temporal_profile),'UTF8')::jsonb;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();profiles:=truss.runtime_import_profiles();
+ IF temporal_profile THEN profiles:=profiles||jsonb_build_object(
+  'importProfile',truss.runtime_temporal_profiles()->'importProfile','importPayloadProfile',truss.runtime_temporal_profiles()->'importPayloadProfile',
+  'ownedImportProfile',truss.runtime_temporal_profiles()->'ownedImportProfile','ownedImportPayloadProfile',truss.runtime_temporal_profiles()->'ownedImportPayloadProfile');END IF;
  IF (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
   RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
  SELECT encode(sha256(convert_to(coalesce(jsonb_agg(jsonb_build_object('documentId',doc_id,'revision',doc_revision,'sha256',content_sha256) ORDER BY doc_id COLLATE "C"),'[]')::text,'UTF8')),'hex') INTO bundle
@@ -21,6 +24,11 @@ BEGIN
    'generation',installation.import_policy_generation::text,'keyReuse','forbid','journalMode','engine','configurationProfile',profiles->'configurationProfile',
    'installedProducerInventorySha256',installation.release_sha256)))::text,'UTF8');
 END;
+$$;
+REVOKE ALL ON FUNCTION truss.import_context_at_profile(text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.import_context(expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN RETURN truss.import_context_at_profile(expected_release,expected_digest,false);END;
 $$;
 REVOKE ALL ON FUNCTION truss.import_context(text,text) FROM PUBLIC;
 
@@ -58,14 +66,14 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.import_key_selection(text,text,text,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.import_object_identity(original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.import_object_identity_at_profile(original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata jsonb;key_row truss.key_def%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
  archive truss.schema_doc%ROWTYPE;component jsonb;values_text text[]:=ARRAY[]::text[];values_cells jsonb;values_buffer jsonb[]:=ARRAY[]::jsonb[];key_facets jsonb;facets_buffer jsonb[]:=ARRAY[]::jsonb[];fields jsonb;fields_buffer jsonb[]:=ARRAY[]::jsonb[];component_index int:=0;pin record;namespace bytea;transport bytea;observed record;member truss.object_key_bucket%ROWTYPE;object_row truss.object%ROWTYPE;result jsonb;owned_selection boolean:=false;root_owner record;
 BEGIN
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique import identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
- IF identity->'profile'=truss.runtime_import_profiles()->'ownedImportProfile'
+ IF identity->'profile'=CASE WHEN temporal_profile THEN truss.runtime_temporal_profiles()->'ownedImportProfile' ELSE truss.runtime_import_profiles()->'ownedImportProfile' END
   AND identity-ARRAY['profile','identity']='{}'::jsonb THEN
   owned_selection:=true;identity:=identity->'identity';
  END IF;
@@ -119,6 +127,11 @@ BEGIN
  RETURN convert_to(result::text,'UTF8');
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.import_object_identity_at_profile(bytea,bytea,bytea,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.import_object_identity(original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN RETURN truss.import_object_identity_at_profile(original_identity,original_document,tuple_bytes,expected_release,expected_digest,false);END;
+$$;
 REVOKE ALL ON FUNCTION truss.import_object_identity(bytea,bytea,bytea,text,text) FROM PUBLIC;
 
 CREATE TABLE truss.runtime_import_source (entity_kind char(1) NOT NULL, entity_id bigint NOT NULL, group_attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), writer_xid xid8 NOT NULL, original_record bytea NOT NULL, expected_source jsonb NOT NULL, operation_index int NOT NULL DEFAULT 0 CHECK (operation_index BETWEEN 0 AND 1023), PRIMARY KEY (entity_kind, entity_id), CONSTRAINT runtime_import_source_attempt_operation UNIQUE (group_attempt_id, operation_index));
@@ -127,7 +140,7 @@ CREATE TRIGGER runtime_record_source_immutable BEFORE UPDATE OR DELETE ON truss.
 
 CREATE FUNCTION truss.runtime_owned_import_record_source_checked(checked_attempt uuid,checked_next_index int,checked_writer_xid xid8,checked_operation jsonb,checked_result jsonb,owned_profile_matches boolean,load_id_asserted boolean,selected_index int,original_record bytea,load_id text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE selected_attempt uuid:=checked_attempt;record jsonb;payload bytea;value jsonb;operation jsonb:=checked_operation;result jsonb:=checked_result;source_value jsonb:='{}';source_invalid boolean;component_invalid boolean;expected_source jsonb;source_row truss.record_source%ROWTYPE;kind char(1);metadata jsonb;selected_type truss.type_def%ROWTYPE;owned_selection boolean;root_identity jsonb;resolved_source_identity jsonb;resolved_target_identity jsonb;source_entity_id bigint;inserted_rows int;
+DECLARE selected_attempt uuid:=checked_attempt;record jsonb;payload bytea;value jsonb;operation jsonb:=checked_operation;result jsonb:=checked_result;source_value jsonb:='{}';source_invalid boolean;component_invalid boolean;expected_source jsonb;source_row truss.record_source%ROWTYPE;kind char(1);metadata jsonb;selected_type truss.type_def%ROWTYPE;owned_selection boolean;root_identity jsonb;temporal_selection boolean;resolved_source_identity jsonb;resolved_target_identity jsonb;source_entity_id bigint;inserted_rows int;
 BEGIN
  IF selected_index IS NULL OR selected_index<0 OR selected_index>=checked_next_index THEN RAISE EXCEPTION 'current complete indexed import group required' USING ERRCODE='55000';END IF;
  IF original_record IS NULL OR octet_length(original_record) NOT BETWEEN 1 AND 2097152 OR (convert_from(original_record,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
@@ -136,7 +149,11 @@ BEGIN
  IF record-ARRAY['kind','identity','payload','payloadProfile']<>'{}'::jsonb OR (record->>'kind' IN ('object','edge')) IS NOT TRUE THEN RAISE EXCEPTION 'closed import record required' USING ERRCODE='22023';END IF;
  IF octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique original payload required' USING ERRCODE='22023';END IF;
  value:=convert_from(payload,'UTF8')::jsonb;
- owned_selection:=record->'payloadProfile'=truss.runtime_import_profiles()->'ownedImportPayloadProfile';
+ temporal_selection:=EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=checked_attempt
+  AND a.context->'mutationProfile'=truss.runtime_temporal_profiles()->'mutationProfile'
+  AND (convert_from(a.input_bytes,'UTF8')::jsonb)->>'interfaceVersion'='truss-group-temporal-input/0.1.0');
+ IF temporal_selection AND record->>'kind'<>'object' THEN RAISE EXCEPTION 'temporal import has object records only' USING ERRCODE='0A000';END IF;
+ owned_selection:=record->'payloadProfile'=CASE WHEN temporal_selection THEN truss.runtime_temporal_profiles()->'ownedImportPayloadProfile' ELSE truss.runtime_import_profiles()->'ownedImportPayloadProfile' END;
  -- Indexed rootless object batches use the same original scalar payload. Only
  -- the indexed batch facade reaches this form; the legacy one-record facade
  -- retains its one-operation check. All payload/key/actual-root checks below
@@ -146,7 +163,8 @@ BEGIN
    AND operation->>'operation'='create_object' AND operation->'ownership'='{"state":"rootless"}'::jsonb) IS NOT TRUE THEN
   RAISE EXCEPTION 'legacy one-create import group required' USING ERRCODE='0A000';END IF;
 
- IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'
+ IF (temporal_selection AND ((record->'payloadProfile' IN (truss.runtime_temporal_profiles()->'importPayloadProfile',truss.runtime_temporal_profiles()->'ownedImportPayloadProfile')) IS NOT TRUE))
+  OR NOT temporal_selection AND (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'
   AND record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'importPayloadProfile'
   AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"}'::jsonb
    AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
@@ -157,7 +175,7 @@ BEGIN
   OR octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'exact original profiled payload required' USING ERRCODE='22023';END IF;
  IF owned_selection AND owned_profile_matches IS NOT TRUE THEN RAISE EXCEPTION 'owned import group profile required' USING ERRCODE='0A000';END IF;
  IF value-ARRAY['interfaceVersion','kind','values','source',CASE record->>'kind' WHEN 'object' THEN 'ownership' ELSE 'orderKey' END]<>'{}'::jsonb THEN RAISE EXCEPTION 'closed profiled import payload required' USING ERRCODE='22023';END IF;
- IF (record->>'kind' IN ('object','edge')) IS NOT TRUE OR value->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN owned_selection THEN 'truss-owned-import-payload/0.1.0' ELSE 'truss-import-payload/0.1.0' END) OR value->>'kind' IS DISTINCT FROM record->>'kind' OR result->>'outcome'<>'created'
+ IF (record->>'kind' IN ('object','edge')) IS NOT TRUE OR value->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN temporal_selection AND owned_selection THEN 'truss-owned-import-temporal-payload/0.1.0' WHEN temporal_selection THEN 'truss-import-temporal-payload/0.1.0' WHEN owned_selection THEN 'truss-owned-import-payload/0.1.0' ELSE 'truss-import-payload/0.1.0' END) OR value->>'kind' IS DISTINCT FROM record->>'kind' OR result->>'outcome'<>'created'
   OR load_id_asserted IS NOT TRUE THEN
   RAISE EXCEPTION 'original import creation/load origin required' USING ERRCODE='22023';END IF;
  IF record->>'kind'='object' THEN
@@ -289,7 +307,7 @@ BEGIN
   RAISE EXCEPTION 'current complete import attempt required' USING ERRCODE='55000';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  operations:=input->'operations';results:=attempt.results;
- owned_profile_matches:=input->'mutationProfile' IS NOT DISTINCT FROM truss.runtime_owned_profile();
+ owned_profile_matches:=truss.runtime_is_owned_profile(input->'mutationProfile');
  load_id_asserted:=EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e
   WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id));
  RETURN truss.runtime_owned_import_record_source_checked(attempt.id,attempt.next_index,attempt.writer_xid,
@@ -309,7 +327,7 @@ BEGIN
   RAISE EXCEPTION 'bounded current completed import source batch required' USING ERRCODE='22023';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  operations:=input->'operations';results:=attempt.results;
- owned_profile_matches:=input->'mutationProfile' IS NOT DISTINCT FROM truss.runtime_owned_profile();
+ owned_profile_matches:=truss.runtime_is_owned_profile(input->'mutationProfile');
  load_id_asserted:=EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e
   WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id));
  record_count:=jsonb_array_length(records);
@@ -344,7 +362,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_import_record_sources(uuid,jsonb,text
 CREATE FUNCTION truss.import_record_source(selected_attempt uuid,original_record bytea,load_id text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 BEGIN
- IF convert_from(original_record,'UTF8')::jsonb->'payloadProfile'=truss.runtime_import_profiles()->'ownedImportPayloadProfile' THEN
+ IF truss.runtime_is_owned_import_payload_profile(convert_from(original_record,'UTF8')::jsonb->'payloadProfile') THEN
   RAISE EXCEPTION 'explicit owned import source facade required' USING ERRCODE='0A000';END IF;
  IF (SELECT next_index FROM truss.runtime_object_attempt WHERE id=selected_attempt) IS DISTINCT FROM 1 THEN
   RAISE EXCEPTION 'legacy one-create import group required' USING ERRCODE='55000';END IF;
@@ -363,7 +381,7 @@ BEGIN
  IF ledger.writer_xid<>pg_current_xact_id() OR attempt.writer_xid<>ledger.writer_xid OR attempt.actor_oid<>truss.runtime_person(false) OR NOT attempt.complete
   OR ledger.operation_index<0 OR ledger.operation_index>=attempt.next_index
   OR attempt.results->ledger.operation_index->>'outcome'<>'created' OR attempt.results->ledger.operation_index->'identity'->>'id'<>ledger.entity_id::text
-  OR (convert_from(ledger.original_record,'UTF8')::jsonb->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'
+  OR (NOT truss.runtime_is_owned_import_payload_profile(convert_from(ledger.original_record,'UTF8')::jsonb->'payloadProfile')
    AND (ledger.operation_index<>0 OR attempt.next_index<>1)) THEN RAISE EXCEPTION 'original pending import creation required' USING ERRCODE='55000';END IF;
  SELECT to_jsonb(s) INTO actual FROM truss.record_source s WHERE entity_kind=ledger.entity_kind AND entity_id=ledger.entity_id;
  IF actual IS DISTINCT FROM ledger.expected_source THEN RAISE EXCEPTION 'immutable exact original import source required' USING ERRCODE='55000';END IF;
@@ -486,7 +504,11 @@ BEGIN
   OR jsonb_typeof(outcome_identity->'id') IS DISTINCT FROM 'string' OR outcome_identity->>'id' !~ '^[1-9][0-9]{0,18}$') THEN
   RAISE EXCEPTION 'retained typed report outcome required' USING ERRCODE='22023';END IF;
  original_identity:=convert_to((envelope->'originalIdentity')::text,'UTF8');
- IF envelope->'originalIdentity'->'profile'=truss.runtime_import_profiles()->'ownedImportProfile'
+ IF envelope->'originalIdentity'->'profile'=truss.runtime_temporal_profiles()->'ownedImportProfile' THEN
+  IF kind<>'object' THEN RAISE EXCEPTION 'temporal import report has object records only' USING ERRCODE='0A000';END IF;
+  PERFORM truss.require_temporal_capability(expected_release,expected_digest);
+ END IF;
+ IF envelope->'originalIdentity'->'profile' IN (truss.runtime_import_profiles()->'ownedImportProfile',truss.runtime_temporal_profiles()->'ownedImportProfile')
   AND (envelope->'originalIdentity')-ARRAY['profile','identity']='{}'::jsonb THEN
   owned_selection:=true;original_identity:=convert_to((envelope->'originalIdentity'->'identity')::text,'UTF8');
  END IF;

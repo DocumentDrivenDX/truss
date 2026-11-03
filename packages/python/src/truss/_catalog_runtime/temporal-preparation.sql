@@ -47,6 +47,13 @@ BEGIN
   IF packet->>'contentSha256' IS DISTINCT FROM source_hash OR entry->>'contentSha256' IS DISTINCT FROM source_hash
    OR packet->>'resultSha256' IS DISTINCT FROM encode(sha256(convert_to(packet->>'resultJson','UTF8')),'hex') THEN
    RAISE EXCEPTION 'original temporal source and owner result digests required' USING ERRCODE='22023';END IF;
+  IF packet->'ownerProfile' IS NULL OR jsonb_typeof(packet->'ownerProfile') IS DISTINCT FROM 'object'
+   OR packet->'ownerProfile'-ARRAY['identity','version','sha256']<>'{}'::jsonb
+   OR jsonb_typeof(packet->'ownerProfile'->'identity') IS DISTINCT FROM 'string'
+   OR jsonb_typeof(packet->'ownerProfile'->'version') IS DISTINCT FROM 'string'
+   OR (packet->'ownerProfile'->>'sha256' ~ '^[0-9a-f]{64}$') IS NOT TRUE
+   OR jsonb_typeof(packet->'bindings') IS DISTINCT FROM 'array' OR jsonb_typeof(packet->'sourceId') IS DISTINCT FROM 'string' THEN
+   RAISE EXCEPTION 'exact original inspection profile and invocation required' USING ERRCODE='22023';END IF;
   source:=(document->>'originalText')::jsonb;owner:=(packet->>'resultJson')::jsonb;
   IF jsonb_typeof(owner->'records') IS DISTINCT FROM 'array' OR jsonb_typeof(owner->'diagnostics') IS DISTINCT FROM 'array'
    OR EXISTS(SELECT 1 FROM jsonb_array_elements(owner->'diagnostics') d WHERE jsonb_typeof(d.value)<>'object' OR d.value->>'severity' IN ('error','fatal'))
@@ -76,6 +83,19 @@ BEGIN
      OR field_decl->'declaration' IS DISTINCT FROM authored OR field_decl->>'fieldModule' IS DISTINCT FROM field_view->'ref'->>'module'
      OR field_decl->>'fieldId' IS DISTINCT FROM field_view->'ref'->>'element' OR field_view->>'scalarType' IS DISTINCT FROM authored->>'scalarType' THEN
      RAISE EXCEPTION 'exact original Field and owner correspondence required' USING ERRCODE='22023';END IF;
+    IF field_view->>'scalarType'='date' OR field_view->>'temporal' IN ('instant','local') THEN
+     IF authored->>'cardinality' IS DISTINCT FROM 'one' OR coalesce(authored->'facets','{}')<>'{}'::jsonb
+      OR authored ? 'allowedValues' OR authored ? 'default' THEN
+      RAISE EXCEPTION 'selected temporal refinements and containers are unsupported' USING ERRCODE='0A000';END IF;
+     IF EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(authored_record->'keys','[]')) k
+      CROSS JOIN LATERAL jsonb_array_elements(k.value->'fields') f WHERE f.value=field_view->'ref') THEN
+      RAISE EXCEPTION 'temporal Key fields are outside selected profile' USING ERRCODE='0A000';END IF;
+     authored_view:=truss.catalog_temporal_pointer(source,field_view->>'viewPointer');
+     IF authored_view->'field' IS DISTINCT FROM field_view->'ref' OR authored_view->'row' IS DISTINCT FROM field_view->'row'
+      OR jsonb_typeof(field_view->'row') IS DISTINCT FROM 'object' OR field_view->'row'-ARRAY['missing','null']<>'{}'::jsonb
+      OR jsonb_typeof(field_view->'row'->'missing') IS DISTINCT FROM 'boolean' OR jsonb_typeof(field_view->'row'->'null') IS DISTINCT FROM 'boolean' THEN
+      RAISE EXCEPTION 'original temporal FieldView presence required' USING ERRCODE='22023';END IF;
+    END IF;
     IF field_view->>'temporal'='local' THEN
      authored_view:=truss.catalog_temporal_pointer(source,field_view->>'viewPointer');
      IF authored->>'scalarType' IS DISTINCT FROM 'timestamp' OR authored->>'cardinality' IS DISTINCT FROM 'one'
@@ -95,3 +115,7 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_temporal_declarations_valid(jsonb,jsonb,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.catalog_temporal_support_profile() RETURNS jsonb
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-fresh-catalog-temporal-support","version":"0.2","sha256":"d73dee86befef723470855eab7baacf25ce90ee0b578b140377f23780352f779"}'::jsonb; $$;
+REVOKE ALL ON FUNCTION truss.catalog_temporal_support_profile() FROM PUBLIC;

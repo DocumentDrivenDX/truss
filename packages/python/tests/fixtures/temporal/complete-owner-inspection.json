@@ -182,7 +182,7 @@
               "extensions": {},
               "facets": {
                 "integerWidth": {
-                  "bits": 32,
+                  "bits": 64,
                   "signed": true
                 }
               },
@@ -842,14 +842,14 @@
             "generated": false,
             "facets": {
               "integerWidth": {
-                "bits": 32,
+                "bits": 64,
                 "signed": true
               }
             },
             "properties": {
               "facets": {
                 "integerWidth": {
-                  "bits": 32,
+                  "bits": 64,
                   "signed": true
                 }
               }

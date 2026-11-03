@@ -9,15 +9,16 @@ import psycopg
 from psycopg.types.json import Jsonb
 from truss.preparation import CatalogDocument
 from truss._temporal_preparation import inspection_packet, temporal_declarations
-from test_temporal_canonical_text_native import TemporalCanonicalTextNativeTests, ROOT
+import test_temporal_canonical_text_native as scalar_fixture
+ROOT = scalar_fixture.ROOT
 
 
 class TemporalTransportComponentNativeTests(unittest.TestCase):
-    cleanup_owned_runtime = classmethod(TemporalCanonicalTextNativeTests.cleanup_owned_runtime.__func__)
+    cleanup_owned_runtime = classmethod(scalar_fixture.TemporalCanonicalTextNativeTests.cleanup_owned_runtime.__func__)
 
     @classmethod
     def setUpClass(cls):
-        TemporalCanonicalTextNativeTests.setUpClass.__func__(cls)
+        scalar_fixture.TemporalCanonicalTextNativeTests.setUpClass.__func__(cls)
         for filename in ('temporal-preparation.sql', 'temporal-cells.sql'):
             cls.connection.execute((ROOT / 'packages/python/src/truss/_catalog_runtime' / filename).read_text(), prepare=False)
 
@@ -28,7 +29,7 @@ class TemporalTransportComponentNativeTests(unittest.TestCase):
         self.assertEqual(sha256(raw).hexdigest(), provenance['resultSha256'])
         fixture = json.loads(raw)
         request = fixture['request']
-        document = CatalogDocument('source-original', 'r1', json.dumps(request['document'], ensure_ascii=True).encode())
+        document = CatalogDocument(request['document']['id'], 'r1', json.dumps(request['document'], ensure_ascii=True).encode())
         packet = inspection_packet(document, selected=request['selected'], bindings=request['bindings'],
             source_id=request['sourceId'], owner_profile={'identity': 'DEV-canonical-source-inspection',
             'version': provenance['commit'], 'sha256': provenance['resultSha256']},

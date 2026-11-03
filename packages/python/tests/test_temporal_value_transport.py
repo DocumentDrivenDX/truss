@@ -28,3 +28,19 @@ class TemporalValueTransportTests(unittest.TestCase):
                      {'kind': 'localTimestamp', 'text': '2024-01-01T00:00:00.0000000'},
                      {'kind': 'localTimestamp', 'text': '2024-01-01T00:00:00.000000Z'}):
             with self.subTest(cell=cell), self.assertRaises(ValueError): local_timestamp_cell(cell)
+
+    def test_result_decoding_requires_explicit_provider_and_never_nested_local(self):
+        from truss._temporal_values import logical_object_cell
+        cell={'kind':'localTimestamp','text':'2024-11-03T01:30:00.123456'}
+        with self.assertRaises(ValueError):logical_object_cell(cell)
+        self.assertEqual(logical_object_cell(cell,local=True),LocalTimestampValue(text=cell['text']))
+        for nested in ({'kind':'sequence','items':[cell]}, {'kind':'map','entries':[{'key':'local','value':cell}]}):
+            with self.assertRaises(ValueError):logical_object_cell(nested,local=True)
+        self.assertIsNone(logical_object_cell(None,local=True))
+        self.assertEqual(logical_object_cell({'kind':'sequence','items':[]},local=True).items,())
+
+    def test_explicit_storage_transport_preserves_ordinary_containers(self):
+        from truss.contracts import SequenceValue,NullValue,MapValue,MapEntry
+        for value in (SequenceValue(items=()),SequenceValue(items=(NullValue(),)),
+                      MapValue(entries=(MapEntry(key='text',value=TextValue(kind='string',text='unchanged')),))):
+            self.assertEqual(wire_temporal_cell(value),_wire_cell(value))
