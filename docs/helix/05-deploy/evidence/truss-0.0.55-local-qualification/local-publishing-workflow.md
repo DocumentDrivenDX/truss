@@ -55,21 +55,42 @@ wheel/sdist/HF hashes, runtime and migration manifests, current macOS scope,
 and historical-receipt references against the contents of that directory.
 Keep the candidate wheel and sdist hashes listed in the release notes unchanged.
 
-## Create the GitHub release locally
+## Stage and verify a GitHub draft locally
 
-Only after that final asset set passes review, the release owner can use the
-GitHub CLI to create the tag and release from the approved source commit and
-attach the staged files:
+Only after the final asset set passes review and its tag points to the approved
+source commit, the release owner can stage a GitHub draft. Use an explicit
+repository because this isolated checkout may not have a GitHub remote:
 
 ```sh
 gh release create v0.0.55 \
+  --repo DocumentDrivenDX/truss \
   --target <approved-source-commit> \
+  --verify-tag \
+  --draft \
   --title "Truss v0.0.55" \
   --notes-file docs/helix/05-deploy/releases/v0.0.55.md \
   /path/to/final-release-assets/*
 ```
 
-The repository's release workflow is `workflow_dispatch` only; this local
-command does not dispatch it. Verify the published asset digests and immutable
-release state before any separate PyPI upload. This document does not authorize
-or perform those external actions.
+Download the draft assets into a new empty directory. Confirm the draft state,
+then verify every downloaded asset against the final bundle checksum manifest
+and compare `release-pins.json` byte-for-byte with the staged pin file:
+
+```sh
+gh release view v0.0.55 --repo DocumentDrivenDX/truss --json isDraft,assets
+gh release download v0.0.55 --repo DocumentDrivenDX/truss --dir /path/to/empty/draft-readback
+(cd /path/to/empty/draft-readback && shasum -a 256 -c SHA256SUMS)
+cmp /path/to/final-release-assets/SHA256SUMS /path/to/empty/draft-readback/SHA256SUMS
+cmp /path/to/final-release-assets/release-pins.json /path/to/empty/draft-readback/release-pins.json
+```
+
+Only after the downloaded draft matches the reviewed asset set should the
+release owner publish it:
+
+```sh
+gh release edit v0.0.55 --repo DocumentDrivenDX/truss --draft=false
+```
+
+Verify the final asset digests and immutable release state before any separate
+PyPI upload. The repository's release workflow is `workflow_dispatch` only;
+this local process does not dispatch it.
