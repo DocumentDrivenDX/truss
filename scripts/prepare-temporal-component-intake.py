@@ -146,6 +146,9 @@ def execute(archive,expected,output):
     candidate=wheels[0];wheelhouse=inputs/'wheelhouse';shutil.copyfile(candidate,wheelhouse/candidate.name)
     run([sys.executable,'-m','venv',output/'candidate-env'],output/'candidate-venv.log');python=output/'candidate-env/bin/python'
     selected=[inputs/m['wheels'][key]['path'] for key in ('core','access','weft')]
+    # The selected local runtime is released on GitHub, not the package index.
+    # Reuse its canonical checksum verifier; the resolver still installs normally.
+    run([python,ROOT/'scripts/install-local-runtime.py','--download-only','--wheelhouse',wheelhouse],output/'runtime-download.log',env=env)
     run([python,'-m','pip','install','--only-binary=:all:','--find-links',wheelhouse,'--report',output/'install-report.json',str(candidate)+'[local,native,query,typed-sdk]',*selected,'pg8000==1.31.5','pydantic==2.14.2'],output/'install.log',env=env)
     run([python,'-m','pip','check'],output/'pip-check.log',env=env);run([python,'-m','pip','freeze'],output/'freeze.txt',env=env)
     # Preserve the actual resolved artifacts for the later OFFLINE inventory
@@ -162,7 +165,7 @@ def execute(archive,expected,output):
         if sha256(target.read_bytes()).hexdigest()!=digest:raise ValueError('Original resolver artifact digest differs')
     manifest=m['inventoryIdentity'];manifest.update(schema='truss-temporal-hosted-input/1',ready=False,phase='inventory',sourceCommit=identity['commit'],sourceTree=identity['tree'],candidateWheel='wheelhouse/'+candidate.name,admission=None)
     manifest['wheels']={**m['wheels'],'truss':{'path':manifest['candidateWheel'],'sha256':sha256(candidate.read_bytes()).hexdigest()}}
-    manifest['files']={str(p.relative_to(inputs)):sha256(p.read_bytes()).hexdigest() for p in sorted(wheelhouse.glob('*.whl'))}
+    manifest['files']={str(p.relative_to(inputs)):sha256(p.read_bytes()).hexdigest() for p in sorted(wheelhouse.iterdir()) if p.is_file()}
     (inputs/'hosted-input.json').write_text(json.dumps(manifest,indent=2)+'\n')
     inventory_bundle=output/'inventory-bundle';inventory_bundle.mkdir()
     shutil.copytree(wheelhouse,inventory_bundle/'wheelhouse')

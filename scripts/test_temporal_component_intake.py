@@ -110,3 +110,47 @@ class TemporalComponentIntakeTests(unittest.TestCase):
             altered=copy.deepcopy(records);altered[report][key]=value
             with self.subTest(report=report,key=key),patch.object(module,'record',side_effect=lambda path,digest:altered[path]),self.assertRaises(ValueError):
                 module.final_weft_component(w,source,core,lock)
+
+
+class TemporalIntakeRuntimeProcurementTests(unittest.TestCase):
+    def observe(self, runtime_download_fails):
+        import release_cohort
+        events=[]
+        class StopObservation(RuntimeError): pass
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)/'intake'
+            def extract(*args):
+                (output/'inputs/wheelhouse').mkdir(parents=True)
+                return {'wheels':{k:{'path':'wheelhouse/'+k+'.whl'} for k in ('core','access','weft')}},{'commit':'source-observation','tree':'tree-observation'}
+            def run(command, log, **kwargs):
+                command=[str(x) for x in command];events.append((command,Path(log).name))
+                if '-m' in command and 'build' in command and '--wheel' in command:
+                    (output/'dist').mkdir();(output/'dist/umf_truss-0.0.56-py3-none-any.whl').touch()
+                if any(x.endswith('/install-local-runtime.py') for x in command) and runtime_download_fails:
+                    raise StopObservation('canonical download/checksum failure')
+                if command[1:4]==['-m','pip','install'] and '--report' in command:
+                    raise StopObservation('reached normal resolver without installing')
+            with patch.object(intake.sys,'platform','linux'),patch.object(intake.platform,'machine',return_value='x86_64'),patch.object(intake.sys,'version_info',(3,11)),patch.object(intake,'extract',side_effect=extract),patch.object(intake.shutil,'copytree'),patch.object(intake,'run',side_effect=run),patch.object(release_cohort,'load_cohort') as cohort:
+                with self.assertRaises(StopObservation):intake.execute(None,None,output)
+                cohort.assert_called_once_with(require_qualified=True)
+        return events
+
+    def test_canonical_runtime_download_precedes_normal_resolver(self):
+        events=self.observe(False)
+        downloads=[(i,c,log) for i,(c,log) in enumerate(events) if any(x.endswith('/install-local-runtime.py') for x in c)]
+        self.assertEqual(len(downloads),1)
+        i,c,log=downloads[0]
+        self.assertEqual(c[1],str(ROOT/'scripts/install-local-runtime.py'))
+        self.assertEqual(c[2:4],['--download-only','--wheelhouse'])
+        self.assertTrue(c[4].endswith('/inputs/wheelhouse'))
+        self.assertTrue(c[0].endswith('/candidate-env/bin/python'))
+        self.assertEqual(log,'runtime-download.log')
+        installs=[(n,c) for n,(c,_) in enumerate(events) if '--report' in c]
+        self.assertEqual(len(installs),1);self.assertGreater(installs[0][0],i)
+        self.assertIn('--only-binary=:all:',installs[0][1])
+        self.assertIn('--find-links',installs[0][1]);self.assertNotIn('--no-deps',installs[0][1])
+
+    def test_canonical_download_or_checksum_failure_prevents_resolver(self):
+        events=self.observe(True)
+        self.assertTrue(any(any(x.endswith('/install-local-runtime.py') for x in c) for c,_ in events))
+        self.assertFalse(any('--report' in c for c,_ in events))
