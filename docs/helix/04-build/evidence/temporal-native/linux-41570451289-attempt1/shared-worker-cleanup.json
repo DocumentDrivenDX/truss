@@ -1,0 +1,10 @@
+{
+  "directory": "/tmp/truss-nw-jqdybwcz",
+  "confirmed": true,
+  "dataDeleted": true,
+  "originalPostmasterPid": 2633,
+  "originalPostmasterPidAbsent": true,
+  "pgCtlStatus": 3,
+  "pgCtlStdout": "pg_ctl: no server running\n",
+  "pgCtlStderr": ""
+}
