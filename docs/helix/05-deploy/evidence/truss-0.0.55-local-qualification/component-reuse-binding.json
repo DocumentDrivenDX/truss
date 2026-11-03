@@ -1,0 +1,145 @@
+{
+  "schema": "truss-component-reuse-binding/0.1",
+  "status": "local-review-ready-unpublished",
+  "candidate": {
+    "version": "0.0.55",
+    "sourceCommit": "71c3e14bbb97fc9f1c938587d535ab69d2032ba0",
+    "wheel": "umf_truss-0.0.55-py3-none-any.whl",
+    "wheelSha256": "156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805",
+    "sdist": "umf_truss-0.0.55.tar.gz",
+    "sdistSha256": "be2964a6f17064fd2061e46882f745c6dc730915f488293eb70dc203b9dd5c26",
+    "qualificationTarget": "macos-arm64 / CPython 3.12.14"
+  },
+  "priorRelease": {
+    "tag": "v0.0.54",
+    "sourceCommit": "da07d0b6e45f3b4bd0a918ebedcebd086a5b9b55",
+    "releasePinsSha256": "c9f4b5a33b379026aa811f1ec26e9c8b78290a87090fb06519b5cae35ecaf6c1",
+    "wheelSha256": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52",
+    "nativeRuntimeManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+    "migrationManifestSha256": "5bd406f8b45f8e2f08b7840644ecb0929c84133c4c4181d93597f41ab87fd85a",
+    "nativeQualificationReceiptSha256": "6e53e58de29606edadc2b9b172352a8973cbd95fe996f2c3c4e65f129beccb3e",
+    "migrationQualificationReceiptSha256": "f802f965576fc567e98b4f4bed0540fa03988e612d35c48face784a3d3d4c7d0",
+    "hfQualificationReceiptSha256": "0428da4b2a959cae08c8c16bbc2e84dd2dd6b0a73db350c46f5b92e895104278",
+    "managedGrantsQualificationReceiptSha256": "abdeb7db2c11556340ac6796cd0dba62571f542ecc3bdae3e988af33b275c8b7",
+    "allReceiptsRemainBoundToPriorCommitWheelAndLinuxPlatform": true
+  },
+  "runtimePackageDelta": {
+    "previousWheelMembers": 458,
+    "currentWheelMembers": 458,
+    "runtimeImplementationChangedMembers": [
+      {
+        "path": "truss/catalog_runtime.py",
+        "previousSha256": "724ac143d132ea424694848ff66f57f50631a20381f663035c7516a10952ece5",
+        "currentSha256": "1ab8adfa7c364eee12177deb58c3f593be4dc0ee8331f82ef1b7784fdcf43fb4"
+      },
+      {
+        "path": "truss/psycopg_host.py",
+        "previousSha256": "a457e07c595b84a042891939f2ab5de5d29be26804711adb97a6dd0b65ced150",
+        "currentSha256": "8af9e63cfa344f3ff987e41bbcab1379bd52dd474742f4ada2e7ab64a90d99a6"
+      }
+    ],
+    "versionedDistInfoMembersAddedOrRemoved": [
+      "umf_truss-0.0.54.dist-info/METADATA",
+      "umf_truss-0.0.54.dist-info/RECORD",
+      "umf_truss-0.0.54.dist-info/WHEEL",
+      "umf_truss-0.0.54.dist-info/entry_points.txt",
+      "umf_truss-0.0.54.dist-info/licenses/LICENSE-APACHE",
+      "umf_truss-0.0.54.dist-info/licenses/LICENSE-MIT",
+      "umf_truss-0.0.54.dist-info/licenses/LICENSE.md",
+      "umf_truss-0.0.54.dist-info/top_level.txt",
+      "umf_truss-0.0.55.dist-info/METADATA",
+      "umf_truss-0.0.55.dist-info/RECORD",
+      "umf_truss-0.0.55.dist-info/WHEEL",
+      "umf_truss-0.0.55.dist-info/entry_points.txt",
+      "umf_truss-0.0.55.dist-info/licenses/LICENSE-APACHE",
+      "umf_truss-0.0.55.dist-info/licenses/LICENSE-MIT",
+      "umf_truss-0.0.55.dist-info/licenses/LICENSE.md",
+      "umf_truss-0.0.55.dist-info/top_level.txt"
+    ],
+    "allOtherRuntimeMembersByteIdentical": 448,
+    "unchangedNativeManifestSha256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+    "unchangedMigrationManifestSha256": "5bd406f8b45f8e2f08b7840644ecb0929c84133c4c4181d93597f41ab87fd85a",
+    "interpretation": "Only the installation timeout override and its public-call forwarding changed in runtime code. Version-specific dist-info files are expected. The operation override is bounded at 180 seconds, while default host and statement caps remain 60 seconds; active parent deadlines still clamp each operation."
+  },
+  "reusablePriorEvidence": {
+    "migration": {
+      "receiptSha256": "f802f965576fc567e98b4f4bed0540fa03988e612d35c48face784a3d3d4c7d0",
+      "recipeSha256": "5bd406f8b45f8e2f08b7840644ecb0929c84133c4c4181d93597f41ab87fd85a",
+      "reuseBasis": "migration manifest and implementation are unchanged; receipt remains historical .54 evidence, not a current .55 run",
+      "evidenceDisposition": "prior-version evidence only; no .55 migration-suite pass is claimed",
+      "currentSuiteClaimed": false
+    },
+    "hf": {
+      "receiptSha256": "0428da4b2a959cae08c8c16bbc2e84dd2dd6b0a73db350c46f5b92e895104278",
+      "archive54Sha256": "a0fbac6683191283070c0dc8bf20f5128c897a45d1032cbab4eb98323293aacd",
+      "archive55Sha256": "77bc91650f212b39111ca58b253f20900b2288d3a9c19b4bc9c96faa0813d4ef",
+      "changedArchiveMembers": [
+        {
+          "path": "README.md",
+          "previous_sha256": "c63b5569c27d3c67178b55659c1acc844fb5b3a680358be3556957406349a06d",
+          "current_sha256": "7f76e5b74ef2a50d536831a8bbf3efc8d6bea793dd62cf3ae89976dbc5f8d1e1"
+        },
+        {
+          "path": "conformance-manifest.json",
+          "previous_sha256": "bdcf6700102b9000f514cb0bed3b81a37590f4db5d1b9d664a38370191dd3631",
+          "current_sha256": "90aa623513444bfa7ab571f5638d9971b9199e6bcc0be951c06c0dccf90610a0"
+        },
+        {
+          "path": "docs/helix/03-test/fixtures/hohfeld-followup-0.1.json",
+          "previous_sha256": "8fe21b9c37d39258827b7098d914e9b72638e32ded1ff4467fb9d883f26d234e",
+          "current_sha256": "3336f4ee0b760ff8837178fa3f36f4999afac3ecefda3787030f810ea80e6090"
+        }
+      ],
+      "reuseBasis": "411/414 member comparison plus exact source/archive identity; version-only toolkit metadata, README, and aligned corpus fixture change; 62-case suite remains only .54 evidence",
+      "evidenceDisposition": "prior-version execution only; the .55 archive/corpus is metadata-aligned and payload-reviewed, but the 62-case suite was not rerun",
+      "currentSuiteClaimed": false
+    },
+    "managedGrants": {
+      "receiptSha256": "abdeb7db2c11556340ac6796cd0dba62571f542ecc3bdae3e988af33b275c8b7",
+      "priorSourceCommit": "da07d0b6e45f3b4bd0a918ebedcebd086a5b9b55",
+      "priorWheelSha256": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52",
+      "inputBasisCount": 754,
+      "missingInputs": [],
+      "mismatchedInputs": [],
+      "currentInputClosureSha256": "ab2626a93bffac42530bf75d0534cef3bac14811746099f1ac3db68a2a0623b9",
+      "reuseBasis": "All recorded 754 test/producer/data input-basis files are present and byte-identical in current source. This closes the input dependency comparison only; it does not carry forward the old pass across changed host/installation code.",
+      "currentInputClosureFile": "qualification/managed-grants-input-basis-current-hashes.json",
+      "evidenceDisposition": "historical .54 result only; not reused as a .55 pass because the installed host/installation implementation changed and those modules are in the prior suite",
+      "currentSuiteClaimed": false
+    },
+    "carrier": {
+      "currentReceipt": "qualification/standalone-carrier-qualification-macos.json",
+      "currentReceiptSha256": "bdb6419b26e06d9e645d2df7420f69b312292473f8bf54c7b45f1916ebddeeb9",
+      "platform": "macOS arm64",
+      "tests": 31,
+      "passed": true,
+      "evidenceDisposition": "current .55 exact-wheel installed-package test on macOS arm64"
+    },
+    "timeoutApi": {
+      "currentReceipt": "qualification/install-timeout-qualification-macos.json",
+      "currentReceiptSha256": "05799b58505a29472f75ad22187f857e6f5c94fc600996f0fef32b235d998c3f",
+      "tests": 5,
+      "clampCheckMilliseconds": 5000,
+      "passed": true,
+      "evidenceDisposition": "current .55 exact-wheel focused test on macOS arm64, including frozen parent deadline clamp"
+    },
+    "ashlarNative": {
+      "receipt": "qualification/ashlar-r61-qualification-closeout.json",
+      "receiptSha256": "8e45c1ccbeed123749ec4353af2d12ee6cc2dd0f48f2658109c55b10094fac1f",
+      "trussWheelSha256": "156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805",
+      "platform": "macOS arm64 local-development Truss source; separate GraphFrames-only retained-export pass",
+      "sourceAuthority": "local development only",
+      "doesNotClaim": "Truss Linux native qualification or full Truss release workflow pass",
+      "evidenceDisposition": "current .55 exact-wheel use in R61 local development source qualification; graphframes pass is a separate retained-export-only run"
+    }
+  },
+  "notQualifiedInThisLocalBundle": [
+    "full 62-case .55 HF suite",
+    "current .55 native migration suite",
+    "current .55 managed-grants suite",
+    "Linux native Truss .55",
+    "full release workflow",
+    "PyPI publication"
+  ],
+  "publishGate": "Root must bind managed Ashlar completion and review this exact bundle. No tag or release is created by this bundle."
+}

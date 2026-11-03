@@ -1,0 +1,37 @@
+{
+  "schema": "truss-local-qualification/0.1",
+  "status": "qualified_subset_with_historical_component_reuse",
+  "candidateVersion": "0.0.55",
+  "candidateSourceCommit": "71c3e14bbb97fc9f1c938587d535ab69d2032ba0",
+  "candidateWheelSha256": "156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805",
+  "candidateSdistSha256": "be2964a6f17064fd2061e46882f745c6dc730915f488293eb70dc203b9dd5c26",
+  "target": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "python": "3.12.14"
+  },
+  "currentReceipts": {
+    "standaloneCarrier": {
+      "path": "qualification/standalone-carrier-qualification-macos.json",
+      "status": "passed",
+      "tests": 31
+    },
+    "installTimeoutApi": {
+      "path": "qualification/install-timeout-qualification-macos.json",
+      "status": "passed",
+      "tests": 5
+    },
+    "ashlarR61": {
+      "path": "qualification/ashlar-r61-qualification-closeout.json",
+      "status": "composed local-development qualification; source phase passed, retained-export-only GraphFrames retry passed"
+    }
+  },
+  "priorEvidenceReuse": "See component-reuse-binding.json; .54 migration/HF/managed-grants receipts retain their original source commit, wheel and Linux target and are not relabeled .55 passes.",
+  "limits": [
+    "No Truss .55 HF 62-case execution",
+    "No Truss .55 migration suite execution",
+    "No Truss .55 managed-grants suite execution",
+    "No Truss Linux native qualification",
+    "No PyPI or GitHub release publication"
+  ]
+}

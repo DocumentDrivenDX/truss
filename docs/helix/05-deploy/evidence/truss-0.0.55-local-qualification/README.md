@@ -1,7 +1,8 @@
 # Truss 0.0.55 local qualification
 
-This packet records the local candidate evidence for source commit
-`43b863053925d376030792c922b7098134890853`. It is not a publication receipt.
+This packet records the local candidate evidence for package source commit
+`43b863053925d376030792c922b7098134890853`, with version-aligned release
+metadata at `71c3e14bbb97fc9f1c938587d535ab69d2032ba0`. It is not a publication receipt.
 No v0.0.55 tag, GitHub release, hosted release workflow or PyPI upload has
 occurred.
 
@@ -15,16 +16,31 @@ The local wheel and source archive are listed in
 | `umf_truss-0.0.55-py3-none-any.whl` | `156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805` |
 | `umf_truss-0.0.55.tar.gz` | `be2964a6f17064fd2061e46882f745c6dc730915f488293eb70dc203b9dd5c26` |
 
-The documentation update does not modify package source or rebuild either
-artifact. These are local build hashes, not public registry hashes.
+The later documentation and fixture metadata commits do not change the wheel
+payload. These are local build hashes, not public registry hashes. A passive
+bundle verifier compares the current wheel and sdist production sources against
+the candidate assets.
 
 ## Focused timeout tests
 
 [`focused-timeout-tests.json`](focused-timeout-tests.json) records four passing
-unit tests under Python 3.12.14. They check default behavior, per-install
-override forwarding and bounds, invalid-input refusal before host work, and the
-single-operation host path. This focused module is not the full Truss test
-suite.
+tests from the packaged timeout module and one supplementary pure parent
+deadline check, all against the installed exact .55 wheel under macOS arm64 and
+Python 3.12.14. The supplementary check freezes the clock and observes a
+5-second remaining parent deadline clamp a requested 180-second install
+override before SQL. Its source is outside `packages/python`, so the qualified
+wheel and sdist remain unchanged. These focused tests are not the full Truss
+test suite.
+
+[`qualification-manifest-macos.json`](qualification-manifest-macos.json) names
+the current local target. [`component-reuse-binding.json`](component-reuse-binding.json)
+binds the current wheel/source, the published .54 receipts, and the exact
+changed component set. The .54 migration, HF and managed-grants results remain
+historical execution evidence; none is labeled as a current .55 suite pass.
+All 754 managed-grants input-basis files were compared and are byte-identical,
+but that does not carry its old pass across the changed host/installation code.
+The changed .55 native code is covered only by the focused timeout checks and
+the R61 path described below. No Truss Linux native qualification is claimed.
 
 ## Fresh Truss source and ACK evidence
 
@@ -57,3 +73,19 @@ Truss suite, exact-tag CI, general platform support, managed-service or
 production acceptance, backend termination on timeout, safe reuse after
 cancellation, historical upgrade/recovery, or public PyPI/GitHub delivery.
 The fresh-install-only baseline and its existing refusals remain unchanged.
+
+## Local bundle verification
+
+The local bundle at
+`/private/tmp/truss055-local-publish-run/local-release-bundle` contains the
+candidate assets, exact .54 release receipts/assets, current qualification
+receipts, and a checksum manifest. Verify it without network or database access:
+
+```sh
+python3 scripts/release-qualification/verify_local_bundle.py \
+  --source-root . \
+  --bundle-root /private/tmp/truss055-local-publish-run/local-release-bundle
+```
+
+This validates hashes and source relationships only. Final release pins and
+publication remain pending the separate managed Ashlar gate and owner review.
