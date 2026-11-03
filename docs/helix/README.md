@@ -1,8 +1,11 @@
 # truss project documentation
 
 The local 0.0.55 candidate adds a bounded install-only operation timeout for
-fresh catalog installation. It remains unpublished and does not change native
-SQL or the fresh-install baseline; see the [candidate notes](05-deploy/releases/v0.0.55.md).
+fresh catalog installation. Focused timeout tests and Ashlar's fresh Truss
+0.0.55 source/ACK workflow passed on the selected local runtime. The candidate
+remains untagged and unpublished; full Truss suite and hosted release gates are
+not claimed. See the [release notes](05-deploy/releases/v0.0.55.md) and
+[local qualification evidence](05-deploy/evidence/truss-0.0.55-local-qualification/README.md).
 
 Release 0.0.54 packages the standalone local timestamp carrier while retaining
 the existing native and value-profile refusals. Its

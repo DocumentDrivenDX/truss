@@ -1,0 +1,24 @@
+{
+  "schema": "truss-focused-timeout-tests/0.1",
+  "status": "passed",
+  "sourceCommit": "43b863053925d376030792c922b7098134890853",
+  "distribution": "umf-truss",
+  "version": "0.0.55",
+  "python": "3.12.14",
+  "environment": "/private/tmp/ashlar-r61-runtime-68191905",
+  "installedDistributionVersion": "0.0.55",
+  "importedCode": "packages/python/src via PYTHONPATH; tests exercised checked-out source, not installed-wheel imports.",
+  "testSource": "packages/python/tests/test_install_operation_timeout.py",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src /private/tmp/ashlar-r61-runtime-68191905/bin/python -m unittest discover -s packages/python/tests -p test_install_operation_timeout.py",
+  "testsRun": 4,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "cases": [
+    "test_default_install_uses_existing_host_deadline",
+    "test_explicit_install_override_is_bounded_and_does_not_change_host_default",
+    "test_invalid_override_refuses_before_host_operation",
+    "test_private_host_path_passes_one_per_operation_override"
+  ],
+  "scope": "Focused install-operation timeout unit tests only; not the full Truss suite or native backend qualification."
+}
