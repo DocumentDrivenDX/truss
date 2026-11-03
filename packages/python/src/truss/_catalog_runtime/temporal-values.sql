@@ -2,18 +2,31 @@
 -- actual cached property/type metadata. A cache hit never caches authority.
 CREATE FUNCTION truss.temporal_writer_basis_custody() RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE selected_revision int;registration record;metadata jsonb;metadata_bytes bytea;
+DECLARE selected_revision int;registration record;metadata jsonb;metadata_bytes bytea;complete_bytes bigint;
 BEGIN
  SELECT rev INTO STRICT selected_revision FROM truss.schema_head WHERE id=1;
  SELECT declaration_bytes,source_bytes INTO STRICT registration FROM truss.catalog_registration_request WHERE revision=selected_revision;
  IF (SELECT count(*) FROM (SELECT 1 FROM truss.prop_def WHERE retired_rev IS NULL LIMIT 65537) p)>65536
   OR (SELECT count(*) FROM (SELECT 1 FROM truss.runtime_type_schema WHERE rev=selected_revision LIMIT 65537) t)>65536 THEN
   RAISE EXCEPTION 'bounded complete temporal schema basis required' USING ERRCODE='54000';END IF;
- SELECT jsonb_build_object('properties',
-  (SELECT coalesce(jsonb_agg(to_jsonb(p) ORDER BY p.prop_id),'[]'::jsonb) FROM truss.prop_def p WHERE p.retired_rev IS NULL),
-  'types',(SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.type_id),'[]'::jsonb) FROM truss.runtime_type_schema t WHERE t.rev=selected_revision)) INTO metadata;
+ -- One statement snapshot: sum each native row's textual bytes plus exact
+ -- array separators BEFORE constructing either complete JSON aggregate. The
+ -- CASE subqueries are entered only for an admitted complete byte budget.
+ WITH bounds AS MATERIALIZED (
+  SELECT octet_length(convert_to(jsonb_build_object('properties','[]'::jsonb,'types','[]'::jsonb)::text,'UTF8'))::bigint
+   +(SELECT coalesce(sum(octet_length(convert_to(to_jsonb(p)::text,'UTF8'))::bigint+2),0)
+     -(CASE WHEN count(*)>0 THEN 2 ELSE 0 END) FROM truss.prop_def p WHERE p.retired_rev IS NULL)
+   +(SELECT coalesce(sum(octet_length(convert_to(to_jsonb(t)::text,'UTF8'))::bigint+2),0)
+     -(CASE WHEN count(*)>0 THEN 2 ELSE 0 END) FROM truss.runtime_type_schema t WHERE t.rev=selected_revision) bytes
+ )
+ SELECT bounds.bytes,CASE WHEN bounds.bytes<=16777216 THEN jsonb_build_object('properties',
+   (SELECT coalesce(jsonb_agg(to_jsonb(p) ORDER BY p.prop_id),'[]'::jsonb) FROM truss.prop_def p WHERE p.retired_rev IS NULL),
+   'types',(SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.type_id),'[]'::jsonb) FROM truss.runtime_type_schema t WHERE t.rev=selected_revision)) END
+ INTO complete_bytes,metadata FROM bounds;
+ IF metadata IS NULL THEN RAISE EXCEPTION 'bounded complete temporal schema bytes required before aggregation' USING ERRCODE='54000';END IF;
  metadata_bytes:=convert_to(metadata::text,'UTF8');
- IF octet_length(metadata_bytes)>16777216 THEN RAISE EXCEPTION 'bounded complete temporal schema bytes required' USING ERRCODE='54000';END IF;
+ IF octet_length(metadata_bytes)<>complete_bytes OR octet_length(metadata_bytes)>16777216 THEN
+  RAISE EXCEPTION 'complete temporal schema byte custody changed' USING ERRCODE='55000';END IF;
  RETURN jsonb_build_object('valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi(),
   'inputProfile','truss-group-temporal-input/0.1.0','personOid',truss.runtime_person(false)::text,
   'declarationSha256',encode(sha256(registration.declaration_bytes),'hex'),

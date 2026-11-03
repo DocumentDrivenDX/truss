@@ -1167,7 +1167,8 @@ BEGIN
    ELSE
     IF operation->>'operation'='update_object' THEN
      IF operation-ARRAY['operation','target','set','unset','expectedVersion','ownershipChange']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object update required' USING ERRCODE='22023';END IF;
-     IF application_prepared IS NOT NULL AND state->'image'->>'rev'=revision::text THEN
+     IF application_prepared IS NOT NULL AND (state->'image'->>'rev'=revision::text
+      OR input->>'interfaceVersion'='truss-group-temporal-input/0.1.0') THEN
       values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,
        state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb));
       IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' AND values_image IS DISTINCT FROM
