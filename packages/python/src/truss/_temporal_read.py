@@ -9,6 +9,32 @@ from ._temporal_values import logical_object_cell
 
 _OBJECT_FIELDS={'profile','releaseId','releaseSha256','documentId','moduleId','recordId','id','typeId',
                 'definitionPin','version','catalogRevision','recordRevision','createdAt','updatedAt','values','retained','valueProfile','queryAbi'}
+_INT32_MAX=2147483647
+_INT64_MAX=9223372036854775807
+
+
+def _decimal_string(value,maximum,field):
+    """Admit the exact native positive decimal string BEFORE conversion."""
+    bound=str(maximum)
+    if (type(value) is not str or not value or value[0]=='0' or not value.isascii() or not value.isdecimal()
+            or len(value)>len(bound) or len(value)==len(bound) and value>bound):
+        raise ValueError('Canonical positive bounded native decimal string required: '+field)
+    return int(value)
+
+
+def decode_cursor(value,manifest,digest):
+    from . import temporal as dto
+    if (type(value) is not dict or set(value)!={'profile','installationId','sourceEpoch','releaseSha256',
+            'documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId','valueProfile','queryAbi'}
+            or value['profile']!='truss-python-temporal-object-page/0.1' or value['releaseSha256']!=digest
+            or value['valueProfile']!=profiles()['valueProfile'] or value['queryAbi']!=abi()):
+        raise ValueError('Whole actual selected native cursor required')
+    return dto.ObjectPageCursor(installation_id=value['installationId'],source_epoch=value['sourceEpoch'],
+        release_sha256=value['releaseSha256'],document_id=value['documentId'],module_id=value['moduleId'],record_id=value['recordId'],
+        type_id=_decimal_string(value['typeId'],_INT32_MAX,'cursor.typeId'),definition_pin=value['definitionPin'],
+        catalog_revision=_decimal_string(value['catalogRevision'],_INT32_MAX,'cursor.catalogRevision'),
+        after_id=_decimal_string(value['afterId'],_INT64_MAX,'cursor.afterId'),
+        value_profile=ProfilePin(**value['valueProfile']),query_abi=ProfilePin(**value['queryAbi']))
 
 
 def decode_object(raw,manifest,digest):
@@ -24,10 +50,15 @@ def decode_object(raw,manifest,digest):
         or value['valueProfile']!=profiles()['valueProfile'] or value['queryAbi']!=abi()):
         raise ValueError('Closed actual selected temporal object envelope required')
     object_type=dto.LogicalObject if owned else dto.ScalarObject
+    if owned:
+        _decimal_string(value['root']['id'],_INT64_MAX,'root.id')
+        _decimal_string(value['root']['typeId'],_INT32_MAX,'root.typeId')
     extra={'ownership':OwnedOwnership(root=StoredObjectReference(identity=_identity(value['root'])))} if owned else {}
     return dto.ObjectFound(object=object_type(**extra,document_id=value['documentId'],module_id=value['moduleId'],record_id=value['recordId'],
-        id=int(value['id']),type_id=int(value['typeId']),definition_pin=value['definitionPin'],version=int(value['version']),
-        catalog_revision=int(value['catalogRevision']),record_revision=int(value['recordRevision']),created_at=value['createdAt'],updated_at=value['updatedAt'],
+        id=_decimal_string(value['id'],_INT64_MAX,'object.id'),type_id=_decimal_string(value['typeId'],_INT32_MAX,'object.typeId'),
+        definition_pin=value['definitionPin'],version=_decimal_string(value['version'],_INT64_MAX,'object.version'),
+        catalog_revision=_decimal_string(value['catalogRevision'],_INT32_MAX,'object.catalogRevision'),
+        record_revision=_decimal_string(value['recordRevision'],_INT32_MAX,'object.recordRevision'),created_at=value['createdAt'],updated_at=value['updatedAt'],
         values=tuple((name,logical_object_cell(cell,local=True)) for name,cell in value['values']),
         retained=tuple((name,logical_object_cell(cell,local=False)) for name,cell in value['retained'])))
 
@@ -101,8 +132,8 @@ def _page(assembly,args,manifest,digest,pin_cursor):
             return Ok(ObjectReadInvalid(code='cursor_selection'))
         if _wire(cursor.value_profile)!=profiles()['valueProfile'] or _wire(cursor.query_abi)!=abi():return Ok(ObjectReadInvalid(code='cursor'))
         value=_wire(cursor)
-        for key in ('typeId','catalogRevision','afterId'):
-            if type(value[key]) is not int or value[key]<=0:return Ok(ObjectReadInvalid(code='cursor'))
+        for key,maximum in (('typeId',_INT32_MAX),('catalogRevision',_INT32_MAX),('afterId',_INT64_MAX)):
+            if type(value[key]) is not int or not 1<=value[key]<=maximum:return Ok(ObjectReadInvalid(code='cursor'))
             value[key]=str(value[key])
         original=json.dumps(value,ensure_ascii=True).encode()
         if len(original)>65536:return Ok(ObjectReadInvalid(code='cursor'))
@@ -118,12 +149,11 @@ def _page(assembly,args,manifest,digest,pin_cursor):
             or value['profile']!='truss-python-temporal-object-page/0.1'
             or value['valueProfile']!=profiles()['valueProfile'] or value['queryAbi']!=abi()):
             raise ValueError('Closed actual temporal object page required')
-        following=value['continuation']
-        if following is not None:
-            following=dto.ObjectPageCursor(installation_id=following['installationId'],source_epoch=following['sourceEpoch'],
-                release_sha256=following['releaseSha256'],document_id=following['documentId'],module_id=following['moduleId'],record_id=following['recordId'],
-                type_id=int(following['typeId']),definition_pin=following['definitionPin'],catalog_revision=int(following['catalogRevision']),after_id=int(following['afterId']),
-                value_profile=ProfilePin(**following['valueProfile']),query_abi=ProfilePin(**following['queryAbi']))
+        # Unlike object/cursor wire fields, the frozen page envelope carries a
+        # JSON integer revision. Preserve that type and its actual native range.
+        if type(value['catalogRevision']) is not int or not 1<=value['catalogRevision']<=_INT32_MAX:
+            raise ValueError('Exact native page revision required')
+        following=None if value['continuation'] is None else decode_cursor(value['continuation'],manifest,digest)
         return dto.ObjectPage(objects=tuple(decode_object(json.dumps(obj).encode(),manifest,digest).object for obj in value['objects']),
                               catalog_revision=value['catalogRevision'],continuation=following)
     return _result(assembly,assembly._host._run_operation(args['transaction'],observe,function_call=True))
