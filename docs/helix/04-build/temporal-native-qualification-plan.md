@@ -288,6 +288,67 @@ this focused campaign does not waive their exact-tag requirements.
 
 ## CI selection and build commands
 
+### Earliest raw initializer observation admission
+
+Decision `truss.temporal-native-qualification/1-observation-admission` (2026-11-03):
+the two serial `UTC` and `America/New_York` raw initializer observations may precede
+Core3.13/source-rebuilt consumers and Weft WASM/browser completion. They observe
+one exact installed Linux initializer; they do not qualify a baseline, native
+composition, owner release or public package. No execution is admitted by this
+plan amendment alone.
+
+Final-source selection follows the
+[Weft R_W production decision](temporal-coherent-source-integration-plan.md#weft-final-production-source-and-current-artifact-inventory).
+Prepare reusable enrollment/intake code now, but select only the incoming genuine
+final R_W Linux release wheel and module. Retained d526 component proofs remain
+valid at their original source; no d526 PostgreSQL captures or combined campaign
+are selected because the expected final wheel/enrollment seal would invalidate
+them. Final R_W Linux component qualification may support early observations
+while its WASM/browser release gates remain open, once the complete actual input
+and enrollment admission below passes review.
+
+Before PostgreSQL starts, Sol reviews ONE actual artifact/enrollment admission:
+
+- Actual Linux Core0.10.8 wheel/source/module identity at canonical S; fresh
+  installed Python3.11 inspection17/51 calls, resource/source/payload checks,
+  Saga19 and lifecycle results. Preserve the original SDK/browser custody proofs
+  and their separate controller/source identities.
+- Actual Linux umf-weft0.4.57 wheel/module at reviewed Weft source, frozen lock
+  and canonical S dependency/resource closure; installed14 temporal boundary and
+  five padded-routing controls, callable four-checker APIs and repaired installed
+  SDK compatibility/custody controls green. A produced wheel or metadata alone
+  is insufficient. macOS proof cannot substitute for this Linux boundary.
+- Exact Accessdev10/Truss0.0.56 installed wheel bytes, normal-resolver/pip-check
+  closure, runtime versions/origins, and a clean actual Truss commit/tree. Genuine
+  Core/Weft binary enrollments and their actual installed hashes, all canonical
+  resources, source seal and native0.76 manifest must be complete before capture.
+  Existing source/installed-payload, enrollment and producer refusal checks stay
+  enabled, including `load_cohort(require_qualified=True)`; no placeholder or
+  ambient-source fallback is permitted.
+
+The identity seal and admission must label their evidence scope as installed
+Linux component admission for inventory observation. They must list actual
+Core3.13/rebuilt and Weft WASM/browser outcomes and all pending full-cohort/TN/release gates explicitly;
+do not invent a full-qualified status to satisfy an identity field. Use only the
+reviewed default-OFF inventory phase, one hosted Linux job, exactly two serial
+fresh initializers, unchanged initialization/clocks and original owned cleanup.
+
+Record each gate's actual outcome and original receipt identity. The coordinator's
+reported green Core continuation41626678514 must be reconciled with its final
+artifact packet; do not keep a completed gate labelled pending or use that report
+alone as promotion/capture admission. Source PASS for dd59 intake preparation
+admits no resolver, build, enrollment apply, capture or hosted execution. Its
+actual final-R_W input packet and clean committed Truss source/tree require
+separate review; intake outputs remain `ready:false` until that later admission.
+
+Retain original capture commit/tree/producer, wheel/module/native digests and raw
+inventories. Later tests over identical bytes do not require recapture. Changed
+selected non-migration payload, compiled enrollment, source seal or native
+manifest requires fresh captures; only the reviewed migration-artifact descendant
+rule permits baseline incorporation without them. Baseline assembly still needs
+review, and final119 execution remains gated on the full reviewed baseline and
+cohort admission. No remaining owner, native or public release gate is waived.
+
 Noether implements selectors; Sol does not edit its workflow. Required behavior
 is default-OFF explicit selection with exclusive job routing. Suggested internal
 inputs are `temporal_native:boolean=false`, `temporal_selection:choice=none`

@@ -377,6 +377,31 @@ assets and receipts. Do not publish0.10.7 for that owner. No additional external
 approval is required; successor source/artifact qualification, normal resolver
 closure, collision checks and public-byte/fresh-consumer gates remain mandatory.
 
+The [production-S/controller release binding](temporal-coherent-source-integration-plan.md#coreaccess-promotion-production-s-and-qualification-controllers)
+fixes Core0.10.8's tag and artifact source at canonical S after its incorporation
+into main. Reviewed qualification controllers also merge into main, with their
+own commit/hash receipts; they do not change Weft's eight canonical source pins
+or relabel retained S artifacts. The main-only core publisher's exact tag/source/
+checksum contract remains intact. Access needs its separately scoped upload route;
+its existing identity/coordinated workflows are validation, not publication.
+
+Raw Truss initializer observations have the narrower
+[installed-Linux component admission](temporal-native-qualification-plan.md#earliest-raw-initializer-observation-admission).
+They may overlap the remaining Core3.13/rebuilt and Weft WASM/browser work once
+their exact actual binary/enrollment inputs are reviewed; they establish no
+cohort/release qualification and do not relax final119 or public-delivery gates.
+
+The [final Weft production-source decision](temporal-coherent-source-integration-plan.md#weft-final-production-source-and-current-artifact-inventory)
+selects actual final Weft main R_W and genuine final producer bytes, not private
+WASM-fix d887 or retained d526 artifacts. Noether prepares enrollment/intake code
+against that final inventory; do not spend PostgreSQL captures on d526 when the
+expected final wheel/seal would invalidate them. The
+[scoped Core continuation](temporal-coherent-source-integration-plan.md#coreaccess-promotion-production-s-and-qualification-controllers)
+and [observed Access publisher failure](temporal-coherent-source-integration-plan.md#access-publisher-observed-external-matching-failure)
+have separate evidence and delivery boundaries. Core promotion still needs its
+actual final receipt/current-main/source-controller review; Access's workflow
+publisher matching failure does not block independent Core/Weft/Truss work.
+
 1. Reconcile the frozen Core owner repair in the existing parent lane. Freeze
    C/A/W/T and all coupled metadata before final artifact admission. Private
    builds and installed qualification do not require owner package publication.

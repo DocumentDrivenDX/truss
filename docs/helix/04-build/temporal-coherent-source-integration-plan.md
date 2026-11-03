@@ -58,6 +58,173 @@ publication or final installed/native qualification. Arras repair is independent
 
 ## Current exact inputs and ownership
 
+### Core/Access promotion: production S and qualification controllers
+
+Decision `truss.temporal-coherent-source/1-release-binding` (2026-11-03): keep
+production source S=`e3f38ef6f05ae636d2837f9d69f8d6805222664b`, tree
+`a21368a92df488882ef9771e4a1d92205267ddd3`, as the Core0.10.8 artifact/tag source
+and Weft's canonical dependency. Qualification controllers are separate sources:
+reviewed Q=`6f0ca8a0a6777016bdeb0e7a49807ccee2ab1a02`, followed by exact native-profile
+enrollment `86e673322ebf75d385ae7119d51e0753d64e2b53`. The remaining hosted resume
+controller must be reviewed and recorded at its actual commit before dispatch.
+Do not predict that commit or claim its missing installed gates have passed.
+
+The coordinator reports [run41626678514](https://github.com/DocumentDrivenDX/umf/actions/runs/41626678514)
+green at Q=`9056a0144b2b3c5954dfb47a8c359fc684879e3e`: the two corrected fixture
+controls, independent no-JavaScript S-sdist rebuild, rebuilt3.11, direct3.13 and
+rebuilt3.13 consumer gates, cleanup, RECORD capture and artifact retention passed.
+This continuation leaves production S and its original archive bytes unchanged.
+Its final artifact/digest receipt packet still requires promotion review; the
+earlier SDK/browser, direct3.11 Saga19/lifecycle2 and inspection17/51 proofs retain
+their original producer/controller/run identities. This scoped result does not
+qualify Weft/Truss or establish main merge, tag, public delivery or fresh-public
+consumer completion.
+
+1. Finish the admitted missing qualification gates and freeze a receipt roster
+   binding each producer/source commit, controller commit/tree, changed verifier/
+   oracle hashes, run/attempt/artifact IDs, input/output digests and actual scope.
+   Preserve the failed runs and partial passes. A qualification receipt assembled
+   from multiple runs must reference their distinct identities and gate outcomes;
+   it must not manufacture one successful producer run.
+2. Freshly reconcile remote main/PR89 ancestry, then merge the reviewed production
+   S through the existing parent lane without squashing/rebasing away S. Integrate
+   reviewed oracle, profile, workflow and receipt-controller changes into main
+   through that lane too. Record actual main commit R and prove S is its ancestor.
+   Do not replace PR89's canonical S with Q or edit the reserved0.10.7 lane.
+3. After all required gates and live collision checks pass, tag `umf-v0.10.8`
+   at S itself, now incorporated into main, not at controller/main tip R. The
+   complete public source archive is the Git archive of S. `release-pins.commit`
+   and the publisher's `source_sha` are S; Q/R are separately identified control
+   sources. This selects the actual merged production revision rather than
+   pretending retained S artifacts were built from Q/R. It governs earlier
+   ambiguous references to a final merged release revision in this plan.
+4. Stage the qualified coupled SDK/Core/CLI/source/companion roster with actual
+   checksums, producer manifests and the receipt roster. Reuse an artifact only
+   with exact declared source/resource/member/feature correspondence. In particular,
+   S's Python sdist contains the original `test_distribution_artifact.py`; Q's
+   changed test is external qualification authority, not a changed sdist member.
+   Do not overlay Q into the release source/sdist, rename archives, or assert a
+   source-map equality that does not hold. No production S2/Weft repin or runtime
+   rebuild follows solely from these qualification/controller changes.
+5. Publish GitHub assets and use the existing main-only `publish-pypi.yml` core
+   OIDC route with exact S/tag/SHA256SUMS pins and its normal public-consumer gate.
+   Main must contain the reviewed0.10.8 publisher guards/controllers before use.
+   The inspected publisher already allows exact0.10.8 and binds the tag/pins/assets;
+   it does not require the release tag to equal the workflow/main tip. Do not
+   change `locally_qualified` to bypass missing installed/public proof, broaden
+   distribution selection, or reuse the historical0.10.3 retained-release profile.
+6. Publish Access0.1.0.dev10 only after public Core0.10.8 is available, using the
+   unchanged qualified Access archives and a source-S/hash receipt. Access package
+   identity and coordinated Python workflows currently validate without uploading;
+   the inspected core publisher accepts only `umf-core`. Luna must establish a
+   separately scoped, reviewed Access upload route and verify actual normal project/
+   trusted-publisher capability. This is remaining delivery work, not an assumed
+   external approval requirement. Preserve the core-only publisher restriction.
+
+Public verification must download the exact tagged S source and all selected
+archives, verify checksums and producer inputs, and run fresh installed consumers
+with each required controller pinned explicitly. Core/companion and Access public
+availability are separate claims. Remaining Weft/Truss native and public gates
+continue under the cohort order; no existing qualification gate is waived.
+
+### Bounded Access publisher implementation
+
+Decision `truss.temporal-coherent-source/1-access-publisher`: Lovelace owns only
+the separately scoped Access delivery route in an isolated S-based checkout.
+H retains Core qualification/publication. Proposed files are
+`.github/workflows/publish-access-pypi.yml`, `scripts/publish_access_pypi_release.py`
+and its dedicated pure controls. Shared inventories/metadata and any main
+integration remain coordinator-owned; do not edit the core publisher, package
+semantics, dependency pins or runtime identity. No heavy local qualification.
+
+- Use one Access component release in the same UMF repository, proposed exact tag
+  `access-v0.1.0.dev10` at S, subject to fresh collision checks before creation.
+  This is package delivery through the existing parent lane, not a new integration
+  branch/stream. Stage the unchanged qualified wheel and sdist under their actual
+  filenames, plus `release-pins.json`, `SHA256SUMS` and the actual Access
+  qualification receipt. Do not rebuild, rename or synthesize qualification.
+- Pins bind exact tag, commit=S, distribution=`umf-access`, version=`0.1.0.dev10`,
+  exact two-file hash map, dependency `umf-core==0.10.8`, and qualification receipt
+  filename/hash. Validate normalized metadata name, wheel/sdist version, dependency,
+  Python range and pure-wheel tag against the actual archives. Refuse ambiguous,
+  duplicate, unsafe, missing or extra selected package files and conflicting bytes.
+- Workflow is manual/default-OFF with `publish=false` by default. Accept explicit
+  tag, source SHA and public SHA256SUMS SHA256 pins; require execution from default
+  branch. Verification can run without upload permission. The separately gated
+  publish job obtains OIDC only when `publish=true` and verification passes; retain
+  contents/actions read permissions elsewhere and existing immutable archive guards.
+- Before upload require completed actual Access/cohort qualification and qualified
+  public Core0.10.8 availability. The core-only publisher remains restricted.
+  Inspect normal available Access project/trusted-publisher capability without
+  exposing credentials; register/use the dedicated workflow only where that
+  capability is established. Report an actual rejected action precisely, rather
+  than inventing a required human approval or assuming repository ownership grants
+  PyPI project control. Do not use local upload or credential workarounds.
+- Registry state must be absent or exactly the selected two files/bytes. Exact
+  existing bytes permit verification-only reuse; partial/conflicting inventories
+  refuse. After upload, download and compare public bytes and run a fresh
+  public-index consumer with no private wheelhouse, forced dependencies or skipped
+  dependency resolution. Require Core0.10.8 resolution, `pip check`, installed
+  origins/version/runtime identity and an inert public catalog/CLI smoke; this
+  does not replace native temporal qualification or access a database.
+- Review pure positive/negative custody controls and the exact workflow/receipt
+  packet before remote actions. No new builds, dispatch, merge, tag or upload from
+  this plan amendment. After review, Luna executes the authorized route through
+  remaining technical gates; no extra human confirmation is introduced.
+
+### Access publisher: observed external matching failure
+
+The dedicated Access route is now implemented through PR99/100/101, separately
+from production S. [Run41627480216](https://github.com/DocumentDrivenDX/umf/actions/runs/41627480216),
+at main/workflow `86c4c1fb8bf47b9ddf710c14d5ded024b3393286`, passed exact local
+immutable owner/repository/workflow/environment claim checks. Its capability-only
+exchange then received PyPI HTTP422 `invalid-publisher`: a valid token with no
+matching publisher. Sanitized artifact13226737073 has SHA256
+`37cb4c70533251bac188d2844f2b3e9058336226997cfe116c6123b906a9b195`.
+This is an actual workflow-token matching failure, not proof of a project-specific
+upload denial or missing human release authority. No package upload was attempted.
+
+Verify/add the `umf-access` project's Trusted Publisher using owner
+`DocumentDrivenDX`, repository `umf`, workflow filename `publish-access-pypi.yml`
+and environment `pypi`, through an authenticated project administration mechanism.
+No shared token, local upload or alternate-credential bypass is selected. A
+subsequent exact-main capability-only exchange remains separate from project
+authorization and all package/Core/cohort qualification gates. Core/Weft/Truss
+work continues independently of this delivery blocker.
+
+### Weft final production source and current artifact inventory
+
+Decision `truss.temporal-coherent-source/1-weft-final-source` (2026-11-03): the
+four fully qualified WASM attribute corrections at private
+`d887bcc5e681ddcd99e0c1ed85f756dab2660130` have source PASS. That private commit
+is not the final producer identity. Integrate the reviewed fix/current SDK
+fixtures and required reviewed producer/profile wiring through existing PR50;
+then freeze the actual final Weft main commit R_W before production. R_W is
+distinct from UMF production S and UMF's separately recorded controller/main tip.
+
+The unchanged exact source/tree/main-ref release guards require genuine R_W
+production: Linux x86_64, Linux ARM64 and macOS ARM64 wheels, source archive and
+corrected WASM. Bind source archive, source/tree, actual workflows, manifests,
+release tag and selected artifacts to their real identities. Review the minimal
+producer/wiring packet before execution. The current three-wheel SDK profile
+requires one report per exact wheel, the ordered42 controls, wheel/native/shim
+digests and explicit producer/controller identities; preserve the historical
+five-wheel/26-control validator unchanged. Any separate closed current-profile
+validator requires source review before use.
+
+Retain d526 producer/run41620259034 Linux component and unaffected semantic
+proofs under their original identities. Unchanged native compiler inputs justify
+bounded semantic-proof reuse; they do not admit d526 artifacts as R_W publication
+outputs. Final artifacts need fresh installed/archive correspondence. A source-only
+sdist command lacking a supported `--locked` option must use locked Cargo
+preflight plus source/lock checks before and after, and verify archived lock,
+dependency manifests, source inventory and resources against R_W. Refuse mutation
+without restoring or rewriting inputs to conceal it. No 495 matrix replay is
+required solely by the isolated attribute fix; affected WASM/consumer and all
+remaining release gates still apply.
+
+### Original source-assembly inventory
+
 Fresh canonical remote main was `381ac3c9788f704201df0b9e16193e85802ef34e`
 (PR98 site evidence merge). All five PRs below were OPEN/unmerged. This is an
 observation, not permission to follow their branches after the recorded heads.
