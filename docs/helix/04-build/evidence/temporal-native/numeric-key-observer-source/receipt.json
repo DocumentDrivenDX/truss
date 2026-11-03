@@ -10,8 +10,9 @@
     "catalogAcceptance": 5,
     "targetRelease": 2
   },
-  "grammar": "Actual constructed observer DDL parsed offline; no SQL executed",
+  "grammar": "Actual unchanged observer method extracted from source AST, executed only against capture-only objects, and emitted fixture DDL parsed offline by pglast. No SQL executed.",
   "productionChanged": false,
   "nativeCasesExecuted": 0,
-  "next": "Sol source review; include in genuine coherent candidate campaign after canonicalS/normalresolver/artifact/manifests closure. No separate component restart."
+  "next": "Sol source review; include in genuine coherent candidate campaign after canonicalS/normalresolver/artifact/manifests closure. No separate component restart.",
+  "priorGrammarAttempt": "First offline pglast-only environment could not import psycopg; failed before grammar parse. Retained observer-grammar-import-attempt.log. Corrected AST-only grammar verification now passes without package installation/native execution."
 }
