@@ -9,6 +9,48 @@ import temporal_native_fixture as fixture
 
 
 class TemporalSourceSecurityNativeTests(fixture.TemporalNativeFixture):
+    def test_native_temporal_cached_and_uncached_source_keep_exact_descriptor_basis(self):
+        """TN08 cache present/miss on actual public acceptance, not mock rows."""
+        c,h,a,tx=self.ready_temporal();binding,requirements=self.capture(c)
+        parsed=json.loads(binding);revision=parsed['catalogRevision']
+        cached=self.admin.execute('SELECT metadata::text FROM truss.runtime_document_schema WHERE rev=%s AND doc_id=%s',
+                                  (revision,'adoc')).fetchone()
+        self.assertIsNotNone(cached)
+        metadata=json.loads(cached[0]);pin=next(p for p in parsed['documents'] if p['documentId']=='adoc')
+        self.assertEqual(metadata['pin'],pin)
+        family,descriptor,definition_pin,property_id=self.admin.execute(
+            "SELECT p.scalar_type,p.native_temporal,d.definition_pin,p.prop_id FROM truss.prop_def p "
+            "JOIN truss.runtime_definition_source d ON d.rev=p.definition_rev AND d.ord=p.definition_doc_ord "
+            "AND d.doc_id=p.definition_document_id AND d.module_id=p.declaration_module AND d.element_id=p.element "
+            "AND d.kind='element' AND d.key_id='' WHERE p.type_id=%s AND p.element='A-local'",
+            (self.selected_type,)).fetchone()
+        self.assertEqual(family,'localTimestamp');self.assertEqual(descriptor['source']['sha256'],pin['sha256'])
+        type_metadata,valid=self.admin.execute('SELECT metadata,valid_properties FROM truss.runtime_type_schema WHERE rev=%s AND type_id=%s',
+                                             (revision,self.selected_type)).fetchone()
+        self.assertIs(valid,True);self.assertEqual(type_metadata['propertyPins'][str(property_id)],definition_pin)
+        original=c.execute('SELECT id,props FROM '+self.source()+' ORDER BY id',self.source_arguments(binding,requirements)).fetchall()
+        self.assertEqual(len(original),6)
+        # Named administrative cache-miss control. Actual native data/owner
+        # inputs stay unchanged; immutable triggers are restored BEFORE calls.
+        self.admin.execute('ALTER TABLE truss.runtime_document_schema DISABLE TRIGGER USER')
+        try:self.admin.execute('DELETE FROM truss.runtime_document_schema WHERE rev=%s AND doc_id=%s',(revision,'adoc'))
+        finally:self.admin.execute('ALTER TABLE truss.runtime_document_schema ENABLE TRIGGER USER')
+        try:
+            self.assertIsNone(self.admin.execute('SELECT metadata FROM truss.runtime_document_schema WHERE rev=%s AND doc_id=%s',
+                                               (revision,'adoc')).fetchone())
+            missing=c.execute('SELECT id,props FROM '+self.source()+' ORDER BY id',self.source_arguments(binding,requirements)).fetchall()
+            self.assertEqual(missing,original)
+        finally:
+            self.admin.execute('INSERT INTO truss.runtime_document_schema(rev,doc_id,metadata) VALUES(%s,%s,%s::jsonb)',
+                               (revision,'adoc',cached[0]))
+        self.assertEqual(self.admin.execute('SELECT metadata::text FROM truss.runtime_document_schema WHERE rev=%s AND doc_id=%s',
+                                           (revision,'adoc')).fetchone(),cached)
+        self.assertEqual(c.execute('SELECT id,props FROM '+self.source()+' ORDER BY id',self.source_arguments(binding,requirements)).fetchall(),original)
+        self.assertEqual(self.admin.execute("SELECT native_temporal FROM truss.prop_def WHERE type_id=%s AND element='A-local'",
+                                           (self.selected_type,)).fetchone()[0],descriptor)
+        print('temporal-native-cache-source-custody '+json.dumps({'catalogRevision':revision,'sourcePin':pin,
+            'family':family,'nativeDescriptor':descriptor,'definitionPin':definition_pin,'cachedAndUncachedRows':len(original)},sort_keys=True))
+
     def denied_source(self, connection, binding, requirements, state):
         with self.assertRaises(psycopg.Error) as caught:
             with connection.transaction():

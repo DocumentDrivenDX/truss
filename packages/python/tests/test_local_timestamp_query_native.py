@@ -12,9 +12,10 @@ from truss import (Ok, LocalTimestampValue, CatalogRuntimeConfiguration,
 from truss import temporal
 from truss.contracts import MapValue, NullValue, TextValue
 from truss.groups import (RootlessOwnership, StoredObjectReference, GroupSuccess,
-                          CommittedReceiptReplay, Delete)
+                          CommittedReceiptReplay, Delete,GroupFailed)
+from truss.preview import GroupValidationObserved
 from truss.history import HistoryEntity, HistoryPage, HistoricalRecord
-from truss.imports import ImportReported, ImportCreated, ImportSkipped
+from truss.imports import ImportReported, ImportCreated, ImportSkipped,ImportRejected
 import temporal_native_fixture as fixture
 
 
@@ -36,6 +37,59 @@ class LocalTimestampQueryTests(fixture.TemporalNativeFixture):
         self.assertIsInstance(result, Ok, repr(result))
         self.assertIsInstance(result.value, temporal.ObjectFound, repr(result))
         return result.value.object
+
+    def test_public_temporal_dry_run_failed_updates_and_per_record_import_effects(self):
+        """TN08 real public writes: preserve pending state on dry-run/refusal."""
+        c,h,a,tx=self.ready_temporal();selected=a.temporal_values()
+        local=LocalTimestampValue(text='2000-02-29T12:34:56.000001')
+        created,_,_=self.run_group(selected,tx,(self.local_create('dry-run-local',local),),'dry-run-local-create')
+        self.assertIsInstance(created,GroupSuccess,repr(created))
+        identity=created.response.semantic.results[0].identity
+        h.detach();c.commit();c,h,a,tx=self.consumer();selected=a.temporal_values()
+        # Fixed read-only observation follows the existing native validation
+        # fixture pattern. No raw-table grants or native happy-path seeds.
+        self.admin.execute("""CREATE FUNCTION public.temporal_fixture_state() RETURNS jsonb
+          LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog AS $$
+          SELECT jsonb_build_object(
+            'objects',(SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.id,t.type_id),'[]') FROM truss.object t),
+            'journal',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]') FROM (SELECT to_jsonb(t) v FROM truss.journal t) j),
+            'attempts',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]') FROM (SELECT to_jsonb(t) v FROM truss.runtime_object_attempt t) j),
+            'transitions',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]') FROM (SELECT to_jsonb(t) v FROM truss.runtime_object_transition t) j),
+            'receipts',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]') FROM (SELECT to_jsonb(t) v FROM truss.request_receipt t) j),
+            'schema',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]') FROM (SELECT to_jsonb(t) v FROM truss.runtime_type_schema t) j)) $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION IF EXISTS public.temporal_fixture_state()')
+        def snapshot():return c.execute('SELECT public.temporal_fixture_state()').fetchone()[0]
+        before=snapshot();context=selected.group_context_in_transaction(tx).value
+        update=temporal.UpdateObject(target=StoredObjectReference(identity=identity),expected_version='1',unset=(),
+            set=(temporal.AuthoredValue(name='A-local',value=LocalTimestampValue(text='2024-01-01T00:00:00.000000')),))
+        dry=selected.dry_run_in_transaction(tx,context.input((update,),MapValue(entries=())),documents=self.documents)
+        self.assertIsInstance(dry,Ok,repr(dry));self.assertIsInstance(dry.value,GroupValidationObserved,repr(dry))
+        self.assertEqual(dry.value.basis.durability,'rolled_back');self.assertEqual(snapshot(),before)
+        self.assertEqual(dict(self.selected_read(selected,tx,identity).values)['A-local'],local)
+        for name,value in (('A-local',TextValue(kind='timestamp',text='2024-01-01T00:00:00Z')),
+                           ('A-date',NullValue()),('A-instant',LocalTimestampValue(text='2000-01-01T00:00:00.000000'))):
+            with self.subTest(field=name):
+                invalid=temporal.UpdateObject(target=StoredObjectReference(identity=identity),expected_version='1',unset=(),
+                    set=(temporal.AuthoredValue(name=name,value=value),))
+                failed,_,_=self.run_group(selected,tx,(invalid,))
+                self.assertIsInstance(failed,GroupFailed,repr(failed));self.assertEqual(snapshot(),before)
+        good=self.local_create('import-valid-per-record',local)
+        bad=self.local_create('import-invalid-per-record',TextValue(kind='date',text='2000-02-29'))
+        records=[]
+        for operation in (good,bad):
+            prepared=selected.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',values=operation.values)
+            self.assertIsInstance(prepared,Ok,repr(prepared));records.append(prepared.value)
+        context=selected.import_context_in_transaction(tx).value
+        imported=selected.import_in_transaction(tx,context.input(tuple(records),load_id='temporal-per-record',
+            asserted_origin=MapValue(entries=())),documents=self.documents)
+        self.assertIsInstance(imported,ImportReported,repr(imported))
+        self.assertEqual(len(imported.report.outcomes),2)
+        self.assertIsInstance(imported.report.outcomes[0],ImportCreated)
+        self.assertIsInstance(imported.report.outcomes[1],ImportRejected)
+        self.assertEqual(dict(self.selected_read(selected,tx,imported.report.outcomes[0].identity).values)['A-local'],local)
+        after=snapshot();self.assertEqual(len(after['objects']),len(before['objects'])+1)
+        self.assertEqual(self.selected_read(selected,tx,identity).version,1)
+        h.detach();c.rollback()
 
     def test_public_accept_apply_read_all_temporal_families_and_presence(self):
         c, h, a, tx = self.ready_temporal()
