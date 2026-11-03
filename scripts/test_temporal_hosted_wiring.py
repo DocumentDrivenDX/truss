@@ -5,6 +5,8 @@ from hashlib import sha256
 import importlib.util
 import itertools
 import json
+import os
+import sys
 from pathlib import Path
 import re
 import subprocess
@@ -83,7 +85,7 @@ class TemporalHostedWiringTests(unittest.TestCase):
                 subprocess.run(['bash','-n'],input=step['run'],text=True,check=True,capture_output=True)
                 for code in re.findall(r"<<'PYCODE'\n(.*?)\nPYCODE",step['run'],re.S):
                     ast.parse(textwrap.dedent(code));parsed_python+=1
-        self.assertEqual(parsed_python,4)
+        self.assertEqual(parsed_python,5)
         ast.parse((ROOT/'scripts/prepare-temporal-hosted-input.py').read_text())
 
     def test_candidate_installs_original_wheels_without_dependency_suppression(self):
@@ -133,3 +135,55 @@ class TemporalHostedWiringTests(unittest.TestCase):
         install=next(step for step in job['steps'] if step.get('name','').startswith('Install one fresh'))
         self.assertEqual(install['if'],"${{ inputs.temporal_candidate_phase != 'intake' }}")
         self.assertEqual(self.workflow['on']['workflow_dispatch']['inputs']['temporal_candidate_phase']['default'],'none')
+
+    def test_public055_same_step_uses_validated_wheel_with_variable_initially_unset(self):
+        step=next(s for s in self.workflow['jobs']['temporal-candidate']['steps'] if s.get('name')=='Prepare the separate immutable public055 fixture environment')
+        original_pin='156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805'
+        self.assertEqual(step['run'].count(original_pin),1)
+        # Exercise the ACTUAL step shell and Python validator with a tiny,
+        # explicitly non-wheel fixture. Only its expected digest is substituted.
+        # Venv/pip are argument-recording stubs; no resolver or native runs.
+        body=b'source-only shell fixture; not an owner wheel'
+        command=step['run'].replace(original_pin,sha256(body).hexdigest())
+        pip_stub='#!'+sys.executable+'\n'+textwrap.dedent('''
+            import json,os,pathlib,sys
+            args=sys.argv[1:]
+            with open(os.environ['TN_SHELL_CONTROL_CALLS'],'a') as out:out.write(json.dumps(args)+'\\n')
+            if args[:3]==['-m','pip','install']:
+                report=pathlib.Path(args[args.index('--report')+1])
+                report.write_text(json.dumps({'scope':'source-only shell stub; no resolver','install':[]}))
+                print('source-only install argument control')
+            elif args==['-m','pip','check']:print('source-only check argument control')
+            elif args==['-m','pip','freeze']:print('source-shell-control==0')
+            else:raise SystemExit('Unexpected executable in shell control: '+repr(args))
+        ''')
+        bootstrap='#!'+sys.executable+'\n'+textwrap.dedent('''
+            import os,pathlib,sys
+            if sys.argv[1:]==['-']:os.execv(sys.executable,[sys.executable,'-'])
+            if sys.argv[1:3]!=['-m','venv']:raise SystemExit('Unexpected bootstrap')
+            target=pathlib.Path(sys.argv[3])/'bin/python';target.parent.mkdir(parents=True)
+            target.write_text(STUB);target.chmod(0o755)
+        ''').replace('STUB',repr(pip_stub))
+        for valid in (True,False):
+            with self.subTest(validDigest=valid),tempfile.TemporaryDirectory() as directory:
+                root=Path(directory)/'step root';wheel=root/'inputs/wheelhouse/public055.whl';wheel.parent.mkdir(parents=True)
+                wheel.write_bytes(body if valid else body+b'corrupt')
+                (root/'evidence').mkdir();env_file=root/'GITHUB_ENV';env_file.write_text('')
+                admission=root/'admission.json';admission.write_text(json.dumps({'public055Wheel':str(wheel),'public055Python':str(root/'public055-env/bin/python')}))
+                bin_path=root/'control-bin';bin_path.mkdir();python=bin_path/'python';python.write_text(bootstrap);python.chmod(0o755)
+                calls=root/'calls.jsonl';env=dict(os.environ);env.pop('TN_PUBLIC055_WHEEL',None)
+                env.update(TN_ROOT=str(root),TN_ADMISSION=str(admission),GITHUB_ENV=str(env_file),TN_SHELL_CONTROL_CALLS=str(calls),PATH=str(bin_path)+os.pathsep+env['PATH'],PYTHONDONTWRITEBYTECODE='1')
+                run=subprocess.run(['bash','-c','test -z "${TN_PUBLIC055_WHEEL+x}"\n'+command],cwd=ROOT,env=env,text=True,capture_output=True,timeout=15)
+                if not valid:
+                    self.assertNotEqual(run.returncode,0)
+                    self.assertFalse((root/'public055-env').exists());self.assertFalse(calls.exists())
+                    continue
+                self.assertEqual(run.returncode,0,run.stdout+run.stderr)
+                observed=[json.loads(line) for line in calls.read_text().splitlines()]
+                self.assertEqual(observed[0][-1],str(wheel)+'[local,native]')
+                self.assertIn('--report',observed[0]);self.assertIn('--constraint',observed[0])
+                self.assertEqual(observed[1:],[['-m','pip','check'],['-m','pip','freeze']])
+                self.assertEqual(env_file.read_text(),'TN_PUBLIC055_WHEEL='+str(wheel)+'\n')
+                for name in ('public055-install.log','public055-install-report.json','public055-pip-check.log','public055-freeze.txt'):
+                    self.assertTrue((root/'evidence'/name).is_file(),name)
+                self.assertIn('source-shell-control==0',(root/'evidence/public055-freeze.txt').read_text())

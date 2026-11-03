@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""TP001 one serial installed-candidate campaign: original119 + closed JH10. Default is collection ONLY.
+"""TP001 one serial installed-candidate campaign: original119 + closed JH10 + separate public0551. Default is collection ONLY.
 
 No installation/build, dependency override, source repair, publish, matrix or
 implicit dispatch occurs here. Execute only after exact source/selection review
@@ -25,7 +25,7 @@ from zipfile import ZipFile
 from temporal_qualification_support import collect_exact,flatten,strict_result,RecordedResult,OwnedNativeCleanup,assert_qualification_checkout,validate_capture_transition
 ROOT=Path(__file__).resolve().parents[1]
 LEDGER=Path(__file__).with_name('temporal-native-case-ledger.json')
-EXPECTED={'temporal':39,'public54':1,'ordinary':11,'hf':62,'baseline':6,'journal':10}
+EXPECTED={'temporal':39,'public54':1,'ordinary':11,'hf':62,'baseline':6,'journal':10,'public55':1}
 
 
 def ledger():
@@ -164,6 +164,15 @@ print("original public54 installed payload verified")
     old=subprocess.run([str(Path(admission['public054Python']).resolve()),'-I','-c',old_script,str(old_wheel)],
         cwd=Path(sys.prefix),capture_output=True,text=True,timeout=30)
     if old.returncode:raise ValueError('Original public54 fixture environment is not ready: '+old.stdout+old.stderr)
+    sys.path.insert(0,str(ROOT/'packages/python/tests'))
+    from test_temporal_public055_refusal_native import provenance,PUBLIC055_WHEEL_SHA256,PUBLIC055_NATIVE_SHA256
+    public055=provenance();old55_wheel=Path(admission['public055Wheel']).resolve()
+    if sha256(old55_wheel.read_bytes()).hexdigest()!=PUBLIC055_WHEEL_SHA256:raise ValueError('Authentic public055 fixture wheel required')
+    script55=old_script.replace('0.0.54','0.0.55').replace('print("original public54 installed payload verified")',
+        "assert __import__('hashlib').sha256((root/'_catalog_runtime/manifest.json').read_bytes()).hexdigest()==sys.argv[2]\nprint('original public055 installed payload verified')")
+    script55+="\nexpected_files={name.removeprefix('truss/') for name in wheel.namelist() if name.startswith('truss/') and not name.endswith('/')}\nactual_files={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc'}\nassert actual_files==expected_files\nselected=__import__('json').loads(pathlib.Path(sys.argv[3]).read_bytes())\nfor name,version in selected['dependencyPins311Linux'].items():\n assert importlib.metadata.version(name)==version,name\nfor name in selected['forbiddenOwnerDistributions']:\n try:importlib.metadata.distribution(name)\n except importlib.metadata.PackageNotFoundError:continue\n raise ValueError('Foreign predecessor owner: '+name)\n"
+    checked55=subprocess.run([str(Path(admission['public055Python']).resolve()),'-I','-c',script55,str(old55_wheel),PUBLIC055_NATIVE_SHA256,str(ROOT/'packages/python/tests/fixtures/temporal/public055-provenance.json')],cwd=Path(sys.prefix),capture_output=True,text=True,timeout=30)
+    if checked55.returncode:raise ValueError('Original public055 fixture environment is not ready: '+checked55.stdout+checked55.stderr)
     archive,raw=read_pinned(admission['hfArchive']);hfroot=Path(admission['hfRoot']).resolve()
     if hfroot.is_relative_to(ROOT):raise ValueError('HF must execute from independent unpacked archive outside checkout')
     with ZipFile(archive) as z:
@@ -191,6 +200,8 @@ def run_child(stage,value,admission,output):
     native_evidence.mkdir(parents=True,exist_ok=False);os.environ['TRUSS_NATIVE_EVIDENCE_DIR']=str(native_evidence)
     os.environ['TRUSS_PUBLIC054_PYTHON']=str(Path(admission['public054Python']).resolve())
     os.environ['TRUSS_PUBLIC054_WHEEL']=str(Path(admission['public054Wheel']).resolve())
+    os.environ['TRUSS_PUBLIC055_PYTHON']=str(Path(admission['public055Python']).resolve())
+    os.environ['TRUSS_PUBLIC055_WHEEL']=str(Path(admission['public055Wheel']).resolve())
     selected_cases=list(flatten(suite));classes=list(dict.fromkeys(type(test) for test in selected_cases))
     result=None;inventory=False;cleanup=False;error=None;captured=[];created=[]
     class StageResult(RecordedResult):

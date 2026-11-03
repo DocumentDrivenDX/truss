@@ -1,5 +1,16 @@
 # Truss Python toolkit
 
+## Version 0.0.55: bounded fresh-install operation timeout
+
+The candidate adds `operation_timeout_ms` to
+`CatalogReferenceAssembly.install_in_transaction`. It defaults to the adopted
+host operation deadline; callers may select up to 180000 milliseconds for this
+one installation operation. The host statement timeout remains independently
+capped at 60000 milliseconds, active outer deadlines remain binding, and later
+operations keep the host's configured deadline. The override requests
+cancellation; it does not establish backend termination or transaction
+settlement.
+
 ## Version 0.0.54 standalone local carrier
 
 `from truss import LocalTimestampValue` constructs an immutable canonical civil
@@ -793,8 +804,14 @@ Recover the host transaction/connection before reuse.
 ## Fresh installation and access
 
 Call `install_in_transaction(tx)` on a fresh database without a `truss` schema,
-then commit the caller transaction. Inspect `status_in_transaction(tx)` rather
-than treating assembly construction as proof of installation.
+then commit the caller transaction. The call defaults to the adopted host's
+operation deadline. A caller that needs more time for the ordered installation
+DDL may pass `operation_timeout_ms=180000`; this extends only that one install
+operation, with a maximum of 180 seconds. The host's native statement timeout
+remains capped at 60 seconds, and later operations keep the host's configured
+deadline. The timeout requests cancellation; it does not guarantee backend
+termination or settle the caller's transaction. Inspect `status_in_transaction(tx)`
+rather than treating assembly construction as proof of installation.
 
 `CatalogRuntimeStatus` includes the observed `release_id`, `release_sha256` and
 `layout_profile` (`ProfilePin`) alongside installation ID, catalog revision and

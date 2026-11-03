@@ -591,6 +591,12 @@
         "gate": "JH-T01\u201309",
         "test": "test_initialization_custody_native.InitializationCustodyNativeTests.test_postddl_custody_refusal_is_contained_and_preserves_prior_caller_work"
       }
+    ],
+    "public55": [
+      {
+        "gate": "TN12-public055",
+        "test": "test_temporal_public055_refusal_native.TemporalPublic055RefusalTests.test_public55_populated_installation_refuses_candidate_without_effects"
+      }
     ]
   },
   "ordinaryCoveredOnceByHF": [
@@ -604,7 +610,8 @@
     "ordinary": 11,
     "hf": 62,
     "baseline": 6,
-    "journal": 10
+    "journal": 10,
+    "public55": 1
   },
   "qualificationBoundaries": {
     "TN00": "Exact unchanged F7 source6b3154ba.. Linux41550448558 seven-case receipt retained; current installed owner/ACL/body/guarded scalar execution binds same helper in TN01/05/09. No repeat standalone helper campaign.",

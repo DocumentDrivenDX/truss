@@ -1,5 +1,19 @@
 # truss project documentation
 
+Truss 0.0.55 adds a bounded install-only operation timeout for
+fresh catalog installation. Its model scope is UMF model 0.10.0; the selected
+integration cohort is UMF SDK 0.10.2/Core 0.10.6, Weft 0.4.56, and Access
+0.1.0.dev8. Focused timeout tests, Ashlar's selected local Truss 0.0.55
+source/ACK workflow, and the scoped managed Ashlar A1 gate passed. The managed
+closeout verified both A0/A1 ACKs and post-ACK cleanup; see its
+[qualification receipt](05-deploy/evidence/truss-0.0.55-local-qualification/managed-ashlar-a1-closeout.json).
+The [GitHub v0.0.55 release](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.55)
+is published. Full Truss-suite, Linux-native, and PyPI results are outside this
+scoped claim. Its [publication and download verification](05-deploy/evidence/truss-0.0.55-publication/README.md)
+records all six downloaded asset hashes. See the
+[release notes](05-deploy/releases/v0.0.55.md) and
+[local qualification evidence](05-deploy/evidence/truss-0.0.55-local-qualification/README.md).
+
 Release 0.0.54 packages the standalone local timestamp carrier while retaining
 the existing native and value-profile refusals. Its
 [release notes](05-deploy/releases/v0.0.54.md) define the narrow scope;

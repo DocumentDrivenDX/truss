@@ -25,6 +25,71 @@ historical migration, horizon extension or support claim from synthetic dates.
 
 # Temporal integration against the current baseline
 
+## Published0.0.55 predecessor boundary
+
+The published0.0.55 source is `6cfe25cd8a2fc1e54ffd0d3b6200ad83546e9317`;
+main's publication receipt is `73b0ab14f4bc4ad57f4c492f83c503255e3e7df2`.
+Its native catalog and migration artifact trees are byte-identical to0.0.54
+at `aef15a9b`; native manifest SHA-256 remains
+`5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522`.
+The changed Python installer/host accepts an explicit installation-only timeout
+of1..180000ms while retaining the default, statement limits and parent-deadline
+intersection. Preserve that published behavior when composing the temporal
+installer and JH whole-unit observations. This source equivalence is not a
+native execution receipt for the merged temporal candidate.
+
+Fresh0.76/0.0.56 admits no populated0.0.55 installation, migration edge, witness
+backfill or historical recovery. Existing native0.75 identity/freshness refusals
+continue to apply; absence of private JH custody does not authorize repair.
+Qualify this newly published Python predecessor through one additive authentic
+public0.0.55 populated-state refusal case in the native qualification plan.
+Preserve all original119 and10 JH cases. Freeze the reconciled source, plan,
+selection and exact public fixture before either new timezone capture.
+
+### Public channels and resolver boundary for0.0.55
+
+Authentic0.0.55 bytes are published on immutable GitHub release `v0.0.55`;
+its release pins explicitly record `pypiPublished:false`. The PyPI version JSON
+returned404 during this review. Do not describe0.0.55 as PyPI-published.
+Its actual wheel METADATA SHA-256 is
+`fc300af37a44e44021190048e0e2fc99e99cd483361420da962ed9d8be210a9d`.
+Base requirements are exactly `jsonschema==4.26.0`, `referencing==0.37.0` and
+`mini-racer==0.14.1`; no Core, Access or Weft requirement is present in the base.
+`query` requires `weft-sql==0.4.51`; `typed-sdk` requires
+`umf_access==0.1.0.dev5`. Local/native requirements are likewise exact version
+pins. Public `weft-sql0.4.51` metadata declares no Requires-Dist; Accessdev5's
+public version JSON returned404. These are metadata observations, not a fresh
+resolver/install result.
+
+Publishing `umf-weft0.4.57` does not replace the separately named `weft-sql`
+requirement. Accessdev10 cannot satisfy an exact dev5 pin. Consequently these
+actual0.0.55 metadata paths establish no automatic upgrade to Core0108,
+Accessdev10 or Weft0457, and no new publication hold follows from that hypothesis.
+An unavailable exact extra must fail, not silently substitute a new cohort.
+The release's separately recorded Core0106/SDK0102/Weft0456/Accessdev8 local
+integration tuple is not the wheel's default extras-resolution contract.
+
+For the public055 negative fixture, install the authentic GitHub wheel in its
+own environment with its released `isolated-runtime-constraints.txt` (SHA-256
+`cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889`)
+and only required local/native extras. The existing seed uses Truss public APIs
+and its original embedded preparation sources; do not add query/typed-sdk extras
+or new owner packages merely because they are present in the candidate process.
+Retain resolver report/freeze/pip-check and exact installed055 payload checks.
+Any additional seed dependency needs original qualified-tuple evidence and
+explicit pins; never use `--no-deps`, import shadowing or constraint overrides
+to force an incompatible tuple.
+
+Core0108 is already public with its recorded proof. Weft0457 may progress through
+its own reviewed qualification/publication gates independently of the055 fixture;
+preserve all required consumer gates. Accessdev10 and Codegen0108 publication
+remain subject to their actual publisher-binding and package-proof gates.
+Truss056 publication follows its full130-case/native/publication qualification
+and availability of its exact public dependency closure, including Accessdev10
+and Weft0457. Keep its reviewed exact pins; public fresh-consumer verification
+must use normal resolution of those actual public bytes. No old055 or other
+immutable assets, yanks or owner worktrees are changed by this boundary.
+
 ## Scope
 
 Port the genuine temporal gap in snapshot

@@ -34,6 +34,45 @@ campaign gates below; source review does not admit PG execution.
 
 # Temporal native qualification plan
 
+## TN-12 additive public0.0.55 refusal
+
+The [current-baseline predecessor boundary](temporal-current-baseline-plan.md#published0055-predecessor-boundary)
+records source-level native0.75 equivalence with0.0.54 and the separately changed
+Python installation timeout. Native execution against public0.0.55 remains
+UNEXECUTED. Add one closed case without modifying any original119 or JH10 ID:
+`test_temporal_public055_refusal_native.TemporalPublic055RefusalTests.test_public55_populated_installation_refuses_candidate_without_effects`.
+Use a separate `public55` ledger stage of1; the complete campaign becomes130
+cases. Do not reinterpret the original `public54` stage or expand old lineage.
+
+Luna owns the new test/fixture, exact selection and preflight integration.
+Authenticate the genuine published wheel
+`umf_truss-0.0.55-py3-none-any.whl`, SHA-256
+`156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805`,
+against the immutable public release/download receipts. Install it in a separate
+normal-resolver environment; verify its exact installed package payload and
+native manifest against that archive. No candidate imports may seed the old DB.
+Retain actual old/new source identities, wheel hashes and fixture provenance.
+
+Seed real public acceptance, objects/properties, unknown source content, retained
+requests/receipts, history and feed state using the existing authentic seed
+producer. Require nonempty seed assertions. On that populated installation,
+the candidate installer must return `InstallRefused/incompatible`; candidate
+RuntimeMigrations status/verify/prepare must reject the unsupported source.
+After each attempt compare complete table data, sequences, native definitions,
+ACLs, roles/memberships, original installation identity and retained state.
+Confirm no new custody relation/witness, migration receipt, source rewrite or
+repair. Preserve prior caller work where the existing transaction contract
+applies. Keep original errors/refusals; no timeout or missing-fixture skip is a
+PASS. Use the existing serialized owned cleanup and retain confirmed pg_ctl3
+and original PID absence before deletion.
+
+Compose the0.0.55 timeout change before final source binding. Retain its focused
+deadline/containment controls and add coverage of JH observations under that
+same operation deadline; do not extend statement or later-operation limits.
+Review source and ledger/preflight changes before captures. Execute the new
+populated-state case within the later coherent campaign, not as an extra
+pre-capture native job. Two-zone raw observations remain observations only.
+
 ## Scope and strategy
 
 **Qualification selection: `truss.temporal-native-qualification/1`.** Execute a

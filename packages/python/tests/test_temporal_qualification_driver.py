@@ -46,9 +46,10 @@ class TemporalQualificationDriverTests(unittest.TestCase):
                 with self.subTest(invalid=invalid),self.assertRaises(ValueError):collect_exact(invalid)
 
     def test_governed_census_preserves_original_hf_cases_and_ordinary_overlap_only_once(self):
-        selected=driver.ledger();self.assertEqual(sum(selected['expectedCounts'].values()),129)
+        selected=driver.ledger();self.assertEqual(sum(selected['expectedCounts'].values()),130)
         self.assertEqual(selected['expectedCounts']['journal'],10)
-        self.assertEqual(sum(v for k,v in selected['expectedCounts'].items() if k!='journal'),119)
+        self.assertEqual(sum(v for k,v in selected['expectedCounts'].items() if k not in ('journal','public55')),119)
+        self.assertEqual(selected['expectedCounts']['public55'],1)
         original=json.loads((ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json').read_bytes())
         self.assertEqual([(r['id'],r['test']) for r in selected['stages']['hf']],[(r['id'],r['test']) for r in original['cases']])
         self.assertEqual(len(selected['ordinaryCoveredOnceByHF']),3)
@@ -100,3 +101,48 @@ class TemporalQualificationDriverTests(unittest.TestCase):
                  self.assertRaisesRegex(ValueError,'identities deferred'):
                 driver.preflight({'schema':'truss-temporal-qualification-input/1'})
             started.assert_not_called()
+
+    def test_public055_fixture_is_bound_to_immutable_publication_and_original_runtime_constraints(self):
+        from test_temporal_public055_refusal_native import provenance,PUBLIC055_WHEEL_SHA256,PUBLIC055_NATIVE_SHA256
+        selected=provenance()
+        publication=json.loads((ROOT/selected['publishedProof']).read_bytes())
+        wheel=next(row for row in publication['assets'] if row['name']==selected['wheelFilename'])
+        self.assertEqual(wheel['sha256'],PUBLIC055_WHEEL_SHA256)
+        self.assertEqual(wheel['bytes'],selected['wheelBytes'])
+        self.assertTrue(publication['release']['is_immutable'])
+        self.assertEqual(selected['nativeManifestSHA256'],PUBLIC055_NATIVE_SHA256)
+        self.assertEqual(selected['requestedExtras'],['local','native'])
+        self.assertEqual(selected['constraintsSHA256'],'cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889')
+        self.assertEqual(len(selected['dependencyPins311Linux']),13)
+        self.assertFalse(set(selected['dependencyPins311Linux'])&set(selected['forbiddenOwnerDistributions']))
+        self.assertEqual(selected['dependencyPins311Linux']['mini-racer'],'0.14.1')
+
+    def test_public055_seed_retains_original_api_sequence_except_bounded_install_keyword(self):
+        import ast
+        import copy
+        original=ast.parse((ROOT/'packages/python/tests/runtime_migration_fixture.py').read_text())
+        authored=ast.parse((ROOT/'packages/python/tests/public055_seed_fixture.py').read_text())
+        before=next(n for n in original.body if isinstance(n,ast.FunctionDef) and n.name=='seed')
+        after=copy.deepcopy(next(n for n in authored.body if isinstance(n,ast.FunctionDef) and n.name=='seed'))
+        installation=[n for n in ast.walk(after) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='install_in_transaction']
+        self.assertEqual(len(installation),1)
+        self.assertEqual([(k.arg,ast.literal_eval(k.value)) for k in installation[0].keywords],[('operation_timeout_ms',180000)])
+        installation[0].keywords=[]
+        self.assertEqual(ast.dump(before,include_attributes=False),ast.dump(after,include_attributes=False))
+
+    def test_public055_snapshot_retains_full_acl_names_without_changing_public054(self):
+        from unittest.mock import MagicMock
+        from test_temporal_public055_refusal_native import TemporalPublic055RefusalTests
+        from test_temporal_catalog_transport_native import TemporalCatalogTransportTests
+        from truss import _migration_verify
+        connection=MagicMock();cursor=connection.cursor.return_value.__enter__.return_value
+        prefix='same_native_routine_'+('x'*70)
+        full=[['routine',prefix+'(text,integer)','EXECUTE'],['routine',prefix+'(text,bigint)','EXECUTE']]
+        original={'tables':{'retained':'exact source'},'acl':[['routine',prefix[:63],'EXECUTE']]}
+        case=TemporalPublic055RefusalTests('test_public55_populated_installation_refuses_candidate_without_effects')
+        with patch.object(TemporalCatalogTransportTests,'snapshot',return_value=dict(original)),patch.object(_migration_verify,'acl',return_value=full) as observed:
+            actual=case.snapshot(connection)
+        observed.assert_called_once_with(cursor,full_names=True)
+        self.assertEqual(actual['acl'],full);self.assertEqual(actual['tables'],original['tables'])
+        before=subprocess.check_output(['git','show','6e2a38e66fd6322bd04a86cb49898b48b9ef5dbf:packages/python/tests/test_temporal_catalog_transport_native.py'],cwd=ROOT)
+        self.assertEqual((ROOT/'packages/python/tests/test_temporal_catalog_transport_native.py').read_bytes(),before)

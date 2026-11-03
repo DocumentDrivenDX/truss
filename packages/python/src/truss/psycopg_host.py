@@ -473,6 +473,9 @@ def _prepare_synchronous_publisher(publisher):
     return publish
 
 
+_MAX_INSTALL_OPERATION_TIMEOUT_MS = 180000
+
+
 class PsycopgHost:
     """Borrow a selected live connection without changing its ownership.
 
@@ -642,9 +645,13 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False, validation=False, attempt_capture=None):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, operation_timeout_ms=None, parameter_limit=4194304, function_call=False, adoption=False, validation=False, attempt_capture=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
+        if (operation_timeout_ms is not None
+                and (type(operation_timeout_ms) is not int
+                     or not 1 <= operation_timeout_ms <= _MAX_INSTALL_OPERATION_TIMEOUT_MS)):
+            return _failure('execution_obligation', 'Install operation timeout must be 1..180000 milliseconds')
         host_reservation=self._custody.reservation
         reserved=(type(host_reservation) in (_HostPairReservation,_HostOperationReservation) and host_reservation.active
                   and host_reservation.thread==get_ident() and any(h is self for h in host_reservation.hosts))
@@ -708,7 +715,8 @@ class PsycopgHost:
                     if issued.outcome != 'issued':
                         raise ValueError('Semantic operation ordinal unavailable')
 
-                milliseconds=self._deadline_ms
+                milliseconds=(self._deadline_ms if operation_timeout_ms is None
+                              else operation_timeout_ms)
                 if operation_deadline is not None:
                     remaining=operation_deadline-monotonic()
                     if remaining<=0:raise TimeoutError('Original operation deadline expired before dispatch')
@@ -931,15 +939,20 @@ class PsycopgHost:
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody, operation_deadline=operation_deadline, function_call=function_call)
 
-    def _run_operation_with_attempt(self, transaction, callback):
+    def _run_operation_with_attempt(self, transaction, callback, *, operation_timeout_ms=None):
         """Private operation variant returning the exact attempt created by this call."""
+        if (operation_timeout_ms is not None
+                and (type(operation_timeout_ms) is not int
+                     or not 1 <= operation_timeout_ms <= _MAX_INSTALL_OPERATION_TIMEOUT_MS)):
+            return _failure('execution_obligation', 'Install operation timeout must be 1..180000 milliseconds'), None
         custody = (self._transactions.get(transaction._key)
                    if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
         if (custody is None or custody.handle is not transaction
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required'), None
         captured=[]
-        result=self._attempt(callback,custody,attempt_capture=captured.append)
+        result=self._attempt(callback,custody,attempt_capture=captured.append,
+                             operation_timeout_ms=operation_timeout_ms)
         return result, captured[0] if len(captured)==1 else None
 
     def _run_validation_operation(self, transaction, callback):

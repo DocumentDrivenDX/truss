@@ -124,9 +124,29 @@ class InitializationCustodyNativeTests(unittest.TestCase):
         xid=self.c.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
         before=self.c.execute('SELECT oid,rolname FROM pg_roles ORDER BY oid').fetchall()
         host,a,tx=assembly(self.c)
+        observed=[];original_observe=custody.observe;host_default=host._deadline_ms
+        def record_observation(cursor):
+            # Actual native observations remain untouched. Capture the real
+            # guarded operation deadline identity, never replace its clock.
+            deadline=cursor._deadline
+            self.assertFalse(deadline.stopped);self.assertTrue(deadline.timer.is_alive())
+            result=original_observe(cursor);observed.append((cursor,deadline,deadline.end,result));return result
+        def reject_store(cursor,*args):
+            # Check the statement bound AFTER both original clock observations;
+            # insert no SQL between groups.sql and either native clock read.
+            cursor.execute("SELECT setting::int FROM pg_catalog.pg_settings WHERE name='statement_timeout'",prepare=False)
+            statement_ms=cursor.fetchone()[0];self.assertGreater(statement_ms,0);self.assertLessEqual(statement_ms,10000)
+            self.assertEqual(len(observed),2)
+            self.assertIs(cursor,observed[0][0]);self.assertIs(cursor,observed[1][0])
+            self.assertIs(observed[0][1],observed[1][1]);self.assertEqual(observed[0][2],observed[1][2])
+            self.assertEqual(observed[0][3][1:],observed[1][3][1:])
+            raise custody.InitializationCustodyRefused('injected post-DDL containment control')
         try:
-            with patch('truss._initialization_custody.store',side_effect=custody.InitializationCustodyRefused('injected post-DDL containment control')):
-                result=a.install_in_transaction(tx)
+            with patch('truss._initialization_custody.observe',side_effect=record_observation),patch('truss._initialization_custody.store',side_effect=reject_store):
+                result=a.install_in_transaction(tx,operation_timeout_ms=180000)
+            self.assertEqual(host._deadline_ms,host_default)
+            self.assertEqual(len(observed),2);self.assertTrue(observed[0][1].stopped)
+            self.assertFalse(observed[0][1].timer.is_alive())
         finally:host.detach()
         self.assertEqual(result,Ok(InstallRefused(code='incompatible')))
         self.assertEqual(self.c.info.transaction_status,TransactionStatus.INTRANS)

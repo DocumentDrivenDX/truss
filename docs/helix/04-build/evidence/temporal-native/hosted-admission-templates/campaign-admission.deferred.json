@@ -6,14 +6,31 @@
   "nativeManifestSha256": null,
   "wheelhouse": null,
   "wheels": {
-    "truss": {"path": null, "sha256": null},
-    "core": {"path": null, "sha256": null},
-    "access": {"path": null, "sha256": null},
-    "weft": {"path": null, "sha256": null}
+    "truss": {
+      "path": null,
+      "sha256": null
+    },
+    "core": {
+      "path": null,
+      "sha256": null
+    },
+    "access": {
+      "path": null,
+      "sha256": null
+    },
+    "weft": {
+      "path": null,
+      "sha256": null
+    }
   },
   "initializationCaptures": null,
-  "hfArchive": {"path": null, "sha256": null},
+  "hfArchive": {
+    "path": null,
+    "sha256": null
+  },
   "hfRoot": null,
   "public054Python": null,
-  "public054Wheel": null
+  "public054Wheel": null,
+  "public055Python": null,
+  "public055Wheel": null
 }
