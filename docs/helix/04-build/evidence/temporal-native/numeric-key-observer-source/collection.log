@@ -1,0 +1,4 @@
+test_temporal_engine_native 8
+test_temporal_catalog_acceptance_native 5
+test_temporal_target_release_native 2
+Source imports and collection only. Native tests UNEXECUTED.

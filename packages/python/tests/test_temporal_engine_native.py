@@ -55,7 +55,7 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
         print('temporal-actual-sdk-wrapper-custody '+json.dumps({'wrapperSha256':sha256(wrapped.artifact_json.encode()).hexdigest(),
             'innerProgramSha256':sha256(inner.encode()).hexdigest(),'nativeReadRows':len(actual),'wholeGenerationRetained':True},sort_keys=True))
 
-    def generated_row(self):
+    def generated_row(self,record='A'):
         owner,owner_pin=_inspector()
         package='temporal_native_'+uuid4().hex
         generated=owner.generate_python_client({'text':self.document.content.decode(),'package':package})
@@ -80,10 +80,12 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
                 if name==package or name.startswith(package+'.'):del sys.modules[name]
         self.addCleanup(forget)
         models=importlib.import_module(package+'.models')
-        required={'A-label','A-value','A-date','A-instant','A-local','A-payload'}
+        source=json.loads(self.document.content)
+        declared=next(e for m in source['modules'] if m['id']=='m' for e in m['elements'] if e['id']==record and e['kind']=='record')
+        required={member['element'] for member in declared['members']}
         rows=[value for value in vars(models).values() if isinstance(value,type) and hasattr(value,'objects')
               and {element for module,element,name in getattr(value,'UMF_FIELDS',()) if module=='m'}==required]
-        self.assertEqual(len(rows),1,'One actual owner-generated A row model required')
+        self.assertEqual(len(rows),1,'One actual owner-generated row model required for '+record)
         row=rows[0]
         self.assertEqual(row.UMF_SOURCE.document_sha256,sha256(self.document.content).hexdigest())
         print('temporal-native-generated-model '+json.dumps({'owner':owner_pin,'files':manifest,
@@ -111,7 +113,7 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
             if not row.model_fields[name].is_required():namespace[name]=row.model_fields[name].default
         return type('NativeTemporalProjection_'+uuid4().hex,(StrictModel,),namespace)
 
-    def entry(self,result,sql,*,page=False,key='a-primary',parameters_type=None,parameters=None,temporal_parameters=None):
+    def entry(self,result,sql,*,page=False,key='a-primary',record='A',parameters_type=None,parameters=None,temporal_parameters=None):
         from umf_access.engine_catalog import EngineRead
         from umf_access.types import StrictModel
         class Parameters(StrictModel):pass
@@ -121,7 +123,7 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
         self.assertIsInstance(captured,Ok,repr(captured));h.detach();c.rollback()
         owner=compiler();self.assertIsNotNone(owner,'Actual enrolled compiled Weft is mandatory')
         options={'method':'truss-runtime-temporal','temporal_profile':'umf.weft-binding-temporal/0.2'}
-        if page:options.update(page_size=2,selected_key={'module':'m','record':'A','key':key})
+        if page:options.update(page_size=2,selected_key={'module':'m','record':record,'key':key})
         original=json.loads(captured.value.request_json)
         entry=EngineRead.build(owner,original,parameters=Parameters,result=result,**options)
         self.assertEqual(entry.artifact()['request'],original)
@@ -319,3 +321,38 @@ class TemporalEngineNativeTests(fixture.TemporalNativeFixture):
         self.assertEqual(len(refusals),7)
         self.assertTrue(any(v['fault']=='sql' and v['stage']=='actual-owner-checker' for v in refusals))
         print('temporal-actual-program-tamper-refusals '+json.dumps(refusals,ensure_ascii=True,sort_keys=True))
+
+    def test_native_and_actual_owner_refuse_numeric_selected_key_even_for_empty_source(self):
+        from umf_access.native_program import ProgramBuildError
+        def numeric_record(source):
+            module=source['modules'][0]
+            module['elements'].extend(({'id':'C','name':'C','kind':'record',
+                'members':[{'module':'m','element':'C-id'},{'module':'m','element':'C-day'}],
+                'keys':[{'id':'c-primary','name':'primary','primary':True,'fields':[{'module':'m','element':'C-id'}]}]},
+                {'id':'C-id','name':'C-id','kind':'field','scalarType':'integer','cardinality':'one','nullability':'required',
+                 'facets':{'integerWidth':{'bits':64,'signed':True}}},
+                {'id':'C-day','name':'C-day','kind':'field','scalarType':'date','cardinality':'one','nullability':'required'}))
+            module['extensions']['umf.access']['views'].append({'record':{'module':'m','element':'C'},
+                'selectedKey':{'module':'m','element':'C','key':'c-primary'},'fields':[
+                    {'field':{'module':'m','element':name},'row':{'missing':False,'null':False},
+                     'create':{'missing':False,'null':False},'mutable':name!='C-id','generated':False}
+                    for name in ('C-id','C-day')]})
+        c,h,a,tx=self.ready_temporal(numeric_record)
+        binding,_=self.capture(c);parsed=json.loads(binding)
+        record=next(r for r in parsed['records'] if r['identity']['element']=='C')
+        field=next(f['identity'] for f in record['fields'] if f['identity']['element']=='C-day')
+        requirements={'version':'truss.temporal-source-guard/0.2','record':record['identity'],
+                      'fields':[{'field':field,'kind':'date','presence':{'missing':False,'null':False}}]}
+        with self.assertRaises(psycopg.Error) as refused:
+            with c.transaction():
+                with c.cursor(name='native_numeric_temporal_key') as cursor:
+                    cursor.execute('SELECT id FROM truss.person_query_temporal_page_objects(%s::jsonb,%s,%s,%s::jsonb) LIMIT 1',
+                        (binding,int(record['typeId']),'c-primary',json.dumps(requirements)))
+                    self.fail('Numeric temporal page Key accepted an empty source: '+repr(cursor.fetchone()))
+        self.assertEqual(refused.exception.sqlstate,'0A000');h.detach();c.rollback()
+        model=self.generated_row('C')
+        sql='SELECT '+','.join(quoted(e)+' AS '+quoted(n) for m,e,n in model.UMF_FIELDS)+' FROM "C" ORDER BY "C-day" ASC'
+        with self.assertRaises(ProgramBuildError) as blocked:self.entry(model,sql,page=True,key='c-primary',record='C')
+        original=json.loads(blocked.exception.original_json)
+        self.assertEqual(original['status'],'blocked');self.assertTrue(original['diagnostics'])
+        self.assertTrue(any('string' in d['message'].lower() for d in original['diagnostics']))

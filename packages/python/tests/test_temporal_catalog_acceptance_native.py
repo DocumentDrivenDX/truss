@@ -15,14 +15,21 @@ import temporal_native_fixture as fixture
 
 class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
     def registration_snapshot(self, connection):
-        result = {}
-        for table in ('schema_head','schema_doc','type_def','prop_def','key_def','rel_def',
-                      'catalog_registration_request','catalog_unchanged_request',
-                      'runtime_type_schema','journal','object','request_receipt'):
-            query = psycopg.sql.SQL("SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]'::jsonb)::text "
-                                   "FROM (SELECT to_jsonb(t) v FROM truss.{} t) s").format(psycopg.sql.Identifier(table))
-            result[table] = connection.execute(query).fetchone()[0]
-        return result
+        if not getattr(self,'_registration_observer_ready',False):
+            # Observe this caller's pending transaction without granting the
+            # person raw private-table privileges (which admission forbids).
+            # Same fixed read-only fixture pattern as group-validation tests.
+            tables=('schema_head','schema_doc','type_def','prop_def','key_def','rel_def',
+                    'catalog_registration_request','catalog_unchanged_request',
+                    'runtime_type_schema','journal','object','request_receipt')
+            pairs=["'"+table+"',(SELECT coalesce(jsonb_agg(v ORDER BY v::text),'[]'::jsonb)::text "
+                   "FROM (SELECT to_jsonb(t) v FROM truss."+table+" t) s)" for table in tables]
+            self.admin.execute('CREATE FUNCTION public.temporal_registration_observation() RETURNS jsonb '
+                'LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog AS $$ SELECT jsonb_build_object('
+                +','.join(pairs)+') $$')
+            self.addCleanup(self.admin.execute,'DROP FUNCTION IF EXISTS public.temporal_registration_observation()')
+            self._registration_observer_ready=True
+        return connection.execute('SELECT public.temporal_registration_observation()').fetchone()[0]
 
     def fresh_preparation(self, assembly):
         # Deliberately different original bytes/revision, with unchanged meaning.
@@ -146,7 +153,7 @@ class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
         selected=a.temporal_values()
         replay=selected.accept_in_transaction(tx,self.prepared,request_key='temporal-model')
         self.assertIsInstance(replay,Ok,repr(replay));self.assertTrue(replay.value.replayed)
-        stored=c.execute("SELECT input_bytes,document_bytes,declaration_bytes,source_bytes FROM truss.catalog_registration_request WHERE request_key='temporal-model'").fetchone()
+        stored=self.admin.execute("SELECT input_bytes,document_bytes,declaration_bytes,source_bytes FROM truss.catalog_registration_request WHERE request_key='temporal-model'").fetchone()
         self.assertEqual(tuple(bytes(v) for v in stored[:3]),(self.prepared.input_bytes,self.prepared.archive_documents_bytes,self.prepared.declarations_bytes))
         source=json.loads(bytes(stored[3]));self.assertEqual(source['sourceFormat'],'truss-registration-summary/2.1')
         archived=json.loads(bytes(stored[1]));declarations=json.loads(bytes(stored[2]))
@@ -161,5 +168,5 @@ class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
         again=a.temporal_values().accept_in_transaction(tx,self.prepared,request_key='temporal-model')
         self.assertIsInstance(again,Ok,repr(again));self.assertTrue(again.value.replayed)
         self.assertEqual(again.value.report_bytes,report)
-        self.assertEqual(c.execute("SELECT input_bytes,document_bytes,declaration_bytes,source_bytes FROM truss.catalog_registration_request WHERE request_key='temporal-model'").fetchone(),stored)
+        self.assertEqual(self.admin.execute("SELECT input_bytes,document_bytes,declaration_bytes,source_bytes FROM truss.catalog_registration_request WHERE request_key='temporal-model'").fetchone(),stored)
         h.detach();c.rollback()
