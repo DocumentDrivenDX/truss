@@ -3,6 +3,10 @@ name: Released Python runtime
 on:
   workflow_dispatch:
     inputs:
+      temporal_native_probe:
+        description: Run only fresh temporal native enrollment and three F8 structural components
+        type: boolean
+        default: false
       temporal_scalar_probe:
         description: Run only the unenrolled F7 strict temporal scalar native component
         type: boolean
@@ -15,7 +19,7 @@ permissions:
   contents: read
 jobs:
   released-runtime:
-    if: ${{ !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe }}
+    if: ${{ !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -54,7 +58,7 @@ jobs:
           path: docs/helix/04-build/evidence/design-audit/ci-release-*
           if-no-files-found: warn
   weft-abi12-probe:
-    if: ${{ inputs.weft_abi12_probe && !inputs.temporal_scalar_probe }}
+    if: ${{ inputs.weft_abi12_probe && !inputs.temporal_scalar_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -165,7 +169,7 @@ jobs:
           path: ${{ runner.temp }}/weft-abi12-probe
           if-no-files-found: warn
   temporal-scalar-probe:
-    if: ${{ inputs.temporal_scalar_probe && !inputs.weft_abi12_probe }}
+    if: ${{ inputs.temporal_scalar_probe && !inputs.weft_abi12_probe && !inputs.temporal_native_probe }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -212,4 +216,61 @@ jobs:
           path: |
             ${{ runner.temp }}/temporal-scalar-probe/inputs
             ${{ runner.temp }}/temporal-scalar-probe/evidence
+          if-no-files-found: warn
+  temporal-native-probe:
+    if: ${{ inputs.temporal_native_probe && !inputs.weft_abi12_probe && !inputs.temporal_scalar_probe }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prepare verified native dependencies for source enrollment only
+        shell: bash
+        run: |
+          set -euo pipefail
+          TN_ROOT="$RUNNER_TEMP/temporal-native-probe"
+          mkdir -p "$TN_ROOT/evidence" "$TN_ROOT/leases"
+          echo "TN_ROOT=$TN_ROOT" >> "$GITHUB_ENV"
+          python -m venv "$TN_ROOT/venv"
+          python scripts/install-local-runtime.py --download-only --wheelhouse "$TN_ROOT/inputs" \
+            2>&1 | tee "$TN_ROOT/evidence/native-wheel.log"
+          "$TN_ROOT/venv/bin/python" -m pip install --only-binary=:all: \
+            "$TN_ROOT"/inputs/*.whl 'psycopg[binary]==3.3.6' \
+            fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 \
+            2>&1 | tee "$TN_ROOT/evidence/install.log"
+          "$TN_ROOT/venv/bin/python" -m pip freeze > "$TN_ROOT/evidence/freeze.txt"
+          git rev-parse HEAD > "$TN_ROOT/evidence/source-commit.txt"
+          git status --porcelain=v1 > "$TN_ROOT/evidence/checkout-status.txt"
+          find packages/python/src/truss/_catalog_runtime -maxdepth 1 -type f -print0 \
+            | sort -z | xargs -0 sha256sum > "$TN_ROOT/evidence/native-source-sha256.txt"
+          sha256sum packages/python/tests/test_temporal_enrollment_native.py \
+            packages/python/tests/test_temporal_transport_component_native.py \
+            packages/python/tests/temporal_native_fixture.py \
+            packages/python/tests/fixtures/temporal/complete-owner-inspection.json \
+            packages/python/tests/fixtures/temporal/complete-owner-inspection-provenance.json \
+            > "$TN_ROOT/evidence/probe-source-sha256.txt"
+      - name: Run exactly one installer and three structural component cases
+        env:
+          PYTHONPATH: packages/python/src:packages/python/tests:scripts
+          PYTHONDONTWRITEBYTECODE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          export TMPDIR="$TN_ROOT/leases"
+          "$TN_ROOT/venv/bin/python" -m unittest \
+            test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi \
+            test_temporal_transport_component_native -v \
+            2>&1 | tee "$TN_ROOT/evidence/native-tests-and-cleanup.log"
+      - name: Always retain exact native inputs, observations and cleanup logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: temporal-native-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/temporal-native-probe/inputs
+            ${{ runner.temp }}/temporal-native-probe/evidence
           if-no-files-found: warn

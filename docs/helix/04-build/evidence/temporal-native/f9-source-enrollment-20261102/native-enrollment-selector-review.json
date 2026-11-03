@@ -1,0 +1,36 @@
+{
+  "status": "PREPARED; Sol wiring/source review required before dispatch",
+  "sourceCommit": "ad93f0eca0a8ac6372651d366d7f1ecc16f069aa",
+  "workflow": ".github/workflows/python-runtime.yml",
+  "workflowSha256": "4204fb5c809cc36bc979adcb4bed86375ed3379a0624f46f93c28bc9444aa9cc",
+  "selector": "temporal_native_probe",
+  "default": false,
+  "runner": "ubuntu-24.04",
+  "python": "3.11",
+  "job": "temporal-native-probe",
+  "matrix": false,
+  "nativeCases": 4,
+  "selectors": [
+    "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+    "test_temporal_transport_component_native"
+  ],
+  "purpose": "actual fresh0.76 installer/enrollment + three structural inverse/cell controls; independent of held canonical inspector/compiler adoption",
+  "claimsExcluded": [
+    "public facade native acceptance",
+    "TN02-12 complete qualification",
+    "ordinary ABI1.2 cohort adoption",
+    "HF62",
+    "TN13/TN14",
+    "publication"
+  ],
+  "dependencyProcurement": "existing checksum-verifying install-local-runtime.py --download-only; no candidate package version or owner binding built",
+  "cleanup": "original PID absence AND pg_ctl status3 before delete via existing F7 helper; both success/failure stdout always uploaded",
+  "checks": [
+    "Ruby YAML parsed",
+    "all workflow shell bodies bash -n passed",
+    "eight selector combinations verified; no other job/matrix selected",
+    "four native selectors collected, UNRUN"
+  ],
+  "dispatchAfterSolReview": "gh workflow run python-runtime.yml --repo DocumentDrivenDX/truss --ref codex/temporal-completion -f temporal_native_probe=true -f temporal_scalar_probe=false -f weft_abi12_probe=false",
+  "dispatchPerformed": false
+}
