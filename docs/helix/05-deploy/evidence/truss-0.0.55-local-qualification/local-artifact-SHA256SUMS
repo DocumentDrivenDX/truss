@@ -1,2 +1,5 @@
+cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889  isolated-runtime-constraints.txt
+39816c1e9d8dff0b8abe88ffbecdac14888e06425802a7a3b83132b1a94b1c15  release-pins.json
+77bc91650f212b39111ca58b253f20900b2288d3a9c19b4bc9c96faa0813d4ef  truss-hf-conformance-0.0.55.zip
 156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805  umf_truss-0.0.55-py3-none-any.whl
 be2964a6f17064fd2061e46882f745c6dc730915f488293eb70dc203b9dd5c26  umf_truss-0.0.55.tar.gz

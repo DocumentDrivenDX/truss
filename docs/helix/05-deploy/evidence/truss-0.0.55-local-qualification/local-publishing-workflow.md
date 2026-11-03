@@ -32,11 +32,19 @@ must be bundled under their original identities rather than rewritten as .55
 passes. The current macOS result is separate from Ashlar's managed Linux trial
 and does not claim Truss Linux native qualification.
 
-## Assemble a final release asset set after the managed gate
+## Review the prepared local asset set
+
+The private review bundle contains the four qualified files and the candidate
+`release-pins.json`; its `assets/SHA256SUMS` covers all five files.
+The repository-side `dist/SHA256SUMS` and local qualification checksum record
+the same names and hashes. These are review inputs only. They do not create a
+tag, draft, release, or publishable status.
+
+## Refresh the release asset set after the managed gate
 
 After the managed Ashlar result and final owner review, the release owner should
-make a fresh release-asset directory from the verified candidate assets. Add
-final `release-pins.json`, `SHA256SUMS`, current receipts, the macOS
+make a fresh release-asset directory from the verified candidate assets. Refresh
+`release-pins.json` and `SHA256SUMS`, then include current receipts, the macOS
 qualification manifest, the component-reuse binding, and the exact published
 .54 receipts required to support the approved reuse statement. Keep each
 receipt's original source commit, wheel hash, and platform. Do not substitute

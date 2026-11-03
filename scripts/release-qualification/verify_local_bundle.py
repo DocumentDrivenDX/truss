@@ -39,8 +39,11 @@ def main():
     verify_sums(bundle, bundle / "SHA256SUMS")
     prior = bundle / "prior-0.0.54"
     verify_sums(prior, prior / "SHA256SUMS")
+    assets = bundle / "assets"
+    verify_sums(assets, assets / "SHA256SUMS")
 
     binding = read_json(bundle / "component-reuse-binding.json")
+    pins = read_json(assets / "release-pins.json")
     prior_pins = read_json(prior / "release-pins.json")
     wheel54 = prior / "umf_truss-0.0.54-py3-none-any.whl"
     wheel55 = bundle / "assets/umf_truss-0.0.55-py3-none-any.whl"
@@ -48,6 +51,65 @@ def main():
         raise ValueError("previous wheel pin mismatch")
     if sha(wheel55.read_bytes()) != binding["candidate"]["wheelSha256"]:
         raise ValueError("candidate wheel pin mismatch")
+    if (pins.get("schema") != "truss-release-pins/0.1"
+            or pins.get("status") != "candidate-local-review-unpublished"
+            or pins.get("distribution") != "umf-truss"
+            or pins.get("version") != "0.0.55"
+            or pins.get("tag") is not None):
+        raise ValueError("candidate release pins are not local/unpublished .55 pins")
+    pinned_assets = pins.get("assets")
+    actual_assets = {
+        name: sha((assets / name).read_bytes())
+        for name in (
+            "umf_truss-0.0.55-py3-none-any.whl",
+            "umf_truss-0.0.55.tar.gz",
+            "truss-hf-conformance-0.0.55.zip",
+            "isolated-runtime-constraints.txt",
+        )
+    }
+    if (type(pinned_assets) is not list or
+            {item.get("name"): item.get("sha256") for item in pinned_assets
+             if type(item) is dict} != actual_assets or len(pinned_assets) != len(actual_assets)):
+        raise ValueError("candidate release pins do not bind the complete four-file asset set")
+    if pins.get("checksumManifestCoverage") != sorted(
+            [*actual_assets, "release-pins.json"]):
+        raise ValueError("candidate release pin checksum coverage is incomplete")
+    if (pins.get("source", {}).get("versionMetadataCommit") != binding["candidate"]["sourceCommit"]
+            or pins.get("source", {}).get("packageSourceCommit") != "43b863053925d376030792c922b7098134890853"
+            or pins.get("priorEvidenceReuse", {}).get("sourceCommit") != prior_pins["commit"]
+            or pins.get("priorEvidenceReuse", {}).get("runtimeManifestSha256") != prior_pins["runtimeManifestSha256"]
+            or pins.get("priorEvidenceReuse", {}).get("migrationManifestSha256") != prior_pins["migrationManifestSha256"]
+            or pins.get("releaseState", {}).get("githubReleaseCreated") is not False
+            or pins.get("releaseState", {}).get("pypiPublished") is not False
+            or pins.get("releaseState", {}).get("managedAshlarGate") != "pending"):
+        raise ValueError("candidate release pins source, historical reuse, or status mismatch")
+    if (pins.get("runtimeManifestSha256") != sha(
+            (source / "packages/python/src/truss/_catalog_runtime/manifest.json").read_bytes())
+            or pins.get("migrationManifestSha256") != sha(
+                (source / "packages/python/src/truss/_migrations/manifest.json").read_bytes())):
+        raise ValueError("candidate runtime or migration manifest pin mismatch")
+    qualification_manifest = read_json(bundle / "qualification-manifest-macos.json")
+    if (qualification_manifest.get("candidateVersion") != "0.0.55"
+            or qualification_manifest.get("candidateAssets") != [
+                {"name": name, "sha256": actual_assets[name]}
+                for name in sorted(actual_assets)
+            ]
+            or qualification_manifest.get("releasePinsPath") != "release-pins.json"
+            or qualification_manifest.get("candidateWheelSha256") != actual_assets[
+                "umf_truss-0.0.55-py3-none-any.whl"]
+            or qualification_manifest.get("candidateSdistSha256") != actual_assets[
+                "umf_truss-0.0.55.tar.gz"]):
+        raise ValueError("qualification manifest does not bind the complete candidate asset set")
+    for key, path in (
+        ("manifest", bundle / "qualification-manifest-macos.json"),
+        ("componentReuseBinding", bundle / "component-reuse-binding.json"),
+        ("focusedTimeoutTests", bundle / "qualification/install-timeout-qualification-macos.json"),
+        ("ashlarR61Closeout", bundle / "qualification/ashlar-r61-qualification-closeout.json"),
+        ("graphframesReport", bundle / "qualification/ashlar-r61-graphframes-report.json"),
+    ):
+        record = pins.get("qualification", {}).get(key)
+        if type(record) is not dict or record.get("sha256") != sha(path.read_bytes()):
+            raise ValueError(f"candidate qualification receipt pin mismatch: {key}")
     if prior_pins["commit"] != binding["priorRelease"]["sourceCommit"]:
         raise ValueError("previous receipt/source binding mismatch")
     if prior_pins["version"] != "0.0.54":

@@ -8,13 +8,22 @@ occurred.
 
 ## Candidate artifacts
 
-The local wheel and source archive are listed in
+The four standard candidate files and local review pins are listed in
 [`local-artifact-SHA256SUMS`](local-artifact-SHA256SUMS):
 
 | Artifact | SHA-256 |
 | --- | --- |
 | `umf_truss-0.0.55-py3-none-any.whl` | `156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805` |
 | `umf_truss-0.0.55.tar.gz` | `be2964a6f17064fd2061e46882f745c6dc730915f488293eb70dc203b9dd5c26` |
+| `truss-hf-conformance-0.0.55.zip` | `77bc91650f212b39111ca58b253f20900b2288d3a9c19b4bc9c96faa0813d4ef` |
+| `isolated-runtime-constraints.txt` | `cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889` |
+| `release-pins.json` | `39816c1e9d8dff0b8abe88ffbecdac14888e06425802a7a3b83132b1a94b1c15` |
+
+The [release pin file](release-pins.json) binds the package code and
+version-metadata commits, these four
+standard candidate assets, the current macOS receipts, unchanged runtime and
+migration manifests, and the historical .54 reuse basis. It is a local review
+asset, not a publication pin or proof of a completed release gate.
 
 The later documentation and fixture metadata commits do not change the wheel
 payload. These are local build hashes, not public registry hashes. A passive
