@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Exactly four component cases on one owned worker; no dependency adoption."""
+"""One installer and three cursor cases on one worker; no owner adoption."""
 import json
 import os
 from pathlib import Path
@@ -77,7 +77,7 @@ def qualification_result(result,*,inventory_verified,cleanup_confirmed):
 def main():
     evidence=evidence_directory()
     selection=('test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi',
-               'test_temporal_transport_component_native')
+               'test_temporal_cursor_component_native')
     loader=unittest.TestLoader();suite=loader.loadTestsFromNames(selection)
     if loader.errors or suite.countTestCases()!=4:
         raise RuntimeError('Exactly four real component cases must collect: '+repr(loader.errors))
@@ -103,7 +103,7 @@ def main():
                                      cleanup_confirmed=getattr(worker,'cleanup_confirmed',False))
         evidence.joinpath('selected-result.json').write_text(json.dumps({
             'selection':selection,'expectedCases':4,**summary,
-            'scope':'fresh installer and structural components ONLY; native public composition/cohort qualification OPEN'},indent=2)+'\n')
+            'scope':'fresh installer and native cursor custody ONLY; compiled owner/public temporal composition qualification OPEN'},indent=2)+'\n')
     return 0 if summary['passed'] else 1
 
 

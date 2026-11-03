@@ -1,0 +1,31 @@
+{
+  "scope": "Selection/source review only; no new native execution",
+  "sourceBase": "822737cd3973f0f456150193b223926221994edf",
+  "selection": [
+    "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+    "test_temporal_cursor_component_native"
+  ],
+  "expectedCases": 4,
+  "strictCounts": "testsRun4; skips/xfail/xpass/failure/error0; wasSuccessful; inventoryVerified; confirmed status3+PIDabsence before deletion; unchanged predicate",
+  "proofAdded": [
+    "native encode/decode exact byte custody, F7 canonical temporal tokens with missing/null retained, actual installed4cursorfunction definitions/owner/ACL",
+    "actual different authenticated reader actor, changed whole context, stale binding and altered seal refusal; actual ungranted-role42501",
+    "actual native decoded tuple cannot be replaced/reordered/shortened; complete authored Key metadata from genuine native capture"
+  ],
+  "fixture": "Existing ordinary public acceptance + authentic explicit native ABI1.3 capture. No fake binding/compiled owner manifest/SQL happy-path seed. Authored cursor inputs do not claim compiled Weft program or temporal catalog/PV1/EngineRead composition.",
+  "pythonDependenciesAdded": [
+    "jsonschema==4.26.0",
+    "referencing==0.37.0",
+    "mini-racer==0.14.1"
+  ],
+  "dependencyReason": "Existing genuine ordinary public preparation runtime requirements; pinned normal binary resolver, no owner substitution/no-deps",
+  "controls": {
+    "focusedDriverAndTupleCases": 11,
+    "passed": true,
+    "actualSelectionCollected": 4,
+    "nativeRun": false,
+    "yaml": "valid; selected job no matrix"
+  },
+  "priorStructuralProof": "Original three transport passes remain exact under Linux41574133232 receipt, not replayed or credited to new cursor test source",
+  "upcoming": "Sol selection/wiring source review, then one explicit single-worker selected Linux job; other selectors false; all artifacts always retained; no other matrix/publish"
+}

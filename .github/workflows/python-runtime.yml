@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       temporal_native_probe:
-        description: Run only fresh temporal native enrollment and three F8 structural components
+        description: Run only fresh temporal native enrollment and three native cursor custody controls
         type: boolean
         default: false
       temporal_scalar_probe:
@@ -244,6 +244,7 @@ jobs:
           "$TN_ROOT/venv/bin/python" -m pip install --only-binary=:all: \
             "$TN_ROOT"/inputs/*.whl 'psycopg[binary]==3.3.6' \
             fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 pg8000==1.31.5 \
+            jsonschema==4.26.0 referencing==0.37.0 mini-racer==0.14.1 \
             2>&1 | tee "$TN_ROOT/evidence/install.log"
           "$TN_ROOT/venv/bin/python" -m pip freeze > "$TN_ROOT/evidence/freeze.txt"
           git rev-parse HEAD > "$TN_ROOT/evidence/source-commit.txt"
@@ -252,12 +253,13 @@ jobs:
             | sort -z | xargs -0 sha256sum > "$TN_ROOT/evidence/native-source-sha256.txt"
           sha256sum packages/python/tests/test_temporal_enrollment_native.py \
             scripts/probe-temporal-native-enrollment.py scripts/native_fixture.py \
-            packages/python/tests/test_temporal_transport_component_native.py \
+            packages/python/tests/test_temporal_cursor_component_native.py \
+            packages/python/src/truss/_temporal_query_execution.py \
             packages/python/tests/temporal_native_fixture.py \
             packages/python/tests/fixtures/temporal/complete-owner-inspection.json \
             packages/python/tests/fixtures/temporal/complete-owner-inspection-provenance.json \
             > "$TN_ROOT/evidence/probe-source-sha256.txt"
-      - name: Run exactly one installer and three structural component cases
+      - name: Run exactly one installer and three native cursor custody cases
         env:
           PYTHONPATH: packages/python/src:packages/python/tests:scripts
           PYTHONDONTWRITEBYTECODE: '1'
