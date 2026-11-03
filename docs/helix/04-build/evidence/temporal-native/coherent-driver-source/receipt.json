@@ -1,0 +1,42 @@
+{
+  "scope": "Coherent campaign driver/capture/baseline assembler/explicit selection SOURCE only; no build or native campaign executed",
+  "baseCommit": "6be4eaeff0cff36db5e6cb3641f7b5f639946b65",
+  "governingPlan": "TP001",
+  "checks": {
+    "pureDriverAndAssemblyControlsPassed": 10,
+    "casesCollected": 119,
+    "expectedCounts": {
+      "temporal": 39,
+      "public54": 1,
+      "ordinary": 11,
+      "hf": 62,
+      "baseline": 6
+    },
+    "ordinaryHFOverlapExecutedOnce": 3,
+    "nativeCasesExecuted": 0,
+    "buildsExecuted": 0,
+    "ciDispatches": 0
+  },
+  "sourceFiles": {
+    "scripts/qualify-temporal-native.py": "ff18fcb69612abdd8de0b45ef77f3a00c43b97591c0102c4d8f17bf9b746f50f",
+    "scripts/capture-temporal-native-inventory.py": "f46f962ecd3f2b640b0f73920314889a7c9d7b0b8ca3b5462681427321da3f3e",
+    "scripts/assemble-temporal-native-baseline.py": "163610a73525e3075a92d579324099e86f58fe79b7f616ef09994c3b500e106a",
+    "scripts/temporal_qualification_support.py": "89abb1d88934860e776ff5d3eaeca2c01914038ce5048298d6068820795052f3",
+    "scripts/temporal-native-case-ledger.json": "e61e26465f113e2b879abbb5d08ae78b8bfc846c31356258bfb3f69454d7b20c",
+    "packages/python/tests/test_temporal_qualification_driver.py": "87937511c66304e22a61edca2edbeaf420845a555d16a51b9ad7a17c7330c621",
+    "packages/python/tests/test_temporal_baseline_staging.py": "d353c3be6888a82143cc40428f8dd5cc1481207735365d4cd59bd3045377b36c"
+  },
+  "prerequisites": [
+    "Review this explicit selection/driver before dispatch",
+    "Actual reviewed W S-repin/lock/features plus coherent wheels and normal resolver",
+    "Adopt exact9 canonicalSresources (5changed) and actual Core/Weft compiled enrollments; preservePR95receipt",
+    "Fresh actual0.76 initializer captures and exact native/ACL/initializer artifacts; no old0.75 relabel",
+    "Actual current-query canonical producer and compiler cohort pins; packaging qualified field remains pending"
+  ],
+  "productionState": "PV5 direct-person cursor and prepared writer are implemented; Sol6be three-correction SOURCEPASS. No remaining public/private interface decision is requested. Actual composition may expose bounded defects to fix/review.",
+  "limitations": [
+    "No new native qualification claim from collection or pure controls",
+    "Final source/tag/public registry bytes/fresh consumers/owner browser+WASM/native proofs remain mandatory",
+    "Selected CI wiring awaits actual artifact procurement inputs; no automatic large/stress/public1000 campaign"
+  ]
+}

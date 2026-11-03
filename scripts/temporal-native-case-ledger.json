@@ -1,0 +1,572 @@
+{
+  "schema": "truss-temporal-case-ledger/1",
+  "governingPlan": "TP001",
+  "stages": {
+    "temporal": [
+      {
+        "gate": "TN01",
+        "test": "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi"
+      },
+      {
+        "gate": "TN02-04",
+        "test": "test_temporal_source_guard_native.TemporalSourceGuardNativeTests.test_buffered_source_uses_statement_snapshot_before_outer_gate"
+      },
+      {
+        "gate": "TN02-04",
+        "test": "test_temporal_source_guard_native.TemporalSourceGuardNativeTests.test_invalid_source_is_not_hidden_by_outer_filter_or_limit"
+      },
+      {
+        "gate": "TN02-04",
+        "test": "test_temporal_source_guard_native.TemporalSourceGuardNativeTests.test_scan_and_byte_caps_refuse_complete_source"
+      },
+      {
+        "gate": "TN02-04",
+        "test": "test_temporal_source_guard_native.TemporalSourceGuardNativeTests.test_stable_source_keeps_statement_snapshot_across_concurrent_public_update"
+      },
+      {
+        "gate": "TN02-04",
+        "test": "test_temporal_source_guard_native.TemporalSourceGuardNativeTests.test_wrong_provenance_kind_and_presence_requirements_refuse"
+      },
+      {
+        "gate": "TN05/08",
+        "test": "test_temporal_source_security_native.TemporalSourceSecurityNativeTests.test_actual_owned_temporal_child_requires_current_aggregate_root_module_reader"
+      },
+      {
+        "gate": "TN05/08",
+        "test": "test_temporal_source_security_native.TemporalSourceSecurityNativeTests.test_installed_temporal_abi13_shims_have_exact_owner_acl_and_stability"
+      },
+      {
+        "gate": "TN05/08",
+        "test": "test_temporal_source_security_native.TemporalSourceSecurityNativeTests.test_native_temporal_cached_and_uncached_source_keep_exact_descriptor_basis"
+      },
+      {
+        "gate": "TN05/08",
+        "test": "test_temporal_source_security_native.TemporalSourceSecurityNativeTests.test_temporal_person_admission_needs_module_role_even_for_registrar"
+      },
+      {
+        "gate": "TN05/08",
+        "test": "test_temporal_source_security_native.TemporalSourceSecurityNativeTests.test_temporal_shim_refuses_abi_owner_acl_source_and_context_drift"
+      },
+      {
+        "gate": "TN06-07",
+        "test": "test_temporal_catalog_acceptance_native.TemporalCatalogAcceptanceTests.test_legacy_timestamp_family_refuses_temporal_reinterpretation_atomically"
+      },
+      {
+        "gate": "TN06-07",
+        "test": "test_temporal_catalog_acceptance_native.TemporalCatalogAcceptanceTests.test_mixed_legacy_support_and_temporal_summary_refuses_before_effects"
+      },
+      {
+        "gate": "TN06-07",
+        "test": "test_temporal_catalog_acceptance_native.TemporalCatalogAcceptanceTests.test_mixed_temporal_archive_refuses_legacy_compact_reconstruction"
+      },
+      {
+        "gate": "TN06-07",
+        "test": "test_temporal_catalog_acceptance_native.TemporalCatalogAcceptanceTests.test_public_accept_atomically_refuses_stripped_temporal_owner_declarations"
+      },
+      {
+        "gate": "TN06-07",
+        "test": "test_temporal_catalog_acceptance_native.TemporalCatalogAcceptanceTests.test_temporal_replay_preserves_original_preparation_and_report_bytes"
+      },
+      {
+        "gate": "TN08/PV5",
+        "test": "test_local_timestamp_query_native.LocalTimestampQueryTests.test_ordinary_abi12_raw_sources_refuse_local_record_and_keep_sibling_record"
+      },
+      {
+        "gate": "TN08/PV5",
+        "test": "test_local_timestamp_query_native.LocalTimestampQueryTests.test_public_accept_apply_read_all_temporal_families_and_presence"
+      },
+      {
+        "gate": "TN08/PV5",
+        "test": "test_local_timestamp_query_native.LocalTimestampQueryTests.test_public_direct_temporal_pages_keep_native_person_seal_and_live_authority"
+      },
+      {
+        "gate": "TN08/PV5",
+        "test": "test_local_timestamp_query_native.LocalTimestampQueryTests.test_public_local_crud_import_cache_history_and_readonly"
+      },
+      {
+        "gate": "TN08/PV5",
+        "test": "test_local_timestamp_query_native.LocalTimestampQueryTests.test_public_temporal_dry_run_failed_updates_and_per_record_import_effects"
+      },
+      {
+        "gate": "TN08/PV5-prepared",
+        "test": "test_temporal_prepared_writer_native.TemporalPreparedWriterNativeTests.test_native_schema_cumulative_byte_overflow_refuses_before_complete_aggregation"
+      },
+      {
+        "gate": "TN08/PV5-prepared",
+        "test": "test_temporal_prepared_writer_native.TemporalPreparedWriterNativeTests.test_older_object_newer_catalog_supplied_temporal_patch_is_never_ignored"
+      },
+      {
+        "gate": "TN08/PV5-prepared",
+        "test": "test_temporal_prepared_writer_native.TemporalPreparedWriterNativeTests.test_real_cold_warm_temporal_prepared_create_update_and_replay"
+      },
+      {
+        "gate": "TN08/PV5-prepared",
+        "test": "test_temporal_prepared_writer_native.TemporalPreparedWriterNativeTests.test_supplied_temporal_prepared_faults_refuse_without_effects_or_fallback"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_actual_compiled_program_tamper_refuses_before_data_artifact_dispatch"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_actual_sdk_page_refuses_tuple_token_context_and_other_actor_before_data_sql"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_actual_sdk_wrapper_preserves_whole_generation_and_inner_program_string"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_date_and_instant_pages_match_independent_native_order_permutations"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_full_pages_match_independent_native_order_oracle_all_directions_and_null_orders"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_hidden_full_composite_key_pages_preserve_repeated_prefixes"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_native_and_actual_owner_refuse_numeric_selected_key_even_for_empty_source"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_temporal_filter_parameters_use_all_three_explicit_kinds"
+      },
+      {
+        "gate": "TN09-10",
+        "test": "test_temporal_engine_native.TemporalEngineNativeTests.test_typed_temporal_model_read_verify_and_complete_pages"
+      },
+      {
+        "gate": "TN11",
+        "test": "test_temporal_target_release_native.TemporalTargetReleaseTests.test_expired_native_temporal_lock_wait_cancels_and_preserves_caller_work"
+      },
+      {
+        "gate": "TN11",
+        "test": "test_temporal_target_release_native.TemporalTargetReleaseTests.test_revoked_current_authority_withholds_buffered_native_temporal_rows"
+      },
+      {
+        "gate": "TN10-custody",
+        "test": "test_temporal_cursor_component_native.TemporalCursorComponentNativeTests.test_native_decoded_complete_tuple_cannot_be_replaced_or_shortened"
+      },
+      {
+        "gate": "TN10-custody",
+        "test": "test_temporal_cursor_component_native.TemporalCursorComponentNativeTests.test_native_person_cursor_refuses_other_actor_context_binding_and_seal"
+      },
+      {
+        "gate": "TN10-custody",
+        "test": "test_temporal_cursor_component_native.TemporalCursorComponentNativeTests.test_native_person_cursor_roundtrip_canonicalization_and_actual_acl"
+      }
+    ],
+    "public54": [
+      {
+        "gate": "TN12",
+        "test": "test_temporal_catalog_transport_native.TemporalCatalogTransportTests.test_public54_populated_installation_refuses_candidate_without_effects"
+      }
+    ],
+    "ordinary": [
+      {
+        "gate": "TN13",
+        "test": "test_compiled_query_native.CompiledQueryTests.test_exact_integer_decimal_projection_and_parameters"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_compiled_query_native.CompiledQueryTests.test_supported_projection_on_mixed_scalar_catalog"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_compiled_query_native.CompiledQueryTests.test_authored_composite_key_pages_and_count_profile"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_scalar_containers_native.ScalarContainerTests.test_public_accept_write_read_import_history_and_map_equality"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_recursive_containers_native.RecursiveContainerTests.test_create_commit_read_and_reconstruct"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_schema_cache_native.SchemaCacheTests.test_query_binding_validator_misses_rolled_back_reused_revision"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_schema_cache_native.SchemaCacheTests.test_query_binding_cache_isolated_by_current_person"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_schema_cache_native.SchemaCacheTests.test_cached_query_schema_cannot_cache_permission_grants"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_schema_memory_cache.SchemaMemoryCacheTests.test_reused_revision_with_different_basis_source_invalidates_view"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_read_only_public_native.ReadOnlyPublicTests.test_create_commit_and_public_reads_in_actual_read_only_transaction"
+      },
+      {
+        "gate": "TN13",
+        "test": "test_read_only_public_native.ReadOnlyPublicTests.test_policy_replaced_while_object_buffered_uses_current_roles"
+      }
+    ],
+    "hf": [
+      {
+        "gate": "TN13/HF62",
+        "id": "nonmember_all_selected_surfaces_have_typed_denial",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_nonmember_all_selected_surfaces_have_typed_denial"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "damaged_original_entrypoint_grant_is_execution_error",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_damaged_original_entrypoint_grant_is_execution_error"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "damaged_private_dependency_is_execution_error",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_damaged_private_dependency_is_execution_error"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "damaged_mutation_grants_are_not_business_denial",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_damaged_mutation_grants_are_not_business_denial"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "reader_keeps_context_but_cannot_apply_and_prior_work_survives",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_reader_keeps_context_but_cannot_apply_and_prior_work_survives"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "normal_context_stays_three_statements",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_normal_context_stays_three_statements"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "public_shim_does_not_grant_private_implementation_or_table_access",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_public_shim_does_not_grant_private_implementation_or_table_access"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "changed_original_entrypoint_owner_is_integrity_error",
+        "test": "test_person_invocation_native.PersonInvocationNativeTests.test_changed_original_entrypoint_owner_is_integrity_error"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "empty_record_accepts_exact_paired_required_field_and_unknown_content",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_empty_record_accepts_exact_paired_required_field_and_unknown_content"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "populated_record_returns_typed_violation_and_preserves_head_data_history",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_populated_record_returns_typed_violation_and_preserves_head_data_history"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "paired_required_addition_does_not_implicitly_rebind_populated_retained_values",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_implicitly_rebind_populated_retained_values"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "pending_writer_blocks_acceptance_then_committed_row_refuses_addition",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_writer_blocks_acceptance_then_committed_row_refuses_addition"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "paired_required_addition_does_not_authorize_unknown_extension_change",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_paired_required_addition_does_not_authorize_unknown_extension_change"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit",
+        "test": "test_required_ddd_evolution_native.RequiredDDDEvolutionTests.test_pending_acceptance_excludes_old_shape_writer_and_stale_pin_after_commit"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "freeze_is_pure_and_missing_request_never_executes",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_freeze_is_pure_and_missing_request_never_executes"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "delete_recovery_does_not_resolve_deleted_target",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_delete_recovery_does_not_resolve_deleted_target"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "unlink_recovery_preserves_original_edge_result",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_unlink_recovery_preserves_original_edge_result"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "noop_recovery_after_later_deletion_has_original_result_and_group_id",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_noop_recovery_after_later_deletion_has_original_result_and_group_id"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "two_groups_same_transaction_have_distinct_stable_identity",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_two_groups_same_transaction_have_distinct_stable_identity"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "changed_complete_input_conflicts_without_reapplication",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_changed_complete_input_conflicts_without_reapplication"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "other_person_does_not_share_original_request_scope",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_other_person_does_not_share_original_request_scope"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "retained_owner_denial_precedes_changed_input_conflict",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_retained_owner_denial_precedes_changed_input_conflict"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "rolled_back_request_is_unobserved_and_never_reapplied",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_rolled_back_request_is_unobserved_and_never_reapplied"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "corrupt_frame_is_local_typed_refusal_without_host_execution",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_corrupt_frame_is_local_typed_refusal_without_host_execution"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "original_source_frame_cannot_be_replaced_on_recovery",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_original_source_frame_cannot_be_replaced_on_recovery"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "read_only_recovery_refuses_unselected_lock_profile",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_read_only_recovery_refuses_unselected_lock_profile"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "inflight_observation_is_busy_then_rollback_is_indistinguishable_from_absence",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_inflight_observation_is_busy_then_rollback_is_indistinguishable_from_absence"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "recovery_after_injected_loss_of_actual_commit_acknowledgement",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_recovery_after_injected_loss_of_actual_commit_acknowledgement"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "expired_header_does_not_disclose_retention_after_retained_writer_revocation",
+        "test": "test_group_request_recovery_native.GroupRequestRecoveryNativeTests.test_expired_header_does_not_disclose_retention_after_retained_writer_revocation"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "damaged_query_binding_grant_remains_execution_error",
+        "test": "test_query_descriptors_native.QueryDescriptorTests.test_damaged_query_binding_grant_remains_execution_error"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "empty_and_aggregate_types_come_from_compiler_without_sample_rows",
+        "test": "test_query_descriptors_native.QueryDescriptorTests.test_empty_and_aggregate_types_come_from_compiler_without_sample_rows"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "all_null_projection_retains_availability_and_native_envelope_metadata",
+        "test": "test_query_descriptors_native.QueryDescriptorTests.test_all_null_projection_retains_availability_and_native_envelope_metadata"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "page_descriptors_exclude_compiler_hidden_sort_outputs",
+        "test": "test_query_descriptors_native.QueryDescriptorTests.test_page_descriptors_exclude_compiler_hidden_sort_outputs"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "selectable_facts_preserve_requested_order_and_compiler_types",
+        "test": "test_query_entity_projection_native.QueryEntityProjectionTests.test_selectable_facts_preserve_requested_order_and_compiler_types"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "facts_pages_and_projection_bound_continuation",
+        "test": "test_query_entity_projection_native.QueryEntityProjectionTests.test_facts_pages_and_projection_bound_continuation"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "explicit_relationship_projection_keeps_100_101_completeness_boundary",
+        "test": "test_query_entity_projection_native.QueryEntityProjectionTests.test_explicit_relationship_projection_keeps_100_101_completeness_boundary"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "invalid_fact_selection_refuses_before_host_execution",
+        "test": "test_query_entity_projection_native.QueryEntityProjectionTests.test_invalid_fact_selection_refuses_before_host_execution"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "original_umf_key_projection_is_exact_or_explicitly_unindexable",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_original_umf_key_projection_is_exact_or_explicitly_unindexable"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "selected_source_and_ordered_seek_retain_native_refusals",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "selected_string_operand_preserves_exact_token_bound_with_json_overhead",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_string_operand_preserves_exact_token_bound_with_json_overhead"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "selected_boolean_cells_preserve_true_and_false",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_boolean_cells_preserve_true_and_false"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_data_wrapper_preserves_statement_snapshot_with_volatile_countercontrol"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "populated_10001_managed_objects_select_without_legacy_source_scan",
+        "test": "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "actual_selected_cursor_decodes_all_batches_and_descriptors",
+        "test": "test_query_stream_abi12_native.QueryStreamABI12Tests.test_actual_selected_cursor_decodes_all_batches_and_descriptors"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "cursor_current_person_revocation_preserves_caller_work",
+        "test": "test_query_stream_abi12_native.QueryStreamABI12Tests.test_cursor_current_person_revocation_preserves_caller_work"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "dry_run_checks_completion_without_durable_receipt_or_data",
+        "test": "test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "unrelated_host_constraint_is_not_forced",
+        "test": "test_group_validation_native.GroupValidationTests.test_unrelated_host_constraint_is_not_forced"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "deferred_authority_failure_is_observed_and_prior_work_survives",
+        "test": "test_group_validation_native.GroupValidationTests.test_deferred_authority_failure_is_observed_and_prior_work_survives"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "dry_run_forces_actual_deferred_failure_before_confirmed_rollback",
+        "test": "test_group_validation_native.GroupValidationTests.test_dry_run_forces_actual_deferred_failure_before_confirmed_rollback"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group",
+        "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "deleted_entity_type_filter_and_descending_python_continuation",
+        "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_deleted_entity_type_filter_and_descending_python_continuation"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor",
+        "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "whole_group_more_than_1024_events_uses_separate_event_budget",
+        "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "optional_key_version_projection_requires_separate_readers_and_named_key",
+        "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_optional_key_version_projection_requires_separate_readers_and_named_key"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "invocation_audit_summary_pages_complete_counts_and_scope",
+        "test": "test_load_audit_native.LoadAuditNativeTests.test_invocation_audit_summary_pages_complete_counts_and_scope"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "final-state-multiplicity-no-invented-ordinal",
+        "test": "test_edge_mutations_native.EdgeMutationTests.test_final_unlink_multiplicity_names_retained_endpoint_without_causal_ordinal"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "500kib_original_document_accepts_and_reads_exact_bytes",
+        "test": "test_catalog_document_bounds_native.CatalogDocumentBoundsTests.test_500kib_original_document_accepts_and_reads_exact_bytes"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "one_byte_above_document_budget_refuses_without_native_effects",
+        "test": "test_catalog_document_bounds_native.CatalogDocumentBoundsTests.test_one_byte_above_document_budget_refuses_without_native_effects"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "relationship_only_load_and_unqualified_listing",
+        "test": "test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "receipt_visibility_current_membership_and_actual_execute",
+        "test": "test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority"
+      },
+      {
+        "gate": "TN13/HF62",
+        "id": "arras_view_original_source_query_and_relationship",
+        "test": "test_arras_view_model_native.ArrasViewModelNativeTests.test_arras_view_metadata_is_retained_and_current_weft_query_succeeds"
+      }
+    ],
+    "baseline": [
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline.CurrentBaselineTests.test_explicit_fresh_baseline_has_no_historical_routes"
+      },
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline.CurrentBaselineTests.test_unknown_and_retired_sources_have_no_forward_route"
+      },
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline_native.CurrentBaselineNativeTests.test_fresh_install_verifies_without_migration_or_receipt"
+      },
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline_native.CurrentBaselineNativeTests.test_inventory_observation_preserves_session_timezone_and_bounds"
+      },
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline_native.CurrentBaselineNativeTests.test_native_definition_damage_refuses_without_repair"
+      },
+      {
+        "gate": "TN12/current-six",
+        "test": "test_current_baseline_native.CurrentBaselineNativeTests.test_native_runtime_identity_cannot_be_relabelled"
+      }
+    ]
+  },
+  "ordinaryCoveredOnceByHF": [
+    "test_query_stream_abi12_native.QueryStreamABI12Tests.test_actual_selected_cursor_decodes_all_batches_and_descriptors",
+    "test_query_stream_abi12_native.QueryStreamABI12Tests.test_cursor_current_person_revocation_preserves_caller_work",
+    "test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals"
+  ],
+  "expectedCounts": {
+    "temporal": 39,
+    "public54": 1,
+    "ordinary": 11,
+    "hf": 62,
+    "baseline": 6
+  },
+  "qualificationBoundaries": {
+    "TN00": "Exact unchanged F7 source6b3154ba.. Linux41550448558 seven-case receipt retained; current installed owner/ACL/body/guarded scalar execution binds same helper in TN01/05/09. No repeat standalone helper campaign.",
+    "TN14": "This private installed campaign is required but cannot close exact-tag/public archive/registry/fresh consumer/browser owner proof; those remain separately required.",
+    "buildAdmission": "Exactly one admitted build/qualification job; serial native leases, actual coherent wheelhouse/manifests/payload verification; fresh0.76 inventory capture prerequisite, no historical inventory relabel.",
+    "pending": "Canonical S source available. Exact reviewed W S-repin/lock/features, Core/Access/Weft wheels/manifests and fresh current0.76 inventories pending; source collection is not qualification."
+  }
+}
