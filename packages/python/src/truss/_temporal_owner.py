@@ -36,7 +36,10 @@ def _inspector():
             if sha256(raw).hexdigest()!=entry['sha256']:raise ValueError('Original canonical inspection resource required')
             decode_owner_evidence_json(raw)  # Reject duplicate/nonfinite/invalid Unicode framing.
             resources[name]=json.loads(raw)
-        return CodegenEngine(resources,max_work=manifest['maximumWork']),manifest['profile']
+        engine=CodegenEngine(resources,max_work=manifest['maximumWork'])
+        if not callable(getattr(engine,'inspect_access_views',None)):
+            raise ValueError('Actual public inspection operation required')
+        return engine,manifest['profile']
     except (ImportError,FileNotFoundError,KeyError,ValueError,TypeError) as error:
         raise PreparationRejected('producer_unavailable') from error
 

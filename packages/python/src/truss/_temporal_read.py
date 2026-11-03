@@ -112,7 +112,8 @@ def _page(assembly,args,manifest,digest,pin_cursor):
             (args['document_id'],args['module_id'],args['record_id'],args['limit'],args['maximum_bytes'],original,manifest['releaseId'],digest),prepare=False)
         raw=native_cursor.fetchone()[0]
         if raw is None:return ObjectNotFound()
-        value=json.loads(bytes(raw))
+        from ._owner_evidence_json import decode_owner_evidence_json
+        value=decode_owner_evidence_json(bytes(raw))
         if (set(value)!={'profile','catalogRevision','objects','continuation','valueProfile','queryAbi'}
             or value['profile']!='truss-python-temporal-object-page/0.1'
             or value['valueProfile']!=profiles()['valueProfile'] or value['queryAbi']!=abi()):

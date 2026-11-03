@@ -56,10 +56,13 @@ class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
                     elif mutation=='owner-record': owner['records'].pop()
                     elif mutation=='summary': summary['sourceFormat']='truss-registration-summary/2.0'
                     elif mutation=='archive': documents[0]['validation']['storageFormat']='truss-catalog-source/2.0'
-                    elif mutation=='support':
+                    elif mutation in ('support','compact-downgrade'):
                         from truss.catalog_runtime import _configuration
                         input=json.loads(values[0]);input['supportProfile']=_configuration()['supportProfile']
                         values[0]=json.dumps(input,ensure_ascii=True,separators=(',',':')).encode()
+                        if mutation=='compact-downgrade':
+                            summary['sourceFormat']='truss-registration-summary/2.0'
+                            for entry in summary['documentValidations']:entry.pop('inspection')
                     else: raise AssertionError(mutation)
                     if mutation.startswith('owner-'):
                         packet['resultJson']=json.dumps(owner,ensure_ascii=True,separators=(',',':'))
@@ -67,6 +70,7 @@ class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
                         documents[0]['validation']['inspection']=copy.deepcopy(packet)
                     for index,value in zip((1,2,3),(documents,declarations,summary),strict=True):
                         values[index]=json.dumps(value,ensure_ascii=True,separators=(',',':')).encode()
+                    if mutation=='compact-downgrade':values[2]=b''
                     observations.append({'originalSha256':[sha256(v).hexdigest() for v in original[:5]],
                                          'faultedSha256':[sha256(v).hexdigest() for v in values[:5]]})
                     parameters=tuple(values)
@@ -124,6 +128,15 @@ class TemporalCatalogAcceptanceTests(fixture.TemporalNativeFixture):
         self.assertIsInstance(rejected,Error,repr(rejected));self.assertEqual(rejected.error.sql_state,'0A000')
         self.assertEqual(self.registration_snapshot(c),before)
         self.assertEqual(self.admin.execute("SELECT scalar_type,native_temporal FROM truss.prop_def WHERE element='A-local'").fetchone(),family)
+        h.detach();c.rollback()
+
+    def test_mixed_temporal_archive_refuses_legacy_compact_reconstruction(self):
+        c,h,a,tx=self.ready_temporal()
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(psycopg.sql.Identifier(self.installation.registrar_role)))
+        prepared=self.fresh_preparation(a);before=self.registration_snapshot(c)
+        result,_=self.faulted_accept(h,a,tx,prepared,'compact-downgrade')
+        self.assertIsInstance(result,Error,repr(result));self.assertEqual(result.error.sql_state,'22023')
+        self.assertEqual(self.registration_snapshot(c),before)
         h.detach();c.rollback()
 
     def test_temporal_replay_preserves_original_preparation_and_report_bytes(self):
