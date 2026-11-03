@@ -23,10 +23,10 @@ The inventory prerequisite runs the installed candidate initializer unchanged:
 ```sh
 python scripts/capture-temporal-native-inventory.py \
   --candidate-wheel "$CAPTURE_WHEEL" --wheel-sha256 "$CAPTURE_WHEEL_SHA256" \
-  --initialization-time-zone UTC --output "$NATIVE_EVIDENCE/init-utc"
+  --evidence-root "$NATIVE_EVIDENCE" --initialization-time-zone UTC --output "$NATIVE_EVIDENCE/init-utc"
 python scripts/capture-temporal-native-inventory.py \
   --candidate-wheel "$CAPTURE_WHEEL" --wheel-sha256 "$CAPTURE_WHEEL_SHA256" \
-  --initialization-time-zone America/New_York --output "$NATIVE_EVIDENCE/init-ny"
+  --evidence-root "$NATIVE_EVIDENCE" --initialization-time-zone America/New_York --output "$NATIVE_EVIDENCE/init-ny"
 python scripts/assemble-temporal-native-baseline.py \
   --capture-pins "$ACTUAL_CAPTURE_PINS" --output "$FRESH_BASELINE_STAGE"
 ```
@@ -59,7 +59,7 @@ env -u PYTHONPATH PYTHONDONTWRITEBYTECODE=1 "$CANDIDATE_PYTHON" \
 ```
 
 The admission JSON uses schema `truss-temporal-qualification-input/1` and names
-sourceCommit, nativeManifestSha256, wheelhouse, four wheels (truss/core/access/
+sourceCommit, sourceTree, generatedEvidenceRoots, nativeManifestSha256, wheelhouse, four wheels (truss/core/access/
 weft path+sha256), initializationCaptures (two receipt path+sha256 pairs), hfArchive
 (path+sha256), independent hfRoot, public054Python and public054Wheel. Actual
 source/artifact pins are reviewed inputs; this file supplies none by invention.
@@ -81,3 +81,26 @@ paths, and upload on failure. No workflow is dispatched by this source packet.
 T4A/F7/previous cursor campaigns are not restarted. Final exact-tag/public bytes,
 fresh consumers, owner browser/WASM/native correspondence and mandatory release
 gates remain separate required provenance boundaries, not waived by119 cases.
+
+
+## Original capture and reviewed final source provenance correction
+
+The two inventory receipts retain their ORIGINAL sourceCommit/sourceTree and
+producer blob identity. They never claim the later baseline commit as their
+capture source. Final admission names the separately reviewed final commit/TREE.
+It must be an actual descendant: every intervening PACKAGE change must be a
+fresh migration JSON artifact selected by its final manifest or the active
+fresh-baseline manifest pointer. Existing frozen artifacts cannot change. The
+S/W source seal cannot change; complete non-migration package payload and native
+manifest equality are mandatory. Reverted intervening package changes also
+refuse. A genuine changed initializer/enrollment source requires its own new
+source capture; a migration-only descendant does not trigger redundant capture.
+
+Capture, staging and final qualification require actual HEAD/TREE correspondence
+and clean qualification inputs: both staged and unstaged tracked differences,
+untracked and ignored executable/data inputs are checked. Intentional parallel
+planner documents are separately enumerated outside executable inputs. Generated
+evidence roots must be explicit directories beneath design-audit (or outside the
+checkout); they never excuse tracked source changes. Dirty generated baselines
+must be reviewed/committed before final admission. All non-migration S/W resources,
+actual compiled enrollments and artifact seals precede inventory capture.

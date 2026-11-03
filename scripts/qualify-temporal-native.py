@@ -22,7 +22,7 @@ import unittest
 from unittest.mock import patch
 from zipfile import ZipFile
 
-from temporal_qualification_support import collect_exact,flatten,strict_result,RecordedResult,OwnedNativeCleanup
+from temporal_qualification_support import collect_exact,flatten,strict_result,RecordedResult,OwnedNativeCleanup,assert_qualification_checkout,validate_capture_transition
 ROOT=Path(__file__).resolve().parents[1]
 LEDGER=Path(__file__).with_name('temporal-native-case-ledger.json')
 EXPECTED={'temporal':39,'public54':1,'ordinary':11,'hf':62,'baseline':6}
@@ -65,6 +65,7 @@ def read_pinned(entry):
 
 def preflight(admission):
     """Read-only checks BEFORE a native process can start."""
+    source_identity=assert_qualification_checkout(ROOT,admission.get('sourceCommit'),admission.get('sourceTree'),evidence_roots=admission.get('generatedEvidenceRoots',()))
     if sys.version_info[:2]!=(3,11) or sys.platform!='linux' or platform.machine()!='x86_64':
         raise ValueError('Selected Linux x86_64/Python3.11 qualification scope required')
     import truss
@@ -122,18 +123,18 @@ def preflight(admission):
     if (recipe['target']!=digest or recipe['targetRelease']!=native['releaseId'] or not recipe.get('baseline')
             or recipe['sources'] or recipe['edges'] or recipe['sourceWheels']):
         raise ValueError('Fresh actual0.76 baseline inventory required; historical0.75 may not be relabelled')
-    profile=json.loads(artifacts[digest+'.json']);zones=set()
+    profile=json.loads(artifacts[digest+'.json']);zones=set();capture_transitions=[]
     for selected in admission['initializationCaptures']:
         path,raw=read_pinned(selected);receipt=json.loads(raw)
         if (receipt.get('passed') is not True or receipt.get('cleanupConfirmed') is not True
-                or receipt.get('runtimeManifestSha256')!=digest or receipt.get('sourceCommit')!=head
-                or receipt.get('producerSha256')!=sha256((ROOT/'scripts/capture-temporal-native-inventory.py').read_bytes()).hexdigest()
+                or receipt.get('runtimeManifestSha256')!=digest
                 or receipt.get('historicalProfilesModified') is not False
                 or receipt.get('sysPlatform')!='linux' or receipt.get('machine')!='x86_64' or receipt.get('pythonMajorMinor')!=[3,11]):
             raise ValueError('Actual current-source initializer/PID cleanup receipt required')
         package=Path(truss.__file__).resolve().parent
         actual_payload={str(p.relative_to(package)):sha256(p.read_bytes()).hexdigest() for p in sorted(package.rglob('*'))
             if p.is_file() and '_migrations' not in p.relative_to(package).parts and '__pycache__' not in p.parts and p.suffix!='.pyc'}
+        capture_transitions.append(validate_capture_transition(ROOT,receipt,head,admission['sourceTree'],native_digest=digest,nonmigration_payload=actual_payload))
         if receipt.get('nonMigrationPackageFiles')!=actual_payload:
             raise ValueError('Captured initializer/package payload differs from final candidate; only fresh baseline artifacts may differ')
         raw_profile=path.with_name('native-profile-observation.json').read_bytes()
@@ -175,7 +176,7 @@ print("original public54 installed payload verified")
                 raise ValueError('Independent HF archive payload mismatch')
     current_recipe={'baseline':recipe['baseline'],'sources':recipe['sources'],'target':recipe['target']}
     return {'scope':'Read-only artifact/inventory admission, not native qualification','wheels':observed,
-        'nativeManifestSha256':digest,'coreInspection':{'request':fixture,'owner':owner_profile,'result':inspection},'recipe':current_recipe,'pipCheck':checked.stdout,'ledgerSha256':sha256(LEDGER.read_bytes()).hexdigest()}
+        'sourceIdentity':source_identity,'captureTransitions':capture_transitions,'nativeManifestSha256':digest,'coreInspection':{'request':fixture,'owner':owner_profile,'result':inspection},'recipe':current_recipe,'pipCheck':checked.stdout,'ledgerSha256':sha256(LEDGER.read_bytes()).hexdigest()}
 
 
 def run_child(stage,value,admission,output):
@@ -310,6 +311,7 @@ def main():
             result_path=output/stage/'result.json'
             if not result_path.is_file():raise RuntimeError('Missing original stage result: '+stage)
             record=json.loads(result_path.read_bytes());records.append(record)
+            assert_qualification_checkout(ROOT,admission['sourceCommit'],admission['sourceTree'],evidence_roots=admission.get('generatedEvidenceRoots',()))
             if code or record.get('passed') is not True:raise RuntimeError('Selected stage failed: '+stage)
     except BaseException as caught:
         error={'class':type(caught).__module__+'.'+type(caught).__qualname__,'message':str(caught)}

@@ -93,7 +93,7 @@ class TemporalQualificationDriverTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'unsealed.json';path.write_text(json.dumps(selected))
             def unsealed(*args,**kwargs):return original(path,**kwargs)
-            with patch.object(release_cohort,'load_cohort',side_effect=unsealed),patch.object(driver.sys,'platform','linux'),patch.object(driver.platform,'machine',return_value='x86_64'), \
+            with patch.object(driver,'assert_qualification_checkout',return_value={}),patch.object(release_cohort,'load_cohort',side_effect=unsealed),patch.object(driver.sys,'platform','linux'),patch.object(driver.platform,'machine',return_value='x86_64'), \
                  patch.object(LocalPostgres,'__enter__') as started, \
                  self.assertRaisesRegex(ValueError,'identities deferred'):
                 driver.preflight({'schema':'truss-temporal-qualification-input/1'})

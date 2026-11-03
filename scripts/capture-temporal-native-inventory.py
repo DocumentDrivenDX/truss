@@ -26,12 +26,18 @@ def main():
     parser.add_argument('--wheel-sha256',required=True)
     parser.add_argument('--initialization-time-zone',required=True,choices=('UTC','America/New_York'))
     parser.add_argument('--output',required=True,type=Path)
+    parser.add_argument('--evidence-root',action='append',type=Path,default=[],help='Explicit run-scoped generated evidence roots, including prior serial capture')
     args=parser.parse_args()
     output=args.output.resolve()
     evidence=ROOT/'docs/helix/04-build/evidence/design-audit'
     if not output.is_relative_to(evidence.resolve()):raise ValueError('Owned native evidence directory required')
     output.mkdir(parents=True,exist_ok=False)
     if os.environ.get('TRUSS_NATIVE_WORKER'):raise ValueError('Initializer capture requires its own serial owned lease')
+    from temporal_qualification_support import assert_qualification_checkout,commit_tree
+    source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    source_tree=commit_tree(ROOT,source_commit)
+    source_identity=assert_qualification_checkout(ROOT,source_commit,source_tree,evidence_roots=(*args.evidence_root,output))
+    if os.environ.get('GITHUB_SHA',source_commit)!=source_commit:raise ValueError('Actual checkout/runner source mismatch')
     from typed_sdk_cohort import _installed_wheel
     wheel=_installed_wheel(args.candidate_wheel,args.wheel_sha256,'truss','umf-truss')
     import truss
@@ -45,8 +51,21 @@ def main():
     from temporal_qualification_support import OwnedNativeCleanup
     sys.path.insert(0,str(ROOT/'packages/python/tests'))
     from runtime_migration_fixture import assembly
-    source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-    if os.environ.get('GITHUB_SHA',source_commit)!=source_commit:raise ValueError('Actual checkout/runner source mismatch')
+    # All actual S/W resources, compiled module enrollments and source seals
+    # precede these captures; their later changes require a new source capture.
+    from release_cohort import load_cohort,verify_installed
+    load_cohort(require_qualified=True);verify_installed()
+    from truss._temporal_owner import _inspector
+    from truss._temporal_compiler import compiler
+    _inspector()
+    if compiler() is None:raise ValueError('Actual compiled temporal Weft enrollment required before capture')
+    package=Path(truss.__file__).resolve().parent
+    nonmigration={str(p.relative_to(package)):sha256(p.read_bytes()).hexdigest() for p in sorted(package.rglob('*'))
+        if p.is_file() and '_migrations' not in p.relative_to(package).parts and '__pycache__' not in p.parts and p.suffix!='.pyc'}
+    for name,digest_expected in nonmigration.items():
+        source=ROOT/'packages/python/src/truss'/name
+        if not source.is_file() or sha256(source.read_bytes()).hexdigest()!=digest_expected:
+            raise ValueError('Actual capture package differs from original committed source: '+name)
     manifest,digest,_=_release()
     if manifest['releaseId']!='truss-catalog-runtime/0.76-temporal-candidate':raise ValueError('Actual0.76 source required')
     raw_manifest=files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes()
@@ -89,6 +108,7 @@ def main():
                     output.joinpath('native-profile-observation.json').write_text(json.dumps(observed,indent=2)+'\n')
                 if (runtime.directory/'log').is_file():shutil.copyfile(runtime.directory/'log',output/'original-postgres.log')
             shutil.rmtree(owned) # Monitor confirms actual pg_ctl3 + original PID absence BEFORE deletion.
+        assert_qualification_checkout(ROOT,source_commit,source_tree,evidence_roots=(*args.evidence_root,output))
     except BaseException as caught:
         error={'class':type(caught).__module__+'.'+type(caught).__qualname__,'message':str(caught)}
         raise
@@ -99,11 +119,9 @@ def main():
             'cleanupConfirmed':monitor.confirmed,'error':error,
             'passed':observed is not None and monitor.confirmed and error is None,
             'producerSha256':sha256(Path(__file__).read_bytes()).hexdigest(),
-            'nonMigrationPackageFiles':{str(p.relative_to(Path(truss.__file__).resolve().parent)):sha256(p.read_bytes()).hexdigest()
-                for p in sorted(Path(truss.__file__).resolve().parent.rglob('*')) if p.is_file()
-                and '_migrations' not in p.relative_to(Path(truss.__file__).resolve().parent).parts
-                and '__pycache__' not in p.parts and p.suffix!='.pyc'},
-            'sourceCommit':source_commit,'sysPlatform':sys.platform,'machine':platform.machine(),'pythonMajorMinor':list(sys.version_info[:2]),
+            'nonMigrationPackageFiles':nonmigration,
+            'sourceCommit':source_commit,'sourceTree':source_tree,'sourceIdentity':source_identity,
+            'sysPlatform':sys.platform,'machine':platform.machine(),'pythonMajorMinor':list(sys.version_info[:2]),
             'profileSha256':sha256(output.joinpath('native-profile-observation.json').read_bytes()).hexdigest() if observed is not None else None,
             'historicalProfilesModified':False,'issuedBaseline':False}
         output.joinpath('receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')

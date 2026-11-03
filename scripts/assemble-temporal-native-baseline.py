@@ -39,6 +39,11 @@ def assemble(selections,output):
     if len(selections)!=2:raise ValueError('Two exact native initializer receipt pins required')
     output=Path(output).resolve()
     if output.exists():raise ValueError('Refuse existing staged baseline output')
+    from temporal_qualification_support import _git,commit_tree,assert_qualification_checkout
+    assembly_commit=_git(ROOT,'rev-parse','HEAD').decode().strip()
+    assembly_tree=commit_tree(ROOT,assembly_commit)
+    assert_qualification_checkout(ROOT,assembly_commit,assembly_tree,
+        evidence_roots=[Path(entry['path']).resolve().parent for entry in selections]+[output])
     captures=[];zones=set();selected_files={}
     for entry in selections:
         path=Path(entry['path']).resolve();raw=path.read_bytes()
@@ -47,8 +52,13 @@ def assemble(selections,output):
         if (receipt.get('passed') is not True or receipt.get('cleanupConfirmed') is not True
                 or receipt.get('historicalProfilesModified') is not False
                 or receipt.get('sysPlatform')!='linux' or receipt.get('machine')!='x86_64' or receipt.get('pythonMajorMinor')!=[3,11]
-                or receipt.get('producerSha256')!=sha256((ROOT/'scripts/capture-temporal-native-inventory.py').read_bytes()).hexdigest()):
+):
             raise ValueError('Successful genuine original-source capture and cleanup proof required')
+        from temporal_qualification_support import commit_tree,_git
+        if commit_tree(ROOT,receipt.get('sourceCommit'))!=receipt.get('sourceTree'):
+            raise ValueError('Original initializer commit/tree required')
+        if sha256(_git(ROOT,'show',receipt['sourceCommit']+':scripts/capture-temporal-native-inventory.py')).hexdigest()!=receipt.get('producerSha256'):
+            raise ValueError('Original committed capture producer required')
         proof=json.loads(path.with_name('cleanup.json').read_bytes())['clusters']
         if not proof or not all(r.get('confirmed') is True and r.get('dataDeleted') is True and r.get('pgCtlStatus')==3 and r.get('originalPostmasterPidAbsent') is True for r in proof):
             raise ValueError('Original postmaster absence and pg_ctl3 before deletion required')
@@ -68,7 +78,7 @@ def assemble(selections,output):
         selected_files['native076-capture-'+entry['sha256']+'.json']=raw
     if zones!={'UTC','America/New_York'}:raise ValueError('Both original initializer timezone observations required')
     left,right=captures
-    for key in ('sourceCommit','nonMigrationPackageFiles'):
+    for key in ('sourceCommit','sourceTree','nonMigrationPackageFiles'):
         if not left[0].get(key) or left[0][key]!=right[0].get(key):raise ValueError('Exact initializer source/package closure required')
     for key in ('sha256','manifest','configuration','acl','aclNameProfile'):
         if left[1][key]!=right[1][key]:raise ValueError('Initializer source/configuration/ACL differs: '+key)
@@ -79,7 +89,8 @@ def assemble(selections,output):
     digest=target['sha256'];profile_name=digest+'.json';selected_files[profile_name]=canonical(target)
     proof={'scope':'Exact fresh0.76 initializer observations only; no timezone conversion, widened initializer or historical admission',
         'observationTimeZone':'UTC','qualifiedTimeZones':['America/New_York','UTC'],'rules':rules,
-        'captures':selections,'sourceCommit':left[0]['sourceCommit'],'runtimeManifestSha256':digest,'sourceWheels':{}}
+        'captures':selections,'sourceCommit':left[0]['sourceCommit'],'sourceTree':left[0]['sourceTree'],
+        'assemblyCommit':assembly_commit,'assemblyTree':assembly_tree,'runtimeManifestSha256':digest,'sourceWheels':{}}
     initialization='native076-initialization-'+sha256(canonical(proof)).hexdigest()[:16]+'.json'
     selected_files[initialization]=canonical(proof)
     original=ROOT/'packages/python/src/truss/_migrations';old=json.loads((original/'manifest.json').read_bytes())

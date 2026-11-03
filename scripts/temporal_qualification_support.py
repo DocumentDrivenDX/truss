@@ -167,3 +167,104 @@ class OwnedNativeCleanup:
     @property
     def confirmed(self):
         return not self.uncertain and not self.cleanup_errors and all(r['confirmed'] and r['dataDeleted'] for r in self.records.values())
+
+
+# Deliberate parallel planner documents are not executable qualification inputs.
+_PLANNER_PATHS={
+ 'docs/helix/02-design/contracts/CONTRACT-010-exact-value-transport.md',
+ 'docs/helix/02-design/contracts/CONTRACT-012-weft-storage-handoff.md',
+ 'docs/helix/03-test/test-plan.md','docs/helix/04-build/temporal-current-baseline-plan.md',
+ *('docs/helix/04-build/'+name for name in ('embedder-temporal-delivery-plan.md',
+ 'temporal-coherent-source-integration-plan.md','temporal-dependency-cohort-plan.md',
+ 'temporal-interface-freeze.md','temporal-native-qualification-plan.md','temporal-public-values-addendum.md'))}
+_INPUT_ROOTS=('packages/python/src/truss','packages/python/tests','scripts','.github/workflows','docs/helix/03-test','tests')
+_MIGRATIONS='packages/python/src/truss/_migrations/'
+_SEAL='scripts/truss-release-cohort.json'
+
+
+def _git(root,*args):
+    return subprocess.check_output(['git',*args],cwd=root)
+
+
+def commit_tree(root,commit):
+    import re
+    if type(commit) is not str or re.fullmatch('[0-9a-f]{40}',commit) is None:
+        raise ValueError('Exact admitted commit required')
+    if _git(root,'rev-parse',commit+'^{commit}').decode().strip()!=commit:
+        raise ValueError('Exact original commit required')
+    return _git(root,'rev-parse',commit+'^{tree}').decode().strip()
+
+
+def assert_qualification_checkout(root,commit,tree,*,evidence_roots=()):
+    """Bind HEAD/TREE and reject staged, unstaged, untracked/ignored inputs.
+
+    Evidence roots are explicit, separate directories below design-audit or
+    outside this checkout. They never authorize changes to tracked input bytes.
+    """
+    root=Path(root).resolve()
+    actual=_git(root,'rev-parse','HEAD').decode().strip()
+    actual_tree=commit_tree(root,actual)
+    if actual!=commit or actual_tree!=tree:raise ValueError('Actual admitted qualification commit/tree differs')
+    outputs=[]
+    for selected in evidence_roots:
+        path=Path(selected).resolve()
+        if root.is_relative_to(path):raise ValueError('Evidence output cannot contain the qualification checkout')
+        if path.is_relative_to(root):
+            relative=path.relative_to(root)
+            base=Path('docs/helix/04-build/evidence/design-audit')
+            if relative==base or not relative.is_relative_to(base):
+                raise ValueError('Evidence output must be separately scoped below design-audit')
+        outputs.append(path)
+    changed=set(_git(root,'diff','--name-only','-z','HEAD','--').decode().split('\0'))
+    changed.update(_git(root,'diff','--cached','--name-only','-z','HEAD','--').decode().split('\0'))
+    dirty=sorted(p for p in changed if p and p not in _PLANNER_PATHS)
+    if dirty:raise ValueError('Dirty tracked qualification inputs versus admitted HEAD: '+repr(dirty))
+    # All untracked files, plus ignored files under executable/data input roots.
+    untracked=set(_git(root,'ls-files','--others','--exclude-standard','-z').decode().split('\0'))
+    untracked.update(_git(root,'ls-files','--others','--ignored','--exclude-standard','-z','--',*_INPUT_ROOTS).decode().split('\0'))
+    unknown=[]
+    for name in sorted(untracked-{''}):
+        path=Path(name)
+        if name in _PLANNER_PATHS or name.startswith('docs/helix/04-build/evidence/temporal-completion-current-owner-audit-20261102/'):continue
+        if '__pycache__' in path.parts and path.suffix=='.pyc':continue
+        if any((root/path).resolve().is_relative_to(p) for p in outputs):continue
+        unknown.append(name)
+    if unknown:raise ValueError('Uncommitted qualification inputs outside scoped evidence: '+repr(unknown))
+    return {'commit':actual,'tree':actual_tree,'qualificationInputsClean':True,'generatedEvidenceRoots':[str(p) for p in outputs]}
+
+
+def validate_capture_transition(root,receipt,final_commit,final_tree,*,native_digest,nonmigration_payload):
+    """Preserve original capture provenance; allow reviewed fresh-artifact descendants only."""
+    root=Path(root).resolve();capture=receipt.get('sourceCommit');tree=receipt.get('sourceTree')
+    identity=receipt.get('sourceIdentity',{})
+    if identity.get('commit')!=capture or identity.get('tree')!=tree or identity.get('qualificationInputsClean') is not True:
+        raise ValueError('Original capture must attest clean qualification inputs at its own commit/tree')
+    if commit_tree(root,capture)!=tree or commit_tree(root,final_commit)!=final_tree:
+        raise ValueError('Original capture/final commit tree correspondence required')
+    if receipt.get('runtimeManifestSha256')!=native_digest or receipt.get('nonMigrationPackageFiles')!=nonmigration_payload:
+        raise ValueError('Complete non-migration payload and native manifest must equal original capture')
+    producer=_git(root,'show',capture+':scripts/capture-temporal-native-inventory.py')
+    from hashlib import sha256
+    if sha256(producer).hexdigest()!=receipt.get('producerSha256'):
+        raise ValueError('Original capture producer commit/blob differs')
+    ancestor=subprocess.run(['git','merge-base','--is-ancestor',capture,final_commit],cwd=root,capture_output=True)
+    if ancestor.returncode:raise ValueError('Reviewed final commit must descend from original capture')
+    # Inspect EVERY intervening commit, including merge-parent diffs, so a
+    # non-migration change subsequently reverted cannot masquerade as equality.
+    changed=set(_git(root,'log','--format=','--name-only','-m','--full-history',capture+'..'+final_commit,
+                     '--','packages/python',_SEAL).decode().splitlines())-{''}
+    manifest=json.loads(_git(root,'show',final_commit+':'+_MIGRATIONS+'manifest.json'))
+    if (manifest.get('target')!=native_digest or manifest.get('targetRelease')!='truss-catalog-runtime/0.76-temporal-candidate'
+            or not manifest.get('baseline') or manifest.get('sources')!=[] or manifest.get('edges')!=[] or manifest.get('sourceWheels')!={}):
+        raise ValueError('Reviewed descendant must select genuine fresh-only native baseline')
+    allowed={_MIGRATIONS+'manifest.json'}|{_MIGRATIONS+name for name in manifest['files'] if Path(name).name==name and name.endswith('.json')}
+    for name in changed:
+        if name not in allowed:raise ValueError('Intervening package/enrollment/seal change requires a new source capture: '+name)
+        if name!=_MIGRATIONS+'manifest.json':
+            exists=subprocess.run(['git','cat-file','-e',capture+':'+name],cwd=root,capture_output=True)
+            if exists.returncode==0:raise ValueError('Frozen migration artifact changed after capture: '+name)
+            body=_git(root,'show',final_commit+':'+name)
+            if sha256(body).hexdigest()!=manifest['files'][name.removeprefix(_MIGRATIONS)]:
+                raise ValueError('Fresh descendant artifact differs from reviewed final manifest')
+    return {'captureCommit':capture,'captureTree':tree,'finalCommit':final_commit,'finalTree':final_tree,
+            'interveningPackagePaths':sorted(changed),'nativeManifestSha256':native_digest,'nonMigrationPayloadEqual':True}
