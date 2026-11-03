@@ -256,7 +256,7 @@ BEGIN
  input_operations:=input->'operations';
  IF replay_only AND request->>'state' IS DISTINCT FROM 'present' THEN RAISE EXCEPTION 'request-present replay probe required' USING ERRCODE='22023';END IF;
  IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin','preconditions']<>'{}'::jsonb
- OR input->>'interfaceVersion' IS DISTINCT FROM CASE WHEN context->'valueProfile'=truss.runtime_temporal_profiles()->'valueProfile' THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
+ OR input->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN context->'valueProfile'=truss.runtime_temporal_profiles()->'valueProfile' THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
  OR jsonb_typeof(input_operations) IS DISTINCT FROM 'array'
  OR jsonb_array_length(input_operations) NOT BETWEEN 1 AND (CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN 1024 ELSE 128 END) OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
  OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512 THEN RAISE EXCEPTION 'selected bounded object group required' USING ERRCODE='0A000';END IF;

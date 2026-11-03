@@ -576,7 +576,7 @@ BEGIN
     ddd_known:=((doc->>'originalText')::jsonb->'vocabularies'->'umf.ddd'->>'version')='0.1.0';
     ddd_profile:=validation->'dddProfile';ddd_validation:=validation->'dddValidation';
     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>
-      (CASE WHEN ddd_known THEN 5 ELSE 3 END)+CASE WHEN temporal THEN 1 ELSE 0 END
+      (CASE WHEN ddd_known THEN 5 ELSE 3 END)+(CASE WHEN temporal THEN 1 ELSE 0 END)
       OR temporal AND (validation->'inspection' IS DISTINCT FROM doc->'validation'->'inspection'
        OR doc->'validation'->>'storageFormat' IS DISTINCT FROM 'truss-catalog-source/2.1')
       OR NOT temporal AND (validation ? 'inspection' OR doc->'validation' ? 'inspection')

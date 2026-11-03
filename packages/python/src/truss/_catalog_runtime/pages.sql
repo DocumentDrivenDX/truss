@@ -31,7 +31,7 @@ BEGIN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536 OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
    RAISE EXCEPTION 'bounded original page cursor required' USING ERRCODE='22023';END IF;
   cursor_value:=convert_from(original_cursor,'UTF8')::jsonb;
-  IF (SELECT count(*) FROM jsonb_object_keys(cursor_value))<>CASE WHEN temporal_profile THEN 13 ELSE 11 END
+  IF (SELECT count(*) FROM jsonb_object_keys(cursor_value))<>(CASE WHEN temporal_profile THEN 13 ELSE 11 END)
    OR EXISTS(SELECT 1 FROM jsonb_each(cursor_value) e WHERE jsonb_typeof(e.value)<>'string' AND NOT (temporal_profile AND e.key IN ('valueProfile','queryAbi')))
    OR cursor_value-ARRAY['profile','installationId','sourceEpoch','releaseSha256','documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId']-(CASE WHEN temporal_profile THEN ARRAY['valueProfile','queryAbi'] ELSE ARRAY[]::text[] END)<>'{}'::jsonb
    OR cursor_value->>'documentId' IS DISTINCT FROM selected_document OR cursor_value->>'moduleId' IS DISTINCT FROM selected_module OR cursor_value->>'recordId' IS DISTINCT FROM selected_record

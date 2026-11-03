@@ -55,7 +55,7 @@ BEGIN
   SELECT count(*),(jsonb_agg(f.value)->0) INTO matches,selected_field FROM jsonb_array_elements(selected_record->'fields') f WHERE f.value->'identity'=identity;
   IF matches<>1 THEN RAISE EXCEPTION 'exact temporal native mapping required' USING ERRCODE='22023';END IF;
   SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=(selected_field->>'propertyId')::int AND p.retired_rev IS NULL;
-  IF NOT FOUND OR property.scalar_type IS DISTINCT FROM CASE kind WHEN 'local' THEN 'localTimestamp' WHEN 'instant' THEN 'timestamp' ELSE 'date' END
+  IF NOT FOUND OR property.scalar_type IS DISTINCT FROM (CASE kind WHEN 'local' THEN 'localTimestamp' WHEN 'instant' THEN 'timestamp' ELSE 'date' END)
    OR property.cardinality IS DISTINCT FROM 'one' OR coalesce(property.facets,'{}')<>'{}'::jsonb
    OR jsonb_typeof(owner_field->'row') IS DISTINCT FROM 'object'
    OR (owner_field->'row')-ARRAY['missing','null']<>'{}'::jsonb
@@ -93,7 +93,7 @@ BEGIN
    RAISE EXCEPTION 'complete bounded temporal source required' USING ERRCODE='54000';END IF;
   root_identity:=truss.query_object_root(binding,object_row);
   IF root_identity IS NOT NULL THEN roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);END IF;
-  IF byte_count+CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END>(binding->>'maximumBytes')::int THEN
+  IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN
    RAISE EXCEPTION 'complete bounded temporal root witnesses required' USING ERRCODE='54000';END IF;
   IF object_row.ver<=0 OR object_row.rev>(binding->>'catalogRevision')::int THEN
    RAISE EXCEPTION 'complete current temporal source required' USING ERRCODE='0A000';END IF;

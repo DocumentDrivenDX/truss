@@ -182,7 +182,7 @@ BEGIN
   RAISE EXCEPTION 'bounded group source required' USING ERRCODE='54000'; END IF;
  IF (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'unique original JSON members required' USING ERRCODE='22023'; END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;
- IF input->>'interfaceVersion' IS DISTINCT FROM CASE WHEN context->'valueProfile'=truss.runtime_temporal_profiles()->'valueProfile' THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END
+ IF input->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN context->'valueProfile'=truss.runtime_temporal_profiles()->'valueProfile' THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END)
  OR input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile'
  OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile'
  OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile'
