@@ -1,0 +1,514 @@
+﻿2026-11-02T02:46:18.7584401Z Current runner version: '2.338.2'
+2026-11-02T02:46:18.7607062Z ##[group]Runner Image Provisioner
+2026-11-02T02:46:18.7607908Z Hosted Compute Agent
+2026-11-02T02:46:18.7608423Z Version: 20261021.618
+2026-11-02T02:46:18.7608992Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-02T02:46:18.7609612Z Build Date: 2026-10-21T00:45:21Z
+2026-11-02T02:46:18.7610212Z Worker ID: {3f969a6b-047d-492f-86a8-03b6effdf545}
+2026-11-02T02:46:18.7610837Z Region: westus3
+2026-11-02T02:46:18.7611312Z Cloud: Azure
+2026-11-02T02:46:18.7611839Z ##[endgroup]
+2026-11-02T02:46:18.7612971Z ##[group]Operating System
+2026-11-02T02:46:18.7613524Z Ubuntu
+2026-11-02T02:46:18.7614029Z 24.04.5
+2026-11-02T02:46:18.7614483Z LTS
+2026-11-02T02:46:18.7614911Z ##[endgroup]
+2026-11-02T02:46:18.7615446Z ##[group]Runner Image
+2026-11-02T02:46:18.7616128Z Image: ubuntu-24.04
+2026-11-02T02:46:18.7616645Z Version: 20261025.353.1
+2026-11-02T02:46:18.7617738Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-02T02:46:18.7619063Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-02T02:46:18.7619914Z ##[endgroup]
+2026-11-02T02:46:18.7621288Z ##[group]GITHUB_TOKEN Permissions
+2026-11-02T02:46:18.7623094Z Contents: read
+2026-11-02T02:46:18.7623727Z Metadata: read
+2026-11-02T02:46:18.7624252Z ##[endgroup]
+2026-11-02T02:46:18.7626274Z Secret source: Actions
+2026-11-02T02:46:18.7627143Z Cache mode: write
+2026-11-02T02:46:18.7627755Z Prepare workflow directory
+2026-11-02T02:46:18.7908751Z Prepare all required actions
+2026-11-02T02:46:18.7950215Z Getting action download info
+2026-11-02T02:46:19.0908501Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-11-02T02:46:19.3211154Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-02T02:46:19.4344484Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-02T02:46:19.7257486Z Complete job name: released-runtime
+2026-11-02T02:46:19.8093605Z ##[group]Run actions/checkout@v6
+2026-11-02T02:46:19.8094675Z with:
+2026-11-02T02:46:19.8095312Z   persist-credentials: false
+2026-11-02T02:46:19.8096396Z   repository: DocumentDrivenDX/truss
+2026-11-02T02:46:19.8103360Z   token: ***
+2026-11-02T02:46:19.8103997Z   ssh-strict: true
+2026-11-02T02:46:19.8104668Z   ssh-user: git
+2026-11-02T02:46:19.8105309Z   clean: true
+2026-11-02T02:46:19.8106214Z   sparse-checkout-cone-mode: true
+2026-11-02T02:46:19.8107370Z   fetch-depth: 1
+2026-11-02T02:46:19.8108247Z   fetch-tags: false
+2026-11-02T02:46:19.8108921Z   show-progress: true
+2026-11-02T02:46:19.8109595Z   lfs: false
+2026-11-02T02:46:19.8110228Z   submodules: false
+2026-11-02T02:46:19.8110922Z   set-safe-directory: true
+2026-11-02T02:46:19.8111704Z   allow-unsafe-pr-checkout: false
+2026-11-02T02:46:19.8112842Z ##[endgroup]
+2026-11-02T02:46:20.0136302Z Syncing repository: DocumentDrivenDX/truss
+2026-11-02T02:46:20.0139108Z ##[group]Getting Git version info
+2026-11-02T02:46:20.0140626Z Working directory is '/home/runner/work/truss/truss'
+2026-11-02T02:46:20.0142583Z [command]/usr/bin/git version
+2026-11-02T02:46:20.0193332Z git version 2.56.0
+2026-11-02T02:46:20.0212333Z ##[endgroup]
+2026-11-02T02:46:20.0225938Z Temporarily overriding HOME='/home/runner/work/_temp/db29dd70-dab8-4cb6-968d-0232269ca874' before making global git config changes
+2026-11-02T02:46:20.0229738Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-02T02:46:20.0232237Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/truss/truss
+2026-11-02T02:46:20.0272125Z Deleting the contents of '/home/runner/work/truss/truss'
+2026-11-02T02:46:20.0283111Z ##[group]Determining repository object format
+2026-11-02T02:46:20.0285125Z ##[endgroup]
+2026-11-02T02:46:20.0286899Z ##[group]Initializing the repository
+2026-11-02T02:46:20.0288379Z [command]/usr/bin/git init /home/runner/work/truss/truss
+2026-11-02T02:46:20.0922782Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-02T02:46:20.0925214Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-02T02:46:20.0927776Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-02T02:46:20.0929368Z hint: call:
+2026-11-02T02:46:20.0929997Z hint:
+2026-11-02T02:46:20.0930824Z hint: 	git config --global init.defaultBranch <name>
+2026-11-02T02:46:20.0931762Z hint:
+2026-11-02T02:46:20.0932876Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-02T02:46:20.0934564Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-02T02:46:20.0935725Z hint:
+2026-11-02T02:46:20.0936741Z hint: 	git branch -m <name>
+2026-11-02T02:46:20.0937817Z hint:
+2026-11-02T02:46:20.0938807Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-02T02:46:20.0940390Z Initialized empty Git repository in /home/runner/work/truss/truss/.git/
+2026-11-02T02:46:20.0943121Z [command]/usr/bin/git remote add origin https://github.com/DocumentDrivenDX/truss
+2026-11-02T02:46:20.0987130Z ##[endgroup]
+2026-11-02T02:46:20.0988467Z ##[group]Disabling automatic garbage collection
+2026-11-02T02:46:20.0989830Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-02T02:46:20.1025306Z ##[endgroup]
+2026-11-02T02:46:20.1026973Z ##[group]Setting up auth
+2026-11-02T02:46:20.1028084Z Removing SSH command configuration
+2026-11-02T02:46:20.1030700Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-02T02:46:20.1068806Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-02T02:46:20.1415451Z Removing HTTP extra header
+2026-11-02T02:46:20.1421549Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-02T02:46:20.1461149Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-02T02:46:20.1659159Z Removing includeIf entries pointing to credentials config files
+2026-11-02T02:46:20.1663979Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-02T02:46:20.1701547Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-02T02:46:20.1909330Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-02T02:46:20.1950652Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/truss/truss/.git.path /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:20.1986139Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/truss/truss/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:20.2021779Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:20.2058552Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:20.2090812Z ##[endgroup]
+2026-11-02T02:46:20.2096949Z ##[group]Fetching the repository
+2026-11-02T02:46:20.2098734Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +refs/tags/v0.0.52:refs/tags/v0.0.52
+2026-11-02T02:46:31.7915434Z From https://github.com/DocumentDrivenDX/truss
+2026-11-02T02:46:31.7916145Z  * [new tag]           v0.0.52    -> v0.0.52
+2026-11-02T02:46:31.7924479Z [command]/usr/bin/git tag --list v0.0.52
+2026-11-02T02:46:31.7957057Z v0.0.52
+2026-11-02T02:46:31.7963854Z [command]/usr/bin/git rev-parse refs/tags/v0.0.52^{commit}
+2026-11-02T02:46:31.7992897Z 1d23bedfdfdc0901e16e1a0663882c765fe1068f
+2026-11-02T02:46:31.7997784Z ##[endgroup]
+2026-11-02T02:46:31.7998343Z ##[group]Determining the checkout info
+2026-11-02T02:46:31.8001410Z ##[endgroup]
+2026-11-02T02:46:31.8001823Z [command]/usr/bin/git sparse-checkout disable
+2026-11-02T02:46:31.8052071Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-02T02:46:31.8085335Z ##[group]Checking out the ref
+2026-11-02T02:46:31.8089101Z [command]/usr/bin/git checkout --progress --force refs/tags/v0.0.52
+2026-11-02T02:46:33.0677752Z Updating files:  25% (7623/30356)
+2026-11-02T02:46:33.1535774Z Updating files:  26% (7893/30356)
+2026-11-02T02:46:33.1793660Z Updating files:  27% (8197/30356)
+2026-11-02T02:46:33.8804571Z Updating files:  28% (8500/30356)
+2026-11-02T02:46:33.8957047Z Updating files:  28% (8780/30356)
+2026-11-02T02:46:33.9836782Z Updating files:  29% (8804/30356)
+2026-11-02T02:46:34.1117408Z Updating files:  30% (9107/30356)
+2026-11-02T02:46:34.1794201Z Updating files:  31% (9411/30356)
+2026-11-02T02:46:34.2193660Z Updating files:  32% (9714/30356)
+2026-11-02T02:46:34.4532197Z Updating files:  33% (10018/30356)
+2026-11-02T02:46:34.8396421Z Updating files:  34% (10322/30356)
+2026-11-02T02:46:34.8853588Z Updating files:  34% (10589/30356)
+2026-11-02T02:46:35.0226947Z Updating files:  35% (10625/30356)
+2026-11-02T02:46:35.0491207Z Updating files:  36% (10929/30356)
+2026-11-02T02:46:35.0803011Z Updating files:  37% (11232/30356)
+2026-11-02T02:46:35.1025570Z Updating files:  38% (11536/30356)
+2026-11-02T02:46:35.1362507Z Updating files:  39% (11839/30356)
+2026-11-02T02:46:35.1663187Z Updating files:  40% (12143/30356)
+2026-11-02T02:46:35.1784301Z Updating files:  41% (12446/30356)
+2026-11-02T02:46:35.2039321Z Updating files:  42% (12750/30356)
+2026-11-02T02:46:35.2225580Z Updating files:  43% (13054/30356)
+2026-11-02T02:46:35.2500859Z Updating files:  44% (13357/30356)
+2026-11-02T02:46:35.4278303Z Updating files:  45% (13661/30356)
+2026-11-02T02:46:35.4416702Z Updating files:  46% (13964/30356)
+2026-11-02T02:46:35.4537479Z Updating files:  47% (14268/30356)
+2026-11-02T02:46:35.4662763Z Updating files:  48% (14571/30356)
+2026-11-02T02:46:35.4784155Z Updating files:  49% (14875/30356)
+2026-11-02T02:46:35.4900761Z Updating files:  50% (15178/30356)
+2026-11-02T02:46:35.5020730Z Updating files:  51% (15482/30356)
+2026-11-02T02:46:35.5139478Z Updating files:  52% (15786/30356)
+2026-11-02T02:46:35.5253577Z Updating files:  53% (16089/30356)
+2026-11-02T02:46:35.5372991Z Updating files:  54% (16393/30356)
+2026-11-02T02:46:35.5489738Z Updating files:  55% (16696/30356)
+2026-11-02T02:46:35.5598483Z Updating files:  56% (17000/30356)
+2026-11-02T02:46:35.5729493Z Updating files:  57% (17303/30356)
+2026-11-02T02:46:35.6003589Z Updating files:  58% (17607/30356)
+2026-11-02T02:46:35.6248303Z Updating files:  59% (17911/30356)
+2026-11-02T02:46:35.6525302Z Updating files:  60% (18214/30356)
+2026-11-02T02:46:35.6798410Z Updating files:  61% (18518/30356)
+2026-11-02T02:46:35.7068633Z Updating files:  62% (18821/30356)
+2026-11-02T02:46:35.7365252Z Updating files:  63% (19125/30356)
+2026-11-02T02:46:35.7693043Z Updating files:  64% (19428/30356)
+2026-11-02T02:46:35.7989626Z Updating files:  65% (19732/30356)
+2026-11-02T02:46:35.8330789Z Updating files:  66% (20035/30356)
+2026-11-02T02:46:35.8347818Z Updating files:  66% (20298/30356)
+2026-11-02T02:46:35.8595267Z Updating files:  67% (20339/30356)
+2026-11-02T02:46:35.8941089Z Updating files:  68% (20643/30356)
+2026-11-02T02:46:35.9218257Z Updating files:  69% (20946/30356)
+2026-11-02T02:46:35.9491659Z Updating files:  70% (21250/30356)
+2026-11-02T02:46:35.9780018Z Updating files:  71% (21553/30356)
+2026-11-02T02:46:36.0131874Z Updating files:  72% (21857/30356)
+2026-11-02T02:46:36.0482788Z Updating files:  73% (22160/30356)
+2026-11-02T02:46:36.0833867Z Updating files:  74% (22464/30356)
+2026-11-02T02:46:36.1101158Z Updating files:  75% (22767/30356)
+2026-11-02T02:46:36.1366434Z Updating files:  76% (23071/30356)
+2026-11-02T02:46:36.1714720Z Updating files:  77% (23375/30356)
+2026-11-02T02:46:36.2060482Z Updating files:  78% (23678/30356)
+2026-11-02T02:46:36.2343554Z Updating files:  79% (23982/30356)
+2026-11-02T02:46:36.8677745Z Updating files:  80% (24285/30356)
+2026-11-02T02:46:37.8432281Z Updating files:  80% (24475/30356)
+2026-11-02T02:46:38.8462905Z Updating files:  80% (24505/30356)
+2026-11-02T02:46:39.6528738Z Updating files:  80% (24537/30356)
+2026-11-02T02:46:39.8326740Z Updating files:  81% (24589/30356)
+2026-11-02T02:46:39.8534161Z Updating files:  81% (24764/30356)
+2026-11-02T02:46:39.9536286Z Updating files:  82% (24892/30356)
+2026-11-02T02:46:39.9899269Z Updating files:  83% (25196/30356)
+2026-11-02T02:46:40.0343009Z Updating files:  84% (25500/30356)
+2026-11-02T02:46:40.0629581Z Updating files:  85% (25803/30356)
+2026-11-02T02:46:40.1103629Z Updating files:  86% (26107/30356)
+2026-11-02T02:46:40.1371033Z Updating files:  87% (26410/30356)
+2026-11-02T02:46:40.1663369Z Updating files:  88% (26714/30356)
+2026-11-02T02:46:40.1931407Z Updating files:  89% (27017/30356)
+2026-11-02T02:46:40.8346647Z Updating files:  90% (27321/30356)
+2026-11-02T02:46:41.8618340Z Updating files:  90% (27407/30356)
+2026-11-02T02:46:42.4369610Z Updating files:  90% (27544/30356)
+2026-11-02T02:46:42.8523060Z Updating files:  91% (27624/30356)
+2026-11-02T02:46:43.8440650Z Updating files:  91% (27678/30356)
+2026-11-02T02:46:44.3910798Z Updating files:  91% (27805/30356)
+2026-11-02T02:46:44.6709012Z Updating files:  92% (27928/30356)
+2026-11-02T02:46:44.7027528Z Updating files:  93% (28232/30356)
+2026-11-02T02:46:44.7193866Z Updating files:  94% (28535/30356)
+2026-11-02T02:46:44.7777568Z Updating files:  95% (28839/30356)
+2026-11-02T02:46:44.8036797Z Updating files:  96% (29142/30356)
+2026-11-02T02:46:44.8190174Z Updating files:  97% (29446/30356)
+2026-11-02T02:46:44.8324780Z Updating files:  98% (29749/30356)
+2026-11-02T02:46:44.8330718Z Updating files:  98% (30040/30356)
+2026-11-02T02:46:44.8796361Z Updating files:  99% (30053/30356)
+2026-11-02T02:46:44.8796779Z Updating files: 100% (30356/30356)
+2026-11-02T02:46:44.8797140Z Updating files: 100% (30356/30356), done.
+2026-11-02T02:46:45.2759691Z Note: switching to 'refs/tags/v0.0.52'.
+2026-11-02T02:46:45.2759922Z 
+2026-11-02T02:46:45.2760102Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-02T02:46:45.2760500Z changes and commit them, and you can discard any commits you make in this
+2026-11-02T02:46:45.2760888Z state without impacting any branches by switching back to a branch.
+2026-11-02T02:46:45.2761111Z 
+2026-11-02T02:46:45.2761261Z If you want to create a new branch to retain commits you create, you may
+2026-11-02T02:46:45.2761623Z do so (now or later) by using -c with the switch command. Example:
+2026-11-02T02:46:45.2761829Z 
+2026-11-02T02:46:45.2761921Z   git switch -c <new-branch-name>
+2026-11-02T02:46:45.2762092Z 
+2026-11-02T02:46:45.2762195Z Or undo this operation with:
+2026-11-02T02:46:45.2762327Z 
+2026-11-02T02:46:45.2762405Z   git switch -
+2026-11-02T02:46:45.2762508Z 
+2026-11-02T02:46:45.2762685Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-02T02:46:45.2762919Z 
+2026-11-02T02:46:45.2763088Z HEAD is now at 1d23bedf Clarify custody binding and local publication scope
+2026-11-02T02:46:45.2911463Z ##[endgroup]
+2026-11-02T02:46:45.2957777Z [command]/usr/bin/git log -1 --format=%H
+2026-11-02T02:46:45.2988691Z 1d23bedfdfdc0901e16e1a0663882c765fe1068f
+2026-11-02T02:46:45.2997462Z ##[group]Removing auth
+2026-11-02T02:46:45.2998874Z Removing SSH command configuration
+2026-11-02T02:46:45.3001468Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-02T02:46:45.3037547Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-02T02:46:45.3353620Z Removing HTTP extra header
+2026-11-02T02:46:45.3358478Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-02T02:46:45.3407373Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-02T02:46:45.3647728Z Removing includeIf entries pointing to credentials config files
+2026-11-02T02:46:45.3656759Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-02T02:46:45.3681553Z includeif.gitdir:/home/runner/work/truss/truss/.git.path
+2026-11-02T02:46:45.3682278Z includeif.gitdir:/home/runner/work/truss/truss/.git/worktrees/*.path
+2026-11-02T02:46:45.3687051Z includeif.gitdir:/github/workspace/.git.path
+2026-11-02T02:46:45.3687602Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-02T02:46:45.3690430Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/truss/truss/.git.path
+2026-11-02T02:46:45.3717768Z /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.3726697Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/truss/truss/.git.path /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.4654996Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/truss/truss/.git/worktrees/*.path
+2026-11-02T02:46:45.4688313Z /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.4700184Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/truss/truss/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.5588669Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-02T02:46:45.5621550Z /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.5628098Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.5678278Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-02T02:46:45.5704465Z /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.5710536Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config
+2026-11-02T02:46:45.5760045Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-02T02:46:45.6011036Z Removing credentials config '/home/runner/work/_temp/git-credentials-e58d555f-9776-4710-947e-8094221d87b7.config'
+2026-11-02T02:46:45.6018578Z ##[endgroup]
+2026-11-02T02:46:45.6279413Z ##[group]Run actions/setup-python@v5
+2026-11-02T02:46:45.6279658Z with:
+2026-11-02T02:46:45.6279832Z   python-version: 3.11
+2026-11-02T02:46:45.6280016Z   cache: pip
+2026-11-02T02:46:45.6280241Z   cache-dependency-path: packages/python/pyproject.toml
+2026-11-02T02:46:45.6280506Z   check-latest: false
+2026-11-02T02:46:45.6282386Z   token: ***
+2026-11-02T02:46:45.6282579Z   update-environment: true
+2026-11-02T02:46:45.6282784Z   allow-prereleases: false
+2026-11-02T02:46:45.6282979Z   freethreaded: false
+2026-11-02T02:46:45.6283157Z ##[endgroup]
+2026-11-02T02:46:45.7386198Z ##[group]Installed versions
+2026-11-02T02:46:45.7512211Z (node:2202) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-02T02:46:45.7513118Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-02T02:46:45.7513979Z Successfully set up CPython (3.11.17)
+2026-11-02T02:46:45.7514548Z ##[endgroup]
+2026-11-02T02:46:45.7950472Z [command]/opt/hostedtoolcache/Python/3.11.17/x64/bin/pip cache dir
+2026-11-02T02:46:47.8639988Z /home/runner/.cache/pip
+2026-11-02T02:46:48.1053806Z Cache hit for: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.17-pip-4e8cba773b0ceebf79bc450d60486fc8c1ddb67323c798791f12a1f780c8a415
+2026-11-02T02:46:48.1139955Z (node:2202) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-02T02:46:49.3323243Z Received 41943040 of 950523358 (4.4%), 40.0 MBs/sec
+2026-11-02T02:46:50.3328550Z Received 150994944 of 950523358 (15.9%), 72.0 MBs/sec
+2026-11-02T02:46:51.3342915Z Received 268435456 of 950523358 (28.2%), 85.3 MBs/sec
+2026-11-02T02:46:52.3352959Z Received 402653184 of 950523358 (42.4%), 95.9 MBs/sec
+2026-11-02T02:46:53.3358432Z Received 528482304 of 950523358 (55.6%), 100.7 MBs/sec
+2026-11-02T02:46:54.3376986Z Received 650117120 of 950523358 (68.4%), 103.2 MBs/sec
+2026-11-02T02:46:55.3375317Z Received 771751936 of 950523358 (81.2%), 105.1 MBs/sec
+2026-11-02T02:46:56.3372711Z Received 910163968 of 950523358 (95.8%), 108.4 MBs/sec
+2026-11-02T02:46:56.8623520Z Received 950523358 of 950523358 (100.0%), 106.3 MBs/sec
+2026-11-02T02:46:56.8624394Z Cache Size: ~906 MB (950523358 B)
+2026-11-02T02:46:56.8733356Z [command]/usr/bin/tar -xf /home/runner/work/_temp/37f9b5b6-d73d-476b-9f8f-d63061367891/cache.tzst -P -C /home/runner/work/truss/truss --use-compress-program unzstd
+2026-11-02T02:46:58.3304274Z Cache restored successfully
+2026-11-02T02:46:58.3658522Z Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.17-pip-4e475ea70f253a6e6a96f0d38ed1a4a11b1b5393965f782712af668ae709f765
+2026-11-02T02:46:58.4188256Z ##[group]Run python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
+2026-11-02T02:46:58.4188834Z [36;1mpython -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels[0m
+2026-11-02T02:46:58.4212625Z shell: /usr/bin/bash -e {0}
+2026-11-02T02:46:58.4212849Z env:
+2026-11-02T02:46:58.4213077Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:46:58.4213427Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:46:58.4213805Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:46:58.4214105Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:46:58.4214404Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:46:58.4214701Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:46:58.4214967Z ##[endgroup]
+2026-11-02T02:47:00.3359577Z Processing ./packages/python
+2026-11-02T02:47:00.3374341Z   Installing build dependencies: started
+2026-11-02T02:47:01.0172304Z   Installing build dependencies: finished with status 'done'
+2026-11-02T02:47:01.0177716Z   Getting requirements to build wheel: started
+2026-11-02T02:47:01.4796781Z   Getting requirements to build wheel: finished with status 'done'
+2026-11-02T02:47:01.4804294Z   Preparing metadata (pyproject.toml): started
+2026-11-02T02:47:01.6394389Z   Preparing metadata (pyproject.toml): finished with status 'done'
+2026-11-02T02:47:01.6415133Z Building wheels for collected packages: umf-truss
+2026-11-02T02:47:01.6421533Z   Building wheel for umf-truss (pyproject.toml): started
+2026-11-02T02:47:02.6118382Z   Building wheel for umf-truss (pyproject.toml): finished with status 'done'
+2026-11-02T02:47:02.6184482Z   Created wheel for umf-truss: filename=umf_truss-0.0.52-py3-none-any.whl size=6844897 sha256=9c6d1310c00e08a26dc9e9db6464ba841b4ae4a39fea7e4a29484b5c39aa0726
+2026-11-02T02:47:02.6185640Z   Stored in directory: /tmp/pip-ephem-wheel-cache-2xjnuda0/wheels/02/a0/18/03110428f83126ed5154a240de8d902eb35f724d1e74e8404d
+2026-11-02T02:47:02.6225147Z Successfully built umf-truss
+2026-11-02T02:47:02.6746854Z ##[group]Run python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name '*.whl' -print -quit)"
+2026-11-02T02:47:02.6747752Z [36;1mpython scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name '*.whl' -print -quit)"[0m
+2026-11-02T02:47:02.6766181Z shell: /usr/bin/bash -e {0}
+2026-11-02T02:47:02.6766391Z env:
+2026-11-02T02:47:02.6766623Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:02.6766985Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:47:02.6767325Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:02.6767621Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:02.6767919Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:02.6768264Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:47:02.6768540Z ##[endgroup]
+2026-11-02T02:47:02.9626825Z Looking in links: https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
+2026-11-02T02:47:03.2896825Z Collecting pgserver-pg18==18.6.1
+2026-11-02T02:47:03.6318661Z   Downloading pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.4 MB)
+2026-11-02T02:47:04.5188805Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.4/12.4 MB 14.3 MB/s  0:00:00
+2026-11-02T02:47:04.5430111Z Saved /tmp/runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+2026-11-02T02:47:04.5430927Z Successfully downloaded pgserver-pg18
+2026-11-02T02:47:05.0781299Z {"release": "https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2", "wheels": ["/tmp/runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"], "checksumsVerified": true}
+2026-11-02T02:47:05.2948686Z Looking in links: /tmp/runtime-wheels
+2026-11-02T02:47:05.2982265Z Processing /tmp/truss-wheels/umf_truss-0.0.52-py3-none-any.whl (from umf-truss==0.0.52)
+2026-11-02T02:47:05.3552792Z Collecting jsonschema==4.26.0 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.3565150Z   Using cached jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+2026-11-02T02:47:05.3693733Z Collecting referencing==0.37.0 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.3705053Z   Using cached referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+2026-11-02T02:47:05.3816679Z Collecting mini-racer==0.14.1 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.3827909Z   Using cached mini_racer-0.14.1-py3-none-manylinux_2_27_x86_64.whl.metadata (22 kB)
+2026-11-02T02:47:05.3931804Z Collecting psycopg==3.3.6 (from psycopg[binary]==3.3.6; extra == "native"->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.3943126Z   Using cached psycopg-3.3.6-py3-none-any.whl.metadata (4.4 kB)
+2026-11-02T02:47:05.4080232Z Collecting pg8000==1.31.5 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.4090842Z   Using cached pg8000-1.31.5-py3-none-any.whl.metadata (88 kB)
+2026-11-02T02:47:05.5453671Z Processing /tmp/runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.6321004Z Collecting fasteners==0.20 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.6331995Z   Using cached fasteners-0.20-py3-none-any.whl.metadata (4.8 kB)
+2026-11-02T02:47:05.6480039Z Collecting platformdirs==4.12.4 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.6490632Z   Using cached platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
+2026-11-02T02:47:05.6930416Z Collecting psutil==7.2.2 (from umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.6942511Z   Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+2026-11-02T02:47:05.7053332Z Collecting attrs>=22.2.0 (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.7063314Z   Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+2026-11-02T02:47:05.7136790Z Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.7148104Z   Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+2026-11-02T02:47:05.8824255Z Collecting rpds-py>=0.25.0 (from jsonschema==4.26.0->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.8837431Z   Using cached rpds_py-2026.9.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+2026-11-02T02:47:05.8925182Z Collecting python-dateutil>=2.8.2 (from pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.9327127Z   Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+2026-11-02T02:47:05.9439574Z Collecting scramp>=1.4.5 (from pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.9450098Z   Using cached scramp-1.5.0-py3-none-any.whl.metadata (34 kB)
+2026-11-02T02:47:05.9575039Z Collecting typing-extensions>=4.6 (from psycopg==3.3.6->psycopg[binary]==3.3.6; extra == "native"->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:05.9585043Z   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+2026-11-02T02:47:06.0644510Z Collecting psycopg-binary==3.3.6 (from psycopg[binary]==3.3.6; extra == "native"->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:06.0657358Z   Using cached psycopg_binary-3.3.6-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+2026-11-02T02:47:06.0814759Z Collecting tzdata (from python-dateutil>=2.8.2->pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:06.0850818Z   Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+2026-11-02T02:47:06.0979839Z Collecting asn1crypto>=1.5.1 (from scramp>=1.4.5->pg8000==1.31.5->umf-truss==0.0.52->umf-truss==0.0.52)
+2026-11-02T02:47:06.0990254Z   Using cached asn1crypto-1.5.1-py2.py3-none-any.whl.metadata (13 kB)
+2026-11-02T02:47:06.1022293Z Using cached fasteners-0.20-py3-none-any.whl (18 kB)
+2026-11-02T02:47:06.1032515Z Using cached jsonschema-4.26.0-py3-none-any.whl (90 kB)
+2026-11-02T02:47:06.1042848Z Using cached mini_racer-0.14.1-py3-none-manylinux_2_27_x86_64.whl (22.2 MB)
+2026-11-02T02:47:06.1119679Z Using cached pg8000-1.31.5-py3-none-any.whl (57 kB)
+2026-11-02T02:47:06.1129787Z Using cached platformdirs-4.12.4-py3-none-any.whl (32 kB)
+2026-11-02T02:47:06.1140171Z Using cached psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+2026-11-02T02:47:06.1150230Z Using cached psycopg-3.3.6-py3-none-any.whl (215 kB)
+2026-11-02T02:47:06.1161104Z Using cached psycopg_binary-3.3.6-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+2026-11-02T02:47:06.1188254Z Using cached referencing-0.37.0-py3-none-any.whl (26 kB)
+2026-11-02T02:47:06.1198218Z Using cached attrs-26.1.0-py3-none-any.whl (67 kB)
+2026-11-02T02:47:06.1208271Z Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+2026-11-02T02:47:06.1246877Z Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+2026-11-02T02:47:06.1387340Z Using cached rpds_py-2026.9.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (375 kB)
+2026-11-02T02:47:06.1398146Z Using cached scramp-1.5.0-py3-none-any.whl (20 kB)
+2026-11-02T02:47:06.1408168Z Using cached asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+2026-11-02T02:47:06.1418593Z Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+2026-11-02T02:47:06.1456389Z Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+2026-11-02T02:47:06.2353870Z Installing collected packages: asn1crypto, tzdata, typing-extensions, scramp, rpds-py, psycopg-binary, psutil, platformdirs, mini-racer, fasteners, attrs, referencing, python-dateutil, psycopg, pgserver-pg18, pg8000, jsonschema-specifications, jsonschema, umf-truss
+2026-11-02T02:47:07.7143727Z 
+2026-11-02T02:47:07.7155457Z Successfully installed asn1crypto-1.5.1 attrs-26.1.0 fasteners-0.20 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 mini-racer-0.14.1 pg8000-1.31.5 pgserver-pg18-18.6.1 platformdirs-4.12.4 psutil-7.2.2 psycopg-3.3.6 psycopg-binary-3.3.6 python-dateutil-4.0.0 referencing-0.37.0 rpds-py-2026.9.1 scramp-1.5.0 typing-extensions-4.16.0 tzdata-2026.6 umf-truss-0.0.52
+2026-11-02T02:47:07.9975640Z Looking in links: /tmp/runtime-wheels
+2026-11-02T02:47:08.0033728Z Processing /tmp/runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+2026-11-02T02:47:08.0313829Z Installing collected packages: pgserver-pg18
+2026-11-02T02:47:08.0314671Z   Attempting uninstall: pgserver-pg18
+2026-11-02T02:47:08.0329366Z     Found existing installation: pgserver-pg18 18.6.1
+2026-11-02T02:47:08.0560202Z     Uninstalling pgserver-pg18-18.6.1:
+2026-11-02T02:47:08.3399784Z       Successfully uninstalled pgserver-pg18-18.6.1
+2026-11-02T02:47:08.6509402Z Successfully installed pgserver-pg18-18.6.1
+2026-11-02T02:47:08.8500800Z No broken requirements found.
+2026-11-02T02:47:08.8854765Z ##[group]Run python -m unittest test_embedded_owner -v
+2026-11-02T02:47:08.8855105Z [36;1mpython -m unittest test_embedded_owner -v[0m
+2026-11-02T02:47:08.8872946Z shell: /usr/bin/bash -e {0}
+2026-11-02T02:47:08.8873155Z env:
+2026-11-02T02:47:08.8873378Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:08.8873729Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:47:08.8874076Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:08.8874374Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:08.8874670Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:08.8874971Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:47:08.8875260Z   PYTHONPATH: packages/python/tests
+2026-11-02T02:47:08.8875475Z ##[endgroup]
+2026-11-02T02:47:10.2421932Z test_chunked_utf8_matches_independent_codecs_and_keeps_exact_buffer_lengths (test_embedded_owner.EmbeddedByteCodecTests.test_chunked_utf8_matches_independent_codecs_and_keeps_exact_buffer_lengths) ... ok
+2026-11-02T02:47:11.9229594Z test_acceptance_catalog_and_exact_keys_without_any_subprocess (test_embedded_owner.EmbeddedOwnerTests.test_acceptance_catalog_and_exact_keys_without_any_subprocess) ... ok
+2026-11-02T02:47:13.0171936Z test_held_disclosure_original_frames_and_fencing_without_subprocess (test_embedded_owner.EmbeddedOwnerTests.test_held_disclosure_original_frames_and_fencing_without_subprocess) ... ok
+2026-11-02T02:47:14.0270897Z test_isolate_deadline_interrupts_nonterminating_code (test_embedded_owner.EmbeddedOwnerTests.test_isolate_deadline_interrupts_nonterminating_code) ... ok
+2026-11-02T02:47:14.0290374Z test_owner_engine_failure_preserves_public_preparation_refusal (test_embedded_owner.EmbeddedOwnerTests.test_owner_engine_failure_preserves_public_preparation_refusal) ... ok
+2026-11-02T02:47:14.8868221Z test_owner_refusal_is_a_fenced_transport_error (test_embedded_owner.EmbeddedOwnerTests.test_owner_refusal_is_a_fenced_transport_error) ... ok
+2026-11-02T02:47:15.3443987Z test_virtual_host_refuses_unbundled_files_and_modules (test_embedded_owner.EmbeddedOwnerTests.test_virtual_host_refuses_unbundled_files_and_modules) ... ok
+2026-11-02T02:47:15.3444552Z 
+2026-11-02T02:47:15.3444747Z ----------------------------------------------------------------------
+2026-11-02T02:47:15.3445182Z Ran 7 tests in 5.815s
+2026-11-02T02:47:15.3445334Z 
+2026-11-02T02:47:15.3445442Z OK
+2026-11-02T02:47:15.3925544Z ##[group]Run python -m unittest test_engine_action_session test_engine_preparation test_group_result_wire test_action_transport
+2026-11-02T02:47:15.3926444Z [36;1mpython -m unittest test_engine_action_session test_engine_preparation test_group_result_wire test_action_transport[0m
+2026-11-02T02:47:15.3944772Z shell: /usr/bin/bash -e {0}
+2026-11-02T02:47:15.3944980Z env:
+2026-11-02T02:47:15.3945218Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.3945735Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:47:15.3946274Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.3946578Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.3946888Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.3947187Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:47:15.3947465Z   PYTHONPATH: packages/python/tests
+2026-11-02T02:47:15.3947738Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-02T02:47:15.3947945Z ##[endgroup]
+2026-11-02T02:47:15.7191459Z ...................................................s
+2026-11-02T02:47:15.7191967Z ----------------------------------------------------------------------
+2026-11-02T02:47:15.7192362Z Ran 52 tests in 0.033s
+2026-11-02T02:47:15.7192487Z 
+2026-11-02T02:47:15.7192559Z OK (skipped=1)
+2026-11-02T02:47:15.7628725Z ##[group]Run runtime_wheel=$(find /tmp/runtime-wheels -maxdepth 1 -name '*.whl' -print -quit)
+2026-11-02T02:47:15.7629331Z [36;1mruntime_wheel=$(find /tmp/runtime-wheels -maxdepth 1 -name '*.whl' -print -quit)[0m
+2026-11-02T02:47:15.7629691Z [36;1mtest -n "$runtime_wheel"[0m
+2026-11-02T02:47:15.7630258Z [36;1mpython scripts/check-local-runtime-smoke.py "$runtime_wheel" "$(find /tmp/truss-wheels -maxdepth 1 -name '*.whl' -print -quit)" --run-id "ci-release-41379481836-1"[0m
+2026-11-02T02:47:15.7649758Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-02T02:47:15.7650038Z env:
+2026-11-02T02:47:15.7650272Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.7650624Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:47:15.7650959Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.7651258Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.7651608Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:15.7651928Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:47:15.7652199Z ##[endgroup]
+2026-11-02T02:47:21.5488997Z {"case": "owned-lifecycle", "passed": true, "returncode": 0, "elapsedSeconds": 5.1372814400000095, "log": "owned-lifecycle.log", "logSha256": "a837edce58ca1e062ef250387b141b852c2ff82d1f6ce6dcde231279eb3fa937"}
+2026-11-02T02:47:24.2010368Z {"case": "private-unix-isolation", "passed": true, "returncode": 0, "elapsedSeconds": 2.651978002000021, "log": "private-unix-isolation.log", "logSha256": "4853d3c2deae7973f0a6f6149bc45b2524449530bb50dd161112a7f0855559b1"}
+2026-11-02T02:47:28.3021876Z {"case": "explicit-cli-installation", "passed": true, "returncode": 0, "elapsedSeconds": 4.101057077999997, "log": "explicit-cli-installation.log", "logSha256": "77582bd284af34ff502100caf859292c2fff8ea4368c14715f67a72778def460"}
+2026-11-02T02:47:29.6612178Z {"case": "supported-driver", "passed": true, "returncode": 0, "elapsedSeconds": 0.678769219000003, "log": "supported-driver.log", "logSha256": "4b0bf45fdafb1bf84a1cf6eddd0f249e4cd009f5e55597e263da4fe5a1138c23"}
+2026-11-02T02:47:39.6078168Z {"case": "worker-cleanup-collisions", "passed": true, "returncode": 0, "elapsedSeconds": 9.730531853999992, "log": "worker-cleanup-collisions.log", "logSha256": "d8a0ca2636346da6b4a9a7a761a91883431a919af34fa37a3eceaf394a3fb562"}
+2026-11-02T02:47:42.5758839Z {"case": "module-interruption", "passed": true, "returncode": 0, "elapsedSeconds": 2.967967320000014, "log": "module-interruption.log", "logSha256": "c5a9ff02e6069277f73481881340b48f094a2fb7c645092e15d975548032c754"}
+2026-11-02T02:47:44.5202947Z {"case": "cli-signals", "passed": true, "returncode": 0, "elapsedSeconds": 1.9443099810000035, "log": "cli-signals.log", "logSha256": "204436ec2a50871ed94e5154475ac51234e53f4393f3496e730b29f51abf283b"}
+2026-11-02T02:47:45.7754386Z {"case": "transaction-timeout", "passed": true, "returncode": 0, "elapsedSeconds": 1.2550333679999994, "log": "transaction-timeout.log", "logSha256": "40fbe3b7c8fe4be8e0dfbedf1d741b05b06566722ba66084ccfa4e5534cf9d42"}
+2026-11-02T02:47:45.8264898Z ##[group]Run actions/upload-artifact@v4
+2026-11-02T02:47:45.8265146Z with:
+2026-11-02T02:47:45.8265323Z   name: released-runtime-evidence
+2026-11-02T02:47:45.8265600Z   path: docs/helix/04-build/evidence/design-audit/ci-release-*
+2026-11-02T02:47:45.8266071Z   if-no-files-found: warn
+2026-11-02T02:47:45.8266277Z   compression-level: 6
+2026-11-02T02:47:45.8266458Z   overwrite: false
+2026-11-02T02:47:45.8266638Z   include-hidden-files: false
+2026-11-02T02:47:45.8266835Z env:
+2026-11-02T02:47:45.8267051Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:45.8267388Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+2026-11-02T02:47:45.8267722Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:45.8268024Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:45.8268319Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+2026-11-02T02:47:45.8268651Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+2026-11-02T02:47:45.8268925Z ##[endgroup]
+2026-11-02T02:47:45.9872480Z (node:3219) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-02T02:47:45.9873189Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-02T02:47:46.0178461Z With the provided path, there will be 13 files uploaded
+2026-11-02T02:47:46.0182313Z Artifact name is valid!
+2026-11-02T02:47:46.0183606Z Root directory input is valid!
+2026-11-02T02:47:46.3505566Z Beginning upload of artifact content to blob storage
+2026-11-02T02:47:46.3806062Z (node:3219) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-02T02:47:46.5810584Z Uploaded bytes 9089
+2026-11-02T02:47:46.6382573Z Finished uploading artifact content to blob storage!
+2026-11-02T02:47:46.6383381Z SHA256 digest of uploaded artifact zip is 3bc0846c33a204926eac0e538a49e875d2ff140873e40c38475491e7866c6b02
+2026-11-02T02:47:46.6384987Z Finalizing artifact upload
+2026-11-02T02:47:47.1095076Z Artifact released-runtime-evidence.zip successfully finalized. Artifact ID 13112413929
+2026-11-02T02:47:47.1096158Z Artifact released-runtime-evidence has been successfully uploaded! Final size is 9089 bytes. Artifact ID is 13112413929
+2026-11-02T02:47:47.1101365Z Artifact download URL: https://github.com/DocumentDrivenDX/truss/actions/runs/41379481836/artifacts/13112413929
+2026-11-02T02:47:47.1273508Z Post job cleanup.
+2026-11-02T02:47:47.2250199Z (node:3232) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-02T02:47:47.2250813Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-02T02:47:47.2455967Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/truss/truss --files-from manifest.txt --use-compress-program zstdmt
+2026-11-02T02:47:48.7696238Z (node:3232) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-02T02:47:49.7596434Z Sent 0 of 962800976 (0.0%), 0.0 MBs/sec
+2026-11-02T02:47:50.7542924Z Sent 536870912 of 962800976 (55.8%), 255.7 MBs/sec
+2026-11-02T02:47:51.7543409Z Sent 694365520 of 962800976 (72.1%), 220.6 MBs/sec
+2026-11-02T02:47:52.0850259Z Sent 962800976 of 962800976 (100.0%), 275.6 MBs/sec
+2026-11-02T02:47:52.4172952Z Cache saved with the key: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.17-pip-4e8cba773b0ceebf79bc450d60486fc8c1ddb67323c798791f12a1f780c8a415
+2026-11-02T02:47:52.4353642Z Post job cleanup.
+2026-11-02T02:47:52.5043713Z [command]/usr/bin/git version
+2026-11-02T02:47:52.5081803Z git version 2.56.0
+2026-11-02T02:47:52.5115695Z Temporarily overriding HOME='/home/runner/work/_temp/03558edc-4c48-4116-9d09-b81d99e1a364' before making global git config changes
+2026-11-02T02:47:52.5117149Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-02T02:47:52.5120700Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/truss/truss
+2026-11-02T02:47:52.5152784Z Removing SSH command configuration
+2026-11-02T02:47:52.5159057Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-02T02:47:52.5202074Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-02T02:47:52.5488117Z Removing HTTP extra header
+2026-11-02T02:47:52.5488919Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-02T02:47:52.5541434Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-02T02:47:52.5815207Z Removing includeIf entries pointing to credentials config files
+2026-11-02T02:47:52.5821618Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-02T02:47:52.5891317Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-02T02:47:52.6278648Z Cleaning up orphan processes
+2026-11-02T02:47:52.6559318Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
