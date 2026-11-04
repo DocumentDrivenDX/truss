@@ -1,0 +1,37 @@
+{
+  "scope": "Source-only default-off hosted selection; no captures, dispatch, native qualification or publication",
+  "parentCommit": "34a4a4a31ba674438e70df26f39ef9e20255ea0f",
+  "governingPlan": "docs/helix/04-build/temporal-native-qualification-plan.md",
+  "sourceControls": {
+    "command": "UV_CACHE_DIR=/private/tmp/truss-temporal-uv-cache uv run --offline --no-project --python 3.11 --with pyyaml==6.0.3 --no-build --no-config python -m unittest discover -s scripts -p test_temporal_hosted_wiring.py -v",
+    "testsRun": 9,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "selectorCombinations": 32,
+    "actualYamlShellSyntaxChecked": true,
+    "embeddedPythonBlocksParsed": 4,
+    "automaticEvents": {
+      "python-runtime.yml": "dispatch-only before and after",
+      "python-boundaries.yml": "push/PR events and unconditional import-map gates byte-identical",
+      "pypi-validation.yml": "push/PR events and unconditional job byte-identical"
+    }
+  },
+  "artifactAdmissionsDeferred": true,
+  "nativeExecutions": 0,
+  "files": {
+    ".github/workflows/python-runtime.yml": "611dfad6ae0a92a1c499d83b2b3775c4f3036ae09b882f03f0306ce4899fc47e",
+    "scripts/prepare-temporal-hosted-input.py": "df7ef6d6d0cb94900e9c25e634cdc4a48b6c8f7899e90bb7c9a211c3edac7a84",
+    "scripts/test_temporal_hosted_wiring.py": "dd13a2edc281ca57874fded69995f8989ffe12af1f01538a6d5d85ef83d423ea",
+    "docs/helix/04-build/evidence/temporal-native/hosted-admission-templates/campaign-admission.deferred.json": "8bef3021aadedd13c948f2aa18754cb825e12e39dcdc3ea402bfd59f24b27ac6",
+    "docs/helix/04-build/evidence/temporal-native/hosted-admission-templates/hosted-input.deferred.json": "ab0074d769582406b6ed20d164fa2ce1ded657dfe2ec234b6d4c5649db1e6965",
+    ".github/workflows/python-boundaries.yml": "51132f821382735f31d4571b7b6167505f9427b04ad7a876b1fc351b2d621d9c",
+    ".github/workflows/pypi-validation.yml": "23d5627f96e9c1e387bee2be2644e7126596919aac1439f70f410bf861757234"
+  },
+  "existingBoundaryGate": {
+    "imports": 1905,
+    "controls": 23,
+    "exitCode": 0,
+    "nativeExecuted": 0
+  }
+}

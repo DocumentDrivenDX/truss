@@ -1,0 +1,8 @@
+test_actual_selected_cursor_decodes_all_batches_and_descriptors (test_weft_abi12_cohort_probe_native.WeftABI12CohortProbeNativeTests.test_actual_selected_cursor_decodes_all_batches_and_descriptors) ... ok
+test_capture_authentic_request_and_old_cohort_response (test_weft_abi12_cohort_probe_native.WeftABI12CohortProbeNativeTests.test_capture_authentic_request_and_old_cohort_response) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.845s
+
+OK
+{"captureOutput": "/home/runner/work/_temp/weft-abi12-probe/evidence/public054-capture.json", "testRunAndCleanup": {"cleanup": {"confirmed": true, "dataDeleted": true, "originalPostmasterPid": 2698, "originalPostmasterPidAbsent": true, "pgCtlStatus": 3, "pgCtlStderr": "", "pgCtlStdout": "pg_ctl: no server running\n", "runtimeDirectory": "/tmp/truss-public-catalog-98zea22n/data"}, "errors": 0, "failures": 0, "passed": true, "skipped": 0, "testsRun": 2}}

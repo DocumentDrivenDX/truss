@@ -38,6 +38,13 @@ CREATE FUNCTION truss.runtime_owned_request_documents(request truss.catalog_regi
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result bytea;
 BEGIN
+ IF (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile'=truss.catalog_temporal_support_profile() THEN
+  IF octet_length(request.document_bytes)=0 OR octet_length(request.declaration_bytes)=0
+   OR (convert_from(request.source_bytes,'UTF8')::jsonb)->>'sourceFormat' IS DISTINCT FROM 'truss-registration-summary/2.1' THEN
+   RAISE EXCEPTION 'original noncompact temporal request cannot be reconstructed' USING ERRCODE='22023';END IF;
+ ELSIF (convert_from(request.source_bytes,'UTF8')::jsonb)->>'sourceFormat'='truss-registration-summary/2.1' THEN
+  RAISE EXCEPTION 'mixed temporal request profile refused' USING ERRCODE='22023';
+ END IF;
  IF octet_length(request.document_bytes)>0 THEN RETURN request.document_bytes;END IF;
  SELECT convert_to(coalesce(jsonb_agg(jsonb_build_object('documentId',d.doc_id,'revision',d.doc_revision,
   'umfVersion',d.umf_version,'originalText',d.document,'validation',d.validation) ORDER BY d.ord),'[]'::jsonb)::text,'UTF8')
@@ -48,8 +55,12 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_request_documents(truss.catalog_registration_request) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_request_declarations(request truss.catalog_registration_request) RETURNS bytea
-LANGUAGE sql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT CASE WHEN octet_length(request.declaration_bytes)>0 THEN request.declaration_bytes
- ELSE truss.runtime_owned_catalog_declarations(truss.runtime_owned_request_documents(request)) END;
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ -- This call enforces2.1's complete original tuple before either return path.
+ PERFORM truss.runtime_owned_request_documents(request);
+ IF octet_length(request.declaration_bytes)>0 THEN RETURN request.declaration_bytes;END IF;
+ RETURN truss.runtime_owned_catalog_declarations(truss.runtime_owned_request_documents(request));
+END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_request_declarations(truss.catalog_registration_request) FROM PUBLIC;

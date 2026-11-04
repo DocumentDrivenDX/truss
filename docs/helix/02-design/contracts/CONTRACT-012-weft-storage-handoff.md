@@ -403,3 +403,31 @@ grouping, parameters and keys remain unsupported. Existing native layout0.16 and
 runtime0.31 do not change. Whole-document read authority and original catalog,
 release and module checks remain required. This ordinary path does not activate
 the private protected security profile or qualify other database deployments.
+
+
+## Selected guarded temporal handoff — freeze1
+
+[Temporal interface freeze1](../../04-build/temporal-interface-freeze.md),
+F1/F5–F9, selects additive ABI1.3 under new native identity
+truss-catalog-runtime/0.76-temporal-candidate. Both conflicting historical
+native0.75 byte sets remain unchanged and are not admitted by relabeling.
+Ordinary query_abi/capture/compiler behavior stays ABI1.2. Exact ABI/manifest
+hashes must be produced from actual reviewed candidate inventory, never invented
+or copied from an older release label.
+
+F7 owns the exact temporal capture, buffered STABLE source signatures and strict
+canonical-text helper; F5 owns closed artifact.sourceDomainChecks with one-based
+original binding/requirements parameter positions. Guard requirements0.2 cover
+all temporal members of the selected source RecordView, not just projections.
+Whole-source validation precedes filters/order/continuation/limit; excluded/later
+invalid rows or overflow refuse before any row escapes. No indexed candidate
+source or separate READ COMMITTED preflight can replace the one-statement
+snapshot and original-person/ACL/root/cap checks. Whole compiler program custody,
+current context and final authority/cleanup/settlement remain mandatory.
+
+The selected release is fresh-install-only. No public0.0.54-to-candidate migration
+is admitted. New tooling refuses a populated authentic public54 namespace/tuple
+without altering property/cell/source/history/ACL/request meaning or bytes.
+Do not revive retired lineage, manipulate time, reset or reinterpret unknown
+retained temporal metadata. A future preservation migration requires a separately
+qualified explicit immutable current54 edge; fresh qualification does not prove it.

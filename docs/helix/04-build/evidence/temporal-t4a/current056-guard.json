@@ -1,0 +1,16 @@
+{
+  "schema": "truss.t4a-cohort-guard-probe/0.1",
+  "scope": "Current Truss cohort guard refusal, independent of raw API replay",
+  "trussSourceCommit": "aef15a9b16b851fbe5a34fb3952c36f36206aef4",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "trussModule": "/private/tmp/umf-stack-release-truss/packages/python/src/truss/__init__.py",
+  "trussQueryRuntime": "/private/tmp/umf-stack-release-truss/packages/python/src/truss/_query_runtime.py",
+  "trussQueryRuntimeSha256": "ea58d31ef2ec65e4886caeb6e72ecf2a66dbee1f2065bd6ce377f57c266b7523",
+  "compilerReturnIsNone": true,
+  "guard": "Truss compiler cohort refusal (expected for 0.4.56)",
+  "candidateDistribution": "umf-weft",
+  "candidateVersion": "0.4.56",
+  "candidateModule": "/private/tmp/truss-temporal-owner-probe/lib/python3.11/site-packages/weft/weft.abi3.so",
+  "candidateModuleSha256": "7f746042c88dde86b0a096b831a4243d40e2448255c1146cf515787b22c30225",
+  "candidatePublishedMacWheelSha256": "68f9297b4b55df483b86d3041040991c4dadfb9b4d63afcff1420c43f93ae41d"
+}

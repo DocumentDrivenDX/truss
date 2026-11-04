@@ -84,6 +84,15 @@ def _metadata(raw: bytes, distribution: str, version: str) -> None:
         "archive metadata contains a direct URL dependency",
     )
 
+    if version == "0.0.56":
+        requirements = message.get_all("Requires-Dist", [])
+        for pin, extra in (("umf-weft==0.4.57", "query"), ("umf-access==0.1.0.dev10", "typed-sdk")):
+            matches = [item.partition(';')[0].strip().replace('_', '-') for item in requirements
+                       if item.partition(';')[2].strip().replace("'", '"') == f'extra == "{extra}"']
+            _require(matches == [pin], "selected release extra missing or changed: " + extra)
+        _require(not any(re.match(r"weft[-_.]sql\b", item, re.I) for item in requirements),
+                 "legacy weft-sql dependency conflicts with selected compiler")
+
 
 def validate_archive(path: Path, distribution: str, version: str) -> None:
     if path.name.endswith(".whl"):
@@ -316,6 +325,11 @@ def prepare_release(
         and pins.get("distribution") == distribution,
         "release pins do not match the requested tag, source, version and distribution",
     )
+    if version == "0.0.56":
+        from release_cohort import load_cohort
+        expected_cohort = load_cohort(require_qualified=True)
+        _require(pins.get("dependencyCohort") == expected_cohort,
+                 "release dependency cohort differs from actual qualified identities")
     archives = sorted(
         name for name in sums if name.startswith(wheel_prefix) and name.endswith(".whl")
     )

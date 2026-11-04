@@ -135,7 +135,7 @@ def preview_group_conditions(host, transaction, input, documents, manifest, dige
     return result
 
 
-def validate_completion(host,transaction,manifest,digest,pin_cursor,*,input=None,documents=(),schema_state=None,dry_run=False):
+def validate_completion(host,transaction,manifest,digest,pin_cursor,*,input=None,documents=(),schema_state=None,dry_run=False,temporal=False):
     """Ordinary effects and native completion inside host-owned rollback custody."""
     from hashlib import sha256
     from .preview import ValidationObservationBasis,CompletionObserved,GroupValidationObserved
@@ -143,7 +143,8 @@ def validate_completion(host,transaction,manifest,digest,pin_cursor,*,input=None
     from ._group_runtime import apply_group,_bytes,_wire
     def validate(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.person_group_context(%s,%s),pg_catalog.pg_current_snapshot()::text',
+        command='SELECT truss.person_temporal_group_context(%s,%s),pg_catalog.pg_current_snapshot()::text' if temporal else 'SELECT truss.person_group_context(%s,%s),pg_catalog.pg_current_snapshot()::text'
+        cursor.execute(command,
             (manifest['releaseId'],digest),prepare=False)
         original,snapshot=cursor.fetchone();context=json.loads(bytes(original))
         input_digest=documents_digest=None
@@ -151,7 +152,7 @@ def validate_completion(host,transaction,manifest,digest,pin_cursor,*,input=None
             # Reuse ordinary validation, native mutations and result decoding.
             # No nested host lease, callback savepoint or receipt publication.
             result=apply_group(host,transaction,input,RequestNone(),documents,manifest,digest,pin_cursor,
-                _cursor=cursor,_schema_state=schema_state)
+                _cursor=cursor,_schema_state=schema_state,temporal=temporal)
             if not isinstance(result,Ok):raise ValueError('Original contained group result required')
             if not isinstance(result.value,GroupSuccess):return result.value
             input_digest=sha256(_bytes(_wire(input))).hexdigest()

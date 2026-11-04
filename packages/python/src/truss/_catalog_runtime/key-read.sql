@@ -43,7 +43,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.key_read_selection(text,text,text,text,bytea,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.lookup_string_key(selected_document text,selected_module text,selected_record text,selected_key text,original_document bytea,values_bytes bytea,tuple_bytes bytea,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.lookup_key_at_profile(selected_document text,selected_module text,selected_record text,selected_key text,original_document bytea,values_bytes bytea,tuple_bytes bytea,maximum_bytes int,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE selection_bytes bytea;selection jsonb;values_json jsonb;actual_values text[];installation truss.catalog_runtime_installation%ROWTYPE;source_pin record;namespace bytea;transport bytea;candidate_count bigint;candidate_bytes bigint;matches bigint;member truss.object_key_bucket%ROWTYPE;result bytea;component record;candidate record;buffered_values text[];key_facets jsonb;buffered_cells jsonb;
 BEGIN
@@ -90,7 +90,7 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'live member object required' USING ERRCODE='55000';END IF;
  END IF;
  IF truss.verify_object_string_key(member.object_id,member.type_id,member.key_num,tuple_bytes) IS NOT TRUE THEN RAISE EXCEPTION 'current object key membership required' USING ERRCODE='55000';END IF;
- result:=truss.get_object(selected_document,selected_module,selected_record,member.object_id,maximum_bytes,expected_release,expected_digest);
+ result:=truss.get_object_at_profile(selected_document,selected_module,selected_record,member.object_id,maximum_bytes,expected_release,expected_digest,temporal_profile);
  IF result IS NULL THEN RETURN NULL;END IF;
  IF convert_from(result,'UTF8')::jsonb->>'catalogRevision' IS DISTINCT FROM selection->>'catalogRevision' THEN
   RAISE EXCEPTION 'catalog changed during key observation' USING ERRCODE='55P03';END IF;
@@ -110,6 +110,13 @@ BEGIN
  IF convert_from(result,'UTF8')::jsonb->>'profile'='truss-python-logical-object/0.1' AND NOT truss.runtime_can_read(
   convert_from(result,'UTF8')::jsonb->'root'->'owner'->>'documentId',convert_from(result,'UTF8')::jsonb->'root'->'owner'->>'moduleId') THEN RETURN NULL;END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.lookup_key_at_profile(text,text,text,text,bytea,bytea,bytea,int,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.lookup_string_key(selected_document text,selected_module text,selected_record text,selected_key text,original_document bytea,values_bytes bytea,tuple_bytes bytea,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.lookup_key_at_profile(selected_document,selected_module,selected_record,selected_key,original_document,values_bytes,tuple_bytes,maximum_bytes,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text) FROM PUBLIC;

@@ -1,0 +1,10 @@
+summary-members original RED ParseError syntax error at end of input
+summary-members grouped GREEN syntax only; real native installation still pending
+page-members original RED ParseError syntax error at end of input
+page-members grouped GREEN syntax only; real native installation still pending
+group-input original RED ParseError syntax error at end of input
+group-input grouped GREEN syntax only; real native installation still pending
+source-family original RED ParseError syntax error at end of input
+source-family grouped GREEN syntax only; real native installation still pending
+source-byte-bound original RED ParseError syntax error at end of input
+source-byte-bound grouped GREEN syntax only; real native installation still pending

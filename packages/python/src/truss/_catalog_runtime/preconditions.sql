@@ -53,7 +53,7 @@ DECLARE conditions jsonb:=coalesce(input->'preconditions','[]');condition jsonb;
 BEGIN
  IF jsonb_typeof(conditions) IS DISTINCT FROM 'array' THEN
   RAISE EXCEPTION 'condition array required' USING ERRCODE='22023';END IF;
- IF jsonb_array_length(conditions)>(CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 3072 ELSE 128 END) THEN
+ IF jsonb_array_length(conditions)>(CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN 3072 ELSE 128 END) THEN
   RAISE EXCEPTION 'condition count exceeds selected profile' USING ERRCODE='54000';END IF;
  IF jsonb_array_length(conditions)<>(SELECT count(DISTINCT value->>'id') FROM jsonb_array_elements(conditions)) THEN RAISE EXCEPTION 'unique condition IDs required' USING ERRCODE='22023';END IF;
  FOR condition IN SELECT value FROM jsonb_array_elements(conditions) LOOP
@@ -72,7 +72,8 @@ BEGIN
    objects:=jsonb_build_array(condition->'target');
    scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module);
    IF condition->>'condition'='property_equals' THEN
-    IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_flat_cell(condition->'value') IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;
+    IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR (CASE WHEN input->>'interfaceVersion'='truss-group-temporal-input/0.1.0'
+     THEN truss.valid_authored_object_cell(selected.type_id,condition->>'name',condition->'value') ELSE truss.valid_flat_cell(condition->'value') END) IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;
     SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=selected.type_id AND p.name=condition->>'name' AND p.retired_rev IS NULL;
     IF FOUND THEN entry:=entry||jsonb_build_object('propertyId',property.prop_id::text);
      scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module);
@@ -231,7 +232,7 @@ BEGIN
    SELECT * INTO current_object FROM truss.object WHERE id=(condition->'target'->>'id')::bigint AND type_id=(condition->'target'->>'typeId')::int;
    IF FOUND THEN
     IF condition->>'condition'='object_exists' THEN passed:=true;
-    ELSIF entry ? 'propertyId' THEN passed:=current_object.props ? (entry->>'propertyId') AND current_object.props->(entry->>'propertyId')=truss.canonical_flat_cell(condition->'value');
+    ELSIF entry ? 'propertyId' THEN passed:=current_object.props ? (entry->>'propertyId') AND current_object.props->(entry->>'propertyId')=truss.canonical_authored_object_cell(current_object.type_id,condition->>'name',condition->'value');
     ELSE passed:=coalesce(current_object.retained,'{}') ? (condition->>'name') AND current_object.retained->(condition->>'name')=truss.canonical_flat_cell(condition->'value');END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN

@@ -1,0 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { inspectAccessViews } from '/private/tmp/umf-temporal-inspection/src/compilation/admission/access/index.ts';
+const document=JSON.parse(readFileSync('/private/tmp/truss-temporal-native-guard-model.json','utf8'));
+const selected=document.modules.flatMap((module:any)=>module.elements.filter((e:any)=>e.kind==='record').map((e:any)=>({module:module.id,element:e.id})));
+const request={document,selected,bindings:[],sourceId:'logical'};
+process.stdout.write(JSON.stringify({request,result:inspectAccessViews(document,selected,[],'logical')},null,2)+'\n');

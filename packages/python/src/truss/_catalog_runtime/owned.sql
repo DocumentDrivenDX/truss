@@ -36,7 +36,7 @@ BEGIN
  IF jsonb_array_length(authored)>1024 OR jsonb_array_length(removed)>1024 THEN RAISE EXCEPTION 'bounded authored values required' USING ERRCODE='54000';END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(authored) v WHERE v.value-ARRAY['name','value']<>'{}'::jsonb
    OR jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string' OR octet_length(v.value->>'name') NOT BETWEEN 1 AND 4096
-   OR truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
+   OR truss.valid_authored_object_cell(selected_type,v.value->>'name',v.value->'value') IS NOT TRUE)
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(removed) v WHERE jsonb_typeof(v.value) IS DISTINCT FROM 'string' OR octet_length(v.value#>>'{}') NOT BETWEEN 1 AND 4096)
   OR jsonb_array_length(authored)<>(SELECT count(DISTINCT v.value->>'name') FROM jsonb_array_elements(authored) v)
   OR jsonb_array_length(removed)<>(SELECT count(DISTINCT v.value) FROM jsonb_array_elements(removed) v)
@@ -53,8 +53,8 @@ BEGIN
  FROM jsonb_array_elements_text(removed) u(name)
  LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=u.name;
  props:=props-removed_props;retained:=retained-removed_retained;
- SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
-  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
+ SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_authored_object_cell(selected_type,a.value->>'name',a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
+  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_authored_object_cell(selected_type,a.value->>'name',a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
  INTO set_props,set_retained
  FROM jsonb_array_elements(authored) a(value)
  LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=a.value->>'name';
@@ -115,7 +115,7 @@ BEGIN
  IF jsonb_array_length(authored)>1024 OR jsonb_array_length(removed)>1024 THEN RAISE EXCEPTION 'bounded authored values required' USING ERRCODE='54000';END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(authored) v WHERE v.value-ARRAY['name','value']<>'{}'::jsonb
    OR jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string' OR octet_length(v.value->>'name') NOT BETWEEN 1 AND 4096
-   OR truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
+   OR truss.valid_authored_object_cell(selected_type,v.value->>'name',v.value->'value') IS NOT TRUE)
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(removed) v WHERE jsonb_typeof(v.value) IS DISTINCT FROM 'string' OR octet_length(v.value#>>'{}') NOT BETWEEN 1 AND 4096)
   OR jsonb_array_length(authored)<>(SELECT count(DISTINCT v.value->>'name') FROM jsonb_array_elements(authored) v)
   OR jsonb_array_length(removed)<>(SELECT count(DISTINCT v.value) FROM jsonb_array_elements(removed) v)
@@ -127,8 +127,8 @@ BEGIN
  FROM jsonb_array_elements_text(removed) u(name)
  LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=u.name;
  props:=props-removed_props;retained:=retained-removed_retained;
- SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
-  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
+ SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_authored_object_cell(selected_type,a.value->>'name',a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
+  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_authored_object_cell(selected_type,a.value->>'name',a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
  INTO set_props,set_retained
  FROM jsonb_array_elements(authored) a(value)
  LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=a.value->>'name';
@@ -1111,6 +1111,9 @@ BEGIN
     selected:='create:'||index;node_order:=array_append(node_order,selected);
     IF application_prepared IS NOT NULL THEN
      values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,NULL,NULL);
+     IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0'
+      AND values_image IS DISTINCT FROM truss.owned_object_values(selected_type.type_id,operation,NULL,NULL) THEN
+      RAISE EXCEPTION 'temporal patch must match original admitted values' USING ERRCODE='22023';END IF;
     ELSE values_image:=truss.owned_object_values(selected_type.type_id,operation,NULL,NULL);END IF;
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',selected_type.type_id::text,
      'definitionPin',operation->>'typeDefinitionPin','owner',jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module)),
@@ -1164,9 +1167,14 @@ BEGIN
    ELSE
     IF operation->>'operation'='update_object' THEN
      IF operation-ARRAY['operation','target','set','unset','expectedVersion','ownershipChange']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object update required' USING ERRCODE='22023';END IF;
-     IF application_prepared IS NOT NULL AND state->'image'->>'rev'=revision::text THEN
+     IF application_prepared IS NOT NULL AND (state->'image'->>'rev'=revision::text
+      OR input->>'interfaceVersion'='truss-group-temporal-input/0.1.0') THEN
       values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,
        state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb));
+      IF input->>'interfaceVersion'='truss-group-temporal-input/0.1.0' AND values_image IS DISTINCT FROM
+       truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',
+        nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint) THEN
+       RAISE EXCEPTION 'temporal patch must match original admitted delta' USING ERRCODE='22023';END IF;
      ELSE values_image:=truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint);END IF;
      state:=jsonb_set(state,'{image,props}',values_image->'props');
      state:=jsonb_set(state,'{image,retained}',coalesce(nullif(values_image->'retained','{}'::jsonb),'null'::jsonb));
@@ -1521,7 +1529,7 @@ BEGIN
   OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete
   OR attempt.next_index<>0 OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
   OR attempt.context->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile')
   OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt) THEN
   RAISE EXCEPTION 'original unused owned attempt required' USING ERRCODE='55000';END IF;
  -- The admitted entry already holds the graph gate and table locks.
@@ -1637,7 +1645,7 @@ BEGIN
  IF selected_index<0
   OR original.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
   OR original.plan->'operationIndex' IS DISTINCT FROM to_jsonb(selected_index)
-  OR original.plan->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  OR NOT truss.runtime_is_owned_profile(original.plan->'mutationProfile') THEN
   RAISE EXCEPTION 'original owned operation correspondence required' USING ERRCODE='55000';END IF;
  IF original.plan->>'compactProfile'='truss-application-value-plan/0.1' THEN
   -- Historical/general readers reconstruct the former virtual frame lazily.
@@ -1707,7 +1715,7 @@ BEGIN
   IF creation_index<0
    OR creation_plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
    OR creation_plan->'operationIndex' IS DISTINCT FROM to_jsonb(creation_index)
-   OR creation_plan->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+   OR NOT truss.runtime_is_owned_profile(creation_plan->'mutationProfile') THEN
    RAISE EXCEPTION 'original owned operation correspondence required' USING ERRCODE='55000';END IF;
   operation:=creation_plan->'operation';
   IF result->>'operation' IS DISTINCT FROM 'create_'||entity_kind
@@ -2519,7 +2527,7 @@ BEGIN
  total:=jsonb_array_length(input->'operations');
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM actor
   OR attempt.complete OR attempt.next_index<>0 OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile')
   OR total NOT BETWEEN 1 AND 1024 OR EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb)
@@ -2715,7 +2723,7 @@ BEGIN
  FROM truss.runtime_owned_operation WHERE attempt_id=attempt.id AND operation_index=total-1;
  IF total NOT BETWEEN 1 AND 1024 OR total<>jsonb_array_length(input->'operations')
   OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM actor
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile')
   OR final_revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
   OR EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>final_revision)
   OR (SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=attempt.id)<>total
@@ -2749,7 +2757,7 @@ BEGIN
  actor:=truss.runtime_person(false);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;total:=jsonb_array_length(input->'operations');
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM actor
   OR attempt.complete OR attempt.next_index<>0 OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile')
   OR total NOT BETWEEN 1 AND 1024 OR EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_edge'
     OR o.value->'source'->>'state' IS DISTINCT FROM 'stored' OR o.value->'target'->>'state' IS DISTINCT FROM 'stored')
@@ -2879,7 +2887,7 @@ BEGIN
  END IF;
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM actor
   OR attempt.complete OR attempt.next_index<>0 OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() OR total NOT BETWEEN 1 AND 1024
+  OR NOT truss.runtime_is_owned_profile(input->'mutationProfile') OR total NOT BETWEEN 1 AND 1024
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
    WHERE o.value->>'operation' IS DISTINCT FROM 'update_object' OR o.value->'target'->>'state' IS DISTINCT FROM 'stored'
     OR o.value ? 'ownershipChange')

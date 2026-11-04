@@ -1,0 +1,6 @@
+Looking in links: https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.51
+Collecting weft-sql==0.4.51
+  Downloading weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.5/13.5 MB 31.7 MB/s  0:00:00
+Saved /home/runner/work/_temp/weft-abi12-probe/inputs/weft051/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Successfully downloaded weft-sql

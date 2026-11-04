@@ -4,7 +4,7 @@ from decimal import Decimal
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Literal, Mapping, TypeAlias
-from .contracts import TextValue
+from .contracts import TextValue,LocalTimestampValue
 from .reader_catalog import ReaderCatalogSnapshot, ReaderCatalogUnchanged
 
 @dataclass(frozen=True, slots=True)
@@ -16,7 +16,10 @@ class QueryRelatedKeys:
     items: tuple[tuple[str | bool | int | Decimal, ...], ...]
     truncated: bool
 
-QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['QueryValue', ...] | Mapping[str, 'QueryValue']
+_OrdinaryQueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['_OrdinaryQueryValue', ...] | Mapping[str, '_OrdinaryQueryValue']
+# The selected temporal route adds a top-level carrier only. Ordinary recursive
+# containers do not acquire local timestamp descendants through this annotation.
+QueryValue: TypeAlias = _OrdinaryQueryValue | LocalTimestampValue
 
 @dataclass(frozen=True, slots=True)
 class QueryReadPosition:

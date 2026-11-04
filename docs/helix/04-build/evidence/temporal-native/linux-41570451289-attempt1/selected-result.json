@@ -1,0 +1,18 @@
+{
+  "selection": [
+    "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+    "test_temporal_transport_component_native"
+  ],
+  "expectedCases": 4,
+  "testsRun": 4,
+  "skips": 0,
+  "expectedFailures": 0,
+  "unexpectedSuccesses": 0,
+  "failures": 1,
+  "errors": 0,
+  "wasSuccessful": false,
+  "inventoryVerified": true,
+  "cleanupConfirmed": true,
+  "passed": false,
+  "scope": "fresh installer and structural components ONLY; native public composition/cohort qualification OPEN"
+}

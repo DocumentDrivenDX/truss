@@ -1,0 +1,396 @@
+{
+  "functions": [
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.query_temporal_binding(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.query_binding_at_abi(selected_documents,maximum_scan_rows,maximum_result_rows,maximum_bytes,expected_release,expected_digest,truss.query_temporal_abi());\nEND;\n$function$\n",
+      "definitionSha256": "a983a05985dd5bf78c23eb17606e13f467a1d117344a092bcec748915ee09b24",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.query_temporal_binding(jsonb,integer,integer,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_query_temporal_binding(selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.query_temporal_binding(jsonb,int,int,int,text,text)'::regprocedure,'read');\n RETURN truss.query_temporal_binding(selected_documents,maximum_scan_rows,maximum_result_rows,maximum_bytes,expected_release,expected_digest);\nEND;\n$function$\n",
+      "definitionSha256": "89076b1cc04b02cdc11830a036778ad15853c2234fc6f2d789bcde7ca4911568",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_query_temporal_binding(jsonb,integer,integer,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.query_temporal_objects(binding jsonb, selected_type integer, requirements jsonb)\n RETURNS TABLE(id bigint, props jsonb)\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nDECLARE object_row truss.object%ROWTYPE;fields jsonb;field jsonb;cell jsonb;kind text;root_identity jsonb;roots jsonb:='{}';root_entry jsonb;\n row_count int:=0;byte_count bigint:=0;numeric_property record;\nBEGIN\n PERFORM truss.query_temporal_scope(binding);\n fields:=truss.query_temporal_requirements(binding,selected_type,requirements);\n FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP\n  row_count:=row_count+1;byte_count:=byte_count+octet_length(object_row.props::text);\n  IF row_count>(binding->>'maximumScanRows')::int OR byte_count>(binding->>'maximumBytes')::int THEN\n   RAISE EXCEPTION 'complete bounded temporal source required' USING ERRCODE='54000';END IF;\n  root_identity:=truss.query_object_root(binding,object_row);\n  IF root_identity IS NOT NULL THEN roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);END IF;\n  IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN\n   RAISE EXCEPTION 'complete bounded temporal root witnesses required' USING ERRCODE='54000';END IF;\n  IF object_row.ver<=0 OR object_row.rev>(binding->>'catalogRevision')::int THEN\n   RAISE EXCEPTION 'complete current temporal source required' USING ERRCODE='0A000';END IF;\n  FOR numeric_property IN SELECT p.prop_id,p.scalar_type FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.scalar_type IN ('integer','decimal') LOOP\n   cell:=object_row.props->numeric_property.prop_id::text;\n   IF cell IS NOT NULL AND cell<>'{\"kind\":\"null\"}'::jsonb AND truss.query_numeric_value(cell->>'text',numeric_property.scalar_type) IS NOT TRUE THEN\n    RAISE EXCEPTION 'exact native numeric sibling domain unavailable' USING ERRCODE='22003';END IF;\n  END LOOP;\n  FOR field IN SELECT value FROM jsonb_array_elements(fields) LOOP\n   cell:=object_row.props->(field->>'propertyId');kind:=field->>'kind';\n   IF cell IS NULL THEN\n    IF field->'presence'->'missing' IS DISTINCT FROM 'true'::jsonb THEN\n     RAISE EXCEPTION 'required temporal source member missing' USING ERRCODE='22023';END IF;\n   ELSIF cell='{\"kind\":\"null\"}'::jsonb THEN\n    IF field->'presence'->'null' IS DISTINCT FROM 'true'::jsonb THEN\n     RAISE EXCEPTION 'nonnullable temporal source member null' USING ERRCODE='22023';END IF;\n   ELSE\n    IF jsonb_typeof(cell) IS DISTINCT FROM 'object' OR jsonb_typeof(cell->'text') IS DISTINCT FROM 'string'\n     OR cell IS DISTINCT FROM jsonb_build_object('kind',CASE kind WHEN 'local' THEN 'localTimestamp' WHEN 'instant' THEN 'timestamp' ELSE 'date' END,'text',cell->'text') THEN\n     RAISE EXCEPTION 'exact original temporal source cell required' USING ERRCODE='22023';END IF;\n    IF kind='local' AND truss.valid_local_timestamp_cell(cell) IS NOT TRUE THEN\n     RAISE EXCEPTION 'canonical native local timestamp source required' USING ERRCODE='22023';END IF;\n    PERFORM truss.query_temporal_canonical_text(kind,cell->>'text');\n   END IF;\n  END LOOP;\n  -- PL/pgSQL's tuplestore buffers the complete function before the executor\n  -- obtains its first row. No business filter/seek/limit enters this function.\n  id:=object_row.id;props:=object_row.props;RETURN NEXT;\n END LOOP;\n FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP\n  IF NOT truss.runtime_can_read(root_entry->'owner'->>'documentId',root_entry->'owner'->>'moduleId') THEN\n   RAISE EXCEPTION 'current buffered temporal aggregate root reader required' USING ERRCODE='P1403';END IF;\n END LOOP;\n PERFORM truss.query_temporal_scope(binding);\nEND;\n$function$\n",
+      "definitionSha256": "ded9e9d4fb4408df8b0ef01a46199af22e2e8a8a81dc6c5a27b8e0de89dfe19c",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.query_temporal_objects(jsonb,integer,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_query_temporal_objects(binding jsonb, selected_type integer, requirements jsonb)\n RETURNS TABLE(id bigint, props jsonb)\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.query_temporal_objects(jsonb,int,jsonb)'::regprocedure,'read');\n RETURN QUERY SELECT * FROM truss.query_temporal_objects(binding,selected_type,requirements);\nEND;\n$function$\n",
+      "definitionSha256": "435b0990a696e69cb282f03c23dfdccedafe9aa6e7eca4ced68b16b4e4ae276d",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_query_temporal_objects(jsonb,integer,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.query_temporal_page_objects(binding jsonb, selected_type integer, selected_key text, requirements jsonb)\n RETURNS TABLE(id bigint, props jsonb)\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.query_temporal_scope(binding);\n IF NOT EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_id=selected_key AND k.retired_rev IS NULL\n  AND EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'keys') b\n   WHERE r.value->>'typeId'=selected_type::text AND b.value->>'keyId'=k.key_id)) THEN\n  RAISE EXCEPTION 'exact selected temporal native Key required' USING ERRCODE='22023';END IF;\n IF EXISTS(SELECT 1 FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) i(prop_id)\n  LEFT JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id AND p.retired_rev IS NULL\n  WHERE k.type_id=selected_type AND k.key_id=selected_key AND k.retired_rev IS NULL\n   AND (p.prop_id IS NULL OR p.scalar_type IS DISTINCT FROM 'string' OR p.cardinality IS DISTINCT FROM 'one'\n    OR p.nullability IS DISTINCT FROM 'required' OR coalesce(p.facets,'{}')<>'{}'::jsonb)) THEN\n  RAISE EXCEPTION 'complete required string temporal selected Key required' USING ERRCODE='0A000';END IF;\n RETURN QUERY SELECT * FROM truss.query_temporal_objects(binding,selected_type,requirements);\nEND;\n$function$\n",
+      "definitionSha256": "052850ccab45d02b06d9953df294637601e30b45a5938ceeeb19efcd65821980",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.query_temporal_page_objects(jsonb,integer,text,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_query_temporal_page_objects(binding jsonb, selected_type integer, selected_key text, requirements jsonb)\n RETURNS TABLE(id bigint, props jsonb)\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.query_temporal_page_objects(jsonb,int,text,jsonb)'::regprocedure,'read');\n RETURN QUERY SELECT * FROM truss.query_temporal_page_objects(binding,selected_type,selected_key,requirements);\nEND;\n$function$\n",
+      "definitionSha256": "53a4e4d4997bc476f0a707904fd241a2fb5e9bf0df6a1ac8297cf19ddda77a79",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_query_temporal_page_objects(jsonb,integer,text,jsonb)",
+      "volatility": "s"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_group_context(expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.group_context_qualified_at_profile(expected_release,expected_digest,truss.runtime_person(false),true);\nEND;\n$function$\n",
+      "definitionSha256": "bf8e186bbee5868e63734a35353b4866ca6e38121bec8743c2f54653ea900611",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_group_context(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_group_context(expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_group_context(text,text)'::regprocedure,'read');\n RETURN truss.temporal_group_context(\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "bfa58e059ae290b3c85f3b5c5cb7c6fe1962239b21451557e3ca1d39827bed29",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_group_context(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.apply_temporal_group(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n RETURN truss.apply_temporal_group_prepared(original_input,original_documents,original_request,expected_release,expected_digest,NULL);\nEND;\n$function$\n",
+      "definitionSha256": "566fb6344442ae7fb68cf9276f073e06fc8dd4592906e241e88de9901da15f21",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.apply_temporal_group(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_apply_temporal_group(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.apply_temporal_group(bytea,bytea,bytea,text,text)'::regprocedure,'write');\n RETURN truss.apply_temporal_group(\"original_input\",\"original_documents\",\"original_request\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "185b9b995bd152d604e9babbf657afd82bd0cbc01c530901e3af425c01a587a6",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_apply_temporal_group(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.apply_temporal_group_prepared(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text, app_prepared jsonb)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n -- No temporal patch issuer exists yet. Even a correctly labelled packet is\n -- untrusted: validating labels alone cannot establish its original2.1 source\n -- and descriptor basis. The explicit unprepared temporal provider below is\n -- available; an ordinary patch must never be accepted or silently discarded.\n IF app_prepared IS NOT NULL THEN\n  RAISE EXCEPTION 'selected temporal prepared optimization unavailable' USING ERRCODE='0A000';END IF;\n RETURN truss.apply_group_prepared_at_profile(original_input,original_documents,original_request,expected_release,expected_digest,app_prepared,true);\nEND;\n$function$\n",
+      "definitionSha256": "b91f2eee59d7257fa161c6a71de3ec0e71c2c77255cce9c1ad113d89709885dd",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.apply_temporal_group_prepared(bytea,bytea,bytea,text,text,jsonb)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_apply_temporal_group_prepared(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text, app_prepared jsonb)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.apply_temporal_group_prepared(bytea,bytea,bytea,text,text,jsonb)'::regprocedure,'write');\n RETURN truss.apply_temporal_group_prepared(\"original_input\",\"original_documents\",\"original_request\",\"expected_release\",\"expected_digest\",\"app_prepared\");\nEND;\n$function$\n",
+      "definitionSha256": "c1ed932fd64548b88d55475ee9d2b133505bb825b484b3ea7823a0ada6439d6a",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_apply_temporal_group_prepared(bytea,bytea,bytea,text,text,jsonb)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_import_context(expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.import_context_at_profile(expected_release,expected_digest,true);\nEND;\n$function$\n",
+      "definitionSha256": "453c96a61d3d70cf152b6ea86f597552243c6c615629ecb95da0b0851db1b6ab",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_import_context(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_import_context(expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_import_context(text,text)'::regprocedure,'read');\n RETURN truss.temporal_import_context(\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "dd1e04a1b1c25878e86db18d701db753586081953849c72e76b30ef605d40514",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_import_context(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_import_key_selection(selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.import_key_selection(selected_document,selected_module,selected_record,expected_release,expected_digest);\nEND;\n$function$\n",
+      "definitionSha256": "49057322df4f4617ac4c9a88e59eb28d9090bff3dc91768f1fc278cfcbc554af",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_import_key_selection(text,text,text,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_import_key_selection(selected_document text, selected_module text, selected_record text, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_import_key_selection(text,text,text,text,text)'::regprocedure,'read');\n RETURN truss.temporal_import_key_selection(\"selected_document\",\"selected_module\",\"selected_record\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "15fbe6b6eaf32a4b8a2d1dc9ac77af53460870b815b65834da2775efdd00944c",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_import_key_selection(text,text,text,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_import_object_identity(original_identity bytea, original_document bytea, tuple_bytes bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.import_object_identity_at_profile(original_identity,original_document,tuple_bytes,expected_release,expected_digest,true);\nEND;\n$function$\n",
+      "definitionSha256": "1c4eac8ef57f091d0c7dd0895ebb1f133863634f86e9bc085360d0e2457a4797",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_import_object_identity(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_import_object_identity(original_identity bytea, original_document bytea, tuple_bytes bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_import_object_identity(bytea,bytea,bytea,text,text)'::regprocedure,'write');\n RETURN truss.temporal_import_object_identity(\"original_identity\",\"original_document\",\"tuple_bytes\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "1cb042c4ba0e652c666fbdfe848b044218eae2bd17bacb88e0c8b9eb75d59490",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_import_object_identity(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_writer_schema_basis(original_input bytea, original_documents bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576\n  OR (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE\n  OR (convert_from(original_input,'UTF8')::jsonb)->>'interfaceVersion' IS DISTINCT FROM 'truss-group-temporal-input/0.1.0' THEN\n  RAISE EXCEPTION 'original selected temporal patch input required' USING ERRCODE='0A000';END IF;\n -- No ordinary cache packet is relabelled. Until the selected temporal patch\n -- optimization issues a complete2.1 source/native descriptor basis, NULL is\n -- explicit optimization unavailability; callers use unprepared TEMPORAL only.\n RETURN NULL;\nEND;\n$function$\n",
+      "definitionSha256": "e7aa4a7eee9fa710790466cb0688500cde8be078a59491d70888be7b52f2c5a5",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_writer_schema_basis(bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_writer_schema_basis(original_input bytea, original_documents bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_writer_schema_basis(bytea,bytea,text,text)'::regprocedure,'write');\n RETURN truss.temporal_writer_schema_basis(\"original_input\",\"original_documents\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "29c723d67c63f61335bbd68ccf623c02a3a5271ee3fe40b16f34b9329d4cbd2d",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_writer_schema_basis(bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.get_temporal_object(selected_document text, selected_module text, selected_record text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nDECLARE result bytea;\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n result:=truss.get_object_at_profile(selected_document,selected_module,selected_record,selected_id,maximum_bytes,expected_release,expected_digest,true);\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN result;\nEND;\n$function$\n",
+      "definitionSha256": "3bab8cbe11e8a3a83c10205c36ff24b67a609a22310dfbd6c75da16355d78659",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.get_temporal_object(text,text,text,bigint,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_get_temporal_object(selected_document text, selected_module text, selected_record text, selected_id bigint, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.get_temporal_object(text,text,text,bigint,int,text,text)'::regprocedure,'read');\n RETURN truss.get_temporal_object(\"selected_document\",\"selected_module\",\"selected_record\",\"selected_id\",\"maximum_bytes\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "14b926de9e64f4bc29f6ec51a9f8e28b268a14963b52007a7c5f6d12e43e7b5b",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_get_temporal_object(text,text,text,bigint,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.page_temporal_objects(selected_document text, selected_module text, selected_record text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n RETURN truss.page_objects_at_profile(selected_document,selected_module,selected_record,page_limit,maximum_bytes,original_cursor,expected_release,expected_digest,true);\nEND;\n$function$\n",
+      "definitionSha256": "0ede3e70e3bb2ab4406f7c2c2309e1e4b7ce04f91d7a2594ec2b587401b9a339",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.page_temporal_objects(text,text,text,integer,integer,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_page_temporal_objects(selected_document text, selected_module text, selected_record text, page_limit integer, maximum_bytes integer, original_cursor bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.page_temporal_objects(text,text,text,int,int,bytea,text,text)'::regprocedure,'read');\n RETURN truss.page_temporal_objects(\"selected_document\",\"selected_module\",\"selected_record\",\"page_limit\",\"maximum_bytes\",\"original_cursor\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "fda6972a976297aa2d1b5a141a1525104a015cf91001fbe01f1ab36168b35251",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_page_temporal_objects(text,text,text,integer,integer,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.lookup_temporal_key(selected_document text, selected_module text, selected_record text, selected_key text, original_document bytea, values_bytes bytea, tuple_bytes bytea, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nDECLARE result bytea;\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n result:=truss.lookup_key_at_profile(selected_document,selected_module,selected_record,selected_key,original_document,values_bytes,tuple_bytes,maximum_bytes,expected_release,expected_digest,true);\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN result;\nEND;\n$function$\n",
+      "definitionSha256": "6f6a7f77aa0c71fda184eb8d8e9b8242ffab45fcef0b139cc5e516ac1c0f26f4",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.lookup_temporal_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_lookup_temporal_key(selected_document text, selected_module text, selected_record text, selected_key text, original_document bytea, values_bytes bytea, tuple_bytes bytea, maximum_bytes integer, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.lookup_temporal_key(text,text,text,text,bytea,bytea,bytea,int,text,text)'::regprocedure,'read');\n RETURN truss.lookup_temporal_key(\"selected_document\",\"selected_module\",\"selected_record\",\"selected_key\",\"original_document\",\"values_bytes\",\"tuple_bytes\",\"maximum_bytes\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "cf9a61bfe59efd3dfd573d8e4644e6f674a4a23e60ade3e7715c28ed5ee6dfd8",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_lookup_temporal_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.recover_temporal_group_request(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\n RETURN truss.recover_group_request_at_profile(original_input,original_documents,original_request,expected_release,expected_digest,true);\nEND;\n$function$\n",
+      "definitionSha256": "c0b9a5d72a5389dcdd2e75cdc48a7a3f8c8ef01bec61da4fb7558624ff647ba6",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.recover_temporal_group_request(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_recover_temporal_group_request(original_input bytea, original_documents bytea, original_request bytea, expected_release text, expected_digest text)\n RETURNS bytea\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.recover_temporal_group_request(bytea,bytea,bytea,text,text)'::regprocedure,'write');\n RETURN truss.recover_temporal_group_request(\"original_input\",\"original_documents\",\"original_request\",\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "2e1a04f909b4ff33e6845f595110c829b3e674c1a6ae619e90d2fc2d6d89ae48",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_recover_temporal_group_request(bytea,bytea,bytea,text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.temporal_scope(expected_release text, expected_digest text)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.runtime_person(false);\n PERFORM truss.require_temporal_capability(expected_release,expected_digest);\nEND;\n$function$\n",
+      "definitionSha256": "6829a551e794b05ebfaf9d2711ef3f7f4522440668c3fc68b0a713e5f5b355a0",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.temporal_scope(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_temporal_scope(expected_release text, expected_digest text)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.temporal_scope(text,text)'::regprocedure,'read');\n PERFORM truss.temporal_scope(\"expected_release\",\"expected_digest\");\nEND;\n$function$\n",
+      "definitionSha256": "d745b4845eb918f13283d8d0bc57e1dcdf52a184de6da75000d3e13217cd0300",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_temporal_scope(text,text)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.query_temporal_cursor_encode(binding jsonb, original_context bytea, original_after text, sort_kinds jsonb)\n RETURNS TABLE(cursor_bytes bytea, after_json text)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nDECLARE installation truss.catalog_runtime_installation%ROWTYPE;actor oid;after_value jsonb;selected_key jsonb;\n states jsonb:='[]';state jsonb;kind text;token text;ordinal int;payload jsonb;seal text;\nBEGIN\n PERFORM truss.query_temporal_scope(binding);actor:=truss.runtime_person(false);\n SELECT * INTO STRICT installation FROM truss.runtime_current_installation();\n IF original_context IS NULL OR octet_length(original_context) NOT BETWEEN 1 AND 4194304\n  OR original_after IS NULL OR octet_length(original_after) NOT BETWEEN 1 AND 1048576\n  OR (original_after IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE\n  OR jsonb_typeof(sort_kinds) IS DISTINCT FROM 'array' THEN\n  RAISE EXCEPTION 'bounded original temporal continuation inputs required' USING ERRCODE='22023';END IF;\n after_value:=original_after::jsonb;selected_key:=after_value->'selectedKey';\n IF after_value-ARRAY['version','selectedKey','sortValues','keyValues']<>'{}'::jsonb\n  OR after_value->>'version' IS DISTINCT FROM 'weft.engine-temporal-after/0.2'\n  OR jsonb_typeof(selected_key) IS DISTINCT FROM 'object' OR selected_key-ARRAY['module','record','key']<>'{}'::jsonb\n  OR (SELECT count(*) FROM jsonb_object_keys(selected_key))<>3\n  OR EXISTS(SELECT 1 FROM jsonb_each(selected_key) e WHERE jsonb_typeof(e.value)<>'string' OR octet_length(e.value#>>'{}') NOT BETWEEN 1 AND 4096)\n  OR jsonb_typeof(after_value->'sortValues') IS DISTINCT FROM 'array'\n  OR jsonb_typeof(after_value->'keyValues') IS DISTINCT FROM 'array'\n  OR jsonb_array_length(after_value->'sortValues') NOT BETWEEN 1 AND 1024\n  OR jsonb_array_length(after_value->'sortValues')<>jsonb_array_length(sort_kinds)\n  OR jsonb_array_length(after_value->'keyValues') NOT BETWEEN 1 AND 1024\n  OR EXISTS(SELECT 1 FROM jsonb_array_elements(after_value->'keyValues') k WHERE jsonb_typeof(k.value)<>'string')\n  OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r\n   CROSS JOIN LATERAL jsonb_array_elements(r.value->'keys') k\n   WHERE r.value->'identity'->>'module'=selected_key->>'module'\n    AND r.value->'identity'->>'element'=selected_key->>'record' AND k.value->>'keyId'=selected_key->>'key') THEN\n  RAISE EXCEPTION 'complete original selected Key and continuation tuple required' USING ERRCODE='22023';END IF;\n FOR ordinal IN 0..jsonb_array_length(sort_kinds)-1 LOOP\n  kind:=sort_kinds->>ordinal;state:=after_value->'sortValues'->ordinal;\n  IF kind IS NULL OR kind NOT IN ('string','date','instant','local') OR jsonb_typeof(sort_kinds->ordinal)<>'string'\n   OR jsonb_typeof(state) IS DISTINCT FROM 'object' THEN\n   RAISE EXCEPTION 'closed temporal continuation kind and state required' USING ERRCODE='22023';END IF;\n  IF state->>'state'='present' THEN\n   IF state-ARRAY['state','value']<>'{}'::jsonb OR jsonb_typeof(state->'value') IS DISTINCT FROM 'string' THEN\n    RAISE EXCEPTION 'exact present temporal continuation required' USING ERRCODE='22023';END IF;\n   token:=state->>'value';\n   IF kind<>'string' THEN token:=truss.query_temporal_canonical_text(kind,token);END IF;\n   states:=states||jsonb_build_array(jsonb_build_object('state','present','value',token));\n  ELSIF state=jsonb_build_object('state','missing') OR state=jsonb_build_object('state','null') THEN\n   states:=states||jsonb_build_array(state);\n  ELSE RAISE EXCEPTION 'closed temporal continuation state required' USING ERRCODE='22023';END IF;\n END LOOP;\n after_value:=jsonb_set(after_value,'{sortValues}',states);after_json:=after_value::text;\n payload:=jsonb_build_object('profile','truss-query-temporal-cursor/0.2','installationId',installation.installation_id::text,\n  'sourceEpoch',installation.source_epoch::text,'releaseSha256',installation.release_sha256,'queryAbi',truss.query_temporal_abi(),\n  'catalogRevision',(binding->>'catalogRevision'),'actorOid',actor::text,\n  'contextSha256',encode(sha256(original_context),'hex'),'afterJson',after_json);\n SELECT encode(sha256(s.secret||sha256(convert_to(payload::text,'UTF8'))),'hex') INTO STRICT seal\n  FROM truss.reader_catalog_validator_secret s;\n cursor_bytes:=convert_to(jsonb_build_object('payload',payload,'digest',seal)::text,'UTF8');\n IF octet_length(cursor_bytes)>65536 THEN RAISE EXCEPTION 'opaque temporal continuation limit exceeded' USING ERRCODE='54000';END IF;\n PERFORM truss.query_temporal_scope(binding);\n RETURN NEXT;\nEND;\n$function$\n",
+      "definitionSha256": "945c103dfc284931fbb8db2b1a123a844bcd835928cfe581d0333903e15c7b4a",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.query_temporal_cursor_encode(jsonb,bytea,text,jsonb)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_query_temporal_cursor_encode(binding jsonb, original_context bytea, original_after text, sort_kinds jsonb)\n RETURNS TABLE(cursor_bytes bytea, after_json text)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.query_temporal_cursor_encode(jsonb,bytea,text,jsonb)'::regprocedure,'read');\n RETURN QUERY SELECT * FROM truss.query_temporal_cursor_encode(binding,original_context,original_after,sort_kinds);\nEND;\n$function$\n",
+      "definitionSha256": "179bc9a356fcbb49d368e6577cf3bfe584dc56a0e930cef2ee2e43a1b392ef02",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_query_temporal_cursor_encode(jsonb,bytea,text,jsonb)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": false,
+      "definition": "CREATE OR REPLACE FUNCTION truss.query_temporal_cursor_decode(binding jsonb, original_context bytea, original_cursor bytea)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nDECLARE installation truss.catalog_runtime_installation%ROWTYPE;actor oid;envelope jsonb;payload jsonb;expected text;\nBEGIN\n PERFORM truss.query_temporal_scope(binding);actor:=truss.runtime_person(false);\n SELECT * INTO STRICT installation FROM truss.runtime_current_installation();\n IF original_context IS NULL OR octet_length(original_context) NOT BETWEEN 1 AND 4194304\n  OR original_cursor IS NULL OR octet_length(original_cursor) NOT BETWEEN 1 AND 65536\n  OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN\n  RAISE EXCEPTION 'bounded original opaque temporal cursor required' USING ERRCODE='22023';END IF;\n envelope:=convert_from(original_cursor,'UTF8')::jsonb;payload:=envelope->'payload';\n IF envelope-ARRAY['payload','digest']<>'{}'::jsonb OR (SELECT count(*) FROM jsonb_object_keys(envelope))<>2\n  OR jsonb_typeof(payload) IS DISTINCT FROM 'object'\n  OR payload-ARRAY['profile','installationId','sourceEpoch','releaseSha256','queryAbi','catalogRevision','actorOid','contextSha256','afterJson']<>'{}'::jsonb\n  OR (SELECT count(*) FROM jsonb_object_keys(payload))<>9\n  OR EXISTS(SELECT 1 FROM jsonb_each(payload) e WHERE e.key<>'queryAbi' AND jsonb_typeof(e.value)<>'string')\n  OR jsonb_typeof(envelope->'digest') IS DISTINCT FROM 'string' OR (envelope->>'digest' ~ '^[0-9a-f]{64}$') IS NOT TRUE THEN\n  RAISE EXCEPTION 'closed native temporal cursor envelope required' USING ERRCODE='22023';END IF;\n SELECT encode(sha256(s.secret||sha256(convert_to(payload::text,'UTF8'))),'hex') INTO STRICT expected\n  FROM truss.reader_catalog_validator_secret s;\n IF envelope->>'digest' IS DISTINCT FROM expected OR payload->>'profile' IS DISTINCT FROM 'truss-query-temporal-cursor/0.2'\n  OR payload->>'installationId' IS DISTINCT FROM installation.installation_id::text\n  OR payload->>'sourceEpoch' IS DISTINCT FROM installation.source_epoch::text\n  OR payload->>'releaseSha256' IS DISTINCT FROM installation.release_sha256\n  OR payload->'queryAbi' IS DISTINCT FROM truss.query_temporal_abi()\n  OR payload->>'catalogRevision' IS DISTINCT FROM binding->>'catalogRevision'\n  OR payload->>'actorOid' IS DISTINCT FROM actor::text\n  OR payload->>'contextSha256' IS DISTINCT FROM encode(sha256(original_context),'hex') THEN\n  RAISE EXCEPTION 'original person and complete temporal cursor context required' USING ERRCODE='P1002';END IF;\n IF octet_length(payload->>'afterJson') NOT BETWEEN 1 AND 1048576\n  OR ((payload->>'afterJson') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN\n  RAISE EXCEPTION 'original native temporal continuation packet required' USING ERRCODE='22023';END IF;\n PERFORM truss.query_temporal_scope(binding);\n RETURN payload->>'afterJson';\nEND;\n$function$\n",
+      "definitionSha256": "f02d355a4726702178d2070d74505131202fa934b9f6341366cf7f6dc5210e4a",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.query_temporal_cursor_decode(jsonb,bytea,bytea)",
+      "volatility": "v"
+    },
+    {
+      "consumerExecute": true,
+      "definition": "CREATE OR REPLACE FUNCTION truss.person_query_temporal_cursor_decode(binding jsonb, original_context bytea, original_cursor bytea)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'off'\nAS $function$\nBEGIN\n PERFORM truss.require_person_invocation('truss.query_temporal_cursor_decode(jsonb,bytea,bytea)'::regprocedure,'read');\n RETURN truss.query_temporal_cursor_decode(binding,original_context,original_cursor);\nEND;\n$function$\n",
+      "definitionSha256": "3c80aa8ebc309398ca303d169d3c0dcada59a8c46f91ac48629ceb8f4c60eb56",
+      "ownerOid": 18500,
+      "securityDefiner": true,
+      "signature": "truss.person_query_temporal_cursor_decode(jsonb,bytea,bytea)",
+      "volatility": "v"
+    }
+  ],
+  "helperDefinition": "CREATE OR REPLACE FUNCTION truss.query_temporal_canonical_text(kind text, token text)\n RETURNS text\n LANGUAGE plpgsql\n IMMUTABLE\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$\nDECLARE\n calendar_value date;\n year_value int;\n hour_value int;\n minute_value int;\n second_value int;\n suffix_length int := 0;\n offset_token text;\n offset_minutes int := 0;\n fraction_text text := '';\n second_of_day int;\n day_delta int;\n canonical_date text;\nBEGIN\n -- Bound bytes and require ASCII before regex or calendar materialization.\n IF kind IS NULL OR kind NOT IN ('date','instant','local') OR token IS NULL\n  OR octet_length(token)>32 OR octet_length(token)<>length(token) THEN\n  RAISE EXCEPTION 'strict temporal kind and bounded ASCII token required' USING ERRCODE='22023';\n END IF;\n -- This character inventory also rejects line terminators independently of\n -- regex end-anchor behavior. Lowercase separators and whitespace never enter.\n IF token COLLATE \"C\" !~ '^[-0-9TZ:.+]+$' THEN\n  RAISE EXCEPTION 'strict temporal token grammar required' USING ERRCODE='22023';\n END IF;\n IF kind='date' THEN\n  IF length(token)<>10 OR token COLLATE \"C\" !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' THEN\n   RAISE EXCEPTION 'strict Gregorian date token required' USING ERRCODE='22023';\n  END IF;\n ELSIF kind='local' THEN\n  IF token COLLATE \"C\" !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{1,6})?$' THEN\n   RAISE EXCEPTION 'strict local timestamp token required' USING ERRCODE='22023';\n  END IF;\n ELSE\n  IF token COLLATE \"C\" !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{1,6})?(Z|[+-][0-9]{2}:[0-9]{2})$' THEN\n   RAISE EXCEPTION 'strict known-offset instant token required' USING ERRCODE='22023';\n  END IF;\n  IF right(token,1)='Z' THEN\n   suffix_length:=1;\n  ELSE\n   suffix_length:=6;\n   offset_token:=right(token,6);\n   IF offset_token='-00:00' OR substring(offset_token,2,2)::int>23\n    OR substring(offset_token,5,2)::int>59 THEN\n    RAISE EXCEPTION 'strict known minute offset required' USING ERRCODE='22023';\n   END IF;\n   offset_minutes:=(substring(offset_token,2,2)::int*60+substring(offset_token,5,2)::int)\n    * CASE WHEN left(offset_token,1)='-' THEN -1 ELSE 1 END;\n  END IF;\n END IF;\n year_value:=substring(token,1,4)::int;\n IF year_value=0 THEN\n  RAISE EXCEPTION 'Gregorian year in selected range required' USING ERRCODE='22023';\n END IF;\n -- make_date validates the proleptic Gregorian day without a timestamp parser.\n calendar_value:=make_date(year_value,substring(token,6,2)::int,substring(token,9,2)::int);\n IF kind='date' THEN RETURN token; END IF;\n hour_value:=substring(token,12,2)::int;\n minute_value:=substring(token,15,2)::int;\n second_value:=substring(token,18,2)::int;\n IF hour_value>23 OR minute_value>59 OR second_value>59 THEN\n  RAISE EXCEPTION 'strict temporal clock required' USING ERRCODE='22023';\n END IF;\n IF substring(token,20,1)='.' THEN\n  fraction_text:=substring(token,21,length(token)-20-suffix_length);\n END IF;\n fraction_text:=rpad(fraction_text,6,'0');\n IF kind='local' THEN RETURN left(token,19)||'.'||fraction_text; END IF;\n\n -- Bounded integer calendar/clock arithmetic, including floor across the\n -- previous midnight. No timestamp casts, floating epoch, rounding or timezone.\n second_of_day:=hour_value*3600+minute_value*60+second_value-offset_minutes*60;\n day_delta:=second_of_day/86400;\n IF second_of_day<0 AND second_of_day%86400<>0 THEN day_delta:=day_delta-1; END IF;\n calendar_value:=calendar_value+day_delta;\n IF calendar_value<DATE '0001-01-01' OR calendar_value>DATE '9999-12-31' THEN\n  RAISE EXCEPTION 'normalized UTC year in selected range required' USING ERRCODE='22023';\n END IF;\n second_of_day:=second_of_day-day_delta*86400;\n -- Build fixed-width text directly; DateStyle and host timezone have no input.\n canonical_date:=lpad(extract(year FROM calendar_value)::int::text,4,'0')||'-'\n  ||lpad(extract(month FROM calendar_value)::int::text,2,'0')||'-'\n  ||lpad(extract(day FROM calendar_value)::int::text,2,'0');\n RETURN canonical_date||'T'||lpad((second_of_day/3600)::text,2,'0')||':'\n  ||lpad(((second_of_day%3600)/60)::text,2,'0')||':'\n  ||lpad((second_of_day%60)::text,2,'0')||'.'||fraction_text||'Z';\nEXCEPTION WHEN datetime_field_overflow OR invalid_datetime_format THEN\n RAISE EXCEPTION 'strict Gregorian temporal calendar required' USING ERRCODE='22023';\nEND;\n$function$\n",
+  "manifestSha256": "a96f88e1460601223cdae0e00e94906fc74df4aa2b7d21d237c8c7547f49cb72",
+  "ordinaryAbi": {
+    "identity": "truss-postgresql-logical-query",
+    "sha256": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+    "version": "1.2"
+  },
+  "release": "truss-catalog-runtime/0.76-temporal-candidate",
+  "sourceFiles": {
+    "../_temporal_owner/source.json": "2b6b91ef7706973b835929fb135b811efba7471f4771754752fcb32822d4df5a",
+    "audit-reader-accumulation.sql": "bf8589a448d4a9293fad861b8d3e479449b042160cead8ce384e2edae088caca",
+    "barrier.sql": "659c4d9dfe8c4cf33b40e2249d3668b1c283e1815f719a47990387d81423d80e",
+    "capability-profiles.json": "b93cd0a1136551e1f8c307ece409163209951fb83842b5e787672b373f410c53",
+    "catalog-key-backfill-storage.sql": "0126ae1db5cad9619f398d41bd4167706f896dee312591dcccf031bf9136490c",
+    "catalog-key-backfill.sql": "5894dfb700829a717142de0eba066310b8cc815b04851f35f665d9aa73e127b0",
+    "catalog-rebind-storage.sql": "9b827d0ab7a9fc210ea3f1d7e65d459cdc0953707400cc070cd9f63b586a4d1e",
+    "catalog-rebind.sql": "0d7aabd6c9eb48ddd9bd908b6786dac2c9e130d0736fe811cdc3f7ae2eabbeff",
+    "containers.sql": "d37996303b2927fe42b6d7a012b54f53a1ed0b0ad6dea54ce0c16c24576117f1",
+    "definition-source.sql": "0aa6d163a5c3322a269786defb22ebd70badd0f1ac74cd41a6c8c7813d36fdd0",
+    "entity-load.sql": "6100f2ce3783fd06f65e9d257cef4bc395d58b653e402121a9d18b47fe1eeb43",
+    "entity-query.sql": "cf4296549c873659eebe2bb84278d07f4fb0da98b970d0b638ba11b20ed9bafc",
+    "entity-times.sql": "c0eab24b02425b184c6cf9fef91d87377ece7c0fe3f82763ab5090f4b107ca5c",
+    "evolution.sql": "c294502ecd2e6a4255e8bd96aa538577eb756d3db81f6909c0d56280d0054cf5",
+    "feed-custody.sql": "4c33f6d438c3f78de5fb6e5c1a628d42bd81309edae56dc74d83931bab549dc6",
+    "feed-receipts.sql": "00c3b5ba48764148fd87256bef8d80a2667189dec73f01f79337f01021c17923",
+    "feed.sql": "542b25ea8ebee1d92457503f86c7e882dadbc6b7c7f80a148ddcf5a35dee3007",
+    "group-audit-reader.sql": "1b80d10290645cdc3d2e12c0f5dd2b3fa76c7ad51cd0effb6fa2d097bd468660",
+    "group-profiles.json": "9a19eeafd78ae13a8baa884a58e22b1ec0f67c89899d9e66c826e595af7e160a",
+    "group-recovery.sql": "c9d821913c44243e555215f62fd04f77d61575d98088d07afb8a34ec4a53a2f3",
+    "groups.sql": "45b9ade63b5fc6448fa6ef0037eccf047e57a2f4d3826da669da3a245bc2229e",
+    "history.sql": "1e7e93f688fb59ab51af0d7d71afda526628ea9088f8651e95d550376c221c2e",
+    "import-batches.sql": "97cf1f1b1012864df0a95c12ba693c5a935a515047ca4533041ee4c8fc3e80a1",
+    "imports.sql": "e477cd8d02a43595f2e82962c07472096dce581a4d51b5cff187f787fbf988e7",
+    "key-derivation.sql": "b24e881af85d119c88d1ad9c22b23043f34077ed8aaa5dda3ca5b25a3704271c",
+    "key-read.sql": "28de0602aff5a9d40daabc9104f34700fa0d445dd10c9bf8a7b8b7f5c5e2305a",
+    "keys.sql": "7dd48722c66c0dd255b098d93b92297539746b1ac4a06fe623564c268d4ad226",
+    "layout.sql": "fc2cdc8dfc80aef7f630a21ee9587751b9b026d9491832c0cdbb89c4a72feaa3",
+    "lifecycle.sql": "e9a0196578dcd8f9cad4cd796ffcf173fa36086bc7411e4cca82e7501fdcf8b8",
+    "lineage.sql": "b808d39ae44cbeca21bd301ff069469cbcea54c6b8fe28eb27f22ce53ce5e2fa",
+    "load-audit-reader.sql": "d24a927e9c01a315ff2b24e4bda12207434fa3d476965149f1cff253e35740fc",
+    "load-audit-storage.sql": "f714a2a07b9855bb73cc4bb429863cf9f378ab1665498033cb4f3f7418244adb",
+    "load-audit-writer.sql": "e97e58b6fd9d60c0988e090980df958a726901d8c3d2279949cf6da2ddb84360",
+    "managed-grants.sql": "0c14b6a10c896ca207604e0391fc5f3be8ba202705f77e42f69ab531626ca2ed",
+    "migrations.sql": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
+    "operations.sql": "afc6d281fe3570dea27ac03b2cc1631e810a57a2df52d0a1ad5ba86e50a9922e",
+    "owned.sql": "fdb46fd7539217e2a238747f9df8d5efbad47133eb4a02f9e80641461dba8998",
+    "ownership.sql": "73b56cc0f438d14ef9ac9f7420d98eadcdc1147569353c4daf8771a42a5344c6",
+    "pages.sql": "8eed2fa2a9338563ad5b543a1b38ba6b6d5b275f69654ddef219be3e01eeedaa",
+    "person-entrypoints.json": "13be01c73c4812cd2b5f3a8273db4ce8265ed91ae78e577b25d53ea9825ad26a",
+    "person-entrypoints.sql": "2c99d9894bf5ae278feb227419851107567e5ee0f2a1583e95113f68e29b5164",
+    "plan.sql": "7d2daa7f2d947de23cb13423220ec521e2e84d54023bd9b2739f88a65e7f3ea4",
+    "preconditions.sql": "b422a354d71c2128cd4942219c5feb47895448dd3aa342719bcb85c506b8d38a",
+    "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
+    "preview.sql": "933f91374edffdb069c336c9aaf27ae68421a78359a39aad3464dc2f2ba3936a",
+    "query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+    "query-export.sql": "52a713f1e5df28320a1c9163cf06f1e2736543b592c6b149329b6a3f00c090d9",
+    "query-selective.sql": "8d2523ba89e3322f3a44e0e7567ef3d91bb0154f6a63dcb2b72a6d852bb5ac9d",
+    "query-temporal-abi.json": "0ecf5aa206dfcfcba21581fc328d7d073b48dbc8b61b2fc199278cf5f3e31b0b",
+    "query-temporal-abi.sql": "afe613a2d2c703737df7fa9274aae27c9b417d66a35476593d3a5c5e3f5e532a",
+    "query-temporal-cursor.sql": "29be4de2d22cbf3c7ca97cbf927ac7a7f1cd3e62d30f7463aa2bd1e5cd3ba77e",
+    "query-temporal-entrypoints.sql": "b630f42b873695b630f1718783f4bcf2fc151eef8b52ed6c3c72a63d6950126e",
+    "query-temporal-sources.sql": "ce4695bb5c521d1ab426793fa5214968011a70a8a1733dd2064f3fe66000bcd2",
+    "query-temporal.sql": "6b3154ba72ae0445e6c1d3d27ae0e526393ea91138782a52fc229b5af0044b90",
+    "query.sql": "b21d33d0ad63d08828a9470f0c40bf09fe6db847f6d52c35b31f75530bdb5fa6",
+    "read.sql": "c80804d045e858a8771b1727a90b79ccee214e593cd683e26cdb9bae77985bf5",
+    "reader.sql": "df24b3281fa77061ea69e6e82d22e5aa07ce6811c60489e228bc8dd0cffbb353",
+    "runtime.sql": "02bebbe2b33d2d61d7dd05216f7decbacc499dc588d57589a87bd12eda360ff0",
+    "scalars.sql": "3ee4e9da7972bb801b643cf6c3a4e92f2e649cfb1b9fb38f2813edd22ced8ebf",
+    "schema-cache.sql": "ef9c43fbb48887d670dc86f7cd7689d3bcd83c193f0116df33c75d88689f42f0",
+    "source-references.sql": "a69e0e7bac28f2e452d15e646ff1a1fe1de027751fb033ea29e14d6ea3096b83",
+    "temporal-cells.sql": "3fa5f76a0d00fd497e41565a5d4341fdd652dde9558153cd2b4061517873b569",
+    "temporal-person-entrypoints.json": "b696f874f2bb4161b4933a56773b6026ae35d4d22ca1477e62967765763df82d",
+    "temporal-preparation.sql": "bc160f77cdacd5875993a0f12a3cc8184b373879a9ba2abc1117e01e821576c3",
+    "temporal-profiles.json": "a25c0da62b23b9e47a2e4ee262de0559ce4b11b40954584781fe86195e881da1",
+    "temporal-profiles.sql": "432eb642c659a4650f21f172e5487ce934d1452c52850870a1ea27c494028887",
+    "temporal-storage.sql": "af2b1638c0ad13ff43876956cb28cc25a2e4eb41497bdf7d014f00a7b0eaa153",
+    "temporal-values-entrypoints.sql": "3388192b5055b4ca71d3142cf1889dc4b007d4300d6f10ff2faf37eff40174af",
+    "temporal-values.sql": "f837e405e6d2daad0f2b8e0b52a925efd22386c3fa69917abd1b736b5cc5c1e2",
+    "traversal.sql": "b9f78937685920ac1997ba21f86525cfb18dedff06254686bd04e4c8fa45a4f9",
+    "view.sql": "857a2c62c284a2462a71acfae88a1fcab840982fe274bcf39a49555692a88614"
+  },
+  "temporalAbi": {
+    "identity": "truss-postgresql-logical-query",
+    "sha256": "0ecf5aa206dfcfcba21581fc328d7d073b48dbc8b61b2fc199278cf5f3e31b0b",
+    "version": "1.3"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "operation": "inspectAccessViews",
+  "resourceProfile": "umf.codegen-resources/1",
+  "sourceCommit": "f629cda829223fb889d1faf25a2543e40689146d",
+  "sourceReview": "PR95 source PASS; original resources only; compiled enrollment requires reconciled actual private or public artifact bytes",
+  "resources": {
+    "coreSchema": {
+      "file": "resources/coreSchema.json",
+      "sourcePath": "spec/core/schema.json",
+      "sha256": "7e42a2d4e0e72af3b01147a5ad95b49a0ccfc9692baadfc9a17144d262e2713a"
+    },
+    "referenceSchema": {
+      "file": "resources/referenceSchema.json",
+      "sourcePath": "spec/core/semantic-type-reference.schema.json",
+      "sha256": "9c3b38c144065a8c62b331c21c0870be76562d48181daa1af7dd9b114fa7704a"
+    },
+    "packageSchema": {
+      "file": "resources/packageSchema.json",
+      "sourcePath": "spec/core/extension-package.schema.json",
+      "sha256": "ab01598d5f0a13ce080a3e4d8bd9334017cb6c659c6c88e8f041767410553462"
+    },
+    "constraints": {
+      "file": "resources/constraints.json",
+      "sourcePath": "spec/metamodel/generated/core-constraints.json",
+      "sha256": "74390306731b6e13edfe7b506f381f561db76c5539a30dba3ed29f8062ea3fe5"
+    },
+    "domainPolicy": {
+      "file": "resources/domainPolicy.json",
+      "sourcePath": "spec/metamodel/generated/domain-policy.json",
+      "sha256": "bdd48aaeca22c922cc9fdb4eb2fdef2d1b37070bec8fe9744ed26135403e2a82"
+    },
+    "tablesPackage": {
+      "file": "resources/tablesPackage.json",
+      "sourcePath": "spec/extensions/tables/package.json",
+      "sha256": "beeb8749216b20d98211700c0a81cdd210b1eaea4060f7ae81b8a91f061da18d"
+    },
+    "actionsPackage": {
+      "file": "resources/actionsPackage.json",
+      "sourcePath": "spec/extensions/actions/package.json",
+      "sha256": "5a787363df77b93d22a785fb3bec711e2bf1ecd25e17e2155c2ce6e80ac4e181"
+    },
+    "bindingPackage": {
+      "file": "resources/bindingPackage.json",
+      "sourcePath": "spec/extensions/binding/package.json",
+      "sha256": "f3326533dcf3d2227955bae2261ab005eaf8692e289c7461f2015fd40565a78f"
+    },
+    "stableBindingPackage": {
+      "file": "resources/stableBindingPackage.json",
+      "sourcePath": "spec/extensions/binding-stable/package.json",
+      "sha256": "0550ae86d0cf07f9e61fb78bbb3a2eeb370838681a1483b1088409ddaeb0631e"
+    }
+  }
+}

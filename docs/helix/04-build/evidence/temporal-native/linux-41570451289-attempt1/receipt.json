@@ -1,0 +1,45 @@
+{
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/41570451289",
+  "jobId": 125701851148,
+  "sourceSha": "591f46fe23997fdfca7497280aa4733f8a13ff67",
+  "runner": "ubuntu-24.04",
+  "python": "3.11.17",
+  "conclusion": "failure",
+  "artifactId": 13200713460,
+  "artifactSha256": "99a42b790fa9a35e57f6f2b27de226c60d0434ceac45f98a1115035ee584e84b",
+  "retainedOriginalZip": "/private/tmp/truss-native-41570451289-artifact.zip",
+  "counts": {
+    "selection": [
+      "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+      "test_temporal_transport_component_native"
+    ],
+    "expectedCases": 4,
+    "testsRun": 4,
+    "skips": 0,
+    "expectedFailures": 0,
+    "unexpectedSuccesses": 0,
+    "failures": 1,
+    "errors": 0,
+    "wasSuccessful": false,
+    "inventoryVerified": true,
+    "cleanupConfirmed": true,
+    "passed": false,
+    "scope": "fresh installer and structural components ONLY; native public composition/cohort qualification OPEN"
+  },
+  "cleanup": {
+    "directory": "/tmp/truss-nw-jqdybwcz",
+    "confirmed": true,
+    "dataDeleted": true,
+    "originalPostmasterPid": 2633,
+    "originalPostmasterPidAbsent": true,
+    "pgCtlStatus": 3,
+    "pgCtlStdout": "pg_ctl: no server running\n",
+    "pgCtlStderr": ""
+  },
+  "actualResults": "three transport cases PASS with original assertions; installer FAIL; no cases skipped",
+  "errorClass": "psycopg.errors.SyntaxError",
+  "sqlState": "42601",
+  "nativeError": "syntax error at end of input; runtime.sql579 unparenthesized CASE in PLpgSQL IF condition",
+  "priorGroupingFix": "all three original transport cases now green; no assertions weakened",
+  "scope": "conditional component observations only; no completed native0.76 installer/inventory/admission or TN02-14 waiver"
+}

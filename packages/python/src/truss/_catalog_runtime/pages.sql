@@ -1,12 +1,15 @@
 -- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Live ID-keyset object paging, not an authority token or held snapshot.
-CREATE FUNCTION truss.page_objects(selected_document text,selected_module text,selected_record text,
- page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.page_objects_at_profile(selected_document text,selected_module text,selected_record text,
+ page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_type truss.type_def%ROWTYPE;
  captured_revision int;source_pin record;cursor_value jsonb;after_id bigint:=0;candidate record;
- objects jsonb:='[]';lookahead_root_owner jsonb;object_bytes bytea;object_value jsonb;continuation jsonb;result bytea;counted int:=0;last_id bigint;
+ cursor_envelope jsonb;cursor_payload jsonb;cursor_seal text;cursor_bytes bytea;cursor_actor oid;
+ selected_profile text;result_document jsonb;objects jsonb:='[]';lookahead_root_owner jsonb;object_bytes bytea;object_value jsonb;continuation jsonb;result bytea;counted int:=0;last_id bigint;
 BEGIN
+ selected_profile:=CASE WHEN temporal_profile THEN 'truss-python-temporal-object-page/0.1' ELSE 'truss-python-object-page/0.1' END;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  PERFORM truss.runtime_person(false);
  IF selected_document IS NULL OR selected_module IS NULL OR selected_record IS NULL
   OR octet_length(selected_document) NOT BETWEEN 1 AND 4096 OR octet_length(selected_module) NOT BETWEEN 1 AND 4096
@@ -29,13 +32,32 @@ BEGIN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536 OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
    RAISE EXCEPTION 'bounded original page cursor required' USING ERRCODE='22023';END IF;
   cursor_value:=convert_from(original_cursor,'UTF8')::jsonb;
-  IF (SELECT count(*) FROM jsonb_object_keys(cursor_value))<>11 OR EXISTS(SELECT 1 FROM jsonb_each(cursor_value) e WHERE jsonb_typeof(e.value)<>'string')
-   OR cursor_value-ARRAY['profile','installationId','sourceEpoch','releaseSha256','documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId']<>'{}'::jsonb
+  IF temporal_profile THEN
+   cursor_actor:=truss.runtime_person(false);cursor_envelope:=cursor_value;cursor_payload:=cursor_envelope->'payload';
+   IF cursor_envelope-ARRAY['payload','digest']<>'{}'::jsonb
+    OR (SELECT count(*) FROM jsonb_object_keys(cursor_envelope))<>2
+    OR jsonb_typeof(cursor_payload) IS DISTINCT FROM 'object'
+    OR cursor_payload-ARRAY['profile','actorOid','metadata']<>'{}'::jsonb
+    OR (SELECT count(*) FROM jsonb_object_keys(cursor_payload))<>3
+    OR cursor_payload->>'profile' IS DISTINCT FROM 'truss-direct-temporal-page-cursor/0.1'
+    OR jsonb_typeof(cursor_payload->'metadata') IS DISTINCT FROM 'object' THEN
+    RAISE EXCEPTION 'original sealed direct temporal page cursor required' USING ERRCODE='P1002';END IF;
+   SELECT encode(sha256(s.secret||sha256(convert_to(cursor_payload::text,'UTF8'))),'hex') INTO STRICT cursor_seal
+    FROM truss.reader_catalog_validator_secret s;
+   IF cursor_envelope->>'digest' IS DISTINCT FROM cursor_seal OR cursor_payload->>'actorOid' IS DISTINCT FROM cursor_actor::text THEN
+    RAISE EXCEPTION 'original person and sealed direct page context required' USING ERRCODE='P1002';END IF;
+   cursor_value:=cursor_payload->'metadata';
+  END IF;
+  IF (SELECT count(*) FROM jsonb_object_keys(cursor_value))<>(CASE WHEN temporal_profile THEN 13 ELSE 11 END)
+   OR EXISTS(SELECT 1 FROM jsonb_each(cursor_value) e WHERE jsonb_typeof(e.value)<>'string' AND NOT (temporal_profile AND e.key IN ('valueProfile','queryAbi')))
+   OR cursor_value-ARRAY['profile','installationId','sourceEpoch','releaseSha256','documentId','moduleId','recordId','typeId','definitionPin','catalogRevision','afterId']-(CASE WHEN temporal_profile THEN ARRAY['valueProfile','queryAbi'] ELSE ARRAY[]::text[] END)<>'{}'::jsonb
    OR cursor_value->>'documentId' IS DISTINCT FROM selected_document OR cursor_value->>'moduleId' IS DISTINCT FROM selected_module OR cursor_value->>'recordId' IS DISTINCT FROM selected_record
    OR jsonb_typeof(cursor_value->'afterId') IS DISTINCT FROM 'string' OR cursor_value->>'afterId' !~ '^[1-9][0-9]{0,18}$'
    OR (length(cursor_value->>'afterId')=19 AND (cursor_value->>'afterId') COLLATE "C">'9223372036854775807' COLLATE "C") THEN
    RAISE EXCEPTION 'exact page cursor selection required' USING ERRCODE='22023';END IF;
-  IF cursor_value->>'profile' IS DISTINCT FROM 'truss-python-object-page/0.1'
+  IF cursor_value->>'profile' IS DISTINCT FROM selected_profile
+   OR temporal_profile AND (cursor_value->'valueProfile' IS DISTINCT FROM truss.runtime_temporal_profiles()->'valueProfile'
+    OR cursor_value->'queryAbi' IS DISTINCT FROM truss.query_temporal_abi())
    OR cursor_value->>'installationId' IS DISTINCT FROM installation.installation_id::text
    OR cursor_value->>'sourceEpoch' IS DISTINCT FROM installation.source_epoch::text
    OR cursor_value->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
@@ -47,19 +69,29 @@ BEGIN
  FOR candidate IN SELECT id FROM truss.object WHERE type_id=selected_type.type_id AND id>after_id ORDER BY id LIMIT page_limit+1 LOOP
   counted:=counted+1;
   IF counted>page_limit THEN
-   object_bytes:=truss.get_object(selected_document,selected_module,selected_record,candidate.id,16777216,expected_release,expected_digest);
+   object_bytes:=truss.get_object_at_profile(selected_document,selected_module,selected_record,candidate.id,16777216,expected_release,expected_digest,temporal_profile);
    IF object_bytes IS NULL THEN RAISE EXCEPTION 'page lookahead no longer admitted' USING ERRCODE='55P03';END IF;
    object_value:=convert_from(object_bytes,'UTF8')::jsonb;
    IF object_value->>'catalogRevision' IS DISTINCT FROM captured_revision::text THEN RAISE EXCEPTION 'catalog changed during page lookahead' USING ERRCODE='55P03';END IF;
-   IF object_value->>'profile'='truss-python-logical-object/0.1' THEN lookahead_root_owner:=object_value->'root'->'owner';END IF;
-   continuation:=jsonb_build_object('profile','truss-python-object-page/0.1','installationId',installation.installation_id::text,
+   IF object_value->>'profile' IN ('truss-python-logical-object/0.1','truss-python-temporal-logical-object/0.1') THEN lookahead_root_owner:=object_value->'root'->'owner';END IF;
+   continuation:=jsonb_build_object('profile',selected_profile,'installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'releaseSha256',installation.release_sha256,'documentId',selected_document,
     'moduleId',selected_module,'recordId',selected_record,'typeId',selected_type.type_id::text,'definitionPin',source_pin.definition_pin,
     'catalogRevision',captured_revision::text,'afterId',last_id::text);
-   IF octet_length(continuation::text)>65536 THEN RAISE EXCEPTION 'page cursor byte limit exceeded' USING ERRCODE='54000';END IF;
+   IF temporal_profile THEN
+    continuation:=continuation||jsonb_build_object('valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi());
+    cursor_payload:=jsonb_build_object('profile','truss-direct-temporal-page-cursor/0.1',
+     'actorOid',truss.runtime_person(false)::text,'metadata',continuation);
+    SELECT encode(sha256(s.secret||sha256(convert_to(cursor_payload::text,'UTF8'))),'hex') INTO STRICT cursor_seal
+     FROM truss.reader_catalog_validator_secret s;
+    cursor_bytes:=convert_to(jsonb_build_object('payload',cursor_payload,'digest',cursor_seal)::text,'UTF8');
+    IF octet_length(cursor_bytes)>65536 THEN RAISE EXCEPTION 'bounded native direct cursor required' USING ERRCODE='54000';END IF;
+    continuation:=continuation||jsonb_build_object('originalCursorBase64',replace(encode(cursor_bytes,'base64'),E'\n',''));
+   END IF;
+   IF NOT temporal_profile AND octet_length(continuation::text)>65536 THEN RAISE EXCEPTION 'page cursor byte limit exceeded' USING ERRCODE='54000';END IF;
    EXIT;
   END IF;
-  object_bytes:=truss.get_object(selected_document,selected_module,selected_record,candidate.id,maximum_bytes,expected_release,expected_digest);
+  object_bytes:=truss.get_object_at_profile(selected_document,selected_module,selected_record,candidate.id,maximum_bytes,expected_release,expected_digest,temporal_profile);
   IF object_bytes IS NULL THEN RAISE EXCEPTION 'page observation no longer admitted' USING ERRCODE='55P03';END IF;
   object_value:=convert_from(object_bytes,'UTF8')::jsonb;
   IF object_value->>'catalogRevision' IS DISTINCT FROM captured_revision::text THEN RAISE EXCEPTION 'catalog changed during page observation' USING ERRCODE='55P03';END IF;
@@ -69,17 +101,27 @@ BEGIN
  PERFORM truss.runtime_person(false);
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RAISE EXCEPTION 'current page reader required' USING ERRCODE='P1403';END IF;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN RAISE EXCEPTION 'catalog changed during page observation' USING ERRCODE='55P03';END IF;
- result:=convert_to(jsonb_build_object('profile','truss-python-object-page/0.1','catalogRevision',captured_revision,'objects',objects,'continuation',continuation)::text,'UTF8');
+ result_document:=jsonb_build_object('profile',selected_profile,'catalogRevision',captured_revision,'objects',objects,'continuation',continuation);
+ IF temporal_profile THEN result_document:=result_document||jsonb_build_object('valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi());END IF;
+ result:=convert_to(result_document::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'complete page byte limit exceeded' USING ERRCODE='54000';END IF;
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current buffered page interpretation reader required' USING ERRCODE='P1403';END IF;
  FOR object_value IN SELECT value FROM jsonb_array_elements(objects) LOOP
-  IF object_value->>'profile'='truss-python-logical-object/0.1' AND NOT truss.runtime_can_read(
+  IF object_value->>'profile' IN ('truss-python-logical-object/0.1','truss-python-temporal-logical-object/0.1') AND NOT truss.runtime_can_read(
    object_value->'root'->'owner'->>'documentId',object_value->'root'->'owner'->>'moduleId') THEN
    RAISE EXCEPTION 'current buffered aggregate root reader required' USING ERRCODE='P1403';END IF;
  END LOOP;
  IF lookahead_root_owner IS NOT NULL AND NOT truss.runtime_can_read(lookahead_root_owner->>'documentId',lookahead_root_owner->>'moduleId') THEN
   RAISE EXCEPTION 'current lookahead aggregate root reader required' USING ERRCODE='P1403';END IF;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.page_objects_at_profile(text,text,text,int,int,bytea,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.page_objects(selected_document text,selected_module text,selected_record text,page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.page_objects_at_profile(selected_document,selected_module,selected_record,page_limit,maximum_bytes,original_cursor,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.page_objects(text,text,text,int,int,bytea,text,text) FROM PUBLIC;

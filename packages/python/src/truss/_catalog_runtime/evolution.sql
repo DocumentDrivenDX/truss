@@ -44,7 +44,7 @@ BEGIN
    -- admitted retained-value destination under the same exclusive head gate.
    check_required:=property_id IS NOT NULL AND field->'declaration'->>'nullability'='required' AND property_meta.nullability IS DISTINCT FROM 'required';
    check_family:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'
-    AND (property_meta.cardinality IS DISTINCT FROM 'one' OR property_meta.scalar_type IS DISTINCT FROM field->'declaration'->>'scalarType');
+    AND (property_meta.cardinality IS DISTINCT FROM 'one' OR property_meta.scalar_type IS DISTINCT FROM coalesce(field->'nativeDescriptor'->>'nativeScalarType',field->'declaration'->>'scalarType'));
    check_facets:=property_id IS NOT NULL AND field->'declaration'->>'cardinality'='one'
     AND property_meta.facets IS DISTINCT FROM field->'declaration'->'facets';
    check_name:=property_id IS NOT NULL AND property_meta.name IS DISTINCT FROM candidate_name;
@@ -52,7 +52,7 @@ BEGIN
    -- only changed fields enter the one per-type data census below.
    IF check_required OR check_family OR check_facets OR check_name THEN
     field_checks:=array_append(field_checks,jsonb_build_object('ordinal',field_ordinal,'propertyId',property_id,
-     'name',candidate_name,'scalarType',field->'declaration'->>'scalarType','facets',field->'declaration'->'facets',
+     'name',candidate_name,'scalarType',coalesce(field->'nativeDescriptor'->>'nativeScalarType',field->'declaration'->>'scalarType'),'facets',field->'declaration'->'facets',
      'fieldModule',field->>'fieldModule','fieldId',field->>'fieldId','checkRequired',check_required,
      'checkFamily',check_family,'checkFacets',check_facets,'checkName',check_name));
    END IF;
@@ -76,7 +76,7 @@ BEGIN
     cell_validity AS MATERIALIZED (
      SELECT c.*,
       CASE WHEN c.cell IS NOT NULL AND c.cell<>'{"kind":"null"}'::jsonb AND (c.check_family OR c.check_facets)
-       THEN truss.valid_scalar_cell(c.cell,c.scalar_type,true) IS TRUE ELSE false END AS valid_cell
+       THEN CASE WHEN c.scalar_type='localTimestamp' THEN truss.valid_local_timestamp_cell(c.cell,true) IS TRUE ELSE truss.valid_scalar_cell(c.cell,c.scalar_type,true) IS TRUE END ELSE false END AS valid_cell
      FROM cells c),
     cell_flags AS MATERIALIZED (
      SELECT c.*,

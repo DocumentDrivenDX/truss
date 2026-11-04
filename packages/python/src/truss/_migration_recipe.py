@@ -48,6 +48,20 @@ def load_recipe():
         profile=json.loads(artifacts[endpoint+'.json'])
         if any(rule not in equivalence['rules'] for rule in profile['definitionAlternatives']):
             raise ValueError('Unqualified native definition alternative')
+        if 'initialization-custody.sql' in profile.get('manifest',{}).get('files',{}) and not profile.get('initializationPolicies'):
+            raise ValueError('New custody target requires its closed dynamic initialization policy')
+        if 'initializationPolicies' in profile:
+            from ._initialization_custody import validate_policy
+            if profile['manifest']!=target or endpoint!=manifest['target']:raise ValueError('Initialization policy belongs only to exact new target manifest')
+            policies=profile['initializationPolicies']
+            if type(policies) is not list or len(policies)!=1 or profile.get('initializationAlternatives') or profile.get('definitionAlternatives'):
+                raise ValueError('One closed dynamic policy without finite alternatives required')
+            for policy in policies:
+                validate_policy(policy,profile['manifest'])
+                if policy not in initialization.get('policies',[]):raise ValueError('Unqualified native initialization policy')
+            schema_name=initialization.get('witnessSchema')
+            if schema_name not in artifacts or sha256(artifacts[schema_name]).hexdigest()!=policies[0]['witnessSchemaSha256']:
+                raise ValueError('Exact initialization witness schema required')
         # Historical profiles stay immutable when a later proof adds a newly
         # qualified target initializer. Each profile selects only its own rules.
         if any(rule not in initialization['rules'] for rule in profile['initializationAlternatives']):

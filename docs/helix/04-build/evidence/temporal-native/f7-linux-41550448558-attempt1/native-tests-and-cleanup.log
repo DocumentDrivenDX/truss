@@ -1,0 +1,13 @@
+test_contract075_canonical_vectors_and_original_text (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_contract075_canonical_vectors_and_original_text) ... ok
+test_exact_integer_offset_normalization_against_fixed_offset_carriers (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_exact_integer_offset_normalization_against_fixed_offset_carriers) ... ok
+test_helper_is_immutable_invoker_and_has_no_public_execute (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_helper_is_immutable_invoker_and_has_no_public_execute) ... ok
+test_host_timezone_datestyle_and_collation_do_not_change_tokens (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_host_timezone_datestyle_and_collation_do_not_change_tokens) ... ok
+test_ordinary_role_cannot_execute_helper (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_ordinary_role_cannot_execute_helper) ... ok
+test_shared_strict075_oracle_vectors (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_shared_strict075_oracle_vectors) ... ok
+test_strict_grammar_calendar_kind_and_normalized_range_refusals (test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests.test_strict_grammar_calendar_kind_and_normalized_range_refusals) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.890s
+
+OK
+temporal-canonical-cleanup {"confirmed": true, "dataDeleted": true, "directory": "/tmp/truss-temporal-canonical-s9tod6uw", "originalPostmasterPid": 2619, "originalPostmasterPidAbsent": true, "pgCtlStatus": 3, "pgCtlStderr": "", "pgCtlStdout": "pg_ctl: no server running\n"}

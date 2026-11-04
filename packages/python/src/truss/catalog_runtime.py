@@ -190,7 +190,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','feed-custody.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql','audit-reader-accumulation.sql'):
+    for name in ('layout.sql','temporal-storage.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','query-temporal.sql','temporal-profiles.sql','temporal-cells.sql','temporal-preparation.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query-temporal-abi.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','feed-custody.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','query-temporal-sources.sql','query-temporal-cursor.sql','temporal-values.sql','person-entrypoints.sql','query-temporal-entrypoints.sql','temporal-values-entrypoints.sql','initialization-custody.sql','managed-grants.sql','audit-reader-accumulation.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -205,7 +205,11 @@ def _verified_release():
     for entry in json.loads(public_profiles)['profiles']+json.loads(public_profiles).get('retainedProfiles',[]):
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('query-abi.json','preparation-baseline.json','person-entrypoints.json'):
+    temporal_profiles=root.joinpath('temporal-profiles.json').read_bytes()
+    if sha256(temporal_profiles).hexdigest()!=manifest['files']['temporal-profiles.json']:raise ValueError('Actual temporal profile definitions required')
+    for entry in json.loads(temporal_profiles)['profiles']:
+        if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original temporal profile definition required')
+    for name in ('query-abi.json','query-temporal-abi.json','preparation-baseline.json','person-entrypoints.json','temporal-person-entrypoints.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original query/preparation baseline required')
     return original,sha256(original).hexdigest(),tuple(sources)
 
@@ -233,19 +237,8 @@ def _object_result(raw,manifest,digest):
         raise ValueError('Exact selected object read profile required')
     if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
         raise ValueError('Exact selected installed runtime required')
-    def logical(value):
-        if type(value) is dict:
-            from .contracts import TextValue,NullValue,BooleanValue,SequenceValue,MapValue,MapEntry
-            def exact(cell):
-                if cell['kind']=='null':return NullValue()
-                if cell['kind']=='boolean':return BooleanValue(value=cell['value'])
-                if cell['kind']=='sequence':return SequenceValue(items=tuple(exact(child) for child in cell['items']))
-                if cell['kind']=='map':return MapValue(entries=tuple(MapEntry(key=entry['key'],value=exact(entry['value'])) for entry in cell['entries']))
-                return TextValue(kind=cell['kind'],text=cell['text'])
-            if value['kind']=='sequence':return SequenceValue(items=tuple(exact(cell) for cell in value['items']))
-            if value['kind']=='map':return MapValue(entries=tuple(MapEntry(key=entry['key'],value=exact(entry['value'])) for entry in value['entries']))
-            return TextValue(kind=value['kind'],text=value['text'])
-        return value
+    from ._temporal_values import logical_object_cell
+    def logical(value):return logical_object_cell(value,local=False)
     object_class = ScalarObject
     extra = {}
     if basis['profile']=='truss-python-logical-object/0.1':
@@ -437,6 +430,22 @@ class CatalogReferenceAssembly:
                          capture_catalog=True)
 
     @_active_operation
+    def query_temporal_catalog_sources_in_transaction(self, transaction: TransactionHandle, *, sql: str,
+                                            document_ids: tuple[str, ...],
+                                            parameters: Mapping[str, str | int | bool | Decimal] | None = None,
+                                            temporal_parameters: Mapping[str, Mapping[str, str]] | None = None,
+                                            maximum_rows: int = 1000, maximum_scan_rows: int = 10000,
+                                            maximum_bytes: int = 1048576) -> Outcome[QueryCatalogSources | QueryRefused | QueryUnavailable]:
+        """Capture explicit native ABI1.3 inputs for the frozen temporal route."""
+        from ._temporal_query_runtime import capture_sources
+        manifest,digest,_=_release()
+        return capture_sources(self._host,transaction,sql=sql,document_ids=document_ids,
+            parameters={} if parameters is None else parameters,
+            temporal_parameters={} if temporal_parameters is None else temporal_parameters,
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
+            manifest=manifest,digest=digest,pin_cursor=_pin_cursor)
+
+    @_active_operation
     def query_current_in_transaction(self,transaction: TransactionHandle,*,executor: CurrentQueryExecutor,sql: str,
                                      document_ids: tuple[str,...],parameters: Mapping[str,str|int] | None=None,
                                      maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused]:
@@ -497,6 +506,17 @@ class CatalogReferenceAssembly:
             return AssemblyDisposed()
     def _available(self):
         if self._disposed:raise ValueError('Assembly disposed')
+    def temporal_values(self):
+        """Bind the explicit temporal facade without observing a connection."""
+        with self._lock:
+            self._available()
+            from .temporal import TemporalValues
+            return TemporalValues(self)
+
+    def _temporal_values_operation(self, operation: str, arguments: Mapping[str, object]):
+        from ._temporal_runtime import execute
+        return execute(self,operation,arguments)
+
     def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun',source_version:str | None=None) -> PreparedAcceptance:
         with self._lock:
             self._available()
@@ -519,6 +539,7 @@ class CatalogReferenceAssembly:
                 'Install operation timeout must be 1..180000 milliseconds'))
         from psycopg import sql
         from ._installation_sql_batch import execute_ordered_ddl
+        from ._initialization_custody import bracket,store,source_policy,InitializationCustodyRefused
         from ._installation_privileges import (InstallationRoles, _name, _policy_names,
                                                 _resolved_tolerated_roles,
                                                 protect_installation_with_cursor,
@@ -615,7 +636,13 @@ class CatalogReferenceAssembly:
                 ([roles.owner,roles.client],),prepare=False)
             if cursor.fetchone()[0]:
                 return refuse('role_exists')
-            execute_ordered_ddl(cursor,sources)
+            try:
+                source_policy(manifest)
+                cursor.execute("SELECT pg_catalog.current_setting('TimeZone')",prepare=False)
+                if cursor.fetchone()[0] not in ('UTC','America/New_York'):return refuse('incompatible')
+            except ValueError:
+                return refuse('incompatible')
+            observations=bracket(cursor,sources,manifest,execute_ordered_ddl)
             privileges=protect_installation_with_cursor(cursor,roles,resolved_tolerated=resolved_tolerated)
             from ._runtime_admission import person_entrypoints
             final_grants=['GRANT USAGE ON SCHEMA truss TO PUBLIC']
@@ -635,6 +662,7 @@ class CatalogReferenceAssembly:
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),
                  json.dumps(managed_grants,ensure_ascii=False,separators=(',',':')),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
+            store(cursor,identity,privileges.owner_oid,manifest,digest,observations)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -643,6 +671,9 @@ class CatalogReferenceAssembly:
         from ._installation_privileges import _ThirdPartyGrantRefusal
         if isinstance(result,Error):
             error=getattr(attempt,'error',None)
+            if (isinstance(error,InitializationCustodyRefused) and getattr(attempt,'phase',None)=='contained'
+                    and getattr(attempt,'cleanup_error',None) is None and result.error.code=='invalid_transaction'):
+                return Ok(InstallRefused(code='incompatible'))
             if (isinstance(error,_ThirdPartyGrantRefusal)
                     and getattr(attempt,'phase',None)=='contained'
                     and getattr(attempt,'cleanup_error',None) is None
@@ -687,6 +718,10 @@ class CatalogReferenceAssembly:
         return _catalog_failure(result,local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}',bun_executable: str='bun',expected_revision: int | None=None,expected_documents: tuple[CatalogDocumentExpectation,...]=()) -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused | CatalogCASConflict]:
+        return self._accept_catalog_in_transaction(transaction,prepared,request_key=request_key,origin_bytes=origin_bytes,bun_executable=bun_executable,expected_revision=expected_revision,expected_documents=expected_documents,temporal_route=False)
+
+    @_active_operation
+    def _accept_catalog_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}',bun_executable: str='bun',expected_revision: int | None=None,expected_documents: tuple[CatalogDocumentExpectation,...]=(),temporal_route: bool=False):
         self._available()
         local_failure=[None]
         cache_current=[True]
@@ -706,6 +741,10 @@ class CatalogReferenceAssembly:
             require_original()
             choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
             configuration=_configuration()
+            from ._temporal_preparation import support_profile
+            temporal=choices.get('supportProfile')==support_profile()
+            if temporal is not temporal_route:reject('unsupported_profile','Explicit matching catalog provider required')
+            if temporal:configuration={**configuration,'supportProfile':support_profile()}
             if choices!=configuration:reject('unsupported_profile','Exact current catalog preparation required')
             try:valid_request=type(request_key) is str and 1<=len(request_key.encode('utf8'))<=1024 and '\0' not in request_key
             except UnicodeError:valid_request=False
@@ -722,10 +761,10 @@ class CatalogReferenceAssembly:
                 reject('invalid_input',str(error))
             if semantic['state']!='source_fields_ready':reject('unsupported_profile','Complete original source inventory required')
             from ._owner_evidence_json import decode_owner_evidence_json
-            if semantic.get('sourceFormat')=='truss-registration-summary/2.0':
+            if semantic.get('sourceFormat') in ('truss-registration-summary/2.0','truss-registration-summary/2.1'):
                 require_original()
                 source={key:semantic[key] for key in ('sourceFormat','umf','documentValidations')}
-                return (prepared.input_bytes,prepared.archive_documents_bytes,b'',
+                return (prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes if temporal else b'',
                     json.dumps(source,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode('utf8'),
                     origin_bytes,request_key,str(-1 if expected_revision is None else expected_revision),expected_docs_bytes)
             evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
@@ -902,6 +941,10 @@ class CatalogReferenceAssembly:
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)',
                                       'person_runtime_status(text,text,jsonb)','preview_group_conditions(bytea,bytea,text,text)',
+                                      'temporal_group_context(text,text)','temporal_import_context(text,text)','temporal_import_key_selection(text,text,text,text,text)',
+                                      'get_temporal_object(text,text,text,bigint,int,text,text)','page_temporal_objects(text,text,text,int,int,bytea,text,text)',
+                                      'lookup_temporal_key(text,text,text,text,bytea,bytea,bytea,int,text,text)','temporal_scope(text,text)',
+                                      'query_temporal_cursor_encode(jsonb,bytea,text,jsonb)','query_temporal_cursor_decode(jsonb,bytea,bytea)','query_temporal_binding(jsonb,int,int,int,text,text)','query_temporal_objects(jsonb,int,jsonb)','query_temporal_page_objects(jsonb,int,text,jsonb)','query_temporal_canonical_text(text,text)',
                                       'query_binding(jsonb,int,int,int,text,text)','query_binding_if_changed(jsonb,int,int,int,text,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_selected_objects(jsonb,int,jsonb)','query_seek_objects(jsonb,int,text,text,int)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
@@ -914,6 +957,7 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_relationship_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_temporal_group(bytea,bytea,bytea,text,text),truss.apply_temporal_group_prepared(bytea,bytea,bytea,text,text,jsonb),truss.recover_temporal_group_request(bytea,bytea,bytea,text,text),truss.temporal_import_object_identity(bytea,bytea,bytea,text,text),truss.temporal_writer_schema_basis(bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text),truss.recover_group_request(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.batched_import_context(text,text),truss.build_import_records(bytea,text,text),truss.process_import_chunk(bytea,bytea,uuid,int,text,text),truss.validate_batched_import_report(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
             _grant_application_writers(cursor)
@@ -1508,7 +1552,7 @@ class CatalogReferenceAssembly:
         if type(version) is not int or not 1<=version<=9223372036854775807:return Ok(HistoryUnavailable(reason='context'))
         return self._read_history(transaction,entity,None,version,maximum_events,maximum_bytes)
 
-    def _read_history(self,transaction,entity,cursor,version,maximum_events,maximum_bytes):
+    def _read_history(self,transaction,entity,cursor,version,maximum_events,maximum_bytes,*,temporal=False):
         try:
             valid=type(entity) is HistoryEntity and entity.kind in ('object','edge') and type(entity.id) is int and 1<=entity.id<=9223372036854775807
             valid=valid and all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (entity.document_id,entity.module_id,entity.definition_id))
@@ -1523,8 +1567,10 @@ class CatalogReferenceAssembly:
             return RetainedHistoryEvent(content=content,sha256=value['sha256'],writer_xid=value['writerXid'],seq=value['seq'],version=int(value['version']))
         def read(native_cursor,observed):
             _pin_cursor(native_cursor)
+            if temporal:native_cursor.execute('SELECT truss.person_temporal_scope(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             native_cursor.execute('SELECT truss.read_history(%s::jsonb,%s,%s,%s,%s,%s,%s)',(selection,None if cursor is None else cursor.content,version,maximum_events,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(native_cursor.fetchone()[0]))
+            if temporal:native_cursor.execute('SELECT truss.person_temporal_scope(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             if value['outcome']=='page':
                 continuation=None if 'cursorBase64' not in value else HistoryCursor(content=base64.b64decode(value['cursorBase64'],validate=True))
                 return HistoryPage(events=tuple(retained(v) for v in value['events']),continuation=continuation,safe_watermark_xid=value['safeWatermarkXid'])

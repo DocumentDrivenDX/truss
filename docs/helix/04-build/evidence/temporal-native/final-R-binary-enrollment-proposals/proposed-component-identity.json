@@ -1,0 +1,26 @@
+{
+  "scope": "PROPOSED original generator identity fields for review ONLY; not an active qualification seal",
+  "ready": false,
+  "proposedIdentity": {
+    "evidenceScope": "Complete actual installed-Linux component identity seal for inventory observation ONLY; NOT full runtime/cohort/release qualification",
+    "coreSourceRevision": "e3f38ef6f05ae636d2837f9d69f8d6805222664b",
+    "weftSourceRevision": "c623b94b66b0b46d492d457c62faddc896e2e452",
+    "nativeManifestSha256": "32589ef963bc7312a87f778171f0d5305199ac05a6f7eb0b2d96181121cc176e",
+    "compilerCohorts": [
+      {
+        "platform": "linux-x86_64",
+        "sourceRevision": "c623b94b66b0b46d492d457c62faddc896e2e452",
+        "wheelFilename": "umf_weft-0.4.57-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "wheelSha256": "120bb6840163914778618e8509d2e70cd6a49f9902a4d5a7f361390515480ac5",
+        "nativeModuleSha256": "28889097ebb1ecd684235c841034390064c21b42bcba10420041f8cfb2402f21"
+      }
+    ],
+    "remainingGates": [
+      "Complete three-platform Weft final-R and full owner cohort reconciliation",
+      "Truss combined311 resolver/intake",
+      "reviewed original2TZ inventories/fresh baseline",
+      "original119 plus closedJH10/HF62/ordinaryABI1.2/current6",
+      "exact-tag/public bytes/fresh consumers/release"
+    ]
+  }
+}

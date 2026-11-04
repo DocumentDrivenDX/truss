@@ -48,6 +48,7 @@ BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type)
   THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
+ PERFORM truss.query_require_ordinary_record(selected_type);
  IF selected_ids IS NULL OR cardinality(selected_ids)>(binding->>'maximumScanRows')::int THEN
   RAISE EXCEPTION 'bounded selected query source required' USING ERRCODE='54000';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;

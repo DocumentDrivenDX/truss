@@ -103,8 +103,19 @@ class RuntimeMigrations:
             if any(row[0]=='type' and row[1] in names for row in grants):
                 raise ValueError('This source needs a separately qualified logical-backup privilege profile')
         commands=[psycopg.sql.SQL('REVOKE ALL ON TYPE {} FROM PUBLIC').format(psycopg.sql.Identifier('truss',name)).as_string() for name in sorted(names)]
-        return {'context':state['context'],'sourceManifestSha256':state['manifestSha256'],
+        result={'context':state['context'],'sourceManifestSha256':state['manifestSha256'],
                 'rowTypePrivilegeRestoreSql':commands}
+        if profile.get('initializationPolicies'):
+            with self._connection() as connection:
+                self._begin(connection,read_only=True)
+                with connection.cursor() as raw_cursor:
+                    cursor=MigrationCursor(raw_cursor,self.timeout,self.statement_timeout)
+                    current,verified=installed_profile(cursor,manifest,artifacts)
+                    if current!=state['context']:raise ValueError('Backup installation context changed')
+                    result['initializationCustody']=verified['initializationCustody']
+                    result['originalHorizonRelation']=[r for r in verified['inventory']['relations'] if r[0]=='journal_runtime_horizon'][0]
+                connection.rollback()
+        return result
 
     def prepare(self,*,attempt_id=None):
         manifest,artifacts,digest=load_recipe();state=self.status()

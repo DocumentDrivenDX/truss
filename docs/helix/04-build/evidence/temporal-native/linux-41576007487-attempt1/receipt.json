@@ -1,0 +1,49 @@
+{
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/41576007487",
+  "jobId": 125719552027,
+  "sourceSha": "b9111251086d80588cf803b93aa545dd191ceb24",
+  "runner": "ubuntu-24.04",
+  "artifactId": 13202958824,
+  "artifactSha256": "beee492768e9b72aaa2de327e4527f0597056de2a3c48ee7bb2afd1289a501ac",
+  "retainedOriginalZip": "/private/tmp/truss-native-41576007487-artifact.zip",
+  "conclusion": "failure",
+  "counts": {
+    "selection": [
+      "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+      "test_temporal_cursor_component_native"
+    ],
+    "expectedCases": 4,
+    "testsRun": 4,
+    "skips": 0,
+    "expectedFailures": 0,
+    "unexpectedSuccesses": 0,
+    "failures": 2,
+    "errors": 0,
+    "wasSuccessful": false,
+    "inventoryVerified": true,
+    "cleanupConfirmed": true,
+    "passed": false,
+    "scope": "fresh installer and native cursor custody ONLY; compiled owner/public temporal composition qualification OPEN"
+  },
+  "cleanup": {
+    "directory": "/tmp/truss-nw-ge5rg7dv",
+    "confirmed": true,
+    "dataDeleted": true,
+    "originalPostmasterPid": 2850,
+    "originalPostmasterPidAbsent": true,
+    "pgCtlStatus": 3,
+    "pgCtlStdout": "pg_ctl: no server running\n",
+    "pgCtlStderr": ""
+  },
+  "actualResults": [
+    "installer PASS: new cursor functions enrolled",
+    "native decoded full Key/sort tuple test PASS",
+    "other-actor test FAIL before other login admission; context/binding/seal preceding assertions passed",
+    "roundtrip/canonicalization test FAIL at ACL expectedFalse on PUBLIC person shim after preceding native roundtrip/canonicalization assertions passed"
+  ],
+  "cause": [
+    "Test expected no PUBLIC EXECUTE even for canonical public person shim; installer intentionally grants shim PUBLIC while underlying functions remain private",
+    "Second real login lacks required bounded statement_timeout; host refuses invalid_transaction before token replay"
+  ],
+  "scope": "Component observations only; 2passing tests do not qualify4; no actor replay/ACL fullpass claim; no compiled owner/public temporal composition claim"
+}

@@ -1,0 +1,48 @@
+Processing /home/runner/work/_temp/temporal-native-probe/inputs/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Collecting psycopg==3.3.6 (from psycopg[binary]==3.3.6)
+  Downloading psycopg-3.3.6-py3-none-any.whl.metadata (4.4 kB)
+Collecting fasteners==0.20
+  Downloading fasteners-0.20-py3-none-any.whl.metadata (4.8 kB)
+Collecting platformdirs==4.12.4
+  Downloading platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
+Collecting psutil==7.2.2
+  Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting pg8000==1.31.5
+  Downloading pg8000-1.31.5-py3-none-any.whl.metadata (88 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.8/88.8 kB 3.2 MB/s eta 0:00:00
+Collecting typing-extensions>=4.6 (from psycopg==3.3.6->psycopg[binary]==3.3.6)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting python-dateutil>=2.8.2 (from pg8000==1.31.5)
+  Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+Collecting scramp>=1.4.5 (from pg8000==1.31.5)
+  Downloading scramp-1.5.0-py3-none-any.whl.metadata (34 kB)
+Collecting psycopg-binary==3.3.6 (from psycopg[binary]==3.3.6)
+  Downloading psycopg_binary-3.3.6-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+Collecting tzdata (from python-dateutil>=2.8.2->pg8000==1.31.5)
+  Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+Collecting asn1crypto>=1.5.1 (from scramp>=1.4.5->pg8000==1.31.5)
+  Downloading asn1crypto-1.5.1-py2.py3-none-any.whl.metadata (13 kB)
+Downloading psycopg-3.3.6-py3-none-any.whl (215 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.5/215.5 kB 9.3 MB/s eta 0:00:00
+Downloading fasteners-0.20-py3-none-any.whl (18 kB)
+Downloading platformdirs-4.12.4-py3-none-any.whl (32 kB)
+Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.6/155.6 kB 39.4 MB/s eta 0:00:00
+Downloading pg8000-1.31.5-py3-none-any.whl (57 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.8/57.8 kB 22.7 MB/s eta 0:00:00
+Downloading psycopg_binary-3.3.6-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.3/5.3 MB 68.4 MB/s eta 0:00:00
+Downloading python_dateutil-4.0.0-py3-none-any.whl (92 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 92.9/92.9 kB 31.8 MB/s eta 0:00:00
+Downloading scramp-1.5.0-py3-none-any.whl (20 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 17.4 MB/s eta 0:00:00
+Downloading asn1crypto-1.5.1-py2.py3-none-any.whl (105 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 105.0/105.0 kB 40.2 MB/s eta 0:00:00
+Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 348.2/348.2 kB 90.2 MB/s eta 0:00:00
+Installing collected packages: asn1crypto, tzdata, typing-extensions, scramp, psycopg-binary, psutil, platformdirs, fasteners, python-dateutil, psycopg, pgserver-pg18, pg8000
+Successfully installed asn1crypto-1.5.1 fasteners-0.20 pg8000-1.31.5 pgserver-pg18-18.6.1 platformdirs-4.12.4 psutil-7.2.2 psycopg-3.3.6 psycopg-binary-3.3.6 python-dateutil-4.0.0 scramp-1.5.0 typing-extensions-4.16.0 tzdata-2026.6
+
+[notice] A new release of pip is available: 24.0 -> 26.3
+[notice] To update, run: python -m pip install --upgrade pip

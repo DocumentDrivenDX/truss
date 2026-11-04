@@ -224,13 +224,16 @@ jobs:
           python -m venv "$RUNNER_TEMP/pypi-consumer"
           "$RUNNER_TEMP/pypi-consumer/bin/python" -m pip --isolated install \
             --disable-pip-version-check --no-cache-dir --index-url https://pypi.org/simple \
-            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query]==$VERSION"
+            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query,typed-sdk]==$VERSION"
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/pypi-consumer/bin/python" - <<'PY'
           import importlib.metadata, json, os
           from pathlib import Path
+          import subprocess,sys
+          subprocess.run([sys.executable,"-m","pip","check"],check=True)
           import truss
           import weft
+          import umf_access
           report = json.loads(Path(os.environ["RUNNER_TEMP"], "pip-install-report.json").read_text(encoding="utf-8"))
           for item in report["install"]:
               url = item["download_info"]["url"]
@@ -240,6 +243,13 @@ jobs:
               if item.startswith(("weft-sql==", "umf-weft==")) and item.partition(";")[2].strip() == 'extra == "query"']
           assert len(query_pins) == 1, "One exact declared query compiler required"
           weft_distribution, expected_weft_version = query_pins[0].split("==")
+          if os.environ["VERSION"] == "0.0.56":
+              assert (weft_distribution, expected_weft_version) == ("umf-weft", "0.4.57")
+              assert importlib.metadata.version("umf_access") == "0.1.0.dev10"
+              assert importlib.metadata.version("umf-core") == "0.10.8"
+              try: importlib.metadata.version("weft-sql")
+              except importlib.metadata.PackageNotFoundError: pass
+              else: raise AssertionError("Conflicting legacy weft-sql installed")
           record = {
               "schema": "pypi-consumer-receipt.v1",
               "status": "passed",
@@ -249,25 +259,44 @@ jobs:
               "truss_version": importlib.metadata.version(os.environ["TRUSS_DISTRIBUTION"]),
               "weft_version": importlib.metadata.version(weft_distribution),
           }
+          if os.environ["VERSION"] == "0.0.56":
+              record.update(access_version=importlib.metadata.version("umf_access"),
+                            core_version=importlib.metadata.version("umf-core"),
+                            scope="Public normal-resolver package/import proof; temporal native proof is separate")
           assert record["truss_version"] == os.environ["VERSION"]
           assert record["weft_version"] == weft.__version__ == expected_weft_version
           assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
           if tuple(map(int, record['truss_version'].split('.'))) >= (0, 0, 54):
               from dataclasses import asdict
-              from truss.contracts import LocalTimestampValue,PresentValue,SequenceValue,TextValue
+              from truss.contracts import LocalTimestampValue,MapEntry,PresentValue,SequenceValue,TextValue
+              from truss._record_schema import _wire_cell
+              from truss._import_runtime import _cell
               token='2024-02-29T23:59:58.000001'
               local=truss.LocalTimestampValue(text=token)
               assert type(local) is LocalTimestampValue
               assert asdict(local)=={'text':token,'kind':'localTimestamp'}
+              assert _wire_cell(local) is None, 'Default ABI must stay closed'
               for rejected in (lambda: LocalTimestampValue(text=token+'Z'),
                   lambda: PresentValue(value=local),lambda: SequenceValue(items=(local,)),
-                  lambda: TextValue(kind='localTimestamp',text=token)):
+                  lambda: TextValue(kind='localTimestamp',text=token),
+                  lambda: MapEntry(key='local',value=local),
+                  lambda: _cell(asdict(local)),
+                  lambda: _cell({'kind':'sequence','items':[asdict(local)]},containers=True)):
                   try: rejected()
                   except ValueError: pass
-                  else: raise AssertionError('Unqualified local temporal value was admitted')
+                  else: raise AssertionError('Ordinary constructor/container/default ABI admitted local value')
               record['standalone_local_timestamp_carrier']='passed'
               record['legacy_exact_value_refusals']='passed'
-              record['native_temporal_acceptance_qualified']=False
+              if tuple(map(int, record['truss_version'].split('.'))) < (0, 0, 56):
+                  record['native_temporal_acceptance_qualified']=False
+              else:
+                  from truss._temporal_values import logical_object_cell
+                  for default_or_nested in (lambda: logical_object_cell(asdict(local)),
+                      lambda: logical_object_cell({'kind':'sequence','items':[asdict(local)]},local=True)):
+                      try: default_or_nested()
+                      except ValueError: pass
+                      else: raise AssertionError('Default/nested temporal decoding must refuse')
+                  record['ordinary_default_abi_and_nested_refusals']='passed'
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )

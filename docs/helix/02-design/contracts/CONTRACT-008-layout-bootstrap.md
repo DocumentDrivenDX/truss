@@ -15,6 +15,20 @@ ddx:
       kind: informed_by
 ---
 
+## Fresh0.76 dynamic initialization custody
+
+For the selected fresh-only0.76/0.0.56 baseline, the
+[journal horizon custody contract](journal-horizon-initialization-custody.md)
+governs independent native clock-window/timezone observations, private immutable
+witness authority, exact dynamic-bound admission and rollback. It takes precedence
+for this one new-target relation field over a finite captured calendar-row list.
+Original initializer SQL/time, all other native definitions/ACLs and original
+literal inventories remain exact. No prior installed release receives custody
+backfill or an upgrade route. Fresh-only retirement still overrides historical
+lineage obligations below; populated0.0.54 and retired sources refuse without
+effects. Two raw timezone observations require the new custody inputs and are
+not a cross-calendar qualification by themselves.
+
 ## Managed platform grantee policy — 2026-10-22
 
 This amendment refines fresh installation and latest-only migration under FR-41,

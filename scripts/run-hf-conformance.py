@@ -13,8 +13,11 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from publish_pypi_release import distribution_for_version
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--installed-package',action='store_true');a=p.parse_args()
-corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=json.loads(corpus.read_bytes())
+from release_cohort import hf_profile
+corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=hf_profile(ROOT, installed=a.installed_package)
 sys.path.insert(0,str(ROOT/'packages/python/tests'))
+from release_cohort import verify_installed
+verify_installed()
 import truss,weft
 import weft.weft as native_compiler
 from truss._current_query_originals import _CONSUMER_COHORTS
@@ -41,5 +44,5 @@ class Result(unittest.TextTestResult):
  def stopTest(self,test):observations.append({'id':test.id(),'status':self.status,'seconds':time.monotonic()-self.started});super().stopTest(test)
 suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(case['test']) for case in profile['cases'])
 started=time.monotonic();result=unittest.TextTestRunner(verbosity=2,resultclass=Result).run(suite)
-record={'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),'profile':profile['profile'],'corpusSha256':hashlib.sha256(corpus.read_bytes()).hexdigest(),'distribution':truss_distribution,'toolkit':importlib.metadata.version(truss_distribution),'compiler':weft.__version__,'compilerSourceRevision':compiler_cohort['sourceRevision'],'compilerNativeModuleSha256':compiler_sha256,'loadedCompiler':str(compiler_path),'loadedPackage':truss.__file__,'nativeManifestSha256':actual,'platform':platform.platform(),'python':sys.version,'seconds':time.monotonic()-started,'tests':result.testsRun,'skipped':len(result.skipped),'failures':len(result.failures),'errors':len(result.errors),'passed':result.wasSuccessful() and not result.skipped and result.testsRun==len(profile['cases']),'cases':observations,'limits':profile['limits']}
+record={'dependencyCohort':verify_installed(),'cohortSha256':hashlib.sha256((ROOT/'scripts/truss-release-cohort.json').read_bytes()).hexdigest(),'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),'profile':profile['profile'],'corpusSha256':hashlib.sha256(corpus.read_bytes()).hexdigest(),'distribution':truss_distribution,'toolkit':importlib.metadata.version(truss_distribution),'compiler':weft.__version__,'compilerSourceRevision':compiler_cohort['sourceRevision'],'compilerNativeModuleSha256':compiler_sha256,'loadedCompiler':str(compiler_path),'loadedPackage':truss.__file__,'nativeManifestSha256':actual,'platform':platform.platform(),'python':sys.version,'seconds':time.monotonic()-started,'tests':result.testsRun,'skipped':len(result.skipped),'failures':len(result.failures),'errors':len(result.errors),'passed':result.wasSuccessful() and not result.skipped and result.testsRun==len(profile['cases']),'cases':observations,'limits':profile['limits']}
 a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(record,indent=2)+'\n');raise SystemExit(not record['passed'])

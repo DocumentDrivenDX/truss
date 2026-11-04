@@ -97,6 +97,11 @@ CREATE FUNCTION truss.valid_property_value(cell jsonb,property truss.prop_def) R
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE nodes jsonb;node jsonb;member jsonb;entry jsonb;declaration jsonb;pending jsonb[];head int:=1;tail int:=0;index_node int;
 BEGIN
+ IF property.cardinality='one' AND property.scalar_type='localTimestamp' THEN
+  RETURN property.home='json' AND property.item IS NULL AND coalesce(property.facets,'{}')='{}'::jsonb
+   AND property.nullability IN ('required','absent-allowed') AND property.native_temporal->>'profile'='truss.local-timestamp/0.1'
+   AND property.native_temporal->>'kind'='local' AND truss.valid_local_timestamp_cell(cell,property.nullability='absent-allowed') IS TRUE;
+ END IF;
  IF property.cardinality='one' THEN RETURN property.home='json' AND coalesce(property.scalar_type,'') IN ('string','integer','decimal','boolean','timestamp','binary','date') AND property.nullability IN ('required','absent-allowed') AND property.item IS NULL AND truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets);END IF;
  IF property.cardinality NOT IN ('array','map') OR property.scalar_type IS NOT NULL OR property.home IS DISTINCT FROM 'json'
   OR property.nullability NOT IN ('required','absent-allowed') OR coalesce(property.facets,'{}')<>'{}'::jsonb OR truss.valid_item_chain(property.item) IS NOT TRUE THEN RETURN false;END IF;
@@ -230,7 +235,7 @@ DECLARE example jsonb;
 BEGIN
  IF property.cardinality IN ('array','map') THEN example:=CASE property.cardinality WHEN 'array' THEN '{"kind":"sequence","items":[]}'::jsonb ELSE '{"kind":"map","entries":[]}'::jsonb END;
  ELSIF property.scalar_type='boolean' THEN example:='{"kind":"boolean","value":false}'::jsonb;
- ELSE example:=jsonb_build_object('kind',property.scalar_type,'text',CASE property.scalar_type WHEN 'integer' THEN '0' WHEN 'decimal' THEN '0' WHEN 'date' THEN '2000-01-01' WHEN 'timestamp' THEN '2000-01-01T00:00:00Z' ELSE '' END);END IF;
+ ELSE example:=jsonb_build_object('kind',property.scalar_type,'text',CASE property.scalar_type WHEN 'integer' THEN '0' WHEN 'decimal' THEN '0' WHEN 'date' THEN '2000-01-01' WHEN 'timestamp' THEN '2000-01-01T00:00:00Z' WHEN 'localTimestamp' THEN '2000-01-01T00:00:00.000000' ELSE '' END);END IF;
  RETURN truss.valid_property_value(example,property) IS TRUE;
 END;
 $$;

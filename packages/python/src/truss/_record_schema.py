@@ -15,7 +15,7 @@ import re
 from collections.abc import Mapping
 from types import MappingProxyType
 
-from .contracts import BooleanValue, MapEntry, MapValue, NullValue, SequenceValue, TextValue
+from .contracts import BooleanValue, MapEntry, MapValue, NullValue, SequenceValue, TextValue, LocalTimestampValue, validate_local_timestamp_text
 
 _TOKEN_LIMIT = 1_048_576
 _VALUE_NODE_LIMIT = 4096
@@ -80,6 +80,7 @@ class PropertySchema:
     nullability: str
     facets: object
     item_chain: tuple[object, ...]
+    native_temporal: object = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -88,6 +89,7 @@ class RecordSchema:
     definition_pin: str
     properties_by_name: object
     properties_by_id: object
+    temporal: bool = False
 
 
 def _positive_id(value, label):
@@ -165,7 +167,7 @@ def _check_facets(family, facets, *, item=False):
     raise SchemaCompilationError('Property facets outside the current native exact-value subset')
 
 
-def _compile_property(prop):
+def _compile_property(prop, *, temporal=False):
     if not isinstance(prop, Mapping):
         raise SchemaCompilationError('Native property definition required')
     name = prop.get('name')
@@ -178,8 +180,24 @@ def _compile_property(prop):
     if prop.get('home', 'json') != 'json' or nullability not in ('required', 'absent-allowed'):
         raise SchemaCompilationError('Property outside selected JSON value subset')
     facets = prop.get('facets') or {}
+    descriptor=prop.get('native_temporal')
+    if family=='localTimestamp':
+        if (not temporal or not isinstance(descriptor,Mapping) or set(descriptor)!={'profile','kind','source'}
+                or descriptor['profile']!='truss.local-timestamp/0.1' or descriptor['kind']!='local'
+                or not isinstance(descriptor['source'],Mapping)
+                or set(descriptor['source'])!={'documentId','sha256','record','field','fieldViewPointer'}):
+            raise SchemaCompilationError('Original local native descriptor required')
+        source=descriptor['source']
+        if (type(source['sha256']) is not str or re.fullmatch('[0-9a-f]{64}',source['sha256']) is None
+                or any(type(source[k]) is not str or not source[k] for k in ('documentId','fieldViewPointer'))
+                or not source['fieldViewPointer'].startswith('/')
+                or any(not isinstance(source[k],Mapping) or set(source[k])!={'module','element'}
+                    or any(type(v) is not str or not v for v in source[k].values()) for k in ('record','field'))):
+            raise SchemaCompilationError('Complete original local native source required')
+    elif descriptor is not None:
+        raise SchemaCompilationError('Local native descriptor cannot relabel an ordinary property')
     if cardinality == 'one':
-        if family not in ('string', 'integer', 'decimal', 'boolean', 'timestamp', 'binary', 'date') or prop.get('item') is not None:
+        if family not in ('string', 'integer', 'decimal', 'boolean', 'timestamp', 'binary', 'date') + (('localTimestamp',) if temporal else ()) or prop.get('item') is not None:
             raise SchemaCompilationError('Supported singular scalar property required')
         compiled_facets = _check_facets(family, facets)
         chain = ()
@@ -190,15 +208,17 @@ def _compile_property(prop):
         compiled_facets = MappingProxyType({})
     else:
         raise SchemaCompilationError('Supported property cardinality required')
-    return PropertySchema(name, property_id, family, cardinality, nullability, compiled_facets, chain)
+    return PropertySchema(name, property_id, family, cardinality, nullability, compiled_facets, chain, _freeze_json(descriptor))
 
 
-def compile_records(records):
+def compile_records(records, *, temporal=False):
     """Compile native prop_def dictionaries once into immutable indexed records.
 
     Each record has ``typeId``, ``definitionPin`` and ``properties``. The input
     may be a tuple/list; no original dictionaries are retained or mutated.
     """
+    if type(temporal) is not bool:
+        raise SchemaCompilationError('Explicit value-profile discriminator required')
     if type(records) not in (tuple, list):
         raise SchemaCompilationError('A bounded record definition sequence is required')
     if len(records) > _SCHEMA_DEFINITION_LIMIT:
@@ -215,14 +235,14 @@ def compile_records(records):
         if len(record['properties']) > _SCHEMA_DEFINITION_LIMIT:
             raise SchemaCompilationError('Record property count limit exceeded')
         for raw_prop in record['properties']:
-            field = _compile_property(raw_prop)
+            field = _compile_property(raw_prop, temporal=temporal)
             if field.name in by_name or field.property_id in by_id:
                 raise SchemaCompilationError('Unique native property identity required')
             by_name[field.name] = field
             by_id[field.property_id] = field
         if type_id in result:
             raise SchemaCompilationError('Unique native record identity required')
-        schema = RecordSchema(type_id, pin, MappingProxyType(by_name), MappingProxyType(by_id))
+        schema = RecordSchema(type_id, pin, MappingProxyType(by_name), MappingProxyType(by_id), temporal)
         if pin in by_pin:
             raise SchemaCompilationError('Unique native record definition pin required')
         result[type_id] = schema
@@ -353,7 +373,13 @@ def _evaluate_values(record, values, mode):
             violations.append(ValueViolation(str(name), 'duplicate_or_invalid_name'))
             continue
         seen.add(name)
-        cell = _wire_cell(entry.value)
+        field = record.properties_by_name.get(name)
+        # Only a selected, known local property can encode this top-level
+        # carrier. Retained values and container descendants stay ordinary.
+        if record.temporal and field is not None and field.family == 'localTimestamp' and type(entry.value) is LocalTimestampValue:
+            try:cell = {'kind':'localTimestamp','text':validate_local_timestamp_text(entry.value.text)}
+            except ValueError:cell = None
+        else:cell = _wire_cell(entry.value)
         if cell is None:
             violations.append(ValueViolation(name, 'unsupported_cell'))
             continue
@@ -449,6 +475,12 @@ def _thaw_json(value):
 def _scalar(value, family, facets, allow_null):
     if type(value) is NullValue:
         return allow_null
+    if family == 'localTimestamp':
+        if type(value) is not LocalTimestampValue or facets:
+            return False
+        try:validate_local_timestamp_text(value.text)
+        except ValueError:return False
+        return True
     if family == 'boolean':
         return type(value) is BooleanValue and type(value.value) is bool
     if type(value) is not TextValue or value.kind != family or type(value.text) is not str:

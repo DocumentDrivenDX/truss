@@ -142,8 +142,19 @@ def _verify_record(archive: zipfile.ZipFile, infos: list[zipfile.ZipInfo]) -> st
     return record_name
 
 
-def verify_wheel(wheel_path: Path, source_path: Path) -> dict[str, object]:
-    cohorts = _cohorts(source_path)
+def verify_wheel(wheel_path: Path, source_path: Path, cohort_path: Path | None = None) -> dict[str, object]:
+    selection = None
+    if cohort_path is None:
+        cohorts = _cohorts(source_path)
+    else:
+        from release_cohort import load_cohort
+        selection = load_cohort(cohort_path, require_qualified=True)
+        selected_names = [row for row in selection['qualified']['compilerCohorts'] if row['wheelFilename'] == wheel_path.name]
+        if len(selected_names) != 1:
+            raise ValueError('Wheel filename does not select one qualified compiler cohort')
+        cohorts = [{'weftWheelSha256': row['wheelSha256'],
+                    'weftModuleSha256': row['nativeModuleSha256']}
+                   for row in selected_names]
     wheel_bytes = wheel_path.read_bytes()
     wheel_sha = hashlib.sha256(wheel_bytes).hexdigest()
     if sum(row["weftWheelSha256"] == wheel_sha for row in cohorts) != 1:
@@ -152,6 +163,14 @@ def verify_wheel(wheel_path: Path, source_path: Path) -> dict[str, object]:
         with zipfile.ZipFile(io.BytesIO(wheel_bytes)) as archive:
             infos = archive.infolist()
             record_name = _verify_record(archive, infos)
+            if selection is not None:
+                from email.parser import BytesParser
+                names = [i.filename for i in infos if i.filename.endswith('.dist-info/METADATA')]
+                if len(names) != 1:
+                    raise ValueError('One selected Weft METADATA required')
+                metadata = BytesParser().parsebytes(archive.read(names[0]))
+                if metadata['Name'] != selection['weft']['distribution'] or metadata['Version'] != selection['weft']['version']:
+                    raise ValueError('Selected Weft wheel metadata differs')
             native_members = [
                 info.filename for info in infos
                 if not info.is_dir()
@@ -185,6 +204,7 @@ def verify_wheel(wheel_path: Path, source_path: Path) -> dict[str, object]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("wheel", type=Path)
+    parser.add_argument("--cohort", type=Path, help="Actual qualified release cohort; refuses deferred identities")
     parser.add_argument(
         "--source",
         type=Path,
@@ -193,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     try:
-        result = verify_wheel(args.wheel, args.source)
+        result = verify_wheel(args.wheel, args.source, args.cohort)
     except (OSError, SyntaxError, ValueError) as error:
         print(json.dumps({"status": "refused", "reason": str(error)}, sort_keys=True), file=sys.stderr)
         return 1
