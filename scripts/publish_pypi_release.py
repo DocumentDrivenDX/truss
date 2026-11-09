@@ -181,6 +181,7 @@ def prepare_release(
     output_dir: Path,
     tag: str,
     source_sha: str,
+    expected_source_tree: str | None = None,
     expected_sums_sha256: str,
     distribution: str,
     wheel_prefix: str,
@@ -192,6 +193,8 @@ def prepare_release(
 ) -> dict[str, Any]:
     _require(TAG.fullmatch(tag) is not None, "tag must be numeric vX.Y.Z")
     _require(COMMIT.fullmatch(source_sha) is not None, "source SHA is invalid")
+    if expected_source_tree is not None:
+        _require(COMMIT.fullmatch(expected_source_tree) is not None, "source tree is invalid")
     _require(
         SHA.fullmatch(expected_sums_sha256) is not None, "SHA256SUMS pin is invalid"
     )
@@ -325,6 +328,37 @@ def prepare_release(
         and pins.get("distribution") == distribution,
         "release pins do not match the requested tag, source, version and distribution",
     )
+    wheel_candidates = sorted(name for name in sums if name.startswith(wheel_prefix) and name.endswith(".whl"))
+    temporal_wheel = False
+    for name in wheel_candidates:
+        try:
+            with zipfile.ZipFile(assets_dir / name) as archive:
+                manifest = json.loads(archive.read("truss/_catalog_runtime/manifest.json"))
+            temporal_wheel = temporal_wheel or manifest.get("releaseId") == "truss-catalog-runtime/0.76-temporal-candidate"
+        except (OSError, KeyError, zipfile.BadZipFile, json.JSONDecodeError):
+            continue
+    temporal_pin = pins.get("temporalQualifiedWheel")
+    _require(temporal_wheel == (temporal_pin is not None),
+             "temporal candidate wheel and exact qualification pin must be selected together")
+    if temporal_wheel:
+        _require(expected_source_tree is not None,
+                 "selected temporal release requires the independently resolved tag source tree")
+        import temporal_qualified_artifact
+        verified = temporal_qualified_artifact.verify_release_staging(
+            assets_dir, source_commit=source_sha, source_tree=expected_source_tree)
+        intake = json.loads((assets_dir / "temporal-qualification-intake.json").read_bytes())
+        expected_pin = {
+            "schema": "truss.temporal-qualified-wheel-release-pin/1",
+            "sourceCommit": source_sha, "sourceTree": expected_source_tree,
+            "runId": str(intake["runId"]), "runAttempt": str(intake["runAttempt"]),
+            "artifactId": str(intake["artifactId"]), "artifactSha256": intake["artifactSha256"],
+            "candidateWheelSha256": verified["candidateWheelSha256"],
+            "qualifiedBundleSha256": _sha((assets_dir / "temporal-qualified-evidence.zip").read_bytes()),
+            "bindingSha256": _sha((assets_dir / "temporal-qualification-binding.json").read_bytes()),
+            "memberManifestSha256": _sha((assets_dir / "temporal-qualified-member-manifest.json").read_bytes()),
+        }
+        _require(temporal_pin == expected_pin,
+                 "release temporal qualification pin differs from authenticated original bundle")
     if version == "0.0.56":
         from release_cohort import load_cohort
         expected_cohort = load_cohort(require_qualified=True)
@@ -485,6 +519,7 @@ def main() -> int:
     parser.add_argument("--repository")
     parser.add_argument("--tag")
     parser.add_argument("--source-sha")
+    parser.add_argument("--expected-source-tree")
     parser.add_argument("--expected-sums-sha256")
     parser.add_argument("--distribution")
     parser.add_argument("--wheel-prefix")
@@ -531,6 +566,7 @@ def main() -> int:
             output_dir=args.output_dir,
             tag=args.tag,
             source_sha=args.source_sha,
+            expected_source_tree=args.expected_source_tree,
             expected_sums_sha256=args.expected_sums_sha256,
             distribution=args.distribution,
             wheel_prefix=args.wheel_prefix,

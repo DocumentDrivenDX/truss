@@ -185,8 +185,16 @@ print("original public54 installed payload verified")
                     or target.read_bytes()!=z.read(name)):
                 raise ValueError('Independent HF archive payload mismatch')
     current_recipe={'baseline':recipe['baseline'],'sources':recipe['sources'],'target':recipe['target']}
+    runtime_assets={}
+    for relative in ('_catalog_runtime/query-abi.json','_catalog_runtime/query-temporal-abi.json',
+                     '_catalog_runtime/query-temporal.sql','_catalog_runtime/query-temporal-sources.sql',
+                     '_catalog_runtime/query-temporal-cursor.sql','_catalog_runtime/temporal-storage.sql'):
+        raw=files('truss').joinpath(relative).read_bytes()
+        runtime_assets[relative]={'sha256':sha256(raw).hexdigest(),'size':len(raw)}
     return {'scope':'Read-only artifact/inventory admission, not native qualification','wheels':observed,
-        'sourceIdentity':source_identity,'captureTransitions':capture_transitions,'nativeManifestSha256':digest,'coreInspection':{'request':fixture,'owner':owner_profile,'result':inspection},'recipe':current_recipe,'pipCheck':checked.stdout,'ledgerSha256':sha256(LEDGER.read_bytes()).hexdigest()}
+        'sourceIdentity':source_identity,'captureTransitions':capture_transitions,'nativeManifestSha256':digest,
+        'runtimeAssets':runtime_assets,'coreInspection':{'request':fixture,'owner':owner_profile,'result':inspection},
+        'recipe':current_recipe,'pipCheck':checked.stdout,'ledgerSha256':sha256(LEDGER.read_bytes()).hexdigest()}
 
 
 def run_child(stage,value,admission,output):

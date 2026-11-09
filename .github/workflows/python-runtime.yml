@@ -462,6 +462,21 @@ jobs:
         run: |
           set -euo pipefail
           env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/qualify-temporal-native.py             --execute --admission "$TN_ADMISSION" --output "$TN_ROOT/evidence/campaign"             2>&1 | tee "$TN_ROOT/evidence/campaign.log"
+      - name: Bind successful campaign to its original installed candidate wheel
+        if: ${{ success() && inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/temporal_qualified_artifact.py --create-bundle \
+            --root "$GITHUB_WORKSPACE" \
+            --campaign-dir "$TN_ROOT/evidence/campaign" \
+            --input-root "$TN_ROOT/inputs" \
+            --candidate-wheel "$TN_CAPTURE_WHEEL" \
+            --cohort scripts/truss-release-cohort.json \
+            --source-commit "$GITHUB_SHA" --source-tree "$(git rev-parse 'HEAD^{tree}')" \
+            --workflow-run-id "$GITHUB_RUN_ID" --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --workflow-job temporal-candidate \
+            --output "$TN_ROOT/temporal-qualified-evidence.zip"
       - name: Retain pending inventory input for a separate actual admission review
         if: ${{ always() && inputs.temporal_candidate_phase == 'intake' }}
         uses: actions/upload-artifact@v4

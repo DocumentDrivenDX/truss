@@ -77,12 +77,14 @@ jobs:
           TAG: ${{ steps.identity.outputs.tag }}
           EVENT_NAME: ${{ github.event_name }}
           PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
+          SOURCE_SHA: ${{ steps.identity.outputs.source_sha }}
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p incoming
           gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > incoming/release.json
           gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" > incoming/tag-ref.json
+          gh api "repos/$GITHUB_REPOSITORY/git/commits/$SOURCE_SHA" > incoming/source-commit.json
           if [[ "$(jq -r .object.type incoming/tag-ref.json)" == tag ]]; then
             OBJECT_SHA="$(jq -r .object.sha incoming/tag-ref.json)"
             gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA" > incoming/tag-object.json
@@ -114,6 +116,7 @@ jobs:
             --wheel-prefix "$WHEEL_PREFIX" --wheel-count 1 --require-sdist
             --release-json incoming/release.json --tag-ref-json incoming/tag-ref.json
             --assets-dir incoming/assets --output-dir dist --receipt dist/source-receipt.json)
+          ARGS+=(--expected-source-tree "$(jq -r .tree.sha incoming/source-commit.json)")
           if [[ -f incoming/tag-object.json ]]; then ARGS+=(--tag-object-json incoming/tag-object.json); fi
           if [[ "$EVENT_NAME" == workflow_run ]]; then
             ARGS+=(--producer-run-json incoming/producer-run.json --producer-workflow-path .github/workflows/release.yml)
@@ -207,6 +210,53 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: tn14-controller
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: truss-pypi-release-${{ needs.verify-release.outputs.version }}
+          path: ${{ runner.temp }}/tn14-assets
+      - uses: actions/download-artifact@v4
+        with:
+          name: truss-pypi-publication-${{ needs.verify-release.outputs.version }}
+          path: ${{ runner.temp }}/tn14-publication
+      - name: Select actual released temporal wheel without importing owner packages
+        id: tn14
+        env:
+          ASSETS: ${{ runner.temp }}/tn14-assets
+        run: |
+          python -I -B - <<'PYTHON'
+          import json,os,zipfile
+          from pathlib import Path
+          assets=Path(os.environ['ASSETS'])
+          source=json.loads((assets/'source-receipt.json').read_bytes())
+          wheels=[assets/name for name in source['files'] if name.endswith('.whl')]
+          assert len(wheels)==1
+          with zipfile.ZipFile(wheels[0]) as wheel:
+              manifest=json.loads(wheel.read('truss/_catalog_runtime/manifest.json'))
+          selected=manifest['releaseId']=='truss-catalog-runtime/0.76-temporal-candidate'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as output:
+              output.write('selected='+str(selected).lower()+'\n')
+              output.write('source='+source['source_sha']+'\n')
+              output.write('tag='+source['tag']+'\n')
+          PYTHON
+      - uses: actions/checkout@v6
+        if: steps.tn14.outputs.selected == 'true'
+        with:
+          ref: ${{ steps.tn14.outputs.source }}
+          path: tn14-source
+          persist-credentials: false
+      - name: Fetch exact published temporal qualification assets
+        if: steps.tn14.outputs.selected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tn14.outputs.tag }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern 'temporal-*' --pattern 'release-pins.json' --pattern 'SHA256SUMS' --dir "$RUNNER_TEMP/tn14-assets"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -302,6 +352,35 @@ jobs:
           )
           print("fresh PyPI Truss query consumer imported Truss and Weft")
           PY
+      - uses: oven-sh/setup-bun@v2
+        if: steps.tn14.outputs.selected == 'true'
+        with:
+          bun-version: '1.4.3'
+      - name: Genuine fresh public temporal TN-14 consumer
+        if: steps.tn14.outputs.selected == 'true'
+        env:
+          PIP_CONFIG_FILE: /dev/null
+          PIP_INDEX_URL: ''
+          PIP_EXTRA_INDEX_URL: ''
+          PIP_FIND_LINKS: ''
+          PIP_NO_INDEX: ''
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/tn14-public-env"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/tn14-public-env/bin/python" -I -B \
+            "$GITHUB_WORKSPACE/tn14-controller/scripts/verify_published_temporal_consumer.py" \
+            --assets "$RUNNER_TEMP/tn14-assets" \
+            --publication "$RUNNER_TEMP/tn14-publication/publication-receipt.json" \
+            --source "$GITHUB_WORKSPACE/tn14-source" \
+            --output "$RUNNER_TEMP/tn14-public-result"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.tn14.outputs.selected == 'true'
+        with:
+          name: truss-public-tn14-${{ needs.verify-release.outputs.version }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tn14-public-result/
+          if-no-files-found: error
+          retention-days: 365
       - uses: actions/upload-artifact@v4
         with:
           name: truss-pypi-consumer-${{ needs.verify-release.outputs.version }}
