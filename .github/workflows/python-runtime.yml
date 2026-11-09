@@ -2,6 +2,7 @@ name: Released Python runtime
 # Installed runtime and private database-wheel smoke stays an explicit qualification.
 on:
   workflow_dispatch:
+  workflow_call:  # opt-in PR run via pr-full.yml (label ci:full)
 permissions:
   contents: read
 jobs:
