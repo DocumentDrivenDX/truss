@@ -85,9 +85,28 @@ class OwnedNativeCleanup:
     def capture(self,data,binary):
         if not isinstance(data,Path) or not isinstance(binary,Path):return
         data=data.resolve();pid_file=data/'postmaster.pid'
-        if str(data) in self.records or not pid_file.is_file():return
-        pid=int(pid_file.read_text().splitlines()[0])
-        if pid<=0:raise RuntimeError('Positive original owned postmaster PID required')
+        if str(data) in self.records:return
+        # Class attributes can name paths before startup, so only a directory
+        # that PostgreSQL has initialized is an owned cluster. Once PG_VERSION
+        # exists, however, a missing/malformed PID is uncertainty, never a
+        # successful no-op: preserve the data and its diagnostics.
+        if not (data.is_dir() and (data/'PG_VERSION').is_file()):return
+        if not pid_file.is_file():
+            self.uncertain.append({'dataDirectory':str(data),'reason':'owned postmaster.pid missing before stop'})
+            self.save()
+            raise RuntimeError('Original owned postmaster PID missing; retain data')
+        try:
+            first=pid_file.read_text().splitlines()[0].strip()
+            if not first.isascii() or not first.isdecimal():raise ValueError('PID is not an ASCII integer')
+            pid=int(first)
+        except (OSError,IndexError,ValueError) as error:
+            self.uncertain.append({'dataDirectory':str(data),'reason':'owned postmaster.pid unreadable or malformed: '+str(error)})
+            self.save()
+            raise RuntimeError('Original owned postmaster PID invalid; retain data') from error
+        if pid<=0:
+            self.uncertain.append({'dataDirectory':str(data),'reason':'owned postmaster PID must be positive'})
+            self.save()
+            raise RuntimeError('Positive original owned postmaster PID required; retain data')
         self.records[str(data)]={'dataDirectory':str(data),'pgCtl':str(binary/'pg_ctl'),
             'originalPostmasterPid':pid,'confirmed':False,'dataDeleted':False}
         self.save()
@@ -167,7 +186,7 @@ class OwnedNativeCleanup:
         finally:self.stack.close()
     @property
     def confirmed(self):
-        return not self.uncertain and not self.cleanup_errors and all(r['confirmed'] and r['dataDeleted'] for r in self.records.values())
+        return bool(self.records) and not self.uncertain and not self.cleanup_errors and all(r['confirmed'] and r['dataDeleted'] for r in self.records.values())
 
 
 # Deliberate parallel planner documents are not executable qualification inputs.

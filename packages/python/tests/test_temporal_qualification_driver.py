@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Qualification driver sensitivity only; no native server or build is started."""
 import importlib.util
+import ast
 import json
 from pathlib import Path
 import shutil
@@ -20,6 +21,13 @@ driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
 class TemporalQualificationDriverTests(unittest.TestCase):
     def result(self,n=2):
         result=unittest.TestResult();result.testsRun=n;return result
+
+    def cleanup_import_stub(self):
+        class LocalPostgres:
+            def __enter__(self):return self
+            def close(self):return None
+        module=types.ModuleType('truss');module.LocalPostgres=LocalPostgres
+        return patch.dict(sys.modules,{'truss':module})
 
     def test_exact_case_counts_zero_skip_xfail_xpass_and_inventory_cleanup_required(self):
         expected=['one','two'];result=self.result()
@@ -63,17 +71,89 @@ class TemporalQualificationDriverTests(unittest.TestCase):
             monitor.records[str(data.resolve())]={'dataDirectory':str(data.resolve()),'pgCtl':'/unit/pg_ctl','originalPostmasterPid':42,'confirmed':False,'dataDeleted':False}
             def status(*args,**kw):events.append('status');self.assertTrue(data.exists());return subprocess.CompletedProcess(args[0],3,'not running','')
             def absent(pid,signal):events.append('original-pid');self.assertTrue(data.exists());raise ProcessLookupError()
-            with patch('temporal_qualification_support.subprocess.run',side_effect=status),patch('temporal_qualification_support.os.kill',side_effect=absent),monitor:
+            with self.cleanup_import_stub(),patch('temporal_qualification_support.subprocess.run',side_effect=status),patch('temporal_qualification_support.os.kill',side_effect=absent),monitor:
                 shutil.rmtree(root)
             self.assertEqual(events,['status','original-pid']);self.assertFalse(root.exists());self.assertTrue(monitor.confirmed)
             proof=json.loads(output.read_bytes())['clusters'][0]
             self.assertEqual((proof['pgCtlStatus'],proof['originalPostmasterPidAbsent'],proof['dataDeleted']),(3,True,True))
 
+    def test_original_pid_is_captured_before_owned_close_stops_cluster(self):
+        with tempfile.TemporaryDirectory() as directory:
+            data=Path(directory)/'data';data.mkdir();(data/'PG_VERSION').write_text('18');(data/'postmaster.pid').write_text('314\n')
+            events=[];monitor=OwnedNativeCleanup([],Path(directory)/'cleanup.json')
+            class LocalPostgres:
+                def __enter__(self):events.append(('start',));return self
+                def close(self):
+                    if not monitor.records or next(iter(monitor.records.values()))['originalPostmasterPid']!=314:
+                        raise AssertionError('Original PID was not captured before stop')
+                    events.append(('stop',));return None
+            LocalPostgres.directory=data;LocalPostgres.psql_path=Path('/unit/bin/psql')
+            module=types.ModuleType('truss');module.LocalPostgres=LocalPostgres
+            with patch.dict(sys.modules,{'truss':module}), \
+                 patch('temporal_qualification_support.subprocess.run',side_effect=lambda *a,**k:subprocess.CompletedProcess(a[0],3,'','')), \
+                 patch('temporal_qualification_support.os.kill',side_effect=ProcessLookupError),monitor:
+                runtime=LocalPostgres();runtime.__enter__();runtime.close()
+            self.assertEqual(events,[('start',),('stop',)])
+            self.assertEqual(next(iter(monitor.records.values()))['originalPostmasterPid'],314)
+
+    def test_missing_or_malformed_original_pid_fails_closed_and_retains_cluster(self):
+        for contents in (None,'not-a-pid\n','0\n'):
+            with self.subTest(contents=contents),tempfile.TemporaryDirectory() as directory:
+                data=Path(directory)/'data';data.mkdir();(data/'PG_VERSION').write_text('18')
+                if contents is not None:(data/'postmaster.pid').write_text(contents)
+                monitor=OwnedNativeCleanup([],Path(directory)/'cleanup.json')
+                with self.assertRaisesRegex(RuntimeError,'retain data'):
+                    monitor.capture(data,Path('/unit/bin'))
+                self.assertTrue(data.exists());self.assertFalse(monitor.confirmed)
+                self.assertTrue(monitor.uncertain)
+
+    def test_empty_cleanup_ledger_cannot_pass_or_delete_an_owned_cluster(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)/'owned';data=root/'data';data.mkdir(parents=True);(data/'PG_VERSION').write_text('18')
+            monitor=OwnedNativeCleanup([],Path(directory)/'cleanup.json')
+            self.assertFalse(monitor.confirmed)
+            with self.cleanup_import_stub(),monitor,self.assertRaisesRegex(RuntimeError,'Unobserved PG'):
+                shutil.rmtree(root)
+            self.assertTrue(data.exists());self.assertFalse(monitor.confirmed)
+
+    def test_missing_pid_in_mixed_clusters_keeps_campaign_cleanup_unconfirmed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);owned=root/'owned';data=owned/'data';data.mkdir(parents=True)
+            (data/'PG_VERSION').write_text('18');(data/'postmaster.pid').write_text('2718\n')
+            missing=root/'missing';missing.mkdir();(missing/'PG_VERSION').write_text('18')
+            monitor=OwnedNativeCleanup([],root/'cleanup.json')
+            def absent(pid,signal):self.assertEqual(pid,2718);raise ProcessLookupError()
+            with self.cleanup_import_stub(), \
+                 patch('temporal_qualification_support.subprocess.run',return_value=subprocess.CompletedProcess([],3,'','')), \
+                 patch('temporal_qualification_support.os.kill',side_effect=absent),monitor:
+                monitor.capture(data,Path('/unit/bin'))
+                shutil.rmtree(owned)
+                with self.assertRaisesRegex(RuntimeError,'retain data'):
+                    monitor.capture(missing,Path('/unit/bin'))
+            record=next(iter(monitor.records.values()))
+            self.assertTrue(record['confirmed'] and record['dataDeleted'])
+            self.assertFalse(monitor.confirmed)
+            proof=json.loads((root/'cleanup.json').read_bytes())
+            self.assertEqual(proof['clusters'][0]['originalPostmasterPid'],2718)
+            self.assertEqual(proof['uncertainPaths'][0]['dataDirectory'],str(missing.resolve()))
+            self.assertTrue(missing.exists())
+            self.assertFalse(monitor.confirmed)
+
+
+    def test_driver_test_class_has_no_shadowed_method_definitions(self):
+        source=Path(__file__).read_text(encoding='utf-8')
+        tree=ast.parse(source,filename=str(Path(__file__)))
+        for node in ast.walk(tree):
+            if isinstance(node,ast.ClassDef):
+                methods=[child.name for child in node.body if isinstance(child,(ast.FunctionDef,ast.AsyncFunctionDef))]
+                duplicates=sorted({name for name in methods if methods.count(name)>1})
+                self.assertFalse(duplicates,f'{node.name} has shadowed methods: {duplicates}')
+
     def test_unknown_pg_directory_is_retained_without_claiming_observed_cleanup(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory)/'owned';data=root/'data';data.mkdir(parents=True);(data/'PG_VERSION').write_text('18')
             monitor=OwnedNativeCleanup([],Path(directory)/'cleanup.json')
-            with monitor,self.assertRaisesRegex(RuntimeError,'Unobserved PG'):
+            with self.cleanup_import_stub(),monitor,self.assertRaisesRegex(RuntimeError,'Unobserved PG'):
                 shutil.rmtree(root)
             self.assertTrue(data.exists());self.assertFalse(monitor.confirmed)
 
@@ -84,7 +164,7 @@ class TemporalQualificationDriverTests(unittest.TestCase):
                 monitor=OwnedNativeCleanup([],Path(directory)/'cleanup.json')
                 monitor.records[str(data)]={'dataDirectory':str(data),'pgCtl':'/unit/pg_ctl','originalPostmasterPid':42,'confirmed':False,'dataDeleted':False}
                 with patch('temporal_qualification_support.subprocess.run',return_value=subprocess.CompletedProcess([],code,'','')), \
-                     patch('temporal_qualification_support.os.kill',side_effect=pid_error),self.assertRaises(RuntimeError):
+                     patch('temporal_qualification_support.os.kill',side_effect=pid_error),self.cleanup_import_stub(),self.assertRaises(RuntimeError):
                     with monitor:shutil.rmtree(root)
                 self.assertTrue(data.exists());self.assertFalse(monitor.confirmed)
 
