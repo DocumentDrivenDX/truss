@@ -691,6 +691,7 @@ jobs:
     if: github.ref_type == 'tag'
     needs: [package, native]
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     permissions:
       contents: write
     steps:

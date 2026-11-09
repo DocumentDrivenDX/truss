@@ -1,8 +1,5 @@
 name: Python module boundaries
 on:
-  push:
-    branches: [main]
-    paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
   pull_request:
     paths: ['packages/python/**', 'scripts/check-module-boundaries*.py', '.github/workflows/python-boundaries.yml']
   workflow_dispatch:
@@ -14,6 +11,7 @@ permissions:
 jobs:
   boundaries:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
         with:

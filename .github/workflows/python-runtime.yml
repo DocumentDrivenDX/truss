@@ -40,6 +40,13 @@ on:
         description: Run only the authentic public54/051 to Weft056 compatibility probe
         type: boolean
         default: false
+  workflow_call:  # opt-in PR run via pr-full.yml (label ci:full)
+    inputs:
+      released_runtime_probe:
+        description: Run only the original released-runtime smoke gate
+        type: boolean
+        required: false
+        default: true
 permissions:
   contents: read
 jobs:
