@@ -314,7 +314,7 @@ jobs:
 
       - name: Run installed original public workload
         id: public_workflows
-        if: github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
+        if: inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
         env:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
@@ -324,7 +324,7 @@ jobs:
           python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --count-sql-submissions --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
 
       - name: Record original public workload status
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         env:
           REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
           WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
@@ -341,7 +341,7 @@ jobs:
           (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
           PYTHON
       - name: Retain original public workload report and log
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         uses: actions/upload-artifact@v4
         with:
           name: original-public-workflow-${{ matrix.os }}

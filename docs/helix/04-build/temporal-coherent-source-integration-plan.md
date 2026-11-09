@@ -424,3 +424,60 @@ source reconciliation and the admitted qualification gates at their respective
 stages; completed delivery requires public-byte and fresh-consumer proof.
 No code/build/test/branch/PR/owner-state change was made
 by this plan author.
+
+## PS1 source selection and hosted-campaign readiness — 2026-11-09
+
+Sol's PS1 selection is ready for exact review. The selected source is identified
+by prefix `e7c14dac`; its reconciliation base is `origin/main` prefix `ed09`.
+Resolve both to full commit/tree identities in the reviewed source ledger before
+any hosted operation. PS1 source preparation is not fit for promotion yet; this
+record does not assert a completed source merge or qualification.
+
+The authenticated Q8 observation records host accepted work `999976`, denied
+charge `62` and attempted work `1000038`. Original C8 measurement recorded only
+`returnedWork=999976` and `attemptedWork=1000038`; its `62` difference was derived,
+with original phase and callback counts unrecorded. Preserve those separate
+evidence scopes. Neither the denied charge nor the attempted capped prefix is
+a full-constructor cost or a remaining-work gap.
+
+### HR-2 source and accounting obligations
+
+The PS1 runtime change is limited to `crates/umf-core/src/schema.rs` and
+`crates/umf-core/src/schema_owner_locations.rs`, with private associated
+`Frame`/`Keyword` storage and one statically specialized semantic body. Fused
+state must contain no inline legacy payload, and legacy state must contain no
+unused fused state. No inlining attribute or physical-stack claim is selected.
+Cold storage must be fallible and fully charged, with one authoritative pathmark
+restoration obligation. Retain fixed tariffs and charge actual performed work;
+credit removed work only through its exact signed source replacement ledger.
+Preserve every semantic, refusal and test obligation.
+
+### Gate before the first one-cost hosted campaign
+
+Do not start the first one-cost hosted campaign until Sol has reviewed the
+generic body and its closure, and the following source/accounting items are
+closed:
+
+- a signed whole-route ledger covering three Engine banks, eight later compiler
+  stages, first-meta parsing/evaluation and Registry, plus all positive fallback,
+  storage, ABI and cleanup costs; unknown full cost stays explicit, and the Q8
+  capped prefix is not an exact source expression or full-route total;
+- all five control findings and the source census; and
+- final-source controller bindings, resolved against the exact reviewed source.
+
+Before any heavy checks, retain the unchanged `1M` fresh51 gate and the early18
+gate. These are ordered prerequisites, not results of this source-plan update.
+This source-preparation update starts no new native work and preserves the
+historical native attempts. This record authorizes no native build or test,
+PostgreSQL operation, hosted campaign, CI dispatch, merge or push. Sol reviews
+the exact source diff and this record before the next commit or push.
+
+### Static from-installed F64 intake trace
+
+The UMF owner decoder `_from_wire` handles `kind: number` by decoding the
+provided hexadecimal IEEE-754 bytes with `struct.unpack(">d", ...)` to a
+built-in Python `float`. Truss source9 retains the inspection result as JSON;
+the audited Truss path has no byte-count field or integer-only consumer check
+to repair. No consumer patch was made, and the separate Truss `maximumWork=1M`
+integer gate remains unchanged. This is a static decoder/consumer trace only;
+it does not claim an end-to-end byte-count contract or native evidence.

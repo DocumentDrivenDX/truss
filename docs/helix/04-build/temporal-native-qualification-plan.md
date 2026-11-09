@@ -409,13 +409,11 @@ input names to these semantics if already implemented. One Ubuntu24.04/Python3.1
 job, no OS/Python/server matrix, no capacity/stress/public1000 workload by default.
 `capacity_statistics=false`, `public_workflows=false`, `stress_case=none` stay so
 unless the coordinator explicitly selects a separate necessary existing gate.
-Current release.yml also enables the public1000 workload automatically for tags;
-therefore dispatching that workflow/tag is NOT the focused campaign selector.
-Before final release, its integrator must reconcile that automatic trigger with
-the required explicit expensive-run selection. Required exact-tag gates retain
-their obligations and must be explicitly selected; optional large/stress work
-must not silently start because a tag exists. This plan edits no workflow and
-waives no required release assertions.
+The release workflow now selects the public1000 workload only when
+`inputs.public_workflows` is true or a non-`none` `stress_case` is explicitly
+selected for `workflow_dispatch`. A tag alone does not select this optional
+workload. Required exact-tag gates retain their obligations and run as before;
+this change does not make them optional or waive any release assertion.
 
 | Selection | Readiness | Exact scope / retry rule |
 | --- | --- | --- |

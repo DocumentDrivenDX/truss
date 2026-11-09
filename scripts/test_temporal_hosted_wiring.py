@@ -28,7 +28,12 @@ def condition(expression,flags):
     def value(node):
         if isinstance(node,ast.BoolOp):return all(value(v) for v in node.values) if isinstance(node.op,ast.And) else any(value(v) for v in node.values)
         if isinstance(node,ast.UnaryOp) and isinstance(node.op,ast.Not):return not value(node.operand)
-        if isinstance(node,ast.Attribute) and isinstance(node.value,ast.Name) and node.value.id=='inputs':return flags[node.attr]
+        if isinstance(node,ast.Compare):
+            left=value(node.left);right=value(node.comparators[0])
+            return left==right if isinstance(node.ops[0],ast.Eq) else left!=right
+        if isinstance(node,ast.Constant):return node.value
+        if isinstance(node,ast.Attribute) and isinstance(node.value,ast.Name) and node.value.id=='inputs':return flags.get(node.attr,False)
+        if isinstance(node,ast.Attribute) and isinstance(node.value,ast.Name) and node.value.id=='github' and node.attr=='event_name':return flags['event_name']
         raise AssertionError('Unreviewed selector expression '+ast.dump(node))
     return value(ast.parse(text,mode='eval').body)
 
@@ -100,27 +105,71 @@ class TemporalHostedWiringTests(unittest.TestCase):
         for forbidden in ('cargo build','maturin build','twine upload','gh workflow run','pip wheel'):
             self.assertNotIn(forbidden,all_commands)
 
-    def test_original_runtime_is_dispatch_only_not_an_automatic_gate(self):
+    def test_original_runtime_dispatch_is_off_and_pr_call_runs_only_released_smoke(self):
         original=subprocess.check_output(['git','show','34a4a4a31ba674438e70df26f39ef9e20255ea0f:.github/workflows/python-runtime.yml'],cwd=ROOT,text=True)
         before=yaml.load(original,Loader=yaml.BaseLoader)
         self.assertEqual(set(before['on']),{'workflow_dispatch'})
-        self.assertEqual(set(self.workflow['on']),set(before['on']))
+        self.assertEqual(set(self.workflow['on']),{'workflow_dispatch','workflow_call'})
+        call_inputs=self.workflow['on']['workflow_call']['inputs']
+        self.assertEqual(set(call_inputs),{'released_runtime_probe'})
+        self.assertEqual(call_inputs['released_runtime_probe']['default'],'true')
+        dispatch_inputs=self.workflow['on']['workflow_dispatch']['inputs']
+        self.assertTrue(all(dispatch_inputs[name]['default']=='false' for name in FLAGS))
+        jobs=self.workflow['jobs'];all_off={name:False for name in FLAGS}
+        self.assertEqual([name for name in ('released-runtime','weft-abi12-probe','temporal-scalar-probe','temporal-native-probe','temporal-candidate')
+                          if condition(jobs[name]['if'],all_off)],[])
+        call_flags={**all_off,'released_runtime_probe':True}
+        selected=[name for name in ('released-runtime','weft-abi12-probe','temporal-scalar-probe','temporal-native-probe','temporal-candidate')
+                  if condition(jobs[name]['if'],call_flags)]
+        self.assertEqual(selected,['released-runtime'])
 
-    def test_existing_automatic_boundary_and_publisher_gates_preserved(self):
+    def test_release_tag_does_not_select_optional_public_thousand_workload(self):
+        release=yaml.load((ROOT/'.github/workflows/release.yml').read_text(),Loader=yaml.BaseLoader)
+        steps=next(job['steps'] for job in release['jobs'].values()
+                   if any(step.get('name')=='Run installed original public workload' for step in job.get('steps',[])))
+        workload=next(step for step in steps if step.get('name')=='Run installed original public workload')
+        status=next(step for step in steps if step.get('name')=='Record original public workload status')
+        upload=next(step for step in steps if step.get('name')=='Retain original public workload report and log')
+        selector="inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')"
+        self.assertEqual(workload['if'],selector)
+        self.assertEqual(status['if'],f'always() && ({selector})')
+        self.assertEqual(upload['if'],f'always() && ({selector})')
+        for step in (workload,status,upload):
+            self.assertNotIn('github.ref_type',step['if'])
+            self.assertIn('inputs.public_workflows',step['if'])
+            self.assertIn("inputs.stress_case != 'none'",step['if'])
+        self.assertEqual(release['on']['workflow_dispatch']['inputs']['public_workflows']['default'],'false')
+        self.assertEqual(release['on']['workflow_dispatch']['inputs']['stress_case']['default'],'none')
+        expression=workload['if']
+        for event,pub,stress,expected in (
+                ('push',False,'none',False),('push',False,'small',False),
+                ('workflow_dispatch',False,'none',False),
+                ('workflow_dispatch',True,'none',True),
+                ('workflow_dispatch',False,'small',True)):
+            flags={'event_name':event,'public_workflows':pub,'stress_case':stress}
+            with self.subTest(event=event,public_workflows=pub,stress_case=stress):
+                self.assertEqual(condition(expression,flags),expected)
+
+    def test_reviewed_main_boundary_and_publisher_gates_preserved(self):
         for name in ('python-boundaries.yml','pypi-validation.yml'):
             path='.github/workflows/'+name
             with self.subTest(workflow=name):
-                original=subprocess.check_output(['git','show','34a4a4a31ba674438e70df26f39ef9e20255ea0f:'+path],cwd=ROOT)
-                self.assertEqual((ROOT/path).read_bytes(),original)
-                workflow=yaml.load(original,Loader=yaml.BaseLoader)
-                self.assertIn('push',workflow['on']);self.assertIn('pull_request',workflow['on'])
-                self.assertEqual(workflow['on']['push']['branches'],['main'])
+                reviewed=subprocess.check_output(['git','show','b8095b9466b024af770ea3f2c4c9f00d4fa0469f:'+path],cwd=ROOT)
+                self.assertEqual((ROOT/path).read_bytes(),reviewed)
+                workflow=yaml.load(reviewed,Loader=yaml.BaseLoader)
+                self.assertIn('pull_request',workflow['on'])
+                self.assertNotIn('push',workflow['on'])
                 for job in workflow['jobs'].values():self.assertNotIn('if',job)
                 if name=='python-boundaries.yml':
+                    self.assertIn('workflow_dispatch',workflow['on'])
                     commands=[step.get('run') for step in workflow['jobs']['boundaries']['steps']]
                     self.assertIn('python3 scripts/check-module-boundaries.py',commands)
                     self.assertIn('python3 scripts/check-module-boundaries-controls.py',commands)
                     self.assertIn('packages/python/**',workflow['on']['pull_request']['paths'])
+                historical=subprocess.check_output(['git','show','34a4a4a31ba674438e70df26f39ef9e20255ea0f:'+path],cwd=ROOT)
+                old_workflow=yaml.load(historical,Loader=yaml.BaseLoader)
+                self.assertIn('push',old_workflow['on'])
+                self.assertEqual(old_workflow['on']['push']['branches'],['main'])
 
     def test_component_intake_is_explicit_and_cannot_fall_through_to_pg(self):
         job=self.workflow['jobs']['temporal-candidate']
