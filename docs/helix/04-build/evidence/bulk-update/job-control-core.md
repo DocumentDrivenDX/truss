@@ -7,3 +7,7 @@ Command: `PYTHONPATH=packages/python/src python3.11 -m unittest discover -s pack
 Negative controls (each made the suite fail, then restored): ambiguous reconcile evidence stopping the job; capacity check off by one at the boundary; confirmed-no-execution expiry requeuing admitted work.
 
 What this does not show: any US-046/047/048/049 acceptance criterion. Those are native-integration criteria and stay `planned`. Residuals: the fixture needs owner review; the module is not yet called by any executor; durable persistence under the job lock, original attempt custody, authorization and tx/1 composition remain unimplemented.
+
+## Addendum (control layout)
+
+`control-layout-results.json` records `check_control_layout.py` against PostgreSQL 18.6: 79 cases pass. A final-batch cancel now yields `completed` in `_bulk_job_control.py` (3 added tests); the pinned UMF fixture does not cover that case and the UMF model still says `cancelled` there.
