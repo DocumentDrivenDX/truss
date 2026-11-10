@@ -22,6 +22,9 @@ jobs:
   full:
     if: contains(github.event.pull_request.labels.*.name, 'ci:full') && github.event.action != 'unlabeled' && (github.event.action != 'labeled' || github.event.label.name == 'ci:full')
     uses: ./.github/workflows/python-runtime.yml
+    permissions:
+      actions: read
+      contents: read
 
   # Cheap gate (seconds): proves the heavy suite was run for this exact tree.
   evidence-gate:
