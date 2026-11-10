@@ -29,9 +29,12 @@ This historical draft is preserved from the earlier authorized bulk-action work.
 It does not claim that its planned tests or protected executor are complete.
 Current owner amendments govern every requirement below: Python-first delivery,
 basic functionality tests, stock PostgreSQL practical limits and the existing
-native statement/operation deadlines. Receiver/exporter, custom tracing/metrics,
-formal-model and elaborate qualification prescriptions below are historical
-optional proposals, not required implementation or release gates. A proposed
+native statement/operation deadlines. Owner decision (2026-11-08) scopes acceptance gates: when making bulk
+recovery or diagnostics claims, the bounded model for US-048-AC7 and the
+traced/untraced real-receiver correlation, privacy and outage tests for
+STP-048 AC6 are required. Other receiver/exporter, custom tracing/metrics and
+elaborate qualification prescriptions remain optional; these gates do not
+extend to unrelated feature claims. A proposed
 upstream60-second allowance cannot widen current native10-second SQL or30-second
 operation limits. Host connection/transaction ownership and no hidden retries
 remain unchanged. Existing `bulk_action_gateway.py`, action-store and authority
@@ -119,6 +122,4 @@ Incomplete upstream/native admission must block dependent execution without bloc
 
 ## Bounded model implementation (2026-10-13)
 
-Historical claim: original component evidence is now retained unchanged in main;
-it was not rerun against current runtime and establishes no current completion:
-The [executable model and native correspondence](../experiments/bulk-actions/README.md) now implement the finite three-target/two-batch/two-worker design, with actual/observed native custody, nine negative controls, useful success/recovery/rollback-crash traces and no-op/result vectors. Python and independent TLC have matching604852 reachable states; final receipts retain source/tool digests. This is bounded design safety, not liveness or native qualification. AC7 and dependent native stories remain open until actual adapter/native correspondence is exercised.
+Historical checkpoint: the earlier PR51 candidate at `da63eaf6043bf7f3f78d71d4f3768102f43d39eb` retains Python and TLC receipts reporting 604,852 reachable states (Python receipt SHA-256 `b70c5d3861ed50f4fe721443b17a65155427f20dd91d779282875cf518df8752`; TLC receipt SHA-256 `aead37c3fb594799f134f8066eafdd01b976287f2802323740bc308a312f188c`). That historical source/result pairing remains intact and was not rerun against the current runtime. At this source revision, the retained Python and TLC result JSONs report 607,102 reachable states ([Python result](../../04-build/evidence/bulk-update/batch-model-results.json), SHA-256 `1e8e524b6955bb8a0a1086f6a40bdc43d98bd26a8aa1947f0245cb8e92672b63`; [TLC result](../../04-build/evidence/bulk-update/tlc-model-results.json), SHA-256 `aed6c0a4b21853c0f97c1758096c0d99a9e82963a001279a86831ff574a085d8`), and the TLC result records five negative controls. However, the retained `python-model.log` reports 604,852 and pins the earlier `check_model.py` source hash `3610bd0e4f04b829ac35c73e48cfd67ec907c10617dc2662ecac597fb62d2c4f`, not the current source hash recorded by the result JSON. Therefore the 607,102 Python result is receipt-reported but not corroborated by a matching retained execution log; the discrepancy remains unresolved and no model was rerun here. The [job-table refinement receipt](../../04-build/evidence/bulk-update/job-refinement-results.json) reports 607,102, but its fixture remains `planned` and still needs UMF owner review. These retained records do not establish liveness, current runtime behavior or native qualification. AC7 and dependent native stories remain open until actual adapter/native correspondence is exercised.

@@ -33,9 +33,12 @@ This historical draft is preserved from the earlier authorized bulk-action work.
 It does not claim that its planned tests or protected executor are complete.
 Current owner amendments govern every requirement below: Python-first delivery,
 basic functionality tests, stock PostgreSQL practical limits and the existing
-native statement/operation deadlines. Receiver/exporter, custom tracing/metrics,
-formal-model and elaborate qualification prescriptions below are historical
-optional proposals, not required implementation or release gates. A proposed
+native statement/operation deadlines. Owner decision (2026-11-08) scopes acceptance gates: when making bulk
+recovery or diagnostics claims, the bounded model for US-048-AC7 and the
+traced/untraced real-receiver correlation, privacy and outage tests for
+STP-048 AC6 are required. Other receiver/exporter, custom tracing/metrics and
+elaborate qualification prescriptions remain optional; these gates do not
+extend to unrelated feature claims. A proposed
 upstream60-second allowance cannot widen current native10-second SQL or30-second
 operation limits. Host connection/transaction ownership and no hidden retries
 remain unchanged. Existing `bulk_action_gateway.py`, action-store and authority
