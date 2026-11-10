@@ -47,6 +47,41 @@ on:
         type: boolean
         required: false
         default: true
+      temporal_candidate_probe:
+        description: Select original temporal qualification in workflow_dispatch or retained-proof consumption in pull_request
+        type: boolean
+        required: false
+        default: false
+      temporal_candidate_phase:
+        description: Exact selected phase; PR calls consume qualify119 proof without executing it
+        type: string
+        required: false
+        default: none
+      temporal_candidate_source_commit:
+        description: Source commit selector; PR calls must equal the actual event PR head
+        type: string
+        required: false
+        default: ''
+      temporal_qualification_pr_number:
+        description: Target PR number selector
+        type: string
+        required: false
+        default: ''
+      temporal_qualification_run_id:
+        description: Original successful workflow_dispatch qualification run ID
+        type: string
+        required: false
+        default: ''
+      temporal_qualification_artifact_id:
+        description: Original retained qualification artifact ID
+        type: string
+        required: false
+        default: ''
+      temporal_qualification_artifact_sha256:
+        description: SHA256 of the original retained qualification artifact ZIP
+        type: string
+        required: false
+        default: ''
 permissions:
   contents: read
 jobs:
@@ -313,7 +348,7 @@ jobs:
           if-no-files-found: warn
 
   temporal-candidate:
-    if: ${{ inputs.temporal_candidate_probe }}
+    if: ${{ inputs.temporal_candidate_probe && github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     permissions:
@@ -390,6 +425,60 @@ jobs:
           "$TN_ROOT/candidate-env/bin/python" -m pip check 2>&1 | tee "$TN_ROOT/evidence/pip-check.log"
           "$TN_ROOT/candidate-env/bin/python" -m pip freeze > "$TN_ROOT/evidence/freeze.txt"
           env -u PYTHONPATH "$TN_ROOT/candidate-env/bin/python" scripts/prepare-temporal-hosted-input.py             --verify-installed "$TN_ROOT/inputs" > "$TN_ROOT/evidence/actual-owner-identities.json"
+      - name: Set up the locked Bun runtime for the normal full suite
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+      - name: Install frozen Bun dependencies
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          bun install --frozen-lockfile 2>&1 | tee "$TN_ROOT/evidence/normal-bun-install.log"
+      - name: Run the locked checked-out TypeScript compiler
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        env:
+          TRUSS_TSC: ${{ github.workspace }}/node_modules/typescript-compiler/bin/tsc
+        shell: bash
+        run: |
+          set -euo pipefail
+          bun run typecheck 2>&1 | tee "$TN_ROOT/evidence/normal-typecheck.log"
+      - name: Run Bun tests
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          bun test 2>&1 | tee "$TN_ROOT/evidence/normal-bun-tests.log"
+      - name: Run Python module boundaries
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check-module-boundaries.py 2>&1 | tee "$TN_ROOT/evidence/normal-module-boundaries.log"
+      - name: Verify installed owners without an external JavaScript runtime
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        env:
+          PYTHONPATH: packages/python/tests
+        run: |
+          set -euo pipefail
+          "$TN_ROOT/candidate-env/bin/python" -m unittest test_embedded_owner -v 2>&1 | tee "$TN_ROOT/evidence/normal-embedded-owner.log"
+      - name: Run owned completion controls
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          "$TN_ROOT/candidate-env/bin/python" -m unittest test_engine_action_session test_engine_preparation test_group_result_wire test_action_transport 2>&1 | tee "$TN_ROOT/evidence/normal-owned-controls.log"
+      - name: Run focused installed runtime checks
+        if: ${{ inputs.temporal_candidate_phase == 'qualify119' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          runtime_wheel=$(find "$TN_ROOT/inputs/wheelhouse" -maxdepth 1 -type f -name 'pgserver_pg18-*.whl' -print -quit)
+          test -n "$runtime_wheel"
+          "$TN_ROOT/candidate-env/bin/python" scripts/check-local-runtime-smoke.py "$runtime_wheel" "$TN_CAPTURE_WHEEL" --run-id "ci-candidate-${{ github.run_id }}-${{ github.run_attempt }}" 2>&1 | tee "$TN_ROOT/evidence/normal-installed-runtime-smoke.log"
       - name: Capture exactly two serial actual initializers (inventory only)
         if: ${{ inputs.temporal_candidate_phase == 'inventory' }}
         shell: bash
@@ -492,6 +581,7 @@ jobs:
           path: |
             ${{ runner.temp }}/temporal-candidate
             docs/helix/04-build/evidence/design-audit/temporal-candidate-*
+            docs/helix/04-build/evidence/design-audit/ci-candidate-*
             /tmp/truss-nw-*
             /tmp/truss-temporal-init-*
             /tmp/truss-current-baseline-*
@@ -499,3 +589,87 @@ jobs:
             /tmp/truss-temporal-public055-refusal-*
             /tmp/truss-public-catalog-*
           if-no-files-found: warn
+
+  temporal-proof-consumer:
+    if: ${{ inputs.temporal_candidate_probe && github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate the exact retained PR-head qualify119 proof
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TN_SELECTED: ${{ inputs.temporal_candidate_probe }}
+          TN_PHASE: ${{ inputs.temporal_candidate_phase }}
+          TN_RELEASED: ${{ inputs.released_runtime_probe }}
+          TN_PR_NUMBER: ${{ inputs.temporal_qualification_pr_number }}
+          TN_EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          TN_SOURCE_COMMIT: ${{ inputs.temporal_candidate_source_commit }}
+          TN_EVENT_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
+          TN_RUN_ID: ${{ inputs.temporal_qualification_run_id }}
+          TN_ARTIFACT_ID: ${{ inputs.temporal_qualification_artifact_id }}
+          TN_ARTIFACT_SHA256: ${{ inputs.temporal_qualification_artifact_sha256 }}
+          TN_REPOSITORY: ${{ github.repository }}
+          TN_ROOT: ${{ runner.temp }}/temporal-proof-intake
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PYCODE'
+          import os, pathlib, subprocess, sys
+          sys.path.insert(0, 'scripts')
+          from temporal_qualified_artifact import validate_pr_qualification_inputs
+          commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          refs=validate_pr_qualification_inputs(
+            selected=os.environ['TN_SELECTED'].lower()=='true', phase=os.environ['TN_PHASE'],
+            released_runtime=os.environ['TN_RELEASED'].lower()=='true',
+            selected_pr_number=os.environ['TN_PR_NUMBER'], current_pr_number=os.environ['TN_EVENT_PR_NUMBER'],
+            selected_source_commit=os.environ['TN_SOURCE_COMMIT'], event_source_commit=os.environ['TN_EVENT_SOURCE_COMMIT'],
+            checkout_commit=commit, run_id=os.environ['TN_RUN_ID'], artifact_id=os.environ['TN_ARTIFACT_ID'],
+            artifact_sha256=os.environ['TN_ARTIFACT_SHA256'])
+          if os.environ['TN_REPOSITORY'] != 'DocumentDrivenDX/truss':
+            raise ValueError('Temporal proof consumer is restricted to DocumentDrivenDX/truss')
+          root=pathlib.Path(os.environ['TN_ROOT']);root.mkdir(parents=True,exist_ok=False)
+          run=subprocess.check_output(['gh','api',f"repos/{os.environ['TN_REPOSITORY']}/actions/runs/{refs['runId']}"],text=True)
+          (root/'run.json').write_text(run)
+          attempt=__import__('json').loads(run).get('run_attempt')
+          if type(attempt) is not int or attempt < 1: raise ValueError('Original positive workflow attempt required')
+          (root/'jobs-pages.json').write_bytes(subprocess.check_output(['gh','api','--paginate','--slurp',
+            f"repos/{os.environ['TN_REPOSITORY']}/actions/runs/{refs['runId']}/attempts/{attempt}/jobs?per_page=100"]))
+          (root/'artifacts-pages.json').write_bytes(subprocess.check_output(['gh','api','--paginate','--slurp',
+            f"repos/{os.environ['TN_REPOSITORY']}/actions/runs/{refs['runId']}/artifacts?per_page=100"]))
+          PYCODE
+          python - <<'PYCODE'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['TN_ROOT'])
+          run=json.loads((root/'run.json').read_bytes())
+          jobs=[row for page in json.loads((root/'jobs-pages.json').read_bytes()) for row in page.get('jobs',[])]
+          artifacts=[row for page in json.loads((root/'artifacts-pages.json').read_bytes()) for row in page.get('artifacts',[])]
+          selected=[row for row in jobs if row.get('name')=='temporal-candidate' and
+            str(row.get('run_id'))==os.environ['TN_RUN_ID'] and
+            str(row.get('run_attempt'))==str(run.get('run_attempt')) and row.get('head_sha')==os.environ['TN_SOURCE_COMMIT']]
+          if len(selected)!=1:raise ValueError('Exactly one successful original temporal-candidate job at the selected source is required')
+          matches=[row for row in artifacts if str(row.get('id'))==os.environ['TN_ARTIFACT_ID']]
+          if len(matches)!=1:raise ValueError('Exactly one selected retained artifact is required')
+          job=selected[0];artifact=matches[0]
+          if job.get('conclusion')!='success' or run.get('conclusion')!='success':raise ValueError('Original qualify119 run and job must succeed')
+          (root/'job.json').write_text(json.dumps(job));(root/'artifact.json').write_text(json.dumps(artifact))
+          PYCODE
+          gh api "repos/$TN_REPOSITORY/actions/artifacts/$TN_ARTIFACT_ID/zip" > "$TN_ROOT/artifact.zip"
+          git rev-parse 'HEAD^{tree}' > "$TN_ROOT/source-tree.txt"
+          python scripts/temporal_qualified_artifact.py --intake \
+            --run-json "$TN_ROOT/run.json" --job-json "$TN_ROOT/job.json" \
+            --artifact-json "$TN_ROOT/artifact.json" --artifact-zip "$TN_ROOT/artifact.zip" \
+            --repository "$TN_REPOSITORY" --run-id "$TN_RUN_ID" --artifact-id "$TN_ARTIFACT_ID" \
+            --artifact-sha256 "$TN_ARTIFACT_SHA256" --source-commit "$TN_SOURCE_COMMIT" \
+            --source-tree "$(cat "$TN_ROOT/source-tree.txt")" --output "$TN_ROOT/release-wheel" \
+            --require-normal-steps

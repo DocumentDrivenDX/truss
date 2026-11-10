@@ -719,6 +719,105 @@ class TemporalQualifiedArtifactTests(unittest.TestCase):
                     repository="DocumentDrivenDX/truss", run_id="123456", artifact_id="7654321",
                     artifact_sha256=digest(raw), source_commit=self.commit, artifact_zip=raw)
 
+    def test_pr_consumer_requires_complete_external_selectors_and_exact_pr_source(self):
+        valid={"selected":True,"phase":"qualify119","released_runtime":False,
+            "selected_pr_number":"51","current_pr_number":"51",
+            "selected_source_commit":self.commit,"event_source_commit":self.commit,
+            "checkout_commit":self.commit,"run_id":"123456","artifact_id":"7654321",
+            "artifact_sha256":"a"*64}
+        self.assertEqual(qualified.validate_pr_qualification_inputs(**valid),{
+            "sourceCommit":self.commit,"runId":"123456","artifactId":"7654321","artifactSha256":"a"*64})
+        refusals=(
+            {"selected":False}, {"phase":"inventory"}, {"released_runtime":True},
+            {"selected_pr_number":"52"}, {"run_id":""}, {"artifact_id":"bad"},
+            {"artifact_sha256":"0"*64}, {"artifact_sha256":"A"*64},
+            {"selected_source_commit":"b"*40}, {"event_source_commit":"b"*40},
+            {"checkout_commit":"b"*40},
+        )
+        for change in refusals:
+            with self.subTest(change=change),self.assertRaises(ValueError):
+                qualified.validate_pr_qualification_inputs(**{**valid,**change})
+
+    def test_pr_source_guard_blocks_temporal_fallback_and_stale_external_selectors(self):
+        selected={"release_id":qualified.TEMPORAL_CANDIDATE_RELEASE_ID,"current_pr_number":51,
+            "selected_pr_number":"51","run_id":"123456","artifact_id":"7654321",
+            "artifact_sha256":"a"*64}
+        self.assertTrue(qualified.validate_pr_source_selector(**selected))
+        self.assertFalse(qualified.validate_pr_source_selector(**{**selected,
+            "release_id":"truss-catalog-runtime/0.75-released","current_pr_number":77}))
+        refusals=(
+            {"selected_pr_number":""}, {"selected_pr_number":"52"},
+            {"run_id":""}, {"artifact_id":"bad"}, {"artifact_sha256":"0"*64},
+            {"release_id":"truss-catalog-runtime/0.75-released"},
+        )
+        for change in refusals:
+            with self.subTest(change=change),self.assertRaises(ValueError):
+                qualified.validate_pr_source_selector(**{**selected,**change})
+
+    def test_pr_evidence_gate_requires_guard_and_temporal_consumer_before_fallbacks(self):
+        accepted=(
+            ({"guard_result":"success","temporal_selected":"false","full_result":"skipped"},"ordinary"),
+            ({"guard_result":"success","temporal_selected":"false","full_result":"success"},"ordinary"),
+            ({"guard_result":"success","temporal_selected":"true","full_result":"success"},"temporal"),
+        )
+        for args,route in accepted:
+            with self.subTest(args=args):self.assertEqual(qualified.validate_pr_evidence_gate(**args),route)
+        refusals=(
+            ("no-heavy ordinary fallback after guard failure",{"guard_result":"failure","temporal_selected":"false","full_result":"skipped"}),
+            ("matching generic evidence after guard failure",{"guard_result":"failure","temporal_selected":"false","full_result":"failure"}),
+            ("generic evidence after selected proof job skipped",{"guard_result":"success","temporal_selected":"true","full_result":"skipped"}),
+            ("generic evidence after selected proof job failed",{"guard_result":"success","temporal_selected":"true","full_result":"failure"}),
+            ("missing guard route output",{"guard_result":"success","temporal_selected":"","full_result":"success"}),
+        )
+        for scenario,args in refusals:
+            with self.subTest(scenario=scenario),self.assertRaises(ValueError):
+                qualified.validate_pr_evidence_gate(**args)
+
+    def test_normal_full_suite_outcomes_must_be_successful_on_original_candidate_job(self):
+        steps=[{"name":name,"status":"completed","conclusion":"success"}
+               for name in qualified.NORMAL_QUALIFICATION_STEPS]
+        qualified.require_normal_qualification_steps({"steps":steps})
+        for index in range(len(steps)):
+            for field,value in (("status","in_progress"),("conclusion","failure")):
+                changed=[dict(step) for step in steps];changed[index][field]=value
+                with self.subTest(index=index,field=field),self.assertRaises(ValueError):
+                    qualified.require_normal_qualification_steps({"steps":changed})
+        for changed in (steps[:-1],steps+[dict(steps[0])],None):
+            with self.subTest(changed=changed),self.assertRaises(ValueError):
+                qualified.require_normal_qualification_steps({"steps":changed})
+
+    def test_pr_intake_binds_original_successful_attempt_artifact_source_and_normal_steps(self):
+        raw=b"retained source-shaped artifact ZIP"
+        run={"id":123456,"event":"workflow_dispatch","path":qualified.WORKFLOW_PATH,
+             "conclusion":"success","run_attempt":2,"head_sha":self.commit,
+             "repository":{"full_name":qualified.TRUSS_REPOSITORY}}
+        job={"id":99,"name":qualified.CAMPAIGN_JOB,"run_id":123456,"run_attempt":2,
+             "head_sha":self.commit,"conclusion":"success",
+             "steps":[{"name":name,"status":"completed","conclusion":"success"}
+                      for name in qualified.NORMAL_QUALIFICATION_STEPS]}
+        artifact={"id":7654321,"name":qualified.CAMPAIGN_ARTIFACT_PREFIX+"123456-2",
+             "expired":False,"digest":"sha256:"+digest(raw),"size_in_bytes":len(raw),
+             "workflow_run":{"id":123456,"head_sha":self.commit}}
+        args={"run":run,"job":job,"artifact":artifact,"repository":qualified.TRUSS_REPOSITORY,
+             "run_id":"123456","artifact_id":"7654321","artifact_sha256":digest(raw),
+             "source_commit":self.commit,"artifact_zip":raw,"require_normal_steps":True}
+        qualified.authenticate_github_metadata(**args)
+        bad_cases=(
+            {"repository":"another/repo"},
+            {"job":{**job,"head_sha":"b"*40}},
+            {"job":{**job,"run_attempt":1}},
+            {"artifact":{**artifact,"workflow_run":{"id":123456,"head_sha":"b"*40}}},
+            {"artifact_sha256":"b"*64},
+        )
+        for mutation in bad_cases:
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):
+                qualified.authenticate_github_metadata(**{**args,**mutation})
+        for index in range(len(job["steps"])):
+            failed=[dict(step) for step in job["steps"]]
+            failed[index]["conclusion"]="skipped"
+            with self.subTest(failed_step=index),self.assertRaises(ValueError):
+                qualified.authenticate_github_metadata(**{**args,"job":{**job,"steps":failed}})
+
     def test_archive_rejects_path_escape_duplicate_and_symlink(self):
         for entries in (([("../escape", b"x")]),
                         ([('safe', b"1"), ('safe', b"2")]),

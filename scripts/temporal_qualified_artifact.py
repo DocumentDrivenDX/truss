@@ -33,6 +33,17 @@ INPUT_NAMES = (
     "temporal_qualification_artifact_id",
     "temporal_qualification_artifact_sha256",
 )
+NORMAL_QUALIFICATION_STEPS = (
+    "Install frozen Bun dependencies",
+    "Run the locked checked-out TypeScript compiler",
+    "Run Bun tests",
+    "Run Python module boundaries",
+    "Verify installed owners without an external JavaScript runtime",
+    "Run owned completion controls",
+    "Run focused installed runtime checks",
+)
+TRUSS_REPOSITORY = "DocumentDrivenDX/truss"
+TEMPORAL_CANDIDATE_RELEASE_ID = "truss-catalog-runtime/0.76-temporal-candidate"
 WEFT_SDK_VALIDATOR_ID = "weft.sdk-custody-42/1"
 WEFT_ORIGINAL_RECORDS = {
     "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/component.json":
@@ -102,29 +113,116 @@ def temporal_candidate(root) -> bool:
     return manifest.get("releaseId") == "truss-catalog-runtime/0.76-temporal-candidate"
 
 
+def validate_pr_qualification_inputs(*, selected: object, phase: object, released_runtime: object,
+                                     selected_pr_number: object, current_pr_number: object,
+                                     selected_source_commit: object, event_source_commit: object,
+                                     checkout_commit: object, run_id: object, artifact_id: object,
+                                     artifact_sha256: object) -> dict[str, str]:
+    """Validate PR workflow selectors against event and checked-out source identity."""
+    if selected is not True or type(phase) is not str or phase != "qualify119" or released_runtime is not False:
+        _fail("PR temporal proof route requires one exclusive qualify119 proof selection")
+    if (type(selected_pr_number) is not str or re.fullmatch(r"[1-9][0-9]{0,19}", selected_pr_number) is None
+            or type(current_pr_number) is not str or selected_pr_number != current_pr_number):
+        _fail("Temporal proof PR selector must exactly match the current pull request")
+    expected = _hex(event_source_commit, 40)
+    if (selected_source_commit != expected or checkout_commit != expected):
+        _fail("Temporal proof source commit must equal the actual PR head checkout")
+    references = validate_dispatch_inputs({
+        INPUT_NAMES[0]: run_id, INPUT_NAMES[1]: artifact_id,
+        INPUT_NAMES[2]: artifact_sha256,
+    }, temporal_candidate=True)
+    if references is None:
+        _fail("Temporal proof requires complete original run/artifact references")
+    return {"sourceCommit": expected, **references}
+
+
+def validate_pr_source_selector(*, release_id: object, current_pr_number: object,
+                                selected_pr_number: object, run_id: object,
+                                artifact_id: object, artifact_sha256: object) -> bool:
+    """Guard PR routing so temporal source cannot fall back to released smoke."""
+    values=(selected_pr_number,run_id,artifact_id,artifact_sha256)
+    if any(type(value) is not str for value in values):
+        _fail("External temporal proof selectors must be strings")
+    candidate=release_id==TEMPORAL_CANDIDATE_RELEASE_ID
+    if not candidate:
+        if selected_pr_number and selected_pr_number == str(current_pr_number):
+            _fail("Selected PR proof source is not the temporal candidate source")
+        return False
+    if selected_pr_number != str(current_pr_number):
+        _fail("Temporal proof PR selector must match this exact PR head")
+    validate_dispatch_inputs({INPUT_NAMES[0]:run_id,INPUT_NAMES[1]:artifact_id,
+                              INPUT_NAMES[2]:artifact_sha256},temporal_candidate=True)
+    return True
+
+
+def validate_pr_evidence_gate(*, guard_result: object, temporal_selected: object,
+                              full_result: object) -> str:
+    """Keep ordinary evidence alternatives out of a selected temporal route."""
+    if guard_result != "success":
+        _fail("Temporal selector guard did not succeed")
+    if temporal_selected == "true":
+        if full_result != "success":
+            _fail("Selected temporal PR requires successful authenticated retained-proof consumer")
+        return "temporal"
+    if temporal_selected != "false":
+        _fail("PR selector guard did not produce an exact route result")
+    return "ordinary"
+
+
+def require_normal_qualification_steps(job: dict) -> None:
+    """Require the original normal full-suite steps on the same qualify119 job."""
+    steps = job.get("steps")
+    if type(steps) is not list:
+        _fail("Authenticated qualify119 job step outcomes are required")
+    by_name = {}
+    for step in steps:
+        if type(step) is dict and type(step.get("name")) is str:
+            name = step["name"]
+            if name in NORMAL_QUALIFICATION_STEPS:
+                if name in by_name:
+                    _fail("Duplicate normal qualification step in original job: " + name)
+                by_name[name] = step
+    if set(by_name) != set(NORMAL_QUALIFICATION_STEPS):
+        _fail("Original qualify119 job is missing required normal full-suite steps")
+    for name in NORMAL_QUALIFICATION_STEPS:
+        step = by_name[name]
+        if step.get("status") != "completed" or step.get("conclusion") != "success":
+            _fail("Original normal full-suite step did not succeed: " + name)
+
+
 def authenticate_github_metadata(*, run: dict, job: dict, artifact: dict,
                                  repository: str, run_id: str, artifact_id: str,
                                  artifact_sha256: str, source_commit: str,
-                                 artifact_zip: bytes) -> None:
+                                 artifact_zip: bytes,
+                                 require_normal_steps: bool = False) -> None:
     """Check captured GitHub API objects against the actual downloaded ZIP."""
     if type(run) is not dict or type(job) is not dict or type(artifact) is not dict:
         _fail("Captured GitHub run/job/artifact metadata required")
+    run_repository = run.get("repository")
     if (str(run.get("id")) != run_id or run.get("event") != "workflow_dispatch"
             or run.get("path") != WORKFLOW_PATH or run.get("conclusion") != "success"
             or str(run.get("run_attempt")) != str(job.get("run_attempt"))
             or str(run.get("head_sha")) != source_commit
-            or run.get("repository", {}).get("full_name") != repository):
+            or type(run_repository) is not dict or run_repository.get("full_name") != repository):
         _fail("Qualification workflow run provenance differs from selected source")
     if (job.get("name") != CAMPAIGN_JOB or str(job.get("run_id")) != run_id
             or str(job.get("run_attempt")) != str(run.get("run_attempt"))
             or job.get("conclusion") != "success"):
         _fail("Original successful qualify119 job required")
+    if require_normal_steps:
+        workflow_run = artifact.get("workflow_run")
+        if (repository != TRUSS_REPOSITORY or job.get("head_sha") != source_commit
+                or type(workflow_run) is not dict
+                or str(workflow_run.get("id")) != run_id
+                or workflow_run.get("head_sha") != source_commit):
+            _fail("Normal temporal proof must bind to the fixed Truss repository and exact source head")
+        require_normal_qualification_steps(job)
     expected_name = CAMPAIGN_ARTIFACT_PREFIX + run_id + "-" + str(run.get("run_attempt"))
     if (str(artifact.get("id")) != artifact_id or artifact.get("name") != expected_name
             or artifact.get("expired") is not False):
         _fail("Original completed qualify119 artifact identity differs")
     workflow_run = artifact.get("workflow_run")
-    if workflow_run is not None and str(workflow_run.get("id")) != run_id:
+    if workflow_run is not None and (type(workflow_run) is not dict or str(workflow_run.get("id")) != run_id):
         _fail("Artifact is not attached to the selected workflow run")
     _hex(artifact_sha256)
     if artifact.get("digest") != "sha256:" + artifact_sha256:
@@ -959,11 +1057,12 @@ def create_binding(root, *, campaign_dir, input_root, candidate_wheel, cohort_pa
 
 def intake_artifact(*, artifact_zip: bytes, run: dict, job: dict, artifact: dict, repository: str,
                     run_id: str, artifact_id: str, artifact_sha256: str, source_commit: str,
-                    source_tree: str, output_dir) -> dict:
+                    source_tree: str, output_dir, require_normal_steps: bool = False) -> dict:
     """Authenticate the original Actions artifact, then stage exact release bytes."""
     authenticate_github_metadata(run=run, job=job, artifact=artifact, repository=repository,
         run_id=run_id, artifact_id=artifact_id, artifact_sha256=artifact_sha256,
-        source_commit=source_commit, artifact_zip=artifact_zip)
+        source_commit=source_commit, artifact_zip=artifact_zip,
+        require_normal_steps=require_normal_steps)
     outer = _read_zip(artifact_zip)
     nested = [raw for name,raw in outer.items() if name.endswith("/temporal-qualified-evidence.zip")
               or name == "temporal-qualified-evidence.zip"]
@@ -1059,6 +1158,7 @@ if __name__ == "__main__":
     parser.add_argument("--run-id")
     parser.add_argument("--artifact-id")
     parser.add_argument("--artifact-sha256")
+    parser.add_argument("--require-normal-steps", action="store_true")
     args = parser.parse_args()
     if args.create_bundle:
         if any(value is None for value in (args.root,args.campaign_dir,args.input_root,args.candidate_wheel,args.cohort,args.output,args.source_commit,args.source_tree,args.workflow_run_id,args.workflow_run_attempt)):
@@ -1075,7 +1175,8 @@ if __name__ == "__main__":
         result=intake_artifact(artifact_zip=args.artifact_zip.read_bytes(),run=json.loads(args.run_json.read_bytes()),
             job=json.loads(args.job_json.read_bytes()),artifact=json.loads(args.artifact_json.read_bytes()),repository=args.repository,
             run_id=args.run_id,artifact_id=args.artifact_id,artifact_sha256=args.artifact_sha256,
-            source_commit=args.source_commit,source_tree=args.source_tree,output_dir=args.output)
+            source_commit=args.source_commit,source_tree=args.source_tree,output_dir=args.output,
+            require_normal_steps=args.require_normal_steps)
         print(json.dumps(result,sort_keys=True))
     else:
         parser.error("Select exactly one of --create-bundle or --intake")

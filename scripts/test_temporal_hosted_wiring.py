@@ -46,7 +46,7 @@ class TemporalHostedWiringTests(unittest.TestCase):
         self.assertEqual({name:inputs[name]['default'] for name in FLAGS},{name:'false' for name in FLAGS})
         names=('released-runtime','weft-abi12-probe','temporal-scalar-probe','temporal-native-probe','temporal-candidate')
         for bits in itertools.product((False,True),repeat=len(FLAGS)):
-            flags=dict(zip(FLAGS,bits));selected=[name for name in names if condition(jobs[name]['if'],flags)]
+            flags={**dict(zip(FLAGS,bits)),'event_name':'workflow_dispatch'};selected=[name for name in names if condition(jobs[name]['if'],flags)]
             with self.subTest(flags=flags):
                 if flags[FLAGS[-1]]:self.assertEqual(selected,['temporal-candidate'])
                 elif sum(bits)==1:self.assertEqual(selected,[names[bits.index(True)]])
@@ -68,6 +68,21 @@ class TemporalHostedWiringTests(unittest.TestCase):
         campaign=next(s for s in job['steps'] if s.get('name','').startswith('Execute only'))
         self.assertIn("'qualify119'",campaign['if']);self.assertIn('--execute --admission',campaign['run'])
         upload=job['steps'][-1];self.assertEqual(upload['if'],'always()');self.assertIn('actions/upload-artifact',upload['uses'])
+        names=[step.get('name') for step in job['steps']]
+        for required in ('Install frozen Bun dependencies','Run the locked checked-out TypeScript compiler',
+                         'Run Bun tests','Run Python module boundaries',
+                         'Verify installed owners without an external JavaScript runtime',
+                         'Run owned completion controls','Run focused installed runtime checks',
+                         'Execute only reviewed original119 plus JH10 and public0551 after genuine final admission'):
+            self.assertEqual(names.count(required),1)
+        for index,name in enumerate(names):
+            if name in ('Install frozen Bun dependencies','Run the locked checked-out TypeScript compiler',
+                        'Run Bun tests','Run Python module boundaries',
+                        'Verify installed owners without an external JavaScript runtime',
+                        'Run owned completion controls','Run focused installed runtime checks',
+                        'Execute only reviewed original119 plus JH10 and public0551 after genuine final admission'):
+                self.assertIn("qualify119",job['steps'][index]['if'])
+        self.assertIn('docs/helix/04-build/evidence/design-audit/ci-candidate-*',upload['with']['path'])
     def test_unfilled_template_and_unsealed_identities_refuse_without_output(self):
         template=json.loads((ROOT/'docs/helix/04-build/evidence/temporal-native/hosted-admission-templates/hosted-input.deferred.json').read_bytes())
         for ready in (False,True):
@@ -111,8 +126,16 @@ class TemporalHostedWiringTests(unittest.TestCase):
         self.assertEqual(set(before['on']),{'workflow_dispatch'})
         self.assertEqual(set(self.workflow['on']),{'workflow_dispatch','workflow_call'})
         call_inputs=self.workflow['on']['workflow_call']['inputs']
-        self.assertEqual(set(call_inputs),{'released_runtime_probe'})
+        self.assertEqual(set(call_inputs),{'released_runtime_probe','temporal_candidate_probe',
+            'temporal_candidate_phase','temporal_candidate_source_commit','temporal_qualification_pr_number',
+            'temporal_qualification_run_id','temporal_qualification_artifact_id',
+            'temporal_qualification_artifact_sha256'})
         self.assertEqual(call_inputs['released_runtime_probe']['default'],'true')
+        self.assertEqual(call_inputs['temporal_candidate_probe']['default'],'false')
+        self.assertEqual(call_inputs['temporal_candidate_phase']['default'],'none')
+        for name in ('temporal_qualification_pr_number','temporal_qualification_run_id',
+                     'temporal_qualification_artifact_id','temporal_qualification_artifact_sha256'):
+            self.assertEqual(call_inputs[name]['default'],'')
         dispatch_inputs=self.workflow['on']['workflow_dispatch']['inputs']
         self.assertTrue(all(dispatch_inputs[name]['default']=='false' for name in FLAGS))
         jobs=self.workflow['jobs'];all_off={name:False for name in FLAGS}
@@ -122,6 +145,53 @@ class TemporalHostedWiringTests(unittest.TestCase):
         selected=[name for name in ('released-runtime','weft-abi12-probe','temporal-scalar-probe','temporal-native-probe','temporal-candidate')
                   if condition(jobs[name]['if'],call_flags)]
         self.assertEqual(selected,['released-runtime'])
+
+    def test_pr_full_uses_external_selector_carrier_and_guards_before_fallback(self):
+        caller=yaml.load((ROOT/'.github/workflows/pr-full.yml').read_text(),Loader=yaml.BaseLoader)
+        jobs=caller['jobs'];guard=jobs['temporal-selector-guard'];full=jobs['full']
+        self.assertEqual(full['needs'],['temporal-selector-guard'])
+        guard_source=guard['steps'][-1]['run']
+        self.assertIn('validate_pr_source_selector',guard_source)
+        for name in ('PR_NUMBER','RUN_ID','ARTIFACT_ID','ARTIFACT_SHA256'):
+            self.assertTrue(any(name in value for value in guard['steps'][-1]['env'].values()))
+        with_values=full['with']
+        self.assertEqual(with_values['temporal_candidate_phase'],'qualify119')
+        self.assertEqual(with_values['temporal_candidate_source_commit'],'${{ github.event.pull_request.head.sha }}')
+        self.assertEqual(with_values['temporal_candidate_probe'],"${{ needs.temporal-selector-guard.outputs.temporal_selected == 'true' }}")
+        self.assertEqual(with_values['released_runtime_probe'],"${{ needs.temporal-selector-guard.outputs.temporal_selected != 'true' }}")
+        consumer=self.workflow['jobs']['temporal-proof-consumer']
+        self.assertIn("github.event_name == 'pull_request'",consumer['if'])
+        intake=next(step for step in consumer['steps'] if step.get('name','').startswith('Authenticate'))
+        self.assertIn('--require-normal-steps',intake['run'])
+        self.assertIn('event.pull_request.head.sha',intake['env']['TN_EVENT_SOURCE_COMMIT'])
+        self.assertEqual(consumer['permissions'],{'actions':'read','contents':'read'})
+        for job in (consumer,):
+            for step in job['steps']:
+                if 'run' not in step:continue
+                subprocess.run(['bash','-n'],input=step['run'],text=True,check=True,capture_output=True)
+                for code in re.findall(r"<<'PYCODE'\n(.*?)\nPYCODE",step['run'],re.S):
+                    ast.parse(textwrap.dedent(code))
+        guard_run=guard['steps'][-1]['run']
+        subprocess.run(['bash','-n'],input=guard_run,text=True,check=True,capture_output=True)
+        guard_python=re.search(r"<<'PYCODE'\n(.*?)\nPYCODE",guard_run,re.S).group(1)
+        ast.parse(textwrap.dedent(guard_python))
+        gate=jobs['evidence-gate'];self.assertEqual(set(gate['needs']),{'full','temporal-selector-guard'})
+        gate_run=gate['steps'][-1]['run']
+        subprocess.run(['bash','-n'],input=gate_run,text=True,check=True,capture_output=True)
+        gate_python=re.search(r"<<'PYCODE'\n(.*?)\nPYCODE",gate_run,re.S).group(1)
+        ast.parse(textwrap.dedent(gate_python))
+        self.assertLess(gate_run.index('validate_pr_evidence_gate'),gate_run.index('No heavy-suite paths changed'))
+        self.assertLess(gate_run.index('validate_pr_evidence_gate'),gate_run.index('.ci/evidence/full-suite.json'))
+        self.assertIn('needs.temporal-selector-guard.result',gate['steps'][-1]['env']['GUARD_RESULT'])
+        self.assertIn('needs.temporal-selector-guard.outputs.temporal_selected',gate['steps'][-1]['env']['TEMPORAL_SELECTED'])
+        candidate=self.workflow['jobs']['temporal-candidate'];upload=candidate['steps'][-1]
+        for logfile in ('normal-bun-install.log','normal-typecheck.log','normal-bun-tests.log',
+                        'normal-module-boundaries.log','normal-embedded-owner.log',
+                        'normal-owned-controls.log','normal-installed-runtime-smoke.log'):
+            logging_step=next(s for s in candidate['steps'] if 'tee "$TN_ROOT/evidence/'+logfile+'"' in s.get('run',''))
+            self.assertIn('set -euo pipefail',logging_step['run'])
+            self.assertEqual(logging_step.get('shell','bash'),'bash')
+            self.assertIn('${{ runner.temp }}/temporal-candidate',upload['with']['path'])
 
     def test_release_tag_does_not_select_optional_public_thousand_workload(self):
         release=yaml.load((ROOT/'.github/workflows/release.yml').read_text(),Loader=yaml.BaseLoader)
