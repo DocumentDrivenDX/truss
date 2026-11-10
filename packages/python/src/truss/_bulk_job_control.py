@@ -42,7 +42,9 @@ def _advance(s):
     s['nextBatch'] = nxt
     s['committedBatches'] += 1
     s['claim'] = None
-    s['status'] = 'cancelled' if s['cancelRequested'] else ('completed' if nxt == s['batchCount'] else 'queued')
+    # Nothing remains to cancel once every batch is committed, so completed wins over a pending cancel
+    # (matches BulkUpdate.tla TerminalPreserved: cancelled implies fewer than all batches committed).
+    s['status'] = 'completed' if nxt == s['batchCount'] else ('cancelled' if s['cancelRequested'] else 'queued')
     return s
 
 

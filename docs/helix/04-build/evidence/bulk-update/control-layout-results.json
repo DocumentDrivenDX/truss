@@ -1,0 +1,10 @@
+{
+  "scope": "Candidate bulk control layout constraints on scratch PostgreSQL; no grants/locks/concurrency/install baseline",
+  "passed": true,
+  "cases": 79,
+  "reachableStates": 53,
+  "fixtureSha256": "ad94f478c7c84b0c404115b275e830c91645c3f6fa009fb52ae44410a13f396e",
+  "layoutSha256": "937f3c5c650ce686a5c08215fa0da8f198bc21f6703690bb7eb6de327690adc6",
+  "postgres": "postgres (PostgreSQL) 18.6 (Homebrew)",
+  "failed": []
+}

@@ -156,5 +156,31 @@ class Capacity(unittest.TestCase):
                 m.check_capacity(*args)
 
 
+class FinalBatchCancel(unittest.TestCase):
+    """Own expectation (not in the pinned fixture): a cancel pending when the LAST batch commits
+    leaves a completed job, because nothing remains to fence (BulkUpdate.tla TerminalPreserved)."""
+
+    def _admitted_one_batch(self):
+        s = m.apply_event(None, {'kind': 'submit', 'batchCount': 1})['state']
+        s = m.apply_event(s, {'kind': 'claim'})['state']
+        s = m.apply_event(s, {'kind': 'execute', 'batch': 0, 'fence': '1'})['state']
+        return m.apply_event(s, {'kind': 'cancel'})['state']
+
+    def test_last_batch_commit_with_pending_cancel_completes(self):
+        r = m.apply_event(self._admitted_one_batch(), {'kind': 'commit'})
+        self.assertEqual((r['state']['status'], r['state']['committedBatches']), ('completed', 1))
+
+    def test_reconciled_last_batch_with_pending_cancel_completes(self):
+        s = m.apply_event(self._admitted_one_batch(), {'kind': 'lose-custody'})['state']
+        r = m.apply_event(s, {'kind': 'reconcile', 'evidence': 'committed'})
+        self.assertEqual(r['state']['status'], 'completed')
+
+    def test_non_final_batch_with_pending_cancel_is_cancelled(self):
+        s = m.apply_event(None, {'kind': 'submit', 'batchCount': 2})['state']
+        s = m.apply_event(m.apply_event(s, {'kind': 'claim'})['state'], {'kind': 'execute', 'batch': 0, 'fence': '1'})['state']
+        s = m.apply_event(s, {'kind': 'cancel'})['state']
+        self.assertEqual(m.apply_event(s, {'kind': 'commit'})['state']['status'], 'cancelled')
+
+
 if __name__ == '__main__':
     unittest.main()
