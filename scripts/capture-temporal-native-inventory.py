@@ -28,6 +28,38 @@ def main():
     parser.add_argument('--output',required=True,type=Path)
     parser.add_argument('--evidence-root',action='append',type=Path,default=[],help='Explicit run-scoped generated evidence roots, including prior serial capture')
     args=parser.parse_args()
+    # Authenticate the original hosted input and all component prerequisites
+    # before creating output or importing a native/runtime dependency.
+    input_root=args.candidate_wheel.resolve().parent.parent
+    hosted_path=input_root/'hosted-input.json'
+    verified_path=input_root/'verified-input.json'
+    if not hosted_path.is_file() or not verified_path.is_file():
+        raise ValueError('Missing authenticated inventory-observation hosted input')
+    hosted=json.loads(hosted_path.read_bytes());verified=json.loads(verified_path.read_bytes())
+    if (verified.get('candidateWheelSha256')!=args.wheel_sha256
+            or Path(verified.get('candidateWheel','')).resolve()!=args.candidate_wheel.resolve()):
+        raise ValueError('Original inventory candidate wheel/input binding differs')
+    from release_cohort import component_source_refs
+    cohort_bytes=(ROOT/'scripts/truss-release-cohort.json').read_bytes()
+    component_source_refs(cohort_bytes)
+    refs=hosted.get('componentPrerequisiteReceipts')
+    if type(refs) is not list:
+        raise ValueError('Missing original component prerequisite refs for inventory-observation')
+    members={}
+    for name,digest_expected in hosted.get('files',{}).items():
+        path=input_root/name
+        if path.is_symlink() or not path.is_file() or sha256(path.read_bytes()).hexdigest()!=digest_expected:
+            raise ValueError('Original inventory hosted member path/hash differs: '+name)
+        raw=path.read_bytes();members[name]=raw;members['inputs/'+name]=raw
+    from temporal_qualified_artifact import require_closed_component_prerequisites
+    component_result=require_closed_component_prerequisites(refs,members,cohort_bytes=cohort_bytes,
+        owner_identities=hosted.get('ownerIdentities'),admitted_wheels=hosted.get('wheels'))
+    from release_cohort import require_stage_admission
+    require_stage_admission('inventory-observation',component=component_result,records={
+        'sourceIdentity':verified.get('sourceIdentity'),
+        'ownerClosure':hosted.get('ownerIdentities'),
+        'resourceClosure':hosted.get('ownerIdentities',{}).get('core',{}).get('resources'),
+        'weftClosure':component_result['weftSDK42']})
     output=args.output.resolve()
     evidence=ROOT/'docs/helix/04-build/evidence/design-audit'
     if not output.is_relative_to(evidence.resolve()):raise ValueError('Owned native evidence directory required')

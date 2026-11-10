@@ -51,6 +51,174 @@ def _require(condition: bool, message: str) -> None:
         raise ReleaseError(message)
 
 
+def _exact_tag_proof(release, tag_ref, tag_object, producer_run, producer_jobs,
+                     *, repository, source_sha, tag):
+    """Validate the successful tag workflow's fixed package/native/release job graph."""
+    _require(type(producer_run) is dict and type(producer_jobs) is dict,
+             "temporal publication requires authenticated exact-tag producer run and jobs")
+    run_id = str(producer_run.get("id", ""))
+    attempt = str(producer_run.get("run_attempt", ""))
+    _require(run_id.isdecimal() and int(run_id) > 0 and attempt.isdecimal() and int(attempt) > 0,
+             "exact-tag producer run/attempt identity is missing")
+    _require(producer_run.get("path") == ".github/workflows/release.yml"
+             and producer_run.get("event") == "workflow_dispatch"
+             and producer_run.get("head_branch") == tag
+             and producer_run.get("head_sha") == source_sha
+             and producer_run.get("conclusion") == "success"
+             and producer_run.get("repository", {}).get("full_name") == repository,
+             "exact-tag producer run is not the successful selected release source")
+    referenced_workflows = producer_run.get("referenced_workflows")
+    _require(type(referenced_workflows) is list and not referenced_workflows,
+             "exact-tag producer has unvalidated nested reusable workflows")
+    jobs = producer_jobs.get("jobs")
+    _require(type(jobs) is list, "exact-tag producer job receipt is malformed")
+    required = {"package", "native (ubuntu-24.04)", "publish"}
+    required_steps = {
+        "package": {
+            "Check active HF release cohort bindings",
+            "Verify reproducible embedded owner delivery assets",
+            "Verify complete source payload in wheel and sdist",
+        },
+        "native (ubuntu-24.04)": {
+            "Install exact released compiler and verify its checksum",
+            "Qualify the installed standalone local carrier and retained refusals",
+            "Qualify the installed fresh baseline and refusal controls",
+            "Qualify the installed final package with independent HF assertions",
+            "Qualify installed managed platform grants and contained refusals",
+            "Verify installed embedded owners with every subprocess forbidden",
+            "Run the installed public adopter workflow",
+            "Run installed current-policy query and activation workflows",
+            "Run exact installed compiler cohort and asset-cache unit module",
+        },
+        "publish": {"Record exact assets and publish"},
+    }
+    selected = {}
+    for job in jobs:
+        if type(job) is dict and job.get("name") in required:
+            name = job["name"]
+            _require(name not in selected, "exact-tag producer has duplicate required jobs")
+            selected[name] = job
+    _require(set(selected) == required, "exact-tag package/native/release jobs are incomplete")
+    for name, job in selected.items():
+        _require(job.get("conclusion") == "success"
+                 and str(job.get("run_id")) == run_id
+                 and str(job.get("run_attempt")) == attempt
+                 and job.get("head_sha", source_sha) == source_sha,
+                 "exact-tag required job did not succeed on the authenticated run: " + name)
+        steps = job.get("steps")
+        _require(type(steps) is list, "exact-tag required job has no step evidence: " + name)
+        observed = {}
+        for step in steps:
+            if type(step) is dict and type(step.get("name")) is str:
+                step_name = step["name"]
+                _require(step_name not in observed, "exact-tag job has duplicate step evidence: " + name)
+                observed[step_name] = step.get("conclusion")
+        missing_steps = sorted(required_steps[name] - set(observed))
+        failed_steps = sorted(step for step in required_steps[name] if observed.get(step) != "success")
+        _require(not missing_steps and not failed_steps,
+                 "exact-tag owner/platform/SDK/public-dependency step evidence is incomplete for "
+                 + name + ": " + ", ".join(missing_steps + failed_steps))
+    _require(release.get("tag_name") == tag and release.get("draft") is False
+             and release.get("prerelease") is False
+             and resolve_tag_commit(tag_ref, tag_object, tag) == source_sha,
+             "exact-tag release/ref/object does not resolve to authenticated source")
+    return {"runId": run_id, "attempt": attempt, "sourceCommit": source_sha,
+            "tag": tag, "jobs": tuple(sorted(("native","package","publish"))),
+            "jobStepEvidence": {name: tuple(sorted(required_steps[name])) for name in sorted(required_steps)},
+            "nestedReusableWorkflows": (), "releaseId": str(release.get("id", ""))}
+
+
+def _load_weft_owner_release(directory: Path) -> dict[str, Any]:
+    """Load the selected immutable Weft release API record and existing assets."""
+    required = {
+        "release-pins.json", "release-assets-0.4.57.json", "SHA256SUMS",
+        "current-controller-pair-registration.json", "current-source-manifest.json",
+        "current-wasm-manifest.json", "macos-browser-compiler-parity.json",
+        "macos-browser-compiler-receipts.json",
+        "x86_64-unknown-linux-gnu-component.json", "x86_64-unknown-linux-gnu-sdk-smoke.json",
+        "x86_64-unknown-linux-gnu-packaging.json",
+        "aarch64-unknown-linux-gnu-component.json", "aarch64-unknown-linux-gnu-sdk-smoke.json",
+        "aarch64-unknown-linux-gnu-packaging.json",
+        "aarch64-apple-darwin-component.json", "aarch64-apple-darwin-sdk-smoke.json",
+        "aarch64-apple-darwin-packaging.json",
+    }
+    api_path = directory / "release-api.json"
+    _require(api_path.is_file() and not api_path.is_symlink(),
+             "Missing upstream Weft GitHub release API receipt")
+    assets = {}
+    for name in required:
+        path = directory / name
+        _require(path.is_file() and not path.is_symlink(),
+                 "Missing upstream Weft owner proof asset: " + name)
+        assets[name] = path.read_bytes()
+    return {"releaseApi": json.loads(api_path.read_bytes()), "assetBytes": assets}
+
+
+def _temporal_owner_readiness(verified, owner_release, core_owner_proofs):
+    from component_prerequisite_validators import (validate_core_selected_owner_proofs,
+        validate_weft_published_owner_proofs)
+    core = validate_core_selected_owner_proofs(core_owner_proofs, selected=verified['selectedCore'])
+    _require(type(owner_release) is dict,
+             "Temporal prepublication requires authenticated upstream Weft owner release receipts")
+    source = verified['weftOwnerSource']
+    weft = validate_weft_published_owner_proofs(owner_release,
+        source_commit=source['sourceCommit'], source_tree=source['sourceTree'],
+        canonical_umf=source['canonicalCoreSourceCommit'], cargo_lock_sha256=source['cargoLockSha256'])
+    return {'core':core, 'weft':weft}
+
+
+def _load_core_owner_proofs(directory: Path, selected):
+    """Read existing retained SDK material; committed cohort alone selects P.
+
+    Inputs are existing registry/controller files, original-provenance-ID.json
+    and retained member bytes. No retrieval, qualification or owner code runs.
+    Content hashes locate copied files without relabeling their original names.
+    """
+    _require(type(selected) is dict and type(selected.get('qualification')) is dict,
+             "Missing trusted selected Core owner admission")
+    blobs = {}; provenance = {}; readiness = []
+    _require(directory.is_dir() and not directory.is_symlink(), 'Core original material directory missing')
+    for path in directory.rglob('*'):
+        _require(not path.is_symlink(), 'Symlink in Core original material directory')
+        if not path.is_file():continue
+        raw = path.read_bytes(); blobs[_sha(raw)] = raw
+        if path.suffix != '.json':continue
+        try:value = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):continue
+        if type(value) is not dict:continue
+        if path.name.startswith('original-provenance-') and path.name.endswith('.json'):
+            _require(path.name not in provenance, 'Duplicate Core original provenance')
+            provenance[path.name] = value
+        if value.get('profile') == 'umf.core-successor.material-readiness/1':readiness.append(raw)
+    q = selected['qualification']; registry_raw = blobs.get(q['registrySha256'])
+    _require(type(registry_raw) is bytes, 'Missing immutable selected P registry bytes')
+    registry = json.loads(registry_raw)
+    matches = [row for row in registry['admissions'] if row['id'] == q['admissionId']]
+    _require(len(matches) == 1, 'Missing trusted selected Core owner admission')
+    aggregate = matches[0]; materials = {}; controllers = {}
+    for platform, binding in aggregate['components'].items():
+        comp = next(row for row in registry['admissions'] if row['id'] == binding['admission_id'])
+        ctrl = comp['controller']; controllers[ctrl['commit']] = {
+            'script':blobs.get(ctrl['script_sha256']), 'workflow':blobs.get(ctrl['workflow_sha256'])}
+        records = {}
+        for material in [binding['material'], comp.get('common'), comp.get('continuation')]:
+            if material is None:continue
+            proofs = ([material['proof'], *[row['provenance'] for row in material['envelopes']]]
+                      if material.get('profile') == 'umf.core-successor.multipart-material/1' else [material])
+            for proof in proofs:
+                original = provenance.get('original-provenance-'+str(proof['artifact'])+'.json')
+                _require(type(original) is dict and original.get('binding') == proof,
+                         'Missing/misbound original Core run/job/artifact provenance')
+                records[str(proof['artifact'])] = {key:original[key] for key in ('run','job','artifact')} | {
+                    'memberBytes':{name:blobs.get(digest) for name,digest in proof['members'].items()}}
+        materials[platform] = records
+    matching = {raw for raw in readiness if json.loads(raw).get('source') == aggregate['source']
+                and json.loads(raw).get('version') == aggregate['version']}
+    _require(len(matching) == 1, 'Missing/ambiguous original Core material readiness')
+    return {'registryBytes':registry_raw, 'controllerBytes':controllers,
+            'materials':materials, 'readinessBytes':matching.pop()}
+
+
 def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -188,6 +356,9 @@ def prepare_release(
     wheel_count: int,
     require_sdist: bool,
     producer_run: dict[str, Any] | None = None,
+    producer_jobs: dict[str, Any] | None = None,
+    owner_release: dict[str, Any] | None = None,
+    core_owner_proofs: dict[str, Any] | None = None,
     allowed_workflow_paths: set[str] | None = None,
     allowed_workflow_prefixes: tuple[str, ...] = (),
 ) -> dict[str, Any]:
@@ -346,6 +517,23 @@ def prepare_release(
         import temporal_qualified_artifact
         verified = temporal_qualified_artifact.verify_release_staging(
             assets_dir, source_commit=source_sha, source_tree=expected_source_tree)
+        exact_tag_proof = _exact_tag_proof(release, tag_ref, tag_object, producer_run,
+            producer_jobs, repository=repository, source_sha=source_sha, tag=tag)
+        exact_tag_proof["ownerReadiness"] = _temporal_owner_readiness(
+            verified, owner_release, core_owner_proofs)
+        from release_cohort import require_stage_admission
+        component=verified['componentResult'];admission=verified['admission']
+        admission_result=verified['admissionResult']
+        require_stage_admission('prepublication',component=component,records={
+            'sourceIdentity':{'commit':source_sha,'tree':expected_source_tree},
+            'ownerClosure':admission_result.get('wheels'),
+            'resourceClosure':component['coreC1'],
+            'weftClosure':component['weftSDK42'],
+            'inventories':admission.get('initializationCaptures'),
+            'freshBaseline':admission_result.get('captureTransitions'),
+            'campaignInputs':admission,
+            'campaign130':verified['campaign130'],
+            'exactTagProofs':exact_tag_proof, 'selectedCore':verified['selectedCore']})
         intake = json.loads((assets_dir / "temporal-qualification-intake.json").read_bytes())
         expected_pin = {
             "schema": "truss.temporal-qualified-wheel-release-pin/1",
@@ -514,6 +702,9 @@ def main() -> int:
     parser.add_argument("--tag-ref-json", type=Path)
     parser.add_argument("--tag-object-json", type=Path)
     parser.add_argument("--producer-run-json", type=Path)
+    parser.add_argument("--producer-jobs-json", type=Path)
+    parser.add_argument("--owner-release-dir", type=Path)
+    parser.add_argument("--core-owner-proof-dir", type=Path)
     parser.add_argument("--assets-dir", type=Path)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--repository")
@@ -557,6 +748,15 @@ def main() -> int:
             return json.loads(path.read_text(encoding="utf-8"))
 
         producer = load(args.producer_run_json) if args.producer_run_json else None
+        producer_jobs = load(args.producer_jobs_json) if args.producer_jobs_json else None
+        owner_release = _load_weft_owner_release(args.owner_release_dir) if args.owner_release_dir else None
+        core_owner_proofs = None
+        if args.core_owner_proof_dir is not None:
+            import temporal_qualified_artifact
+            verified_owner_context = temporal_qualified_artifact.verify_release_staging(
+                args.assets_dir, source_commit=args.source_sha, source_tree=args.expected_source_tree)
+            core_owner_proofs = _load_core_owner_proofs(args.core_owner_proof_dir,
+                verified_owner_context['selectedCore'])
         receipt = prepare_release(
             repository=args.repository,
             release=load(args.release_json),
@@ -573,6 +773,9 @@ def main() -> int:
             wheel_count=args.wheel_count,
             require_sdist=args.require_sdist,
             producer_run=producer,
+            producer_jobs=producer_jobs,
+            owner_release=owner_release,
+            core_owner_proofs=core_owner_proofs,
             allowed_workflow_paths=set(args.producer_workflow_path),
             allowed_workflow_prefixes=tuple(args.producer_workflow_prefix),
         )

@@ -100,6 +100,30 @@ def prepare(archive,expected,output,phase,*,root=ROOT):
             actual=json.loads(z.read(admission))
             if actual.get('sourceCommit')!=identity['commit'] or actual.get('sourceTree')!=identity['tree']:
                 raise ValueError('Final admission and selected checkout identity differ')
+        # The cohort is the trusted configuration authority. Its source refs
+        # are checked before the verified input is exposed to any later stage.
+        cohort_bytes=(root/'scripts/truss-release-cohort.json').read_bytes()
+        from release_cohort import component_source_refs
+        component_source_refs(cohort_bytes)
+        component_admission = actual if phase=='qualify119' else manifest
+        prerequisites=component_admission.get('componentPrerequisiteReceipts')
+        if type(prerequisites) is not list:
+            raise ValueError('Missing original component prerequisite refs for '+
+                             ('native-campaign' if phase=='qualify119' else 'inventory-observation'))
+        from temporal_qualified_artifact import require_closed_component_prerequisites
+        component_result=require_closed_component_prerequisites(prerequisites, {**{name:z.read(name) for name in entries},
+            **{'inputs/'+name:z.read(name) for name in entries}}, cohort_bytes=cohort_bytes,
+            owner_identities=manifest['ownerIdentities'], admitted_wheels=manifest['wheels'])
+        from release_cohort import require_stage_admission
+        stage='native-campaign' if phase=='qualify119' else 'inventory-observation'
+        require_stage_admission(stage,component=component_result,records={
+            'sourceIdentity':identity,
+            'ownerClosure':manifest['ownerIdentities'],
+            'resourceClosure':manifest['ownerIdentities']['core'].get('resources'),
+            'weftClosure':component_result['weftSDK42'],
+            **({'inventories':manifest.get('initializationCaptures'),
+                'freshBaseline':manifest.get('baseline'),
+                'campaignInputs':manifest.get('campaignInputs')} if stage=='native-campaign' else {})})
         output.mkdir(parents=True,exist_ok=False)
         for name in names:
             target=output/relative(name);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read(name))

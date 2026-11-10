@@ -51,6 +51,97 @@ class PackagingCohortTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'deferred'):
             self.load(selection)
 
+    def test_current_cohort_without_c1_source_refs_refuses_specific_route(self):
+        with self.assertRaisesRegex(ValueError,'Missing trusted component source refs: core'):
+            cohort.component_source_refs((ROOT/'scripts/truss-release-cohort.json').read_bytes())
+        for section, message in (({'weft':None},'core'),({'core':None,'weft':{}},'core'),
+                                 ({'core':{},'weft':None},'weft')):
+            with self.subTest(section=section), self.assertRaisesRegex(ValueError,message):
+                cohort.component_source_refs(json.dumps({'componentPrerequisiteSourceRefs':section}).encode())
+
+    def test_stage_admission_is_phase_specific_and_keeps_future_outputs_pending(self):
+        from component_prerequisite_validators import REQUIRED,WEFT_ORIGINAL_CHECK_CALLS
+        component={'coreC1':{name:{'validated':True} for name in REQUIRED},
+            'weftSDK42':WEFT_ORIGINAL_CHECK_CALLS,
+            'stagePrerequisites':{'historyDisposition':{'syntheticSourceContext':True},
+                                  'lifecycle2':{'syntheticSourceContext':True},
+                                  'weftOwnerSource':{'sourceCommit':'6'*40,'sourceTree':'7'*40,
+                                      'canonicalCoreSourceCommit':'e'*40,'cargoLockSha256':'f'*64}}}
+        inventory={'sourceIdentity':{'commit':'a'*40,'tree':'b'*40},
+            'ownerClosure':{'synthetic':'owner closure'},'resourceClosure':{'synthetic':'nine source resources'},
+            'weftClosure':WEFT_ORIGINAL_CHECK_CALLS}
+        self.assertEqual(cohort.require_stage_admission('inventory-observation',component=component,
+            records=inventory)['stage'],'inventory-observation')
+        native={**inventory,'inventories':[{'zone':'UTC'},{'zone':'America/New_York'}],
+            'freshBaseline':{'source':'synthetic reviewed baseline'},'campaignInputs':{'candidate':'synthetic'}}
+        self.assertEqual(cohort.require_stage_admission('native-campaign',component=component,
+            records=native)['stage'],'native-campaign')
+        from component_prerequisite_validators import CORE_CELLS,CORE_PLATFORMS,CORE_SDK_CHECKS
+        selected_core={'sourceCommit':'1'*40,'version':'0.10.10','wheelSha256':'4'*64,
+            'nativeSha256':'5'*64,'qualification':{'authorityCommit':'3'*40,
+                'authorityTree':'a'*40,'registrySha256':'b'*64,'admissionId':'synthetic-source-fixture'}}
+        core_readiness={'profile':'core-selected-owner-readiness/1','sourceCommit':selected_core['sourceCommit'],
+            'version':selected_core['version'],'wheelSha256':selected_core['wheelSha256'],
+            'nativeSha256':selected_core['nativeSha256'],'authorityCommit':'3'*40,
+            'platforms':CORE_PLATFORMS,'sdkChecks':CORE_SDK_CHECKS,'cells':CORE_CELLS}
+        weft_readiness={'profile':'weft-0457-published-owner-proof/1','sourceCommit':'6'*40,
+            'sourceTree':'7'*40,'platforms':('linux-aarch64','linux-x86_64','macos-arm64'),
+            'nodeCases':14,'chromiumCases':14,'browserCases':9,
+            'sourceDependencyClosure':'cargo-package-lists-and-local-dependency-bound'}
+        publication={**native,'campaign130':{'expectedTotal':130,'passed':True},
+            'exactTagProofs':{'runId':'7','attempt':'1','sourceCommit':'a'*40,'tag':'v0.0.56',
+                'jobs':('native','package','publish'),
+                'jobStepEvidence':{'native (ubuntu-24.04)':('synthetic native proof',),
+                    'package':('synthetic package proof',),'publish':('synthetic exact-tag proof',)},
+                'nestedReusableWorkflows':(),'releaseId':'8',
+                'ownerReadiness':{'core':core_readiness,'weft':weft_readiness}},
+            'selectedCore':selected_core}
+        self.assertEqual(cohort.require_stage_admission('prepublication',component=component,
+            records=publication)['stage'],'prepublication')
+        with self.assertRaisesRegex(ValueError,'Weft owner readiness source/tree'):
+            cohort.require_stage_admission('prepublication',component=component,
+                records={**publication,'exactTagProofs':{**publication['exactTagProofs'],
+                    'ownerReadiness':{**publication['exactTagProofs']['ownerReadiness'],
+                        'weft':{**weft_readiness,'sourceCommit':'a'*40}}}})
+        for key,value in (('sourceCommit','a'*40),('version','0.10.8'),('wheelSha256','e'*64),
+                          ('authorityCommit','8'*40)):
+            bad={**publication,'exactTagProofs':{**publication['exactTagProofs'],
+                'ownerReadiness':{**publication['exactTagProofs']['ownerReadiness'],
+                    'core':{**core_readiness,key:value}}}}
+            with self.subTest(core_owner_key=key),self.assertRaises(ValueError):
+                cohort.require_stage_admission('prepublication',component=component,records=bad)
+        with self.assertRaisesRegex(ValueError,'Missing applicable native-campaign evidence: .*campaignInputs'):
+            cohort.require_stage_admission('native-campaign',component=component,records=inventory)
+        with self.assertRaisesRegex(ValueError,'Missing applicable prepublication evidence: .*exactTagProofs'):
+            cohort.require_stage_admission('prepublication',component=component,records=native)
+        for proof in ({'release':{'tag_name':'synthetic'},'ownerReadiness':publication['exactTagProofs']['ownerReadiness']},
+                      {'runId':'7','attempt':'1','sourceCommit':'a'*40,'tag':'v0.0.56',
+                       'jobs':('native','package','publish'),
+                       'jobStepEvidence':publication['exactTagProofs']['jobStepEvidence'],
+                       'nestedReusableWorkflows':(),'releaseId':'8','producerRun':None,
+                       'ownerReadiness':publication['exactTagProofs']['ownerReadiness']},
+                      {'runId':'7','attempt':'1','sourceCommit':'a'*40,'tag':'v0.0.56',
+                       'jobs':('native','package'),'jobStepEvidence':publication['exactTagProofs']['jobStepEvidence'],
+                       'nestedReusableWorkflows':(),'releaseId':'8',
+                       'ownerReadiness':publication['exactTagProofs']['ownerReadiness']}):
+            with self.subTest(proof=proof),self.assertRaisesRegex(ValueError,'Missing validated exact-tag'):
+                cohort.require_stage_admission('prepublication',component=component,
+                    records={**publication,'exactTagProofs':proof,'selectedCore':selected_core})
+        with self.assertRaisesRegex(ValueError,'Unknown temporal admission stage'):
+            cohort.require_stage_admission('public-consumer',component=component,records=publication)
+
+    def test_original_cancelled_weft_run_accepts_only_pinned_successful_selected_job(self):
+        cohort._require_weft_overall_outcome('41686658658','1','126094501575','cancelled')
+        cohort._require_weft_overall_outcome('41686658658','1','126094501575','success')
+        for run,attempt,job,conclusion in (
+            ('41686658659','1','126094501575','cancelled'),
+            ('41686658658','2','126094501575','cancelled'),
+            ('41686658658','1','126094501576','cancelled'),
+            ('41686658658','1','126094501575','failure')):
+            with self.subTest(run=run,attempt=attempt,job=job,conclusion=conclusion), \
+                    self.assertRaisesRegex(ValueError,'pinned cancelled overall run'):
+                cohort._require_weft_overall_outcome(run,attempt,job,conclusion)
+
     def test_old_distribution_or_unselected_version_refuses(self):
         for key, field, value in [('weft', 'distribution', 'weft-sql'),
                                   ('weft', 'version', '0.4.56'), ('core', 'version', '0.10.7'),

@@ -66,6 +66,26 @@ def read_pinned(entry):
 def preflight(admission):
     """Read-only checks BEFORE a native process can start."""
     source_identity=assert_qualification_checkout(ROOT,admission.get('sourceCommit'),admission.get('sourceTree'),evidence_roots=admission.get('generatedEvidenceRoots',()))
+    from release_cohort import component_source_refs
+    cohort_bytes=(ROOT/'scripts/truss-release-cohort.json').read_bytes()
+    component_source_refs(cohort_bytes)
+    wheelhouse_path=Path(admission.get('wheelhouse','')).resolve()
+    input_root=wheelhouse_path.parent
+    hosted_path=input_root/'hosted-input.json'
+    if not hosted_path.is_file():raise ValueError('Missing authenticated native-campaign hosted inputs')
+    hosted=json.loads(hosted_path.read_bytes())
+    refs=admission.get('componentPrerequisiteReceipts')
+    if type(refs) is not list:raise ValueError('Missing original component prerequisite refs for native-campaign')
+    member_bytes={}
+    for name,digest_expected in hosted.get('files',{}).items():
+        path=input_root/name
+        if path.is_symlink() or not path.is_file():raise ValueError('Missing original native-campaign member: '+name)
+        raw=path.read_bytes()
+        if sha256(raw).hexdigest()!=digest_expected:raise ValueError('Original native-campaign member hash differs: '+name)
+        member_bytes[name]=raw;member_bytes['inputs/'+name]=raw
+    from temporal_qualified_artifact import require_closed_component_prerequisites
+    component_result=require_closed_component_prerequisites(refs,member_bytes,cohort_bytes=cohort_bytes,
+        owner_identities=hosted.get('ownerIdentities'),admitted_wheels=hosted.get('wheels'))
     if sys.version_info[:2]!=(3,11) or sys.platform!='linux' or platform.machine()!='x86_64':
         raise ValueError('Selected Linux x86_64/Python3.11 qualification scope required')
     import truss
@@ -191,6 +211,13 @@ print("original public54 installed payload verified")
                      '_catalog_runtime/query-temporal-cursor.sql','_catalog_runtime/temporal-storage.sql'):
         raw=files('truss').joinpath(relative).read_bytes()
         runtime_assets[relative]={'sha256':sha256(raw).hexdigest(),'size':len(raw)}
+    from release_cohort import require_stage_admission
+    require_stage_admission('native-campaign',component=component_result,records={
+        'sourceIdentity':source_identity,'ownerClosure':observed,
+        'resourceClosure':admission.get('ownerIdentities',{}).get('core',{}).get('resources'),
+        'weftClosure':component_result['weftSDK42'],'inventories':capture_transitions,
+        'freshBaseline':profile,'campaignInputs':{'hfArchive':admission['hfArchive'],
+            'public054Wheel':admission['public054Wheel'],'public055Wheel':admission['public055Wheel']}})
     return {'scope':'Read-only artifact/inventory admission, not native qualification','wheels':observed,
         'sourceIdentity':source_identity,'captureTransitions':capture_transitions,'nativeManifestSha256':digest,
         'runtimeAssets':runtime_assets,'coreInspection':{'request':fixture,'owner':owner_profile,'result':inspection},

@@ -22,8 +22,9 @@ def exact(value,length):
     return value
 
 
-def record(path,digest):
-    raw=Path(path).read_bytes()
+def record(path,digest,*,reader=None):
+    raw=reader({'path':path,'sha256':digest}) if reader is not None else Path(path).read_bytes()
+    if type(raw) is not bytes:raise ValueError('Original handoff reader must return authenticated bytes')
     if sha256(raw).hexdigest()!=exact(digest,64):raise ValueError('Original handoff digest differs')
     return json.loads(raw)
 
@@ -45,15 +46,15 @@ def wheel_payload(entry,package):
 
 
 
-def final_weft_component(w,source,canonical_source,lock):
+def final_weft_component(w,source,canonical_source,lock,*,record_reader=None):
     """Authenticate original final-R component records; never upgrade scope."""
     if (w.get('schema')!='weft-final-R-linux-x86-component-handoff/1'
         or w.get('sourceCommit')!=source or w.get('actualJobConclusion')!='success'
         or w.get('originalAttempt')!=1):raise ValueError('Actual original final-R Linux job required')
     exact(w['sourceTree'],40)
-    component=record(w['component']['path'],w['component']['sha256'])
-    sdk=record(w['sdk42']['path'],w['sdk42']['sha256'])
-    packaging=record(w['installedPackaging']['path'],w['installedPackaging']['sha256'])
+    component=record(w['component']['path'],w['component']['sha256'],reader=record_reader)
+    sdk=record(w['sdk42']['path'],w['sdk42']['sha256'],reader=record_reader)
+    packaging=record(w['installedPackaging']['path'],w['installedPackaging']['sha256'],reader=record_reader)
     if (component['status']!='passed' or component['sourceCommit']!=source
         or component['sourceTree']!=w['sourceTree'] or component['canonicalUmf']!=canonical_source
         or component['cargoLockSha256']!=exact(lock,64)
@@ -80,6 +81,8 @@ def final_weft_component(w,source,canonical_source,lock):
         or packaging['status']!='passed' or packaging['version']!='0.4.57'
         or any(packaging[k]!=pins[k] for k in ('wheelSha256','nativeModuleSha256'))):
         raise ValueError('Actual SDK/packaging/native/shim correspondence differs')
+    from component_prerequisite_validators import validate_weft_existing_sdk_checks
+    validate_weft_existing_sdk_checks(sdk,source_commit=source,pins_before_after=pins)
     return sdk
 
 

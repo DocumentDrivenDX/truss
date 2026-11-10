@@ -10,6 +10,7 @@ original campaign evidence and the exact release wheel bytes.
 from __future__ import annotations
 
 import hashlib
+import ast
 import json
 from email.parser import BytesParser
 from pathlib import PurePosixPath
@@ -32,6 +33,21 @@ INPUT_NAMES = (
     "temporal_qualification_artifact_id",
     "temporal_qualification_artifact_sha256",
 )
+WEFT_SDK_VALIDATOR_ID = "weft.sdk-custody-42/1"
+WEFT_ORIGINAL_RECORDS = {
+    "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/component.json":
+        ("inputs/weft-final-R-c623b94b/linux-x86-retained/component.json",
+         "a10a8961da065c5b39f77a0181ad3d474ece4c1e2c5de151d616e293d52f0c6f"),
+    "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/sdk-smoke.json":
+        ("inputs/weft-final-R-c623b94b/linux-x86-retained/sdk-smoke.json",
+         "93a3910abd94baaa2e68387be666ad29f24b1c4092667629db7be11ea30b72f7"),
+    "/private/tmp/weft-temporal-canonical-S/final-R-c623b94b/linux-x86-retained/packaging.json":
+        ("inputs/weft-final-R-c623b94b/linux-x86-retained/packaging.json",
+         "0d5565fa0277aca1f0ba0215d786f51f8a28dcd6b0777d6c97005803dd0ea00b"),
+}
+WEFT_ORIGINAL_RUN = "41686658658"
+WEFT_ORIGINAL_ATTEMPT = "1"
+WEFT_ORIGINAL_JOB = "126094501575"
 
 
 def _fail(message: str) -> None:
@@ -176,6 +192,55 @@ def _receipt_ref(files: dict[str, bytes], ref: object) -> bytes:
     return files[path]
 
 
+def _original_weft_record(ref, files):
+    """Resolve the three preserved absolute Weft refs through the closed archive map."""
+    if type(ref) is not dict or set(ref) != {'path', 'sha256'}:
+        _fail('Malformed original Weft handoff reference')
+    mapping = WEFT_ORIGINAL_RECORDS.get(ref.get('path'))
+    if mapping is None or ref.get('sha256') != mapping[1]:
+        _fail('Original Weft path/hash is not in the closed correspondence')
+    member, expected = mapping
+    raw = files.get(member)
+    if type(raw) is not bytes or sha256(raw) != expected:
+        _fail('Missing/mismatched authenticated original Weft archive member: ' + member)
+    return raw
+
+
+def _join_original_weft(handoff, section, metadata, owner, admitted):
+    run, job, artifact = metadata['run'], metadata['job'], metadata['artifact']
+    if (type(owner) is not dict or type(admitted) is not dict
+            or handoff.get('sourceCommit') != section['sourceCommit']
+            or handoff.get('sourceTree') != section['sourceTree']
+            or str(handoff.get('runID')) != str(run.get('id'))
+            or str(handoff.get('originalAttempt')) != str(run.get('run_attempt'))
+            or str(handoff.get('actualJobID')) != str(job.get('id'))
+            or str(handoff.get('actualJobID')) != WEFT_ORIGINAL_JOB
+            or handoff.get('actualJobConclusion') != job.get('conclusion')
+            or str(job.get('run_id')) != str(run.get('id'))
+            or str(job.get('run_attempt')) != str(run.get('run_attempt'))
+            or str(artifact.get('workflow_run', {}).get('id', run.get('id'))) != str(run.get('id'))
+            or str(artifact.get('workflow_run', {}).get('run_attempt', run.get('run_attempt'))) != str(run.get('run_attempt'))
+            or handoff.get('wheel', {}).get('sha256') != admitted.get('sha256')
+            or handoff.get('wheel', {}).get('sha256') != owner.get('wheelSha256')
+            or handoff.get('nativeModule', {}).get('sha256') != owner.get('moduleSha256')
+            or handoff.get('shimSha256') != owner.get('shimSha256')):
+        _fail('Original Weft handoff does not join authenticated raw metadata and admitted owner bytes')
+
+
+def _lifecycle_cases(producer_bytes):
+    tree = ast.parse(producer_bytes)
+    assignments = {target.id: ast.literal_eval(node.value) for node in tree.body
+        if isinstance(node, ast.Assign) and isinstance(node.value, (ast.Tuple, ast.List))
+        for target in node.targets if isinstance(target, ast.Name) and target.id == 'LIFECYCLE2_CASES'}
+    cases = assignments.get('LIFECYCLE2_CASES')
+    if type(cases) not in (tuple, list) or len(cases) != 2:
+        _fail('Pinned exact two-case lifecycle2 source roster required')
+    normalized = list(cases)
+    if len(set(normalized)) != 2 or any(type(item) is not str or not item for item in normalized):
+        _fail('Pinned lifecycle2 source roster is malformed or duplicated')
+    return normalized
+
+
 def _runner_wheel_correspondence(admission: dict, hosted: dict) -> dict[str, dict[str, str]]:
     """Join preserved absolute admission paths to hosted archive-relative wheel members."""
     wheelhouse_text = admission.get("wheelhouse")
@@ -211,17 +276,249 @@ def _runner_wheel_correspondence(admission: dict, hosted: dict) -> dict[str, dic
     return correspondence
 
 
-def require_closed_component_prerequisites(prerequisites: object, files: dict[str, bytes]) -> None:
-    """Refuse until the separately reviewed Lovelace validator registry is invoked."""
+def _authenticated_component_results(prerequisites: object, files: dict[str, bytes], validator_refs: dict):
+    """Load only fixed, hash-referenced producer result objects for the registry."""
+    from component_prerequisite_validators import REQUIRED
+
     if type(prerequisites) is not list or not prerequisites:
-        _fail("Missing owner component prerequisite receipts; source binding remains unqualified")
-    for prerequisite in prerequisites:
-        if type(prerequisite) is not dict:
-            _fail("Component prerequisite receipt must be a closed original record")
-        validator_id = prerequisite.get("validatorId")
-        # This slice has no Lovelace registry integration yet. Do not let a
-        # nonempty ID, a hash-valid receipt, or `passed: true` substitute.
-        _fail("Unmapped component prerequisite validator; selected qualification route is refused")
+        _fail("Missing original Core C1 component receipts; native-campaign admission is refused")
+    results = {}
+    weft_sdk_result = None
+    lifecycle_result = None
+    for row in prerequisites:
+        if type(row) is not dict or set(row) != {
+                "gateId", "validatorId", "receiptPath", "receiptSha256",
+                "validatorSourcePath", "validatorSourceSha256"}:
+            _fail("Original component receipt reference is incomplete or unknown")
+        gate_id = row["gateId"]
+        if gate_id not in REQUIRED and gate_id != WEFT_SDK_VALIDATOR_ID:
+            _fail("Unknown or caller-selected component validator ID")
+        if row["validatorId"] != gate_id:
+            _fail("Unknown or caller-selected component validator ID")
+        if gate_id in results:
+            _fail("Duplicate original component result: " + gate_id)
+        path = _relative(row["receiptPath"])
+        digest = _hex(row["receiptSha256"])
+        raw = files.get(path)
+        if raw is None or sha256(raw) != digest:
+            _fail("Original component receipt path/hash mismatch: " + gate_id)
+        source_path = _relative(row["validatorSourcePath"])
+        source_digest = _hex(row["validatorSourceSha256"])
+        expected_validator = validator_refs['weftHandoff' if gate_id == WEFT_SDK_VALIDATOR_ID else 'coreRegistry']
+        if source_path != expected_validator['path'] or source_digest != expected_validator['sha256']:
+            _fail("Original component validator source does not match the closed cohort role: " + gate_id)
+        source = files.get("source/" + source_path)
+        if source is None or sha256(source) != source_digest:
+            _fail("Original component validator source path/hash mismatch: " + gate_id)
+        try:
+            result = json.loads(raw)
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise ValueError("Original component result is not JSON: " + gate_id) from error
+        if type(result) is not dict:
+            _fail("Original component result object required: " + gate_id)
+        parent = path.rpartition('/')[0]
+        def sibling(name):
+            candidate = (parent + '/' if parent else '') + name
+            value = files.get(candidate, files.get('inputs/' + candidate))
+            if type(value) is not bytes:
+                _fail('Missing original component producer companion: ' + candidate)
+            return value
+        from component_prerequisite_validators import (
+            FACTORY51, EARLY18, RUST477, PYTHON31, SAGA19, RESOURCES9,
+        )
+        if gate_id == WEFT_SDK_VALIDATOR_ID:
+            pass
+        elif gate_id == FACTORY51:
+            results[gate_id] = result
+        elif gate_id == EARLY18:
+            cost = result
+            member_bytes = {}
+            for name, binding in cost.get('members', {}).items():
+                value = sibling(name)
+                if (type(binding) is not dict or len(value) != binding.get('bytes')
+                        or sha256(value) != binding.get('sha256')):
+                    _fail('Original cost-gate companion path/hash mismatch: ' + str(name))
+                member_bytes[name] = value
+            results[gate_id] = {'cost': cost, 'xml': member_bytes.get('public-controls.xml'),
+                                'memberBytes': member_bytes}
+        elif gate_id == RUST477:
+            compiled_raw = sibling('compiled-census.json')
+            compiled = json.loads(compiled_raw)
+            case_logs = {}
+            for index, row_result in enumerate(result.get('results', [])):
+                identity = (row_result.get('package'), row_result.get('target'), row_result.get('name'))
+                case_logs[identity] = sibling('rust-cases/' + str(index) + '-case.log')
+            results[gate_id] = {'result': result, 'compiled': compiled,
+                                'compiledBytes': compiled_raw, 'caseLogs': case_logs}
+        elif gate_id == PYTHON31:
+            xmls = {}
+            for index in range(len(result.get('pythonGroups', []))):
+                xmls[str(index)] = sibling('factory-group-' + str(index) + '.xml')
+            results[gate_id] = {'aggregate': result, 'xml': xmls}
+            try:lifecycle_result=json.loads(sibling('saga-lifecycle2-result.json'))
+            except (UnicodeDecodeError,json.JSONDecodeError) as error:
+                raise ValueError('Original lifecycle2 result is malformed') from error
+        elif gate_id == SAGA19:
+            results[gate_id] = result
+        elif gate_id == RESOURCES9:
+            measurement_ref = next((row for row in prerequisites if row.get('gateId') == FACTORY51), None)
+            if measurement_ref is None:
+                _fail('Missing original factory measurement for resource manifest crosschecks')
+            measurement_path = _relative(measurement_ref['receiptPath'])
+            measurement_raw = files.get(measurement_path, files.get('inputs/' + measurement_path))
+            if type(measurement_raw) is not bytes or sha256(measurement_raw) != measurement_ref['receiptSha256']:
+                _fail('Original resource/factory measurement reference differs')
+            measurement = json.loads(measurement_raw)
+            pairs = measurement.get('pairs')
+            if type(pairs) is not list or len(pairs) != 51:
+                _fail('Original paid 51-pair resource manifests are missing')
+            manifest = pairs[0].get('sourceManifest')
+            if any(row.get('sourceManifest') != manifest for row in pairs):
+                _fail('Original paid source manifests differ across the 51 factory pairs')
+            results[gate_id] = manifest
+        else:
+            _fail('Unknown component prerequisite gate')
+        if gate_id == WEFT_SDK_VALIDATOR_ID:
+            if weft_sdk_result is not None:
+                _fail("Duplicate original Weft SDK42 result")
+            weft_sdk_result = result
+    if set(results) != REQUIRED:
+        missing = sorted(REQUIRED - set(results))
+        _fail("Missing original Core C1 result(s): " + ", ".join(missing))
+    return results, weft_sdk_result, lifecycle_result
+
+
+def require_closed_component_prerequisites(prerequisites: object, files: dict[str, bytes], *,
+                                           cohort_bytes: bytes,
+                                           owner_identities: dict,
+                                           admitted_wheels: dict,
+                                           weft_sdk: dict | None = None,
+                                           weft_source_commit: str | None = None,
+                                           weft_pins: dict | None = None) -> dict:
+    """Invoke the frozen Core registry and existing Weft SDK-call validator.
+
+    Expected pins are derived here from the authenticated source-controlled
+    cohort references and original admitted wheel/owner identities. Callers
+    cannot supply an expected map. Receipt content is data only; no bundled
+    code is imported or executed.
+    """
+    from component_prerequisite_validators import (
+        REQUIRED, WEFT_ORIGINAL_CHECK_CALLS, validate_component_prerequisites,
+        validate_weft_existing_sdk_checks,
+    )
+
+    from release_cohort import derive_component_expected, component_source_refs, _read_source_refs
+    from pathlib import Path
+    expected = derive_component_expected(cohort_bytes, files,
+        owner_identities=owner_identities, admitted_wheels=admitted_wheels)
+    section = component_source_refs(cohort_bytes)
+    authenticated_sources = _read_source_refs(section, files)
+    for role in ('coreRegistry', 'weftHandoff'):
+        ref = section['validatorSourceRefs'][role]
+        local_path = Path(__file__).with_name(Path(ref['path']).name)
+        if (not local_path.is_file()
+                or local_path.read_bytes() != authenticated_sources[ref['path']]):
+            _fail('Executed fixed validator differs from authenticated source bytes: ' + role)
+    results, referenced_weft_sdk, lifecycle = _authenticated_component_results(
+        prerequisites, files, section['validatorSourceRefs'])
+    try:
+        checked = validate_component_prerequisites(results, expected)
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("Original Core C1 prerequisite validation refused: " + str(error)) from error
+    if set(checked) != REQUIRED:
+        _fail("Core C1 registry did not validate its complete fixed gate set")
+    handoff_ref = section['weft']['handoff']
+    raw_handoff = files.get(handoff_ref['path'], files.get('inputs/' + handoff_ref['path']))
+    if type(raw_handoff) is not bytes or sha256(raw_handoff) != handoff_ref['sha256']:
+        _fail('Missing trusted Weft handoff reference/bytes')
+    handoff = json.loads(raw_handoff)
+    def original_reader(ref):
+        return _original_weft_record(ref, files)
+    # Import only the fixed Truss source module, never code from an evidence member.
+    import importlib.util
+    handoff_module_path = Path(__file__).with_name('prepare-temporal-binary-enrollment.py')
+    spec = importlib.util.spec_from_file_location('truss_fixed_final_weft_validator', handoff_module_path)
+    if spec is None or spec.loader is None:
+        _fail('Fixed original Weft validator source is unavailable')
+    handoff_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(handoff_module)
+    joined_weft_sdk = handoff_module.final_weft_component(
+        handoff, section['weft']['sourceCommit'],
+        section['weft']['canonicalCoreSourceCommit'], section['weft']['cargoLockSha256'],
+        record_reader=original_reader)
+    # The handoff's internally consistent proof graph must also be the exact
+    # independently admitted wheel/module/shim and authenticated raw run graph.
+    weft_section = section['weft']
+    weft_meta = {role: json.loads(authenticated_sources[ref['path']])
+                 for role, ref in weft_section['originalMetadataRefs'].items()}
+    admitted_weft = admitted_wheels.get('weft')
+    owner_weft = owner_identities.get('weft')
+    _join_original_weft(handoff, weft_section, weft_meta, owner_weft, admitted_weft)
+    if weft_sdk is not None and weft_sdk != joined_weft_sdk:
+        _fail('Caller and original Weft handoff SDK42 bytes disagree')
+    weft_sdk = joined_weft_sdk
+    if referenced_weft_sdk is not None and weft_sdk != referenced_weft_sdk:
+        _fail("Separate and original Weft SDK42 receipt bytes disagree")
+    weft_pins = {'wheelSha256': admitted_weft['sha256'],
+                 'nativeModuleSha256': owner_weft['moduleSha256'],
+                 'shimSha256': owner_weft['shimSha256']}
+    weft_source_commit = section['weft']['sourceCommit']
+    if type(weft_pins) is not dict or set(weft_pins) != {"wheelSha256", "nativeModuleSha256", "shimSha256"}:
+        _fail("Missing admitted Weft wheel/native/shim pins")
+    try:
+        weft_checks = validate_weft_existing_sdk_checks(
+            weft_sdk, source_commit=weft_source_commit, pins_before_after=weft_pins)
+    except (KeyError, TypeError, ValueError) as error:
+        raise ValueError("Original Weft SDK42 validation refused: " + str(error)) from error
+    if weft_checks != WEFT_ORIGINAL_CHECK_CALLS:
+        _fail("Original Weft SDK42 check-call outcomes differ")
+    core_bytes=_read_source_refs(section,files)
+    census=json.loads(core_bytes[section['core']['sourceRefs']['census']['path']])
+    factory=census.get('installedFactory',{})
+    history=factory.get('legacyDisposition')
+    if (type(history) is not dict or history.get('oldProbeUnchanged') is not True
+            or history.get('warmed51IsFactoryEvidence') is not False
+            or type(history.get('separateExplicitHistory')) is not str
+            or not history['separateExplicitHistory']):
+        _fail('Original Core History1 explicit disposition is missing or changed')
+    producer=core_bytes[section['core']['producerSourceRefs']['tools/run_inspector_attribution_lanes.py']['path']]
+    normalized_cases = _lifecycle_cases(producer)
+    if (type(lifecycle) is not dict or lifecycle.get('profile')!='umf.private-installed-saga-lifecycle2/1'
+            or lifecycle.get('status')!='passed' or lifecycle.get('passed') is not True
+            or lifecycle.get('source')!=expected['controllerSource']
+            or str(lifecycle.get('run'))!=expected['run'] or str(lifecycle.get('attempt'))!=expected['attempt']
+            or lifecycle.get('cases')!=normalized_cases
+            or lifecycle.get('publishable') is not False or lifecycle.get('readyForEnrollment') is not False
+            or lifecycle.get('currentInputIdentity')!=expected['currentInputIdentity']):
+        _fail('Original same-job lifecycle2 prerequisite is missing or misbound')
+    for role in ('identityBefore','identityAfter','log','junit'):
+        ref=lifecycle.get(role)
+        if type(ref) is not dict or type(ref.get('path')) is not str:
+            _fail('Original lifecycle2 '+role+' reference is missing')
+        python_ref=next(row for row in prerequisites if row.get('gateId')=='core.c1.python-cases-31/1')
+        parent=_relative(python_ref['receiptPath']).rpartition('/')[0]
+        member=(parent+'/' if parent else '')+_relative(ref['path'])
+        raw=files.get(member,files.get('inputs/'+member))
+        if (type(raw) is not bytes or sha256(raw)!=_hex(ref.get('sha256'))
+                or (type(ref.get('bytes')) is int and len(raw)!=ref['bytes'])):
+            _fail('Original lifecycle2 '+role+' bytes/hash differ')
+        if role.startswith('identity'):
+            identity=json.loads(raw)
+            if (identity.get('artifactSource')!=expected['source']
+                    or identity.get('controllerSource')!=expected['controllerSource']
+                    or identity.get('wheelSHA256')!=expected['wheelSha256']
+                    or identity.get('currentInputIdentity')!=expected['currentInputIdentity']
+                    or identity.get('completeWheelAndInstalledRecordVerified') is not True
+                    or identity.get('distributionOwnershipVerified') is not True):
+                _fail('Original lifecycle2 same-wheel identity differs: '+role)
+        elif role=='junit':
+            from component_prerequisite_validators import _junit
+            _junit(raw,normalized_cases,'Original lifecycle2')
+    stage_records={'historyDisposition':history,'lifecycle2':lifecycle,
+                   'weftOwnerSource':{key: section['weft'][key] for key in
+                       ('sourceCommit','sourceTree','canonicalCoreSourceCommit','cargoLockSha256')}}
+    return {"coreC1": checked, "weftSDK42": weft_checks,
+            "stagePrerequisites":stage_records}
 
 
 def committed_source_snapshot(root, source_commit: str, source_tree: str, paths, *, evidence_roots=()) -> dict[str, bytes]:
@@ -373,7 +670,7 @@ def _validate_campaign(files: dict[str, bytes], binding: dict) -> tuple[dict, di
         census_stage = census.get("stages", {}).get(stage, {})
         if census_stage.get("count") != EXPECTED_COUNTS[stage] or census_stage.get("ids") != selectors:
             _fail("Original source census selectors differ: " + stage)
-    return admission, admission_result, campaign, hosted
+    return admission, admission_result, campaign, hosted, None
 
 
 def verify_qualified_bundle(archive_bytes: bytes, release_wheel: bytes, *, expected_source_commit: str,
@@ -436,7 +733,7 @@ def verify_qualified_bundle(archive_bytes: bytes, release_wheel: bytes, *, expec
         if (type(record) is not dict or set(record) != {"sha256", "size"}
                 or record.get("sha256") != sha256(files[path]) or record.get("size") != len(files[path])):
             _fail("Retained member hash/size differs: " + path)
-    admission, admission_result, campaign, hosted = _validate_campaign(files, binding)
+    admission, admission_result, campaign, hosted, component_result = _validate_campaign(files, binding)
     cohort = _json(files, binding["receipts"]["cohort"]["path"])
     installed = binding.get("installed")
     if (type(installed) is not dict or installed.get("candidateWheelSha256") != candidate["sha256"]
@@ -509,7 +806,13 @@ def verify_qualified_bundle(archive_bytes: bytes, release_wheel: bytes, *, expec
         _fail("Missing owner component prerequisite receipts; source binding remains unqualified")
     if admission.get("componentPrerequisiteReceipts") != prerequisites:
         _fail("Component prerequisite receipt roster differs from admitted source")
-    require_closed_component_prerequisites(prerequisites, files)
+    cohort_ref = binding['receipts']['cohort']
+    cohort_bytes = files[_relative(cohort_ref['path'])]
+    from release_cohort import component_source_refs
+    from component_prerequisite_validators import selected_core_owner_context
+    source_section = component_source_refs(cohort_bytes)
+    component_result = require_closed_component_prerequisites(prerequisites, files,
+        cohort_bytes=cohort_bytes, owner_identities=owners, admitted_wheels=hosted_wheels)
     if github is not None:
         if type(github) is not dict or github.get("sourceCommit") != expected_source_commit:
             _fail("Authenticated GitHub metadata/source binding required")
@@ -524,7 +827,13 @@ def verify_qualified_bundle(archive_bytes: bytes, release_wheel: bytes, *, expec
     return {"status": "verified-original-bytes", "sourceCommit": expected_source_commit,
             "sourceTree": expected_source_tree, "candidateWheelSha256": candidate["sha256"],
             "campaignCases": 130, "workflowRunId": campaign.get("workflowRunId"),
-            "workflowRunAttempt": campaign.get("workflowRunAttempt")}
+            "workflowRunAttempt": campaign.get("workflowRunAttempt"),
+            "componentResult":component_result,"campaign130":campaign,
+            "selectedCore": selected_core_owner_context(
+                cohort_bytes, owner=owners['core'], wheel=wheel_map['core']),
+            "weftOwnerSource": {key: source_section['weft'][key] for key in
+                ('sourceCommit','sourceTree','canonicalCoreSourceCommit','cargoLockSha256')},
+            "admission":admission,"admissionResult":admission_result,"cohort":cohort}
 
 
 def create_binding(root, *, campaign_dir, input_root, candidate_wheel, cohort_path, source_commit, source_tree,

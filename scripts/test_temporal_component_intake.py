@@ -95,10 +95,13 @@ class TemporalComponentIntakeTests(unittest.TestCase):
             'producerRunId':42,'producerRunAttempt':'1','temporalCases':14,'routingControls':5,'sdkControls':42,
             'sdkReportSha256':'9'*64,'packagingReportSha256':'a'*64,**pins,
             'stageResults':[{'name':n,'exitCode':0} for n in ('normal-install','pip-check','packaging','native-origin','temporal14','routing5','sdk42')]}
-        sdk={'sourceCommit':source,'version':'0.4.57','controls':42,'pinsBeforeAfter':pins}
+        sdk={'sourceCommit':source,'version':'0.4.57','controls':42,'pinsBeforeAfter':pins,
+             'checks':[{'id':name,'status':status} for name,status in
+                       (('read-check','compiled'),('page-check','compiled'),
+                        ('read-context-drift','blocked'),('page-context-drift','blocked'))]}
         packaging={'status':'passed','version':'0.4.57',**pins}
         records={'component':component,'sdk':sdk,'packaging':packaging}
-        with patch.object(module,'record',side_effect=lambda path,digest:records[path]):
+        with patch.object(module,'record',side_effect=lambda path,digest,reader=None:records[path]):
             self.assertEqual(module.final_weft_component(w,source,core,lock),sdk)
         mutations=[('component','sourceTree','f'*40),('component','cargoLockSha256','f'*64),
             ('component','workflowCommit','f'*40),('component','producerRunId',43),
@@ -108,8 +111,50 @@ class TemporalComponentIntakeTests(unittest.TestCase):
             ('component','stageResults',[{**r,'exitCode':1} for r in component['stageResults']])]
         for report,key,value in mutations:
             altered=copy.deepcopy(records);altered[report][key]=value
-            with self.subTest(report=report,key=key),patch.object(module,'record',side_effect=lambda path,digest:altered[path]),self.assertRaises(ValueError):
+            with self.subTest(report=report,key=key),patch.object(module,'record',side_effect=lambda path,digest,reader=None:altered[path]),self.assertRaises(ValueError):
                 module.final_weft_component(w,source,core,lock)
+        for checks in (sdk['checks'][:-1],
+                       [*sdk['checks'],{'id':'read-check','status':'compiled'}],
+                       [{**sdk['checks'][0],'status':'blocked'},*sdk['checks'][1:]]):
+            altered=copy.deepcopy(records);altered['sdk']['checks']=checks
+            with self.subTest(checks=checks),patch.object(module,'record',side_effect=lambda path,digest,reader=None:altered[path]),self.assertRaises(ValueError):
+                module.final_weft_component(w,source,core,lock)
+
+    def test_final_r_reader_is_limited_to_closed_authenticated_member_refs(self):
+        spec=importlib.util.spec_from_file_location('final_enrollment_reader',ROOT/'scripts/prepare-temporal-binary-enrollment.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        source='1'*40;core='3'*40;lock='4'*64
+        pins={'wheelSha256':'5'*64,'nativeModuleSha256':'6'*64,'shimSha256':'7'*64}
+        component={'status':'passed','sourceCommit':source,'sourceTree':'2'*40,'canonicalUmf':core,
+            'cargoLockSha256':lock,'target':'x86_64-unknown-linux-gnu','workflowCommit':source,
+            'producerRunId':42,'producerRunAttempt':'1','temporalCases':14,'routingControls':5,'sdkControls':42,
+            'sdkReportSha256':'9'*64,'packagingReportSha256':'a'*64,**pins,
+            'stageResults':[{'name':n,'exitCode':0} for n in ('normal-install','pip-check','packaging','native-origin','temporal14','routing5','sdk42')]}
+        sdk={'sourceCommit':source,'version':'0.4.57','controls':42,'pinsBeforeAfter':pins,
+             'checks':[{'id':name,'status':status} for name,status in
+                       (('read-check','compiled'),('page-check','compiled'),
+                        ('read-context-drift','blocked'),('page-context-drift','blocked'))]}
+        packaging={'status':'passed','version':'0.4.57',**pins}
+        payloads={'sdk':json.dumps(sdk).encode(),'packaging':json.dumps(packaging).encode()}
+        component['sdkReportSha256']=sha256(payloads['sdk']).hexdigest()
+        component['packagingReportSha256']=sha256(payloads['packaging']).hexdigest()
+        payloads['component']=json.dumps(component).encode()
+        refs={name:{'path':name,'sha256':sha256(raw).hexdigest()} for name,raw in payloads.items()}
+        handoff={'schema':'weft-final-R-linux-x86-component-handoff/1','sourceCommit':source,
+            'sourceTree':'2'*40,'actualJobConclusion':'success','originalAttempt':1,'runID':42,
+            'component':refs['component'],'sdk42':refs['sdk'],'installedPackaging':refs['packaging'],
+            'wheel':{'sha256':pins['wheelSha256']},'nativeModule':{'sha256':pins['nativeModuleSha256']},
+            'shimSha256':pins['shimSha256'],'actualControls':{'temporal':14,'ordinaryPaddedRouting':5,'SDK':42}}
+        seen=[]
+        def reader(ref):
+            seen.append(ref)
+            return payloads[ref['path']]
+        checked=module.final_weft_component(handoff,source,core,lock,record_reader=reader)
+        self.assertEqual(checked,sdk)
+        self.assertEqual(seen,[refs['component'],refs['sdk'],refs['packaging']])
+        altered=copy.deepcopy(handoff);altered['sdk42']['sha256']='b'*64
+        with self.assertRaisesRegex(ValueError,'Original handoff digest differs'):
+            module.final_weft_component(altered,source,core,lock,record_reader=reader)
 
 
 class TemporalIntakeRuntimeProcurementTests(unittest.TestCase):

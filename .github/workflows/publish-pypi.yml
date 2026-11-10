@@ -77,6 +77,7 @@ jobs:
           TAG: ${{ steps.identity.outputs.tag }}
           EVENT_NAME: ${{ github.event_name }}
           PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
+          PRODUCER_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
           SOURCE_SHA: ${{ steps.identity.outputs.source_sha }}
         shell: bash
         run: |
@@ -91,8 +92,32 @@ jobs:
           fi
           if [[ "$EVENT_NAME" == workflow_run ]]; then
             gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID" > incoming/producer-run.json
+            gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID/attempts/$PRODUCER_ATTEMPT/jobs?per_page=100" \
+              | jq '{jobs: [.[].jobs[]]}' > incoming/producer-jobs.json
           fi
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir incoming/assets
+          TEMPORAL_ID="$(jq -r '.releaseId' packages/python/src/truss/_catalog_runtime/manifest.json)"
+          if [[ "$TEMPORAL_ID" == "truss-catalog-runtime/0.76-temporal-candidate" ]]; then
+            WEFT_VERSION="$(jq -r '.weft.version' scripts/truss-release-cohort.json)"
+            OWNER_TAG="v$WEFT_VERSION"
+            OWNER_DIR="incoming/weft-owner"
+            mkdir -p "$OWNER_DIR"
+            gh api "repos/DocumentDrivenDX/weft/releases/tags/$OWNER_TAG" > "$OWNER_DIR/release-api.json"
+            gh release download "$OWNER_TAG" --repo DocumentDrivenDX/weft --dir "$OWNER_DIR" \
+              --pattern "release-pins.json" --pattern "release-assets-$WEFT_VERSION.json" \
+              --pattern "SHA256SUMS" --pattern "current-controller-pair-registration.json" \
+              --pattern "current-source-manifest.json" --pattern "current-wasm-manifest.json" \
+              --pattern "macos-browser-compiler-parity.json" --pattern "macos-browser-compiler-receipts.json" \
+              --pattern "x86_64-unknown-linux-gnu-component.json" \
+              --pattern "x86_64-unknown-linux-gnu-sdk-smoke.json" \
+              --pattern "x86_64-unknown-linux-gnu-packaging.json" \
+              --pattern "aarch64-unknown-linux-gnu-component.json" \
+              --pattern "aarch64-unknown-linux-gnu-sdk-smoke.json" \
+              --pattern "aarch64-unknown-linux-gnu-packaging.json" \
+              --pattern "aarch64-apple-darwin-component.json" \
+              --pattern "aarch64-apple-darwin-sdk-smoke.json" \
+              --pattern "aarch64-apple-darwin-packaging.json"
+          fi
       - name: Verify tag source, checksum manifest, pins and package metadata
         id: source
         env:
@@ -116,10 +141,12 @@ jobs:
             --wheel-prefix "$WHEEL_PREFIX" --wheel-count 1 --require-sdist
             --release-json incoming/release.json --tag-ref-json incoming/tag-ref.json
             --assets-dir incoming/assets --output-dir dist --receipt dist/source-receipt.json)
+          if [[ -d incoming/weft-owner ]]; then ARGS+=(--owner-release-dir incoming/weft-owner); fi
           ARGS+=(--expected-source-tree "$(jq -r .tree.sha incoming/source-commit.json)")
           if [[ -f incoming/tag-object.json ]]; then ARGS+=(--tag-object-json incoming/tag-object.json); fi
           if [[ "$EVENT_NAME" == workflow_run ]]; then
-            ARGS+=(--producer-run-json incoming/producer-run.json --producer-workflow-path .github/workflows/release.yml)
+            ARGS+=(--producer-run-json incoming/producer-run.json --producer-jobs-json incoming/producer-jobs.json
+              --producer-workflow-path .github/workflows/release.yml)
           fi
           python scripts/publish_pypi_release.py "${ARGS[@]}"
           printf 'version=%s\ndistribution=%s\n' "$VERSION" "$DISTRIBUTION" >> "$GITHUB_OUTPUT"
