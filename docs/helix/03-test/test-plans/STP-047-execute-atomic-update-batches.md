@@ -33,9 +33,12 @@ This historical draft is preserved from the earlier authorized bulk-action work.
 It does not claim that its planned tests or protected executor are complete.
 Current owner amendments govern every requirement below: Python-first delivery,
 basic functionality tests, stock PostgreSQL practical limits and the existing
-native statement/operation deadlines. Receiver/exporter, custom tracing/metrics,
-formal-model and elaborate qualification prescriptions below are historical
-optional proposals, not required implementation or release gates. A proposed
+native statement/operation deadlines. Owner decision (2026-11-08) scopes acceptance gates: when making bulk
+recovery or diagnostics claims, the bounded model for US-048-AC7 and the
+traced/untraced real-receiver correlation, privacy and outage tests for
+STP-048 AC6 are required. Other receiver/exporter, custom tracing/metrics and
+elaborate qualification prescriptions remain optional; these gates do not
+extend to unrelated feature claims. A proposed
 upstream60-second allowance cannot widen current native10-second SQL or30-second
 operation limits. Host connection/transaction ownership and no hidden retries
 remain unchanged. Existing `bulk_action_gateway.py`, action-store and authority
@@ -62,7 +65,7 @@ Prove US-047's original portable or native outcomes under its contracted profile
 | US-047-AC3 | `stop_with_prefix` | the complete earlier prefix stays committed, batch1 has no business effect and no later batch is admitted. | `@covers US-047-AC3` | Native integration | `packages/python/tests/test_bulk_executor.py` |
 | US-047-AC4 | `current_authority` | original current-authority/invariant boundaries refuse before unauthorized effects and no privileged fixture path substitutes for the public gateway. | `@covers US-047-AC4` | Native integration | `packages/python/tests/test_bulk_executor.py` |
 | US-047-AC5 | `no_op_receipt` | exact no-op and complete original result vectors persist without fabricated changes/version increments or repeat effects. | `@covers US-047-AC5` | Native integration | `packages/python/tests/test_bulk_executor.py` |
-| US-047-AC6 | `capacity_and_failure` | complete rollback/stop or uncertainty is preserved without partial item outcomes, truncated receipts or lost original recovery custody. | `@covers US-047-AC6` | Native integration | `packages/python/tests/test_bulk_executor.py` |
+| US-047-AC6 | `capacity_and_failure` | complete rollback/stop or uncertainty is preserved without partial item outcomes, truncated receipts or lost original recovery custody. Planned capacity controls: R = 2 MiB default retained result per batch; C = 256 MiB per-job manifest/control/outcomes. Registration MUST satisfy `manifestControlBound + ceil(maxItems/batchSize) × R ≤ C`; reserve full R before writes. Failure to reserve full R and a complete result exceeding R each refuse with `PAP_LIMIT` before writes. Preserve committed prefix and complete result vectors. | `@covers US-047-AC6` | Native integration | `packages/python/tests/test_bulk_executor.py` |
 | US-047-AC7 | `namespace_token_collision` | namespace-inclusive reserved item tokens remain distinct and cannot replay, conflict with or disclose the other job. | `@covers US-047-AC7` | Native integration | `packages/python/tests/test_bulk_executor.py` |
 
 ## Executable Proof
@@ -74,6 +77,8 @@ Primary planned command: `python3 -m unittest discover -s packages/python/tests 
 Original fixture owner/path: UMF `docs/helix/03-test/fixtures/bulk-update/cases.json` and `model.json`, owned by US-902; all consumers pin the originals. Shared language-neutral fixture: three matching Customer identities2/10/11, active true, integer last_seen below100, fourth identity12 above100; batchSize2 yields [2,1]; registered set-active recipe plus original model/action/source/selection pins. Negative controls mutate one pinned input/guard/fence/permission at a time. Runtime rows require isolated owned databases/roles and current source/installer closure; synthetic issuers cannot qualify protected ordinary-person admission.
 
 ## Edge Cases and Failure Modes
+
+For the existing `capacity_and_failure` control (`@covers US-047-AC6`), qualify the largest actual 100-item complete tx/1 result against R and verify full-R reservation before any batch write. At 10,000 items and 100 items per batch, 100 × 2 MiB + 16 MiB manifest = 216 MiB, leaving 40 MiB of C for control; the former 8 MiB default would require 816 MiB and is inadmissible. Test both failure to reserve full R and an oversized complete result; each must refuse with `PAP_LIMIT` before any batch writes. If a later batch reservation fails after earlier commits, stop with the committed prefix explicit and complete. Preserve the existing complete rollback/stop or uncertainty behavior without partial item outcomes. These controls are planned and have not been executed; the arithmetic is an admission bound, not an observed runtime measurement.
 
 Empty/no-op, exact bound/overflow, Unicode/large-integer, duplicate/unknown fields, tampering, missing authority, drift and uncertainty must keep their distinct contract outcomes. Native concurrency controls use actual two-connection barriers and independent effect/outcome queries.
 
