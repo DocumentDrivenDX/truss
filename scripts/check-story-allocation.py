@@ -52,8 +52,8 @@ for story in stories:
             else:
                 allocations.append({'criterion': identity, 'scenario': cells[1],
                                     'expected': cells[2], 'layer': cells[4], 'testInputs': cells[5]})
-if len(criteria) != 192:
-    errors.append('expected all 192 criteria (167 baseline plus 25 bulk UPDATE draft criteria)')
+if len(criteria) != 197:
+    errors.append('expected all 197 criteria (172 baseline, including US-012-AC5/6 and US-045-AC6/7/8, plus 25 bulk UPDATE draft criteria)')
 receipt = {'scope': 'Declared story/design/test reference structure only; no semantic adequacy, implementation or native verdict',
            'stories': len(stories), 'criteria': len(criteria), 'errors': errors, 'sources': sources,
            'allocations': allocations,

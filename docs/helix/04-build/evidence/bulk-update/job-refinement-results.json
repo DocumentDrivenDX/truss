@@ -1,0 +1,116 @@
+{
+  "scope": "Bounded model refinement onto UMF job table; no native proof",
+  "passed": true,
+  "fixtureSha256": "1e9fefad1295bc9e56c4a3c81a1b6653906f2790acde321c6ba1ed70f3d7000c",
+  "fixtureStatus": "planned",
+  "modelStates": 607102,
+  "stepsUsed": {
+    "('queued', 'running', 0)": [
+      "claim_0",
+      "claim_1"
+    ],
+    "('queued', 'cancelled', 0)": [
+      "persist_cancel"
+    ],
+    "('running', 'queued', 0)": [
+      "expire_lease"
+    ],
+    "('running', 'cancelled', 0)": [
+      "persist_cancel"
+    ],
+    "('running', 'stopped', 0)": [
+      "close_unadmitted_native_abort",
+      "guard_conflict_commit_ack"
+    ],
+    "('running', 'reconciling', 0)": [
+      "cancel_original_noncommit",
+      "commit_ack_loss",
+      "crash_unresolved_running",
+      "expired_claim_native_noncommit",
+      "guard_conflict_commit_ack_loss",
+      "rollback_ack",
+      "rollback_ack_loss"
+    ],
+    "('reconciling', 'stopped', 0)": [
+      "reconcile_original_guard_conflict",
+      "reconcile_original_noncommit_stop"
+    ],
+    "('running', 'queued', 1)": [
+      "commit_ack"
+    ],
+    "('running', 'cancelled', 1)": [
+      "commit_ack"
+    ],
+    "('reconciling', 'queued', 1)": [
+      "commit_ack",
+      "reconcile_original_commit"
+    ],
+    "('reconciling', 'cancelled', 1)": [
+      "commit_ack",
+      "reconcile_original_commit"
+    ],
+    "('running', 'completed', 1)": [
+      "commit_ack"
+    ],
+    "('reconciling', 'completed', 1)": [
+      "commit_ack",
+      "reconcile_original_commit"
+    ]
+  },
+  "fixtureTriplesNotExercisedByModel": [
+    "('cancelled', 'cancelled', 0)",
+    "('completed', 'completed', 0)",
+    "('reconciling', 'reconciling', 0)",
+    "('running', 'running', 0)",
+    "('stopped', 'stopped', 0)"
+  ],
+  "controls": {
+    "broken_terminal": {
+      "kind": "refinement",
+      "event": "unsafe_restart_stopped",
+      "from": [
+        "stopped",
+        0
+      ],
+      "to": [
+        "queued",
+        0
+      ]
+    },
+    "missing_lookup_reclaim": {
+      "kind": "invariant",
+      "event": "unsafe_missing_means_noncommit",
+      "violations": [
+        "no_invented_noncommit"
+      ]
+    },
+    "broken_recovery": {
+      "kind": "refinement",
+      "event": "unsafe_retry_admitted",
+      "from": [
+        "reconciling",
+        0
+      ],
+      "to": [
+        "queued",
+        0
+      ]
+    },
+    "premature_cancel": {
+      "kind": "invariant",
+      "event": "persist_cancel",
+      "violations": [
+        "cancelled_requires_original_settlement"
+      ]
+    },
+    "broken_cancel": {
+      "kind": "invariant",
+      "event": "open_original_native",
+      "violations": [
+        "no_dispatch_beyond_terminal_cutoff",
+        "cancelled_requires_original_settlement"
+      ]
+    }
+  },
+  "sourceSha256": "aa0805ace67de421fc11bee5cca16695922a3d17380a367ce323530e3aadb886"
+}

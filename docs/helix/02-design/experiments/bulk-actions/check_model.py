@@ -136,7 +136,11 @@ def transitions(s, mutation=None):
             results=tuple(('changed' if s.changes[i] else 'noop') if s.staged[i] else s.results[i] for i in range(3))
             receipts = list(s.receipts); receipts[s.batch] = True
             for ack, phase in ((True, 'committed'), (False, 'commit_unknown')):
-                yield 'commit_ack' if ack else 'commit_ack_loss', replace(s, effects=effects,
+                # A cancel requested during the admitted attempt is consumed by its commit (CONTRACT-904 T10).
+                cf = s.cancel_requested
+                cs = (('completed' if s.prefix+1 == 2 else 'cancelled') if ack else 'reconciling') if cf else s.cancel_status
+                yield 'commit_ack' if ack else 'commit_ack_loss', replace(s, cancel_fenced=s.cancel_fenced or cf, cancel_status=cs,
+                    terminal_cutoff=min(s.terminal_cutoff, s.prefix+1) if cf else s.terminal_cutoff, effects=effects,
                     receipts=tuple(receipts),outcomes=outcomes,results=results, prefix=s.prefix+1, phase=phase,
                     recovering=not ack, staged=(0, 0, 0),
                     versions=tuple(s.versions[i]+s.staged[i]*int(s.changes[i]) for i in range(3)),native_actual='committed',native_observed='committed' if ack else 'unknown')

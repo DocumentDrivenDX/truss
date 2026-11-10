@@ -1,5 +1,5 @@
 ----------------------------- MODULE BulkUpdate -----------------------------
-EXTENDS Integers, Sequences, TLC
+EXTENDS Integers, Sequences, TLC, BulkUpdateJobTable
 \* Design model only: actual PostgreSQL/authority obligations are external premises.
 VARIABLE s
 vars == <<s>>
@@ -123,6 +123,9 @@ Commit(ack) ==
       !.outcomes = [i \in 1..3 |-> s.outcomes[i] + s.staged[i]],
       !.results = [i \in 1..3 |-> IF s.staged[i] = 1 THEN (IF s.changes[i] THEN "changed" ELSE "noop") ELSE s.results[i]],
       !.native_actual = "committed", !.native_observed = IF ack THEN "committed" ELSE "unknown", !.receipts[s.batch+1] = TRUE, !.prefix = @ + 1,
+      !.cancel_fenced = @ \/ s.cancel_requested,
+      !.terminal_cutoff = IF s.cancel_requested /\ s.prefix + 1 < @ THEN s.prefix + 1 ELSE @,
+      !.cancel_status = IF s.cancel_requested THEN (IF ack THEN (IF s.prefix + 1 = 2 THEN "completed" ELSE "cancelled") ELSE "reconciling") ELSE @,
       !.phase = IF ack THEN "committed" ELSE "commit_unknown",
       !.recovering = ~ack, !.staged = <<0,0,0>>]
 Rollback(ack) ==
@@ -153,6 +156,19 @@ Next ==
  \/ (\E b \in BOOLEAN: GuardConflict(b) \/ Commit(b) \/ Rollback(b))
  \/ (\E c \in BOOLEAN: \E a \in BOOLEAN: MarkerCommit(c,a))
  \/ (\E i \in 1..3: ExternalEdit(i) \/ ExternalRebind(i) \/ Write(i))
+\* Job-level projection onto the UMF job table (CONTRACT-904), checked against the owner fixture table.
+\* Allowed is generated from transitions.json by gen_job_table.py into BulkUpdateJobTable.tla.
+Prefix(x) == x.prefix - (IF x.phase = "commit_unknown" THEN 1 ELSE 0)
+Status(x) ==
+ IF x.stopped /\ x.phase = "settled" THEN "stopped"
+ ELSE IF x.cancel_status = "cancelled" THEN "cancelled"
+ ELSE IF x.phase \in {"commit_unknown","rollback_unknown","rolled_back","conflict_unknown"} \/ (x.recovering /\ x.phase # "registration_unknown") THEN "reconciling"
+ ELSE IF Prefix(x) = 2 /\ x.phase \in {"idle","committed"} THEN "completed"
+ ELSE IF x.phase = "committed" \/ (x.phase = "idle" /\ (x.owner = -1 \/ x.expired)) THEN "queued"
+ ELSE "running"
+JobStep == \/ (Status(s) = Status(s') /\ Prefix(s) = Prefix(s'))
+           \/ <<Status(s), Status(s'), Prefix(s') - Prefix(s)>> \in Allowed
+JobRefinement == [][JobStep]_vars
 Spec == Init /\ [][Next]_vars
 OneEffect == \A i \in 1..3: s.outcomes[i] \in 0..1
 AtomicBatch == s.outcomes[1] = s.outcomes[2]

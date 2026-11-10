@@ -33,9 +33,14 @@ This historical draft is preserved from the earlier authorized bulk-action work.
 It does not claim that its planned tests or protected executor are complete.
 Current owner amendments govern every requirement below: Python-first delivery,
 basic functionality tests, stock PostgreSQL practical limits and the existing
-native statement/operation deadlines. Receiver/exporter, custom tracing/metrics,
-formal-model and elaborate qualification prescriptions below are historical
-optional proposals, not required implementation or release gates. A proposed
+native statement/operation deadlines. Owner decision 2026-11-08, superseding the
+optional treatment of these items here: the bounded formal model (US-048-AC7,
+TLC) and the traced/untraced real-receiver correlation, privacy and outage tests
+(STP-048 AC6) are **required acceptance gates** for bulk-action recovery and
+diagnostics claims. This is a scoped exception to the basic-logging-only
+`o11y-otel` override in `01-frame/concerns.md` and does not widen it to other
+features; other receiver/exporter and tracing/metrics prescriptions remain
+historical optional proposals. A proposed
 upstream60-second allowance cannot widen current native10-second SQL or30-second
 operation limits. Host connection/transaction ownership and no hidden retries
 remain unchanged. Existing `bulk_action_gateway.py`, action-store and authority
@@ -107,7 +112,7 @@ If an actual xid8 is used, assign/capture it on the ORIGINAL effect transaction 
 
 Adopt original shared diagnostic/capture pipeline and its exact existing contracts; no parallel bulk-specific telemetry transport. Bulk diagnostics use existing trusted attemptId/runId correlation and safe operation/outcome slots; job/batch/fence correspondence is retained in separately protected audit/control state, never added as unknown exporter fields. Raw SQL/parameters/guard/business values are excluded before sinks. Failed exporter cannot change commit/lock/recovery meaning. TD-048/STP-048 allocate traced/untraced real-receiver correlation, privacy and outage tests under the already selected o11y-otel concern.
 
-Upstream100-item/10000-item/16MiB/60-second limits apply. Register an 8 MiB maximum retained result per batch and 256 MiB maximum retained manifest/outcomes per job; admit finite complete manifest/control space at seal/submit and reserve full configured result space for each batch before its writes and refuse PAP_LIMIT on exhaustion. Actual retained manifest/control/outcomes MUST fit the256MiB job cap. Later batch capacity refusal may stop a partially completed job; its committed prefix is retained explicitly. It cannot omit/truncate receipts or masquerade as whole-job success. No truncation or result-vector reconstruction from journals. Durable namespace nonreuse and retention are CONTRACT-904 namespace-lifetime rules, stronger than ordinary group minimum retention; existing ordinary groups remain unchanged. No universal CPU/heap ceiling or throughput claim.
+Upstream100-item/10000-item/16MiB/60-second limits apply. Register a maximum retained result R per batch and a maximum retained manifest/control/outcomes C per job (defaults R = 2 MiB, C = 256 MiB; owner decision 2026-11-08 lowered R from 8 MiB). Registration MUST refuse unless, at the configured item and batch limits, `manifestControlBound + ceil(maxItems/batchSize) × R ≤ C`. At 10000 items and 100 items per batch that is 100 batches, so 100 × 2 MiB = 200 MiB plus the 16 MiB manifest bound leaves 40 MiB of the 256 MiB for control state; R = 8 MiB (800 MiB) is not admissible. A batch whose complete retained result exceeds R refuses PAP_LIMIT before its writes, so R MUST be qualified against the largest 100-item complete tx/1 result. Admit finite complete manifest/control space at seal/submit and reserve full configured result space R for each batch before its writes and refuse PAP_LIMIT on exhaustion. R MUST NOT exceed the upstream result bound. Actual retained manifest/control/outcomes MUST fit the256MiB job cap. Later batch capacity refusal may stop a partially completed job; its committed prefix is retained explicitly. It cannot omit/truncate receipts or masquerade as whole-job success. No truncation or result-vector reconstruction from journals. Durable namespace nonreuse and retention are CONTRACT-904 namespace-lifetime rules, stronger than ordinary group minimum retention; existing ordinary groups remain unchanged. No universal CPU/heap ceiling or throughput claim.
 
 ## Precedence and Compatibility
 

@@ -9,7 +9,7 @@ ddx:
   links:
     - id: truss.native-source-binding.design
       kind: informed_by
-    - id: CONTRACT-013
+    - id: CONTRACT-014
       kind: informed_by
     - id: CONTRACT-007
       kind: informed_by
@@ -20,7 +20,7 @@ ddx:
 # Native source observation
 
 This isolated implementation spike extends the incomplete native-binding design,
-not the current consumer registration. Baseline is Truss59360445. CONTRACT-013's
+not the current consumer registration. Baseline is Truss59360445. CONTRACT-014's
 structural0.1 packet remains frozen and rejects the proposed0.2 inventory; it must
 not be weakened or implicitly migrated. This proposal needs independent review.
 
