@@ -1,47 +1,57 @@
 {
   "scope": "Independent TLC mutations of bounded design model; no native proof",
   "passed": true,
-  "originalSha256": "90e148bef7fe14a735c66d3925ace3eb0c582d44fb674c414d7d7914b2b1ea9f",
+  "originalSha256": "17cf31159c570b4e5685fb365ac771d0fe09c36f0f97609b93709c5399bd3e46",
   "results": [
     {
       "id": "expired_admission",
       "refused": true,
       "exitCode": 12,
-      "sourceSha256": "fa14cba68ebb994e09b1d4add0cba4e95b4f2ee78d805c1f2145e8db9000f098",
+      "sourceSha256": "66cb97dd0361b340da9db4a79370f53ebf4b760106371d7211ebc146a6661e7c",
       "violation": [
         "Error: Invariant LiveAdmission is violated."
       ],
-      "logSha256": "f7c214bb489e984c01acef4a358e8edc942687b06369d04e2ddd14bc0e97f61f"
+      "logSha256": "5cfd58f40e98acc4bdcc2a3a73e7ede44d3b47dc5d427b95f3ed89a1c4d75777"
     },
     {
       "id": "partial_commit",
       "refused": true,
       "exitCode": 12,
-      "sourceSha256": "3f9d9a00334dd0000aea021a10e9e58b45fd7573b7d17477dfa16341e4c2f23e",
+      "sourceSha256": "5da4b5c1b8c6fc01e2b20ce11a3513dedd4216304f6e23585688a4ffed37de33",
       "violation": [
         "Error: Invariant CompleteReceipts is violated."
       ],
-      "logSha256": "1499c41ee7e63c7e58d9cbda06f302cdbd77f03b2f6d46d8bdc6458e0ce30ce2"
+      "logSha256": "eb5383cdcb7034ed532cb122bc2efbfdeec220bd5129746754a70136168ec497"
     },
     {
       "id": "guard_race",
       "refused": true,
       "exitCode": 12,
-      "sourceSha256": "d0323c4b24562c8ff43ef3c64dcd73bc4a5fbb3a345ce84cee9d9f3336a36917",
+      "sourceSha256": "342bbf895bdc23ee715f79eb47835e080caf6411901ef3a05d503bd0e1575b1d",
       "violation": [
         "Error: Invariant FrozenTarget is violated."
       ],
-      "logSha256": "072986dfcb8cfe17da582e8a1641c553f9144d544ff139ed1a621b0339124725"
+      "logSha256": "ee9bf0994a3ac82bced28c8473571d3be98317af9fb237153f98c37f235b80d8"
+    },
+    {
+      "id": "job_refinement_restart_stopped",
+      "refused": true,
+      "exitCode": 13,
+      "sourceSha256": "14e505ac71eb4f4bd3e72c31ccb412455d779891fbb5a53e4f4d1dc1c751c953",
+      "violation": [
+        "Error: Action property JobRefinement is violated."
+      ],
+      "logSha256": "aaf8fd7be5ebefac4568f30c18cac99fef312b3cba6aa7e11e37e26855c06704"
     },
     {
       "id": "unconfirmed_marker",
       "refused": true,
       "exitCode": 12,
-      "sourceSha256": "4fd5d54b64f9b7218928823cd4dc4175edf5614687dd37f279fe29f0512e7aea",
+      "sourceSha256": "b3ae11a5f71e0a29e05b116a3dc691acb008c9df5f860b3a66cdb631d03c92c6",
       "violation": [
         "Error: Invariant ConfirmedMarker is violated."
       ],
-      "logSha256": "3ffe420fb923aad890b4176e7dc8ebd1b906ca936f1ee229faa2422b539a6b44"
+      "logSha256": "87eefb0406eab0dec1cd8529b058ea4be436ad7f149439277190db1aa4a87444"
     }
   ]
 }

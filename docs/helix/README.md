@@ -191,7 +191,7 @@ interface dependencies and unresolved gates.
 | 00 Discover | Drafts | [Product vision](00-discover/product-vision.md), [competitive analysis](00-discover/competitive-analysis.md), [discovery input](00-discover/vision-input.md), [naming research](00-discover/naming-research.md), 11 [component profiles](00-discover/README.md) |
 | 01 Frame | In progress | [Concerns](01-frame/concerns.md), [research plan](01-frame/research-plan.md) (storage bake-off); [PRD](01-frame/prd.md), [feature registry](01-frame/feature-registry.md) (8 features, 45 stories) draft |
 | 02 Design | ADR-001/002/003/004/005/006/007/008 accepted directions; CONTRACT-001–012 draft | [SPIKE-001](02-design/spikes/SPIKE-001-apache-age.md) (Apache AGE), [SPIKE-002](02-design/spikes/SPIKE-002-storage-bake-off.md) (storage bake-off), [storage layout review](02-design/storage-layout-review.md), [ADR-002](02-design/adr/ADR-002-storage-strategy.md) (storage, accepted 2026-10-03, some points provisional), [ADR-001](02-design/adr/ADR-001-language-and-portable-core.md) (TypeScript first, portable core, Rust triggers; accepted 2026-10-03, Node support provisional) |
-| 03 Test | Draft strategy; all 45 story plans allocated | [TP-001](03-test/test-plan.md), [story coverage](04-build/design-coverage.md) |
+| 03 Test | Draft strategy; all 49 story plans allocated (10 baseline allocation-row errors open in US-012/US-045) | [TP-001](03-test/test-plan.md), [story coverage](04-build/design-coverage.md) |
 | 04 Build | Experimental Weft integration implemented; protected runtime unfinished | [Implementation plan](04-build/implementation-plan.md), [coordination](04-build/design-coordination.md) |
 | Current closure | Design selections and adoption remain open | [Consolidated design closure](04-build/current-design-closure.md) |
 | 05 Deploy | Not started | — |
@@ -239,7 +239,7 @@ Design additions: eight [feature solution designs](02-design/solution-designs/),
 [bootstrap contract](02-design/contracts/CONTRACT-008-layout-bootstrap.md),
 [group planning](02-design/contracts/CONTRACT-009-group-planning-and-locks.md),
 and [bootstrap experiment](04-build/evidence/native-layout-capture.md). These
-are drafts/candidate evidence. All 45 story design/test pairs are allocated;
+are drafts/candidate evidence. All 49 story design/test pairs are allocated (baseline US-012-AC5/6 and US-045-AC6/7/8 rows still have open errors);
 structural coverage does not establish semantic completeness or execution readiness.
 
 

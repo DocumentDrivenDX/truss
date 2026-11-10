@@ -179,6 +179,7 @@ The table incorporates current-authority and namespace lifecycle refinements bel
 | 2 | Complete current-authority policy guard set | Selected current-authority protocol; stable complete owner order, fresh actual-caller checks after guard acquisition; no hidden substitute for explicit read-only adoption |
 | 3 | Trusted namespace lifecycle guards, when request-bearing | Shared for request admission/replay; exclusive for namespace administration; complete native namespace identity and fresh generation/state admission |
 | 4 | Request identity, when present | Selected full trusted namespace/request serialization; digest routing alone cannot establish identity or authority |
+| 4a | Bulk job-control, bulk jobs only (CONTRACT-013) | Acquired after the complete levels 1–4 set and before level 5; absent for ordinary groups. No path holds it while waiting for a level 1–4 lock; a discovered earlier-level lock not held rolls back per the hierarchy rule. Retain through native transaction termination |
 | 5 | Business-key identities and qualified bucket guards | Complete old/new key sets in selected unambiguous byte order before roots; selected advisory or protected native bucket protocol, never assumed interchangeable |
 | 6 | Composition roots | Root object rows ascending `(type_id,id)`; strongest needed mode acquired first |
 | 7 | Other object rows | Ascending `(type_id,id)`, excluding already locked roots |

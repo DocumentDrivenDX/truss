@@ -118,7 +118,7 @@ that work. Weft's broader non-JSON binding support remains part of the product.
 
 ## Isolated implementation sequence
 
-1. Pin governing layout/source artifacts and specify CONTRACT-013's candidate
+1. Pin governing layout/source artifacts and specify CONTRACT-014's candidate
    descriptor and witness boundaries before registering a protocol.
 2. Implement a pure deterministic descriptor assembly/closed-shape checker over
    captured immutable inputs. It must emit data only and preserve unknown raw

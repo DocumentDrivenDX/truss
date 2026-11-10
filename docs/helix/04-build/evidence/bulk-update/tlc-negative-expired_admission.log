@@ -1,9 +1,10 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
-Running breadth-first search Model-Checking with fp 9 and seed 5561745903047946118 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 15675] (Mac OS X 27.0.1 aarch64, Eclipse Adoptium 17.0.20.1 x86_64, MSBDiskFPSet, DiskStateQueue).
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-expired_admission-u0rtctd9/BulkUpdate.tla
+Running breadth-first search Model-Checking with fp 106 and seed 4102357659358567372 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 58860] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-expired_admission-fub80n88/BulkUpdate.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Integers.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Sequences.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/TLC.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-expired_admission-fub80n88/BulkUpdateJobTable.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Naturals.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/FiniteSets.tla
 Semantic processing of module Naturals
@@ -11,12 +12,13 @@ Semantic processing of module Integers
 Semantic processing of module Sequences
 Semantic processing of module FiniteSets
 Semantic processing of module TLC
+Semantic processing of module BulkUpdateJobTable
 Semantic processing of module BulkUpdate
-Starting... (2026-10-13 23:51:06)
+Starting... (2026-11-10 13:14:42)
 Computing initial states...
 Computed 2 initial states...
 Computed 4 initial states...
-Finished computing initial states: 8 distinct states generated at 2026-10-13 23:51:06.
+Finished computing initial states: 8 distinct states generated at 2026-11-10 13:14:42.
 Error: Invariant LiveAdmission is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -43,4 +45,4 @@ s = [phase |-> "admitted", cancel_fenced |-> FALSE, stopped |-> FALSE, restored 
 40883 states generated, 12597 distinct states found, 7148 states left on queue.
 The depth of the complete state graph search is 7.
 The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 8).
-Finished in 00s at (2026-10-13 23:51:06)
+Finished in 00s at (2026-11-10 13:14:42)

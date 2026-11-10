@@ -62,7 +62,7 @@ kept separate from portable parser/type/schema tests.
 
 ## Structural spike capacity addendum
 
-The inherited capacity profile is explicit in CONTRACT-013:1..256 modules,
+The inherited capacity profile is explicit in CONTRACT-014:1..256 modules,
 512-character numeric tokens,4096 object members/array items, rootdepth0 through
 128, and1,000,000 nodes including object keys. Individual source bytes remain
 1..4,000,000, aggregate at most16,000,000. Test the largest admissible supplied

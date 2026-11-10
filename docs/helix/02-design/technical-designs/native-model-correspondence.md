@@ -11,7 +11,7 @@ ddx:
       kind: informed_by
     - id: truss.native-source-observation.design
       kind: informed_by
-    - id: CONTRACT-013
+    - id: CONTRACT-014
       kind: informed_by
 ---
 
