@@ -11,7 +11,7 @@
       "violation": [
         "Error: Invariant LiveAdmission is violated."
       ],
-      "logSha256": "f047b929859001d018fc7f902f368b543667bea235f50becdd299065ce312035"
+      "logSha256": "5cfd58f40e98acc4bdcc2a3a73e7ede44d3b47dc5d427b95f3ed89a1c4d75777"
     },
     {
       "id": "partial_commit",
@@ -21,7 +21,7 @@
       "violation": [
         "Error: Invariant CompleteReceipts is violated."
       ],
-      "logSha256": "6e3257e3da6bb217b4fcb36962d458427d1dbafb10c43f997cec8e8721fcfb16"
+      "logSha256": "eb5383cdcb7034ed532cb122bc2efbfdeec220bd5129746754a70136168ec497"
     },
     {
       "id": "guard_race",
@@ -31,7 +31,7 @@
       "violation": [
         "Error: Invariant FrozenTarget is violated."
       ],
-      "logSha256": "958de0fa3f83d6587df395350c34defa01d9b266cdb4063b1c7c548cc99aaf3e"
+      "logSha256": "ee9bf0994a3ac82bced28c8473571d3be98317af9fb237153f98c37f235b80d8"
     },
     {
       "id": "job_refinement_restart_stopped",
@@ -41,7 +41,7 @@
       "violation": [
         "Error: Action property JobRefinement is violated."
       ],
-      "logSha256": "80f3af4e4fdbefac08435ab16784ef63e3745f6f93d7fe92be0a07e6948bf56a"
+      "logSha256": "aaf8fd7be5ebefac4568f30c18cac99fef312b3cba6aa7e11e37e26855c06704"
     },
     {
       "id": "unconfirmed_marker",
@@ -51,7 +51,7 @@
       "violation": [
         "Error: Invariant ConfirmedMarker is violated."
       ],
-      "logSha256": "e66dfc43ce05e1d7ca2404e2396b4c8959f4127c5dd75e457a42a688126d56cf"
+      "logSha256": "87eefb0406eab0dec1cd8529b058ea4be436ad7f149439277190db1aa4a87444"
     }
   ]
 }

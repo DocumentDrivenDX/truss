@@ -1,10 +1,10 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
-Running breadth-first search Model-Checking with fp 46 and seed -6171053759669434217 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 18810] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-partial_commit-_2y72g85/BulkUpdate.tla
+Running breadth-first search Model-Checking with fp 29 and seed -5528390910263370366 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 58928] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-partial_commit-ci6gm3ww/BulkUpdate.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Integers.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Sequences.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/TLC.tla
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-partial_commit-_2y72g85/BulkUpdateJobTable.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-partial_commit-ci6gm3ww/BulkUpdateJobTable.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Naturals.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/FiniteSets.tla
 Semantic processing of module Naturals
@@ -14,11 +14,11 @@ Semantic processing of module FiniteSets
 Semantic processing of module TLC
 Semantic processing of module BulkUpdateJobTable
 Semantic processing of module BulkUpdate
-Starting... (2026-11-10 12:07:41)
+Starting... (2026-11-10 13:14:43)
 Computing initial states...
 Computed 2 initial states...
 Computed 4 initial states...
-Finished computing initial states: 8 distinct states generated at 2026-11-10 12:07:41.
+Finished computing initial states: 8 distinct states generated at 2026-11-10 13:14:43.
 Error: Invariant CompleteReceipts is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -45,4 +45,4 @@ s = [phase |-> "commit_unknown", cancel_fenced |-> FALSE, stopped |-> FALSE, res
 41236 states generated, 12693 distinct states found, 7203 states left on queue.
 The depth of the complete state graph search is 7.
 The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 8).
-Finished in 01s at (2026-11-10 12:07:42)
+Finished in 00s at (2026-11-10 13:14:43)

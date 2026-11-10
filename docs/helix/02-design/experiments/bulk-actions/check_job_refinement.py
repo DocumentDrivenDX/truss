@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""@covers US-048-AC7 / UMF US-904-AC7. Refinement of the bounded batch model onto the UMF job table.
+"""@covers US-048-AC7 / UMF US-907-AC7. Refinement of the bounded batch model onto the UMF job table.
 
 Every reachable edge of check_model.py is projected to a job-level status plus durable committed-batch
 count. The projected step must stutter or equal a (from, to, committed-delta) triple that the UMF owner

@@ -27,7 +27,7 @@ The transition map below is explicit about implementation gaps. Native tests are
 
 Evidence provenance is tested independently with `python3 check_receipt_controls.py`: altered source pins, failed status and unsafe models with the same state count refuse before Java dispatch. TLC pins the full Python receipt and source before/after execution.
 
-## Job-table refinement (UMF US-904-AC7)
+## Job-table refinement (UMF US-907-AC7)
 
 `gen_job_table.py --fixture <umf>/docs/helix/03-test/fixtures/bulk-update/transitions.json` generates `BulkUpdateJobTable.tla` (18 permitted `(from, to, committed-delta)` triples; the header pins the fixture hash; `--check` fails if stale). `BulkUpdate.tla` projects every state to a job status and durable committed-batch count (a native commit with a lost acknowledgement counts once the original result is observed) and `PROPERTY JobRefinement` requires every step to stutter or match a fixture triple. `check_job_refinement.py` does the same over the Python graph. Both explorers agree on 607,102 states. The fixture is hand-authored from UMF CONTRACT-904 and still needs owner review (`status: planned`).
 
