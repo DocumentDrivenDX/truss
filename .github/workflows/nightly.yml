@@ -55,7 +55,7 @@ jobs:
           python scripts/build-hf-conformance-archive.py --output "$RUNNER_TEMP/hf.zip"
           mkdir "$RUNNER_TEMP/hf" && unzip -q "$RUNNER_TEMP/hf.zip" -d "$RUNNER_TEMP/hf"
           python -m venv "$RUNNER_TEMP/v"
-          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]"
+          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest
           cd "$RUNNER_TEMP/hf"
           "$RUNNER_TEMP/v/bin/python" scripts/run-hf-conformance.py --installed-package
 
