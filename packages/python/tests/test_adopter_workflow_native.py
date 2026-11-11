@@ -12,7 +12,7 @@ class AdopterWorkflowTests(unittest.TestCase):
         spec=importlib.util.spec_from_file_location('adopter_workflow',example)
         module=importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        directory=Path(tempfile.mkdtemp(prefix='truss-adopter-',dir='/private/tmp'))
+        directory=Path(tempfile.mkdtemp(prefix='truss-adopter-',dir='/tmp'))
         # A raised/unconfirmed runtime shutdown preserves its database for recovery.
         result=module.run_workflow(directory,bun_executable=__import__('bun_path').BUN)
         shutil.rmtree(directory)

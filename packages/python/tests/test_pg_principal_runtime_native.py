@@ -7,7 +7,7 @@ from truss import LocalPostgres
 ROOT=Path(__file__).resolve().parents[3]
 class PrincipalRuntimeNativeTests(unittest.TestCase):
  def test_original_native_caller_subject_and_quarantine(self):
-  with tempfile.TemporaryDirectory(prefix='truss-principal-runtime-',dir='/private/tmp') as directory:
+  with tempfile.TemporaryDirectory(prefix='truss-principal-runtime-',dir='/tmp') as directory:
    with LocalPostgres(Path(directory)/'data') as runtime:
     params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
     with psycopg.connect(**params,autocommit=True) as admin:

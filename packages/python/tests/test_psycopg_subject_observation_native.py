@@ -22,7 +22,7 @@ class SubjectObservationNativeTests(unittest.TestCase):
   request=Path(__file__).with_name('fixtures').joinpath('security-mapping-request.json').read_bytes()
   source=json.loads(request)['modules'][0]['documentJson'].encode()
   cases=[]
-  with tempfile.TemporaryDirectory(prefix='python-subject-',dir='/private/tmp') as directory:
+  with tempfile.TemporaryDirectory(prefix='python-subject-',dir='/tmp') as directory:
    with LocalPostgres(Path(directory)/'data') as runtime:
     params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
     with psycopg.connect(**params,autocommit=True) as admin:

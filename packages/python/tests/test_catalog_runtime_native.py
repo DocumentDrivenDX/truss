@@ -61,6 +61,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         result=self.assembly.install_in_transaction(self.tx)
         if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
         self.installation=result.value
+        if not hasattr(result.value,'status'):self.fail('Install refused: '+repr(result.value))
         self.assertEqual(result.value.status,'pending_commit')
         self.host.detach();self.admin.commit()
         self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(psycopg.sql.Identifier(result.value.registrar_role)))

@@ -29,7 +29,7 @@ jobs:
           python -m pip install build==1.3.0
           python -m build packages/python --outdir dist
           python -m venv "$RUNNER_TEMP/v"
-          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]" pytest pytest-xdist
+          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest pytest-xdist
       - name: Python tests (slow subset)
         working-directory: packages/python/tests
         run: |

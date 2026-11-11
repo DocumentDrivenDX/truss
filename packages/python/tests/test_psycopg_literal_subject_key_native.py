@@ -33,7 +33,7 @@ class NativeLiteralSubjectKeyTests(unittest.TestCase):
   profile=json.loads(request['queryProfileJson']);profile.update(modelPins=[request['modules'][0]['pin']],policySha256=hashlib.sha256(request['policyJson'].encode()).hexdigest(),ontologySha256=hashlib.sha256(request['ontologyJson'].encode()).hexdigest(),targets=[ref('Staff')],bindings=[]);request['queryProfileJson']=json.dumps(profile)
   request['sql']='SELECT r.k0 FROM Staff r';request['parameters']={}
   original_request=json.dumps(request).encode()
-  with tempfile.TemporaryDirectory(prefix='native-literal-key-',dir='/private/tmp') as directory:
+  with tempfile.TemporaryDirectory(prefix='native-literal-key-',dir='/tmp') as directory:
    with LocalPostgres(Path(directory)/'data') as runtime:
     params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
     with psycopg.connect(**params,autocommit=True) as admin:
