@@ -16,7 +16,7 @@ import unittest
 from truss import _bulk_job_control as m
 
 FIXTURE = pathlib.Path(__file__).parent / 'fixtures/bulk-update/transitions.json'
-PINNED_SHA256 = 'ad94f478c7c84b0c404115b275e830c91645c3f6fa009fb52ae44410a13f396e'
+PINNED_SHA256 = '3cbca1f196fa64f7855bcdf9238f91aa6daf1a514d35cf62560eca6dba48474c'
 RAW = FIXTURE.read_bytes()
 FX = json.loads(RAW)
 MiB = 1024 * 1024

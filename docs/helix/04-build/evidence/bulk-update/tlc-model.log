@@ -1,10 +1,10 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
-Running breadth-first search Model-Checking with fp 0 and seed -6866040813720869863 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 58823] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-final-0cty7axd/BulkUpdate.tla
+Running breadth-first search Model-Checking with fp 37 and seed 8157914343425981274 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 24682] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-final-xtp_xo76/BulkUpdate.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Integers.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Sequences.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/TLC.tla
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-final-0cty7axd/BulkUpdateJobTable.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-final-xtp_xo76/BulkUpdateJobTable.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Naturals.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/FiniteSets.tla
 Semantic processing of module Naturals
@@ -14,18 +14,18 @@ Semantic processing of module FiniteSets
 Semantic processing of module TLC
 Semantic processing of module BulkUpdateJobTable
 Semantic processing of module BulkUpdate
-Starting... (2026-11-10 13:14:27)
+Starting... (2026-11-10 19:37:43)
 Computing initial states...
 Computed 2 initial states...
 Computed 4 initial states...
-Finished computing initial states: 8 distinct states generated at 2026-11-10 13:14:27.
-Progress(11) at 2026-11-10 13:14:30: 648,388 states generated (648,388 s/min), 146,543 distinct states found (146,543 ds/min), 51,940 states left on queue.
+Finished computing initial states: 8 distinct states generated at 2026-11-10 19:37:43.
+Progress(11) at 2026-11-10 19:37:46: 604,886 states generated (604,886 s/min), 137,932 distinct states found (137,932 ds/min), 50,073 states left on queue.
 Model checking completed. No error has been found.
   Estimates of the probability that TLC did not check all reachable states
   because two distinct states had the same fingerprint:
   calculated (optimistic):  val = 9.6E-8
-  based on the actual fingerprints:  val = 8.4E-9
+  based on the actual fingerprints:  val = 3.0E-7
 3510993 states generated, 607102 distinct states found, 0 states left on queue.
 The depth of the complete state graph search is 29.
 The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 10 and the 95th percentile is 4).
-Finished in 14s at (2026-11-10 13:14:41)
+Finished in 15s at (2026-11-10 19:37:58)

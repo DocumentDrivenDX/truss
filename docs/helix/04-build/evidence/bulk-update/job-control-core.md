@@ -10,4 +10,4 @@ What this does not show: any US-046/047/048/049 acceptance criterion. Those are 
 
 ## Addendum (control layout)
 
-`control-layout-results.json` records `check_control_layout.py` against PostgreSQL 18.6: 79 cases pass. A final-batch cancel now yields `completed` in `_bulk_job_control.py` (3 added tests); the pinned UMF fixture does not cover that case and the UMF model still says `cancelled` there.
+`control-layout-results.json` records `check_control_layout.py` against PostgreSQL 18.6: 79 cases pass. A final-batch cancel now yields `completed` in `_bulk_job_control.py` (3 added tests); UMF PR 131 added the covering fixture cases and fixed its model; this repo now pins the corrected fixture (sha256 `3cbca1f1…474c`, 16 tests pass) and the TLA job table, TLC receipts (607,102 states), refinement and layout receipts were regenerated against it.
