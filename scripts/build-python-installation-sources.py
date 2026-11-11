@@ -14,8 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DESTINATION = ROOT / 'packages/python/src/truss/_installation'
 SOURCES = (
     ('model', 'docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json'),
-    ('owner_export', 'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql'),
-    ('owner_generation_evidence', 'docs/helix/04-build/evidence/design-audit/source-epoch-layout-source.json'),
+    ('owner_export', 'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql'),
+    ('owner_generation_evidence', 'packages/postgresql/generated/source-epoch-layout-source.json'),
     *tuple(('issued_admission', 'packages/postgresql/native/issued-operation-admission/' + name + '.sql')
            for name in ('operation-admission', 'operation-asserted-origin-admission',
                         'operation-epoch-context-admission', 'operation-configuration-context-admission')),

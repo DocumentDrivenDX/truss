@@ -16,7 +16,7 @@ class PsycopgGraphProjectionNativeTests(unittest.TestCase):
         try:
             with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
                 c.execute('DROP TRIGGER fact_write_fence ON truss.edge')
-                c.execute((ROOT/'docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql').read_text())
+                c.execute((ROOT/'packages/postgresql/generated/authorization-graph-fact-scope.owner-export.sql').read_text())
                 c.execute((ROOT/'packages/postgresql/native/authorization-graph-fact-scope.sql').read_text())
                 c.execute("INSERT INTO truss.rel_def(document_id,rel_type_id,module,rel_id,name,source_min,target_min,lifecycle,directed,since_rev,doc_ord,definition_source_kind,binding_source_rev,binding_source_pointer,binding_source_bytes) VALUES('fixture',101,'fixture','mentors','mentors',0,0,'fixture',true,0,0,'accepted_binding',0,'#/mentors',decode('04','hex')); INSERT INTO truss.rel_endpoint VALUES(101,100,100)")
         except BaseException:

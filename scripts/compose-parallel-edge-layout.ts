@@ -22,7 +22,7 @@ result.id='truss-layout-parallel-edge-1.0-candidate';
 const serialized=JSON.stringify(result)+'\n',ddl=await exportPostgresqlSql(result,backend);
 if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Reload/export mismatch');
 const modelPath='docs/helix/02-design/models/truss-layout-parallel-edge-1.0.proposal.umf.json';
-const ddlPath='docs/helix/04-build/evidence/parallel-edge-layout-1.0.owner-export.sql';
+const ddlPath='packages/postgresql/generated/parallel-edge-layout-1.0.owner-export.sql';
 await Bun.write(modelPath,serialized);await Bun.write(ddlPath,ddl);
 const prior='docs/helix/02-design/models/truss-layout-core-structural-0.9.proposal.umf.json';
 const core=await Bun.file(prior).json();

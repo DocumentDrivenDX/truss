@@ -9,7 +9,7 @@ class RelationalInspectionTests(unittest.TestCase):
   binary=os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY')
   if not binary:self.skipTest('Original relational producer required')
   root=Path(__file__).resolve().parents[3]
-  request=(root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
+  request=(root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
   output=subprocess.run([binary],input=request,capture_output=True,check=True,timeout=15).stdout;packet=json.loads(output)
   operands=json.dumps({'version':'weft.security.operand-values/0.1-candidate','contextSha256':packet['queryContextSha256'],'scans':[{'scan':r['scan'],'rows':[]} for r in packet['operandReads']]}).encode()
   batch=json.dumps({'version':packet['resultContract']['encoding'],'resultContractSha256':packet['resultContractSha256'],'rows':[]}).encode()

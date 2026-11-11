@@ -14,7 +14,7 @@ class ArchiveSelfWriteFenceNativeTests(NativeBoundaryFixture,unittest.TestCase):
         cls.kwargs={**cls.kwargs,'database':'archive_fence_component'}
         c=cls.Connection(**cls.kwargs)
         try:
-            c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
+            c.run((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text())
             c.run((ROOT/'packages/postgresql/native/catalog-report/archive-self-write-fence.sql').read_text())
             c.run("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0','fixture','fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)")
         finally:c.close()

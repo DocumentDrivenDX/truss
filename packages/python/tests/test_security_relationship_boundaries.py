@@ -10,7 +10,7 @@ class RelationshipBoundaryTests(unittest.TestCase):
  def test_separate_original_codec_inspector_and_preflight(self):
   binary=os.environ.get('TRUSS_SECURITY_RELATIONSHIP_COMPILER_BINARY')
   if not binary:self.skipTest('Separate original relationship producer required')
-  folder=Path(__file__).resolve().parents[3]/'docs/helix/04-build/evidence/security-public-relationship-request-20261014'
+  folder=Path(__file__).resolve().parents[3]/'packages/python/tests/fixtures/security/security-public-relationship-request-20261014'
   checker=prepare_owned_relationship_codec_checker(Path(binary).with_name('security_relationship_codecs'))
   inspect=prepare_owned_relationship_inspector(Path(binary).with_name('security_relationship_result'))
   for suffix in ('','-observation-denied'):

@@ -13,7 +13,7 @@ from truss._owner_evidence_json import decode_owner_evidence_json
 from security_owned_read import _pin_owned_evaluator_sources,_read_owned_resource_receipt
 from security_graph_read import _property,_text_rows
 ROOT=Path(__file__).resolve().parent.parent
-BASE=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
+BASE=ROOT/'packages/python/tests/fixtures/security/security-named-source-profile'
 
 
 def _catalog_record_recipe(assessment,transport,document):

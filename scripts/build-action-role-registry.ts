@@ -42,6 +42,6 @@ const doc=await importPostgresqlSql(source,backend,{id:'truss-action-role-regist
 const raw=JSON.stringify(doc)+'\n';const ddl=await exportPostgresqlSql(doc,backend);
 if(await exportPostgresqlSql(readDocument(raw,'json'),backend)!==ddl)throw Error('Saved registry export differs');
 await Bun.write('docs/helix/02-design/models/truss-action-role-registry-storage-0.1.proposal.umf.json',raw);
-await Bun.write('docs/helix/04-build/action-role-registry.generated.sql',ddl);
+await Bun.write('packages/postgresql/generated/action-role-registry.generated.sql',ddl);
 await Bun.write('packages/python/src/truss/_security_bootstrap/action-role-registry-storage.sql',ddl);
 console.log(JSON.stringify({nativeStorageExport:true,savedRoundtrip:true,scope:'Original action declarations and role mappings; not selection program or authority'}));

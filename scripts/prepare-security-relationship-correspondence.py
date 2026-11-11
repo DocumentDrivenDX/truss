@@ -20,7 +20,7 @@ def derive_relationship_correspondence(raw,physical_request_raw,sources):
  physical_request=_original_json(physical_request_raw)
  if len(physical_request['modules'])!=1:raise ValueError('Original single native source required')
  physical=physical_request['modules'][0]
- correspondence=_original_json(Path('docs/helix/04-build/evidence/security-ontology-shared-policy-20261014/binding-correspondence.json').read_bytes())
+ correspondence=_original_json(Path('packages/python/tests/fixtures/security/security-ontology-shared-policy-20261014/binding-correspondence.json').read_bytes())
  correspondence['version']='truss.reified-security-binding-fixture/0.2-candidate'
  correspondence['scope']='Original supplied assessment correspondence only; not installed/authenticated protected authority.'
  hashof=lambda b:hashlib.sha256(b).hexdigest()
@@ -53,9 +53,9 @@ def derive_relationship_correspondence(raw,physical_request_raw,sources):
  return json.dumps(correspondence,separators=(',',':')).encode()
 
 if __name__=='__main__':
- root=Path('docs/helix/03-test/fixtures/security-public-relationship')
- evidence=Path('docs/helix/04-build/evidence/security-public-relationship-inventory-20261014')
- transport=Path('docs/helix/04-build/evidence/security-named-source-profile/transport.json').read_bytes();(root/'transport.json').write_bytes(transport)
+ root=Path('packages/python/tests/fixtures/spec/security-public-relationship')
+ evidence=Path('packages/python/tests/fixtures/security/security-public-relationship-inventory-20261014')
+ transport=Path('packages/python/tests/fixtures/security/security-named-source-profile/transport.json').read_bytes();(root/'transport.json').write_bytes(transport)
  sources={name:(root/(name+'.json')).read_bytes() for name in ('document','resolution','policy','transport')}
  for suffix,policy_file in [('', 'policy'),('-observation-denied','policy-observation-denied')]:
   selected={**sources,'policy':(root/(policy_file+'.json')).read_bytes()}

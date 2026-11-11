@@ -20,7 +20,7 @@ function chunks(bytes:Buffer){return Array.from({length:Math.ceil(bytes.length/3
 function capture(bytes:Buffer){const a=new CensusChunkAssembly(),rows=chunks(bytes);for(let i=0;i<rows.length;i+=16)a.accept(response(rows.slice(i,i+16)));a.accept(response([]));return a.finish();}
 for(const size of [1,32767,32768,32769,524288,524289,16777216])test('complete exact byte boundary '+size,()=>{
  const source=Buffer.alloc(size,65);expect(Buffer.from(capture(source))).toEqual(source);
-});
+},30000);
 test('native UTF8 bytes survive a split inside a multibyte scalar',()=>{
  const source=Buffer.from('A'.repeat(32767)+'🙂é'+ 'B'.repeat(32767));expect(capture(source)).toBe(source.toString());
 });

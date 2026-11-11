@@ -4,7 +4,7 @@ from pathlib import Path
 from hashlib import sha256
 import json,runpy
 ROOT=Path(__file__).resolve().parent.parent
-FIXTURE=ROOT/'docs/helix/03-test/fixtures/security-public-relationship'
+FIXTURE=ROOT/'packages/python/tests/fixtures/spec/security-public-relationship'
 
 def prepare_relationship_request(physical_request,assessment,*,observation_denied=False,query_sql="SELECT r.resourceId FROM Resource r WHERE HAS_RELATED(r.relatedResources, KEY('RB'))"):
  if type(observation_denied) is not bool or type(query_sql) is not str or not 1<=len(query_sql.encode())<=4000000:raise ValueError('Exact bounded original traversal selection required')

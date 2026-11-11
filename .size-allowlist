@@ -1,9 +1,7 @@
-# Shell glob patterns (matched with case) for tracked files allowed to exceed 1 MiB.
+# Shell glob patterns (matched with `case`) for tracked files allowed to exceed 1 MiB.
+packages/browser/owners/*
 packages/python/src/truss/_migrations/*.json
 packages/python/src/truss/_current_*_owner/*.mjs
-packages/python/src/truss/_installation/*
-packages/browser/owners/*
 packages/python/tests/fixtures/current-disclosure/actual-atomic-transport.json
-docs/helix/02-design/contracts/bindings/*
-docs/helix/02-design/models/*
-docs/helix/02-design/contracts/*
+docs/helix/02-design/contracts/bindings/catalog-enumeration-*.json
+docs/helix/02-design/models/truss-layout-*.proposal.umf.json

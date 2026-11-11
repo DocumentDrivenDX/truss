@@ -1,5 +1,0 @@
-{
-  "scope": "Journal result shape only; ordering, watermark, cursor, epoch and empty-more require semantic refusal; no native qualification",
-  "cases": 16,
-  "failures": []
-}

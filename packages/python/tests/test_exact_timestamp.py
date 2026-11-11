@@ -10,7 +10,7 @@ from truss.timestamp import timestamp_from_admitted_text
 class ExactTimestampCandidateTests(unittest.TestCase):
     def test_original_timestamp_vectors(self):
         root = Path(__file__).resolve().parents[3]
-        fixture = json.loads((root / "docs/helix/03-test/python-exact-value-vectors.proposal.json").read_text())
+        fixture = json.loads((root / "packages/python/tests/fixtures/spec/python-exact-value-vectors.proposal.json").read_text())
         decoded = {}
         for vector in fixture["vectors"]:
             carrier = vector["wire"].get("value", {})

@@ -2,7 +2,7 @@
 import {test,expect} from 'bun:test';
 import {readFileSync} from 'node:fs';
 import {orderCatalogDocuments} from '../packages/umf-bun/src/catalog-document-order';
-const vectors=JSON.parse(readFileSync(new URL('../docs/helix/03-test/document-order-v0.1.proposal.vectors.json',import.meta.url),'utf8'));
+const vectors=JSON.parse(readFileSync(new URL('../tests/fixtures/spec/document-order-v0.1.proposal.vectors.json',import.meta.url),'utf8'));
 function permutations<T>(values:T[]):T[][]{if(!values.length)return [[]];return values.flatMap((value,index)=>permutations(values.filter((_,i)=>i!==index)).map(rest=>[value,...rest]));}
 for(const fixture of vectors.cases)test(fixture.name,()=>{
  for(const nodes of permutations<string>(fixture.nodes))for(const edges of permutations<[string,string]>(fixture.edges)){

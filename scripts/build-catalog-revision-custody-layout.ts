@@ -43,7 +43,7 @@ const model=await importPostgresqlSql(source,backend,{id:'truss-catalog-revision
 const serialized=JSON.stringify(model)+'\n',ddl=await exportPostgresqlSql(model,backend);
 if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Original reload/export mismatch');
 const modelPath='docs/helix/02-design/contracts/catalog-revision-custody-storage-v0.1.proposal.umf.json';
-const ddlPath='docs/helix/04-build/evidence/catalog-revision-custody-storage.owner-export.sql';
+const ddlPath='packages/postgresql/generated/catalog-revision-custody-storage.owner-export.sql';
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('/Users/erik/Projects/umf/'+path).text())])));
 const receipt={ownerSourcePins,modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),producerSha256:hash(await Bun.file('scripts/build-catalog-revision-custody-layout.ts').text()),reloadedExportExact:true,scope:'Storage proposal only; native guard behavior, versioned installation, capture, core projection and native behavior remain unqualified',qualified:false};

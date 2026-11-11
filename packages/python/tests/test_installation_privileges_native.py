@@ -21,7 +21,7 @@ class InstallationPrivilegeTests(unittest.TestCase):
     def setUp(self):
         PsycopgHostNativeTests.setUp(self)
         self.tx=self.begin()
-        self.connection.execute((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text(),prepare=False)
+        self.connection.execute((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text(),prepare=False)
         self.connection.execute("CREATE TYPE truss.choice AS ENUM ('a','b'); CREATE DOMAIN truss.positive AS int CHECK(VALUE>0)",prepare=False)
         self.connection.execute("CREATE FUNCTION truss.private_probe() RETURNS int LANGUAGE sql AS 'SELECT 1'; CREATE FUNCTION truss.private_probe(value int) RETURNS int LANGUAGE sql AS 'SELECT value'",prepare=False)
         self.connection.execute("CREATE TABLE public.caller_sentinel(value text); INSERT INTO public.caller_sentinel VALUES ('kept')",prepare=False)

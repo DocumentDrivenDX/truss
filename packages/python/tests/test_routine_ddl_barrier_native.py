@@ -17,7 +17,7 @@ class RoutineDdlBarrierNativeTests(NativeBoundaryFixture,unittest.TestCase):
   super().setUpClass();cls.admin=cls.Connection(**cls.kwargs);cls.admin.run('CREATE DATABASE routine_ddl_barrier_component');cls.kwargs={**cls.kwargs,'database':'routine_ddl_barrier_component'}
   c=cls.Connection(**cls.kwargs)
   try:
-   c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
+   c.run((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text())
    for n in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock','operation-admission'):c.run((ROOT/f'packages/postgresql/native/{n}.sql').read_text())
    c.run("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0','fixture','fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)")
    cls.epoch=c.run("SELECT truss.runtime_issue_source_epoch('fixture',NULL,'target',decode('01','hex'),decode('02','hex'))")[0][0]

@@ -20,6 +20,6 @@ const document=await importPostgresqlSql(source,backend,{id:'truss-preparation-p
 const saved=JSON.stringify(document)+'\n';const ddl=await exportPostgresqlSql(document,backend);
 if(await exportPostgresqlSql(readDocument(saved,'json'),backend)!==ddl)throw Error('Saved source model export differs');
 await Bun.write('docs/helix/02-design/models/truss-preparation-program-sources-0.1.proposal.umf.json',saved);
-await Bun.write('docs/helix/04-build/preparation-program-sources.generated.sql',ddl);
+await Bun.write('packages/postgresql/generated/preparation-program-sources.generated.sql',ddl);
 await Bun.write('packages/python/src/truss/_security_bootstrap/preparation-program-sources-storage.sql',ddl);
 console.log(JSON.stringify({nativeStorageExport:true,savedRoundtrip:true,scope:'Original source attachment, not authority'}));

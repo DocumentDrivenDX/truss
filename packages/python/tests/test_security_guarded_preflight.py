@@ -10,7 +10,7 @@ class GuardedPreflightTests(unittest.TestCase):
   binary=os.environ.get('TRUSS_SECURITY_GUARDED_COMPILER_BINARY')
   if not binary:self.skipTest('Original guarded compiler required')
   root=Path(__file__).resolve().parents[3]
-  evidence=root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014'
+  evidence=root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014'
   original=(evidence/'compiler-request.json').read_bytes()
   output=subprocess.run([binary],input=original,capture_output=True,check=True,timeout=15).stdout
   comparison=capture_guarded_source_comparison(original,output)

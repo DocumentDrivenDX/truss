@@ -2,7 +2,7 @@
 import {test,expect} from 'bun:test';
 import {createCanonicalAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
 const codec=await createCanonicalAcceptanceReportHandoff('/Users/erik/Projects/umf/package.json');
-const fixture=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
+const fixture=(await Bun.file('tests/fixtures/spec/report-wire-untrusted.fixture.json').json()).report;
 const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
 test('all seventeen report fields reach the native codec carrier without accepted authority',()=>{
  const source=wire(fixture),result=codec.prepare(source),tree=JSON.parse(result.nativeTreeText);expect(tree.kind).toBe('object');expect(tree.members.length).toBe(17);expect(Buffer.from(result.originalUtf8Hex,'hex')).toEqual(Buffer.from(source));expect(result.scope).toBe('complete_report_wire_codec_handoff_only');

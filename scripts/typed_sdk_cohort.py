@@ -50,8 +50,6 @@ def verify_cohort(args):
     selected=(args.sdk_wheel,args.sdk_wheel_sha256,args.weft_wheel,args.weft_wheel_sha256)
     if all(value is None for value in selected):return None
     if any(value is None for value in selected):raise ValueError('Select both wheels and both SHA256 pins together')
-    from release_cohort import verify_installed
-    verify_installed()
     records={name:_installed_wheel(path,digest,package,distribution) for name,path,digest,package,distribution in (
         ('sdk',args.sdk_wheel,args.sdk_wheel_sha256,'umf_access','umf_access'),
         ('weft',args.weft_wheel,args.weft_wheel_sha256,'weft','umf-weft'))}

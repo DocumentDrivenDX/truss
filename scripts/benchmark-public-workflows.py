@@ -70,7 +70,7 @@ if args.bulk_size>args.expected_group_limit:parser.error('--bulk-size exceeds th
 
 from performance_workloads import workloads, schema as workload_schema, values as workload_values, edges as workload_edges
 selected_workloads=workloads()
-matrix_settings=json.loads((Path(__file__).resolve().parents[1]/'docs/helix/03-test/performance/workloads.json').read_text())
+matrix_settings=json.loads((Path(__file__).resolve().parents[1]/'scripts/perf/workloads.json').read_text())
 selected_cases=args.matrix_case or args.samples
 if args.keep_failed_database and len(selected_cases)!=1:
     parser.error('--keep-failed-database requires exactly one selected case')

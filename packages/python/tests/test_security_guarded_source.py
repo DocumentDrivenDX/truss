@@ -10,7 +10,7 @@ class GuardedSourceTests(unittest.TestCase):
   binary=os.environ.get('TRUSS_SECURITY_GUARDED_COMPILER_BINARY')
   if not binary:self.skipTest('Original guarded compiler required')
   root=Path(__file__).resolve().parents[3]
-  request=(root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
+  request=(root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
   def compile(raw):return subprocess.run([binary],input=raw,capture_output=True,check=True,timeout=15).stdout
   output=compile(request);comparison=capture_guarded_source_comparison(request,output)
   alternative=json.loads(request);alternative['sql']='SELECT r.resourceId FROM Resource r'

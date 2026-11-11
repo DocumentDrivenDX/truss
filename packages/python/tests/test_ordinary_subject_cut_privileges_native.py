@@ -22,7 +22,7 @@ class OrdinarySubjectCutPrivilegeTests(unittest.TestCase):
   with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
    c.execute("CREATE ROLE cut_owner NOLOGIN NOSUPERUSER NOBYPASSRLS;CREATE ROLE cut_reader NOLOGIN;CREATE ROLE cut_alice LOGIN;CREATE ROLE cut_outsider LOGIN;GRANT cut_reader TO cut_alice;CREATE TABLE truss.spike_subject_fact(actor text PRIMARY KEY,staff_id text NOT NULL);INSERT INTO truss.spike_subject_fact VALUES('cut_alice','s1'),('cut_outsider','s2')")
    c.execute('GRANT SELECT,MAINTAIN ON truss.source_epoch_current,truss.source_epoch_registry,truss.spike_subject_fact TO cut_owner;GRANT USAGE,CREATE ON SCHEMA truss TO cut_owner;GRANT USAGE ON SCHEMA truss TO cut_reader,cut_outsider')
-   c.execute((ROOT/'docs/helix/02-design/spikes/security/ordinary-subject-cut-definer-v0.1.sql').read_text())
+   c.execute((ROOT/'packages/python/tests/fixtures/ordinary-subject-cut-definer-v0.1.sql').read_text())
    c.execute('ALTER FUNCTION truss.spike_acquire_ordinary_subject_cut(text,text,text) OWNER TO cut_owner;GRANT EXECUTE ON FUNCTION truss.spike_acquire_ordinary_subject_cut(text,text,text) TO cut_reader')
    c.execute('REVOKE CREATE ON SCHEMA truss FROM cut_owner')
  tearDownClass=classmethod(epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__)

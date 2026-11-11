@@ -1,1 +1,0 @@
-SELECT $1::pg_catalog.xid8::pg_catalog.text AS original_writer_xid, pg_catalog.pg_xact_status($1::pg_catalog.xid8)::pg_catalog.text AS transaction_status

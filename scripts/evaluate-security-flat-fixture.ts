@@ -5,7 +5,7 @@ import {evaluateSecurityAccess,type SecurityFact,type SecurityFactCut} from '/Us
 import type {CoreLiteral} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/schema-literals';
 const model=securityFixture();
 for(const [name,value] of [['policy',model.policy],['resolution',model.resolution]] as const){
- if(await Bun.file('docs/helix/04-build/evidence/security-fact-requirements/'+name+'.json').text()!==JSON.stringify(value)+'\n')throw Error('Original fixture source correspondence required');
+ if(await Bun.file('packages/python/tests/fixtures/security/security-fact-requirements/'+name+'.json').text()!==JSON.stringify(value)+'\n')throw Error('Original fixture source correspondence required');
 }
 const raw=await Bun.stdin.text();if(raw.length>1048576)throw Error('Bounded fixture capture required');
 const input=JSON.parse(raw);const names=['Staff','Project','Resource','Ownership','Assignment'];

@@ -60,7 +60,7 @@ const upgradeBytes=JSON.stringify(upgrade)+'\n';
 const upgradeDdl=await exportPostgresqlSql(upgrade,backend);
 if(await exportPostgresqlSql(readDocument(upgradeBytes,'json'),backend)!==upgradeDdl)throw Error('Saved upgrade model must generate identical SQL');
 await Bun.write(directory+'truss-owned-transition-upgrade-0.1.proposal.umf.json',upgradeBytes);
-await Bun.write('docs/helix/04-build/owned-transition-upgrade.generated.sql',upgradeDdl);
+await Bun.write('packages/postgresql/generated/owned-transition-upgrade.generated.sql',upgradeDdl);
 const module:any={id:'truss-owned-object-transition',namespace:'truss',elements:[]};
 const ref=(element:string)=>({module:module.id,element});
 let columnCount=0;
@@ -97,5 +97,5 @@ if(validation.diagnostics.some(d=>d.severity==='error'))throw Error(JSON.stringi
 if(columnCount!==24)throw Error('All23 original transition columns plus endpoint ownership context required');
 await Bun.write(directory+'truss-owned-object-transition-storage-0.1.proposal.umf.json',nativeBytes);
 await Bun.write(directory+'truss-owned-object-transition-core-0.1.proposal.umf.json',JSON.stringify(core)+'\n');
-await Bun.write('docs/helix/04-build/owned-object-transition.generated.sql',ddl);
+await Bun.write('packages/postgresql/generated/owned-object-transition.generated.sql',ddl);
 console.log(JSON.stringify({columns:columnCount,unique:{object:['attempt_id','operation_index','object_id','type_id'],edge:['attempt_id','operation_index','edge_id','rel_type_id']},fk:'runtime_object_attempt.id',valid:validation.valid,complete:validation.complete,ownerExport:true,installed:false}));

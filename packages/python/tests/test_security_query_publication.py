@@ -9,7 +9,7 @@ class QueryPublicationTests(unittest.TestCase):
   binary=os.environ.get('TRUSS_SECURITY_GUARDED_COMPILER_BINARY')
   if not binary:self.skipTest('Original guarded compiler required')
   root=Path(__file__).resolve().parents[3]
-  request=(root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json').read_text()
+  request=(root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014/compiler-request.json').read_text()
   output=subprocess.run([binary],input=request.encode(),capture_output=True,check=True,timeout=15).stdout.decode()
   query=json.loads(output)['query']
   batch=json.dumps({'version':'weft.security.cells/0.1.0','resultContractSha256':query['resultContractSha256'],'rows':[]},separators=(',',':'))

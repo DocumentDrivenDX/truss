@@ -180,14 +180,14 @@ if args.initialization_peer:
  manifest['files']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.glob('*.json')) if p.name!='manifest.json'}
  (OUT/'manifest.json').write_bytes(canonical(manifest))
 
-for relative,name in [('docs/helix/02-design/models/truss-runtime-migrations-0.1.umf.json','receipt-model-0.1.umf.json'),('docs/helix/04-build/evidence/runtime-migrations-20261021/receipt-model.json','receipt-model-0.1.evidence.json')]:
+for relative,name in [('docs/helix/02-design/models/truss-runtime-migrations-0.1.umf.json','receipt-model-0.1.umf.json'),('packages/postgresql/generated/runtime-migrations-receipt-model.json','receipt-model-0.1.evidence.json')]:
  (OUT/name).write_bytes((ROOT/relative).read_bytes())
 manifest['receiptModel']={'artifact':'receipt-model-0.1.umf.json','evidence':'receipt-model-0.1.evidence.json','sourceFile':'migrations.sql'}
 manifest['immutableFiles']+=['receipt-model-0.1.umf.json','receipt-model-0.1.evidence.json']
 manifest['files']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.glob('*.json')) if p.name!='manifest.json'}
 (OUT/'manifest.json').write_bytes(canonical(manifest))
 
-proof_bytes=(ROOT/'docs/helix/04-build/evidence/runtime-migrations-20261021/native-deparse-equivalence.json').read_bytes()
+proof_bytes=(ROOT/'packages/postgresql/generated/runtime-migrations-native-deparse-equivalence.json').read_bytes()
 proof=json.loads(proof_bytes)
 if proof['passed'] is not True or any(d['definitionAlternatives']!=proof['rules'] for d in data.values()):raise ValueError('Native deparse equivalence must be qualified before packaging')
 name='native-deparse-equivalence-0.1.json';(OUT/name).write_bytes(proof_bytes)

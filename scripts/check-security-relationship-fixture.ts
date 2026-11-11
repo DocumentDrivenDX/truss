@@ -4,7 +4,7 @@ import {validateDocument} from '/Users/erik/.codex/worktrees/security-main-integ
 import {inspectSecurityPolicy} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/policy';
 import Ajv from '/Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/2020.js';
 import {createHash} from 'node:crypto';
-const root='docs/helix/03-test/fixtures/security-public-relationship/';
+const root='packages/python/tests/fixtures/spec/security-public-relationship/';
 const document=await Bun.file(root+'document.json').json(),policy=await Bun.file(root+'policy.json').json(),resolution=await Bun.file(root+'resolution.json').json();
 const core=validateDocument(document),semantic=inspectSecurityPolicy(policy,resolution);
 const schemaPath='/private/tmp/weft-b008-traversal/docs/helix/02-design/contracts/security-query-profile-v0.2-candidate.schema.json';
@@ -23,7 +23,7 @@ for(const [selected,name] of [[profile,'policy'],[deniedProfile,'policy-observat
 }
 const modules=await Bun.file(root+'modules.json').json();
 if(modules[0].documentJson!==await Bun.file(root+'document.json').text())throw Error('Selected module source bytes differ');
-const original=await Bun.file('docs/helix/04-build/evidence/security-named-source-profile/policy.json').json();
+const original=await Bun.file('packages/python/tests/fixtures/security/security-named-source-profile/policy.json').json();
 if(JSON.stringify(policy.rules.slice(0,-1))!==JSON.stringify(original.rules))throw Error('Original read rules changed');
 if(JSON.stringify(deniedPolicy.rules)!==JSON.stringify(original.rules))throw Error('Denied variant changed original read rules');
 const fields=['policy-observation-denied','query-profile-observation-denied-template','document','modules','ontology','policy','resolution','query-profile-template','source-manifest'];

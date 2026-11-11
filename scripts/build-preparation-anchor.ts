@@ -37,6 +37,6 @@ const doc=await importPostgresqlSql(source,backend,{id:'truss-preparation-attemp
 const raw=JSON.stringify(doc)+'\n';const ddl=await exportPostgresqlSql(doc,backend);
 if(await exportPostgresqlSql(readDocument(raw,'json'),backend)!==ddl)throw Error('Saved anchor export differs');
 await Bun.write('docs/helix/02-design/models/truss-preparation-attempt-anchor-storage-0.1.proposal.umf.json',raw);
-await Bun.write('docs/helix/04-build/preparation-attempt-anchor.generated.sql',ddl);
+await Bun.write('packages/postgresql/generated/preparation-attempt-anchor.generated.sql',ddl);
 await Bun.write('packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql',ddl);
 console.log(JSON.stringify({nativeStorageExport:true,savedRoundtrip:true,scope:'private identity component only; opaque program identity has no admission meaning'}));

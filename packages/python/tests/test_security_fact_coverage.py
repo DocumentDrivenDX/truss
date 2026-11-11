@@ -4,7 +4,7 @@ import hashlib,json,unittest
 from pathlib import Path
 from truss._security_fact_coverage import _FactBindingDeclaration,_inspect_fact_coverage
 ROOT=Path(__file__).resolve().parents[3]
-RAW=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
+RAW=(ROOT/'packages/python/tests/fixtures/security/security-fact-requirements/requirements.json').read_bytes()
 DIGEST=hashlib.sha256(RAW).hexdigest()
 
 class SecurityFactCoverageTests(unittest.TestCase):

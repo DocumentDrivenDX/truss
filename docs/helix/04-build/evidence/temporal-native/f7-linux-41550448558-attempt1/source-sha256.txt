@@ -1,3 +1,0 @@
-6b3154ba72ae0445e6c1d3d27ae0e526393ea91138782a52fc229b5af0044b90  packages/python/src/truss/_catalog_runtime/query-temporal.sql
-c1c6a4f69f6335e9f732d754108473eb052c5664c5baf0300f4c77baa9405a82  packages/python/tests/test_temporal_canonical_text_native.py
-33e246d47ead263e9b2467b57a46811cdd3628d703d91b5f4fa564b1d207f9c2  packages/python/tests/fixtures/temporal/strict075.json

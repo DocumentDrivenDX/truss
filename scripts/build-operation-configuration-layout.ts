@@ -34,11 +34,11 @@ const model=await importPostgresqlSql(source,backend,{id:'truss-operation-config
 const serialized=JSON.stringify(model)+'\n',ddl=await exportPostgresqlSql(model,backend);
 if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Original reload/export mismatch');
 const modelPath='docs/helix/02-design/contracts/operation-configuration-storage-v0.1.proposal.umf.json';
-const ddlPath='docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql';
+const ddlPath='packages/postgresql/generated/operation-configuration-storage.owner-export.sql';
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('/Users/erik/Projects/umf/'+path).text())])));
 const receipt={ownerSourcePins,modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),producerSha256:hash(await Bun.file('scripts/build-operation-configuration-layout.ts').text()),reloadedExportExact:true,scope:'UMF owner import and saved reload/export only; adjunct not composed, initialized, immutable, core-projected or installed-qualified',qualified:false};
-for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],['docs/helix/04-build/evidence/design-audit/operation-configuration-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
+for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],['packages/postgresql/generated/operation-configuration-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
  if(process.argv.includes('--check')){if(await Bun.file(path).text()!==bytes)throw Error('Stale operation configuration source: '+path)}else await Bun.write(path,bytes);
 }
 console.log('Operation configuration adjunct: UMF saved reload/export exact; unqualified.');

@@ -14,7 +14,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
   locals()[_name]=None
  def test_actual_authored_resource_relationship_and_population(self):
   root=Path(__file__).resolve().parents[3]
-  logical=json.loads((root/'docs/helix/03-test/fixtures/security-public-relationship/document.json').read_bytes())
+  logical=json.loads((root/'packages/python/tests/fixtures/spec/security-public-relationship/document.json').read_bytes())
   relationship=logical['modules'][0]['relationships'][0]
   physical=ontology_document('adoc');physical['modules'][0]['relationships'].append(relationship)
   def source(document):document.clear();document.update(physical)
@@ -78,7 +78,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
     (out/'accepted-assessment.json').write_bytes(assessment)
     import runpy
     derive=runpy.run_path(str(root/'scripts/prepare-security-relationship-correspondence.py'))['derive_relationship_correspondence']
-    fixture=root/'docs/helix/03-test/fixtures/security-public-relationship'
+    fixture=root/'packages/python/tests/fixtures/spec/security-public-relationship'
     selected={name:(fixture/(name+'.json')).read_bytes() for name in ('document','resolution','policy','transport')}
     duplicate=b'{"inventory":{},"inventory":{}}'
     with self.assertRaisesRegex(ValueError,'Duplicate correspondence source member'):derive(duplicate,physical_request,selected)

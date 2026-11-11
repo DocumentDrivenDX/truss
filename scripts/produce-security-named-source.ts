@@ -17,7 +17,7 @@ request.sql='SELECT r.resourceId FROM Resource r';
 profile.bindings=[];
 profile.modelPins=[request.modules[0].pin];profile.policySha256=hash(policy);profile.ontologySha256=hash(request.ontologyJson);
 request.queryProfileJson=JSON.stringify(profile);
-const base='docs/helix/04-build/evidence/security-named-source-profile';
+const base='packages/python/tests/fixtures/security/security-named-source-profile';
 for(const [name,value] of [['document',document],['policy',policy],['resolution',resolution],['transport',JSON.stringify(transport)+'\n'],['requirements',JSON.stringify(requirements)+'\n'],['mapping-request',JSON.stringify(request)+'\n']] as const)
  await Bun.write(base+'/'+name+'.json',value);
 console.log(JSON.stringify({scope:'Separately authored shared named fixture source; no native admission',documentSha256:hash(document),policySha256:hash(policy),resolutionSha256:hash(resolution)}));

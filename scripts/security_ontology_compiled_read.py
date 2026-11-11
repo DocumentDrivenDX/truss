@@ -11,8 +11,8 @@ import json,subprocess
 from truss._owner_evidence_json import decode_owner_evidence_json
 
 ROOT=Path(__file__).resolve().parent.parent
-BASE=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
-BINDING=ROOT/'docs/helix/04-build/evidence/security-ontology-shared-policy-20261014/binding-correspondence.json'
+BASE=ROOT/'packages/python/tests/fixtures/security/security-named-source-profile'
+BINDING=ROOT/'packages/python/tests/fixtures/security/security-ontology-shared-policy-20261014/binding-correspondence.json'
 
 
 def _original_request(physical_request,assessment,query_sql=None):

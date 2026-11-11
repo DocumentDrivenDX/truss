@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeAcceptanceJson,AcceptanceJsonError} from '../packages/postgresql/src/acceptance-json';
-const corpus=await Bun.file('docs/helix/03-test/acceptance-outer-json-expected.proposal.json').json();
+const corpus=await Bun.file('tests/fixtures/spec/acceptance-outer-json-expected.proposal.json').json();
 for(const c of corpus.cases)test(c.name,()=>{
  const bytes=Uint8Array.from(Buffer.from(c.utf8Hex,'hex'));
  expect(new Bun.CryptoHasher('sha256').update(bytes).digest('hex')).toBe(c.sourceSha256);

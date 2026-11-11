@@ -1,6 +1,0 @@
-test_preserve_original_report_then_backfill_key (test_recursive_upgrade_native.RecursiveUpgradeTests.test_preserve_original_report_then_backfill_key) ... ok
-
-----------------------------------------------------------------------
-Ran 1 test in 13.400s
-
-OK

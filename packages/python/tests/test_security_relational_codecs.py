@@ -9,7 +9,7 @@ class RelationalCodecTests(unittest.TestCase):
   binary=os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY')
   if not binary:self.skipTest('Original relational producer required')
   root=Path(__file__).resolve().parents[3]
-  request=(root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
+  request=(root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014/compiler-request.json').read_bytes()
   output=subprocess.run([binary],input=request,capture_output=True,check=True,timeout=15).stdout;packet=json.loads(output)
   check=prepare_owned_relational_codec_checker(Path(binary).with_name('security_postgresql_codecs'))
   self.assertEqual(json.loads(check(request,output))['parameterCount'],1)

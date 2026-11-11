@@ -1,6 +1,0 @@
-Looking in links: https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.56
-Collecting umf-weft==0.4.56
-  Downloading umf_weft-0.4.56-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (14.4 MB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.4/14.4 MB 38.6 MB/s  0:00:00
-Saved /home/runner/work/_temp/weft-abi12-probe/inputs/weft056/umf_weft-0.4.56-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-Successfully downloaded umf-weft

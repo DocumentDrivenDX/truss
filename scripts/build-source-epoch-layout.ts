@@ -41,9 +41,9 @@ const model=await importPostgresqlSql(source,backend,{id:'truss-source-epoch-sto
 const serialized=JSON.stringify(model)+'\n';const ddl=await exportPostgresqlSql(model,backend);
 if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Reload/export mismatch');
 const modelPath='docs/helix/02-design/contracts/source-epoch-storage-v0.1.proposal.umf.json';
-const ddlPath='docs/helix/04-build/evidence/source-epoch-storage.owner-export.sql';
+const ddlPath='packages/postgresql/generated/source-epoch-storage.owner-export.sql';
 await Bun.write(modelPath,serialized);await Bun.write(ddlPath,ddl);
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const owner=Bun.spawnSync(['git','-C','/Users/erik/Projects/umf','rev-parse','HEAD']);if(owner.exitCode)throw Error('Owner revision unavailable');
-await Bun.write('docs/helix/04-build/evidence/design-audit/source-epoch-storage.json',JSON.stringify({scope:'Owner SQL import, UMF retention and exact saved reload/export only; no native install, epoch issuance or authority qualification',ownerCommit:new TextDecoder().decode(owner.stdout).trim(),modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),reloadedExportExact:true,qualified:false},null,2)+'\n');
+await Bun.write('packages/postgresql/generated/source-epoch-storage.json',JSON.stringify({scope:'Owner SQL import, UMF retention and exact saved reload/export only; no native install, epoch issuance or authority qualification',ownerCommit:new TextDecoder().decode(owner.stdout).trim(),modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),reloadedExportExact:true,qualified:false},null,2)+'\n');
 console.log('Epoch candidate UMF and owner DDL saved; reload/export exact.');

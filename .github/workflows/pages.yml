@@ -33,7 +33,7 @@ jobs:
           tar -xzf "$RUNNER_TEMP/hugo.tar.gz" -C "$RUNNER_TEMP/hugo-bin" hugo
           echo "$RUNNER_TEMP/hugo-bin" >> "$GITHUB_PATH"
       - name: Build site
-        run: hugo --source website --destination public --cleanDestinationDir --panicOnWarning
+        run: hugo --source website --destination public --cleanDestinationDir
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

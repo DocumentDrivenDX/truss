@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Fail if the tracked tree contains large files outside .size-allowlist or exceeds the total budget.
+# Fail if the committed tree contains a file over 1 MiB that is not matched by
+# .size-allowlist (shell glob patterns), or if the tree exceeds the total budget.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 MAX_FILE=$((1024 * 1024))
 MAX_TREE=$((80 * 1024 * 1024))
 status=0
 total=0
-while IFS= read -r -d '' f; do
-  [ -f "$f" ] || continue
-  size=$(wc -c <"$f")
+while IFS=$'\t' read -r -d '' meta f; do
+  size=${meta##* }
   total=$((total + size))
   if [ "$size" -gt "$MAX_FILE" ]; then
     allowed=0
@@ -22,10 +22,10 @@ while IFS= read -r -d '' f; do
       status=1
     fi
   fi
-done < <(git ls-files -z)
+done < <(git ls-tree -r -l -z HEAD)
 if [ "$total" -gt "$MAX_TREE" ]; then
   echo "size-guard: tracked tree is $total bytes (> $MAX_TREE)" >&2
   status=1
 fi
-echo "size-guard: tracked tree $total bytes"
+echo "size-guard: committed tree $total bytes"
 exit "$status"

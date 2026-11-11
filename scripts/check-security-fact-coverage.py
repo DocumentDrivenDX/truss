@@ -11,7 +11,7 @@ with zipfile.ZipFile(out/'sources.zip','w',zipfile.ZIP_DEFLATED) as z:
  for p in paths:z.writestr(str(p).lstrip('/'),p.read_bytes())
 producer=subprocess.run(['/opt/homebrew/bin/bun','scripts/produce-security-fact-requirements.ts'],capture_output=True,text=True,timeout=60)
 (out/'producer.log').write_text(producer.stdout+producer.stderr)
-base=root/'docs/helix/04-build/evidence/security-fact-requirements'
+base=root/'packages/python/tests/fixtures/security/security-fact-requirements'
 for p in base.iterdir():
  if p.is_file():(out/p.name).write_bytes(p.read_bytes())
 env=dict(os.environ,PYTHONPATH='packages/python/src:packages/python/tests')

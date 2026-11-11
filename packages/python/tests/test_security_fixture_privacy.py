@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
-HELPER = ROOT / 'docs/helix/04-build/evidence/design-audit/native_fixture_safety.py'
+HELPER = ROOT / 'packages/python/tests/native_fixture_safety.py'
 spec = importlib.util.spec_from_file_location('native_fixture_safety_test', HELPER)
 safety = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(safety)
