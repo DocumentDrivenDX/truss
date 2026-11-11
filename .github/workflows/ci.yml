@@ -72,11 +72,11 @@ jobs:
       - name: Install built wheel
         run: |
           python -m venv "$RUNNER_TEMP/v"
-          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest pytest-xdist
+          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest pytest-xdist umf-core==0.10.8
       - name: Python tests (fast subset)
         working-directory: packages/python/tests
         run: |
-          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 4 -m "not slow and not quarantined" -p no:cacheprovider --durations=25 .
+          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 4 -m "not slow" -p no:cacheprovider --durations=25 .
 
   smoke:
     needs: build-lint

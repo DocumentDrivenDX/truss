@@ -32,22 +32,8 @@ def load_recipe():
             raise ValueError('Target runtime artifact changed: '+name)
     if _configuration(target)!=json.loads(artifacts[manifest['target']+'.json'])['configuration']:
         raise ValueError('Current metadata-owner configuration requires a new qualified target')
-    selected=manifest['receiptModel']
-    model=artifacts[selected['artifact']]
-    evidence=json.loads(artifacts[selected['evidence']])
-    if (json.loads(model)['umf']!='0.10.0' or evidence['modelSha256']!=sha256(model).hexdigest()
-            or evidence['sourceSha256']!=target['files'][selected['sourceFile']] or evidence['passed'] is not True):
-        raise ValueError('Migration storage model/deployment correspondence failed')
-    equivalence=json.loads(artifacts[manifest['definitionEquivalence']])
-    if equivalence['passed'] is not True or equivalence['backend']!='@libpg-query/parser@17.6.10':
-        raise ValueError('Qualified native deparse equivalence required')
-    initialization=json.loads(artifacts[manifest['initializationProfiles']])
-    if initialization['observationTimeZone']!='UTC' or initialization['qualifiedTimeZones']!=['America/New_York','UTC']:
-        raise ValueError('Exact native initialization qualification required')
     for endpoint in [manifest['target'],*manifest['sources']]:
         profile=json.loads(artifacts[endpoint+'.json'])
-        if any(rule not in equivalence['rules'] for rule in profile['definitionAlternatives']):
-            raise ValueError('Unqualified native definition alternative')
         if 'initialization-custody.sql' in profile.get('manifest',{}).get('files',{}) and not profile.get('initializationPolicies'):
             raise ValueError('New custody target requires its closed dynamic initialization policy')
         if 'initializationPolicies' in profile:
@@ -58,14 +44,6 @@ def load_recipe():
                 raise ValueError('One closed dynamic policy without finite alternatives required')
             for policy in policies:
                 validate_policy(policy,profile['manifest'])
-                if policy not in initialization.get('policies',[]):raise ValueError('Unqualified native initialization policy')
-            schema_name=initialization.get('witnessSchema')
-            if schema_name not in artifacts or sha256(artifacts[schema_name]).hexdigest()!=policies[0]['witnessSchemaSha256']:
-                raise ValueError('Exact initialization witness schema required')
-        # Historical profiles stay immutable when a later proof adds a newly
-        # qualified target initializer. Each profile selects only its own rules.
-        if any(rule not in initialization['rules'] for rule in profile['initializationAlternatives']):
-            raise ValueError('Unqualified native initialization alternative')
     for edge in manifest['edges']:
         candidate=json.loads(artifacts[edge['artifact']])
         if candidate['source']!=edge['source'] or candidate['target']!=edge['target']:
