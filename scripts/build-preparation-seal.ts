@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Candidate seal storage through the committed UMF native owner. Not installed. */
-import {backend} from '/Users/erik/.codex/worktrees/0e51/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql,getPostgresqlNode} from '/Users/erik/.codex/worktrees/0e51/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/native-json';
-import {validateDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/validation/document';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql,getPostgresqlNode} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
+import {validateDocument} from '../../umf/src/validation/document';
 const source=`CREATE SEQUENCE truss.runtime_preparation_seal_seq AS bigint MINVALUE 1 MAXVALUE 9223372036854775807 NO CYCLE;
 CREATE TABLE truss.runtime_preparation_seal (
  seal_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_preparation_seal_seq') CHECK(seal_id>0),

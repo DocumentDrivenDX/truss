@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Prepare multi-object transition storage through UMF's existing native editor/exporter. */
-import {backend} from '/Users/erik/.codex/worktrees/0e51/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql,getPostgresqlNode,proposePostgresqlNodeEdit} from '/Users/erik/.codex/worktrees/0e51/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/native-json';
-import {validateDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/validation/document';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql,getPostgresqlNode,proposePostgresqlNodeEdit} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
+import {validateDocument} from '../../umf/src/validation/document';
 
 const directory='docs/helix/02-design/models/';
 const baselinePath=directory+'truss-owned-transition-baseline-0.1.umf.json';

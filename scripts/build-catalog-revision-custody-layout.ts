@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Review-only original catalog custody home; DDL is exported by UMF. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
 const source=`
 CREATE TABLE truss.catalog_revision_custody (
  original_writer_xid xid8 NOT NULL,
@@ -45,7 +45,7 @@ if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)thro
 const modelPath='docs/helix/02-design/contracts/catalog-revision-custody-storage-v0.1.proposal.umf.json';
 const ddlPath='packages/postgresql/generated/catalog-revision-custody-storage.owner-export.sql';
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
-const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('/Users/erik/Projects/umf/'+path).text())])));
+const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('../umf/'+path).text())])));
 const receipt={ownerSourcePins,modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),producerSha256:hash(await Bun.file('scripts/build-catalog-revision-custody-layout.ts').text()),reloadedExportExact:true,scope:'Storage proposal only; native guard behavior, versioned installation, capture, core projection and native behavior remain unqualified',qualified:false};
 for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],['docs/helix/04-build/evidence/design-audit/catalog-revision-custody-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
  if(process.argv.includes('--check')){if(await Bun.file(path).text()!==bytes)throw Error('Stale catalog custody source: '+path)}else await Bun.write(path,bytes);

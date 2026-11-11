@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Export candidate capture functions through UMF's owner AST, preserving reload parity. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
 const root=process.argv[2];
 if(!root)throw Error('Explicit candidate directory required');
 for(const name of ['composition-admission','registration-capture','registrar','prerequisites']){

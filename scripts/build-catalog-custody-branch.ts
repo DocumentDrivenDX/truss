@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Distinct custody-aware candidate branch, edited and exported through owner AST. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {importPostgresqlSql,getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const oldRecipe='packages/python/src/truss/_profiles/catalog-report-wide-composition-candidate.json';
 const newRecipe='packages/python/src/truss/_profiles/catalog-report-custody-composition-candidate.json';

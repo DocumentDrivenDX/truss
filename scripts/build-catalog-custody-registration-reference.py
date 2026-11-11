@@ -66,7 +66,7 @@ def compile_reference(selection,postgres_bin,output):
         for ordinal,(identity,raw) in enumerate(items):
             (folder/f'{ordinal:03}.original').write_bytes(raw)
     (output/'selection.original.json').write_bytes(raw_selection)
-    root=Path(tempfile.mkdtemp(prefix='truss-custody-reference-',dir='/private/tmp'))
+    root=Path(tempfile.mkdtemp(prefix='truss-custody-reference-',dir=None))
     data=root/'data';socket=root/'socket';socket.mkdir();started=False
     receipt={'scope':'owned independent administrative reference compilation','stop':None,'status':None}
     def run(name,*args):

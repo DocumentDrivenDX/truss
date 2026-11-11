@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** UMF owner import/reload/export of the private configured completion producer. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
 const path='packages/postgresql/native/catalog-completion/configured-state-candidate';
 const sql=await Bun.file(path+'.sql').text();
 const document=await importPostgresqlSql(sql,backend,{id:'truss-configured-catalog-completion-candidate'});

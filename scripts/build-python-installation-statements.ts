@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original owner-emitted statement units for provisional installer construction. */
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
 const modelPath='docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json';
 const exportPath='packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql';
 const hash=(value:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(value).digest('hex');
@@ -108,12 +108,12 @@ for(const [position,node] of nodes.entries()){
  statements.push({position:String(position),sql,byteLength:Buffer.byteLength(sql),sha256:hash(sql)});
 }
 if(statements.map(s=>s.sql).join('; ')!==originalExport)throw Error('Ordered owner statement projection must reproduce the complete export');
-const revision=Bun.spawnSync(['git','rev-parse','HEAD'],{cwd:'/Users/erik/Projects/umf'});
+const revision=Bun.spawnSync(['git','rev-parse','HEAD'],{cwd:'../umf'});
 if(revision.exitCode!==0)throw Error('Committed owner revision required');
 const sources:Record<string,string>={};
 for(const path of [modelPath,exportPath,sourceManifestPath,'scripts/build-python-installation-statements.ts',
- '/Users/erik/Projects/umf/src/adapters/postgresql/index.ts','/Users/erik/Projects/umf/src/model/native-json.ts',
- '/Users/erik/Projects/umf/native/postgresql/runtime.ts'])sources[path]=hash(new Uint8Array(await Bun.file(path).arrayBuffer()));
+ '../umf/src/adapters/postgresql/index.ts','../umf/src/model/native-json.ts',
+ '../umf/native/postgresql/runtime.ts'])sources[path]=hash(new Uint8Array(await Bun.file(path).arrayBuffer()));
 const asset=JSON.stringify({nativeMajor:'16',interfaceVersion:'truss-provisional-installation-statements/0.1.0',
  scope:'original_owner_statement_units_rollback_only_construction',ownerRevision:Buffer.from(revision.stdout).toString().trim(),
  modelSha256:hash(model),ownerExportSha256:hash(originalExport),sources,statements,membership,
