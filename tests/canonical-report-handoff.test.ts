@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCanonicalAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
-const codec=await createCanonicalAcceptanceReportHandoff('/Users/erik/Projects/umf/package.json');
+const codec=await createCanonicalAcceptanceReportHandoff(new URL('../package.json',import.meta.url).pathname);
 const fixture=(await Bun.file('tests/fixtures/spec/report-wire-untrusted.fixture.json').json()).report;
 const wire=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));
 test('all seventeen report fields reach the native codec carrier without accepted authority',()=>{

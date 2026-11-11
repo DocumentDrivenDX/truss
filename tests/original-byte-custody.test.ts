@@ -7,7 +7,7 @@ import {decodeCapturedOriginContext} from '../packages/postgresql/src/captured-o
 import {prepareCanonicalWireTree} from '../packages/postgresql/src/canonical-wire-tree';
 import {createAcceptanceInputInspector} from '../packages/umf-bun/src/acceptance-input';
 import {createCanonicalAcceptanceReportHandoff,createProposedComposedAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
-const dependencies='/Users/erik/Projects/umf/package.json';
+const dependencies=new URL('../package.json',import.meta.url).pathname;
 const inspector=await createAcceptanceInputInspector(dependencies),report=await createCanonicalAcceptanceReportHandoff(dependencies),composed=await createProposedComposedAcceptanceReportHandoff(dependencies);
 const input=(await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input;
 const baseline=(await Bun.file('tests/fixtures/spec/report-wire-untrusted.fixture.json').json()).report;
