@@ -14,7 +14,7 @@ class AdopterWorkflowTests(unittest.TestCase):
         spec.loader.exec_module(module)
         directory=Path(tempfile.mkdtemp(prefix='truss-adopter-',dir='/private/tmp'))
         # A raised/unconfirmed runtime shutdown preserves its database for recovery.
-        result=module.run_workflow(directory,bun_executable='/opt/homebrew/bin/bun')
+        result=module.run_workflow(directory,bun_executable=__import__('bun_path').BUN)
         shutil.rmtree(directory)
         self.assertEqual({key:value for key,value in result.items() if key!='feed_transactions'},
             {'catalog':'accepted','mutation':'committed','replay':'committed','receipt':'included',

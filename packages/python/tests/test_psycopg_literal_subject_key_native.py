@@ -52,19 +52,19 @@ class NativeLiteralSubjectKeyTests(unittest.TestCase):
       selection=_SubjectSelection(original_request,source,'m','Staff','pk','literal_alice','literal_diag','subject',tuple('k'+str(i)for i in range(5)))
       observed=_observe_ordinary_subject(host,transaction.value,selection,weft.inspect_security_mapping_subject_key_json);self.assertIsInstance(observed,Ok)
       observation=observed.value
-      key=encode_literal_key_tuple(source,observation.identity,observation.values,bun_executable='/opt/homebrew/bin/bun')
+      key=encode_literal_key_tuple(source,observation.identity,observation.values,bun_executable=__import__('bun_path').BUN)
       expected=[{'string':'Δ\uFEFF'},{'boolean':True},{'integerToken':'9007199254740993'},{'decimalToken':'9007199254740993.0000'},{'binaryHex':'0001'}]
       self.assertEqual(json.loads(key.original_receipt_bytes)['values'],expected)
       self.assertEqual(key.literal_texts,observation.values)
       encodings=('core-literal-json',)*5
-      def bound():return _observe_ordinary_subject_key(host,transaction.value,selection,weft.inspect_security_mapping_subject_key_json,encodings,bun_executable='/opt/homebrew/bin/bun')
+      def bound():return _observe_ordinary_subject_key(host,transaction.value,selection,weft.inspect_security_mapping_subject_key_json,encodings,bun_executable=__import__('bun_path').BUN)
       for invalid in [('core-literal-json',)*4,('core-literal-json',)*33,('foreign',)*5]:
        invoked=[]
-       with self.assertRaises(ValueError):_observe_ordinary_subject_key(host,transaction.value,selection,lambda *_:invoked.append(True),invalid,bun_executable='/opt/homebrew/bin/bun')
+       with self.assertRaises(ValueError):_observe_ordinary_subject_key(host,transaction.value,selection,lambda *_:invoked.append(True),invalid,bun_executable=__import__('bun_path').BUN)
        self.assertEqual(invoked,[])
       combined=bound();self.assertIsInstance(combined,Ok);self.assertEqual(combined.value.tuple_bytes,key.tuple_bytes)
       self.assertEqual(combined.value.original_receipt_bytes,key.original_receipt_bytes)
-      self.assertIsInstance(_observe_ordinary_subject_key(host,transaction.value,selection,weft.inspect_security_mapping_subject_key_json,('string',)*5,bun_executable='/opt/homebrew/bin/bun'),Error)
+      self.assertIsInstance(_observe_ordinary_subject_key(host,transaction.value,selection,weft.inspect_security_mapping_subject_key_json,('string',)*5,bun_executable=__import__('bun_path').BUN),Error)
       self.assertIsInstance(bound(),Ok) # Original codec refusal was locally contained.
       nested=[]
       def nested_encoder(*args,**kwargs):
@@ -81,7 +81,7 @@ class NativeLiteralSubjectKeyTests(unittest.TestCase):
       self.assertIsInstance(bound(),Ok)
       for i,foreign in [(0,'{"boolean":true}'),(2,'{"integerToken":"01"}'),(3,'{"decimalToken":"1.00001"}')]:
        values=list(observation.values);values[i]=foreign
-       with self.assertRaises(ValueError):encode_literal_key_tuple(source,observation.identity,tuple(values),bun_executable='/opt/homebrew/bin/bun')
+       with self.assertRaises(ValueError):encode_literal_key_tuple(source,observation.identity,tuple(values),bun_executable=__import__('bun_path').BUN)
       entered=[]
       def delayed_encoder(*args,**kwargs):
        entered.append(True);sleep(.2)
@@ -105,7 +105,7 @@ class NativeLiteralSubjectKeyTests(unittest.TestCase):
        return candidate
       try:
        with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=changed_transaction_encoder):
-        changed_result=_observe_ordinary_subject_key(replacement_host,replacement_transaction.value,selection,weft.inspect_security_mapping_subject_key_json,encodings,bun_executable='/opt/homebrew/bin/bun')
+        changed_result=_observe_ordinary_subject_key(replacement_host,replacement_transaction.value,selection,weft.inspect_security_mapping_subject_key_json,encodings,bun_executable=__import__('bun_path').BUN)
        self.assertIsInstance(changed_result,Error);self.assertEqual(changed,[True]);self.assertTrue(replacement_host._custody.quarantined)
       finally:replacement.close();replacement_host.detach()
       output=os.environ.get('TRUSS_LITERAL_SUBJECT_EVIDENCE')

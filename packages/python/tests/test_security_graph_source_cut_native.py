@@ -17,10 +17,10 @@ class GraphABACTests(groups.PublicCreateGroupTests):
  def test_public_graph_creation_and_original_source_validity(self):
   c,host,assembly,tx=self.ready(self.source)
   operations=tuple(replace(self.create(label=label,alias=label),values=self.create(label=label,alias=label).values+(AuthoredValue(name='flag',value=BooleanValue(value=flag)),)) for label,flag in [('yes',True),('no',False)])
-  inp,_=self.input(assembly,tx,operations);result=assembly.apply_in_transaction(tx,inp,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun');self.assertIsInstance(result,Ok);self.assertIsInstance(result.value,GroupSuccess);host.detach();c.commit()
+  inp,_=self.input(assembly,tx,operations);result=assembly.apply_in_transaction(tx,inp,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN);self.assertIsInstance(result,Ok);self.assertIsInstance(result.value,GroupSuccess);host.detach();c.commit()
   type_id=self.types[('adoc','A')].type_id
   props={row[0]:str(row[1]) for row in self.admin.execute('SELECT name,prop_id FROM truss.prop_def WHERE type_id=%s',(int(type_id),))};packet={'typeId':type_id,'valueId':props['A-value'],'labelId':props['A-label'],'flagId':props['flag']}
-  run=subprocess.run(['/opt/homebrew/bin/bun',str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-public-graph-abac.ts')],input=json.dumps(packet),text=True,capture_output=True,timeout=30);self.assertEqual(run.returncode,0,run.stderr);sql=json.loads(run.stdout);observations=[]
+  run=subprocess.run([__import__('bun_path').BUN,str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-public-graph-abac.ts')],input=json.dumps(packet),text=True,capture_output=True,timeout=30);self.assertEqual(run.returncode,0,run.stderr);sql=json.loads(run.stdout);observations=[]
   valid=self.admin.execute(sql['validitySql']).fetchone()[0];self.assertEqual(valid,'true');observations.append({'id':'original-public-graph-validity','observed':valid})
   self.admin.execute('CREATE FUNCTION public.graph_candidate(text,text,bool) RETURNS bool LANGUAGE SQL AS $$ SELECT '+sql['predicateSql']+' $$')
   self.addCleanup(self.admin.execute,'DROP FUNCTION public.graph_candidate(text,text,bool)')

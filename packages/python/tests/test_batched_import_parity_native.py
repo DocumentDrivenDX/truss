@@ -149,7 +149,7 @@ class BatchedImportParityNativeTests(batched_tests.BatchedImportTests):
 
         legacy_input = legacy_context.input(route_records['adoc'], load_id='parity-legacy', asserted_origin=origin)
         legacy_result = assembly.import_in_transaction(tx, legacy_input, documents=self.documents,
-            bun_executable='/opt/homebrew/bin/bun')
+            bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(legacy_result, ImportReported, repr(legacy_result))
 
         drafts = (
@@ -215,7 +215,7 @@ class BatchedImportParityNativeTests(batched_tests.BatchedImportTests):
             self.assertEqual(deleted.outcome, 'success', repr(deleted))
             input_value = legacy_context.input((route_records[doc][0],), load_id='reserved-'+doc, asserted_origin=origin) if doc == 'adoc' else built.value.context.input((batch_records[0],), load_id='reserved-'+doc, asserted_origin=origin)
             outcome = assembly.import_in_transaction(tx, input_value, documents=self.documents,
-                bun_executable='/opt/homebrew/bin/bun') if doc == 'adoc' else assembly.import_batched_in_transaction(tx, input_value, documents=self.documents).result
+                bun_executable=__import__('bun_path').BUN) if doc == 'adoc' else assembly.import_batched_in_transaction(tx, input_value, documents=self.documents).result
             self.assertEqual(outcome.report.outcomes[0].reason, 'reserved_identity')
         host.detach(); connection.rollback()
 
@@ -240,7 +240,7 @@ class BatchedImportParityNativeTests(batched_tests.BatchedImportTests):
                 asserted_origin=MapValue(entries=()))
             legacy_executed, legacy_execute_stats = self.measured(host, backend_pid, lambda:
                 assembly.import_in_transaction(tx, legacy_input, documents=self.documents,
-                    bun_executable='/opt/homebrew/bin/bun'))
+                    bun_executable=__import__('bun_path').BUN))
             self.assertIsInstance(legacy_executed, ImportReported, repr(legacy_executed))
             legacy_execute_statements = len(queries)
 

@@ -42,7 +42,7 @@ class Core10CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   return (CatalogDocument(source['id'],'schema-1',FIXTURE.read_bytes()),)
  def test_original10_prepare_register_commit_report_and_view(self):
   self.install();c,h,a,t=self.consumer()
-  prepared=a.prepare_catalog(self.source10(),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog(self.source10(),source_version='0.10.0',bun_executable=__import__('bun_path').BUN)
   self.assertEqual(prepared.input()['supportProfile'],DATE10_PROFILE)
   c.execute("CREATE TEMP TABLE prior10(value text);INSERT INTO prior10 VALUES('kept')")
   registered=a.accept_in_transaction(t,prepared,request_key='native10-original')
@@ -60,7 +60,7 @@ class Core10CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   retry=a.accept_in_transaction(t,prepared,request_key='native10-original');self.assertIsInstance(retry,Ok);self.assertTrue(retry.value.replayed)
   self.assertEqual(retry.value.report_bytes,registered.value.report_bytes)
  def test_original10_registration_rollback_preserves_prior_work(self):
-  self.install();c,h,a,t=self.consumer();prepared=a.prepare_catalog(self.source10(),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
+  self.install();c,h,a,t=self.consumer();prepared=a.prepare_catalog(self.source10(),source_version='0.10.0',bun_executable=__import__('bun_path').BUN)
   c.execute("CREATE TEMP TABLE rollback_prior10(value text);INSERT INTO rollback_prior10 VALUES('kept');SAVEPOINT caller_before10")
   registered=a.accept_in_transaction(t,prepared,request_key='rollback10');self.assertIsInstance(registered,Ok,str(h._custody.last_attempt.error))
   c.execute('ROLLBACK TO SAVEPOINT caller_before10');self.assertEqual(c.execute('TABLE rollback_prior10').fetchall(),[('kept',)])
@@ -69,7 +69,7 @@ class Core10CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(0,))
 
  def test_missing_null_and_wrong_profile_refuse_without_partial_registration(self):
-  self.install();c,h,a,t=self.consumer();prepared=a.prepare_catalog((CatalogDocument(catalog.relational_document()['id'],'r1',json.dumps(catalog.relational_document()).encode()),),bun_executable='/opt/homebrew/bin/bun')
+  self.install();c,h,a,t=self.consumer();prepared=a.prepare_catalog((CatalogDocument(catalog.relational_document()['id'],'r1',json.dumps(catalog.relational_document()).encode()),),bun_executable=__import__('bun_path').BUN)
   c.execute("CREATE TEMP TABLE profile_prior10(value text);INSERT INTO profile_prior10 VALUES('kept')")
   self.admin.execute('SELECT truss.catalog_require_sources(%s,%s,%s)',(prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes),prepare=False)
   for mutation in ('missing','null','wrong'):
@@ -92,7 +92,7 @@ class Core10CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   field=next(e for e in doc['modules'][0]['elements'] if e['id']=='resourceId')
   field['default']={'value':{'string':'EXACT'},'on':'missing'};field['allowedValues']=[{'string':'EXACT'},{'string':'OTHER'}]
   document=CatalogDocument(original.document_id,original.document_revision,json.dumps(doc).encode())
-  prepared=a.prepare_catalog((document,),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog((document,),source_version='0.10.0',bun_executable=__import__('bun_path').BUN)
   result=a.accept_in_transaction(t,prepared,request_key='properties10')
   self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
   h.detach();c.commit()

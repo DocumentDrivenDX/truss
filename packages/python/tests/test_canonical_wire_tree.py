@@ -18,7 +18,7 @@ class CanonicalWireTreeTests(unittest.TestCase):
         for wire in VECTORS:
             with self.subTest(wire=wire):
                 result=prepare_canonical_wire_tree(wire)
-                owner=subprocess.run(['/opt/homebrew/bin/bun',str(ROOT/'packages/python/tests/tools/canonical-wire-tree.ts')],
+                owner=subprocess.run([__import__('bun_path').BUN,str(ROOT/'packages/python/tests/tools/canonical-wire-tree.ts')],
                     input=wire,capture_output=True,check=True)
                 expected=json.loads(owner.stdout)
                 self.assertEqual(result.original_utf8_hex,expected['originalUtf8Hex'])

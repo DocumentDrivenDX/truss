@@ -95,7 +95,7 @@ def _socket_directory(data_directory: Path) -> Path:
 class LocalPostgres:
     """Own one isolated local cluster; connections and transactions belong to callers.
 
-    Install ``truss-toolkit[local]``. Each data directory owns a PostgreSQL 18
+    Install ``umf-truss[local]``. Each data directory owns a PostgreSQL 18
     cluster and a private, short Unix-socket directory. The context stops the
     server and retains data; it never initializes or upgrades Truss. A context
     cannot be reentered or restarted; use a new context for restart.
@@ -125,8 +125,11 @@ class LocalPostgres:
             return Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
         return self._binary_directory / 'psql'
 
-    def _run(self, command: str, *arguments: str, timeout: int = 60,
+    def _run(self, command: str, *arguments: str, timeout: int | None = None,
              check: bool = True) -> subprocess.CompletedProcess[str]:
+        # initdb can take over a minute on a loaded machine; TRUSS_LOCAL_TIMEOUT_S overrides the default.
+        if timeout is None:
+            timeout = int(os.environ.get('TRUSS_LOCAL_TIMEOUT_S', '300'))
         if self._binary_directory is None:
             raise LocalRuntimeError('PostgreSQL binaries are unavailable')
         executable = self._binary_directory / command
@@ -163,7 +166,7 @@ class LocalPostgres:
             if runtime_version != RUNTIME_VERSION:
                 raise LocalRuntimeError(f'Expected pinned {RUNTIME_DISTRIBUTION}=={RUNTIME_VERSION}')
         except (ImportError, importlib.metadata.PackageNotFoundError) as error:
-            raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+            raise LocalRuntimeError('Install umf-truss[local] for the local runtime') from error
 
         expected_major = SERVER_VERSION.split('.')[0]
         self.directory.parent.mkdir(parents=True, exist_ok=True)

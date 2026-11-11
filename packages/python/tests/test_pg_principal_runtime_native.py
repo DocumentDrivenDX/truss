@@ -35,7 +35,7 @@ class PrincipalRuntimeNativeTests(unittest.TestCase):
       LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$ SELECT 'alice'::name $$;
       GRANT USAGE ON SCHEMA principal_diag TO principal_alice,principal_bob""")
      config={'host':params['host'],'port':int(params.get('port',5432)),'database':params.get('dbname','postgres'),'user':params['user']}
-     run=subprocess.run(['/opt/homebrew/bin/bun',str(ROOT/'tests/pg-principal-native-runner.ts')],input=json.dumps(config).encode(),capture_output=True,timeout=60,cwd=ROOT)
+     run=subprocess.run([__import__('bun_path').BUN,str(ROOT/'tests/pg-principal-native-runner.ts')],input=json.dumps(config).encode(),capture_output=True,timeout=60,cwd=ROOT)
      self.assertEqual(run.returncode,0,run.stderr.decode());receipt=json.loads(run.stdout);self.assertEqual(len(receipt['cases']),13)
      receipt['serverVersion']=admin.execute('SHOW server_version').fetchone()[0]
      output=os.environ.get('TRUSS_PRINCIPAL_RUNTIME_EVIDENCE')

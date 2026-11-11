@@ -20,7 +20,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
     def added(self,assembly,identity):
         source=relational_document();source['id']=identity
         document=CatalogDocument(identity,'r1',json.dumps(source,indent=2).encode())
-        return document,assembly.prepare_catalog((document,),bun_executable='/opt/homebrew/bin/bun')
+        return document,assembly.prepare_catalog((document,),bun_executable=__import__('bun_path').BUN)
 
     def test_add_document_preserves_old_read_create_keys_and_receipt(self):
         connection,host,assembly,tx=self.ready()
@@ -59,17 +59,17 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         old=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(original_object.id))
         self.assertIsInstance(old.value,ObjectFound)
         self.assertEqual((old.value.object.catalog_revision,old.value.object.record_revision),(2,1))
-        old_key=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable='/opt/homebrew/bin/bun')
+        old_key=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(old_key.value,ObjectFound);self.assertEqual(old_key.value.object.id,int(original_object.id))
         replay=self.apply(assembly,tx,original_input,original_request)
         self.assertIsInstance(replay.response,CommittedReceiptReplay);self.assertEqual(replay.response.semantic,original_group.response.semantic)
         new_input,new_request=self.input(assembly,tx,operations=(self.create(document='bdoc',label='new',alias='new'),))
         stale_input=replace(new_input,mutation_profile=ProfilePin(identity='truss-rootless-string-create',version='0.1',sha256='f77c86906a35d8ca16bb00b7b068eaa023d224b3792353365089e8d718f92b71'))
-        conflict=assembly.apply_in_transaction(tx,stale_input,new_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        conflict=assembly.apply_in_transaction(tx,stale_input,new_request,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(conflict,Ok);self.assertIsInstance(conflict.value,GroupFailed)
         self.assertEqual(conflict.value.failure.code,'request_conflict')
         fresh_request=assembly.group_context_in_transaction(tx).value.request('stale-bdoc-profile')
-        stale=assembly.apply_in_transaction(tx,stale_input,fresh_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        stale=assembly.apply_in_transaction(tx,stale_input,fresh_request,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(stale.value,GroupUnavailable);self.assertEqual(stale.value.reason,'profile')
         new_request=assembly.group_context_in_transaction(tx).value.request('new-bdoc-object')
         created=self.apply(assembly,tx,new_input,new_request)
@@ -89,7 +89,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
             self.assertIsInstance(source,Ok);self.assertEqual(source.value.catalog_revision,2)
             self.assertEqual(source.value.source_catalog_revision,1 if doc=='adoc' else 2)
             self.assertEqual(source.value.registration_id,json.loads(bytes(old_report))['registrationId'] if doc=='adoc' else registered.value.registration_id)
-            key=assembly.lookup_key_in_transaction(tx,document_id=doc,module_id='m',record_id='A',key_id='a-primary',values=('value','one' if doc=='adoc' else 'new'),bun_executable='/opt/homebrew/bin/bun')
+            key=assembly.lookup_key_in_transaction(tx,document_id=doc,module_id='m',record_id='A',key_id='a-primary',values=('value','one' if doc=='adoc' else 'new'),bun_executable=__import__('bun_path').BUN)
             self.assertIsInstance(key.value,ObjectFound);self.assertEqual(key.value.object.id,identity)
         catalog=assembly.reader_catalog_in_transaction(tx)
         self.assertIsInstance(catalog,Ok);self.assertEqual({m['documentId'] for m in catalog.value.modules},{'adoc','bdoc'})
@@ -114,7 +114,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(2,))
         self.assertEqual(self.admin.execute("SELECT count(*) FROM truss.schema_doc WHERE doc_id='third'").fetchone(),(0,))
         connection,host,assembly,tx=self.consumer()
-        changed=assembly.prepare_catalog((replace(document,document_revision='r2'),),bun_executable='/opt/homebrew/bin/bun')
+        changed=assembly.prepare_catalog((replace(document,document_revision='r2'),),bun_executable=__import__('bun_path').BUN)
         denied=assembly.accept_in_transaction(tx,changed,request_key='changed-first')
         self.assertIsInstance(denied,Error);self.assertEqual(denied.error.catalog_code,'unauthorized')
         host.detach();connection.rollback()
@@ -161,7 +161,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='cache-model'),Ok)
         connection.rollback();connection.execute('BEGIN');tx=host.adopt_transaction().value
         changed=replace(document,content=document.content+b'\n')
-        prepared=assembly.prepare_catalog((changed,),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((changed,),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='cache-model'),Ok)
         connection.commit()
         self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
@@ -174,7 +174,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         # Preparing an unrelated source must not erase accepted convenience data.
         self.added(assembly,'not-accepted')
         input,request=self.input(assembly,tx,operations=(self.create(document='cache'),))
-        result=assembly.apply_in_transaction(tx,input,request,bun_executable='/opt/homebrew/bin/bun')
+        result=assembly.apply_in_transaction(tx,input,request,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(result,Ok);self.assertIsInstance(result.value,GroupSuccess)
         self.assertIsInstance(result.value.response,AppliedPending)
         host.detach();connection.rollback()

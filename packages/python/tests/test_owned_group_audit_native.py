@@ -63,7 +63,7 @@ class OwnedGroupAuditNativeTests(edge_tests.EdgeMutationTests):
             AliasObjectReference(alias='root'),AliasObjectReference(alias='child'),alias='owned-link'))
         applied=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),
             context.request('owned-audit-create'),documents=self.documents,
-            bun_executable='/opt/homebrew/bin/bun')
+            bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(applied,Ok,repr(applied))
         self.assertIsInstance(applied.value,GroupSuccess,repr(applied.value))
         root_id,child_id,edge_id=(item.identity for item in applied.value.response.semantic.results)
@@ -117,7 +117,7 @@ class OwnedGroupAuditNativeTests(edge_tests.EdgeMutationTests):
                         expected_version='1')
         deleted=assembly.apply_in_transaction(tx,deletion_context.input((deletion,),MapValue(entries=())),
             deletion_context.request('owned-audit-delete'),documents=self.documents,
-            bun_executable='/opt/homebrew/bin/bun')
+            bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(deleted,Ok,repr(deleted))
         self.assertIsInstance(deleted.value,GroupSuccess,repr(deleted.value))
         self.assertEqual({entry.identity for entry in deleted.value.response.semantic.results[0].deleted},

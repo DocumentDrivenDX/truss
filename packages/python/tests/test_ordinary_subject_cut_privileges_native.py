@@ -57,7 +57,7 @@ class OrdinarySubjectCutPrivilegeTests(unittest.TestCase):
      self.assertTrue(all(d.type_code==25 for d in cursor.description))
      self.assertEqual(cursor.fetchmany(2),[(*row[6:9],'cut_alice','cut_alice')])
      with self.assertRaises(psycopg.errors.LockNotAvailable):admin.execute("UPDATE truss.spike_subject_fact SET staff_id='revoked' WHERE actor='cut_alice'")
-     result=encode_literal_key_tuple(document,('m','Staff','pk'),(json.dumps({'string':row[-1]}),),bun_executable='/opt/homebrew/bin/bun')
+     result=encode_literal_key_tuple(document,('m','Staff','pk'),(json.dumps({'string':row[-1]}),),bun_executable=__import__('bun_path').BUN)
      encoded.append(True)
      return result
     result=host._run_operation(transaction.value,acquire)

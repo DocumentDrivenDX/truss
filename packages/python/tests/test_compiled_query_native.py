@@ -447,7 +447,7 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         source=MapValue(entries=(MapEntry(key='author',value=TextValue(kind='string',text='historical')),MapEntry(key='at',value=TextValue(kind='string',text='2020-01-01'))))
         record=assembly.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',values=self.create('imported',value='imported').values,source=source).value
         context=assembly.import_context_in_transaction(tx).value
-        report=assembly.import_in_transaction(tx,context.input((record,),load_id='entity-import',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        report=assembly.import_in_transaction(tx,context.input((record,),load_id='entity-import',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(report,ImportReported)
         imported=entity('imported');self.assertEqual((imported['_created_by'],imported['_original_author'],imported['_original_at']),('consumer','historical','2020-01-01'))
         host.detach();connection.commit();connection.execute('BEGIN READ ONLY')

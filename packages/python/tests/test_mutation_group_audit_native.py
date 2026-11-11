@@ -23,7 +23,7 @@ class MutationGroupAuditNativeTests(mutation_tests.ObjectMutationTests):
         context = assembly.group_context_in_transaction(tx).value
         input = context.input((self.create(label='audit-secret', value='payload-secret'),), action)
         applied = assembly.apply_in_transaction(tx, input, context.request('audit-create'),
-            documents=self.documents, bun_executable='/opt/homebrew/bin/bun')
+            documents=self.documents, bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(applied, Ok, repr(applied))
         identity = applied.value.response.semantic.results[0].identity
         create_writer_xid = connection.execute('SELECT pg_current_xact_id()::text').fetchone()[0]

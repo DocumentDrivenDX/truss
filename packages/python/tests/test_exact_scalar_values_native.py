@@ -45,7 +45,7 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
             if field.name=='retained-number':self.assertEqual(dict(read.value.object.retained)[field.name],field.value)
             elif field.name not in ('A-label','A-value'):
                 self.assertEqual(actual[field.name],True if field.name=='flag' else field.value)
-        key=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable='/opt/homebrew/bin/bun')
+        key=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(key.value,ObjectFound);self.assertEqual(key.value.object,read.value.object)
         host.detach();connection.rollback()
 
@@ -56,7 +56,7 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
             ('flag',TextValue(kind='integer',text='1')),('at',TextValue(kind='timestamp',text='2023-02-29T00:00:00Z')),
             ('at',TextValue(kind='timestamp',text='2024-01-01T00:00:60Z')),('blob',TextValue(kind='binary',text='AB=='))):
             input,_=self.input(assembly,tx,operations=(self.operation(**{name:value}),))
-            refused=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            refused=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN)
             self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
             self.assertIsInstance(refused.value.failure,InvalidGroupInput)
             import base64,json
@@ -65,7 +65,7 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(connection.execute('SELECT count(*) FROM scalar_prior').fetchone(),(1,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         input,_=self.input(assembly,tx,operations=(self.operation(blob=TextValue(kind='binary',text='')),))
-        applied=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        applied=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(applied.value,GroupSuccess)
         host.detach();connection.rollback()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
@@ -77,7 +77,7 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
         for name,value in (('d',TextValue(kind='decimal',text='1x2')),
                            ('at',TextValue(kind='timestamp',text='2024-01-01T00:00:00x123Z'))):
             input,_=self.input(assembly,tx,operations=(self.operation(**{name:value}),))
-            refused=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            refused=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN)
             self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         host.detach();connection.rollback()

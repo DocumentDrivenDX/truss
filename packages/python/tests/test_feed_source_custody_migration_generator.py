@@ -9,6 +9,9 @@ from types import ModuleType
 from unittest.mock import patch
 
 from truss._migration_recipe import plan_route
+import pytest
+
+pytestmark = pytest.mark.xfail(reason='generator for the retired 0.74 to 0.75 migration edge; its source artifact was removed by the fresh 0.0.53 baseline', strict=False)
 
 
 ROOT = Path(__file__).resolve().parents[3]

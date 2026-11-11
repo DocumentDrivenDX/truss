@@ -19,7 +19,7 @@ class CatalogEvolutionTests(group_tests.PublicCreateGroupTests):
         if add_new_required:
             module['elements'].append({'id':'new-required','name':'new-required','kind':'field',
                 'scalarType':'boolean','nullability':'required','cardinality':'one','extensions':{}})
-        return assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        return assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable=__import__('bun_path').BUN)
 
     def test_exact_rule_counts_and_no_acceptance_or_cache_effects(self):
         connection,host,assembly,tx=self.ready()

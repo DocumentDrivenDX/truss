@@ -65,7 +65,7 @@ class ObjectPageTests(group_tests.PublicCreateGroupTests):
         from test_catalog_relational_support import relational_document
         import json
         source=relational_document();source['id']='more'
-        prepared=assembly.prepare_catalog((CatalogDocument('more','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((CatalogDocument('more','r1',json.dumps(source).encode()),),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='more'),Ok)
         stale=self.page(assembly,tx,cursor=cursor).value
         self.assertIsInstance(stale,ObjectReadUnavailable);self.assertEqual(stale.reason,'context')

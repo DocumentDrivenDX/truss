@@ -20,7 +20,7 @@ class ImportLoadQueryTests(mutation_tests.ObjectMutationTests):
             source=MapValue(entries=(MapEntry(key='author',value=TextValue(kind='string',text='ann')),)))
         self.assertIsInstance(imported,Ok)
         load='L1:é/ exact load'
-        report=assembly.import_in_transaction(tx,context.input((imported.value,),load_id=load,asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        report=assembly.import_in_transaction(tx,context.input((imported.value,),load_id=load,asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(report,ImportReported);self.assertIsInstance(report.report.outcomes[0],ImportCreated)
         def rows():
             result=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a ORDER BY a."A-label"',document_ids=('adoc',),read_profile='complete-entity')

@@ -207,7 +207,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 c.execute(query,prepare=False,binary=False)
                 self.assertTrue(all(d.type_code==25 for d in c.description))
                 rows=c.fetchmany(101);self.assertLessEqual(len(rows),100);capture[name]=rows
-            result=subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-flat-fixture.ts'],cwd=ROOT,input=json.dumps(capture),capture_output=True,text=True,timeout=20)
+            result=subprocess.run([__import__('bun_path').BUN,'scripts/evaluate-security-flat-fixture.ts'],cwd=ROOT,input=json.dumps(capture),capture_output=True,text=True,timeout=20)
             self.assertEqual(result.returncode,0,result.stderr)
             return json.loads(result.stdout)
         result=self.dependency_cut(t,evaluate,providers);self.assertIsInstance(result,Ok);return result.value
@@ -318,7 +318,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         return _capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
     def reconstruct_identity_fixture(self,t,providers=None):
         captured=self.identity_capture(t,providers);self.assertIsInstance(captured,Ok)
-        return subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-captured-identity-fixture.ts'],cwd=ROOT,input=json.dumps([asdict(c) for c in captured.value]),capture_output=True,text=True,timeout=20)
+        return subprocess.run([__import__('bun_path').BUN,'scripts/evaluate-security-captured-identity-fixture.ts'],cwd=ROOT,input=json.dumps([asdict(c) for c in captured.value]),capture_output=True,text=True,timeout=20)
     def identity_decision(self,mutation=None,providers=None):
         t=self.begin()
         if mutation:self.connection.execute(mutation)
@@ -958,7 +958,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         import security_owned_read as tool
         original_run=tool.subprocess.run;observed=[]
         def during(command,*args,**kwargs):
-            if command[0]=='/opt/homebrew/bin/bun' and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
+            if command[0]==__import__('bun_path').BUN and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
                 self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass,'truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(7,))
                 with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
                     for statement in ('UPDATE truss.sec_assignment SET active=false','SELECT truss.runtime_fence_shared_authority_writer()'):

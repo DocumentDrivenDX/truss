@@ -81,7 +81,7 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   context=a.group_context_in_transaction(t).value
   from truss import CatalogDocument
   request=json.loads(self.reference);documents=tuple(CatalogDocument(m['pin']['documentId'],m['pin']['revision'],m['documentJson'].encode()) for m in request['modules'])
-  created=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+  created=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(created,Ok,str(h._custody.last_attempt.error))
   if refused:
    self.assertIsInstance(created.value,GroupFailed)
@@ -96,7 +96,7 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
     operation=UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='salary',value=TextValue(kind='integer',text=str(value))),),unset=())
     update_input=context.input((operation,),MapValue(entries=()))
     update_request=context.request('signed64-final-update') if value==-9223372036854775808 else RequestNone()
-    changed=a.apply_in_transaction(t,update_input,update_request,documents=documents,bun_executable='/opt/homebrew/bin/bun')
+    changed=a.apply_in_transaction(t,update_input,update_request,documents=documents,bun_executable=__import__('bun_path').BUN)
     self.assertIsInstance(changed,Ok,str(h._custody.last_attempt.error));self.assertIsInstance(changed.value,expected)
     if expected is GroupSuccess:previous=value
     observed=a.get_object_in_transaction(t,document_id='domain',module_id='m',record_id='Resource',object_id=int(identity.id))
@@ -106,7 +106,7 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   h.detach();c.commit();self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(12,))
   if update:
    c,h,a,t=self.consumer()
-   replay=a.apply_in_transaction(t,update_input,update_request,documents=documents,bun_executable='/opt/homebrew/bin/bun')
+   replay=a.apply_in_transaction(t,update_input,update_request,documents=documents,bun_executable=__import__('bun_path').BUN)
    self.assertIsInstance(replay,Ok);self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
    self.assertEqual(replay.value.response.semantic,changed.value.response.semantic)
    h.detach();c.commit()

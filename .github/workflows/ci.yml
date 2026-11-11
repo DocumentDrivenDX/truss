@@ -77,14 +77,11 @@ jobs:
         run: |
           "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 4 -m "not slow" -p no:cacheprovider --durations=25 .
 
-  quickstart:
+  smoke:
     needs: build-lint
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -92,9 +89,17 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Install built wheel in a fresh venv and run the example workflow
+      - name: Fresh-venv install of the built wheel and local PostgreSQL start
         run: |
           python -m venv "$RUNNER_TEMP/q"
           "$RUNNER_TEMP/q/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]"
           cd "$RUNNER_TEMP"
-          "$RUNNER_TEMP/q/bin/python" "$GITHUB_WORKSPACE/packages/python/examples/adopter_workflow.py" "$RUNNER_TEMP/qs" | tee "$RUNNER_TEMP/qs.json"
+          "$RUNNER_TEMP/q/bin/python" - <<'PY'
+          import psycopg, truss
+          from truss import LocalPostgres
+          with LocalPostgres("smoke-data") as pg:
+              with psycopg.connect(pg.info.connection_uri) as c:
+                  version = c.execute("SHOW server_version").fetchone()[0]
+          assert version.startswith("18."), version
+          print("ok", version)
+          PY

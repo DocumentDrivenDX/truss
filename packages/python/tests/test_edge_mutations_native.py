@@ -33,7 +33,7 @@ class EdgeMutationTests(condition_tests.GroupPreconditionTests):
         page=assembly.page_edges_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',anchor=a).value
         self.assertEqual(page.edges[0].identity,edge)
         host.detach();connection.rollback();connection,host,assembly,tx=self.consumer()
-        replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(replay,Ok);self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
         added,_,_=self.run_group(assembly,tx,(self.create(label='third',value='third',alias='third',record='B'),
             replace(self.link(pin,StoredObjectReference(identity=a),AliasObjectReference(alias='third'),alias='second'),order_key=NullOrderKey())), 'second-link')
@@ -49,7 +49,7 @@ class EdgeMutationTests(condition_tests.GroupPreconditionTests):
         missing=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',edge_id=int(edge.id));self.assertIsInstance(missing.value,EdgeNotFound)
         host.detach();connection.commit();self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(0,))
         connection,host,assembly,tx=self.consumer()
-        replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(replay.value.response,CommittedReceiptReplay);self.assertEqual(replay.value.response.semantic,applied.response.semantic)
         host.detach();connection.rollback()
 
@@ -62,7 +62,7 @@ class EdgeMutationTests(condition_tests.GroupPreconditionTests):
         self.assertIsInstance(result,GroupSuccess);a=result.response.semantic.results[0].identity
         context=assembly.group_context_in_transaction(tx).value
         input=context.input((self.create(label='new',value='new',alias='new',record='B'),),MapValue(entries=()),preconditions=(RelationshipCount(id='empty',reason='must be empty',relationship_definition_pin=pin,anchor=a,direction='outgoing',maximum='0'),))
-        failed=assembly.apply_in_transaction(tx,input,context.request('count-failed'),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        failed=assembly.apply_in_transaction(tx,input,context.request('count-failed'),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(failed.value.failure,PreconditionFailed)
         host.detach();connection.commit();self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(2,))
 

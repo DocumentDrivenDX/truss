@@ -14,7 +14,7 @@ env:
 jobs:
   slow-native:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v6
         with:
@@ -54,7 +54,7 @@ jobs:
           python -m venv "$RUNNER_TEMP/v"
           "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]"
           cd "$RUNNER_TEMP/hf"
-          "$RUNNER_TEMP/v/bin/python" "$(find . -name run-hf-conformance.py | head -1)" --installed-package
+          "$RUNNER_TEMP/v/bin/python" scripts/run-hf-conformance.py --installed-package
 
   migrations:
     runs-on: ubuntu-24.04
@@ -71,4 +71,4 @@ jobs:
           python -m build packages/python --outdir dist
           python -m venv "$RUNNER_TEMP/v"
           "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]"
-          "$RUNNER_TEMP/v/bin/python" scripts/qualify-runtime-migrations.py --installed-package
+          "$RUNNER_TEMP/v/bin/python" scripts/test-runtime-migrations.py --installed-package

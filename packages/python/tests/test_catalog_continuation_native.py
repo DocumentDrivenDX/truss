@@ -22,7 +22,7 @@ class CatalogContinuationNativeTests(reader_tests.ReaderCatalogTests):
     def added(self,assembly,identity):
         source=relational_document();source['id']=identity
         document=CatalogDocument(identity,'r1',json.dumps(source,indent=2).encode())
-        return document,assembly.prepare_catalog((document,),bun_executable='/opt/homebrew/bin/bun')
+        return document,assembly.prepare_catalog((document,),bun_executable=__import__('bun_path').BUN)
 
     def test_conditional_snapshot_unchanged_readonly_hit_and_revocation(self):
         connection,host,assembly,tx=self.reader()
@@ -116,7 +116,7 @@ class CatalogContinuationNativeTests(reader_tests.ReaderCatalogTests):
             expected_documents=(CatalogDocumentExpectation('cdoc',0),))
         self.assertEqual(stale,Ok(CatalogCASConflict()))
 
-        bdoc_v2=assembly.prepare_catalog((replace(bdoc,document_revision='r2',content=bdoc.content+b'\n'),),bun_executable='/opt/homebrew/bin/bun')
+        bdoc_v2=assembly.prepare_catalog((replace(bdoc,document_revision='r2',content=bdoc.content+b'\n'),),bun_executable=__import__('bun_path').BUN)
         same_document_stale=assembly.accept_in_transaction(tx,bdoc_v2,request_key='bdoc-stale-source',
             expected_documents=(CatalogDocumentExpectation('bdoc',1),))
         self.assertEqual(same_document_stale,Ok(CatalogCASConflict()))
