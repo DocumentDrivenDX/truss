@@ -35,7 +35,7 @@ change against the built wheel in a fresh virtual environment.
 curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/quickstart.py
 curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/notes.umf.json
 python quickstart.py ./truss-demo
-# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 1, "ack": "committed"}
+# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 2, "ack": "committed"}
 ```
 
 The first run starts PostgreSQL (`initdb`), which takes a minute on a slow disk. Set

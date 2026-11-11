@@ -19,7 +19,7 @@ Requires Python 3.11 or newer. The `local` extra brings PostgreSQL 18.6 (`pgserv
 curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/quickstart.py
 curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/notes.umf.json
 python quickstart.py ./truss-demo
-# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 1, "ack": "committed"}
+# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 2, "ack": "committed"}
 ```
 
 It starts a private PostgreSQL on a Unix socket (no TCP listener), installs Truss, registers a UMF document, creates two notes and an edge, looks one up by key, runs a relationship query, and reads and acknowledges the change feed. CI runs this script against the built wheel on every change.
