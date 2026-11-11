@@ -220,6 +220,13 @@ SLOW_MODULES: set[str] = {
     'test_umf_string_key_verifier_native',
 }
 
+# Timing-sensitive tests that flake on a shared 4-vCPU runner under xdist; nightly runs them.
+SLOW_TESTS: set[str] = {
+    'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_mixed_preconditions_succeed',
+    'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_preconditions_succeed',
+    'test_embedded_owner.py::EmbeddedOwnerTests::test_isolate_deadline_interrupts_nonterminating_code',
+}
+
 # Known-failing tests, excluded from CI by `-m "not quarantined"` and listed in the PR description.
 # Each entry needs a reason; remove the entry when the cause is fixed.
 STALE_LAYOUT = 'fixtures install the layout 0.16 DDL, which no longer defines row_home_* tables/types (dropped by fdd249e7); native row-image fixtures need rewriting'
@@ -257,7 +264,7 @@ QUARANTINED_TESTS: dict[str, str] = {
 def pytest_collection_modifyitems(config, items):
     for item in items:
         module = item.module.__name__.split('.')[-1]
-        if module in SLOW_MODULES:
+        if module in SLOW_MODULES or any(item.nodeid.endswith(key) for key in SLOW_TESTS):
             item.add_marker(pytest.mark.slow)
         if module in QUARANTINED_MODULES or any(item.nodeid.endswith(key) for key in QUARANTINED_TESTS):
             item.add_marker(pytest.mark.quarantined)
