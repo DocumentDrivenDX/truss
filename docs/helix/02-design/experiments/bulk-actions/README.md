@@ -48,3 +48,11 @@ Owner decisions (2026-11-10): the worker database role is `"bulk-worker"`, and t
 `PYTHONPATH=packages/python/src python3.11 check_claim_fence_native.py --pg-bin <postgresql@18 bin> [--out receipt]` runs 27 checks with concurrent psql sessions on a scratch cluster: a claim race (second claimant blocks on the lock, then is refused), stale fence refusal, cancel against an admitted attempt in both lock orders, the role surface, the lock footprint (relation locks on the job home only, no advisory locks) and 400 random event sequences (about 1,100 events) that agree exactly with `_bulk_job_control`. Controls that each fail the run: removing `FOR UPDATE` (a second claimant wins with fence 2), disabling the fence check, granting the worker table access, and restoring the old final-batch rule (the layout's CHECK rejects it).
 
 Not covered: levels 1-4 (the caller must already hold them; nothing here verifies that), the effect transaction and its atomic coupling with the committed-prefix advance (a native commit whose acknowledgement is lost can leave the job row behind the graph), authority, custody and reconciliation evidence, lease timing, and the install baseline. Native US-046-049 criteria stay planned.
+
+### Coupling decision (option 1 + safety net, 2026-11-10)
+
+The job row advances inside the effect transaction (`worker_event(commit, result)` with the complete batch
+result, after the business writes, before COMMIT); deferred constraint triggers make a receipt/prefix
+mismatch impossible to commit; `reconcile(committed)` is an observation in Truss. In `BulkUpdate.tla` a commit
+whose acknowledgement was lost has already advanced the job. `check_claim_fence_native.py` now runs 37 checks,
+including session kills around the commit. See [bulk-prefix-coupling-options.md](../bulk-prefix-coupling-options.md).

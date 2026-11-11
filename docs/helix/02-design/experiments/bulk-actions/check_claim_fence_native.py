@@ -226,6 +226,58 @@ def main():
             check('E: no advisory or non-relation locks beyond xid locks', all(x.startswith('relation:') for x in held), held)
             check('E: only the job home (and its key index) is locked', rels <= {'job', 'job_pkey'} and 'job' in rels, held)
 
+            ctl.call('CREATE TABLE scratch_effect(job text, batch int);')
+            ctl.call('GRANT INSERT ON scratch_effect TO "bulk-worker";')  # harness-only stand-in for the business homes
+            # G. safety net: receipts and prefix must move together at COMMIT
+            ctl.call(submit('ns', 'net', 2))
+            adv_only = ctl.call("BEGIN; UPDATE truss_bulk.job SET committed_batches=1 WHERE job_id='net'; COMMIT;")
+            ctl.call('ROLLBACK;')
+            rec_only = ctl.call("BEGIN; INSERT INTO truss_bulk.batch_receipt VALUES ('ns','net',0,'0','\\x01'::bytea,decode(repeat('ab',32),'hex')); COMMIT;")
+            ctl.call('ROLLBACK;')
+            gap = ctl.call("BEGIN; INSERT INTO truss_bulk.batch_receipt VALUES ('ns','net',1,'0','\\x01'::bytea,decode(repeat('ab',32),'hex')); "
+                           "UPDATE truss_bulk.job SET committed_batches=1 WHERE job_id='net'; COMMIT;")
+            ctl.call('ROLLBACK;')
+            both = ctl.call("BEGIN; INSERT INTO truss_bulk.batch_receipt VALUES ('ns','net',0,'0','\\x01'::bytea,decode(repeat('ab',32),'hex')); "
+                            "UPDATE truss_bulk.job SET committed_batches=1, status='queued' WHERE job_id='net'; COMMIT;")
+            rows = ctl.call("SELECT committed_batches FROM truss_bulk.job WHERE job_id='net';")
+            check('G: prefix advance without a receipt cannot commit', any('does not match' in x for x in adv_only), adv_only)
+            check('G: a receipt without the prefix advance cannot commit', any('does not match' in x for x in rec_only), rec_only)
+            check('G: a receipt for batch 1 without batch 0 cannot commit', any('does not match' in x for x in gap), gap)
+            check('G: receipt and advance together commit', not any('ERROR' in x for x in both) and rows == ['1'], (both, rows))
+
+            # H. option 1 atomicity: kill the effect session at each point; the row and the effect move together
+            def effect_attempt(job, kill_at):
+                ctl.call(submit('ns', job, 2))
+                w1.call(worker('ns', job, ev('claim'))); w1.call(worker('ns', job, ev('execute', batch=0, fence='1')))
+                e = Session(pg, sock, WORKER, 'eff', env); sessions.append(e)
+                e.call('BEGIN;')
+                e.call("INSERT INTO scratch_effect VALUES ('%s',0);" % job)  # stand-in for the graph/journal writes
+                if kill_at == 'before-call':
+                    e.p.kill()
+                else:
+                    r = j(e.call(worker('ns', job, ev('commit'), b'result'))[0])
+                    if kill_at == 'after-call-before-commit':
+                        e.p.kill()
+                    elif kill_at == 'after-commit':
+                        e.call('COMMIT;'); e.p.kill()
+                time.sleep(0.3)
+                st = ctl.call("SELECT committed_batches || ':' || status || ':' || (SELECT count(*) FROM truss_bulk.batch_receipt WHERE job_id='%s') || ':' || (SELECT count(*) FROM scratch_effect WHERE job='%s') FROM truss_bulk.job WHERE job_id='%s';" % (job, job, job))
+                return st[0] if st else '?'
+            check('H: killed before the commit call: row, receipt and business write all absent', effect_attempt('k1', 'before-call') == '0:running:0:0')
+            check('H: killed after the call, before COMMIT: row, receipt and business write all absent', effect_attempt('k2', 'after-call-before-commit') == '0:running:0:0')
+            check('H: killed after COMMIT: row, receipt and business write all present', effect_attempt('k3', 'after-commit') == '1:queued:1:1')
+            # a lost acknowledgement after commit: control cannot record lose-custody (row already advanced)
+            lc = j(ctl.call(worker('ns', 'k3', ev('lose-custody')))[0])
+            check('H: after a committed effect, lose-custody is refused (observation, not a write)', lc == {'ok': False}, lc)
+            # after a killed uncommitted effect: lose-custody then confirmed noncommit stops the job
+            lc2 = j(w2.call(worker('ns', 'k2', ev('lose-custody')))[0])
+            rc2 = j(w2.call(worker('ns', 'k2', ev('reconcile', evidence='noncommit-admitted')))[0])
+            check('H: after a killed uncommitted effect, reconcile stops with PAP_ABORT_DISPOSITION_UNKNOWN',
+                  lc2['ok'] and rc2['ok'] and rc2['state']['status'] == 'stopped' and rc2['state']['stop']['code'] == 'PAP_ABORT_DISPOSITION_UNKNOWN', (lc2, rc2))
+            ctl.call(submit('ns', 'k4', 2)); w1.call(worker('ns', 'k4', ev('claim'))); w1.call(worker('ns', 'k4', ev('execute', batch=0, fence='1')))
+            nores = j(w1.call(worker('ns', 'k4', ev('commit')))[0])
+            check('H: commit without a complete result is refused PAP_RESULT', nores == {'ok': False, 'code': 'PAP_RESULT'}, nores)
+
             # F. differential vs the pure model
             rng = random.Random(a.seed); script = []; plan = []
             for s in range(a.sequences):
@@ -244,6 +296,10 @@ def main():
                 state = m.apply_event(None, {'kind': 'submit', 'batchCount': nb})['state']; idx += 1
                 for e in events:
                     exp = m.apply_event(state, e); got = j(lines[idx]); idx += 1; compared += 1
+                    if e['kind'] == 'reconcile' and e['evidence'] == 'committed' and exp['ok']:
+                        # Option 1: committed evidence is an observation of an already-advanced row; a reconciling row has
+                        # no receipt, so Truss refuses (the portable model advances). State stays unchanged in both.
+                        exp = {'ok': False, 'code': 'PAP_RECEIPT'}
                     if exp['ok']:
                         state = exp['state']
                     same = exp['ok'] == got['ok'] and exp.get('code') == got.get('code') and exp.get('basis') == got.get('basis') \

@@ -17,7 +17,7 @@ ddx:
 
 # Bulk jobs: how the committed prefix is coupled to the effect transaction
 
-Status: **decision needed** (owner). Written 2026-11-10 after the candidate control functions
+Status: **decided 2026-11-10: option 1 with the deferred constraint-trigger safety net** (see "Decision and implementation" at the end). Written 2026-11-10 after the candidate control functions
 (`bulk-control-functions.sql`, role `bulk-worker`, job lock at CONTRACT-009 level 4a) were verified on a
 scratch PostgreSQL 18.6. Nothing here is installed or qualified.
 
@@ -136,3 +136,31 @@ makes the contract's "commit together" true by construction, and shrinks the rec
 
 Not decided by this note: levels 1-4 lock acquisition, authority and custody records, lease timing, the
 install baseline, or UMF's export of the layout. Native US-046-049 criteria stay planned.
+
+## Decision and implementation (2026-11-10)
+
+The owner chose option 1 with the deferred safety net. Questions 1 and 2 are answered: option 1 plus the net,
+and `reconcile(committed)` in Truss is an observation of an already-advanced row. Question 3 (whether
+CONTRACT-013's normative text should name the carrying transaction) was not answered and is left open; the
+contract is unchanged.
+
+Implemented in the candidate files (design candidate, still not installed or qualified):
+
+- `bulk-control-functions.sql`: `commit` refuses without a complete result (`PAP_RESULT`); `reconcile(committed)`
+  on a reconciling row refuses `PAP_RECEIPT` unless the claim's receipt exists, which the safety net makes
+  impossible, so in Truss committed evidence is only an observation of an advanced row.
+- `bulk-control-layout.sql`: deferred constraint triggers on the job and receipt homes require, at COMMIT,
+  that `committed_batches` equals the receipt count and the receipts are exactly batches 0..n-1.
+- `BulkUpdate.tla` and `check_job_refinement.py`: a commit whose acknowledgement is lost leaves the job already
+  advanced (`commit_unknown` projects to queued, completed or cancelled, never reconciling). TLC: no error over
+  607,102 states with `JobRefinement`; receipts regenerated.
+- `check_claim_fence_native.py`: 37 checks (10 new). Safety net: a prefix advance without a receipt, a receipt
+  without the advance and a receipt gap each fail at COMMIT, and a receipt plus advance commits. Atomicity: an
+  effect session (a business write plus the commit call) killed before the call, after the call before COMMIT,
+  and after COMMIT leaves the job row, the receipt and the business write all absent or all present. After a
+  committed effect `lose-custody` is refused; after a killed uncommitted effect, `lose-custody` and
+  `noncommit-admitted` stop the job with `PAP_ABORT_DISPOSITION_UNKNOWN`. Three new deliberate breaks (no
+  safety net, commit without a result, advance without a receipt) are each detected.
+
+Still not covered: levels 1-4, authority, custody records, lease timing, the real graph/journal/outbox homes
+(a scratch table stands in for the business writes), and the install baseline.
