@@ -20,7 +20,6 @@ import io
 import json
 import os
 from pathlib import Path
-import shutil
 import signal
 import subprocess
 import sys
@@ -296,12 +295,16 @@ def assert_replay(prepared, document, stored, first_report, replay):
          'Accepted local property descriptor missing')
 
 
-def assert_operations(operations, cleanup):
+def _assert_operation_results(operations):
     need(set(operations) == set(OPERATIONS), 'Missing actual TN-14 operation')
     for name in OPERATIONS:
         need(operations[name].get('status') == 'passed', 'Unasserted operation: ' + name)
     for name in ('write', 'import', 'typed-read'):
         need(operations[name].get('kinds') == list(KINDS), 'Missing temporal kind: ' + name)
+
+
+def assert_operations(operations, cleanup):
+    _assert_operation_results(operations)
     need(cleanup.confirmed, 'Native cleanup empty/mixed/uncertain')
 
 
@@ -581,38 +584,9 @@ def accept_and_replay(session, document, output=None):
                                retainedSha256=[digest(bytes(value)) for value in stored])}
 
 
-def finish_cleanup(runtime, monitor, root):
-    """Use the reviewed original-PID/status implementation, retaining uncertainty."""
-    errors = []
-    try:
-        monitor.capture(runtime.directory, runtime.psql_path.parent)
-    except BaseException as error:
-        errors.append(error)
-    try:
-        runtime.close()
-    except BaseException as error:
-        errors.append(error)
-    for record in monitor.records.values():
-        try:
-            if not record['confirmed']:
-                # Retry stop only for this captured original owned cluster.
-                subprocess.run([record['pgCtl'], '-D', record['dataDirectory'], '-m', 'fast', '-w', '-t', '30', 'stop'],
-                               capture_output=True, timeout=35)
-            monitor.confirm(record)
-        except BaseException as error:
-            errors.append(error)
-    unknown = [path.parent for path in root.rglob('PG_VERSION')
-               if str(path.parent.resolve()) not in monitor.records]
-    monitor.uncertain.extend(str(path) for path in unknown)
-    if errors:
-        monitor.cleanup_errors.extend(type(error).__name__ + ': ' + str(error) for error in errors)
-    if monitor.records and not monitor.uncertain and not monitor.cleanup_errors:
-        # Every original PID is absent and pg_ctl==3 BEFORE deletion.
-        shutil.rmtree(root)
-        for record in monitor.records.values():
-            record['dataDeleted'] = not Path(record['dataDirectory']).exists()
-    monitor.save()
-    need(monitor.confirmed, 'Owned cleanup uncertain; retained: ' + str(root))
+def finish_cleanup(runtime, monitor, root, *, remove=True):
+    """Close and remove through the same owned-tree gate as the isolated campaign."""
+    monitor.finish_runtime(runtime, root, remove=remove)
 
 
 def run_native(context, output, controller, *, seconds=300):
@@ -625,9 +599,9 @@ def run_native(context, output, controller, *, seconds=300):
     api = SimpleNamespace(pg=psycopg, truss=truss, contracts=contracts, groups=groups, imports=imports,
                           temporal=temporal, weft=weft)
     support = load_control(controller / 'temporal_qualification_support.py', 'tn14_cleanup_support')
-    monitor = support.OwnedNativeCleanup([], output / 'cleanup.json')
     root = Path(tempfile.mkdtemp(prefix='truss-public-tn14-'))
     runtime = truss.LocalPostgres(root / 'data')
+    monitor = support.OwnedNativeCleanup([], output / 'cleanup.json', only_runtime=runtime)
     operations = {}
     def timed_out(signum, frame):
         raise TimeoutError('Public TN-14 operation deadline')
@@ -635,31 +609,31 @@ def run_native(context, output, controller, *, seconds=300):
     old_alarm = signal.signal(signal.SIGALRM, timed_out)
     signal.alarm(seconds)
     try:
-        try:
-            runtime.__enter__()
-        finally:
-            monitor.capture(runtime.directory, runtime.psql_path.parent)
-        need(runtime.info.server_version == context['profile']['serverVersion'], 'Actual server version differs')
-        session = PublicSession(api, runtime)
-        document = truss.CatalogDocument('adoc', 'r1', canonical(authored_document()))
-        operations.update(accept_and_replay(session, document, output))
-        (output / 'operations.json').write_bytes(canonical(operations))
-        operations.update(write_and_import(session, (document,), output))
-        (output / 'operations.json').write_bytes(canonical(operations))
-        models = generated_models(api, document, output / 'generated')
-        operations.update(typed_reads(session, models, output))
-        (output / 'operations.json').write_bytes(canonical(operations))
+        with monitor:
+            try:
+                runtime.__enter__()
+                need(runtime.info.server_version == context['profile']['serverVersion'], 'Actual server version differs')
+                session = PublicSession(api, runtime)
+                document = truss.CatalogDocument('adoc', 'r1', canonical(authored_document()))
+                operations.update(accept_and_replay(session, document, output))
+                (output / 'operations.json').write_bytes(canonical(operations))
+                operations.update(write_and_import(session, (document,), output))
+                (output / 'operations.json').write_bytes(canonical(operations))
+                models = generated_models(api, document, output / 'generated')
+                operations.update(typed_reads(session, models, output))
+                (output / 'operations.json').write_bytes(canonical(operations))
+                for name in OPERATIONS:
+                    path = output / (name + '-result.json')
+                    need(path.is_file(), 'Original operation result evidence missing: ' + name)
+                    operations[name]['result'] = {'path': path.name, 'sha256': digest(path.read_bytes())}
+                _assert_operation_results(operations)
+            finally:
+                signal.alarm(0)
+                finish_cleanup(runtime, monitor, root, remove=sys.exc_info()[0] is None)
     finally:
-        signal.alarm(0)
-        try:
-            finish_cleanup(runtime, monitor, root)
-        finally:
-            signal.signal(signal.SIGTERM, old_term)
-            signal.signal(signal.SIGALRM, old_alarm)
-    for name in OPERATIONS:
-        path = output / (name + '-result.json')
-        need(path.is_file(), 'Original operation result evidence missing: ' + name)
-        operations[name]['result'] = {'path': path.name, 'sha256': digest(path.read_bytes())}
+        signal.signal(signal.SIGTERM, old_term)
+        signal.signal(signal.SIGALRM, old_alarm)
+    need(monitor.confirmed, 'Owned cleanup uncertain; retained: ' + str(root))
     assert_operations(operations, monitor)
     return operations, read_json(output / 'cleanup.json')
 

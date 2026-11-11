@@ -2,6 +2,10 @@
 """Qualification driver sensitivity only; no native server or build is started."""
 import importlib.util
 import ast
+from contextlib import nullcontext
+import base64
+import os
+import zlib
 import json
 from pathlib import Path
 import shutil
@@ -127,6 +131,8 @@ class TemporalQualificationDriverTests(unittest.TestCase):
                  patch('temporal_qualification_support.subprocess.run',return_value=subprocess.CompletedProcess([],3,'','')), \
                  patch('temporal_qualification_support.os.kill',side_effect=absent),monitor:
                 monitor.capture(data,Path('/unit/bin'))
+                # Simulate the original postmaster's removal of its PID file.
+                (data/'postmaster.pid').unlink()
                 shutil.rmtree(owned)
                 with self.assertRaisesRegex(RuntimeError,'retain data'):
                     monitor.capture(missing,Path('/unit/bin'))
@@ -226,3 +232,360 @@ class TemporalQualificationDriverTests(unittest.TestCase):
         self.assertEqual(actual['acl'],full);self.assertEqual(actual['tables'],original['tables'])
         before=subprocess.check_output(['git','show','6e2a38e66fd6322bd04a86cb49898b48b9ef5dbf:packages/python/tests/test_temporal_catalog_transport_native.py'],cwd=ROOT)
         self.assertEqual((ROOT/'packages/python/tests/test_temporal_catalog_transport_native.py').read_bytes(),before)
+
+
+# Read-only fixture bytes from the stopped, retained PostgreSQL 18.6 cluster.
+# The control flow below uses stubbed stop/status/PID and never opens a server.
+_AUTHENTIC_RELMAP = zlib.decompress(base64.b64decode(
+    'eJwTV49kEGRgYHjNAsEPofg5FN+HYhFuCBaFYm8BCPaB4iYuCG6G4n4ongDFSVCcDMVpUJwOxfW8'
+    'EDwKBgZ8+rbqPgAcXBZu'
+))
+_AUTHENTIC_CONTROL = zlib.decompress(base64.b64decode(
+    'eJzbZ65+hP/s5ywOdgYGYwYhHkYGCBAEioHoHzKFjMg0Ixr+wARRn2wM4YPACyZUNcjmoYMXzNhE'
+    'sQOYWSlAzAHEXFC+A5TmgNLt14wcGRRALKBDFCBaQWpAzDPsEIVw9+k6R6W4/AldPLf8T7GeR+hO'
+    'OUHFOS+Uei5J+67+rPgndAZQjWqohjDxrhwFo2AUjIJRMApGwSgYBaNgFIyCUTAKRsEoGAWjYBSM'
+    'glEwCkbBKBgFo2AUjIJRMAroDwBavyL4'
+))
+
+
+class OwnedDatabaseLayoutTests(unittest.TestCase):
+    def make_owned(self, root, name='owned'):
+        data = root / name
+        data.mkdir()
+        (data / 'PG_VERSION').write_bytes(b'18\n')
+        socket = root / 'socket'
+        socket.mkdir()
+        pid = b'314\n' + os.fsencode(data) + b'\n1700000000\n5432\n' + os.fsencode(socket) + b'\n'
+        (data / 'postmaster.pid').write_bytes(pid)
+        (socket / '.s.PGSQL.5432.lock').write_bytes(pid)
+        (data / 'global').mkdir()
+        (data / 'global/pg_control').write_bytes(_AUTHENTIC_CONTROL)
+        for oid in ('1', '4', '5'):
+            database = data / 'base' / oid
+            database.mkdir(parents=True)
+            (database / 'PG_VERSION').write_bytes(b'18\n')
+            (database / 'pg_filenode.map').write_bytes(_AUTHENTIC_RELMAP)
+            # The relation file is a stub. Its filename comes from the real map.
+            (database / '1259').write_bytes(b'relation fixture')
+        return data
+
+    def controls(self, data, oids=None):
+        socket = data.parent / 'socket'
+        if oids is None:
+            oids = ['1', '4', '5']
+        module = types.ModuleType('truss')
+        class LocalPostgres:
+            directory = data
+            psql_path = Path('/unit/bin/psql')
+            info = types.SimpleNamespace(socket_directory=socket, server_version='18.6')
+            _info = info
+
+            def __enter__(self):
+                return self
+
+            def close(self):
+                (data / 'postmaster.pid').unlink()
+        module.LocalPostgres = LocalPostgres
+        def status(argv, **kwargs):
+            if argv[0] == '/unit/bin/psql':
+                self.assertIn(str(socket), argv)
+                self.assertIn('FROM pg_catalog.pg_database', argv[-1])
+                self.assertIn('default_transaction_read_only=on', kwargs['env']['PGOPTIONS'])
+                self.assertTrue((data / 'postmaster.pid').is_file())
+                result = {'data': str(data), 'socket': str(socket), 'port': '5432',
+                          'listen': '', 'unix': True, 'version': '180006', 'oids': oids}
+                return subprocess.CompletedProcess(argv, 0, json.dumps(result), '')
+            self.assertEqual(argv, ['/unit/bin/pg_ctl', '-D', str(data), 'status'])
+            self.assertTrue(data.is_dir())
+            return subprocess.CompletedProcess(argv, 3, 'not running', '')
+        def absent(pid, signal):
+            self.assertEqual((pid, signal), (314, 0))
+            self.assertTrue(data.is_dir())
+            if (data / 'postmaster.pid').exists():
+                return
+            raise ProcessLookupError
+        return (module, status, absent)
+
+    def test_authentic_per_database_markers_allow_owned_delete_after_stop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            data = self.make_owned(root)
+            module, status, absent = self.controls(data)
+            monitor = OwnedNativeCleanup([], root / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch('temporal_qualification_support.subprocess.run', side_effect=status), \
+                    patch('temporal_qualification_support._socket_identity', return_value=[7, 8], create=True), \
+                    patch('temporal_qualification_support.os.kill', side_effect=absent), monitor:
+                runtime = module.LocalPostgres()
+                runtime.__enter__()
+                self.assertEqual(monitor.records[str(data)]['originalPostmasterPid'], 314)
+                runtime.close()
+                self.assertTrue(data.exists())
+                shutil.rmtree(data)
+            self.assertTrue(monitor.confirmed)
+            record = json.loads((root / 'cleanup.json').read_bytes())['clusters'][0]
+            self.assertEqual(set(record['databaseLayout']['databases']), {'1', '4', '5'})
+            self.assertEqual((record['pgCtlStatus'], record['originalPostmasterPidAbsent'],
+                              record['dataDeleted']), (3, True, True))
+
+    def test_unobserved_or_changed_layout_retains_entire_requested_tree(self):
+        cases = ('unknown sibling', 'nested marker', 'nested postmaster pid',
+                 'nested postmaster opts', 'nested control', 'leading zero',
+                 'non-ASCII OID', 'zero', 'uint32 overflow', 'wrong version',
+                 'missing map', 'bad map CRC', 'wrong root PID binding',
+                 'database identity', 'root identity', 'new legitimate-looking OID',
+                 'copied valid OID before capture', 'unlisted added before close', 'socket lock mismatch',
+                 'symlink marker', 'symlink database', 'symlink base',
+                 'symlink deletion target', 'symlink ancestor', 'dir_fd', 'partial root')
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as tmp:
+                scratch = Path(tmp).resolve()
+                root = scratch / 'requested'
+                root.mkdir()
+                data = self.make_owned(root)
+                db = data / 'base/1'
+                target = root
+                flags = {}
+                if case in ('leading zero', 'non-ASCII OID', 'zero', 'uint32 overflow'):
+                    name = {'leading zero': '01', 'non-ASCII OID': '١', 'zero': '0',
+                            'uint32 overflow': '4294967296'}[case]
+                    db.rename(db.with_name(name))
+                elif case == 'wrong version':
+                    (db / 'PG_VERSION').write_bytes(b'17\n')
+                elif case == 'missing map':
+                    (db / 'pg_filenode.map').unlink()
+                elif case == 'bad map CRC':
+                    (db / 'pg_filenode.map').write_bytes(_AUTHENTIC_RELMAP[:-1] + bytes([_AUTHENTIC_RELMAP[-1] ^ 1]))
+                elif case == 'wrong root PID binding':
+                    (data / 'postmaster.pid').write_bytes(b'314\n/other\n')
+                elif case == 'copied valid OID before capture':
+                    shutil.copytree(db, db.with_name('9'))
+                elif case == 'socket lock mismatch':
+                    (root / 'socket/.s.PGSQL.5432.lock').write_bytes(b'99\n')
+
+                module, status, absent = self.controls(data)
+                monitor = OwnedNativeCleanup([], scratch / 'cleanup.json')
+                with patch.dict(sys.modules, {'truss': module}), \
+                        patch('temporal_qualification_support.subprocess.run', side_effect=status), \
+                    patch('temporal_qualification_support._socket_identity', return_value=[7, 8], create=True), \
+                        patch('temporal_qualification_support.os.kill', side_effect=absent), monitor:
+                    runtime = module.LocalPostgres()
+                    runtime.__enter__()
+                    if case == 'unlisted added before close':
+                        shutil.copytree(db, db.with_name('9'))
+                    runtime.close()
+                    if case in ('copied valid OID before capture', 'unlisted added before close'):
+                        self.assertIn('Unregistered PostgreSQL database directory',
+                                      monitor.records[str(data)]['layoutUncertain'])
+                        self.assertFalse((data / 'postmaster.pid').exists())
+                    if case == 'unknown sibling':
+                        sibling = root / 'sibling'
+                        sibling.mkdir()
+                        (sibling / 'PG_VERSION').write_bytes(b'18\n')
+                    elif case.startswith('nested'):
+                        relative = {'nested marker': 'nested/PG_VERSION',
+                                    'nested postmaster pid': 'postmaster.pid',
+                                    'nested postmaster opts': 'postmaster.opts',
+                                    'nested control': 'global/pg_control'}[case]
+                        marker = db / relative
+                        marker.parent.mkdir(exist_ok=True)
+                        marker.write_bytes(b'18\n')
+                    elif case == 'database identity':
+                        db.rename(scratch / 'original-db')
+                        shutil.copytree(scratch / 'original-db', db)
+                    elif case == 'root identity':
+                        data.rename(scratch / 'original-root')
+                        shutil.copytree(scratch / 'original-root', data)
+                    elif case == 'new legitimate-looking OID':
+                        shutil.copytree(db, db.with_name('9'))
+                    elif case == 'symlink marker':
+                        (db / 'PG_VERSION').unlink()
+                        (db / 'PG_VERSION').symlink_to(data / 'PG_VERSION')
+                    elif case == 'symlink database':
+                        db.rename(scratch / 'original-db')
+                        db.symlink_to(scratch / 'original-db', target_is_directory=True)
+                    elif case == 'symlink base':
+                        (data / 'base').rename(scratch / 'original-base')
+                        (data / 'base').symlink_to(scratch / 'original-base', target_is_directory=True)
+                    elif case == 'symlink deletion target':
+                        target = scratch / 'root-alias'
+                        target.symlink_to(root, target_is_directory=True)
+                    elif case == 'symlink ancestor':
+                        alias = scratch / 'root-alias'
+                        alias.symlink_to(root, target_is_directory=True)
+                        target = alias / 'owned'
+                    elif case == 'dir_fd':
+                        flags = {'dir_fd': -1}
+                    elif case == 'partial root':
+                        target = data / 'base'
+                    if case == 'symlink deletion target':
+                        with self.assertRaises(OSError):
+                            shutil.rmtree(target)
+                        self.assertTrue(target.is_symlink())
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, 'retained|retain data'):
+                            shutil.rmtree(target, **flags)
+                        self.assertTrue(monitor.uncertain)
+                self.assertTrue(data.exists())
+                self.assertTrue(root.exists())
+                self.assertFalse(monitor.confirmed)
+
+
+    def test_authoritative_refresh_admits_database_created_after_enter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            data = self.make_owned(root)
+            oids = ['1', '4', '5']
+            module, status, absent = self.controls(data, oids)
+            monitor = OwnedNativeCleanup([], root / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch('temporal_qualification_support._socket_identity', return_value=[7, 8]), \
+                    patch('temporal_qualification_support.subprocess.run', side_effect=status), \
+                    patch('temporal_qualification_support.os.kill', side_effect=absent), monitor:
+                runtime = module.LocalPostgres()
+                runtime.__enter__()
+                shutil.copytree(data / 'base/1', data / 'base/9')
+                oids.append('9')
+                runtime.close()
+                shutil.rmtree(data)
+            self.assertTrue(monitor.confirmed)
+            self.assertEqual(set(monitor.records[str(data)]['databaseLayout']['databases']),
+                             {'1', '4', '5', '9'})
+
+    def test_raw_capture_without_trusted_socket_retains_even_genuine_layout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            data = self.make_owned(root)
+            module, status, absent = self.controls(data)
+            monitor = OwnedNativeCleanup([], root / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch('temporal_qualification_support.subprocess.run', side_effect=status), \
+                    patch('temporal_qualification_support.os.kill', side_effect=absent), monitor:
+                monitor.capture(data, Path('/unit/bin'))
+                (data / 'postmaster.pid').unlink()
+                monitor.confirm(monitor.records[str(data)])
+                with self.assertRaisesRegex(RuntimeError, 'socket authority unavailable'):
+                    shutil.rmtree(data)
+            self.assertTrue(data.is_dir())
+
+    def test_ordinary_rmtree_preserves_missing_path_and_unlinks_nested_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            outside = self.make_owned(root)
+            ordinary = root / 'ordinary'
+            ordinary.mkdir()
+            (ordinary / 'link').symlink_to(outside, target_is_directory=True)
+            direct = root / 'direct'
+            direct.symlink_to(outside, target_is_directory=True)
+            with TemporalQualificationDriverTests().cleanup_import_stub(), OwnedNativeCleanup([], root / 'cleanup.json'):
+                shutil.rmtree(root / 'missing', ignore_errors=True)
+                with self.assertRaises(FileNotFoundError):
+                    shutil.rmtree(root / 'missing')
+                shutil.rmtree(direct, ignore_errors=True)
+                self.assertTrue(direct.is_symlink())
+                shutil.rmtree(ordinary)
+            self.assertTrue((outside / 'postmaster.pid').is_file())
+            self.assertFalse(ordinary.exists())
+
+    @unittest.skipUnless(sys.platform == 'darwin', 'macOS system temp alias')
+    def test_platform_temp_alias_joins_owned_runtime_and_original_rmtree_path(self):
+        with tempfile.TemporaryDirectory(dir='/tmp') as tmp:
+            root = Path(tmp)
+            canonical = root.resolve()
+            data = self.make_owned(canonical)
+            module, status, absent = self.controls(data)
+            monitor = OwnedNativeCleanup([], canonical / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch('temporal_qualification_support._socket_identity', return_value=[7, 8]), \
+                    patch('temporal_qualification_support.subprocess.run', side_effect=status), \
+                    patch('temporal_qualification_support.os.kill', side_effect=absent), monitor:
+                runtime = module.LocalPostgres()
+                runtime.__enter__()
+                runtime.close()
+                shutil.rmtree(root / 'owned')
+            self.assertTrue(monitor.confirmed)
+
+    def test_noncanonical_paths_refuse_before_ancestry_or_stop_for_live_owned_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            data = self.make_owned(root)
+            unmarked = data / 'base/1/unmarked'
+            unmarked.mkdir()
+            (unmarked / 'keep').write_bytes(b'live data')
+            module, status, absent = self.controls(data)
+            monitor = OwnedNativeCleanup([], root / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch('temporal_qualification_support._socket_identity', return_value=[7, 8]), \
+                    patch('temporal_qualification_support.subprocess.run', side_effect=status) as calls, \
+                    patch('temporal_qualification_support.os.kill', side_effect=absent) as signals, monitor:
+                runtime = module.LocalPostgres()
+                runtime.__enter__()
+                calls.reset_mock()
+                signals.reset_mock()
+                for path, options in (('/' + str(unmarked), {}),
+                                      (data / 'base/1/../1/unmarked', {}),
+                                      (Path('base/1/unmarked'), {}),
+                                      (unmarked, {'dir_fd': -1})):
+                    with self.subTest(path=path), patch.object(
+                            monitor, '_deletion_roots', wraps=monitor._deletion_roots) as ancestry:
+                        with self.assertRaisesRegex(RuntimeError, 'Ambiguous'):
+                            shutil.rmtree(path, ignore_errors=True, **options)
+                        ancestry.assert_not_called()
+                        calls.assert_not_called()
+                        signals.assert_not_called()
+                        self.assertEqual((unmarked / 'keep').read_bytes(), b'live data')
+                        self.assertTrue((data / 'postmaster.pid').is_file())
+                runtime.close()
+            self.assertTrue(unmarked.is_dir())
+
+    def test_physical_case_alias_refuses_owned_descendant_and_enclosing_root_before_stop(self):
+        import temporal_qualification_support as support
+
+        with tempfile.TemporaryDirectory() as tmp:
+            scratch = Path(tmp).resolve()
+            root = scratch / 'OwnedContainer'
+            root.mkdir()
+            data = self.make_owned(root)
+            unmarked = data / 'base/1/unmarked'
+            unmarked.mkdir()
+            (unmarked / 'keep').write_bytes(b'live data')
+            aliased_data = root / 'OWNED'
+            aliased_enclosing = scratch / 'ownedcontainer'
+            actual_case_aliases = aliased_data.exists() and aliased_enclosing.exists()
+            identity_mock = nullcontext()
+            if actual_case_aliases:
+                self.assertTrue(aliased_data.samefile(data))
+                self.assertTrue(aliased_enclosing.samefile(root))
+            else:
+                # Exercise the same physical-overlap branch on case-sensitive
+                # filesystems without depending on a second mount or native PG.
+                shutil.copytree(data, aliased_data)
+                aliased_enclosing.mkdir()
+                directory_identity = support._directory_identity
+                aliases = {aliased_data: data, aliased_enclosing: root}
+                identity_mock = patch.object(support, '_directory_identity', side_effect=lambda path:
+                                             directory_identity(aliases.get(path, path)))
+            module, status, absent = self.controls(data)
+            monitor = OwnedNativeCleanup([], scratch / 'cleanup.json')
+            with patch.dict(sys.modules, {'truss': module}), \
+                    patch.object(support, '_socket_identity', return_value=[7, 8]), \
+                    patch.object(support.subprocess, 'run', side_effect=status) as calls, \
+                    patch.object(support.os, 'kill', side_effect=absent) as signals, monitor:
+                runtime = module.LocalPostgres()
+                runtime.__enter__()
+                calls.reset_mock()
+                signals.reset_mock()
+                with identity_mock, patch.object(monitor, '_check_deletion_tree',
+                                                  wraps=monitor._check_deletion_tree) as scan:
+                    for target in (aliased_data / 'base/1/unmarked', aliased_enclosing):
+                        with self.subTest(target=target, actual_case_aliases=actual_case_aliases):
+                            with self.assertRaisesRegex(RuntimeError, 'Physical alias'):
+                                shutil.rmtree(target, ignore_errors=True)
+                            self.assertTrue(target.is_dir())
+                            self.assertEqual((unmarked / 'keep').read_bytes(), b'live data')
+                            self.assertTrue((data / 'postmaster.pid').is_file())
+                            scan.assert_not_called()
+                            calls.assert_not_called()
+                            signals.assert_not_called()
+                runtime.close()
+            self.assertTrue(root.is_dir())

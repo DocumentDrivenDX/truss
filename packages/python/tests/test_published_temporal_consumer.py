@@ -1,13 +1,15 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Synthetic pure sensitivity tests. NO installed/native TN-14 qualification."""
 import copy
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from datetime import datetime, timezone
 import importlib.util
 import io
 import json
 from pathlib import Path
 import subprocess
+import shutil
+import types
 import sys
 import tempfile
 from types import SimpleNamespace as NS
@@ -179,32 +181,160 @@ class PublicTemporalConsumerPureTests(unittest.TestCase):
             with self.subTest(name=name),self.assertRaisesRegex(ValueError,'missing operation'):
                 consumer.write_and_import(session,('original document',))
 
+    def run_cleanup_fixture(self, outer, variant):
+        # Reuse the authentic marker/map bytes and local socket-lock fixture
+        # from the shared cleanup tests. No real backend or owner is imported.
+        import test_temporal_qualification_driver as shared
+        fixture = shared.OwnedDatabaseLayoutTests()
+        root = outer / 'owned'
+        root.mkdir()
+        data = fixture.make_owned(root, name='data')
+        output = outer / 'evidence'
+        output.mkdir()
+        oids = ['1', '4', '5']
+        module, result, pid_probe = fixture.controls(data, oids)
+        events = []
+        if variant == 'copied before capture':
+            shutil.copytree(data / 'base/1', data / 'base/9')
+        elif variant == 'uncaptured':
+            (data / 'PG_VERSION').unlink()
+            (data / 'postmaster.pid').unlink()
+        elif variant == 'wrong socket':
+            (root / 'socket/.s.PGSQL.5432.lock').write_bytes(b'77\n')
+        elif variant == 'missing base':
+            shutil.rmtree(data / 'base')
+        class Runtime(module.LocalPostgres):
+            def __init__(self, requested):
+                if requested != data:
+                    raise AssertionError('TN-14 requested a different owner')
+
+            def __enter__(self):
+                events.append('start')
+                return self
+
+            def close(self):
+                events.append('stop')
+                if variant in ('retry stop', 'retry changed socket'):
+                    if variant == 'retry changed socket':
+                        (root / 'socket/.s.PGSQL.5432.lock').write_bytes(b'77\n')
+                    raise RuntimeError('stub original stop failure')
+                (data / 'postmaster.pid').unlink()
+        module.LocalPostgres = Runtime
+        module.CatalogDocument = lambda *_args: object()
+        module.contracts = module.groups = module.imports = module.temporal = NS()
+        calls = {'membership': 0}
+        def process(argv, **kwargs):
+            if argv[0].endswith('/psql'):
+                calls['membership'] += 1
+                events.append(('membership', tuple(oids)))
+                if variant == 'refresh refusal' and calls['membership'] == 2:
+                    return subprocess.CompletedProcess(argv, 1, '', 'stub query refusal')
+            elif argv[-1] == 'stop':
+                events.append('retry')
+                self.assertEqual((data / 'postmaster.pid').read_text().splitlines()[0], '314')
+                (data / 'postmaster.pid').unlink()
+                return subprocess.CompletedProcess(argv, 0, 'stopped', '')
+            else:
+                events.append('status')
+                self.assertFalse((data / 'postmaster.pid').exists())
+            return result(argv, **kwargs)
+        def observe_pid(pid, signal):
+            if not (data / 'postmaster.pid').exists():
+                events.append('pid absent')
+            return pid_probe(pid, signal)
+
+        def operations(names):
+            items = {}
+            for name in names:
+                items[name] = {'status': 'passed', 'kinds': list(consumer.KINDS)}
+                if variant != 'missing result' or name != 'ordinary-1.2':
+                    (output / (name + '-result.json')).write_bytes(name.encode('ascii'))
+            return items
+        def first(*_args):
+            if variant == 'late member':
+                shutil.copytree(data / 'base/1', data / 'base/9')
+                oids.append('9')
+            elif variant == 'nested cluster':
+                nested = data / 'base/1/nested'
+                nested.mkdir()
+                (nested / 'PG_VERSION').write_bytes(b'18\n')
+                (nested / 'postmaster.pid').write_bytes(b'77\n')
+            elif variant == 'mixed sibling':
+                sibling = root / 'other'
+                sibling.mkdir()
+                (sibling / 'PG_VERSION').write_bytes(b'18\n')
+            elif variant == 'wrong PID':
+                (data / 'postmaster.pid').write_bytes(b'77\n')
+            elif variant == 'replaced root':
+                data.rename(outer / 'original-data')
+                shutil.copytree(outer / 'original-data', data)
+            return operations(('install', 'accept-local-property', 'replay-2.1'))
+
+        with ExitStack() as stack:
+            stack.enter_context(patch.dict(sys.modules, {'truss': module, 'psycopg': types.ModuleType('psycopg'),
+                                                       'weft': types.ModuleType('weft')}))
+            stack.enter_context(patch.object(consumer, 'load_control', return_value=cleanup))
+            stack.enter_context(patch.object(consumer.tempfile, 'mkdtemp', return_value=str(root)))
+            stack.enter_context(patch.object(consumer, 'PublicSession', return_value=NS()))
+            stack.enter_context(patch.object(consumer, 'accept_and_replay', side_effect=first))
+            stack.enter_context(patch.object(consumer, 'write_and_import', side_effect=lambda *_: operations(('write', 'import'))))
+            stack.enter_context(patch.object(consumer, 'generated_models', return_value=NS()))
+            stack.enter_context(patch.object(consumer, 'typed_reads', side_effect=lambda *_: operations(
+                ('typed-read', 'hidden-composite-pages', 'ordinary-1.2'))))
+            stack.enter_context(patch.object(cleanup, '_socket_identity', return_value=[7, 8]))
+            stack.enter_context(patch.object(cleanup.subprocess, 'run', side_effect=process))
+            stack.enter_context(patch.object(cleanup.os, 'kill', side_effect=observe_pid))
+            alarms = stack.enter_context(patch.object(consumer.signal, 'alarm'))
+            handlers = stack.enter_context(patch.object(consumer.signal, 'signal', return_value='previous'))
+            args = ({'profile': {'serverVersion': '18.6'}}, output, outer)
+            if variant == 'late member':
+                observed, receipt = consumer.run_native(*args)
+                for name in consumer.OPERATIONS:
+                    self.assertEqual(observed[name]['result']['sha256'], consumer.digest(name.encode('ascii')))
+                self.assertEqual(set(receipt['clusters'][0]['databaseLayout']['databases']), {'1', '4', '5', '9'})
+                self.assertTrue(receipt['clusters'][0]['dataDeleted'])
+            else:
+                with self.assertRaises((ValueError, RuntimeError)):
+                    consumer.run_native(*args)
+                receipt = json.loads((output / 'cleanup.json').read_bytes())
+                self.assertTrue(data.exists())
+                self.assertTrue(all(not row['dataDeleted'] for row in receipt['clusters']))
+            self.assertEqual([call.args for call in alarms.call_args_list], [(300,), (0,)])
+            self.assertEqual([call.args[1] for call in handlers.call_args_list[2:]], ['previous', 'previous'])
+        # The on-disk operation evidence remains original even when cleanup refuses.
+        operations_json = json.loads((output / 'operations.json').read_bytes())
+        self.assertEqual(set(operations_json), set(consumer.OPERATIONS))
+        self.assertTrue(all('result' not in row for row in operations_json.values()))
+        return root, events, receipt
+
     def test_reviewed_cleanup_captures_original_pid_before_stop_and_delete(self):
         with tempfile.TemporaryDirectory() as directory:
-            outer=Path(directory);root=outer/'owned';data=root/'data';data.mkdir(parents=True)
-            (data/'PG_VERSION').write_text('18');(data/'postmaster.pid').write_text('321\n')
-            monitor=cleanup.OwnedNativeCleanup([],outer/'cleanup.json');events=[]
-            def close():
-                self.assertEqual(monitor.records[str(data.resolve())]['originalPostmasterPid'],321)
-                events.append('stop');(data/'postmaster.pid').unlink()
-            runtime=NS(directory=data,psql_path=Path('/unit/bin/psql'),close=close)
-            def status(*args,**kwargs):
-                self.assertTrue(data.exists());events.append('status');return subprocess.CompletedProcess(args[0],3,'','')
-            with patch.object(consumer.subprocess,'run',side_effect=status),patch.object(cleanup.os,'kill',side_effect=ProcessLookupError):
-                consumer.finish_cleanup(runtime,monitor,root)
-            self.assertTrue(monitor.confirmed);self.assertFalse(root.exists());self.assertEqual(events[0],'stop')
+            root, events, receipt = self.run_cleanup_fixture(Path(directory).resolve(), 'late member')
+            self.assertFalse(root.exists())
+            self.assertEqual(events[:4], ['start', ('membership', ('1', '4', '5')),
+                                         ('membership', ('1', '4', '5', '9')), 'stop'])
+            self.assertEqual(events[-2:], ['status', 'pid absent'])
+            record = receipt['clusters'][0]
+            self.assertEqual((record['originalPostmasterPid'], record['pgCtlStatus'],
+                              record['originalPostmasterPidAbsent']), (314, 3, True))
 
     def test_uncaptured_and_mixed_uncertain_cleanup_retains_data(self):
-        for mixed in (False,True):
-            with tempfile.TemporaryDirectory() as directory:
-                outer=Path(directory);root=outer/'owned';data=root/'data';data.mkdir(parents=True);(data/'PG_VERSION').write_text('18')
-                monitor=cleanup.OwnedNativeCleanup([],outer/'cleanup.json')
-                if mixed:
-                    (data/'postmaster.pid').write_text('321\n');monitor.uncertain.append('other uncaptured cluster')
-                runtime=NS(directory=data,psql_path=Path('/unit/bin/psql'),close=lambda:None)
-                with patch.object(consumer.subprocess,'run',return_value=subprocess.CompletedProcess([],3,'','')),patch.object(cleanup.os,'kill',side_effect=ProcessLookupError):
-                    with self.assertRaises(ValueError):consumer.finish_cleanup(runtime,monitor,root)
-                self.assertTrue(root.exists());self.assertFalse(monitor.confirmed)
+        variants = ('uncaptured', 'mixed sibling', 'nested cluster', 'copied before capture',
+                    'wrong socket', 'wrong PID', 'replaced root', 'refresh refusal', 'missing base',
+                    'retry stop', 'retry changed socket', 'missing result')
+        for variant in variants:
+            with self.subTest(variant=variant), tempfile.TemporaryDirectory() as directory:
+                root, events, receipt = self.run_cleanup_fixture(Path(directory).resolve(), variant)
+                self.assertTrue(root.is_dir())
+                if variant in ('uncaptured', 'wrong PID', 'replaced root'):
+                    self.assertNotIn('stop', events)
+                    self.assertNotIn('retry', events)
+                elif variant == 'retry stop':
+                    self.assertEqual(events.count('retry'), 1)
+                    self.assertTrue(receipt['cleanupErrors'])
+                else:
+                    self.assertEqual(events.count('stop'), 1)
+                    self.assertNotIn('retry', events)
 
     def test_record_compares_source_and_native_payload_before_import(self):
         with tempfile.TemporaryDirectory() as directory:
