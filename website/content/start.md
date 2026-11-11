@@ -1,37 +1,31 @@
 ---
-title: "Start with understanding."
-description: "Inspect the repository, trace a claim and choose a bounded experiment."
-composition: model-primary
-number: "04"
+title: "Run it in five minutes."
+description: "Install the Python package, start a private PostgreSQL and exercise Truss end to end."
+number: "03"
 ---
-## Read the direction
-
-Begin with the [current documentation index](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/README.md), then read the [product vision](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/00-discover/product-vision.md) and [requirements](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/01-frame/prd.md). These governed artifacts describe intent; the release notes and evidence describe what has actually been checked.
-
-## Evaluate the Python release
-
-Truss `0.0.49` adds managed platform-grant policy and install API/CLI support to the v0.0.48 HF baseline. The published evidence covers native manifest SHA-256 prefix `288801f7`, four admitted migration sources (106 cases), the HF62 independent corpus, the managed 21-module/130-test gate, the public Weft 0.4.51 cohort from compiler source revision `55715373…`, and selected installed Linux/macOS qualification. The [v0.0.49 release notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.49.md) and [published verification receipt](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json) identify the exact artifacts and limits. Actual Lakebase acceptance remains a separate qualification.
-
-Only the latest application runtime is supported. The latest tool provides offline, explicit transactional forward migration for the admitted UMF `0.10` sources: v0.0.44, the shared v0.0.45/46 lineage, v0.0.47 and v0.0.48 on PostgreSQL `18.6`. Admitted databases retain a forward route without a release-age cutoff. Startup never upgrades or resets a database.
-
-Use the [Python operator guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md#runtime-migrations--v0049) for managed-grants configuration, backup, migration, original-attempt recovery and limits. The [v0.0.49 public release](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.49) provides checksum-verified assets. Fresh installation requires a new namespace; existing admitted databases use explicit migration. Startup never upgrades or resets a database. The historical [v0.0.48 release notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.48.md) and [verification receipt](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/validation.json) retain their original scope.
+## Install
 
 ```sh
-git clone https://github.com/DocumentDrivenDX/truss.git
-cd truss
+python -m venv .venv && . .venv/bin/activate
+pip install "umf-truss[local,native,query]" \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
 ```
 
-The repository clone below is for source inspection and development; the published package quickstart above does not require a clone. Development checks may need Bun, a compiler and PostgreSQL; those tools are not runtime prerequisites for Python deployment.
+Requires Python 3.11 or newer. The `local` extra brings PostgreSQL 18.6 (`pgserver-pg18`), whose wheels are GitHub release assets for now, hence `--find-links`. Python embeds V8; Bun and Node are not needed.
 
-## Follow a requirement to evidence
+## Run the quickstart
 
-1. Find the intended behavior in the PRD or feature specifications.
-2. Read its architecture decision and contract.
-3. Check the implementation plan for open dependencies.
-4. Read the source-pinned evidence and its exclusions.
+```sh
+curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/quickstart.py
+curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/notes.umf.json
+python quickstart.py ./truss-demo
+# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 1, "ack": "committed"}
+```
 
-## Contribute a concrete question
+It starts a private PostgreSQL on a Unix socket (no TCP listener), installs Truss, registers a UMF document, creates two notes and an edge, looks one up by key, runs a relationship query, and reads and acknowledges the change feed. CI runs this script against the built wheel on every change.
 
-Useful contributions identify a schema-evolution case, an enforcement boundary or a reproducible integration result. Include the database version, source revision and observed behavior. Truss is licensed under MIT or Apache-2.0, at your option.
+## Go further
 
-[Open the repository ↗](https://github.com/DocumentDrivenDX/truss)
+- [Python API guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md)
+- [`adopter_workflow.py`](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/examples/adopter_workflow.py): receipts, replay, imports and dry runs
+- [Architecture](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/02-design/architecture.md), [decisions](https://github.com/DocumentDrivenDX/truss/tree/main/docs/helix/02-design/adr) and [contracts](https://github.com/DocumentDrivenDX/truss/tree/main/docs/helix/02-design/contracts)

@@ -1,11 +1,8 @@
 # Truss microsite
 
-Build: `hugo --source website --destination public --panicOnWarning`.
-Check: `python3 website/scripts/check_site.py website/public --require-seals`.
-Verify sources: `node /path/to/innsigle/src/cli.mjs verify --all`.
+Hugo site built by `.github/workflows/pages.yml`. The version in the header and footer comes from
+`packages/python/pyproject.toml` (`HUGO_PARAMS_version`); pull requests build the site, `main` and
+published releases deploy it.
 
-Four authored pages use shared layouts and an original inline structural graphic.
-Source declarations are model-primary; the signature covers Markdown, not the generated site.
-Pinned Innsigle revision: 4185eb56beb7b52beaa4a00c2fc897f93d44b939.
-Page changes require individual re-sealing with `.innsigle/colo.json` and the public page URI.
-Private keys remain in 1Password and never enter CI. CI verifies and deploys main through GitHub Actions.
+    HUGO_PARAMS_version=$(python3 -c 'import tomllib;print(tomllib.load(open("packages/python/pyproject.toml","rb"))["project"]["version"])') \
+      hugo --source website --destination public --panicOnWarning

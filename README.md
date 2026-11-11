@@ -1,127 +1,72 @@
-# truss
+# Truss
 
-Truss is an embeddable property-oriented graph toolkit for PostgreSQL, with
-property values typed by [UMF](https://github.com/DocumentDrivenDX/umf) schemas.
+Truss is an embeddable, property-oriented graph store on PostgreSQL. Types, properties, keys and
+relationships come from [UMF](https://github.com/DocumentDrivenDX/umf) documents and are stored as
+catalog rows in one generic schema, so adding a type never adds a table, column or index. Values and
+edges have per-property history in a journal, and committed changes are readable through an
+acknowledged change feed. Queries are SQL-like text compiled by [Weft](https://github.com/DocumentDrivenDX/weft).
 
-**Status:** experimental Python reference implementation. The
-[Python interface](packages/python/README.md) provides fresh installation,
-catalog registration, exact scalar/nested-container object and independent edge mutations/reads,
-preconditions, idempotent receipts, host-owned imports, history, committed feeds
-and Weft-compiled scalar and relationship queries. The local baseline is DocumentDrivenDX
-`pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
-use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
+**Status: experimental.** PostgreSQL 18.6 only, Python 3.11 or newer, Linux and macOS (CI tests Linux).
+The Python package `umf-truss` (import name `truss`) is the product. Version: see
+[CHANGELOG](CHANGELOG.md).
 
-## Current Python release
-
-[`umf-truss==0.0.51`](https://pypi.org/project/umf-truss/0.0.51/) is published
-with the `truss` import and exact Weft 0.4.51 consumer identities. Install in a
-fresh environment when switching distribution names:
+## Install
 
 ```sh
-python -m pip install 'umf-truss[query]==0.0.51'
+python -m venv .venv && . .venv/bin/activate
+pip install "umf-truss[local,native,query]" \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
 ```
 
-The [release notes](docs/helix/05-deploy/releases/v0.0.51.md) and
-[published proof](docs/helix/05-deploy/evidence/truss-0.0.51-publication/README.md)
-bind its 108 migration/existing-current cases, 62 HF cases, 174 managed-grant
-tests, remaining required installed Linux workflows and actual public-index
-publication. CI is Linux-only; available macOS dependency artifacts retain
-their historical qualification limits. Only the latest application runtime is
-supported, with explicit forward paths for every admitted database lineage.
+- `local`: `pgserver-pg18` (PostgreSQL 18.6) so `truss.LocalPostgres` can start a private server on a
+  Unix socket. The wheels are GitHub release assets for now, hence `--find-links`; the line goes away when
+  they are on PyPI. Without `local`, connect to your own PostgreSQL 18.6.
+- `native`: `psycopg`, the supported driver. `query`: `umf-weft`, for relationship queries.
+- Python embeds V8 (`mini-racer`); Bun and Node are not needed to run Truss.
 
-## Historical private-instance launcher — v0.0.49
+## Quickstart (about five minutes)
 
-The published **v0.0.49** release adds managed platform-grant policy and
-install API/CLI support to the [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
-The [release notes](docs/helix/04-build/releases/v0.0.49.md) and
-[published verification receipt](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json)
-identify the exact artifacts and qualification limits. The command below uses
-checksum-verified public v0.0.49 assets and their matching tag; managed-grants
-support requires v0.0.49.
-
-With `uv` installed, run the v0.0.49 launcher in an isolated Python3.11 tool
-environment:
+`packages/python/examples/quickstart.py` starts a private PostgreSQL in a directory you name, installs
+Truss, registers a UMF document, creates two notes and an edge in one atomic group, looks a note up by
+key, runs a relationship query, and reads and acknowledges the committed change feed. CI runs it on every
+change against the built wheel in a fresh virtual environment.
 
 ```sh
-uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.49/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.49 \
-  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.49' \
-  truss-local-postgres \
-  --data-dir "$HOME/.local/share/truss/beads" \
-  --install
+curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/quickstart.py
+curl -LO https://raw.githubusercontent.com/DocumentDrivenDX/truss/main/packages/python/examples/notes.umf.json
+python quickstart.py ./truss-demo
+# {"catalog": "accepted", "mutation": "committed", "lookup": "found", "query": "relationship", "feed_transactions": 1, "ack": "committed"}
 ```
 
-The first run may download Python and package wheels. This provisions local
-PostgreSQL18.6 and the Truss schema/routines in private per-instance data and
-Unix-socket directories. It needs no system PostgreSQL, administrator access,
-TCP listener or port configuration. The launcher runs in the foreground;
-Ctrl-C stops it while retaining data. Rerun with the same directory to restart.
-Add `--probe` to install or confirm Truss and stop while retaining data. This is
-a local database runtime, not an HTTP, MCP or TrussRPC application service.
-Tools still embed the Python library, connect with an ordinary identity and
-register UMF documents; public business-role and module-access configuration is
-separate. For development against the current checkout, use `./scripts/truss-local`.
+The first run starts PostgreSQL (`initdb`), which takes a minute on a slow disk. Set
+`TRUSS_LOCAL_TIMEOUT_S` to allow longer. If a run is killed, stop the leftover server with
+`pg_ctl -D ./truss-demo/postgres/data stop` (the `pg_ctl` inside the `pgserver` package). See
+[`packages/python/README.md`](packages/python/README.md) for the API, and
+[`adopter_workflow.py`](packages/python/examples/adopter_workflow.py) for receipts, replay, imports and dry runs.
 
-**Published v0.0.49:** native `0.74-candidate`, Weft `0.4.51`, UMF core
-`0.10.0`. The [release notes](docs/helix/04-build/releases/v0.0.49.md) and
-[published verification receipt](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json)
-bind native manifest SHA-256 prefix `288801f7`, four admitted migration sources
-(106 cases), HF62, the managed 21-module/130-test gate, the public Weft 0.4.51
-cohort from compiler source revision `55715373…`, and selected installed
-Linux/macOS qualification. Only the latest application runtime is supported.
-The latest tool provides offline, explicit transactional forward migration for
-the exact v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48 tuples, with
-original-attempt recovery and no release-age cutoff. Startup never upgrades or
-resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0049),
-the historical [v0.0.48 release notes](docs/helix/04-build/releases/v0.0.48.md),
-and the [migration qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
-Actual Lakebase acceptance and broader managed-service support require separate
-qualification.
+## Experimental
 
-For source development, the checkout wrapper selects the matching constraints
-and PostgreSQL wheel:
+Temporal values, bulk job control, the `typed-sdk` extra (`truss.access`, needs umf-access 0.10.11, not yet
+published) and `experimental-pg8000` are experimental and are not part of the quickstart.
 
-```sh
-./scripts/truss-local --data-dir "$HOME/.local/share/truss/beads" --install
-```
+## Documentation
 
-Historical release summaries and their evidence follow.
+[Architecture](docs/helix/02-design/architecture.md), [decisions](docs/helix/02-design/adr/),
+[contracts](docs/helix/02-design/contracts/), the [design index](docs/helix/README.md),
+[CHANGELOG](CHANGELOG.md), [ROADMAP](ROADMAP.md) and the
+[microsite](https://documentdrivendx.github.io/truss/).
 
-Version 0.0.41 accepted only original UMF `0.10.0` source documents and
-requires a fresh installation. Earlier UMF source formats and upgrades from older Truss
-installations are unsupported. Existing databases are never migrated or reset
-automatically. Earlier catalog revisions, receipts and retained history within
-a current installation remain available under their existing authority rules.
+## Relationship to other projects
 
-Catalog preparation retains original source documents,
-reuses immutable schema indexes in application memory, and checks the current
-database basis and authority before prepared writes. Truss v0.0.48 query ABI1.2
-uses native-indexed exact string/boolean equality and eligible single required
-string-key pages above10,000 source rows. Complete candidate and byte limits apply
-before residual filters and `LIMIT`; numeric, temporal, composite and larger-key
-queries retain the bounded complete fallback. Complete-entity relationships
-remain capped at100 related keys. The v0.0.47/Weft0.4.49 ABI1.1 source-bound
-behavior remains historical. Behavior and evidence are tracked in
-[`docs/helix/`](docs/helix/README.md). Cyclic schema definitions, record-valued
-properties, history offload and managed-service qualification remain unfinished.
+- **UMF** describes schemas; Truss executes against them and never defines UMF semantics.
+- **Weft** compiles queries; Truss composes them with its storage.
+- **Axon** is document-oriented. Truss is property-oriented: the property value and edge are its unit
+  of storage and mutation.
 
-## Relationship to other DocumentDrivenDX projects
+## Development
 
-- **UMF** describes schemas; truss executes against them. truss depends on UMF
-  and never defines UMF semantics.
-- **Axon** is document-oriented. truss is property-oriented: its unit of
-  storage and mutation is the individual property value and edge.
-- **HELIX** governs this repository's planning artifacts.
+`bun install && bun test && python -m build packages/python`; see [AGENTS.md](AGENTS.md) for the rest.
 
 ## License
 
 [MIT OR Apache-2.0](LICENSE.md), at your option.
-
-## Experimental runtime build
-
-An initial private [inert PostgreSQL assembly package](packages/postgresql/README.md)
-can be built and consumed as ESM with public declarations. It deliberately has
-no native capability or installed Truss runtime. See the scoped
-[build evidence](docs/helix/04-build/evidence/inert-assembly/README.md).

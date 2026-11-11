@@ -1,1 +1,1 @@
-{{ define "main" }}<article class="prose"><p class="eyebrow">Truss field notes / {{ .Params.number }}</p><h1>{{ .Title }}</h1><p class="lede">{{ .Description }}</p>{{ if eq .File.TranslationBaseName "start" }}{{ partial "runtime-quickstart.html" . }}{{ end }}{{ .Content }}</article>{{ end }}
+{{ define "main" }}<article class="prose"><p class="eyebrow">Truss {{ site.Params.version }} / {{ .Params.number }}</p><h1>{{ .Title }}</h1><p class="lede">{{ .Description }}</p>{{ .Content }}</article>{{ end }}

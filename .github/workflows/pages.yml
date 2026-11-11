@@ -5,6 +5,15 @@ on:
     branches: [main]
     paths:
       - 'website/**'
+      - 'CHANGELOG.md'
+      - 'packages/python/pyproject.toml'
+      - '.github/workflows/pages.yml'
+  release:
+    types: [published]
+  pull_request:
+    paths:
+      - 'website/**'
+      - 'packages/python/pyproject.toml'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -32,14 +41,18 @@ jobs:
           mkdir -p "$RUNNER_TEMP/hugo-bin"
           tar -xzf "$RUNNER_TEMP/hugo.tar.gz" -C "$RUNNER_TEMP/hugo-bin" hugo
           echo "$RUNNER_TEMP/hugo-bin" >> "$GITHUB_PATH"
-      - name: Build site
-        run: hugo --source website --destination public --cleanDestinationDir
+      - name: Build site (version stamped from pyproject.toml)
+        run: |
+          version=$(python3 -c 'import tomllib;print(tomllib.load(open("packages/python/pyproject.toml","rb"))["project"]["version"])')
+          HUGO_PARAMS_version="${version}" hugo --source website --destination public --cleanDestinationDir --panicOnWarning
+          grep -q "Truss ${version}" website/public/index.html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: website/public
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:

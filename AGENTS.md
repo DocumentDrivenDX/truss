@@ -1,145 +1,52 @@
 # Working in truss
 
-This repository uses HELIX. Read `.helix.yml` and engage the installed
-`helix` skill for governed planning and documentation work.
+Truss is an embeddable, property-oriented graph store on PostgreSQL whose types come from
+UMF documents. The shipped product is the Python package `umf-truss` (`packages/python`).
 
-- Keep project artifacts under `docs/helix/` in the matching activity.
-- Resolve the graph, templates, and prompts from the installed HELIX plugin;
-  do not copy the methodology catalog into this repository.
-- Read governing upstream artifacts before authoring downstream documents.
-- Preserve artifact IDs, frontmatter, and deliberate `ddx.links` traceability.
-- Record unknowns explicitly as open questions, assumptions or risks.
+## Build and test
+- `bun install --frozen-lockfile && bun run typecheck && bun test`
+- `python -m build packages/python`
+- `pip install "dist/*.whl[local,native,query]" pytest pytest-xdist`, then
+  `cd packages/python/tests && pytest -n 4 -m "not slow"`
+- `python packages/python/examples/quickstart.py /tmp/truss-demo` must keep working.
+- CI (`.github/workflows/ci.yml`) runs the same on Linux. Run native checks only on your own
+  platform. Never start PostgreSQL on TCP; `LocalPostgres` uses a private Unix socket.
 
-Start with `docs/helix/README.md`, then
-`docs/helix/04-build/design-decision-queue.md` and
-`docs/helix/04-build/remaining-design-handoff-audit.md`. The PRD, eight feature
-specifications, 45 stories, architecture, contracts, implementation plan and
-story test plans exist as governed drafts. Experimental Weft integration and
-private PostgreSQL catalog/report components exist; they do not establish a
-complete protected engine or accepted catalog. The user has authorized runtime
-implementation. Trace changes to framed requirements rather than restarting
-framing or requesting that authorization again.
+## Supported database
+PostgreSQL 18.6 only: `pgserver-pg18` for local use (the wheels are public GitHub release assets at
+`https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2`; pass them
+with `--find-links` until they are on PyPI) or a host-supplied connection. The host owns any pool.
 
-Follow the audit's current acceptance implementation exit sequence. Preserve
-original producer evidence and independently qualify native effects before
-publishing an accepted revision. Never replace missing report fields with
-fixture identities or empty inventories. Component checks cannot establish the
-full acceptance → mutation → journal → feed → acknowledgement contract.
-
-## Verification platforms
-
-Run hosted CI on Linux only, including release, capacity and stress jobs.
-For local development, run native checks only on the development machine’s
-platform by default. Run additional local platforms only when explicitly
-requested. Keep historical cross-platform evidence scoped to its original run;
-new CI receipts must describe only the platforms actually tested.
-
-## Accepted decisions
-
-Follow these unless a later ADR supersedes them. Points an ADR marks
-provisional may change when its validation measurements report.
-
-- Accepted ADR-003 amends ADR-001's Python restriction. Prioritize the Truss-owned,
-  tested embeddable Python 3.11 implementation; do not wait for a Rust port or a
-  complete TypeScript engine. Consume Weft's Rust Python bridge and the existing
-  authorization boundary without implementing competing compiler/resolver semantics.
-  Qualify both implementations against the shared corpus and native interchange.
-- The owner-selected local runtime is pgserver, with explicit installation and
-  infrequent migrations. The host supplies the PostgreSQL connection and operates
-  any pool. Stale admission returns one refusal without internal retries. Catalog
-  identity is document-qualified. Consult the current installation/migration plan
-  for historical PostgreSQL16.2 evidence, the private PostgreSQL17.11
-  integration candidate and remaining complete-runtime gates. The private17.11 wheel
-  is the exact local dependency pin; it remains unpublished. See the2026-10-11
-  runtime checkpoint and preserve older16.15 receipts as historical evidence.
-
-- [ADR-001](docs/helix/02-design/adr/ADR-001-language-and-portable-core.md):
-  TypeScript (strict, ES modules), with Bun for development, tests and tooling.
-  The library supports Bun and Node 22 and later LTS lines (Node provisional
-  until check L1).
-  - The core is its own package with no I/O, no `node:*` or `bun` imports and
-    no host globals. Database adapters (`Bun.sql`, `pg`) and tooling are
-    separate packages and may use host APIs.
-  - Never hold a stored integer, decimal or timestamp in a JavaScript `number`
-    or `Date`. Adapters return text that the core parses exactly. Decimal
-    arithmetic uses truss's `bigint`-based implementation.
-  - Consume UMF through its TypeScript library at a pinned version.
-  - The conformance corpus is language-neutral data. Expected results and
-    enforcement reports are normative; expected SQL is informative.
-  - Move the core to Rust only when an ADR-001 D6 trigger fires and a new ADR
-    records the evidence.
-- [ADR-002](docs/helix/02-design/adr/ADR-002-storage-strategy.md): generic
-  catalog storage on PostgreSQL. Adding a type, property, key or relationship
-  adds catalog rows, never columns, tables, partitions or per-type indexes.
-  - Objects are one table keyed on `(id, type_id)`; business identity (UMF keys)
-    is in a key table, `object_key`. Values sit in one flat JSONB map per object
-    keyed by catalog property id: a missing key is absent, JSON `null` is
-    explicit null. Unknown data goes in the `retained` map. SPIKE-003 measured
-    a partition per type and a partial index per type against this layout.
-  - Edges carry typed endpoints, enforced by foreign keys against
-    `rel_endpoint`, and their own properties column.
-  - The object row is canonical; the journal records per-property history in
-    the same transaction.
-  - Database enforcement only in forms that need no DDL per revision. No
-    per-type CHECK constraints on shared tables. Cross-row rules lock the
-    parent (`FOR NO KEY UPDATE`) or run SERIALIZABLE; a delete uses
-    `FOR UPDATE`. Writers read the catalog head row `FOR SHARE` first.
-  - Prepared statements are recommended, not required. Indexes and statistics exist only where
-    the binding declares them.
-  - Provisional until measured: storage-home thresholds, value records stored
-    as structured values with `root_id` on composed objects, edge ids, and the
-    `target_type` edge-index include.
-
-Current original-driver evidence composes all four issued admission families with
-one-use Python custody and nonrewinding ordinals on PostgreSQL17.11. Its synthetic
-administrative artifacts do not qualify protected ordinary-person admission.
-Follow the protected admission execution packet in
-`docs/helix/04-build/operation-ordinal-issuer-handoff.md`: preserve original caller
-context separately from privileged owner and asserted origin; qualify original
-installed call/role/ACL/dependency closure before exposing mutation APIs. The complete seven-body
-installed profile remains missing. The private whole-catalog
-`edge_limit_verify_current_scope` semantic body has native component evidence;
-its administrative test custody does not qualify ordinary-person admission,
-complete finalization, installation readiness or accepted publication. Do not remove the invoker elevation guard
-or grant direct consumer registry writes as a composition shortcut.
-
-CONTRACT-001 through CONTRACT-012 describe the storage, journal, catalog,
-mutation, embedding, bootstrap and Weft handoff boundaries. Start physical
-layout work with CONTRACT-012 and its installation gap matrix. The current
-reviewed source-epoch native component model is 0.16; the separate core structural
-projection is 0.8 and includes uncomposed configuration/migration, capacity
-reservation and commit-cache adjuncts. Projection versions are Truss artifact
-versions, not new UMF core version claims. These
-are component review inputs, not a complete installed profile. Earlier layout and
-compiler packets remain historical evidence and must
-not be silently combined into an installed profile.
-
-PostgreSQL 17.9 has component evidence. Supported deployment versions, complete
-installation/security/resource profile adoption and full runtime qualification
-remain open; consult the current decision queue for the precise scope. UMF owns
-metadata semantics and reusable SQL generation; Weft owns logical SQL lowering.
-Truss owns their composition, retained evidence and protected publication.
+## Decisions in force
+- ADR-001: TypeScript (strict ESM, Bun) for the portable core, which has no I/O and no host globals;
+  database adapters are separate packages. Never hold stored integers, decimals or timestamps in a
+  JS `number`/`Date`; adapters return text that the core parses exactly.
+- ADR-003 (amends ADR-001's Python restriction): the tested Python 3.11+ implementation is the shipped
+  engine. Consume Weft's Python bridge for query compilation; do not reimplement Weft or UMF semantics.
+- ADR-002: generic catalog storage. Adding a type, property, key or relationship adds catalog rows,
+  never columns, tables, partitions or per-type indexes. Objects are one table keyed on
+  `(id, type_id)`; business identity (UMF keys) is in `object_key`; values are one JSONB map per object
+  keyed by property id (missing = absent, JSON null = explicit null); unknown data goes in `retained`.
+  Edges have typed endpoints. The object row is canonical; the journal records per-property history
+  in the same transaction. No per-type DDL or CHECK constraints; cross-row rules lock the parent
+  (`FOR NO KEY UPDATE`) or run SERIALIZABLE.
+- ADR-004 to ADR-008: document-qualified catalog identity, complete group receipts, exact numeric
+  carriers, complete historical envelopes, trusted embedding host.
 
 ## Boundaries
+- Truss consumes UMF and never defines UMF semantics; carry missing concepts in a truss-owned UMF
+  extension vocabulary and propose them upstream. UMF owns metadata semantics and SQL generation,
+  Weft owns logical SQL lowering, Truss owns their composition.
+- Truss is property-oriented: the property value and edge are the unit of storage and mutation;
+  document-shaped views are derived. It is not part of Axon.
+- Never silently lose meaning: keep UMF documents verbatim, retain data that binds to no known field,
+  and report for each UMF assertion whether the database, the engine or nothing enforces it.
 
-- truss consumes UMF ([DocumentDrivenDX/umf](https://github.com/DocumentDrivenDX/umf))
-  and never defines UMF semantics. When truss needs a concept UMF lacks, carry
-  it in a truss-owned UMF extension vocabulary and propose it upstream; do not
-  fork UMF meaning. truss is a UMF consumer, not UMF's reference implementation.
-- truss is property-oriented: the individual property value and edge are the
-  canonical unit of storage, identity and mutation. Document-shaped views are
-  derived. This is the logical model; ADR-002 packs a property's value into
-  its object's JSONB map, and the journal keeps per-property history. truss is distinct from Axon, which is document-oriented; do not
-  describe truss as part of Axon, and do not rule out Axon using truss.
-- Never silently lose meaning. Retain UMF documents verbatim, retain data that
-  binds to no known field, and report for every UMF assertion whether the
-  database, the engine, or nothing enforces it.
-- Qualify every support claim with the database engine and version, UMF core
-  version, supported subset and evidence.
-
-Native qualification reuses one owned pgserver17.11 Unix-socket cluster per
-suite/worker, fresh databases/roles and explicit inventory/cleanup checks.
-Use `scripts/qualify-pgserver-pg17.py WHEEL --run-id FRESH_ID [--workers N]`;
-keep LocalPostgres/CLI lifecycle and destructive cluster-setting checks isolated.
-Do not enable a shared TCP5432 listener or reuse a worker after cleanup drift.
-See the2026-10-11 shared-worker checkpoint for final native evidence.
+## Rules
+- Do not commit run outputs, logs, wheels, zips or captures. `scripts/size-guard.sh` fails on tracked
+  files over 1 MB.
+- A support claim in README or docs needs a CI test that exercises it; otherwise call it experimental.
+- Releases: bump `packages/python/pyproject.toml`, add a CHANGELOG section, tag `vX.Y.Z` on main;
+  `release.yml` does the rest.
+- Design docs are in `docs/helix/` (PRD, features, ADRs, architecture, contracts). Update the ADR or
+  contract when behaviour changes.
