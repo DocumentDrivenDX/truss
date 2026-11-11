@@ -1,6 +1,8 @@
 name: nightly
 
 on:
+  pull_request:  # TEMPORARY trial, removed before finishing
+    paths: ['.github/workflows/nightly.yml']
   schedule:
     - cron: '17 6 * * *'
   workflow_dispatch:
@@ -34,7 +36,7 @@ jobs:
       - name: Python tests (slow subset)
         working-directory: packages/python/tests
         run: |
-          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 4 -m "slow and not quarantined" -p no:cacheprovider --durations=25 .
+          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 2 -m "slow and not quarantined" -p no:cacheprovider --durations=25 .
 
   conformance:
     runs-on: ubuntu-24.04
