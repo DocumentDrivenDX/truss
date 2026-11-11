@@ -1,6 +1,8 @@
 name: nightly
 
 on:
+  pull_request:  # TEMPORARY: one trial run on the reset PR, removed before merge
+    paths: ['.github/workflows/nightly.yml']
   schedule:
     - cron: '17 6 * * *'
   workflow_dispatch:
