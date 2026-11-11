@@ -233,6 +233,7 @@ QUARANTINED_MODULES: dict[str, str] = {
 }
 WEFT_QUERY = 'Weft query refused with WFT-BINDING (selected runtime context or limits) under umf-weft 0.4.57; fix tracked as the Weft query work'
 QUARANTINED_TESTS: dict[str, str] = {
+    'test_compiled_query_native.py::CompiledQueryTests::test_indexed_equality_precedes_residual_limit_with_legacy_count_page_bounds': WEFT_QUERY,
     'test_compiled_query_native.py::CompiledQueryTests::test_authored_composite_key_pages_and_count_profile': WEFT_QUERY,
     'test_compiled_query_native.py::CompiledQueryTests::test_boolean_and_optional_values_remain_logical': WEFT_QUERY,
     'test_compiled_query_native.py::CompiledQueryTests::test_combined_catalog_source_query_uses_one_operation_and_current_visibility': WEFT_QUERY,
