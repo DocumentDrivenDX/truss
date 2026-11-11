@@ -67,8 +67,8 @@ ENF-03. Every support statement names the PostgreSQL and UMF versions and links 
 
 ## User Stories
 
-- [US-025 — Report the enforcement layer of every assertion](../user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md)
-- [US-026 — Back every support claim with evidence](../user-stories/US-026-back-every-support-claim-with-evidence.md)
+- US-025 — Report the enforcement layer of every assertion
+- US-026 — Back every support claim with evidence
 
 ## Edge Cases and Error Handling
 

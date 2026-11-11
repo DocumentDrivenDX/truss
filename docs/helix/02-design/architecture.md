@@ -43,7 +43,7 @@ entries and `python3 scripts/check-module-boundaries-controls.py` with allowed a
 forbidden import cases before feature implementation. Run the same checker locally,
 in the project's pre-commit path when configured, and Linux CI; Python-only checks
 still require semantic review of SQL, dynamic loading and settlement. Apply
-CONTRACT-008 RM-01–07 and [TD-045](technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md).
+CONTRACT-008 RM-01–07 and TD-045.
 No second ledger, compiler, authorization resolver or recovery service is introduced.
 
 
@@ -181,7 +181,7 @@ The proposed `createReferenceAssembly` construction/lifetime export belongs to `
 
 ### Public capability inventory
 
-The [package delivery design](package-delivery.proposal.md) allocates emitted exports, dependency closures, the packed reference consumer and PD-01–08 acceptance schedules. Published package names and adapter runtime profiles remain unselected.
+The package delivery design allocates emitted exports, dependency closures, the packed reference consumer and PD-01–08 acceptance schedules. Published package names and adapter runtime profiles remain unselected.
 
 Initial package-format candidate: emit ESM JavaScript targeting ES2022 with matching `.d.ts` declarations and explicit `exports`/type entry points. Publish compiled artifacts rather than requiring consumers to compile workspace TypeScript. Browser core, driver-neutral PostgreSQL assembly and Bun/Node adapters retain separate entry points and dependency closures. Data contracts/corpus artifacts use explicit data exports and exact version/digest inventories; importing an executable entry point does not eagerly load all corpus/native-model data. Native database support still follows selected adapter/server profiles rather than the JavaScript target. This is a draft packaging choice, requiring public API/build review and independent loader evidence before release; CommonJS or other loader profiles need their own selected build/evidence and are not inferred from ESM tests.
 
@@ -282,7 +282,7 @@ ADR-001 and ADR-002 are accepted. ADR-003 remains proposed. Fixed storage and pe
 
 ## Design Gates
 
-[Design coordination](../04-build/design-coordination.md) owns the remaining design queue. Before a public embedding API, specify transaction failure/savepoint semantics and group lock planning. Before Weft integration, reconcile document-qualified logical identity with the current catalog uniqueness rule. Before feed qualification, define complete historical envelopes, replay identity, snapshots and retention interaction. Upcoming UMF capabilities are versioned dependencies, never implicit promises.
+Design coordination owns the remaining design queue. Before a public embedding API, specify transaction failure/savepoint semantics and group lock planning. Before Weft integration, reconcile document-qualified logical identity with the current catalog uniqueness rule. Before feed qualification, define complete historical envelopes, replay identity, snapshots and retention interaction. Upcoming UMF capabilities are versioned dependencies, never implicit promises.
 
 ## Reference host parity and packed delivery
 
@@ -355,14 +355,14 @@ Owner deployment constraint, 2026-10-07: an extension dependency is permitted on
 
 ### Selected reference implementation languages
 
-The Python and TypeScript implementations share SQL plus PL/pgSQL for PostgreSQL fixed observations and protected orchestration. This is the implementation-language selection for CH-02, not acceptance of an installed native profile. Use SQL for fixed relational observations; PL/pgSQL for the five trigger handlers, two ordinary complete-scope validators, and mutation/catalog/receipt/lifecycle orchestration. The [managed routine review](contracts/managed-extension-source-review.md) supplies the availability basis and remaining exact provider checks. No Rust/C extension, alternative procedural language or telemetry extension is a required default correctness dependency.
+The Python and TypeScript implementations share SQL plus PL/pgSQL for PostgreSQL fixed observations and protected orchestration. This is the implementation-language selection for CH-02, not acceptance of an installed native profile. Use SQL for fixed relational observations; PL/pgSQL for the five trigger handlers, two ordinary complete-scope validators, and mutation/catalog/receipt/lifecycle orchestration. The managed routine review supplies the availability basis and remaining exact provider checks. No Rust/C extension, alternative procedural language or telemetry extension is a required default correctness dependency.
 
 Do not implement a second UMF semantic engine or a Truss SQL compiler in those routines. Portable metadata interpretation and value admission reuse pinned UMF APIs; compiler lowering remains Weft-owned. Native guards must still enforce their selected stored-domain/integrity responsibilities, using explicitly inventoried codec/comparator dependencies. Choosing PL/pgSQL for orchestration does not choose an unproved implementation language for every byte scanner, native codec or resource primitive. Register those dependencies separately and report a concrete unsupported boundary if the selected composition cannot supply them.
 
 B-002/B-003/B-005/B-013 can now author protected orchestration bodies and source inventories against that language choice. They must retain exact body/overload/owner/search-path/security/attribute/dependency identities, controlled-work bounds and mandatory graph integrity. Exact RDS/Aurora/Lakebase engine tuples and privileges, driver/protocol hooks, cancellation/termination, complete codec/accounting realization and native qualification remain open. This choice neither authorizes deployment nor claims that source-only routines already meet every contract.
 
 
-The [installer matrix](contracts/weft-review-installation-gap-matrix.proposal.md#selected-handler-and-validator-attributes) selects explicit PL/pgSQL, VOLATILE, PARALLEL UNSAFE, CALLED ON NULL INPUT and NOT LEAKPROOF attributes for the five required trigger handlers and two ordinary complete-scope validators. Earlier general candidate discussions remain applicable to other helpers; these seven routines no longer have an open optimizer/null/disclosure attribute choice. Exact body/security/native-profile qualification remains required. STP-045 FA-01–03 allocates independent installed-attribute and drift controls.
+The installer matrix selects explicit PL/pgSQL, VOLATILE, PARALLEL UNSAFE, CALLED ON NULL INPUT and NOT LEAKPROOF attributes for the five required trigger handlers and two ordinary complete-scope validators. Earlier general candidate discussions remain applicable to other helpers; these seven routines no longer have an open optimizer/null/disclosure attribute choice. Exact body/security/native-profile qualification remains required. STP-045 FA-01–03 allocates independent installed-attribute and drift controls.
 
 
 ## Selected reference composition refinements
@@ -408,7 +408,7 @@ row-image/capture/tree/scalar-shape/custody/address/context/group/touch/correspo
 standard-library and internal decoder dependencies are individually enumerated. `python3 scripts/check-module-boundaries-controls.py`
 executes the real checker against16 disposable allowed/forbidden controls,
 including private row-image/capture/touch access, driver rejection and a reverse
-image/attribution cycle. [Current source/control evidence](../04-build/evidence/design-audit/python-capture-receive-boundary-controls.json)
+image/attribution cycle. Current source/control evidence
 retains the actual earlier eight-unmapped-module failure and corrected run.
 The same commands are configured in `.github/workflows/python-boundaries.yml`;
 remote CI execution is not yet observed. The pure/planning map explicitly permits

@@ -362,12 +362,12 @@ Contracted first slice: `umf.actions.plan/1`, `umf.actions.manifest/1`, `umf.act
 
 | Story | Owned output | Design/test allocation |
 | --- | --- | --- |
-| [US-046](user-stories/US-046-materialize-frozen-update.md) | 5 planned criteria: bulk-update-materialize-frozen-update | [TD-046](../02-design/technical-designs/TD-046-materialize-frozen-update.md) / [STP-046](../03-test/test-plans/STP-046-materialize-frozen-update.md) |
-| [US-047](user-stories/US-047-execute-atomic-update-batches.md) | 7 planned criteria: bulk-update-execute-atomic-update-batches | [TD-047](../02-design/technical-designs/TD-047-execute-atomic-update-batches.md) / [STP-047](../03-test/test-plans/STP-047-execute-atomic-update-batches.md) |
-| [US-048](user-stories/US-048-recover-queued-update.md) | 8 planned criteria: bulk-update-recover-queued-update | [TD-048](../02-design/technical-designs/TD-048-recover-queued-update.md) / [STP-048](../03-test/test-plans/STP-048-recover-queued-update.md) |
-| [US-049](user-stories/US-049-bounded-action-gateway.md) | 5 planned criteria: bounded-action-gateway prerequisite | [TD-049](../02-design/technical-designs/TD-049-bounded-action-gateway.md) / [STP-049](../03-test/test-plans/STP-049-bounded-action-gateway.md) |
+| US-046 | 5 planned criteria: bulk-update-materialize-frozen-update | TD-046 / STP-046 |
+| US-047 | 7 planned criteria: bulk-update-execute-atomic-update-batches | TD-047 / STP-047 |
+| US-048 | 8 planned criteria: bulk-update-recover-queued-update | TD-048 / STP-048 |
+| US-049 | 5 planned criteria: bounded-action-gateway prerequisite | TD-049 / STP-049 |
 
-The [machine-readable bulk allocation](../03-test/bulk-update-story-allocation.json) is a separate new-slice inventory; planned rows are not passed coverage. Every story/criterion has one primary test allocation and retains its original canonical citation.
+The machine-readable bulk allocation is a separate new-slice inventory; planned rows are not passed coverage. Every story/criterion has one primary test allocation and retains its original canonical citation.
 
 These consolidated bulk drafts preserve earlier planning. Current owner amendments
 exclude custom instrumentation and mandatory formal/receiver qualification from
@@ -412,5 +412,5 @@ operation are excluded. Recovery uses a forward fix or a tested backup restore;
 a restored older database is eligible for migration, not supported old-runtime
 operation. Historical release claims retain their original scope.
 
-See the [restoration plan](../04-build/runtime-migration-restoration-plan.md) for implementation gates. This decision
+See the restoration plan for implementation gates. This decision
 specifies required behavior; it does not claim that migration tooling is shipped.

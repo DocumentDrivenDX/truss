@@ -86,13 +86,13 @@ STO-09. An imported record keeps the load it came from and the source's own fact
 
 ## User Stories
 
-- [US-007 — Store and read objects and edges exactly](../user-stories/US-007-store-and-read-objects-and-edges-exactly.md)
-- [US-008 — Keep what the schema does not define](../user-stories/US-008-keep-what-the-schema-does-not-define.md)
-- [US-009 — Find an object by its key](../user-stories/US-009-find-an-object-by-its-key.md)
-- [US-010 — Refuse bad edges and protect connected objects](../user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md)
-- [US-011 — Limit an edge's multiplicity without an index per relationship](../user-stories/US-011-limit-an-edges-multiplicity.md)
-- [US-034 — Repeat an import and change nothing](../user-stories/US-034-repeat-an-import-and-change-nothing.md)
-- [US-035 — Keep the source facts of an imported record](../user-stories/US-035-keep-the-source-facts-of-an-imported-record.md)
+- US-007 — Store and read objects and edges exactly
+- US-008 — Keep what the schema does not define
+- US-009 — Find an object by its key
+- US-010 — Refuse bad edges and protect connected objects
+- US-011 — Limit an edge's multiplicity without an index per relationship
+- US-034 — Repeat an import and change nothing
+- US-035 — Keep the source facts of an imported record
 
 ## Edge Cases and Error Handling
 

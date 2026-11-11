@@ -82,11 +82,11 @@ RD-06. Expose the full Weft query surface over the Truss storage mapping, preser
 
 ## User Stories
 
-- [US-020 — Read an object by identifier or key](../user-stories/US-020-read-an-object-by-id-or-key.md)
-- [US-021 — List a type's objects in pages](../user-stories/US-021-list-a-types-objects-in-pages.md)
-- [US-022 — List an object's edges, bounded](../user-stories/US-022-list-an-objects-edges-bounded.md)
-- [US-023 — Traverse one to three hops](../user-stories/US-023-traverse-one-to-three-hops.md)
-- [US-024 — Enumerate the types of the catalog](../user-stories/US-024-enumerate-the-types-of-the-catalog.md)
+- US-020 — Read an object by identifier or key
+- US-021 — List a type's objects in pages
+- US-022 — List an object's edges, bounded
+- US-023 — Traverse one to three hops
+- US-024 — Enumerate the types of the catalog
 
 ## Edge Cases and Error Handling
 
