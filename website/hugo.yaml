@@ -12,15 +12,11 @@ markup:
       attribute:
         block: true
 params:
-  innsigle:
-    field: composition
-    warnUnsealed: true
+  # Stamped from packages/python/pyproject.toml by pages.yml (HUGO_PARAMS_version).
+  version: dev
 module:
   mounts:
     - {source: content, target: content}
     - {source: assets, target: assets}
     - {source: layouts, target: layouts}
     - {source: static, target: static}
-    - {source: ../.innsigle/public, target: static/.well-known/innsigle}
-    - {source: ../.innsigle/public, target: assets/innsigle}
-    - {source: content, target: assets/content-src}

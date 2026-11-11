@@ -91,7 +91,7 @@ is Python host orchestration over shared protected PostgreSQL protocols, with
 Weft's Rust compiler consumed through its Python bridge. It does not require a
 Rust port of Truss and does not create a second ACL resolver or SQL compiler.
 The active security workstream owns authorization semantics and its shared
-invocation boundary. See [the Python integration design](../python-integration.proposal.md)
+invocation boundary. See the Python integration design
 for PY-01–07, exact transport and consumer R1–R10.
 
 “Second implementation” here means an independently packaged host API and
@@ -176,7 +176,7 @@ Historical context/receipt bytes remain untouched. New contexts use explicit
 native-derivation profiles without fabricated owner receipts. Runtime0.67
 updates procedures and its release ledger; it does not rewrite stored keys.
 Registration still uses broader UMF Bun preparation. See
-[execution plan](../../04-build/key-encoding-performance.md).
+execution plan.
 
 - [ADR-001](ADR-001-language-and-portable-core.md), [ADR-002](ADR-002-storage-strategy.md)
 - [CONTRACT-001](../contracts/CONTRACT-001-storage-layout.md), [CONTRACT-002](../contracts/CONTRACT-002-journal.md), [CONTRACT-003](../contracts/CONTRACT-003-catalog-revision.md), [CONTRACT-004](../contracts/CONTRACT-004-mutation-and-conformance.md)

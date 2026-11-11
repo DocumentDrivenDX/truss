@@ -1,532 +1,141 @@
-# NOTE: steps that depended on deleted evidence/qualification scripts were removed in the
-# CI reset. This workflow is superseded by the tag-driven release workflow (separate change).
-name: Release Python package
+name: release
+
+# Tag-driven. Pushing a tag `vX.Y.Z` tests, builds, smoke-tests and publishes `umf-truss` to PyPI
+# (trusted publishing, environment `pypi`) and creates the GitHub Release.
+# `workflow_dispatch` is a dry run: it builds and smoke-tests, and never publishes.
 on:
+  push:
+    tags: ['v*']
   workflow_dispatch:
     inputs:
-      capacity_statistics:
-        description: Collect test-only PostgreSQL completed-call statistics for capacity diagnosis
+      dry_run:
+        description: 'Build and smoke-test only. Publishing happens only for a pushed version tag.'
         type: boolean
-        default: false
-      public_workflows:
-        description: Run the original installed 1000-node/1000-edge public workload on Linux
-        type: boolean
-        default: false
-      stress_case:
-        description: Run exact stress cases on Linux alongside native qualification
-        type: choice
-        default: none
-        options: [none, all, small, nominal, type-heavy, many-types, wide, complex, dense-edges, index-heavy, skewed, node-heavy, large]
+        default: true
+
 permissions:
   contents: read
-concurrency:
-  group: python-release-${{ github.ref }}-${{ inputs.stress_case || 'publish' }}
-  cancel-in-progress: false
+
+env:
+  TZ: UTC
+  # pgserver-pg18 is published as GitHub release assets until it reaches PyPI.
+  PIP_FIND_LINKS: https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
+
 jobs:
-  package:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: test
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
-      actions: read
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - uses: oven-sh/setup-bun@v2
+      - name: Dispatch runs never publish
+        if: github.event_name == 'workflow_dispatch' && !inputs.dry_run
+        run: |
+          echo "Publishing happens only for a pushed version tag; run this dispatch with dry_run=true." >&2
+          exit 1
+      - name: Tag must equal the package version
+        if: github.ref_type == 'tag'
+        run: |
+          version=$(python -c 'import tomllib;print(tomllib.load(open("packages/python/pyproject.toml","rb"))["project"]["version"])')
+          test "${GITHUB_REF_NAME}" = "v${version}" || { echo "tag ${GITHUB_REF_NAME} != v${version}" >&2; exit 1; }
+          python scripts/changelog_section.py "${version}" > /dev/null
+      - name: Build wheel and sdist
+        run: |
+          python -m pip install build==1.3.0
+          python -m build packages/python --outdir dist
+          (cd dist && sha256sum * > SHA256SUMS)
+      - uses: actions/attest-build-provenance@v2
+        if: github.ref_type == 'tag'
         with:
-          bun-version: '1.4.3'
-      - name: Verify reproducible embedded owner delivery assets
-        run: |
-          bun install --frozen-lockfile
-          bun scripts/build-python-embedded.ts
-          git diff --exit-code -- packages/python/src/truss/_embedded_js packages/python/src/truss/_embedded_release.py
-      - name: Verify complete source payload in wheel and sdist
-        run: |
-          python - <<'PYTHON'
-          import os,pathlib,tarfile,zipfile
-          source=pathlib.Path('packages/python/src/truss')
-          expected={p.relative_to(source).as_posix():p.read_bytes() for p in source.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc'}
-          wheel_path=next(pathlib.Path('dist').glob(os.environ['WHEEL_PREFIX']+'*.whl'))
-          with zipfile.ZipFile(wheel_path) as wheel:
-              actual={n.removeprefix('truss/'):wheel.read(n) for n in wheel.namelist() if n.startswith('truss/') and not n.endswith('/')}
-              assert actual==expected, 'Wheel runtime payload differs from source'
-          with tarfile.open(next(pathlib.Path('dist').glob('*.tar.gz'))) as sdist:
-              actual={m.name.split('/src/truss/',1)[1]:sdist.extractfile(m).read() for m in sdist.getmembers() if m.isfile() and '/src/truss/' in m.name}
-              assert actual==expected, 'Sdist runtime payload differs from source'
-          print(f'Verified {len(expected)} exact source payloads in wheel and sdist')
-          PYTHON
-      - name: Build the independent HF corpus archive
-        run: |
-          version=$(python -c "import tomllib;print(tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['version'])")
-          python scripts/build-hf-conformance-archive.py --output "dist/truss-hf-conformance-${version}.zip"
-      - name: Stage package-only local runtime constraints asset
-        run: |
-          python - <<'PYTHON'
-          import pathlib
-          source=pathlib.Path('packages/python/isolated-runtime-constraints.txt')
-          target=pathlib.Path('dist/isolated-runtime-constraints.txt')
-          target.write_bytes(source.read_bytes())
-          assert target.read_bytes()==source.read_bytes()
-          PYTHON
+          subject-path: |
+            dist/*.whl
+            dist/*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
-          name: python-package
-          path: dist/*
-          if-no-files-found: error
-  native:
-    needs: package
+          name: release-dist
+          path: dist/
+          retention-days: 14
+
+  smoke:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+        python: ['3.11', '3.13']
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-          fetch-depth: 0
+          sparse-checkout: packages/python/examples
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - name: Fresh-venv install of the built wheel and quickstart (no Bun, no source on the path)
+        run: |
+          python -m venv "$RUNNER_TEMP/q"
+          "$RUNNER_TEMP/q/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query]"
+          cp -r packages/python/examples "$RUNNER_TEMP/examples"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/q/bin/python" examples/quickstart.py "$RUNNER_TEMP/demo" | tee out.json
+          "$RUNNER_TEMP/q/bin/python" -c 'import json;d=json.load(open("out.json"));assert d["catalog"]=="accepted" and d["ack"]=="committed" and d["query"]=="relationship",d'
+
+  publish:
+    needs: smoke
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - run: rm -f dist/SHA256SUMS
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - uses: actions/download-artifact@v4
         with:
-          name: python-package
+          name: release-dist
           path: dist
-      - name: Qualify the installed standalone local carrier and retained refusals
+      - name: Create the GitHub Release
         env:
-          PYTHONPATH: packages/python/tests
-          PYTHONDONTWRITEBYTECODE: '1'
+          GH_TOKEN: ${{ github.token }}
         run: |
-          python - <<'PYTHON'
-          import hashlib,importlib.metadata,json,os,pathlib,tomllib,unittest,truss
-          project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
-          origin=pathlib.Path(truss.__file__).resolve()
-          assert not origin.is_relative_to(pathlib.Path('packages/python/src').resolve())
-          assert importlib.metadata.version(project['name'])==project['version']
-          modules=['test_local_timestamp_value','test_public_contracts','test_record_schema','test_import_contracts',
-              'test_temporal_value_transport','test_temporal_public_values']
-          result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(modules))
-          wheel=next(pathlib.Path('dist').glob('*.whl'))
-          record={'profile':'truss-standalone-local-carrier/0.1','sourceCommit':os.environ['GITHUB_SHA'],
-              'distribution':project['name'],'version':project['version'],'installedOrigin':str(origin),
-              'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),
-              'installedContractsSha256':hashlib.sha256((origin.parent/'contracts.py').read_bytes()).hexdigest(),
-              'modules':modules,'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),
-              'passed':result.wasSuccessful() and not result.skipped and result.testsRun>=31,
-              'nativeTemporalAcceptanceQualified':False,
-              'scope':'Standalone canonical local carrier; current ExactValue, container and import profiles still refuse local values; no native temporal acceptance claim'}
-          output=pathlib.Path(os.environ['RUNNER_TEMP'])/'standalone-carrier';output.mkdir()
-          (output/'qualification.json').write_text(json.dumps(record,indent=2)+'\n')
-          assert record['passed'], 'Installed standalone carrier/refusal qualification failed'
-          PYTHON
-      - name: Retain standalone carrier qualification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: standalone-carrier-qualification-${{ matrix.os }}
-          path: ${{ runner.temp }}/standalone-carrier/qualification.json
-          if-no-files-found: error
-      - name: Unpack the independent conformance archive outside the checkout
-        run: |
-          python - <<'PYTHON'
-          import os,pathlib,zipfile
-          archives=list(pathlib.Path('dist').glob('truss-hf-conformance-*.zip'));assert len(archives)==1
-          destination=pathlib.Path(os.environ['RUNNER_TEMP'])/'hf-conformance'
-          destination.mkdir()
-          zipfile.ZipFile(archives[0]).extractall(destination)
-          PYTHON
-      - name: Qualify the installed final package with independent HF assertions
-        working-directory: ${{ runner.temp }}/hf-conformance
-        run: python scripts/run-hf-conformance.py --installed-package --output "$RUNNER_TEMP/hf-conformance-qualification/qualification.json"
-      - name: Retain independent conformance qualification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hf-conformance-qualification-${{ matrix.os }}
-          path: ${{ runner.temp }}/hf-conformance-qualification/*
-          if-no-files-found: error
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: '1.4.3'
-      - name: Check out the independent strict protected test oracle
-        uses: actions/checkout@v6
-        with:
-          repository: DocumentDrivenDX/umf
-          ref: 5ba77cff91a121a44c82f6bce32a78d8842161b5
-          path: .qualification/umf-owner
-          persist-credentials: false
-      - name: Install pinned independent test oracle dependencies
-        working-directory: .qualification/umf-owner
-        run: bun install --frozen-lockfile
-      - name: Retain managed platform grants qualification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: managed-grants-qualification-${{ matrix.os }}
-          path: ${{ runner.temp }}/managed-grants/*
-          if-no-files-found: error
-      - name: Verify installed local runtime lifecycle and isolation
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_local_runtime test_local_runtime_native_isolation test_local_install_cli_native -v
-      - name: Verify installed embedded owners with every subprocess forbidden
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_embedded_owner -v
-      - name: Run combined typed-host and strict native result controls
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_group_result_wire test_group_result_wire_native test_action_transport -v
-      - name: Run installed E1 group and admission regressions
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest -v test_group_runtime_bounds test_catalog_admission_outcomes test_group_preconditions_native.GroupPreconditionTests test_group_create_native.PublicCreateGroupTests test_key_lookup_native.KeyLookupTests test_object_read_native.PublicObjectReadTests test_object_pages_native.ObjectPageTests test_typed_query_pages_native.TypedQueryPagesTests test_typed_query_pages_native.StringQueryPagesTests test_read_only_public_native.ReadOnlyPublicTests
-      - name: Verify source-only preparation, real schemas, and capacity regressions
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_group_source_admission_native test_create_metadata_cache_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native test_schema_cache_native test_embedder_workflows_native test_bulk_update_transition_guard_native test_schema_memory_cache test_record_schema test_record_schema_oracle_native test_record_preparation_native test_record_schema_selection_native test_reader_catalog_native test_compiled_query_native.CompiledQueryTests.test_wide_complete_entity_preserves_fields_with_explicit_byte_budget
-      - name: Run the installed public adopter workflow
-        run: |
-          python - <<'PYTHON'
-          import importlib.metadata,pathlib,tomllib,truss,weft
-          project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
-          assert importlib.metadata.version(project['name'])==project['version']
-          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('umf-weft==')
-          assert importlib.metadata.version('umf-weft')==weft.__version__==expected_compiler
-          assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
-          PYTHON
-          python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun /missing/bun
-      - name: Run installed original atomic capacity workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-          TRUSS_CAPACITY_FUNCTION_STATS: ${{ inputs.capacity_statistics && format('{0}/capacity-function-statistics', runner.temp) || '' }}
-        run: python -m unittest test_group_capacity_native.GroupCapacityTests test_bulk_create_sql_native test_journal_batches_native
-
-      - name: Run installed original public workload
-        id: public_workflows
-        if: inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        shell: bash
-        run: |
-          mkdir -p "$RUNNER_TEMP/public-workflows"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --count-sql-submissions --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
-
-      - name: Record original public workload status
-        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
-        env:
-          REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
-          WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
-        run: |
-          python - <<'PYTHON'
-          import json,os,pathlib
-          root=pathlib.Path(os.environ['REPORT_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
-          report=root/'report.json'
-          status={'source':os.environ['GITHUB_SHA'],'outcome':os.environ['WORKLOAD_OUTCOME'],
-              'reportPresent':report.is_file(),'scope':'Original small public workload; SQL 10s / operation 30s; no stress qualification'}
-          if report.is_file():
-              result=json.loads(report.read_bytes())
-              status.update(functionalPassed=result['functionalPassed'],runtimePackage=result['runtimePackage'])
-          (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
-          PYTHON
-      - name: Retain original public workload report and log
-        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
-        uses: actions/upload-artifact@v4
-        with:
-          name: original-public-workflow-${{ matrix.os }}
-          path: ${{ runner.temp }}/public-workflows/*
-          if-no-files-found: error
-
-      - name: Record capacity statistics collection status
-        if: always() && inputs.capacity_statistics
-        env:
-          STATISTICS_DIRECTORY: ${{ runner.temp }}/capacity-function-statistics
-        run: |
-          python - <<'PYTHON'
-          import json,os,pathlib,platform
-          root=pathlib.Path(os.environ['STATISTICS_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
-          records=[]
-          for path in sorted(root.glob('*.json')):
-              if path.name=='collection-status.json':continue
-              record=json.loads(path.read_bytes())
-              records.append({'file':path.name,'phase':record.get('phase','cumulative-after-close'),'status':record['status'],'reason':record.get('reason')})
-          expected={'create','following','update','replay','late-fault'}
-          status={'source':os.environ['GITHUB_SHA'],'platform':platform.system().lower()+'-'+platform.machine(),
-              'scope':'Instrumented phase observations, not clean timing qualification; cancelled calls and later COMMIT work may be absent',
-              'records':records,'missingPhases':sorted(expected-{r['phase'] for r in records})}
-          (root/'collection-status.json').write_text(json.dumps(status,indent=2)+'\n')
-          PYTHON
-      - name: Retain capacity function statistics
-        if: always() && inputs.capacity_statistics
-        uses: actions/upload-artifact@v4
-        with:
-          name: capacity-function-statistics-${{ matrix.os }}
-          path: ${{ runner.temp }}/capacity-function-statistics/*.json
-          if-no-files-found: error
-
-      - name: Run installed current-policy query and activation workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_current_query_runtime_native test_current_query_subject_cut_native -v
-      - name: Run exact installed compiler cohort and asset-cache unit module
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_DISCLOSURE_NATIVE_QUALIFICATION: '1'
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_current_disclosure_cohort -v
-      - name: Run the public-only policy query reference example
-        run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun /missing/bun
-      - name: Register original UMF domain-pack catalogs through the installed API
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_domain_pack_catalog_native.DomainPackCatalogTests -v
-      - name: Run installed owned graph and descendant query workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_feed_runtime_native.FeedRuntimeTests test_history_runtime_native.HistoryRuntimeTests test_owned_scope_native.OwnedScopeTests test_owned_objects_native.OwnedObjectTests test_owned_group_batch_native.OwnedGroupBatchTests test_journal_row_guard_native.JournalRowGuardTests test_prepared_plan_capture_native.PreparedPlanCaptureTests test_query_export_sources_native.QueryExportSourceTests test_rootless_preparation_native.RootlessPreparationTests test_operation_result_slots_native.OperationResultSlotTests test_edge_authority_native.EdgeAuthorityTests test_final_edge_inventory_native.FinalEdgeInventoryTests
-      - name: Run installed owned catalog evolution and key backfill workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_catalog_key_backfill_native -v
-      - name: Run installed numeric facet workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_numeric_facets_native.NumericFacetTests.test_public_accept_create_update_import_read_and_query test_numeric_facets_native.NumericFacet12_2Tests.test_public_accept_create_update_import_read_and_query
-      - name: Run Hohfeld performance correctness and live-authority controls
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_runtime_release_cache test_query_compile_cache test_schema_cache_native test_hohfeld_statement_budgets_native test_compiled_query_native -v
-      - name: Run installed unnamed-field and original registration retry workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_refuse_registration_with_element_diagnostics test_catalog_unchanged_native.CatalogUnchangedTests test_graph_commit_practical_native.GraphCommitPracticalTests test_atomic_group_surface_native.AtomicGroupSurfaceTests test_import_rejection_practical_native.ImportRejectionPracticalTests
-      - name: Run basic current scalar and consumer workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_date_decimal_native.DateDecimalTests test_date_decimal_native.LargeScaleDecimalTests test_date_decimal_native.DateQueryTests test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_named_revision_exact_numeric_workflow test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_registration_refuses_missing_record_and_field_names test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create
-      - name: Run public offline preparation and unchanged commerce workflow
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_catalog_preparation_public test_core10_catalog_native test_commerce_source_native test_catalog_declarative test_catalog_declarative_native test_catalog_enforcement_native test_text_limit_evolution_native
-      - name: Run installed current decimal scale2 workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_decimal_scale2_native.DecimalScale2Tests
-      - name: Run public registration-owned rebinding workflows
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_catalog_rebind_native test_required_catalog_rebind_native
-      - name: Qualify remaining embedder batch catalog preview lifecycle and audit APIs
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_batched_import_native test_batched_import_parity_native test_catalog_additions_native test_catalog_continuation_native test_catalog_compatible_acceptance_native test_group_preview_native test_lifecycle_native test_install_preflight_native test_module_access_batch_native test_load_audit_native test_mutation_group_audit_native test_audit_disclosure_native test_owned_group_audit_native test_group_preview_wire test_load_audit_wire test_lifecycle_wire test_catalog_continuation_types test_ddd_owner_preparation -v
-      - name: Run pending receipt visibility and bundled group preparation
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_receipt_visibility_native.ReceiptVisibilityTests
-      - name: Verify managed-function statement budget and host fault containment
-        env:
-          PYTHONPATH: packages/python/tests
-        run: |
-          TRUSS_CENSUS_POSTGRES_BIN="$(python -c 'from pgserver._commands import POSTGRES_BIN_PATH; print(POSTGRES_BIN_PATH)')"
-          test -x "$TRUSS_CENSUS_POSTGRES_BIN/initdb"
-          test -x "$TRUSS_CENSUS_POSTGRES_BIN/pg_ctl"
-          export TRUSS_CENSUS_POSTGRES_BIN
-          PYTHONDONTWRITEBYTECODE=1 python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
-      - name: Run public recursive-container workflows
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_recursive_containers_native
-      - name: Run installed current exact timestamp workflows
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_timestamp_query_native
-      - name: Run installed current binary equality workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_binary_query_native.BinaryQueryTests
-      - name: Run installed current optional binary workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_optional_binary_query_native.OptionalBinaryTests
-      - name: Run installed current typed business-key workflows
-        env:
-          TRUSS_BUN_EXECUTABLE: bun
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_database_key_derivation_native.DatabaseKeyDerivationTests test_string_key_bucket_native.StringKeyBucketNativeTests
-      - name: Run installed bounded traversal and module-owner workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_traversal_native.PublicTraversalTests
-      - name: Run installed current numeric facet evolution workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_facet_evolution_native.FacetEvolutionTests
-
-      - name: Run installed current scalar container workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_scalar_containers_native.ScalarContainerTests
-
-      - name: Run installed current typed relationship key workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_typed_relationship_keys_native
-
-      - name: Run installed typed and string SQL page workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_typed_query_pages_native
-
-      - name: Run installed field-name evolution workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_field_name_evolution_native
-
-      - name: Run installed Record rename and member-order workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_record_label_evolution_native
-
-      - name: Run installed required-field evolution workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_required_evolution_native
-
-      - name: Run installed relationship-bound evolution workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_relationship_evolution_native
-
-      - name: Run installed flat-container requiredness workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_container_required_evolution_native
-
-      - name: Run installed engine import and original diagnostic workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_replay_frame_native test_owned_import_native test_engine_import_native test_engine_action_session_native test_action_subject_installation_native test_catalog_diagnostics_native
-
-      - name: Run installed parallel-edge workflow
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_parallel_edges_native
-
-      - name: Run installed relationship-name evolution workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_relationship_names_native
-
-      - name: Run explicit named revisions of the three frozen real schemas
-        if: github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
-        env:
-          PYTHONPATH: packages/python/tests
-        run: |
-          mkdir -p "$RUNNER_TEMP/real-schemas"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --author-fixture-names --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/real-schemas/report.json" 2>&1 | tee "$RUNNER_TEMP/real-schemas/run.log"
-      - name: Retain original real-schema report and log
-        if: always() && github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
-        uses: actions/upload-artifact@v4
-        with:
-          name: original-real-schemas
-          path: ${{ runner.temp }}/real-schemas/*
-          if-no-files-found: warn
-
-  large-capacity:
-    if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: large-runner-capacity-probe-${{ matrix.os }}
-          path: ${{ runner.temp }}/public-stress/runner-capacity.json
-          if-no-files-found: error
-  stress:
-    needs:
-      - "package"
-      - "native"
-    if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
-    strategy:
-      fail-fast: false
-      matrix:
-        case: ${{ inputs.stress_case == 'all' && fromJSON('["large","dense-edges","wide","many-types","index-heavy","nominal","type-heavy","complex","skewed","node-heavy","small"]') || fromJSON(format('["{0}"]', inputs.stress_case)) }}
-        os:
-          - "ubuntu-24.04"
-    runs-on: "${{ matrix.os }}"
-    timeout-minutes: 360
-    steps:
-      - uses: "actions/checkout@v6"
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: "actions/setup-python@v5"
-        with:
-          python-version: "3.11"
-      - name: "Retain large-workload disk capacity before loading"
-        if: "always() && matrix.case == 'large'"
-        uses: "actions/upload-artifact@v4"
-        with:
-          name: "large-runner-capacity-${{ matrix.os }}"
-          path: "${{ runner.temp }}/public-stress/runner-capacity.json"
-          if-no-files-found: "warn"
-      - uses: "actions/download-artifact@v4"
-        with:
-          name: "python-package"
-          path: "dist"
-      - name: "Run selected installed public stress workload"
-        id: "stress"
-        env:
-          PYTHONPATH: "packages/python/tests"
-          STRESS_CASE: "${{ matrix.case }}"
-        shell: "bash"
-        run: |
-          mkdir -p "$RUNNER_TEMP/public-stress"
-          load_size=100
-          if [ "$STRESS_CASE" = large ]; then load_size=1000; fi
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
-      - name: "Retain selected stress workload report and log"
-        if: "always()"
-        uses: "actions/upload-artifact@v4"
-        with:
-          name: "public-stress-${{ matrix.case }}-${{ matrix.os }}"
-          path: "${{ runner.temp }}/public-stress/*"
-          if-no-files-found: "error"
-
+          version="${GITHUB_REF_NAME#v}"
+          python scripts/changelog_section.py "${version}" > notes.md
+          gh release create "${GITHUB_REF_NAME}" dist/* --title "Truss ${version}" --notes-file notes.md --verify-tag

@@ -35,7 +35,7 @@ D7 and D9 retain their engine/database/none distinction. Keep useful database co
 | Date | Proposed 2026-10-03; accepted 2026-10-03; layout (D1, D2, D9, D10) decided 2026-10-04 on SPIKE-003 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
-| Evidence | [SPIKE-001](../spikes/SPIKE-001-apache-age.md), [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [SPIKE-003](../spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md), [storage layout review](../storage-layout-review.md) |
+| Evidence | SPIKE-001, SPIKE-002, SPIKE-003, storage layout review |
 
 [ADR-001](ADR-001-language-and-portable-core.md) accepts TypeScript first, a
 portable core and measured triggers for a Rust core. Its Node support remains
@@ -74,7 +74,7 @@ with the number of types on a shared table (7.6–8.0 ms at 105 types), per-type
 CHECK constraints on a shared table cost about 14 µs per constraint per statement
 for every type, deferred triggers race under READ COMMITTED, and the default
 `Bun.sql` decoding loses precision. The
-[storage layout review](../storage-layout-review.md) adds open concerns that
+storage layout review adds open concerns that
 SPIKE-002 did not measure: object-level write cost, the cost of storing every
 nested record as a child object, the canonical store, and property identity
 across revisions.
@@ -401,7 +401,7 @@ view.
 
 ## Concern Impact
 
-Recorded in [concerns](../../01-frame/concerns.md) on acceptance:
+Recorded in concerns on acceptance:
 
 - `postgresql`: prepared statements are recommended, not required; there is an index budget per
   table.

@@ -92,12 +92,12 @@ compatibility and downgrade operation are excluded (PRD owner decision 2026-10-2
 
 ## User Stories
 
-- [US-045 — Bootstrap the internal layout from UMF](../user-stories/US-045-bootstrap-the-internal-layout-from-umf.md)
+- US-045 — Bootstrap the internal layout from UMF
 
-- [US-039 — Read UMF the same way as the reference validator](../user-stories/US-039-read-umf-the-same-way-as-the-reference.md)
-- [US-027 — Build an implementation from the contracts](../user-stories/US-027-build-an-implementation-from-the-contracts.md)
-- [US-028 — Pass the corpus and the interchange check](../user-stories/US-028-pass-the-corpus-and-the-interchange-check.md)
-- [US-029 — Declare the layout version and check the DDL on every version](../user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md)
+- US-039 — Read UMF the same way as the reference validator
+- US-027 — Build an implementation from the contracts
+- US-028 — Pass the corpus and the interchange check
+- US-029 — Declare the layout version and check the DDL on every version
 
 ## Edge Cases and Error Handling
 

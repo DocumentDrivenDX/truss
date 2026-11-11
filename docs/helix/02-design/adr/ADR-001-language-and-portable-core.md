@@ -27,7 +27,7 @@ ddx:
 | Date | Proposed 2026-10-03; accepted 2026-10-03 |
 | Decider | Project owner |
 | Drafted by | Claude Code agent |
-| Evidence | [discovery input](../../00-discover/vision-input.md) §Language Analysis, [concerns](../../01-frame/concerns.md), [SPIKE-001](../spikes/SPIKE-001-apache-age.md) C9, [SPIKE-002](../spikes/SPIKE-002-storage-bake-off.md), [ADR-002](ADR-002-storage-strategy.md) |
+| Evidence | discovery input §Language Analysis, concerns, SPIKE-001 C9, SPIKE-002, [ADR-002](ADR-002-storage-strategy.md) |
 
 AGENTS.md requires this ADR to confirm the language choice and the portable-core
 split before any implementation code lands. With its acceptance, that condition
@@ -48,7 +48,7 @@ The owner directed on 2026-09-24 that truss is implemented in TypeScript first,
 with Bun for development and testing, and moves to Rust only if a measured need
 arises. The owner first considered Rust with Python and Node bindings, because
 the query compiler must be fast and memory-safe and Rust embeds more easily than
-Go. The [discovery input](../../00-discover/vision-input.md) records the options
+Go. The discovery input records the options
 weighed:
 
 | Option | For | Against |
@@ -57,7 +57,7 @@ weighed:
 | Go | Simple language; good concurrency | A Go runtime per embedded library; cgo overhead; awkward Python and Node bindings |
 | TypeScript on Bun | Reuses UMF's TypeScript library directly; same toolchain as UMF; PostgreSQL does the heavy execution | No native Python embedding; single-threaded runtime; slower compile path |
 
-[Concern practice](../../01-frame/concerns.md) requires a portable-core override. The `typescript-bun`
+Concern practice requires a portable-core override. The `typescript-bun`
 concern prefers Bun-native APIs (`Bun.sql`, `Bun.file`), but a library that Node
 applications embed cannot depend on them. The concerns document records a
 project override under ADR-001: the core stays free of I/O and host-specific
@@ -225,7 +225,7 @@ measured limits. *(choice)*
 
 ## Concern Impact
 
-Recorded in [concerns](../../01-frame/concerns.md) on
+Recorded in concerns on
 acceptance: the `typescript-bun` override's authority changes from "Needs ADR
 (ADR-001)" to ADR-001. The `rust-cargo` concern stays inactive until a D6 trigger fires.
 

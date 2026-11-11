@@ -122,5 +122,5 @@ operation are excluded. Recovery uses a forward fix or a tested backup restore;
 a restored older database is eligible for migration, not supported old-runtime
 operation. Historical release claims retain their original scope.
 
-See the [restoration plan](../../04-build/runtime-migration-restoration-plan.md) for implementation gates. This decision
+See the restoration plan for implementation gates. This decision
 specifies required behavior; it does not claim that migration tooling is shipped.

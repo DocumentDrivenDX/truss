@@ -11,7 +11,7 @@ closure qualification are installer responsibilities.
 UMF retains the source and guarded export in
 [the native artifact](../../../../docs/helix/02-design/contracts/operation-address-v0.1.proposal.umf.json).
 Its declaration inventory is partial: no interpreted function/body semantics are
-claimed. [The native receipt](../../../../docs/helix/04-build/evidence/design-audit/operation-address-encoder-native.json)
+claimed. The native receipt
 records 19 PostgreSQL16.15 observations, including Python byte parity, actual
 fixture identity/attributes/ACL, native maximum domains, exact output ceiling and
 ordinary direct-call denial. Native text NUL remains unsupported.
@@ -28,7 +28,7 @@ native integer domains, then compares the original frame with the paired encoder
 Objects/numbers are never accepted as address scalars; decoded native fields are
 data projections, not scope or registry authority.
 
-[The paired native receipt](../../../../docs/helix/04-build/evidence/design-audit/operation-address-pair-native.json)
+The paired native receipt
 passes 43 observations, retaining the earlier encoder controls plus scalar/max-domain
 round trips, thirteen malformed/noncanonical/type/domain refusal controls, exact
 8-MiB decoding and ordinary decoder denial. The

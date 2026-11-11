@@ -155,7 +155,7 @@ Nonlogin internal roles are the recommended realization where the managed target
 
 ### Proposed document-qualified grant home
 
-The [qualified helper execution design](qualified-grant-helper.proposal.md) defines original actor capture, six-step privilege-delta ordering, no-op/rollback behavior and QG-01–06 native schedules. Its body and installation-bound callable inventory remain unimplemented.
+The qualified helper execution design defines original actor capture, six-step privilege-delta ordering, no-op/rollback behavior and QG-01–06 native schedules. Its body and installation-bound callable inventory remain unimplemented.
 
 The table above describes baseline layout 0.2. Under proposed ADR-004, `truss-qualified-module-policy/0.1.0` instead selects a fixed generic `module_access` home with exact non-null text columns `document_id`, `module`, `reader_role`, `writer_role` and primary key `(document_id,module)`. All identity comparisons use the selected native exact-byte text/collation profile, with no case folding, Unicode normalization or locale-dependent equality. Reader and writer remain distinct exact native role names. Qualified document/module values must independently resolve under the admitted UMF/catalog context and PostgreSQL text carrier; this profile cannot truncate or rename unsupported identities. A predeclared grant may precede definitions in its exact document/module, as in the baseline, but cannot supply provenance for a later catalog definition.
 
@@ -207,7 +207,7 @@ Authorization follows admitted operation order: a guarded read may finish before
 
 ### Guard lock/adoption refinement
 
-The [installation-wide guard candidate](installation-policy-guard.proposal.md) allocates a fixed singleton home, checked generation/initialization, complete controlled authority paths and PG-01–06 schedules. It is a concrete optional realization; layout 0.9 does not yet contain the table. Fixed-snapshot/current-authority and read-only coordinator qualifications remain explicit prerequisites.
+The installation-wide guard candidate allocates a fixed singleton home, checked generation/initialization, complete controlled authority paths and PG-01–06 schedules. It is a concrete optional realization; layout 0.9 does not yet contain the table. Fixed-snapshot/current-authority and read-only coordinator qualifications remain explicit prerequisites.
 
 For the proposed row-guard profile on compatible read/write transactions, acquire catalog-head locks already required by the operation first, then policy-generation guard, then request/business/root/row locks in CONTRACT-009 order. Do not add a catalog write lock to a read-only snapshot or acquire a newly discovered catalog lock after the guard. Administrative authority updates that require catalog locking use the same order; pure policy updates may take only the guard provided they acquire no earlier lock afterward. Multiple scope guards use the profile's exact stable scope order. All participants need the same versioned hierarchy; enabling one guarded writer cannot qualify unguarded legacy paths.
 
@@ -357,7 +357,7 @@ PostgreSQL 17 rejects circular role memberships. A synthetic or corrupt observed
 
 This fixes the graph algorithm for the candidate's static switching/inheritance surface. It does not qualify administrative delegation, privileged wrappers, native reset/rollback/prepared behavior or deployment role/collector profiles. Any unsupported session-authorization transition or host command path invalidates the original admission rather than being simulated as an ordinary graph edge.
 
-[Nine independently authored PG17 graph cases](bindings/observer-role-reachability-pg17-v0.1.vectors.json) have [scoped experiment evidence](../../04-build/evidence/design-audit/observer-role-reachability-audit.json), including inherited-after-switch exposure, a mixed path that grants no SET permission, blocked edges and corrupt cycle/PUBLIC endpoints. Reproduce with normal/optimized `python3 docs/helix/04-build/evidence/design-audit/check-observer-role-reachability.py`. A not_exposed result means only this synthetic static SET/INHERIT graph has no observer path; it is not observer-profile admission. Actual native role identities/options, delegation, ACL/wrapper/RLS and original complete collection/resource evidence remain required. Local role/edge limits are experiment bounds only.
+[Nine independently authored PG17 graph cases](bindings/observer-role-reachability-pg17-v0.1.vectors.json) have scoped experiment evidence, including inherited-after-switch exposure, a mixed path that grants no SET permission, blocked edges and corrupt cycle/PUBLIC endpoints. Reproduce with normal/optimized `python3 docs/helix/04-build/evidence/design-audit/check-observer-role-reachability.py`. A not_exposed result means only this synthetic static SET/INHERIT graph has no observer path; it is not observer-profile admission. Actual native role identities/options, delegation, ACL/wrapper/RLS and original complete collection/resource evidence remain required. Local role/edge limits are experiment bounds only.
 
 ### Protected ownership and delegation closure
 
@@ -453,7 +453,7 @@ For the selected reference protected procedure profile, `grant_module_roles(docu
 
 The helper does not grant direct canonical DML, sequence allocation/reset, private reserve/seal/journal/cleanup execution or integrity-scope disclosure. The baseline two-argument helper's broad table/sequence grants are incompatible with this profile. Public EXECUTE remains access to a shared procedure surface: every actual operation separately validates original actor and current qualified document/module/owner authority. Native helper success is not profile readiness without independent full effective-right correspondence.
 
-A false writes request does not revoke existing rights. Revocation and shared-role/cross-module policy changes require their complete original transition/reconciliation procedure; one module's change cannot silently remove shared procedure rights required elsewhere. Repeated identical native grants do not prove durable original administrative settlement or create a Truss replay receipt. Failures and unknown outer acknowledgment preserve original administrative attempt and policy/installation custody. The [installation procedure](weft-review-installation-gap-matrix.proposal.md#document-qualified-administrative-grant-procedure) records the concrete authoring sequence; exact native argument/result/body/security/role/dependency/account binding remains required.
+A false writes request does not revoke existing rights. Revocation and shared-role/cross-module policy changes require their complete original transition/reconciliation procedure; one module's change cannot silently remove shared procedure rights required elsewhere. Repeated identical native grants do not prove durable original administrative settlement or create a Truss replay receipt. Failures and unknown outer acknowledgment preserve original administrative attempt and policy/installation custody. The installation procedure records the concrete authoring sequence; exact native argument/result/body/security/role/dependency/account binding remains required.
 
 
 ### Direct SQL read surface in protected-profile activation
@@ -616,36 +616,36 @@ Private `prepare_core08_catalog_source` consumes immutable original UTF-8 model 
 
 The produced `Core08CatalogSource` is source metadata, not PreparedAcceptance, accepted report, native catalog authority or authenticated issuance. Its native_ready field is fixed false at construction. Original producer assets and manifest are checked before bounded Bun capture. Source/request/response limits are4M/8M/16M UTF-8 bytes, with4096 scheduled calls and selected repeated-source preflight before owner inspection. Actual serialized outputs are checked independently. Capture deadlines reap child processes and refuse without partial artifacts. These bounds do not prove total native/process heap, CPU or complete issuer/resource isolation. Trusted host runtime/file selection remains a premise; hashes and version output do not authenticate an issuer.
 
-[Evidence](../../04-build/evidence/core08-catalog-source-20261013/receipt.json) qualifies33 source regressions, six fresh installed-wheel tests,136 genuine-model owner observations matching Chromium153 and independent Astra source/bound controls. The new source owner profiles fixed actual0.7-only inspection blockers; the earlier source test also corrected an invalid default carrier/result-path assumption. An observed runtime-version timeout is retained and now has a tested typed refusal. Native0.8 registration/report/migration and an owner-provided guarded catalog assessment producer remain the next required implementations. Existing native source/caller compatibility controls remain valid; no backend case closes.
+Evidence qualifies33 source regressions, six fresh installed-wheel tests,136 genuine-model owner observations matching Chromium153 and independent Astra source/bound controls. The new source owner profiles fixed actual0.7-only inspection blockers; the earlier source test also corrected an invalid default carrier/result-path assumption. An observed runtime-version timeout is retained and now has a tested typed refusal. Native0.8 registration/report/migration and an owner-provided guarded catalog assessment producer remain the next required implementations. Existing native source/caller compatibility controls remain valid; no backend case closes.
 
 
 ### Original core0.8 public catalog increment — 2026-10-13
 
-Explicit `prepare_catalog(..., source_version="0.8.0")` uses the separately pinned original UMF7c0f0c98 producer and closed support profile. Core0.7 remains the default. PostgreSQL18.6 native registration preserves exact source bytes, facets and reports, commits/replays and caller rollback. Populated0.34 additive upgrade preserves data, reports, routine OIDs/owners/ACLs and rollback. Six selected native controls and41 pure regressions pass; Astra independently passed54 pure tests and reviewed both property-pointer and nullable-profile fixes. [Evidence](../../04-build/evidence/core08-native-catalog-20261013/) retains scoped abstract profile proof and historical failed runs. This is catalog metadata support; native constraint enforcement and protected security readiness remain unqualified. The guarded original assessment producer and complete accepted-model/native mapping integration remain next. No required backend case is promoted;132 required/26 implemented passing/106 missing remains the last full gate.
+Explicit `prepare_catalog(..., source_version="0.8.0")` uses the separately pinned original UMF7c0f0c98 producer and closed support profile. Core0.7 remains the default. PostgreSQL18.6 native registration preserves exact source bytes, facets and reports, commits/replays and caller rollback. Populated0.34 additive upgrade preserves data, reports, routine OIDs/owners/ACLs and rollback. Six selected native controls and41 pure regressions pass; Astra independently passed54 pure tests and reviewed both property-pointer and nullable-profile fixes. Evidence retains scoped abstract profile proof and historical failed runs. This is catalog metadata support; native constraint enforcement and protected security readiness remain unqualified. The guarded original assessment producer and complete accepted-model/native mapping integration remain next. No required backend case is promoted;132 required/26 implemented passing/106 missing remains the last full gate.
 
 Concurrent main runtime0.35 import projection is preserved in combined runtime0.36. Exact0.35 source digest is retained; populated .35→.36 upgrade/rollback passes and actual original Weft import projection passes after its narrow release compatibility amendment. See the merged-scope receipt for source and test limits.
 
 
 ### Guarded original accepted-model assessment — 2026-10-13
 
-`require_accepted_catalog=True` adds a private native assessment to original mapping preparation. Exact accepted0.8 model sources now reach genuine Weft under the existing administrative guard, after original native source/expected-record/report checks and complete revision-history checks. Native type/property/key/relationship/endpoint inventory and original compiler sources are captured and rechecked; ordinary public actor gates remain unchanged. Eight new native controls and eight existing guard controls pass, with scoped formal endpoint correspondence and retained failures. See [receipt](../../04-build/evidence/security-accepted-catalog-20261013/receipt.json).
+`require_accepted_catalog=True` adds a private native assessment to original mapping preparation. Exact accepted0.8 model sources now reach genuine Weft under the existing administrative guard, after original native source/expected-record/report checks and complete revision-history checks. Native type/property/key/relationship/endpoint inventory and original compiler sources are captured and rechecked; ordinary public actor gates remain unchanged. Eight new native controls and eight existing guard controls pass, with scoped formal endpoint correspondence and retained failures. See receipt.
 
 This is an accepted-source assessment prerequisite for US-056-AC2/6/9/10 and truss.B01/B02/B08/B11/B12, not complete physical mapping or protected execution. Next bind genuine original scan occurrences and ontology associations to native type/property/key/endpoints and full fact dependencies without substituting another semantic interpreter. Issuer/caller authentication, complete writer/source barriers and same-transaction ABA remain open. No backend test is promoted; the full132 required cases remain unchanged.
 
 
 ### Original scan and dependency native homes — 2026-10-13
 
-Guarded accepted-model preparation now retains native dependency metadata mapping original Weft self-join scans, query uses, action dependencies, qualified fields and ordered keys to native IDs. Association Records keep object-table homes; no native edge is invented. Eight native controls and four native-derived correspondence substitutions pass. [Receipt](../../04-build/evidence/security-native-dependencies-20261013/receipt.json) records current pins and unproven physical endpoint/predicate/authority obligations. This advances US-056-AC2/6/9/10 prerequisites without closing required backend cases or activating protected SQL.
+Guarded accepted-model preparation now retains native dependency metadata mapping original Weft self-join scans, query uses, action dependencies, qualified fields and ordered keys to native IDs. Association Records keep object-table homes; no native edge is invented. Eight native controls and four native-derived correspondence substitutions pass. Receipt records current pins and unproven physical endpoint/predicate/authority obligations. This advances US-056-AC2/6/9/10 prerequisites without closing required backend cases or activating protected SQL.
 
 
 ### Original ontology endpoint and witness keys — 2026-10-13
 
-Dependency metadata0.2 binds original ontology bytes to the Weft handoff, then maps original association witness keys, named endpoint roles and ordered association-field/target-key-field pairs to accepted native homes. Genuine two-field Staff/Assignment key preparation now passes PostgreSQL18.6; distinct same-target roles remain separate. Nine native controls, final two-case witness-key replay,20 independent mapper controls and a qualified ordered-sequence proof retain evidence in [receipt](../../04-build/evidence/security-ontology-endpoints-20261013/receipt.json). Native predicate lowering, edge-backed association mapping and full authority/source/writer lifetime remain next. This advances US-056-AC2/6/9/10 prerequisites and does not promote required backend cases or enable protected SQL.
+Dependency metadata0.2 binds original ontology bytes to the Weft handoff, then maps original association witness keys, named endpoint roles and ordered association-field/target-key-field pairs to accepted native homes. Genuine two-field Staff/Assignment key preparation now passes PostgreSQL18.6; distinct same-target roles remain separate. Nine native controls, final two-case witness-key replay,20 independent mapper controls and a qualified ordered-sequence proof retain evidence in receipt. Native predicate lowering, edge-backed association mapping and full authority/source/writer lifetime remain next. This advances US-056-AC2/6/9/10 prerequisites and does not promote required backend cases or enable protected SQL.
 
 
 ### Core0.8 original keys and native population prerequisite — 2026-10-13
 
-Separate original UMF7c0f0c98 key encoder3.0.0 now supports exact0.8 sources through the existing key batch API; old0.7 encoder2.0.0/assets remain unchanged. String tuple profile1 bytes and source/receipt correspondence are preserved. Nine source and nine installed unit cases, plus installed native0.8 create/commit/read/replay, single/composite lookup/reversed nonmatch and legacy regression pass. [Evidence](../../04-build/evidence/core08-native-keys-20261013/receipt.json) retains reviewed source pins, wheel verification and failed-test corrections. This removes the discovered0.7-only data prerequisite before US-056-AC2/6/9/10 native predicate implementation. Protected security stays unqualified; no required backend case is promoted. Next lower original logical predicates on these actual accepted/populated homes.
+Separate original UMF7c0f0c98 key encoder3.0.0 now supports exact0.8 sources through the existing key batch API; old0.7 encoder2.0.0/assets remain unchanged. String tuple profile1 bytes and source/receipt correspondence are preserved. Nine source and nine installed unit cases, plus installed native0.8 create/commit/read/replay, single/composite lookup/reversed nonmatch and legacy regression pass. Evidence retains reviewed source pins, wheel verification and failed-test corrections. This removes the discovered0.7-only data prerequisite before US-056-AC2/6/9/10 native predicate implementation. Protected security stays unqualified; no required backend case is promoted. Next lower original logical predicates on these actual accepted/populated homes.
 
 
 ### Fixed-data/current-authority preparation component — 2026-10-14
@@ -674,7 +674,7 @@ comparisons and pending-installation reports are **not authority leases or cut
 issuers**, and carry `security_ready=false`. Trusted engine construction remains
 a premise; arbitrary process objects/digests cannot supply it.
 
-Native evidence in [the component receipt](../../04-build/evidence/security-preparation-authority-20261014/receipt.json)
+Native evidence in the component receipt
 shows an actual ordinary RR snapshot retaining revoked membership while fresh
 RC observes its removal; held cuts block membership, role-attribute and
 module-policy changes. Context substitution, transaction end and disconnect
@@ -705,7 +705,7 @@ issues a lease. Native coordinator-disconnect testing confirms data-owned cuts
 continue blocking revocation through the original data transaction's actual
 COMMIT acknowledgement. No seal is written by this component. The private
 comparison APIs refuse a namespace that places other schemas before pg_catalog.
-The [original-caller bridge proposal](preparation-authority-bridge.proposal.md)
+The original-caller bridge proposal
 records native anchor/permit/selection/finalization gates and the nine qualified
 conditional proof queries; complete preparation admission remains unavailable.
 
@@ -714,7 +714,7 @@ The owner-private PG18.6 `require_preparation_peer_xid` component additionally
 requires native `pg_xact_status(xid8)` to report in-progress and compares the
 actual same-database live peer xid32. The native xid8 implementation validates
 against the allocator and retained history; snapshot xmax is not substituted
-for that allocator bound. [Retained native evidence](../../04-build/evidence/security-preparation-peer-xid-20261014/receipt.json)
+for that allocator bound. Retained native evidence
 includes the discarded snapshot-bound failure, forged-epoch rejection and
 ended-peer refusal. This is a scoped reconciliation component, not original
 backend/coordinator incarnation, authority, store or program admission. Complete

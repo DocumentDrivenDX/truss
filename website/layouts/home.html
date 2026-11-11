@@ -1,1 +1,1 @@
-{{ define "main" }}<a class="runtime-quickstart-cta" href="{{ "start/#runtime-quickstart-title" | relURL }}"><span>Install Truss 0.0.48 with uvx →</span><span>Python 3.11 · private PostgreSQL · no TCP ports</span></a>{{ .Content }}{{ partial "runtime-quickstart.html" . }}{{ end }}
+{{ define "main" }}<a class="runtime-quickstart-cta" href="{{ "start/" | relURL }}"><span>Install Truss {{ site.Params.version }} →</span><span>Python 3.11+ · private PostgreSQL 18.6 · no TCP ports</span></a>{{ .Content }}{{ end }}

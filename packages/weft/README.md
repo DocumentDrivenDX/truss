@@ -15,7 +15,7 @@ portable JS/declaration build. The public TypeScript model binding remains
 core0.7-only; additive upstream0.8 admission needs separately qualified selected
 meaning and host mapping. Existing Python wheel, browser WASM and native database
 receipts retain their earlier source scope. See the
-[current regression receipt](../../docs/helix/04-build/evidence/design-audit/weft-f05f2df-truss-regression.json).
+current regression receipt.
 
 Build only committed upstream source, excluding another chat's edits:
 

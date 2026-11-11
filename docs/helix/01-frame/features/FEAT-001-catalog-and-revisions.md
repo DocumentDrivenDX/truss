@@ -92,13 +92,13 @@ CAT-09. Every accepted revision records who or what accepted it: the asserted ac
 
 ## User Stories
 
-- [US-001 — Accept a UMF revision as a whole or reject it with every reason](../user-stories/US-001-accept-a-umf-revision-as-a-whole.md)
-- [US-002 — Import documents in dependency order](../user-stories/US-002-import-documents-that-depend-on-each-other.md)
-- [US-003 — Decide what happens to an unknown entity type](../user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md)
-- [US-004 — Keep identifiers stable across revisions](../user-stories/US-004-keep-identifiers-stable-across-revisions.md)
-- [US-005 — See every violator before a tightening is accepted](../user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md)
-- [US-006 — Add a type without DDL](../user-stories/US-006-add-a-type-without-ddl.md)
-- [US-036 — Record who accepted a revision](../user-stories/US-036-record-who-accepted-a-revision.md)
+- US-001 — Accept a UMF revision as a whole or reject it with every reason
+- US-002 — Import documents in dependency order
+- US-003 — Decide what happens to an unknown entity type
+- US-004 — Keep identifiers stable across revisions
+- US-005 — See every violator before a tightening is accepted
+- US-006 — Add a type without DDL
+- US-036 — Record who accepted a revision
 
 ## Edge Cases and Error Handling
 

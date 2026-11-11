@@ -103,7 +103,7 @@ standard's property graph queries) from PostgreSQL 19, Gel's December 2025
 shutdown and Kuzu's October 2025 archive. These changes leave PostgreSQL teams
 with connected data evaluating extensions, generated tables or a separate
 database. Versions, source limitations and follow-up research are recorded in
-the [competitive analysis](competitive-analysis.md).
+the competitive analysis.
 
 ### Review Checklist
 

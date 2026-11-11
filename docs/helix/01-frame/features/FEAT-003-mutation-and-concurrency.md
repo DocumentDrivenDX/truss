@@ -87,12 +87,12 @@ MUT-12 (RES-05/06). Prepare batches once and use set-based writes while preservi
 
 ## User Stories
 
-- [US-012 — Write with one protocol and report every violation](../user-stories/US-012-write-with-one-protocol-and-report-every-violation.md)
-- [US-013 — Refuse a write against a stale catalog](../user-stories/US-013-refuse-a-write-against-a-stale-catalog.md)
-- [US-014 — Keep cross-row rules honest](../user-stories/US-014-keep-cross-row-rules-honest.md)
-- [US-040 — Apply several operations as one atomic group](../user-stories/US-040-apply-operations-as-one-atomic-group.md)
-- [US-043 — Make a group safe to repeat](../user-stories/US-043-make-a-group-safe-to-repeat.md)
-- [US-044 — Run a change inside my transaction and roll it back](../user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md)
+- US-012 — Write with one protocol and report every violation
+- US-013 — Refuse a write against a stale catalog
+- US-014 — Keep cross-row rules honest
+- US-040 — Apply several operations as one atomic group
+- US-043 — Make a group safe to repeat
+- US-044 — Run a change inside my transaction and roll it back
 
 ## Edge Cases and Error Handling
 

@@ -89,12 +89,12 @@ HST-06. A relationship may name a type in another module; the edge is visible on
 
 ## User Stories
 
-- [US-037 — Give roles access to modules and nothing else](../user-stories/US-037-give-roles-access-to-modules-only.md)
-- [US-038 — Link modules and see the link only with access to both](../user-stories/US-038-link-modules-and-see-the-link-only-with-both.md)
-- [US-030 — Extend the layout from a host](../user-stories/US-030-extend-the-layout-from-a-host.md)
-- [US-031 — Govern writes by role grants](../user-stories/US-031-govern-writes-by-role-grants.md)
-- [US-032 — Work behind a transaction-mode pooler](../user-stories/US-032-work-behind-a-transaction-mode-pooler.md)
-- [US-033 — Run the layout on an embedded PostgreSQL](../user-stories/US-033-run-the-layout-on-an-embedded-postgres.md)
+- US-037 — Give roles access to modules and nothing else
+- US-038 — Link modules and see the link only with access to both
+- US-030 — Extend the layout from a host
+- US-031 — Govern writes by role grants
+- US-032 — Work behind a transaction-mode pooler
+- US-033 — Run the layout on an embedded PostgreSQL
 
 ## Edge Cases and Error Handling
 

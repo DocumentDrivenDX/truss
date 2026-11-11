@@ -80,13 +80,13 @@ JNL-08. The lag of a downstream copy is observable from each consumer's recorded
 
 ## User Stories
 
-- [US-015 — Journal every change atomically with its origin](../user-stories/US-015-journal-every-change-atomically.md)
-- [US-016 — Journal plain SQL changes too](../user-stories/US-016-journal-plain-sql-changes-too.md)
-- [US-017 — Read the journal incrementally without missing a change](../user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md)
-- [US-018 — Reconstruct a record as of a version](../user-stories/US-018-reconstruct-a-record-as-of-a-version.md)
-- [US-019 — Trim the journal by dropping partitions](../user-stories/US-019-trim-the-journal-by-dropping-partitions.md)
-- [US-041 — Publish the journal without losing or reordering a change](../user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md)
-- [US-042 — Read how far behind a downstream copy is](../user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md)
+- US-015 — Journal every change atomically with its origin
+- US-016 — Journal plain SQL changes too
+- US-017 — Read the journal incrementally without missing a change
+- US-018 — Reconstruct a record as of a version
+- US-019 — Trim the journal by dropping partitions
+- US-041 — Publish the journal without losing or reordering a change
+- US-042 — Read how far behind a downstream copy is
 
 ## Edge Cases and Error Handling
 
