@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import {mkdir} from 'node:fs/promises';
-const tsc=process.env.TRUSS_TSC ?? '/Users/erik/Projects/umf/node_modules/.bin/tsc';
+const tsc=process.env.TRUSS_TSC ?? '../umf/node_modules/.bin/tsc';
 await mkdir('packages/weft/dist',{recursive:true});
 const result=Bun.spawnSync([tsc,'--ignoreConfig','--strict','--declaration','--emitDeclarationOnly','--target','ES2022','--module','ESNext','--moduleResolution','bundler','--outDir','packages/weft/dist','packages/weft/src/index.ts']);
 if(result.exitCode)throw Error(new TextDecoder().decode(result.stdout)+new TextDecoder().decode(result.stderr));

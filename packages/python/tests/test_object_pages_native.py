@@ -91,7 +91,7 @@ class ObjectPageTests(group_tests.PublicCreateGroupTests):
 
     def test_revocation_after_buffered_page_does_not_publish(self):
         connection,host,assembly,tx=self.ready_objects()
-        original=self.admin.execute("SELECT pg_get_functiondef('truss.page_objects(text,text,text,int,int,bytea,text,text)'::regprocedure)").fetchone()[0]
+        original=self.admin.execute("SELECT pg_get_functiondef('truss.page_objects_at_profile(text,text,text,int,int,bytea,text,text,boolean)'::regprocedure)").fetchone()[0]
         needle=' PERFORM truss.runtime_person(false);\n IF NOT truss.runtime_can_read'
         self.assertIn(needle,original)
         self.admin.execute(original.replace(needle,' PERFORM pg_advisory_lock(928390);PERFORM pg_advisory_unlock(928390);\n'+needle))

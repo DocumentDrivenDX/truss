@@ -1,4 +1,9 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
+import unittest
+try:
+    import umf_access  # noqa: F401
+except ImportError:
+    raise unittest.SkipTest('needs umf-access 0.10.11, which is not published yet (typed-sdk extra)')
 """Optional installed-wheel correspondence for the two native SDK runners."""
 import hashlib
 import importlib

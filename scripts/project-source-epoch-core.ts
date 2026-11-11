@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Bounded authored structural delta; native semantics remain retained. */
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
-import {validateDocument} from '/Users/erik/Projects/umf/src/validation/document';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
+import {validateDocument} from '../../umf/src/validation/document';
 const source='docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json';
 const prior='docs/helix/02-design/models/truss-layout-core-structural-0.3.proposal.umf.json';
 const model:any=readDocument(await Bun.file(source).text(),'json');

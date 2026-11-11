@@ -41,7 +41,7 @@ class TemporalQueryCaptureTests(unittest.TestCase):
             def _run_operation(self,*args,**kwargs):raise AssertionError('I/O before input refusal')
         base=dict(host=NoIO(),transaction=object(),sql='SELECT value FROM source',document_ids=('adoc',),
                   parameters={},temporal_parameters={},maximum_rows=10,maximum_scan_rows=100,maximum_bytes=1024,
-                  manifest={'releaseId':'truss-catalog-runtime/0.76-temporal-candidate'},digest='not-observed',pin_cursor=None)
+                  manifest={'releaseId':'truss-catalog-runtime/0.76-candidate'},digest='not-observed',pin_cursor=None)
         for changes in (
             {'parameters':{'same':'x'},'temporal_parameters':{'same':{'kind':'local','value':'x'}}},
             {'parameters':{'x':LocalTimestampValue(text='2024-01-01T00:00:00.000000')}},

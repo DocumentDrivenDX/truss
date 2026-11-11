@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Extract closed prerequisite statement units through the UMF owner AST API. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
 const hash=(raw:string)=>new Bun.CryptoHasher('sha256').update(raw).digest('hex');
 const output='packages/postgresql/native/catalog-report/prerequisite-statements';
 const mappings=[
@@ -30,7 +30,7 @@ for(const [base,names,kind] of mappings){
   artifacts.push({name,source,sourceSha256:hash(originalBytes),ordinal,modelPath,modelSha256:hash(saved),sqlPath,sqlSha256:hash(sql)});
  }
 }
-const owner='/Users/erik/Projects/umf';
+const owner='../umf';
 const revision=Bun.spawnSync(['git','-C',owner,'rev-parse','HEAD']);
 const status=Bun.spawnSync(['git','-C',owner,'status','--porcelain']);
 if(revision.exitCode||status.exitCode||new TextDecoder().decode(status.stdout).trim())throw Error('Committed clean UMF owner source required');

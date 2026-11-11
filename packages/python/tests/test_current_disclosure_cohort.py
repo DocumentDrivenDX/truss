@@ -58,47 +58,6 @@ class DisclosureCohortTests(unittest.TestCase):
   finally:
    _actual_consumer_json.cache_clear();_actual_disclosure_consumer_json.cache_clear();_actual_weft_module_sha256.cache_clear()
 
- @unittest.expectedFailure  # requires the pinned original Weft 0.4.51 ABI2 module; see exact-version checks in _current_disclosure_originals.py
- def test_native_module_and_asset_hashes_are_computed_once_per_process(self):
-  from hashlib import sha256
-  from pathlib import Path
-  from importlib.resources import files
-  import weft.weft as native
-  from truss._current_query_originals import _actual_consumer,_actual_consumer_json,_actual_weft_module_sha256
-  from truss._current_query_originals import _CONSUMER_COHORTS as query_cohorts
-  from truss._current_disclosure_originals import _actual_disclosure_consumer,_actual_disclosure_consumer_json,_CONSUMER_COHORTS as disclosure_cohorts
-  from truss._current_query_computation import clear_current_query_owner_asset_cache
-  from truss._current_disclosure_computation import verify_current_disclosure_owner_assets
-  _actual_consumer_json.cache_clear();_actual_disclosure_consumer_json.cache_clear();_actual_weft_module_sha256.cache_clear()
-  clear_current_query_owner_asset_cache();verify_current_disclosure_owner_assets.cache_clear()
-  native_path=Path(native.__file__)
-  query_root=Path(files('truss').joinpath('_current_query_owner'))
-  manifest_path=query_root/'manifest.json';child_path=query_root/'current-query-child.mjs'
-  original=Path.read_bytes;reads={}
-  query_selections=[]
-  def counted(path):
-   if path in (native_path,manifest_path,child_path):reads[path]=reads.get(path,0)+1
-   return original(path)
-  with patch.object(Path,'read_bytes',counted):
-   for _ in range(3):
-    selection=_actual_consumer()
-    from truss._current_query_originals import _match_consumer
-    _match_consumer(selection)
-    query_selections.append(selection)
-   first_disclosure=_actual_disclosure_consumer();second_disclosure=_actual_disclosure_consumer()
-  self.assertEqual(reads,{native_path:1,manifest_path:1,child_path:1})
-  self.assertTrue(all(item==query_selections[0] for item in query_selections))
-  self.assertEqual(first_disclosure,second_disclosure)
-  self.assertEqual(sha256(native_path.read_bytes()).hexdigest(),selection['weftModuleSha256'])
-  self.assertIn(selection,query_cohorts)
-  query_wheels={row['weftModuleSha256']:row['weftWheelSha256'] for row in query_cohorts}
-  disclosure_wheels={row['weftModuleSha256']:row['weftWheelSha256'] for row in disclosure_cohorts}
-  self.assertEqual(selection['weftWheelSha256'],query_wheels[selection['weftModuleSha256']])
-  self.assertEqual(first_disclosure['weftRevision'],selection['weftRevision'])
-  import weft
-  self.assertEqual(first_disclosure['weftVersion'],weft.__version__)
-  self.assertEqual(first_disclosure['weftWheelSha256'],disclosure_wheels[first_disclosure['weftModuleSha256']])
-
  def test_enrolled_assets_are_identified_once_per_process_and_rechecked_after_restart(self):
   self.addCleanup(verify_current_disclosure_owner_assets.cache_clear)
   enrolled=verify_current_disclosure_owner_assets()

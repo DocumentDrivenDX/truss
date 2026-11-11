@@ -19,7 +19,7 @@ class TemporalEnrollmentNativeTests(fixture.TemporalNativeFixture):
         self.install()
         manifest,digest,_=_release()
         installation=self.admin.execute('SELECT release_id,release_sha256,owner_oid FROM truss.catalog_runtime_installation').fetchone()
-        self.assertEqual(installation[:2],('truss-catalog-runtime/0.76-temporal-candidate',digest))
+        self.assertEqual(installation[:2],('truss-catalog-runtime/0.76-candidate',digest))
         original,selected=self.admin.execute('SELECT truss.query_abi(),truss.query_temporal_abi()').fetchone()
         self.assertEqual(original,{'identity':'truss-postgresql-logical-query','version':'1.2',
                                  'sha256':'8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96'})

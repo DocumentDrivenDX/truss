@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Distinct bounded report-artifact profile; preserve all historical producers. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const profileRoot='packages/python/src/truss/_profiles';
 const revision=await Bun.file(`${profileRoot}/catalog-revision-composition-candidate.json`).json();
@@ -54,5 +54,5 @@ await emit('packages/postgresql/native/catalog-report/revision-registration-cand
  body=exact(body,'a32febdea06ee57405d856038ede3b503430a4f823226e0dfa65b072fae2f725',hash(registrationBytes));
  return exact(body,'truss.runtime_write_catalog_report_candidate(','truss.runtime_write_catalog_report_wide_candidate(');
 });
-await Bun.write('packages/postgresql/native/catalog-report/wide-report-source-manifest.json',JSON.stringify({scope:'selected owner AST function composition; native qualification separate',ownerCommit:new TextDecoder().decode(Bun.spawnSync(['git','-C','/Users/erik/Projects/umf','rev-parse','HEAD']).stdout).trim(),inputs,profiles:[{path:revisionPath,sha256:hash(revisionBytes)},{path:compositionPath,sha256:hash(compositionBytes)},{path:registrationPath,sha256:hash(registrationBytes)}]},null,2)+'\n');
+await Bun.write('packages/postgresql/native/catalog-report/wide-report-source-manifest.json',JSON.stringify({scope:'selected owner AST function composition; native qualification separate',ownerCommit:new TextDecoder().decode(Bun.spawnSync(['git','-C','../umf','rev-parse','HEAD']).stdout).trim(),inputs,profiles:[{path:revisionPath,sha256:hash(revisionBytes)},{path:compositionPath,sha256:hash(compositionBytes)},{path:registrationPath,sha256:hash(registrationBytes)}]},null,2)+'\n');
 console.log(JSON.stringify({functions:inputs.length}));

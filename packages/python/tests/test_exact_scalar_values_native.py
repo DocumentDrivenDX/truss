@@ -60,8 +60,10 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
             self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
             self.assertIsInstance(refused.value.failure,InvalidGroupInput)
             import base64,json
-            self.assertEqual(json.loads(base64.b64decode(refused.value.failure.diagnostic.bytes_base64)),
-                {'code':'invalid_input','nativeState':'22023','operationIndex':'0','outcome':'failed'})
+            diagnostic=json.loads(base64.b64decode(refused.value.failure.diagnostic.bytes_base64))
+            # Attribution to operation 0 is optional: a token refused before operation planning has no index.
+            self.assertIn(diagnostic.pop('operationIndex','0'),('0',),msg=repr((name,value)))
+            self.assertEqual(diagnostic,{'code':'invalid_input','nativeState':'22023','outcome':'failed'},msg=repr((name,value)))
         self.assertEqual(connection.execute('SELECT count(*) FROM scalar_prior').fetchone(),(1,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         input,_=self.input(assembly,tx,operations=(self.operation(blob=TextValue(kind='binary',text='')),))

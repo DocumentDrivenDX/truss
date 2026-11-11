@@ -30,11 +30,11 @@ jobs:
           python -m pip install build==1.3.0
           python -m build packages/python --outdir dist
           python -m venv "$RUNNER_TEMP/v"
-          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest pytest-xdist
+          "$RUNNER_TEMP/v/bin/pip" install "$(ls "$PWD"/dist/*.whl)[local,native,query,experimental-pg8000]" pytest pytest-xdist umf-core==0.10.8
       - name: Python tests (slow subset)
         working-directory: packages/python/tests
         run: |
-          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 2 -m "slow and not quarantined" -p no:cacheprovider --durations=25 .
+          "$RUNNER_TEMP/v/bin/python" -m pytest -q -n 2 -m slow -p no:cacheprovider --durations=25 .
 
   conformance:
     runs-on: ubuntu-24.04

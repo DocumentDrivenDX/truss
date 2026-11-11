@@ -409,7 +409,7 @@ the private protected security profile or qualify other database deployments.
 
 [Temporal interface freeze1](../../04-build/temporal-interface-freeze.md),
 F1/F5–F9, selects additive ABI1.3 under new native identity
-truss-catalog-runtime/0.76-temporal-candidate. Both conflicting historical
+truss-catalog-runtime/0.76-candidate. Both conflicting historical
 native0.75 byte sets remain unchanged and are not admitted by relabeling.
 Ordinary query_abi/capture/compiler behavior stays ABI1.2. Exact ABI/manifest
 hashes must be produced from actual reviewed candidate inventory, never invented

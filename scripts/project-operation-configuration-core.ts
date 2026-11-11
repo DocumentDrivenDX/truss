@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Core structural projection of one original adjunct; no installed identity allocation. */
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
-import {validateDocument} from '/Users/erik/Projects/umf/src/validation/document';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
+import {validateDocument} from '../../umf/src/validation/document';
 const source='docs/helix/02-design/contracts/operation-configuration-storage-v0.1.proposal.umf.json';
 const prior='docs/helix/02-design/models/truss-layout-core-structural-0.4.proposal.umf.json';
 const old=await Bun.file(prior).json(),model=structuredClone(old),module=model.modules.find((m:any)=>m.id==='truss-layout');

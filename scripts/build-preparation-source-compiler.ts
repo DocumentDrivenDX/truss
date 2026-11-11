@@ -4,7 +4,7 @@ import {mkdtemp,writeFile,readFile,symlink,mkdir,copyFile,readdir} from 'node:fs
 const repository=process.argv[2];if(!repository?.startsWith('/'))throw Error('Absolute UMF Git repository required');
 const revision='98ee88f193f5d70ccf21bd78ef6c37fffddc5eab';
 const entry='tools/security/protection-preparation-sources.ts';
-const output=await mkdtemp('/private/tmp/truss-preparation-source-compiler-');
+const output=await mkdtemp((process.env.TMPDIR??'/tmp')+'/truss-preparation-source-compiler-');
 const archive=Bun.spawnSync(['git','archive',revision],{cwd:repository});
 if(archive.exitCode)throw Error('Committed source compiler archive required');
 await writeFile(output+'/source.tar',archive.stdout);

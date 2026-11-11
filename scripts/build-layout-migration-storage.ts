@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Review-only migration receipt adjunct. UMF owns import and DDL generation. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
 const source=`
 CREATE SEQUENCE truss.layout_migration_receipt_row_seq AS bigint
  MINVALUE 1 MAXVALUE 9223372036854775807 START WITH 1 NO CYCLE;
@@ -40,7 +40,7 @@ const guardModel=await importPostgresqlSql(guardSource,backend,{id:'truss-layout
 const serializedGuard=JSON.stringify(guardModel)+'\n',guardDdl=await exportPostgresqlSql(guardModel,backend);
 if(await exportPostgresqlSql(readDocument(serializedGuard,'json'),backend)!==guardDdl)throw Error('Original saved guard export mismatch');
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
-const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('/Users/erik/Projects/umf/'+path).text())])));
+const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('../umf/'+path).text())])));
 const receipt={guardSourcePath,guardSourceSha256:hash(guardSource),guardModelPath,guardModelSha256:hash(serializedGuard),guardDdlPath,guardDdlSha256:hash(guardDdl),ownerSourcePins,modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),producerSha256:hash(await Bun.file('scripts/build-layout-migration-storage.ts').text()),reloadedExportExact:true,qualified:false,scope:'UMF owner import and saved reload/export only; uncomposed storage/immutability adjuncts, no protected receipt producer, core projection, installation or migration qualification'};
 for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],[guardModelPath,serializedGuard],[guardDdlPath,guardDdl],['packages/postgresql/generated/layout-migration-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
  if(process.argv.includes('--check')){if(await Bun.file(path).text()!==bytes)throw Error('Stale layout migration storage: '+path)}else await Bun.write(path,bytes);

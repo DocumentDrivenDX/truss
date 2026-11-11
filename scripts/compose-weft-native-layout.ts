@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Source repair experiment: ordinary digest plus complete CHECK, never mislabeled IMMUTABLE code. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,importPostgresqlSql,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
 const source='docs/helix/02-design/models/truss-layout-reference-history-0.12.proposal.umf.json';
 const original=readDocument(await Bun.file(source).text(),'json');
 const nodes=JSON.parse(renderTree(getPostgresqlNode(original,'/stmts')));

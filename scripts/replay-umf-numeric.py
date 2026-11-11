@@ -26,7 +26,7 @@ def main():
     if not dependencies.is_dir():
         raise SystemExit('cached dependencies unavailable; no automatic install')
     archive = subprocess.check_output(['git', 'archive', REVISION, *MEMBERS], cwd=repo)
-    with tempfile.TemporaryDirectory(prefix='truss-umf-numeric-', dir='/private/tmp') as directory:
+    with tempfile.TemporaryDirectory(prefix='truss-umf-numeric-', dir=None) as directory:
         root = Path(directory)
         sources = []
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:

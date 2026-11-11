@@ -68,7 +68,7 @@ def capture_sources(host,transaction,*,sql,document_ids,parameters,temporal_para
     if (any(type(v) is not int for v in (maximum_rows,maximum_scan_rows,maximum_bytes))
             or not 1<=maximum_rows<=10000 or not 1<=maximum_scan_rows<=10000 or not 1<=maximum_bytes<=16777216):
         return Ok(QueryRefused(code='limits'))
-    if manifest['releaseId']!='truss-catalog-runtime/0.76-temporal-candidate':
+    if manifest['releaseId']!='truss-catalog-runtime/0.76-candidate':
         return Ok(QueryRefused(code='unsupported_query'))
     command='SELECT truss.person_query_temporal_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)'
     arguments=(json.dumps(document_ids),maximum_scan_rows,maximum_rows,maximum_bytes,manifest['releaseId'],digest)

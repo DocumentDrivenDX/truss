@@ -129,10 +129,10 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction(access_mode='read_only').value
         self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         writer,writer_host,writer_assembly,writer_tx=self.consumer();_,prepared=self.added(writer_assembly,'concurrent')
-        original=self.admin.execute("SELECT pg_get_functiondef('truss.get_object(text,text,text,bigint,int,text,text)'::regprocedure)").fetchone()[0]
-        needle=" actor_oid:=truss.runtime_person(false);\n IF current_setting('transaction_read_only')='on' THEN"
+        original=self.admin.execute("SELECT pg_get_functiondef('truss.get_object_at_profile(text,text,text,bigint,int,text,text,boolean)'::regprocedure)").fetchone()[0]
+        needle=" IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required'"
         self.assertIn(needle,original)
-        self.admin.execute(original.replace(needle," PERFORM pg_advisory_lock(928381);PERFORM pg_advisory_unlock(928381);\n"+needle))
+        self.admin.execute(original.replace(needle," PERFORM pg_advisory_lock(928381);PERFORM pg_advisory_unlock(928381);\n"+needle,1))
         self.admin.execute('SELECT pg_advisory_lock(928381)')
         try:
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 /** Approved parallel-edge delta through the UMF-owned PostgreSQL AST exporter. */
-import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
-import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
-import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
-import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
+import {backend} from '../../umf/native/postgresql/runtime';
+import {readDocument} from '../../umf/src/model/document';
+import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '../../umf/src/adapters/postgresql';
+import {renderTree} from '../../umf/src/model/native-json';
 const source='docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json';
 const originalBytes=await Bun.file(source).text();
 if(new Bun.CryptoHasher('sha256').update(originalBytes).digest('hex')!=='261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368')throw Error('Exact retained layout0.16 required');

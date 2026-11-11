@@ -9,7 +9,7 @@ const coreOperations=['readJsonValue','validateSemanticTypesDocument','encodeCor
 const catalogOperations=[...coreOperations,'inspectDdd'];
 const numericOperations=['exactDecimal','integerFromBigInt','integerToBigInt','admitJavascriptNumber','numericToNumberLossless'];
 const operations=mode==='core10-catalog'?catalogOperations:[...numericOperations,...coreOperations];
-const output=await mkdtemp('/private/tmp/truss-umf-runtime-');
+const output=await mkdtemp((process.env.TMPDIR??'/tmp')+'/truss-umf-runtime-');
 const dependencyRoot=process.env.TRUSS_UMF_NODE_MODULES||repository+'/node_modules';
 const archive=Bun.spawnSync(['git','archive',revision,'src','spec','package.json'],{cwd:repository});if(archive.exitCode)throw Error('Pinned source archive unavailable');
 await writeFile(output+'/source.tar',archive.stdout);

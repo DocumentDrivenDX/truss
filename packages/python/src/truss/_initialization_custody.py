@@ -52,7 +52,7 @@ def source_policy(manifest):
     expected={'groups.sql':GROUPS_SHA,'initialization-custody.schema.json':SCHEMA_SHA,
               'initialization-custody.sql':sha256(native.joinpath('initialization-custody.sql').read_bytes()).hexdigest(),
               '../_initialization_custody.py':sha256(root.joinpath('_initialization_custody.py').read_bytes()).hexdigest()}
-    if manifest.get('releaseId')!='truss-catalog-runtime/0.76-temporal-candidate':raise ValueError('Custody belongs only to explicit native0.76')
+    if manifest.get('releaseId')!='truss-catalog-runtime/0.76-candidate':raise ValueError('Custody belongs only to explicit native0.76')
     for name,digest in expected.items():
         raw=(root.joinpath('_initialization_custody.py') if name.startswith('../') else native.joinpath(name)).read_bytes()
         if manifest['files'].get(name)!=digest or sha256(raw).hexdigest()!=digest:raise ValueError('Qualified custody source changed:'+name)
