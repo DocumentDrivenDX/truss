@@ -43,6 +43,10 @@ def _private_environment() -> dict[str, str]:
     for name in tuple(environment):
         if name.startswith('PG'):
             environment.pop(name, None)
+    # The runtime installs only into clusters initialized in UTC or America/New_York;
+    # initdb takes its default time zone from TZ, so pin an owned cluster to a supported one.
+    if environment.get('TZ') != 'America/New_York':
+        environment['TZ'] = 'UTC'
     return environment
 
 

@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 env:
+  TZ: UTC
   PIP_FIND_LINKS: https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2
 
 jobs:
