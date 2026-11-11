@@ -1,10 +1,10 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
-Running breadth-first search Model-Checking with fp 69 and seed -2827310412737936010 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 58932] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-guard_race-n_wejubt/BulkUpdate.tla
+Running breadth-first search Model-Checking with fp 35 and seed 2105005815971613094 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 24796] (Mac OS X 27.0.1 aarch64, Homebrew 21.0.13.0.3 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-guard_race-8ns5or7e/BulkUpdate.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Integers.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Sequences.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/TLC.tla
-Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-guard_race-n_wejubt/BulkUpdateJobTable.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-guard_race-8ns5or7e/BulkUpdateJobTable.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Naturals.tla
 Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/FiniteSets.tla
 Semantic processing of module Naturals
@@ -14,11 +14,11 @@ Semantic processing of module FiniteSets
 Semantic processing of module TLC
 Semantic processing of module BulkUpdateJobTable
 Semantic processing of module BulkUpdate
-Starting... (2026-11-10 13:14:44)
+Starting... (2026-11-10 19:38:01)
 Computing initial states...
 Computed 2 initial states...
 Computed 4 initial states...
-Finished computing initial states: 8 distinct states generated at 2026-11-10 13:14:44.
+Finished computing initial states: 8 distinct states generated at 2026-11-10 19:38:01.
 Error: Invariant FrozenTarget is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -48,4 +48,4 @@ s = [phase |-> "writing", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |
 93087 states generated, 26098 distinct states found, 13402 states left on queue.
 The depth of the complete state graph search is 8.
 The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 7).
-Finished in 00s at (2026-11-10 13:14:45)
+Finished in 00s at (2026-11-10 19:38:01)
