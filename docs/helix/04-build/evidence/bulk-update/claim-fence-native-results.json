@@ -1,0 +1,15 @@
+{
+  "scope": "Candidate bulk control functions on scratch PostgreSQL; levels 1-4, effect transaction, authority and custody NOT exercised",
+  "passed": true,
+  "checks": 27,
+  "seed": 20261110,
+  "role": "bulk-worker",
+  "lockLevel": "4a",
+  "postgres": "postgres (PostgreSQL) 18.6 (Homebrew)",
+  "sourceSha256": {
+    "bulk-control-layout.sql": "937f3c5c650ce686a5c08215fa0da8f198bc21f6703690bb7eb6de327690adc6",
+    "bulk-control-functions.sql": "3c58ec0101076e7a1a4446a7ba714774bb770adad697c1c3e8d4cacc9c0d0763",
+    "bulk-control-grants.sql": "fd22b6393c82791b45da985f171dcb83f34fa3159b3c6e0fb17d3d768a6e1c41"
+  },
+  "failed": []
+}
