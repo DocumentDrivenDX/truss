@@ -17,7 +17,7 @@ with tempfile.TemporaryDirectory(prefix='truss-census-build-') as build:
  args=['bun','build','packages/pg-runtime/tools/security-source-census-native.ts','--target=bun','--outdir='+str(build),'--metafile='+str(meta),'--sourcemap=external']
  built=command(args);(folder/'build.stdout.log').write_text(built.stdout);(folder/'build.stderr.log').write_text(built.stderr);require(built)
  graph=json.loads(meta.read_text());paths=[Path(p) for p in graph['inputs']]
- paths += [Path(__file__),Path('packages/postgresql/native/security-query-source-census.sql'),*[Path('tests')/p for p in ['security-source-census.test.ts','pg-wire.test.ts','query-journal.test.ts']],Path('docs/helix/04-build/evidence/inert-assembly/native-wire.json'),Path('bun.lock'),Path('package.json'),Path('packages/pg-runtime/package.json')]
+ paths += [Path(__file__),Path('packages/postgresql/native/security-query-source-census.sql'),*[Path('tests')/p for p in ['security-source-census.test.ts','pg-wire.test.ts','query-journal.test.ts']],Path('tests/fixtures/native-wire.json'),Path('bun.lock'),Path('package.json'),Path('packages/pg-runtime/package.json')]
  for p in list(paths):
   for parent in p.parents:
    manifest=parent/'package.json'

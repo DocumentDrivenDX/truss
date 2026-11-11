@@ -36,7 +36,7 @@ class ReadOnlyPublicTests(reader_tests.ReaderCatalogTests):
         self.assertIsInstance(assembly.accepted_document_in_transaction(tx,document_id='adoc').value,AcceptedDocument)
         self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
         try:
-            attempted=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            attempted=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN)
             self.assertIsInstance(attempted,Error);self.assertEqual(attempted.error.sql_state,'25006')
         finally:self.admin.execute('REVOKE group_writer FROM consumer')
         self.assertEqual(connection.execute('SHOW transaction_read_only').fetchone(),('on',))

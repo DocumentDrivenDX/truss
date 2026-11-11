@@ -7,10 +7,10 @@ import {decodeCapturedOriginContext} from '../packages/postgresql/src/captured-o
 import {prepareCanonicalWireTree} from '../packages/postgresql/src/canonical-wire-tree';
 import {createAcceptanceInputInspector} from '../packages/umf-bun/src/acceptance-input';
 import {createCanonicalAcceptanceReportHandoff,createProposedComposedAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
-const dependencies='/Users/erik/Projects/umf/package.json';
+const dependencies=new URL('../package.json',import.meta.url).pathname;
 const inspector=await createAcceptanceInputInspector(dependencies),report=await createCanonicalAcceptanceReportHandoff(dependencies),composed=await createProposedComposedAcceptanceReportHandoff(dependencies);
 const input=(await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input;
-const baseline=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
+const baseline=(await Bun.file('tests/fixtures/spec/report-wire-untrusted.fixture.json').json()).report;
 const proposal={...baseline,interfaceVersion:'truss-acceptance-report/0.3.0-proposal',lifecycleProfile:{identity:'test',version:'1',sha256:'a'.repeat(64)},reactivations:[]};
 const encode=(s:string)=>new TextEncoder().encode(s),hex=(b:Uint8Array)=>Buffer.from(b).toString('hex');
 const context3={interfaceVersion:'truss-native-operation-context/0.3',xid:'1',ordinal:'0',sessionUser:'login',actingUser:'reader',database:'fixture',backendPid:'1',actorRoleOid:'2',sessionRoleOid:'3',assertedOriginUtf8Hex:'6e756c6c',assertedOriginCaptureProfileHex:'01'};

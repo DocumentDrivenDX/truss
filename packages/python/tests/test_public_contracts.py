@@ -72,7 +72,7 @@ class PublicContractTests(unittest.TestCase):
         self.assertEqual(ExecutionFailure('commit_unknown', 'fixture', 'qualified_request_lookup').code, 'commit_unknown')
 
     def test_language_neutral_exact_value_vectors(self):
-        fixture = Path(__file__).resolve().parents[3] / 'docs/helix/03-test/fixtures/python-group-contract-values.json'
+        fixture = Path(__file__).resolve().parents[3] / 'packages/python/tests/fixtures/spec/python-group-contract-values.json'
         vectors = json.loads(fixture.read_text())
         for data in vectors['positive']:
             with self.subTest(data=data):

@@ -34,7 +34,7 @@ class CatalogCodeTests(catalog_tests.PublicCatalogRuntimeTests):
         unchanged=assembly.accept_in_transaction(tx,prepared,request_key='second')
         self.assertIsInstance(unchanged,Ok);self.assertIsInstance(unchanged.value,CatalogUnchanged)
         source=relational_document();source['id']='adoc'
-        changed=assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        changed=assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable=__import__('bun_path').BUN)
         self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unauthorized','P1403')
         self.assertIsInstance(assembly.report_in_transaction(tx),Ok)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))

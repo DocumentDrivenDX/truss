@@ -70,6 +70,6 @@ const core:any={umf:'0.8.0',id:'truss-action-store-core-0.1',vocabularies:{'trus
 const valid=validateDocument(core);if(!valid.valid)throw Error(JSON.stringify(valid.diagnostics));
 await Bun.write('docs/helix/02-design/models/truss-action-store-storage-0.1.proposal.umf.json',raw);
 await Bun.write('docs/helix/02-design/models/truss-action-store-core-0.1.proposal.umf.json',JSON.stringify(core)+'\n');
-await Bun.write('docs/helix/04-build/action-store.generated.sql',ddl);
+await Bun.write('packages/postgresql/generated/action-store.generated.sql',ddl);
 await Bun.write('packages/python/src/truss/_security_bootstrap/action-store-storage.sql',ddl);
 console.log(JSON.stringify({columns:record.members.length,ownerExport:true,savedExportIdentical:true,valid:valid.valid,complete:valid.complete,installed:false}));

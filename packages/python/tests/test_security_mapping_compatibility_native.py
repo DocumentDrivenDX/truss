@@ -22,7 +22,7 @@ class MappingCompatibilityNativeTests(mapping.MappingNativeTests):
  def accepted_current(self):
   self.install();c,h,a,t=self.consumer();source=relational_document();source['id']='domain'
   original=json.dumps(source,ensure_ascii=False,indent=2).encode()
-  prepared=a.prepare_catalog((CatalogDocument('domain','schema-1',original),),bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog((CatalogDocument('domain','schema-1',original),),bun_executable=__import__('bun_path').BUN)
   accepted=a.accept_in_transaction(t,prepared,request_key='original-native08')
   self.assertIsInstance(accepted,Ok,str(h._custody.last_attempt.error));h.detach();c.commit()
   c,h,a,t=self.consumer();view=a.catalog_view_in_transaction(t,a.catalog_view_request())
@@ -35,7 +35,7 @@ class MappingCompatibilityNativeTests(mapping.MappingNativeTests):
   self.assertFalse(result.security_ready);self.assertEqual(len(json.loads(result.original_response)['handoff']['scans']),2)
   c,h,a,t=self.consumer();c.execute("CREATE TEMP TABLE compatibility_prior(value text);INSERT INTO compatibility_prior VALUES('kept')")
   module=source['modules'][0];pin=module['pin']
-  prepared=a.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],module['documentJson'].encode()),),bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],module['documentJson'].encode()),),bun_executable=__import__('bun_path').BUN)
   accepted=a.accept_in_transaction(t,prepared,request_key='original10')
   self.assertIsInstance(accepted,Error);failure=str(h._custody.last_attempt.error)
   self.assertIn('Unselected catalog support source',failure)

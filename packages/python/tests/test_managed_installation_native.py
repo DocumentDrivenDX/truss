@@ -57,7 +57,7 @@ class ManagedInstallationTests(mutation_tests.ObjectMutationTests):
         connection,host,assembly,tx=self.consumer()
         created,_,_=self.run_group(assembly,tx,(self.create(),),'managed-create');self.assertIsInstance(created,GroupSuccess)
         reader=assembly.direct_reads(assembly.direct_read_selection).capability
-        found=reader.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable='/opt/homebrew/bin/bun')
+        found=reader.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(found.value,ObjectFound)
         host.detach();connection.commit()
         connection,host,assembly,tx=self.consumer()

@@ -13,7 +13,7 @@ class OriginalUmfKeyTupleTests(unittest.TestCase):
         return json.dumps(value).encode()
 
     def encode(self,requests,source=None):
-        return encode_string_key_tuples(self.source() if source is None else source,requests,bun_executable='/opt/homebrew/bin/bun')
+        return encode_string_key_tuples(self.source() if source is None else source,requests,bun_executable=__import__('bun_path').BUN)
 
     def test_composite_component_order_and_ambiguous_concatenations(self):
         requests=tuple(KeyTupleRequest('m','A','a-primary',values) for values in (('ab','c'),('a','bc'),('c','ab')))

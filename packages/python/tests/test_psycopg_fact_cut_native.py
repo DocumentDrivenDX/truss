@@ -37,7 +37,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     cls.semantic_relations[name]=_FactRelationComparison('truss',name,oid,owner,(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0])
                 cls.bindings={r[0]:_FactRelationComparison('truss',r[0],r[1],r[2],(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]) for r in c.execute("SELECT relname,oid,relowner FROM pg_class WHERE oid IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)")}
                 c.execute((ROOT/'packages/postgresql/native/source-epoch-shared-authority-writer.sql').read_text())
-                c.execute((ROOT/'docs/helix/04-build/evidence/authority-epoch-reason.owner-export.sql').read_text())
+                c.execute((ROOT/'packages/postgresql/generated/authority-epoch-reason.owner-export.sql').read_text())
                 c.execute((ROOT/'packages/postgresql/native/source-epoch-authority-issue.sql').read_text())
         except BaseException:
             epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__(cls)
@@ -165,7 +165,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         fields=tuple(_DependencyFactProvider('field',('domain','m',ref),self.semantic_relations[table],_FactColumnComparison(name,num,oid,-1,True,100 if oid==25 else 0)) for ref,table,name,num,oid in specs)
         return fields+tuple(_DependencyFactProvider('association',('domain','m',ref),self.semantic_relations[table]) for ref,table in [('Assignment','sec_assignment'),('Ownership','sec_ownership')])
     def dependency_cut(self,t,callback,providers=None):
-        raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
+        raw=(ROOT/'packages/python/tests/fixtures/security/security-fact-requirements/requirements.json').read_bytes()
         return _run_dependency_fact_operation(self.host,t,self.comparison(),raw,hashlib.sha256(raw).hexdigest(),self.dependency_providers() if providers is None else providers,callback)
     def test_complete_original_dependency_fixture_cuts_all_five_tables(self):
         t=self.begin()
@@ -207,7 +207,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 c.execute(query,prepare=False,binary=False)
                 self.assertTrue(all(d.type_code==25 for d in c.description))
                 rows=c.fetchmany(101);self.assertLessEqual(len(rows),100);capture[name]=rows
-            result=subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-flat-fixture.ts'],cwd=ROOT,input=json.dumps(capture),capture_output=True,text=True,timeout=20)
+            result=subprocess.run([__import__('bun_path').BUN,'scripts/evaluate-security-flat-fixture.ts'],cwd=ROOT,input=json.dumps(capture),capture_output=True,text=True,timeout=20)
             self.assertEqual(result.returncode,0,result.stderr)
             return json.loads(result.stdout)
         result=self.dependency_cut(t,evaluate,providers);self.assertIsInstance(result,Ok);return result.value
@@ -235,7 +235,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.assertEqual(self.connection.execute('SELECT active,decoy_active FROM truss.sec_assignment').fetchall(),[(False,True)])
 
     def bound_profile(self,providers=None):
-        raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
+        raw=(ROOT/'packages/python/tests/fixtures/security/security-fact-requirements/requirements.json').read_bytes()
         return raw,json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
     def issue_bound_profile(self,raw_profile,*,predecessor=None):
         epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch if predecessor is None else predecessor,raw_profile,b'bound-fixture')).fetchone()[0]
@@ -311,14 +311,14 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
 
     def identity_dependency_providers(self):
         return self.dependency_providers()+tuple(_DependencyFactProvider('field',('domain','m',ref),self.semantic_relations[table],_FactColumnComparison(column,1,25,-1,True,100)) for ref,table,column in [('assignmentId','sec_assignment','assignment_id'),('ownerId','sec_ownership','owner_id')])
-    def identity_raw(self):return (ROOT/'docs/helix/04-build/evidence/security-identity-requirements/requirements.json').read_bytes()
+    def identity_raw(self):return (ROOT/'packages/python/tests/fixtures/security/security-identity-requirements/requirements.json').read_bytes()
     def identity_capture(self,t,providers=None):
         raw=self.identity_raw();profile=json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.identity_dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
         comparison=self.issue_bound_profile(profile)
         return _capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
     def reconstruct_identity_fixture(self,t,providers=None):
         captured=self.identity_capture(t,providers);self.assertIsInstance(captured,Ok)
-        return subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-captured-identity-fixture.ts'],cwd=ROOT,input=json.dumps([asdict(c) for c in captured.value]),capture_output=True,text=True,timeout=20)
+        return subprocess.run([__import__('bun_path').BUN,'scripts/evaluate-security-captured-identity-fixture.ts'],cwd=ROOT,input=json.dumps([asdict(c) for c in captured.value]),capture_output=True,text=True,timeout=20)
     def identity_decision(self,mutation=None,providers=None):
         t=self.begin()
         if mutation:self.connection.execute(mutation)
@@ -887,7 +887,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
 
     def source_bound_profile(self):
         from truss._psycopg_dependency_fact_cut import _OriginalFactSources
-        base=ROOT/'docs/helix/04-build/evidence/security-identity-requirements'
+        base=ROOT/'packages/python/tests/fixtures/security/security-identity-requirements'
         sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
         raw=self.identity_raw()
         profile=json.dumps({'kind':'truss-flat-fact-provider-fixture/0.2','requirementsSha256':hashlib.sha256(raw).hexdigest(),'policyUtf8':sources.policy.decode('utf8'),'resolutionUtf8':sources.resolution.decode('utf8'),'providers':[asdict(p) for p in self.identity_dependency_providers()]},sort_keys=True,separators=(',',':')).encode()
@@ -958,7 +958,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         import security_owned_read as tool
         original_run=tool.subprocess.run;observed=[]
         def during(command,*args,**kwargs):
-            if command[0]=='/opt/homebrew/bin/bun' and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
+            if command[0]==__import__('bun_path').BUN and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
                 self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass,'truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(7,))
                 with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
                     for statement in ('UPDATE truss.sec_assignment SET active=false','SELECT truss.runtime_fence_shared_authority_writer()'):
@@ -1048,7 +1048,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             run_ddl_fenced_named_subject_resource_read(None,None,None,None,None,None,None,None)
         from truss._psycopg_dependency_fact_cut import _OriginalFactSources
         from truss._psycopg_subject_observation import _SubjectSelection
-        base=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
+        base=ROOT/'packages/python/tests/fixtures/security/security-named-source-profile'
         raw=(base/'requirements.json').read_bytes()
         sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
         self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text());self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")

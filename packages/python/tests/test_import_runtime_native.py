@@ -41,7 +41,7 @@ class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
 
     def execute(self,assembly,tx,context,records,load='load'):
         input=context.input(records,load_id=load,asserted_origin=MapValue(entries=(MapEntry(key='x-initiated-by',value=TextValue(kind='string',text='adapter')),)))
-        result=assembly.import_in_transaction(tx,input,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        result=assembly.import_in_transaction(tx,input,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         if not isinstance(result,ImportReported):self.fail(repr(result)+' '+str(assembly._host._custody.last_attempt.error))
         return result.report
 
@@ -68,7 +68,7 @@ class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
         a,b=(r.identity for r in created.response.semantic.results)
         pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer();context=assembly.import_context_in_transaction(tx).value
-        imports=assembly.imports(assembly.import_selection,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').capability
+        imports=assembly.imports(assembly.import_selection,documents=self.documents,bun_executable=__import__('bun_path').BUN).capability
         built=imports.edge_import_record_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',
             source_endpoint=a,target_endpoint=b,values=(),order_key=NullOrderKey())
         self.assertIsInstance(built,Ok);edge=built.value

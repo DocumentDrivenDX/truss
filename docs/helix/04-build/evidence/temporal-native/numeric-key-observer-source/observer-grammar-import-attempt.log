@@ -1,1 +1,0 @@
-Initial offline pglast-only environment import attempt FAILED before SQL parsing: ModuleNotFoundError: No module named psycopg. No SQL/server/native execution occurred.

@@ -72,7 +72,7 @@ class InstallationBatchingNativeTests(unittest.TestCase):
         self.connection.execute(
             (
                 ROOT
-                / "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql"
+                / "packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql"
             ).read_text(),
             prepare=False,
         )

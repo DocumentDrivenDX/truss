@@ -38,7 +38,7 @@ test('oversized header refuses before body allocation or forwarding and remains 
  expect(()=>partial.finish()).toThrow('incomplete');
 });
 
-import nativeWire from '../docs/helix/04-build/evidence/inert-assembly/native-wire.json';
+import nativeWire from '../tests/fixtures/native-wire.json';
 test('invalid text row refuses before forwarding to original parser',()=>{
  const originalDescription=Uint8Array.from(Buffer.from(nativeWire.frames[0].originalHex,'hex'));
  const ingress=new ResponseIngress({...limits,maxTotalBytes:4096,maxFrames:4});let calls=0;

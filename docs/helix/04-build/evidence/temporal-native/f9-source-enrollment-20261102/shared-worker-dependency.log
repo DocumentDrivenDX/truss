@@ -1,9 +1,0 @@
-Using Python 3.11.17 environment at: /private/tmp/truss-temporal-current054-venv
-Resolved 5 packages in 867ms
-Prepared 5 packages in 396ms
-Installed 5 packages in 16ms
- + asn1crypto==1.5.1
- + pg8000==1.31.5
- + python-dateutil==4.0.0
- + scramp==1.5.0
- + tzdata==2026.6

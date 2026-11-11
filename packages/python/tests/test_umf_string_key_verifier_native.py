@@ -62,7 +62,7 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
                 {'id':'R','kind':'record','members':refs,'keys':[{'id':'wide','name':'wide','fields':refs}],'extensions':{}},*fields]}]}
         values=('x'*16384,*('' for _ in range(127)))
         request=KeyTupleRequest('m','R','wide',values)
-        receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')[0]
+        receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable=__import__('bun_path').BUN)[0]
         self.assertTrue(self.matches(receipt.tuple_bytes,list(values)))
 
     def test_inclusive_component_limit_matches_owner(self):
@@ -78,11 +78,11 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
             values=('',)*count;request=KeyTupleRequest('m','R','limit',values)
             with self.subTest(count=count):
                 if count==1024:
-                    receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')[0]
+                    receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable=__import__('bun_path').BUN)[0]
                     self.assertTrue(self.matches(receipt.tuple_bytes,list(values)))
                 else:
                     with self.assertRaisesRegex(ValueError,'UMF key tuple refused'):
-                        encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')
+                        encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable=__import__('bun_path').BUN)
                     # Canonical UMFK1 with a 1025-component count and empty strings.
                     # The current producer refuses this count before emitting bytes.
                     original=b'UMFK1'+b'\x81\x08'+b'\x04\x00'*1025
@@ -106,7 +106,7 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
         for total in (1048576,1048577):
             value='x'*(total-10)
             payload=json.dumps({'sourceText':source,'identity':{'module':'m','element':'A','key':'z-alt'},'values':[{'string':value}]}).encode()
-            result=_capture(['/opt/homebrew/bin/bun','--eval',script],input_bytes=payload,limit=3145728,timeout=10)
+            result=_capture([__import__('bun_path').BUN,'--eval',script],input_bytes=payload,limit=3145728,timeout=10)
             self.assertEqual(result.returncode,0)
             original=bytes.fromhex(result.stdout.decode())
             self.assertEqual(len(original),total)

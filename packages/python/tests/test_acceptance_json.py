@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 class AcceptanceJsonTests(unittest.TestCase):
     def test_original_shared_vectors(self):
-        corpus = json.loads((ROOT / 'docs/helix/03-test/acceptance-outer-json-expected.proposal.json').read_text())
+        corpus = json.loads((ROOT / 'tests/fixtures/spec/acceptance-outer-json-expected.proposal.json').read_text())
         for case in corpus['cases']:
             with self.subTest(case=case['name']):
                 original = bytes.fromhex(case['utf8Hex'])

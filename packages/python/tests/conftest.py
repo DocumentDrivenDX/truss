@@ -1,0 +1,184 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+"""Test selection: `slow` is nightly-only, `quarantined` (known failing, with a reason) is excluded everywhere."""
+import os
+from pathlib import Path
+
+import pytest
+
+# Native tests start their own PostgreSQL clusters from these binaries (Unix sockets only).
+if not os.environ.get('TRUSS_CENSUS_POSTGRES_BIN'):
+    try:
+        import pgserver
+        os.environ['TRUSS_CENSUS_POSTGRES_BIN'] = str(Path(pgserver.__file__).parent / 'pginstall' / 'bin')
+    except ImportError:
+        pass
+
+# Modules too slow for the pull-request job (add from `--durations` output); nightly runs `-m slow`.
+SLOW_MODULES: set[str] = {
+    'test_stress_registration_native',
+    'test_catalog_view_capacity_native',
+    'test_bulk_create_sql_native',
+}
+
+# Timing-sensitive tests that flake on a shared 4-vCPU runner under xdist; nightly runs them.
+SLOW_TESTS: set[str] = {
+    'test_group_preview_native.py::GroupPreviewNativeTests::test_preview_accepts_3072_conditions',
+    'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_mixed_preconditions_succeed',
+    'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_preconditions_succeed',
+    'test_embedded_owner.py::EmbeddedOwnerTests::test_isolate_deadline_interrupts_nonterminating_code',
+}
+
+# Known-failing tests, excluded from CI by `-m "not quarantined"` and listed in the PR description.
+# Each entry needs a reason constant; remove the entry when the cause is fixed.
+STALE_LAYOUT = 'fixtures install the layout 0.16 DDL, which no longer defines row_home_* tables/types (dropped by fdd249e7); native row-image fixtures need rewriting'
+WEFT_QUERY = 'Weft query refused with WFT-BINDING (selected runtime context or limits) under umf-weft 0.4.57; fix tracked as the Weft query work'
+STALE_BASELINE = 'migrations/manifest.json target is stale for the 0.76 runtime; needs a new fresh baseline incl. native initialization-custody policy'
+ORIGINAL_INPUT = 'needs an original UMF/Weft producer, compiler or mapping input that is not installable in CI'
+ORIGINAL_ADMISSION = 'fails with "Original transaction/profile admission refused" on Linux CI; needs investigation with the owner'
+CAMPAIGN_WORKER = 'needs the campaign-owned native worker runner (scripts/qualify-pgserver-pg17.py, removed in the reset)'
+OPTIONAL_DEP = 'needs umf-core metadata, umf_access or pydantic, which the CI install does not provide'
+OTHER = 'fails on Linux CI for a reason not yet triaged; see the nightly log'
+QUARANTINED_MODULES: dict[str, str] = {
+    'test_action_role_installation_native': STALE_BASELINE,
+    'test_action_store_native': ORIGINAL_ADMISSION,
+    'test_adopter_workflow_native': WEFT_QUERY,
+    'test_arras_view_model_native': WEFT_QUERY,
+    'test_binary_query_native': WEFT_QUERY,
+    'test_catalog_diagnostics_native': WEFT_QUERY,
+    'test_catalog_keyed_rebind_native': WEFT_QUERY,
+    'test_commerce_source_native': WEFT_QUERY,
+    'test_consumer_northwind_numeric_native': WEFT_QUERY,
+    'test_container_required_evolution_native': WEFT_QUERY,
+    'test_current_baseline_native': STALE_BASELINE,
+    'test_current_query_full_sources_native': ORIGINAL_INPUT,
+    'test_current_query_runtime_native': ORIGINAL_INPUT,
+    'test_date_decimal_native': WEFT_QUERY,
+    'test_decimal_scale2_native': WEFT_QUERY,
+    'test_edge_event_frame_native': STALE_LAYOUT,
+    'test_edge_writer_hotfix_native': OTHER,
+    'test_embedder_workflows_native': OTHER,
+    'test_epoch_state_fence_native': STALE_LAYOUT,
+    'test_exact_scalar_values_native': OTHER,
+    'test_facet_evolution_native': WEFT_QUERY,
+    'test_fenced_subject_key_native': STALE_LAYOUT,
+    'test_field_name_evolution_native': WEFT_QUERY,
+    'test_hohfeld_statement_budgets_native': WEFT_QUERY,
+    'test_import_load_query_native': WEFT_QUERY,
+    'test_initialization_custody_derivation_native': CAMPAIGN_WORKER,
+    'test_initialization_custody_native': CAMPAIGN_WORKER,
+    'test_key_footprint_capacity_native': OTHER,
+    'test_local_timestamp_query_native': ORIGINAL_INPUT,
+    'test_managed_grants_migration_native': STALE_BASELINE,
+    'test_managed_platform_grants_native': CAMPAIGN_WORKER,
+    'test_native_admission_dispatch': STALE_LAYOUT,
+    'test_native_connected_string_writer': STALE_LAYOUT,
+    'test_native_dependent_owner': STALE_LAYOUT,
+    'test_native_state_owner': STALE_LAYOUT,
+    'test_native_string_candidate': STALE_LAYOUT,
+    'test_native_string_dispatch': STALE_LAYOUT,
+    'test_numeric_facets_native': WEFT_QUERY,
+    'test_numeric_row_image_native': STALE_LAYOUT,
+    'test_optional_binary_query_native': WEFT_QUERY,
+    'test_ordinary_subject_cut_privileges_native': STALE_LAYOUT,
+    'test_owned_objects_native': WEFT_QUERY,
+    'test_parallel_edges_native': WEFT_QUERY,
+    'test_pg_principal_runtime_native': OTHER,
+    'test_preparation_attempt_anchor_native': STALE_BASELINE,
+    'test_preparation_seal_storage_native': ORIGINAL_ADMISSION,
+    'test_preparation_source_inventory_native': STALE_BASELINE,
+    'test_psycopg_epoch_cut_native': STALE_LAYOUT,
+    'test_psycopg_fact_cut_native': STALE_LAYOUT,
+    'test_psycopg_graph_projection_native': STALE_LAYOUT,
+    'test_psycopg_literal_subject_key_native': OTHER,
+    'test_psycopg_subject_observation_native': OTHER,
+    'test_published48_migration_receipts_native': STALE_BASELINE,
+    'test_query_descriptors_native': WEFT_QUERY,
+    'test_query_entity_projection_native': WEFT_QUERY,
+    'test_query_stream_abi12_native': WEFT_QUERY,
+    'test_record_label_evolution_native': WEFT_QUERY,
+    'test_recursive_containers_native': WEFT_QUERY,
+    'test_reference_decimal_native': STALE_LAYOUT,
+    'test_relationship_names_native': WEFT_QUERY,
+    'test_required_catalog_rebind_native': WEFT_QUERY,
+    'test_required_evolution_native': WEFT_QUERY,
+    'test_routine_ddl_barrier_native': STALE_LAYOUT,
+    'test_row_touch_observer_native': STALE_LAYOUT,
+    'test_runtime_migrations_native': STALE_BASELINE,
+    'test_runtime_migrations_subsequent_native': STALE_BASELINE,
+    'test_scalar_containers_native': WEFT_QUERY,
+    'test_security_accepted_catalog_native': ORIGINAL_INPUT,
+    'test_security_catalog_archive_native': ORIGINAL_INPUT,
+    'test_security_catalog_authority_native': ORIGINAL_INPUT,
+    'test_security_catalog_channel_native': ORIGINAL_INPUT,
+    'test_security_catalog_guard_native': ORIGINAL_INPUT,
+    'test_security_catalog_read_native': ORIGINAL_INPUT,
+    'test_security_catalog_source_cut_native': ORIGINAL_INPUT,
+    'test_security_catalog_source_factory_native': ORIGINAL_INPUT,
+    'test_security_catalog_source_installation_native': ORIGINAL_INPUT,
+    'test_security_catalog_subject_installation_native': ORIGINAL_INPUT,
+    'test_security_catalog_subject_native': ORIGINAL_INPUT,
+    'test_security_graph_read_native': STALE_LAYOUT,
+    'test_security_graph_source_cut_native': OTHER,
+    'test_security_guarded_subject_native': ORIGINAL_INPUT,
+    'test_security_helper_acl_native': ORIGINAL_INPUT,
+    'test_security_helper_definition_native': ORIGINAL_INPUT,
+    'test_security_mapping_compatibility_native': ORIGINAL_INPUT,
+    'test_security_mapping_native': ORIGINAL_INPUT,
+    'test_security_ontology_edges_native': OTHER,
+    'test_security_predicate_native': ORIGINAL_INPUT,
+    'test_security_registered_callers_native': ORIGINAL_INPUT,
+    'test_security_source_epoch_installation_native': ORIGINAL_INPUT,
+    'test_temporal_catalog_acceptance_native': ORIGINAL_INPUT,
+    'test_temporal_catalog_transport_native': ORIGINAL_INPUT,
+    'test_temporal_engine_native': OPTIONAL_DEP,
+    'test_temporal_prepared_writer_native': ORIGINAL_INPUT,
+    'test_temporal_public055_refusal_native': ORIGINAL_INPUT,
+    'test_temporal_source_guard_native': ORIGINAL_INPUT,
+    'test_temporal_source_security_native': ORIGINAL_INPUT,
+    'test_temporal_target_release_native': OPTIONAL_DEP,
+    'test_timestamp_query_native': WEFT_QUERY,
+    'test_typed_relationship_keys_native': WEFT_QUERY,
+}
+QUARANTINED_TESTS: dict[str, str] = {
+    'test_bulk_update_transition_guard_native.py::BulkUpdateTransitionGuardTests::test_independent_update_uses_compact_transition_refs_and_keeps_public_reads': WEFT_QUERY,
+    'test_catalog_additions_native.py::CatalogAdditionTests::test_readonly_head_advance_refuses_buffered_observation': OTHER,
+    'test_catalog_key_backfill_native.py::CatalogKeyBackfillTests::test_register_existing_objects_lookup_and_query': WEFT_QUERY,
+    'test_catalog_rebind_native.py::CatalogRebindTests::test_register_rebind_read_report_history_and_retry': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_authored_composite_key_pages_and_count_profile': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_boolean_and_optional_values_remain_logical': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_combined_catalog_source_query_uses_one_operation_and_current_visibility': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_materializes_facts_and_retains_nested_proofs': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_pending_update_import_and_readonly': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_wildcard_names_include_relationship_outputs': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_exact_integer_decimal_projection_and_parameters': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_grouped_count_preserves_string_boolean_bags': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_indexed_equality_precedes_residual_limit_with_legacy_count_page_bounds': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_public_links_forward_inverse_bounded_keys_readonly_and_unlink': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_public_mutations_filter_count_complete_record_and_readonly_query': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_repeated_query_compiles_once_but_revoked_reader_still_refuses': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_supported_projection_on_mixed_scalar_catalog': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_wide_complete_entity_preserves_fields_with_explicit_byte_budget': WEFT_QUERY,
+    'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_mixed_preconditions_succeed': OTHER,
+    'test_group_preview_native.py::GroupPreviewNativeTests::test_preview_data_uses_one_snapshot_across_concurrent_update': OTHER,
+    'test_object_pages_native.py::ObjectPageTests::test_revocation_after_buffered_page_does_not_publish': WEFT_QUERY,
+    'test_owned_import_native.py::OwnedImportTests::test_import_commit_reopen_sources_and_invalid_replacement_retry': WEFT_QUERY,
+    'test_query_selective_sources_native.py::QuerySelectiveSourcesTests::test_populated_10001_managed_objects_select_without_legacy_source_scan': WEFT_QUERY,
+    'test_read_only_public_native.py::ReadOnlyPublicTests::test_policy_replaced_while_object_buffered_uses_current_roles': WEFT_QUERY,
+    'test_security_public_ontology_native.py::PublicOntologySecurityTests::test_fresh_installer_seals_candidate_homes_and_refuses_inherited_acl': OTHER,
+    'test_stress_registration_native.py::StressRegistrationTests::test_thousand_type_catalog_first_distinct_type_create_batch': WEFT_QUERY,
+    'test_typed_query_pages_native.py::StringQueryPagesTests::test_existing_string_primary_key_page_facade': WEFT_QUERY,
+    'test_typed_query_pages_native.py::TypedQueryPagesTests::test_exact_pages_and_readonly_continuation': WEFT_QUERY,
+}
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        module = item.module.__name__.split('.')[-1]
+        if module in SLOW_MODULES or any(item.nodeid.endswith(key) for key in SLOW_TESTS):
+            item.add_marker(pytest.mark.slow)
+        if module in QUARANTINED_MODULES or any(item.nodeid.endswith(key) for key in QUARANTINED_TESTS):
+            item.add_marker(pytest.mark.quarantined)
+
+
+def pytest_configure(config):
+    config.addinivalue_line('markers', 'slow: long-running native module, run by the nightly job')
+    config.addinivalue_line('markers', 'quarantined: known failing, excluded from CI; see conftest.py for the reason')

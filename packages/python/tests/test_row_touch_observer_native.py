@@ -16,8 +16,8 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
         super().setUpClass()
         c=cls.Connection(**cls.kwargs)
         try:
-            c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
-            c.run((ROOT/'docs/helix/04-build/evidence/design-audit/capacity-reservation-source.owner-export.sql').read_text())
+            c.run((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text())
+            c.run((ROOT/'packages/postgresql/generated/capacity-reservation-source.owner-export.sql').read_text())
             for name in ('row-image/codec','row-image/state-owner','row-image/dependent-owner','capacity-reservation/custody-codec','capacity-reservation/custody-size','capacity-reservation/accounting','capacity-reservation/observation','operation-commit-barrier','row-touch/observe'):
                 c.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
             for table,names in [('row_home_operation',('capacity_operation_insert','capacity_operation_update')),('row_home_touch',('capacity_touch_insert','capacity_touch_update'))]:

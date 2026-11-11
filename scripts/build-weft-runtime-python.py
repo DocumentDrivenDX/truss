@@ -12,8 +12,6 @@ import tarfile
 import tempfile
 import tomllib
 
-from release_cohort import load_cohort
-# No source pin is emitted before the actual coherent cohort is qualified.
 
 
 def check_wheel(wheel: Path, expected_version: str):
@@ -47,11 +45,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('repository', type=Path, help='Local DocumentDrivenDX/weft clone containing the pinned commit')
     parser.add_argument('output', type=Path, help='New or empty build directory')
+    parser.add_argument('--revision', required=True, help='Weft git revision (commit or tag) to build')
     parser.add_argument('--offline', action='store_true', help='Require already cached Cargo dependencies')
     parser.add_argument('--profile', choices=('release', 'dev'), default='release',
                         help='Explicit Cargo build profile; no automatic fallback')
     args = parser.parse_args()
-    revision = load_cohort(require_qualified=True)['qualified']['weftSourceRevision']
+    revision = args.revision
     output = args.output.resolve()
     if output.exists() and any(output.iterdir()):
         parser.error('Build directory must be new or empty')

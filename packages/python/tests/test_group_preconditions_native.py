@@ -29,7 +29,7 @@ class GroupPreconditionTests(mutation_tests.ObjectMutationTests):
         context=assembly.group_context_in_transaction(tx).value
         operation=UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='new')),),unset=(),expected_version='1')
         input=context.input((operation,),MapValue(entries=()),preconditions=conditions);request=context.request(key)
-        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         if not isinstance(result,Ok):self.fail(repr(result)+' '+str(assembly._host._custody.last_attempt.error))
         return result.value,input,request
 

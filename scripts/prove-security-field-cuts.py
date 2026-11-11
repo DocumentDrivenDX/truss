@@ -3,7 +3,7 @@
 from pathlib import Path
 import hashlib,json,uuid,z3
 root=Path.cwd();out=root/'docs/helix/04-build/evidence/security-field-cuts-formal'/str(uuid.uuid4());out.mkdir(parents=True)
-paths=['scripts/prove-security-field-cuts.py','packages/python/src/truss/_security_fact_coverage.py','packages/python/src/truss/_psycopg_fact_cut.py','docs/helix/04-build/evidence/security-fact-requirements/requirements.json','docs/helix/04-build/evidence/security-fact-requirements/policy.json','docs/helix/04-build/evidence/security-fact-requirements/resolution.json','packages/python/src/truss/_psycopg_dependency_fact_cut.py']
+paths=['scripts/prove-security-field-cuts.py','packages/python/src/truss/_security_fact_coverage.py','packages/python/src/truss/_psycopg_fact_cut.py','packages/python/tests/fixtures/security/security-fact-requirements/requirements.json','packages/python/tests/fixtures/security/security-fact-requirements/policy.json','packages/python/tests/fixtures/security/security-fact-requirements/resolution.json','packages/python/src/truss/_psycopg_dependency_fact_cut.py']
 pins={}
 for name in paths:
  raw=(root/name).read_bytes();pins[name]=hashlib.sha256(raw).hexdigest();p=out/'preimages'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)

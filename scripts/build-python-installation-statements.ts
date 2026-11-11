@@ -5,7 +5,7 @@ import {getPostgresqlNode,proposePostgresqlNodeEdit,exportPostgresqlSql} from '/
 import {renderTree} from '/Users/erik/Projects/umf/src/model/native-json';
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 const modelPath='docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json';
-const exportPath='docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql';
+const exportPath='packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql';
 const hash=(value:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(value).digest('hex');
 const model=await Bun.file(modelPath).text(),document=readDocument(model,'json');
 const originalExport=await Bun.file(exportPath).text();

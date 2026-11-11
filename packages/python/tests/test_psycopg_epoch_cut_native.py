@@ -16,7 +16,7 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
     def setUpClass(cls):
         host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
         with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
-            c.execute((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
+            c.execute((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text())
             for n in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):
                 c.execute((ROOT/f'packages/postgresql/native/{n}.sql').read_text())
             c.execute("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0','fixture','fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)")

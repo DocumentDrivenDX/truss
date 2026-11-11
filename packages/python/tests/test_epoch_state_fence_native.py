@@ -15,7 +15,7 @@ class EpochStateFenceNativeTests(NativeBoundaryFixture,unittest.TestCase):
         cls.kwargs={**cls.kwargs,'database':'epoch_state_fence_component'}
         c=cls.Connection(**cls.kwargs)
         try:
-            c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
+            c.run((ROOT/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text())
             for name in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue',
                          'source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):
                 c.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())

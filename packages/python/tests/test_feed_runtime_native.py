@@ -162,7 +162,7 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
             values=self.create(label='imported',value='imported',record='B').values,
             source=MapValue(entries=(MapEntry(key='system',value=TextValue(kind='string',text='adapter')),))).value
         imported=assembly.import_in_transaction(tx,context.input((record,),load_id='feed-load',asserted_origin=MapValue(entries=())),
-            documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(imported,ImportReported);target=imported.report.outcomes[0].identity
         relationship=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value
         linked,_,_=self.run_group(assembly,tx,(CreateEdge(relationship_definition_pin=relationship.definition_pin,

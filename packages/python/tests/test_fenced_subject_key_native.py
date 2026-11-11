@@ -56,14 +56,14 @@ class FencedSubjectKeyNativeTests(unittest.TestCase):
    def inspected_encoder(*args,**kwargs):
     with self.assertRaises(psycopg.errors.LockNotAvailable):admin.execute("UPDATE truss.subject_fact SET staff_id='blocked'")
     held.append(True);return encode_literal_key_tuple(*args,**kwargs)
-   def bind():return _observe_fenced_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,self.relations,bun_executable='/opt/homebrew/bin/bun')
+   def bind():return _observe_fenced_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,self.relations,bun_executable=__import__('bun_path').BUN)
    with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=inspected_encoder):
     # NOWAIT on writer side gives deterministic exclusion instead of waiting.
     admin.execute("SET lock_timeout='100ms'")
     result=bind()
    self.assertIsInstance(result,Ok,str(host._custody.last_attempt.error));self.assertEqual(held,[True]);self.assertEqual(result.value.observation.values,('fresh',))
    self.assertEqual(json.loads(result.value.original_receipt_bytes)['values'],[{'string':'fresh'}])
-   self.assertIsInstance(_observe_ordinary_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),bun_executable='/opt/homebrew/bin/bun'),Error)
+   self.assertIsInstance(_observe_ordinary_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),bun_executable=__import__('bun_path').BUN),Error)
    c.execute('ROLLBACK')
    admin.execute('BEGIN');admin.execute("UPDATE truss.subject_fact SET staff_id='pending'")
    c.execute('BEGIN');t=host.adopt_transaction();self.assertIsInstance(t,Ok)
@@ -73,7 +73,7 @@ class FencedSubjectKeyNativeTests(unittest.TestCase):
    encoded=[]
    def forbidden_encoder(*args,**kwargs):encoded.append(True);raise AssertionError('must not encode')
    with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=forbidden_encoder):
-    self.assertIsInstance(_observe_fenced_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,bad,bun_executable='/opt/homebrew/bin/bun'),Error)
+    self.assertIsInstance(_observe_fenced_subject_key(host,t.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,bad,bun_executable=__import__('bun_path').BUN),Error)
    self.assertEqual(encoded,[]);c.execute('ROLLBACK')
    c.execute('BEGIN');t=host.adopt_transaction();self.assertIsInstance(t,Ok)
    def same_writer_encoder(*args,**kwargs):
@@ -82,7 +82,7 @@ class FencedSubjectKeyNativeTests(unittest.TestCase):
    with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=same_writer_encoder):self.assertIsInstance(bind(),Error)
    self.assertEqual(admin.execute('SELECT staff_id FROM truss.subject_fact').fetchone(),('fresh',));c.execute('ROLLBACK')
    c.execute('BEGIN READ ONLY');ro=host.adopt_transaction(access_mode='read_only');self.assertIsInstance(ro,Ok)
-   self.assertIsInstance(_observe_fenced_subject_key(host,ro.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,self.relations,bun_executable='/opt/homebrew/bin/bun'),Error)
+   self.assertIsInstance(_observe_fenced_subject_key(host,ro.value,selection,weft.inspect_security_mapping_subject_key_json,('string',),comparison,self.relations,bun_executable=__import__('bun_path').BUN),Error)
    c.execute('ROLLBACK')
    output=os.environ.get('TRUSS_FENCED_SUBJECT_EVIDENCE')
    if output:Path(output).write_text(json.dumps({'serverVersion':admin.execute('SHOW server_version').fetchone()[0],'cases':['read committed sees post-transaction-start committed subject value','writer blocked during original codec','pending writer refuses acquisition','original stable profile still rejects read committed','fenced profile rejects read-only','wrong relation binding refuses before encoder','same-reader write refuses without changing fact'],'observedValues':result.value.observation.values,'originalReceipt':result.value.original_receipt_bytes.decode(),'scope':'Ordinary-role source/declared fact cut component with deliberately broad invoker fixture grants; not bypass-safe installation, complete dependency closure, role/helper/configwriter exclusion, current authority or protected release'},indent=2)+'\n')

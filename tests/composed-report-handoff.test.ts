@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCanonicalAcceptanceReportHandoff,createProposedComposedAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
-const dependencies='/Users/erik/Projects/umf/package.json';
+const dependencies=new URL('../package.json',import.meta.url).pathname;
 const baseline=await createCanonicalAcceptanceReportHandoff(dependencies);
 const composed=await createProposedComposedAcceptanceReportHandoff(dependencies);
-const original=(await Bun.file('docs/helix/03-test/report-wire-untrusted.fixture.json').json()).report;
+const original=(await Bun.file('tests/fixtures/spec/report-wire-untrusted.fixture.json').json()).report;
 const pin={identity:'synthetic',version:'0.1.0',sha256:'a'.repeat(64)};
 const artifact={identity:'synthetic',bytesBase64:'e30=',sha256:'a'.repeat(64)};
 const present={present:true,value:{kind:'null'}},absent={present:false};

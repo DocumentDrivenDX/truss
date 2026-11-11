@@ -15,7 +15,7 @@ class CurrentQueryPipeTests(unittest.TestCase):
             _envelope(b'{"requestId":1e3}')
 
     def test_original_frames_share_child_and_retain_exact_response(self):
-        bun = shutil.which('bun') or '/opt/homebrew/bin/bun'
+        bun = shutil.which('bun') or __import__('bun_path').BUN
         if not Path(bun).is_file():
             self.skipTest('Bun required')
         with tempfile.TemporaryDirectory() as directory:

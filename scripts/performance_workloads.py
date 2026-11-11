@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-MATRIX=Path(__file__).resolve().parents[1]/'docs/helix/03-test/performance/workloads.json'
+MATRIX=Path(__file__).resolve().parents[1]/'scripts/perf/workloads.json'
 
 def workloads():
     return {case['id']:case for case in json.loads(MATRIX.read_text())['cases']}

@@ -2,8 +2,8 @@
 """Author separate traversal fixture sources; never install or authorize them."""
 from pathlib import Path
 import copy,hashlib,json
-base=Path('docs/helix/04-build/evidence/security-named-source-profile')
-out=Path('docs/helix/03-test/fixtures/security-public-relationship');out.mkdir(parents=True,exist_ok=True)
+base=Path('packages/python/tests/fixtures/security/security-named-source-profile')
+out=Path('packages/python/tests/fixtures/spec/security-public-relationship');out.mkdir(parents=True,exist_ok=True)
 request=json.loads((base/'mapping-request.json').read_bytes())
 doc=json.loads(request['modules'][0]['documentJson'])
 relation={'id':'ResourceRelatedResource','name':'relatedResources','source':[{'module':'m','element':'Resource'}],'target':[{'module':'m','element':'Resource','key':'pk'}],'sourceMultiplicity':{'min':0,'max':'*'},'targetMultiplicity':{'min':0,'max':'*'},'targetLifecycle':'independent','directed':True}

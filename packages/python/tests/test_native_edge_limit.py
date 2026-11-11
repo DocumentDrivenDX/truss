@@ -13,7 +13,7 @@ class NativeEdgeLimitTests(NativeBoundaryFixture,unittest.TestCase):
         super().setUpClass()
         connection=cls.Connection(**cls.kwargs)
         try:
-            connection.run((ROOT/'docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql').read_text())
+            connection.run((ROOT/'packages/postgresql/generated/qualified-property-layout-0.15.owner-export.sql').read_text())
             connection.run(SQL.read_text())
             connection.run('CREATE ROLE truss_el_ordinary')
             connection.run('GRANT USAGE ON SCHEMA truss TO truss_el_ordinary')

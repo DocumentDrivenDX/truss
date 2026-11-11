@@ -22,7 +22,7 @@ def document(identity):
     return CatalogDocument(identity,'r1',(' \n'+json.dumps(value)+'\n').encode())
 
 def prepare(documents,configuration=None):
-    return prepare_acceptance(documents,json.dumps(CONFIG if configuration is None else configuration).encode(),bun_executable='/opt/homebrew/bin/bun')
+    return prepare_acceptance(documents,json.dumps(CONFIG if configuration is None else configuration).encode(),bun_executable=__import__('bun_path').BUN)
 
 class PreparationTests(unittest.TestCase):
     def test_registration_names_report_every_element_across_documents(self):
@@ -198,7 +198,7 @@ print(json.loads(prepared.report_evidence_bytes)['interfaceVersion'])
 
     def test_duplicate_json_key_cannot_be_silently_overwritten(self):
         with self.assertRaises(PreparationRejected):
-            prepare_acceptance((document('first'),),b'{"binding":{"state":"absent"},"binding":{"state":"absent"}}',bun_executable='/opt/homebrew/bin/bun')
+            prepare_acceptance((document('first'),),b'{"binding":{"state":"absent"},"binding":{"state":"absent"}}',bun_executable=__import__('bun_path').BUN)
 
     def test_unsafe_numeric_source_is_not_rounded(self):
         source=document('number')

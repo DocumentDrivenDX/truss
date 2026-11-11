@@ -126,13 +126,13 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertEqual(writer.execute('SELECT session_user,current_user,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone(),('assignment_revoker','assignment_revoker',False,False))
   writer.execute('BEGIN');wh=adopt_psycopg_host(writer);self.addCleanup(wh.detach)
   wt=wh.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),wh).value
-  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable='/opt/homebrew/bin/bun')
+  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(found,Ok,str(wh._custody.last_attempt.error))
   operation=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='active',value=BooleanValue(value=False)),),unset=(),expected_version='1')
   context=assembly.group_context_in_transaction(wt).value
   source=json.loads(mapping.original_request)
   documents=tuple(CatalogDocument(m['pin']['documentId'],m['pin']['revision'],m['documentJson'].encode()) for m in source['modules'])
-  changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+  changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(changed,Ok,str(wh._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess)
   wh.detach();writer.commit()
   self.assertEqual(writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
@@ -165,7 +165,7 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertEqual(writer.execute('SELECT session_user,current_user,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone(),('assignment_revoker','assignment_revoker',False,False))
   writer.execute('BEGIN');wh=adopt_psycopg_host(writer);self.addCleanup(wh.detach)
   wt=wh.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),wh).value
-  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable='/opt/homebrew/bin/bun')
+  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(found,Ok,str(wh._custody.last_attempt.error))
   operation=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='active',value=BooleanValue(value=False)),),unset=(),expected_version='1')
   context=assembly.group_context_in_transaction(wt).value
@@ -174,7 +174,7 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   outcomes=[];errors=[];blocking=[]
   def revoke():
    try:
-    changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+    changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
     self.assertIsInstance(changed,Ok,str(wh._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess)
     wh.detach();writer.commit()
     self.assertEqual(writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
@@ -284,7 +284,7 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertEqual(writer.execute('SELECT session_user,current_user,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone(),('assignment_revoker','assignment_revoker',False,False))
   writer.execute('BEGIN');wh=adopt_psycopg_host(writer,statement_timeout_ms=10000,operation_timeout_ms=20000);self.addCleanup(wh.detach)
   wt=wh.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),wh).value
-  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable='/opt/homebrew/bin/bun')
+  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(found,Ok,str(wh._custody.last_attempt.error))
   operation=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='active',value=BooleanValue(value=False)),),unset=(),expected_version='1')
   context=assembly.group_context_in_transaction(wt).value;source=json.loads(mapping.original_request)
@@ -292,7 +292,7 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   outcomes=[];errors=[];blocking=[];delivered=[]
   def revoke():
    try:
-    changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+    changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
     self.assertIsInstance(changed,Ok,str(wh._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess)
     wh.detach();writer.commit();self.assertEqual(writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
     outcomes.append('public-update-committed')
@@ -370,13 +370,13 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertEqual(writer.execute('SELECT session_user,current_user,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone(),('assignment_revoker','assignment_revoker',False,False))
   writer.execute('BEGIN');wh=adopt_psycopg_host(writer);self.addCleanup(wh.detach)
   wt=wh.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),wh).value
-  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable='/opt/homebrew/bin/bun')
+  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(found,Ok,str(wh._custody.last_attempt.error))
   xid=writer.execute('SELECT pg_catalog.pg_current_xact_id()::pg_catalog.text').fetchone()[0]
   operation=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='active',value=BooleanValue(value=False)),),unset=(),expected_version='1')
   context=assembly.group_context_in_transaction(wt).value;source=json.loads(mapping.original_request)
   documents=tuple(CatalogDocument(m['pin']['documentId'],m['pin']['revision'],m['documentJson'].encode()) for m in source['modules'])
-  changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+  changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(changed,Ok,str(wh._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess)
   wh.detach();writer.commit();self.assertEqual(writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
   self.assertEqual(c.execute('SELECT pg_catalog.pg_visible_in_snapshot(%s::pg_catalog.xid8,%s::pg_catalog.pg_snapshot)',(xid,snapshot)).fetchone(),(False,))

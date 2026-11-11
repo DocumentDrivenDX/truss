@@ -747,13 +747,13 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for link,pairs in connections.items():
    pin=a.get_relationship_reference_in_transaction(t,document_id='adoc',module_id='m',relationship_id=link).value.definition_pin
    for i,(source,target) in enumerate(pairs):ops.append(CreateEdge(relationship_definition_pin=pin,source=AliasObjectReference(alias=source),target=AliasObjectReference(alias=target),values=(),order_key=NullOrderKey(),alias=link+str(i)))
-  inp,_=self.input(a,t,tuple(ops));result=a.apply_in_transaction(t,inp,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun');self.assertIsInstance(result,Ok,str(a._host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess);h.detach();c.commit()
+  inp,_=self.input(a,t,tuple(ops));result=a.apply_in_transaction(t,inp,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN);self.assertIsInstance(result,Ok,str(a._host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess);h.detach();c.commit()
   packet={'records':{},'links':{}}
   for record,fields in RECORDS.items():
    type_id=self.types[('adoc',record)].type_id;props={name:str(pid) for name,pid in self.admin.execute('SELECT name,prop_id FROM truss.prop_def WHERE type_id=%s',(int(type_id),))}
    packet['records'][record]={'typeId':type_id,'fields':{f:{'id':props[record+'-'+f],'scalar':scalar} for f,scalar in fields.items()}}
   for link,(source,target) in LINKS.items():packet['links'][link]={'id':str(self.admin.execute("SELECT rel_type_id FROM truss.rel_def WHERE document_id='adoc' AND module='m' AND rel_id=%s",(link,)).fetchone()[0]),'source':source,'target':target}
-  produced=subprocess.run(['/opt/homebrew/bin/bun',str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-public-ontology.ts')],input=json.dumps(packet),text=True,capture_output=True,timeout=30);self.assertEqual(produced.returncode,0,produced.stderr);sql=json.loads(produced.stdout);observations=[]
+  produced=subprocess.run([__import__('bun_path').BUN,str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-public-ontology.ts')],input=json.dumps(packet),text=True,capture_output=True,timeout=30);self.assertEqual(produced.returncode,0,produced.stderr);sql=json.loads(produced.stdout);observations=[]
   version=self.admin.execute('SHOW server_version_num').fetchone()[0];self.assertEqual(version,'180006');observations.append({'id':'native-version','observed':version})
   self.admin.execute('CREATE SCHEMA ontology_fixture')
   for name,source in sql['objects'].items():
@@ -936,7 +936,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    except Exception as exc:authority_errors.append(type(exc).__name__);authority_writer.rollback()
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();guard_cursor=self.admin.execute(acquire);captured=guard_cursor.fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
   decoder_packet={'columns':[{'name':column.name,'typeOid':str(column.type_code)} for column in guard_cursor.description],'rows':[list(row) for row in captured],'expected':{'installationIdentityHex':installation_bytes.hex(),'policyProfileHex':profile_bytes.hex()}}
-  decoder=subprocess.run(['/opt/homebrew/bin/bun',str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-authority-guard-decode.ts')],input=json.dumps(decoder_packet),text=True,capture_output=True,timeout=30);self.assertEqual(decoder.returncode,0,decoder.stderr);decoded=json.loads(decoder.stdout);self.assertEqual(decoded['generation'],'1');observations.append({'id':'actual-native-guard-descriptors-and-row-decoded','input':decoder_packet,'observed':decoded,'qualification':'local decoding, not a lease'})
+  decoder=subprocess.run([__import__('bun_path').BUN,str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-authority-guard-decode.ts')],input=json.dumps(decoder_packet),text=True,capture_output=True,timeout=30);self.assertEqual(decoder.returncode,0,decoder.stderr);decoded=json.loads(decoder.stdout);self.assertEqual(decoded['generation'],'1');observations.append({'id':'actual-native-guard-descriptors-and-row-decoded','input':decoder_packet,'observed':decoded,'qualification':'local decoding, not a lease'})
   holder_pid=self.admin.execute('SELECT pg_backend_pid()').fetchone()[0];authority_thread=threading.Thread(target=controlled_role_change);authority_thread.start()
   try:
    deadline=time.monotonic()+5;blockers=[]
@@ -1157,10 +1157,10 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    cursor=self.admin.execute(observe_claim,(token,));native_rows=cursor.fetchall()
    native_packet={'columns':[{'name':c.name,'typeOid':str(c.type_code)} for c in cursor.description],'rows':[list(row) for row in native_rows],'expected':{'operationIdentityHex':token.hex(),'installationIdentityHex':installation_bytes.hex(),'policyProfileHex':profile_bytes.hex(),'generation':'5'}}
    runner=str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-publication-claim-decode.ts')
-   decoded=subprocess.run(['/opt/homebrew/bin/bun',runner],input=json.dumps(native_packet),text=True,capture_output=True,timeout=30);self.assertEqual(decoded.returncode,0,decoded.stderr);value=json.loads(decoded.stdout)
+   decoded=subprocess.run([__import__('bun_path').BUN,runner],input=json.dumps(native_packet),text=True,capture_output=True,timeout=30);self.assertEqual(decoded.returncode,0,decoded.stderr);value=json.loads(decoded.stdout)
    self.assertEqual(value,{'state':'not-observed'} if settled is None else {'state':'observed',**native_packet['expected'],'settled':settled})
    wrong=json.loads(json.dumps(native_packet));wrong['expected']['operationIdentityHex']='ff'
-   if settled is not None:self.assertNotEqual(subprocess.run(['/opt/homebrew/bin/bun',runner],input=json.dumps(wrong),text=True,capture_output=True,timeout=30).returncode,0)
+   if settled is not None:self.assertNotEqual(subprocess.run([__import__('bun_path').BUN,runner],input=json.dumps(wrong),text=True,capture_output=True,timeout=30).returncode,0)
    return native_packet,value
   # No re-insertion/disclosure: drain original registrants and freshly reconcile.
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()

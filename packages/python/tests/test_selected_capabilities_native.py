@@ -20,22 +20,22 @@ class SelectedCapabilityTests(mutation_tests.ObjectMutationTests):
         catalog_result=assembly.catalog(assembly.catalog_selection)
         self.assertIsInstance(catalog_result,CapabilityAvailable);catalog=catalog_result.capability
         self.assertEqual(catalog.selection,assembly.catalog_selection)
-        prepared=catalog.prepare_catalog(self.documents,bun_executable='/opt/homebrew/bin/bun')
+        prepared=catalog.prepare_catalog(self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(catalog.accept_in_transaction(tx,prepared,request_key='selected-unchanged').value,CatalogUnchanged)
         self.assertEqual(catalog.report_in_transaction(tx).value.revision,1)
         self.assertEqual(catalog.accepted_document_in_transaction(tx,document_id='adoc').value.document_revision,'r1')
         reader_result=assembly.direct_reads(assembly.direct_read_selection)
         self.assertIsInstance(reader_result,CapabilityAvailable);reader=reader_result.capability
-        groups=assembly.groups(assembly.group_selection,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').capability
+        groups=assembly.groups(assembly.group_selection,documents=self.documents,bun_executable=__import__('bun_path').BUN).capability
         context=assembly.group_context_in_transaction(tx).value
         created=groups.apply_in_transaction(tx,context.input((self.create(),),MapValue(entries=())),context.request('selected-create'))
         self.assertIsInstance(created.value,GroupSuccess)
-        found=reader.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable='/opt/homebrew/bin/bun')
+        found=reader.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(found.value,ObjectFound)
         updated=groups.apply_in_transaction(tx,context.input((UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(),unset=()),),MapValue(entries=())),context.request('selected-noop'))
         self.assertIsInstance(updated.value,GroupSuccess)
         self.assertIsInstance(reader.page_objects_in_transaction(tx,document_id='adoc',module_id='m',record_id='A').value,ObjectPage)
-        importer_result=assembly.imports(assembly.import_selection,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        importer_result=assembly.imports(assembly.import_selection,documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(importer_result,CapabilityAvailable);importer=importer_result.capability
         import_context=importer.import_context_in_transaction(tx).value
         record=importer.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='B',values=self.create(label='imported',value='imported',record='B').values).value

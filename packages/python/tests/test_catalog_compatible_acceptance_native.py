@@ -87,7 +87,7 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
     def test_evolve_read_write_lookup_and_original_catalog_group_recovery(self):
         connection,host,assembly,tx=self.ready()
         self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(psycopg.sql.Identifier(self.installation.registrar_role)))
-        original=assembly.prepare_catalog(self.documents,bun_executable='/opt/homebrew/bin/bun')
+        original=assembly.prepare_catalog(self.documents,bun_executable=__import__('bun_path').BUN)
         old_report=assembly.report_in_transaction(tx,1).value.original_bytes
         created,input,request=self.run_group(assembly,tx,(self.create(),self.create(label='two',value='other',record='B',alias='b')),'before-evolution')
         self.assertIsInstance(created,GroupSuccess);a,b=(v.identity for v in created.response.semantic.results)
@@ -114,7 +114,7 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         module['elements'].extend((added_record,*added_fields))
         module['relationships'][0]['targetMultiplicity']['max']='*'
         document=CatalogDocument('adoc','r2',json.dumps(source).encode())
-        prepared=assembly.prepare_catalog((document,),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((document,),bun_executable=__import__('bun_path').BUN)
         accepted=assembly.accept_in_transaction(tx,prepared,request_key='model-r2')
         if not isinstance(accepted,Ok):self.fail(repr(accepted)+' '+str(assembly._host._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration);self.assertEqual(accepted.value.revision,2)
@@ -134,13 +134,13 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         context=assembly.group_context_in_transaction(tx).value
         update_b=UpdateObject(target=StoredObjectReference(identity=b),set=(AuthoredValue(name='B-label',value=TextValue(kind='string',text='updated-b')),),unset=(),expected_version='1')
         conditional=context.input((update_b,),MapValue(entries=()),preconditions=(KeyAbsent(id='free-b',reason='must remain free',type_definition_pin=b.definition_pin,key_id='a-primary',values=(TextValue(kind='string',text='unused'),TextValue(kind='string',text='unused'))),))
-        updated_b=assembly.apply_in_transaction(tx,conditional,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        updated_b=assembly.apply_in_transaction(tx,conditional,RequestNone(),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(updated_b.value,GroupSuccess)
         changed,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=current_a_identity),set=(AuthoredValue(name='A-note',value=TextValue(kind='string',text='new')),),unset=(),expected_version='1'),))
         self.assertIsInstance(changed,GroupSuccess)
         added,_,_=self.run_group(assembly,tx,(self.create(label='new-a',value='new-a'),self.create(label='new-b',value='new-b',record='B',alias='b'),self.create(label='new-aa',value='new-aa',record='AA',alias='aa')))
         self.assertIsInstance(added,GroupSuccess)
-        looked=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable='/opt/homebrew/bin/bun')
+        looked=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('value','one'),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(looked.value,ObjectFound);self.assertEqual(str(looked.value.object.id),a.id)
         recovered=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/no-owner-producer-needed')
         self.assertIsInstance(recovered.value.response,CommittedReceiptReplay);self.assertEqual(recovered.value.response.semantic,created.response.semantic)
@@ -149,13 +149,13 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         self.assertNotEqual(new_pin,old_pin)
         context=assembly.import_context_in_transaction(tx).value
         edge=EdgeImportRecord(identity=EdgeImportIdentity(relationship_definition_pin=new_pin,source=current_a_identity,target=current_b),payload=context.edge_payload((),NullOrderKey()),payload_profile=context.payload_profile)
-        imported=assembly.import_in_transaction(tx,context.input((edge,),load_id='after-evolution',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        imported=assembly.import_in_transaction(tx,context.input((edge,),load_id='after-evolution',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(imported,ImportReported);self.assertIsInstance(imported.report.outcomes[0],ImportSkipped)
         self.assertEqual(imported.report.outcomes[0].reason,'reserved_identity')
         historical=assembly.accept_in_transaction(tx,original,request_key='create-model')
         self.assertEqual(historical.value.report_bytes,old_report);self.assertTrue(historical.value.replayed)
         context=assembly.group_context_in_transaction(tx).value
-        default_documents=assembly.apply_in_transaction(tx,context.input((self.create(label='after-replay',value='after-replay'),),MapValue(entries=())),RequestNone(),bun_executable='/opt/homebrew/bin/bun')
+        default_documents=assembly.apply_in_transaction(tx,context.input((self.create(label='after-replay',value='after-replay'),),MapValue(entries=())),RequestNone(),bun_executable=__import__('bun_path').BUN)
         self.assertIsInstance(default_documents.value,GroupSuccess)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(2,))

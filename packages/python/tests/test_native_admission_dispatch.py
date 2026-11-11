@@ -30,10 +30,10 @@ class NativeAdmissionDispatchTests(ReservedNativeOperationOrdinalTests):
 
     def _prepare(self, family, *, denied=False):
         root = Path(__file__).resolve().parents[3]
-        setup = (root/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text()
-        setup += ';\n' + (root/'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql').read_text()
+        setup = (root/'packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql').read_text()
+        setup += ';\n' + (root/'packages/postgresql/generated/operation-configuration-storage.owner-export.sql').read_text()
         setup += ';\n' + (root/'packages/postgresql/native/source-epoch-lock.sql').read_text()
-        setup += ';\n' + (root/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text().split('INSERT INTO truss.row_home_operation')[0]
+        setup += ';\n' + (root/'packages/postgresql/generated/pgserver-populated-guard-fixture.sql').read_text().split('INSERT INTO truss.row_home_operation')[0]
         setup += "INSERT INTO truss.source_epoch_current VALUES (1,'guard-fixture','guard-fixture-epoch');"
         setup += "INSERT INTO truss.installation_admission (head_id,installation_id_utf8,source_epoch_utf8,configuration_generation,key_reuse,journal_mode,configuration_bytes,selected_binding_bytes,installed_inventory_bytes) VALUES (1,convert_to('guard-fixture','UTF8'),convert_to('guard-fixture-epoch','UTF8'),7,'forbid','engine',decode('0001ff','hex'),convert_to('binding fixture','UTF8'),convert_to('inventory fixture','UTF8'));"
         for name in ('operation-admission.sql', 'operation-asserted-origin-admission.sql', 'operation-epoch-context-admission.sql', 'operation-configuration-context-admission.sql'):

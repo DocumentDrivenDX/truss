@@ -18,7 +18,7 @@ def key_source(fields):
 
 class LiteralKeyTests(unittest.TestCase):
  def encode(self,source,values,identity=('m','Staff','pk')):
-  return encode_literal_key_tuple(source,identity,tuple(json.dumps(v) for v in values),bun_executable='/opt/homebrew/bin/bun')
+  return encode_literal_key_tuple(source,identity,tuple(json.dumps(v) for v in values),bun_executable=__import__('bun_path').BUN)
  def test_original_independent_byte_vectors_and_refusals(self):
   corpus=json.loads((FIXTURE/'umf-literal-key-vectors.json').read_bytes())
   for vector in corpus['vectors']:
@@ -53,7 +53,7 @@ class LiteralKeyTests(unittest.TestCase):
  def test_raw_literal_text_retained_owner_parses_and_invalid_unicode_refuses(self):
   source=key_source([{'id':'s','scalarType':'string'}])
   text=' { "string" : "\\u0394" } '
-  output=encode_literal_key_tuple(source,('m','Staff','pk'),(text,),bun_executable='/opt/homebrew/bin/bun')
+  output=encode_literal_key_tuple(source,('m','Staff','pk'),(text,),bun_executable=__import__('bun_path').BUN)
   self.assertEqual(output.literal_texts,(text,));self.assertEqual(json.loads(output.original_receipt_bytes)['values'],[{'string':'Δ'}])
   for text in ['{','{"string":"\\uD800"}',chr(0xd800),'x'*65537]:
-   with self.assertRaises(ValueError):encode_literal_key_tuple(source,('m','Staff','pk'),(text,),bun_executable='/opt/homebrew/bin/bun')
+   with self.assertRaises(ValueError):encode_literal_key_tuple(source,('m','Staff','pk'),(text,),bun_executable=__import__('bun_path').BUN)

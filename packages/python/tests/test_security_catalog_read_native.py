@@ -53,7 +53,7 @@ class AcceptedCatalogReadNativeTests(accepted.AcceptedCatalogMappingTests):
    operations.append(CreateObject(type_definition_pin=types[record].definition_pin,values=values,ownership=RootlessOwnership(),alias='row'+str(index)))
   context=a.group_context_in_transaction(t).value
   documents=tuple(CatalogDocument(m['pin']['documentId'],m['pin']['revision'],m['documentJson'].encode()) for m in source['modules'])
-  created=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+  created=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),RequestNone(),documents=documents,bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(created,Ok,str(h._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess,str(created))
   h.detach();c.commit()
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value

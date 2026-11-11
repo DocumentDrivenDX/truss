@@ -12,7 +12,7 @@ import {validateSecurityDisclosure} from '/Users/erik/.codex/worktrees/security-
 if(Bun.argv.length>3||(Bun.argv[2]!==undefined&&Bun.argv[2]!=='--named-source'))throw Error('Exact fixture source profile required');
 const named=Bun.argv[2]==='--named-source';
 const model=named?namedSecurityFixture():securityFixture(),transport=securityIdentityTransportDependencies(model.policy,model.resolution);
-const base=named?'docs/helix/04-build/evidence/security-named-source-profile':'docs/helix/04-build/evidence/security-identity-requirements';
+const base=named?'packages/python/tests/fixtures/security/security-named-source-profile':'packages/python/tests/fixtures/security/security-identity-requirements';
 for(const [name,value] of [['policy',model.policy],['resolution',model.resolution],['transport',transport]] as const)
  if(await Bun.file(base+'/'+name+'.json').text()!==JSON.stringify(value)+'\n')throw Error('Original identity source correspondence required');
 if(named){

@@ -31,10 +31,10 @@ const model=await importPostgresqlSql(source,backend,{id:'truss-layout-migration
 const serialized=JSON.stringify(model)+'\n',ddl=await exportPostgresqlSql(model,backend);
 if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)throw Error('Original saved model export mismatch');
 const modelPath='docs/helix/02-design/contracts/layout-migration-storage-v0.1.proposal.umf.json';
-const ddlPath='docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql';
+const ddlPath='packages/postgresql/generated/layout-migration-storage.owner-export.sql';
 const guardSourcePath='packages/postgresql/native/layout-migration-receipt-immutability.sql';
 const guardModelPath='docs/helix/02-design/contracts/layout-migration-immutability-v0.1.proposal.umf.json';
-const guardDdlPath='docs/helix/04-build/evidence/layout-migration-immutability.owner-export.sql';
+const guardDdlPath='packages/postgresql/generated/layout-migration-immutability.owner-export.sql';
 const guardSource=await Bun.file(guardSourcePath).text();
 const guardModel=await importPostgresqlSql(guardSource,backend,{id:'truss-layout-migration-immutability-candidate'});
 const serializedGuard=JSON.stringify(guardModel)+'\n',guardDdl=await exportPostgresqlSql(guardModel,backend);
@@ -42,7 +42,7 @@ if(await exportPostgresqlSql(readDocument(serializedGuard,'json'),backend)!==gua
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
 const ownerSourcePins=Object.fromEntries(await Promise.all(['src/adapters/postgresql/index.ts','src/model/document.ts','src/model/native-json.ts','native/postgresql/runtime.ts'].map(async path=>[path,hash(await Bun.file('/Users/erik/Projects/umf/'+path).text())])));
 const receipt={guardSourcePath,guardSourceSha256:hash(guardSource),guardModelPath,guardModelSha256:hash(serializedGuard),guardDdlPath,guardDdlSha256:hash(guardDdl),ownerSourcePins,modelPath,modelSha256:hash(serialized),ddlPath,ddlSha256:hash(ddl),producerSha256:hash(await Bun.file('scripts/build-layout-migration-storage.ts').text()),reloadedExportExact:true,qualified:false,scope:'UMF owner import and saved reload/export only; uncomposed storage/immutability adjuncts, no protected receipt producer, core projection, installation or migration qualification'};
-for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],[guardModelPath,serializedGuard],[guardDdlPath,guardDdl],['docs/helix/04-build/evidence/design-audit/layout-migration-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
+for(const [path,bytes] of [[modelPath,serialized],[ddlPath,ddl],[guardModelPath,serializedGuard],[guardDdlPath,guardDdl],['packages/postgresql/generated/layout-migration-storage.json',JSON.stringify(receipt,null,2)+'\n']]){
  if(process.argv.includes('--check')){if(await Bun.file(path).text()!==bytes)throw Error('Stale layout migration storage: '+path)}else await Bun.write(path,bytes);
 }
 console.log('Layout migration receipt adjunct: UMF saved reload/export exact; unqualified.');

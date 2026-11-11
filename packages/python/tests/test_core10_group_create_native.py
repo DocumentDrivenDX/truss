@@ -17,8 +17,8 @@ class Core10GroupCreateTests(groups.PublicCreateGroupTests):
   c,h,a,t=self.ready();input,request=self.input(a,t);created=self.apply(a,t,input,request).response.semantic.results[0].identity
   h.detach();c.commit();c,h,a,t=self.consumer()
   for key,values in (('z-alt',('one',)),('a-primary',('value','one'))):
-   result=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id=key,values=values,bun_executable='/opt/homebrew/bin/bun')
+   result=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id=key,values=values,bun_executable=__import__('bun_path').BUN)
    self.assertIsInstance(result,groups.Ok);self.assertIsInstance(result.value,groups.ObjectFound,str(a._host._custody.last_attempt.error))
    self.assertEqual(result.value.object.identity.id,created.id)
-  reversed_key=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('one','value'),bun_executable='/opt/homebrew/bin/bun')
+  reversed_key=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='a-primary',values=('one','value'),bun_executable=__import__('bun_path').BUN)
   self.assertIsInstance(reversed_key,groups.Ok);self.assertEqual(reversed_key.value.outcome,'not_found')

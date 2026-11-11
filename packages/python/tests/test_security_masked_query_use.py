@@ -11,7 +11,7 @@ class MaskedQueryUseTests(unittest.TestCase):
   if not binary:self.skipTest('Original relational compiler required')
   binary=Path(binary);pin=hashlib.sha256(binary.read_bytes()).digest()
   root=Path(__file__).resolve().parents[3]
-  source=root/'docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json'
+  source=root/'packages/python/tests/fixtures/security/security-graph-subject-registration-20261014/compiler-request.json'
   request=json.loads(source.read_bytes());source_pin=hashlib.sha256(source.read_bytes()).digest()
   pairs=(
    ('filter',"SELECT r.resourceId FROM Resource r WHERE r.salary = 200","SELECT r.resourceId FROM Resource r WHERE r.resourceId = 'RB'"),

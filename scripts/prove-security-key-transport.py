@@ -3,7 +3,7 @@
 from pathlib import Path
 import hashlib,json,uuid,z3
 root=Path.cwd();owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf');out=root/'docs/helix/04-build/evidence/security-key-transport-formal'/str(uuid.uuid4());out.mkdir(parents=True)
-paths=[root/p for p in ('scripts/prove-security-key-transport.py','scripts/evaluate-security-captured-identity-fixture.ts','scripts/produce-security-identity-requirements.ts','packages/python/src/truss/_psycopg_dependency_fact_cut.py','docs/helix/04-build/evidence/security-identity-requirements/transport.json','docs/helix/04-build/evidence/security-identity-requirements/requirements.json')]+[owner/'src/extensions/security/dependencies.ts',owner/'src/model/key-tuple.ts']
+paths=[root/p for p in ('scripts/prove-security-key-transport.py','scripts/evaluate-security-captured-identity-fixture.ts','scripts/produce-security-identity-requirements.ts','packages/python/src/truss/_psycopg_dependency_fact_cut.py','packages/python/tests/fixtures/security/security-identity-requirements/transport.json','packages/python/tests/fixtures/security/security-identity-requirements/requirements.json')]+[owner/'src/extensions/security/dependencies.ts',owner/'src/model/key-tuple.ts']
 pins={}
 for p in paths:
  raw=p.read_bytes();pins[str(p)]=hashlib.sha256(raw).hexdigest();dest=out/'preimages'/str(p).lstrip('/');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)

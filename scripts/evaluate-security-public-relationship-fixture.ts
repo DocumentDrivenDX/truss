@@ -5,7 +5,7 @@ import {inspectSecurityPolicy} from '/Users/erik/.codex/worktrees/security-main-
 import {checkSchemaLiteral} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/schema-literals';
 if(Bun.argv.length>3||(Bun.argv[2]!==undefined&&Bun.argv[2]!=='--evaluate'))throw Error('Exact oracle mode required');
 const exercising=Bun.argv[2]!== '--evaluate';
-const base='docs/helix/03-test/fixtures/security-public-relationship/';
+const base='packages/python/tests/fixtures/spec/security-public-relationship/';
 const resolution=await Bun.file(base+'resolution.json').json();
 const raw=await Bun.stdin.text();if(new TextEncoder().encode(raw).length>1048576)throw Error('Bounded original fixture required');
 const input=JSON.parse(raw);if(!input||JSON.stringify(Object.keys(input).sort())!==JSON.stringify(['policyFacts','queryRelationshipOccurrences','queryResourceIdentities'].sort()))throw Error('Exact original projection frame required');

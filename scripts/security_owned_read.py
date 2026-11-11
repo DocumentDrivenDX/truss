@@ -22,7 +22,7 @@ def _pin_owned_evaluator_sources():
     """Private administrative source snapshot, never an authority capability."""
     tool=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
     owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf')
-    paths=[tool,ROOT/'scripts/security-named-source-fixture.ts',ROOT/'scripts/security-named-subject.sql',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/document.json',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json']+[ROOT/'docs/helix/04-build/evidence'/base/(name+'.json') for base in ('security-identity-requirements','security-named-source-profile') for name in ('policy','resolution','transport')]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
+    paths=[tool,ROOT/'scripts/security-named-source-fixture.ts',ROOT/'scripts/security-named-subject.sql',ROOT/'packages/python/tests/fixtures/security/security-named-source-profile/document.json',ROOT/'packages/python/tests/fixtures/security/security-named-source-profile/mapping-request.json']+[ROOT/'docs/helix/04-build/evidence'/base/(name+'.json') for base in ('security-identity-requirements','security-named-source-profile') for name in ('policy','resolution','transport')]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
     return _OwnedEvaluatorSourcePins(tool,tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in paths))
 
 

@@ -1,9 +1,0 @@
-{
-  "source": "fresh-baseline-20261102",
-  "class": "CurrentBaselineNativeTests",
-  "passed": true,
-  "pgCtlStatus": 3,
-  "postmasterPidPresent": false,
-  "stdout": "pg_ctl: no server running\n",
-  "stderr": ""
-}

@@ -17,14 +17,14 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
  def accepted(self,second=False,source=None):
   self.install();source=json.loads(mapping.FIXTURE.read_text()) if source is None else source;self.reference=mapping.encoded(source)
   c,h,a,t=self.consumer();m=source['modules'][0];p=m['pin']
-  prepared=a.prepare_catalog((CatalogDocument(p['documentId'],p['revision'],m['documentJson'].encode()),),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog((CatalogDocument(p['documentId'],p['revision'],m['documentJson'].encode()),),source_version='0.10.0',bun_executable=__import__('bun_path').BUN)
   result=a.accept_in_transaction(t,prepared,request_key='accepted-mapping08');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
   if second:
    h.detach();c.commit()
    self.admin.execute("CREATE ROLE assessment_writer;INSERT INTO truss.module_access VALUES('domain','m','consumer','assessment_writer')")
    self.addCleanup(self.admin.execute,'DROP OWNED BY assessment_writer;DROP ROLE assessment_writer')
    c,h,a,t=self.consumer()
-   another=a.prepare_catalog((CatalogDocument(p['documentId'],'schema-2',m['documentJson'].encode()),),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
+   another=a.prepare_catalog((CatalogDocument(p['documentId'],'schema-2',m['documentJson'].encode()),),source_version='0.10.0',bun_executable=__import__('bun_path').BUN)
    result=a.accept_in_transaction(t,another,request_key='accepted-mapping08-second');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
   h.detach();c.commit()
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value

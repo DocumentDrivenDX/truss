@@ -9,7 +9,7 @@ class NativeStateOwnerTests(NativeBoundaryFixture, unittest.TestCase):
         super().setUp()
         root = Path(__file__).resolve().parents[3]
         self.connection.run('BEGIN')
-        for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
+        for path in ('packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql',
                      'packages/postgresql/native/row-image/codec.sql',
                      'packages/postgresql/native/row-image/state-owner.sql'):
             self.connection.run((root/path).read_text())

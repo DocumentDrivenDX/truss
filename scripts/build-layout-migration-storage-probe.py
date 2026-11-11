@@ -3,8 +3,8 @@
 from pathlib import Path
 import sys
 root = Path(__file__).resolve().parents[1]
-ddl = (root / 'docs/helix/04-build/evidence/layout-migration-storage.owner-export.sql').read_text()
-guard = (root / 'docs/helix/04-build/evidence/layout-migration-immutability.owner-export.sql').read_text()
+ddl = (root / 'packages/postgresql/generated/layout-migration-storage.owner-export.sql').read_text()
+guard = (root / 'packages/postgresql/generated/layout-migration-immutability.owner-export.sql').read_text()
 namespace = 'truss_migration_storage_probe'
 body = """-- Synthetic parent and renamed disposable schema; no installation/commit qualification.
 BEGIN;
@@ -66,7 +66,7 @@ END $$;
 ROLLBACK;
 SELECT to_regclass('truss_migration_storage_probe.layout_migration_receipt') IS NULL AS rollback_removed_home;
 """
-path = root / 'docs/helix/04-build/evidence/layout-migration-storage.rollback-probe.sql'
+path = root / 'packages/postgresql/generated/layout-migration-storage.rollback-probe.sql'
 if '--check' in sys.argv:
     if path.read_text() != body:
         raise SystemExit('stale migration storage probe')

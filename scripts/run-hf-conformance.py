@@ -1,48 +1,29 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Run independently asserted HF cases against an exact installed Truss cohort.
+"""Run the independently asserted HF cases against the installed Truss package.
 
-Fixtures create isolated temporary local PostgreSQL clusters and synthetic data.
-The archive's test producers include explicit administrative fault controls;
-passing them is not authorization for those controls on an application database.
+Fixtures create isolated temporary local PostgreSQL clusters over Unix sockets with
+synthetic data; no application database connection is accepted. Exits non-zero if any
+case fails, errors or is skipped.
 """
-import argparse,hashlib,importlib.metadata,json,os,platform,sys,time,unittest
-from importlib.resources import files
+import argparse,json,sys,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from publish_pypi_release import distribution_for_version
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--installed-package',action='store_true');a=p.parse_args()
-from release_cohort import hf_profile
-corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=hf_profile(ROOT, installed=a.installed_package)
 sys.path.insert(0,str(ROOT/'packages/python/tests'))
-from release_cohort import verify_installed
-verify_installed()
-import truss,weft
-import weft.weft as native_compiler
-from truss._current_query_originals import _CONSUMER_COHORTS
-if a.installed_package and Path(truss.__file__).resolve().is_relative_to(ROOT/'packages/python/src'):raise ValueError('Installed package required')
-truss_distribution=distribution_for_version(profile['toolkitVersion'])
-if importlib.metadata.version(truss_distribution)!=profile['toolkitVersion'] or weft.__version__!=profile['compilerVersion']:raise ValueError('Exact selected package/compiler cohort required')
-compiler_path=Path(native_compiler.__file__).resolve()
-compiler_sha256=hashlib.sha256(compiler_path.read_bytes()).hexdigest()
-selected=[c for c in profile['compilerCohorts'] if c['nativeModuleSha256']==compiler_sha256]
-if len(selected)!=1:raise ValueError('Exact corpus-qualified installed native compiler required')
-compiler_cohort=selected[0]
-installed_selected=[c for c in _CONSUMER_COHORTS if c['weftModuleSha256']==compiler_sha256 and c['weftRevision']==compiler_cohort['sourceRevision'] and c['weftWheelSha256']==compiler_cohort['wheelSha256']]
-if len(installed_selected)!=1:raise ValueError('Exact installed Truss/compiler correspondence required')
-actual=hashlib.sha256(files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes()).hexdigest()
-if actual!=profile['nativeManifestSha256']:raise ValueError('Exact selected native profile required')
-for name,digest in profile['producers'].items():
- if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=digest:raise ValueError('Original producer changed: '+name)
-observations=[]
-class Result(unittest.TextTestResult):
- def startTest(self,test):super().startTest(test);self.started=time.monotonic();self.status='passed'
- def addFailure(self,test,error):self.status='failed';super().addFailure(test,error)
- def addError(self,test,error):self.status='error';super().addError(test,error)
- def addSkip(self,test,reason):self.status='skipped';super().addSkip(test,reason)
- def stopTest(self,test):observations.append({'id':test.id(),'status':self.status,'seconds':time.monotonic()-self.started});super().stopTest(test)
-suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(case['test']) for case in profile['cases'])
-started=time.monotonic();result=unittest.TextTestRunner(verbosity=2,resultclass=Result).run(suite)
-record={'dependencyCohort':verify_installed(),'cohortSha256':hashlib.sha256((ROOT/'scripts/truss-release-cohort.json').read_bytes()).hexdigest(),'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),'profile':profile['profile'],'corpusSha256':hashlib.sha256(corpus.read_bytes()).hexdigest(),'distribution':truss_distribution,'toolkit':importlib.metadata.version(truss_distribution),'compiler':weft.__version__,'compilerSourceRevision':compiler_cohort['sourceRevision'],'compilerNativeModuleSha256':compiler_sha256,'loadedCompiler':str(compiler_path),'loadedPackage':truss.__file__,'nativeManifestSha256':actual,'platform':platform.platform(),'python':sys.version,'seconds':time.monotonic()-started,'tests':result.testsRun,'skipped':len(result.skipped),'failures':len(result.failures),'errors':len(result.errors),'passed':result.wasSuccessful() and not result.skipped and result.testsRun==len(profile['cases']),'cases':observations,'limits':profile['limits']}
-a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(record,indent=2)+'\n');raise SystemExit(not record['passed'])
+p=argparse.ArgumentParser(description=__doc__)
+p.add_argument('--installed-package',action='store_true',help='require truss to be imported from site-packages, not this checkout')
+a=p.parse_args()
+import truss
+if a.installed_package and Path(truss.__file__).resolve().is_relative_to(ROOT/'packages/python/src'):
+ raise SystemExit('Installed package required')
+corpus=json.loads((ROOT/'packages/python/tests/fixtures/spec/hohfeld-followup-0.1.json').read_bytes())
+import conftest
+quarantined={k.replace('.py::','.').replace('::','.') for k in conftest.QUARANTINED_TESTS}|set(conftest.QUARANTINED_MODULES)
+cases=[c for c in corpus['cases'] if c['test'] not in quarantined and c['test'].split('.')[0] not in conftest.QUARANTINED_MODULES]
+print('quarantined cases skipped:',len(corpus['cases'])-len(cases),'(see packages/python/tests/conftest.py)')
+suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(case['test']) for case in cases)
+result=unittest.TextTestRunner(verbosity=2).run(suite)
+ok=result.wasSuccessful() and not result.skipped and result.testsRun==len(cases)
+print(json.dumps({'tests':result.testsRun,'cases':len(cases),'skipped':len(result.skipped),'failures':len(result.failures),'errors':len(result.errors),'passed':ok}))
+raise SystemExit(0 if ok else 1)

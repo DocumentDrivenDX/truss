@@ -24,7 +24,7 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
                 source['modules'][0]['elements'].append({'id':'A-extra','name':'A-extra','kind':'field','scalarType':'string',
                     'nullability':'absent-allowed','cardinality':'one','extensions':{}})
                 documents.append(CatalogDocument(identity,'r1',json.dumps(source).encode()))
-            prepared=assembly.prepare_catalog(tuple(documents),bun_executable='/opt/homebrew/bin/bun')
+            prepared=assembly.prepare_catalog(tuple(documents),bun_executable=__import__('bun_path').BUN)
         accepted=assembly.accept_in_transaction(tx,prepared,request_key='read-fixture')
         self.assertIsInstance(accepted,Ok);host.detach();connection.commit()
         for role in ('object_reader','object_writer'):

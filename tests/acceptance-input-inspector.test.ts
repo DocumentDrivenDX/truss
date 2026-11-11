@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createAcceptanceInputInspector,AcceptanceInputInspectionError} from '../packages/umf-bun/src/acceptance-input';
-const inspector=await createAcceptanceInputInspector('/Users/erik/Projects/umf/package.json');
+const inspector=await createAcceptanceInputInspector(new URL('../package.json',import.meta.url).pathname);
 const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json();
 const inspect=(input:unknown)=>inspector.inspect(new TextEncoder().encode(JSON.stringify(input)));
 test('complete original wire and all converted artifact bytes survive inspection',()=>{

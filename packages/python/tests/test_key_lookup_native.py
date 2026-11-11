@@ -11,7 +11,7 @@ class KeyLookupTests(group_tests.PublicCreateGroupTests):
 
     def lookup(self,assembly,tx,values,key='a-primary',document='adoc',source=None):
         return assembly.lookup_key_in_transaction(tx,document_id=document,module_id='m',record_id='A',key_id=key,values=values,
-            original_document=source,bun_executable='/opt/homebrew/bin/bun')
+            original_document=source,bun_executable=__import__('bun_path').BUN)
 
     def test_create_lookup_commit_readonly_primary_and_alternate_keys(self):
         connection,host,assembly,tx=self.ready();label='é雪🚀|\\';value=''

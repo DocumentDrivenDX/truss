@@ -1,5 +1,0 @@
-{
-  "scope": "rejection shape only; no completeness/provenance/rollback evidence",
-  "cases": 10,
-  "failures": []
-}
