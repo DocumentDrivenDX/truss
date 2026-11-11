@@ -28,6 +28,8 @@ SLOW_TESTS: set[str] = {
     'test_group_preview_native.py::GroupPreviewNativeTests::test_preview_accepts_3072_conditions',
     'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_mixed_preconditions_succeed',
     'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_preconditions_succeed',
+    'test_key_footprint_capacity_native.py::KeyFootprintCapacityTests::test_eight_keys',
+    'test_group_preview_native.py::GroupPreviewNativeTests::test_preview_data_uses_one_snapshot_across_concurrent_update',
     'test_embedded_owner.py::EmbeddedOwnerTests::test_isolate_deadline_interrupts_nonterminating_code',
 }
 
