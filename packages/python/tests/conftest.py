@@ -14,10 +14,15 @@ if not os.environ.get('TRUSS_CENSUS_POSTGRES_BIN'):
         pass
 
 # Modules too slow for the pull-request job (add from `--durations` output); nightly runs `-m slow`.
-SLOW_MODULES: set[str] = set()
+SLOW_MODULES: set[str] = {
+    'test_stress_registration_native',
+    'test_catalog_view_capacity_native',
+    'test_bulk_create_sql_native',
+}
 
 # Timing-sensitive tests that flake on a shared 4-vCPU runner under xdist; nightly runs them.
 SLOW_TESTS: set[str] = {
+    'test_group_preview_native.py::GroupPreviewNativeTests::test_preview_accepts_3072_conditions',
     'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_mixed_preconditions_succeed',
     'test_group_preconditions_native.py::GroupPreconditionTests::test_owned_3072_preconditions_succeed',
     'test_embedded_owner.py::EmbeddedOwnerTests::test_isolate_deadline_interrupts_nonterminating_code',
