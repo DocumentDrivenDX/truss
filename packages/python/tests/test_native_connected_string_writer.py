@@ -12,7 +12,7 @@ def installation_sql(path):
         return originals.read(path).decode('utf8')
 
 def install_string_fixture(run):
-    for path in ('packages/postgresql/generated/source-epoch-layout-0.16.owner-export.sql',
+    for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
       'packages/postgresql/native/row-image/codec.sql',
       'packages/postgresql/native/row-image/prestate.sql',
       'packages/postgresql/native/row-image/state-owner.sql',

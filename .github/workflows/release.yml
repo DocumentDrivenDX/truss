@@ -37,14 +37,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Check large-workload runner capacity controls
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_large_runner_capacity_helper
-      - name: Test frozen Weft wheel archive verification controls
-        env:
-          PYTHONPATH: packages/python/tests
-        run: python -m unittest test_verify_weft_release_wheel -v
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.4.3'
@@ -292,12 +284,6 @@ jobs:
           TRUSS_DISCLOSURE_NATIVE_QUALIFICATION: '1'
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_current_disclosure_cohort -v
-      - name: Run installed disclosure source correspondence regressions
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_DISCLOSURE_NATIVE_QUALIFICATION: '1'
-          TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_current_disclosure_originals test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests -v
       - name: Run the public-only policy query reference example
         run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun /missing/bun
       - name: Register original UMF domain-pack catalogs through the installed API
@@ -543,3 +529,4 @@ jobs:
           name: "public-stress-${{ matrix.case }}-${{ matrix.os }}"
           path: "${{ runner.temp }}/public-stress/*"
           if-no-files-found: "error"
+

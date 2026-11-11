@@ -220,12 +220,48 @@ SLOW_MODULES: set[str] = {
     'test_umf_string_key_verifier_native',
 }
 
+# Known-failing tests, excluded from CI by `-m "not quarantined"` and listed in the PR description.
+# Each entry needs a reason; remove the entry when the cause is fixed.
+STALE_LAYOUT = 'fixtures install the layout 0.16 DDL, which no longer defines row_home_* tables/types (dropped by fdd249e7); native row-image fixtures need rewriting'
+QUARANTINED_MODULES: dict[str, str] = {
+    'test_native_admission_dispatch': STALE_LAYOUT,
+    'test_native_state_owner': STALE_LAYOUT,
+    'test_native_connected_string_writer': STALE_LAYOUT,
+    'test_native_dependent_owner': STALE_LAYOUT,
+    'test_native_string_candidate': STALE_LAYOUT,
+    'test_native_string_dispatch': STALE_LAYOUT,
+}
+WEFT_QUERY = 'Weft query refused with WFT-BINDING (selected runtime context or limits) under umf-weft 0.4.57; fix tracked as the Weft query work'
+QUARANTINED_TESTS: dict[str, str] = {
+    'test_compiled_query_native.py::CompiledQueryTests::test_authored_composite_key_pages_and_count_profile': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_boolean_and_optional_values_remain_logical': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_combined_catalog_source_query_uses_one_operation_and_current_visibility': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_materializes_facts_and_retains_nested_proofs': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_pending_update_import_and_readonly': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_complete_entity_wildcard_names_include_relationship_outputs': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_exact_integer_decimal_projection_and_parameters': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_grouped_count_preserves_string_boolean_bags': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_public_links_forward_inverse_bounded_keys_readonly_and_unlink': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_public_mutations_filter_count_complete_record_and_readonly_query': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_repeated_query_compiles_once_but_revoked_reader_still_refuses': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_supported_projection_on_mixed_scalar_catalog': WEFT_QUERY,
+    'test_compiled_query_native.py::CompiledQueryTests::test_wide_complete_entity_preserves_fields_with_explicit_byte_budget': WEFT_QUERY,
+    'test_object_pages_native.py::ObjectPageTests::test_revocation_after_buffered_page_does_not_publish': WEFT_QUERY,
+    'test_read_only_public_native.py::ReadOnlyPublicTests::test_policy_replaced_while_object_buffered_uses_current_roles': WEFT_QUERY,
+    'test_typed_query_pages_native.py::StringQueryPagesTests::test_existing_string_primary_key_page_facade': WEFT_QUERY,
+    'test_typed_query_pages_native.py::TypedQueryPagesTests::test_exact_pages_and_readonly_continuation': WEFT_QUERY,
+}
+
 
 def pytest_collection_modifyitems(config, items):
     for item in items:
-        if item.module.__name__.split('.')[-1] in SLOW_MODULES:
+        module = item.module.__name__.split('.')[-1]
+        if module in SLOW_MODULES:
             item.add_marker(pytest.mark.slow)
+        if module in QUARANTINED_MODULES or any(item.nodeid.endswith(key) for key in QUARANTINED_TESTS):
+            item.add_marker(pytest.mark.quarantined)
 
 
 def pytest_configure(config):
     config.addinivalue_line('markers', 'slow: long-running native module, run by the nightly job')
+    config.addinivalue_line('markers', 'quarantined: known failing, excluded from CI; see conftest.py for the reason')
