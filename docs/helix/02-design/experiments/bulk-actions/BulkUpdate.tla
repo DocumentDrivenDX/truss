@@ -158,13 +158,15 @@ Next ==
  \/ (\E i \in 1..3: ExternalEdit(i) \/ ExternalRebind(i) \/ Write(i))
 \* Job-level projection onto the UMF job table (CONTRACT-904), checked against the owner fixture table.
 \* Allowed is generated from transitions.json by gen_job_table.py into BulkUpdateJobTable.tla.
-Prefix(x) == x.prefix - (IF x.phase = "commit_unknown" THEN 1 ELSE 0)
+\* Option 1 (owner decision 2026-11-10): the job row advances in the effect transaction, so a commit whose
+\* acknowledgement was lost has ALREADY advanced the job; "unknown" is the host's belief, not a job state.
+Prefix(x) == x.prefix
 Status(x) ==
  IF x.stopped /\ x.phase = "settled" THEN "stopped"
- ELSE IF x.cancel_status = "cancelled" THEN "cancelled"
- ELSE IF x.phase \in {"commit_unknown","rollback_unknown","rolled_back","conflict_unknown"} \/ (x.recovering /\ x.phase # "registration_unknown") THEN "reconciling"
- ELSE IF Prefix(x) = 2 /\ x.phase \in {"idle","committed"} THEN "completed"
- ELSE IF x.phase = "committed" \/ (x.phase = "idle" /\ (x.owner = -1 \/ x.expired)) THEN "queued"
+ ELSE IF x.cancel_status = "cancelled" \/ (x.phase = "commit_unknown" /\ x.cancel_fenced /\ x.prefix < 2 /\ ~x.stopped) THEN "cancelled"
+ ELSE IF x.phase \in {"rollback_unknown","rolled_back","conflict_unknown"} \/ (x.recovering /\ x.phase \notin {"registration_unknown","commit_unknown"}) THEN "reconciling"
+ ELSE IF Prefix(x) = 2 /\ x.phase \in {"idle","committed","commit_unknown"} THEN "completed"
+ ELSE IF x.phase \in {"committed","commit_unknown"} \/ (x.phase = "idle" /\ (x.owner = -1 \/ x.expired)) THEN "queued"
  ELSE "running"
 JobStep == \/ (Status(s) = Status(s') /\ Prefix(s) = Prefix(s'))
            \/ <<Status(s), Status(s'), Prefix(s') - Prefix(s)>> \in Allowed

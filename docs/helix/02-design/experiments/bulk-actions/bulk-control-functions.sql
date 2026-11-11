@@ -77,6 +77,8 @@ BEGIN
       RETURN jsonb_build_object('ok', true, 'state', truss_bulk._state(j));
     ELSIF k = 'commit' THEN
       IF NOT j.effect_admitted THEN RETURN jsonb_build_object('ok', false); END IF;
+      -- Option 1: the advance runs in the EFFECT transaction, with the complete batch result.
+      IF p_result IS NULL THEN RETURN jsonb_build_object('ok', false, 'code', 'PAP_RESULT'); END IF;
       RETURN truss_bulk._advance(j, p_result);
     ELSIF k = 'failure' THEN
       UPDATE truss_bulk.job SET status = 'stopped', stop_batch = claim_batch, stop_code = p_event->>'code',
@@ -98,7 +100,16 @@ BEGIN
 
   IF j.status = 'reconciling' AND j.claim_batch IS NOT NULL AND k = 'reconcile' THEN
     ev := p_event->>'evidence';
-    IF ev = 'committed' THEN RETURN truss_bulk._advance(j, p_result); END IF;
+    IF ev = 'committed' THEN
+      -- Option 1: a commit advances the row atomically with its receipt, so a reconciling row has no receipt
+      -- for its claim. Committed evidence therefore cannot be applied here; it is an OBSERVATION of an
+      -- already-advanced row. Refuse unless the receipt for this claim exists (it cannot, with the safety net).
+      IF NOT EXISTS (SELECT 1 FROM truss_bulk.batch_receipt WHERE namespace = p_ns AND job_id = p_job
+                     AND batch = j.claim_batch AND fence = j.claim_fence) THEN
+        RETURN jsonb_build_object('ok', false, 'code', 'PAP_RECEIPT');
+      END IF;
+      RETURN truss_bulk._advance(j, NULL);
+    END IF;
     IF ev = 'noncommit-admitted' THEN
       UPDATE truss_bulk.job SET status = 'stopped', stop_batch = claim_batch, stop_code = 'PAP_ABORT_DISPOSITION_UNKNOWN',
              claim_batch = NULL, claim_fence = NULL, effect_admitted = NULL

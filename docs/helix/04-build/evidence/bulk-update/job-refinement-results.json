@@ -24,7 +24,6 @@
     ],
     "('running', 'reconciling', 0)": [
       "cancel_original_noncommit",
-      "commit_ack_loss",
       "crash_unresolved_running",
       "expired_claim_native_noncommit",
       "guard_conflict_commit_ack_loss",
@@ -36,25 +35,28 @@
       "reconcile_original_noncommit_stop"
     ],
     "('running', 'queued', 1)": [
-      "commit_ack"
+      "commit_ack",
+      "commit_ack_loss"
     ],
     "('running', 'cancelled', 1)": [
-      "commit_ack"
+      "commit_ack",
+      "commit_ack_loss"
     ],
     "('reconciling', 'queued', 1)": [
       "commit_ack",
-      "reconcile_original_commit"
+      "commit_ack_loss"
     ],
     "('reconciling', 'cancelled', 1)": [
       "commit_ack",
-      "reconcile_original_commit"
+      "commit_ack_loss"
     ],
     "('running', 'completed', 1)": [
-      "commit_ack"
+      "commit_ack",
+      "commit_ack_loss"
     ],
     "('reconciling', 'completed', 1)": [
       "commit_ack",
-      "reconcile_original_commit"
+      "commit_ack_loss"
     ]
   },
   "fixtureTriplesNotExercisedByModel": [
@@ -112,5 +114,5 @@
       ]
     }
   },
-  "sourceSha256": "822ffa3a7aae64cf2270d95cba4e7168e7128a8103aab4512730c6ed593aa981"
+  "sourceSha256": "74985bf069fdbe4811206e4f8c19db8d7bbd22e3604f69e9c64a53dd83054a3a"
 }

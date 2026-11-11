@@ -55,3 +55,31 @@ CREATE TABLE truss_bulk.batch_receipt (
   PRIMARY KEY (namespace, job_id, batch),
   FOREIGN KEY (namespace, job_id) REFERENCES truss_bulk.job (namespace, job_id)
 );
+
+-- Safety net (owner decision 2026-11-10, option 1): at COMMIT, a job's committed_batches must equal the number of
+-- its receipts and those receipts must be exactly batches 0..n-1. An executor that writes a receipt without
+-- advancing the prefix (or the reverse) cannot commit. This adds no transition logic; the explicit functions
+-- still make the advance. DEFERRABLE INITIALLY DEFERRED so a single transaction may do both in either order.
+CREATE FUNCTION truss_bulk._check_prefix() RETURNS trigger
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog, pg_temp AS $$  -- deferred triggers run as the session role
+DECLARE ns text; jb text; n integer; hi integer; c integer;
+BEGIN
+  IF TG_OP = 'DELETE' THEN ns := OLD.namespace; jb := OLD.job_id; ELSE ns := NEW.namespace; jb := NEW.job_id; END IF;
+  SELECT committed_batches INTO c FROM truss_bulk.job WHERE namespace = ns AND job_id = jb;
+  IF NOT FOUND THEN
+    IF EXISTS (SELECT 1 FROM truss_bulk.batch_receipt WHERE namespace = ns AND job_id = jb) THEN
+      RAISE EXCEPTION 'receipts without a job row (%/%)', ns, jb USING ERRCODE = 'integrity_constraint_violation';
+    END IF;
+    RETURN NULL;
+  END IF;
+  SELECT count(*), coalesce(max(batch), -1) INTO n, hi FROM truss_bulk.batch_receipt WHERE namespace = ns AND job_id = jb;
+  IF n <> c OR hi <> c - 1 THEN
+    RAISE EXCEPTION 'committed prefix % does not match % receipts (highest batch %) for %/%', c, n, hi, ns, jb
+      USING ERRCODE = 'integrity_constraint_violation';
+  END IF;
+  RETURN NULL;
+END $$;
+CREATE CONSTRAINT TRIGGER job_prefix_matches_receipts AFTER INSERT OR UPDATE OR DELETE ON truss_bulk.job
+  DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss_bulk._check_prefix();
+CREATE CONSTRAINT TRIGGER receipts_match_job_prefix AFTER INSERT OR UPDATE OR DELETE ON truss_bulk.batch_receipt
+  DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss_bulk._check_prefix();

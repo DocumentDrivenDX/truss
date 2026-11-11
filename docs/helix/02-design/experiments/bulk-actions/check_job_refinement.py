@@ -14,16 +14,19 @@ from pathlib import Path
 import check_model as m
 
 def project(s):
-    prefix = s.prefix - (1 if s.phase == 'commit_unknown' else 0)  # durable only once the original result is observed
+    # Option 1 (owner decision 2026-11-10): the job row advances in the effect transaction, so a commit whose
+    # acknowledgement was lost has already advanced the job; "unknown" is the host's belief, not a job state.
+    prefix = s.prefix
     # Effects are admitted only after the confirmed marker, so registration_unknown is still an unadmitted running claim.
-    unknown = ('commit_unknown', 'rollback_unknown', 'rolled_back', 'conflict_unknown')
+    unknown = ('rollback_unknown', 'rolled_back', 'conflict_unknown')
     if s.stopped and s.phase == 'settled': status = 'stopped'
-    elif s.cancel_status == 'cancelled': status = 'cancelled'
-    elif s.phase in unknown or (s.recovering and s.phase != 'registration_unknown'): status = 'reconciling'
-    elif prefix == 2 and s.phase in ('idle', 'committed'): status = 'completed'
-    elif s.phase == 'committed' or (s.phase == 'idle' and (s.owner == -1 or s.expired)): status = 'queued'
+    elif s.cancel_status == 'cancelled' or (s.phase == 'commit_unknown' and s.cancel_fenced and s.prefix < 2 and not s.stopped): status = 'cancelled'
+    elif s.phase in unknown or (s.recovering and s.phase not in ('registration_unknown', 'commit_unknown')): status = 'reconciling'
+    elif prefix == 2 and s.phase in ('idle', 'committed', 'commit_unknown'): status = 'completed'
+    elif s.phase in ('committed', 'commit_unknown') or (s.phase == 'idle' and (s.owner == -1 or s.expired)): status = 'queued'
     else: status = 'running'
     return status, prefix
+
 
 def allowed_triples(fx):
     out = {}
