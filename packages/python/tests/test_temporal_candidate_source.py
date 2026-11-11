@@ -12,7 +12,7 @@ class TemporalCandidateSourceTests(unittest.TestCase):
     def test_fresh076_sources_keep_original_abi12_and_hash_actual_abi13(self):
         manifest, digest, sources = _release()
         root = files('truss').joinpath('_catalog_runtime')
-        self.assertEqual(manifest['releaseId'], 'truss-catalog-runtime/0.76-temporal-candidate')
+        self.assertEqual(manifest['releaseId'], 'truss-catalog-runtime/0.76-candidate')
         self.assertEqual(manifest['version'], '0.76')
         self.assertEqual(digest, sha256(root.joinpath('manifest.json').read_bytes()).hexdigest())
         self.assertEqual(sha256(root.joinpath('query-abi.json').read_bytes()).hexdigest(),

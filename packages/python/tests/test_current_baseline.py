@@ -4,7 +4,7 @@ from truss._migration_recipe import load_recipe, plan_route
 
 
 class CurrentBaselineTests(unittest.TestCase):
-    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-temporal-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
+    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
     def test_explicit_fresh_baseline_has_no_historical_routes(self):
         manifest, artifacts, _ = load_recipe()
         self.assertEqual(manifest['baseline']['identity'], 'truss-fresh-install-baseline/2026-11-02')
@@ -14,7 +14,7 @@ class CurrentBaselineTests(unittest.TestCase):
         self.assertEqual(plan_route(manifest, manifest['target']), [])
         self.assertEqual(json.loads(artifacts[manifest['target'] + '.json'])['sha256'], manifest['target'])
 
-    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-temporal-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
+    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
 
     def test_unknown_and_retired_sources_have_no_forward_route(self):
         manifest, _, _ = load_recipe()

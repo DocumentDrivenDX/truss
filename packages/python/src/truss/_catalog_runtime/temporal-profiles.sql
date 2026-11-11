@@ -19,7 +19,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;property record;
  packet jsonb;owner_result jsonb;owner_record jsonb;owner_field jsonb;expected jsonb;matches int;
 BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id IS DISTINCT FROM 'truss-catalog-runtime/0.76-temporal-candidate'
+ IF installation.release_id IS DISTINCT FROM 'truss-catalog-runtime/0.76-candidate'
   OR expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
   OR truss.query_temporal_abi() IS DISTINCT FROM '{"identity":"truss-postgresql-logical-query","version":"1.3","sha256":"0ecf5aa206dfcfcba21581fc328d7d073b48dbc8b61b2fc199278cf5f3e31b0b"}'::jsonb THEN
   RAISE EXCEPTION 'explicit actual native0.76 and ABI1.3 capability required' USING ERRCODE='0A000';END IF;

@@ -114,7 +114,7 @@ print(json.dumps({'version':'0.0.55','moduleRoot':str(root),'manifestSha256':sys
             self.assertIsNone(admin.execute("SELECT to_regclass('truss.runtime_initialization_custody')").fetchone()[0])
             self.assertEqual(admin.execute('SELECT count(*) FROM truss.runtime_migration_receipt').fetchone(),(0,))
             self.assertEqual(admin.execute('SELECT installation_id::text,release_id,release_sha256 FROM truss.catalog_runtime_installation').fetchone(),original)
-        native,digest,_=_release();self.assertEqual(native['releaseId'],'truss-catalog-runtime/0.76-temporal-candidate')
+        native,digest,_=_release();self.assertEqual(native['releaseId'],'truss-catalog-runtime/0.76-candidate')
         report={'scope':'Actual installed public055 populated-state refusal ONLY','oldWheelSHA256':PUBLIC055_WHEEL_SHA256,'oldNativeManifestSHA256':PUBLIC055_NATIVE_SHA256,'candidateNativeManifestSHA256':digest,'fixtureProvenanceSHA256':PROVENANCE_SHA256,'seedProducerSHA256':self.provenance['seedProducerSHA256'],'oldInstalledIdentity':self.old_identity,'refusals':observations,'completeStateEqualAfterEveryAttempt':True,'tableByteDigests':{n:sha256(b.encode()).hexdigest() for n,b in before['tables'].items()},'noMigrationReceipt':True,'noCustodyWitness':True,'cleanup':'Separate owned-monitor pg_ctl3+originalPIDabsence proof REQUIRED before PASS'}
         report['candidateSourceCommit']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
         report['candidateSourceTree']=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],cwd=ROOT,text=True).strip()

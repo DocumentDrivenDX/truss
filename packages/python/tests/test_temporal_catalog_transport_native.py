@@ -100,7 +100,7 @@ print(json.dumps({'distribution':'umf-truss','version':'0.0.54','moduleRoot':str
             after = self.snapshot(admin)
             self.assertEqual(after, before)
             manifest, digest, _ = _release()
-            self.assertEqual(manifest['releaseId'], 'truss-catalog-runtime/0.76-temporal-candidate')
+            self.assertEqual(manifest['releaseId'], 'truss-catalog-runtime/0.76-candidate')
             print('temporal-public054-no-effects ' + json.dumps({
                 'oldWheelSha256': PUBLIC054_WHEEL_SHA256, 'oldManifestSha256': self.old_identity['manifestSha256'],
                 'candidateManifestSha256': digest, 'refusal': 'InstallRefused/incompatible',

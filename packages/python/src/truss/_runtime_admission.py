@@ -19,7 +19,7 @@ def person_entrypoints():
     value=json.loads(raw)
     if value['interfaceVersion']!='truss-person-invocations/0.2':
         raise ValueError('Selected person invocation profile required')
-    if manifest['releaseId']=='truss-catalog-runtime/0.76-temporal-candidate':
+    if manifest['releaseId']=='truss-catalog-runtime/0.76-candidate':
         temporal_raw=root.joinpath('temporal-person-entrypoints.json').read_bytes()
         if sha256(temporal_raw).hexdigest()!=manifest['files']['temporal-person-entrypoints.json']:
             raise ValueError('Exact temporal person declarations required')

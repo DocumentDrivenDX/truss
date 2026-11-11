@@ -14,7 +14,7 @@ from truss.migrations import RuntimeMigrations
 
 
 class MigrationRecipeTests(unittest.TestCase):
-    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-temporal-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
+    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
     def test_exact_packaged_target_and_predecessors(self):
         """@covers US-045-AC6"""
         manifest,artifacts,digest=load_recipe()
@@ -36,7 +36,7 @@ class MigrationRecipeTests(unittest.TestCase):
         manifest['edges']+=[{'source':'unselected','target':'unselected','direction':'forward','artifact':'bad'}]
         with self.assertRaisesRegex(ValueError,'forward'):plan_route(manifest,'old')
 
-    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-temporal-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
+    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
 
     def test_artifact_corruption_refuses_before_connection(self):
         """@covers US-045-AC6"""
@@ -56,7 +56,7 @@ class MigrationRecipeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Restart-durable'):
             RuntimeMigrations(lambda: self.fail('No connection'),Registry())
 
-    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-temporal-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
+    @unittest.expectedFailure  # migrations/manifest.json target is stale: 0.0.56 runtime (0.76-candidate) needs a new fresh baseline incl. a native initialization-custody policy; owner follow-up
 
     def test_only_exact_native_initialization_profiles_are_admitted_and_preserved(self):
         """@covers US-045-AC6 @covers US-045-AC7"""

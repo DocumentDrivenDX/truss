@@ -53,8 +53,8 @@ class ReadOnlyPublicTests(reader_tests.ReaderCatalogTests):
         connection,host,assembly,tx,identity,input=self.committed_object()
         self.admin.execute('CREATE ROLE replacement_reader NOLOGIN');self.admin.execute('CREATE ROLE replacement_writer NOLOGIN')
         self.addCleanup(self.admin.execute,'DROP ROLE replacement_writer');self.addCleanup(self.admin.execute,'DROP ROLE replacement_reader')
-        original=self.admin.execute("SELECT pg_get_functiondef('truss.get_object(text,text,text,bigint,int,text,text)'::regprocedure)").fetchone()[0]
-        needle=" actor_oid:=truss.runtime_person(false);\n IF current_setting('transaction_read_only')='on' THEN"
+        original=self.admin.execute("SELECT pg_get_functiondef('truss.get_object_at_profile(text,text,text,bigint,int,text,text,boolean)'::regprocedure)").fetchone()[0]
+        needle=" actor_oid:=truss.runtime_person(false);\n IF selected_document IS NULL"
         self.assertIn(needle,original)
         gated=original.replace(needle," PERFORM pg_advisory_lock(928372);PERFORM pg_advisory_unlock(928372);\n"+needle)
         self.admin.execute(gated);self.admin.execute('SELECT pg_advisory_lock(928372)')

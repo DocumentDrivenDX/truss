@@ -203,7 +203,7 @@ def _run(host,transaction,*,engine_program,sql,document_ids,parameters,maximum_r
         if (any(type(v) is not int for v in (maximum_rows,maximum_scan_rows,maximum_bytes))
                 or (maximum_rows,maximum_scan_rows,maximum_bytes)!=(binding['maximumResultRows'],binding['maximumScanRows'],binding['maximumBytes'])
                 or binding['releaseId']!=manifest['releaseId'] or binding['releaseSha256']!=digest
-                or binding['queryAbi']!=abi() or manifest['releaseId']!='truss-catalog-runtime/0.76-temporal-candidate'):
+                or binding['queryAbi']!=abi() or manifest['releaseId']!='truss-catalog-runtime/0.76-candidate'):
             raise ValueError('Actual original native release/ABI/caps required')
         owner=compiler()
         if owner is None:return Ok(QueryUnavailable(reason='compiler'))

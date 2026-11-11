@@ -7,7 +7,7 @@
   "localDescriptor": "truss.local-timestamp/0.1",
   "sourceGuard": "truss.temporal-source-guard/0.2",
   "nativeScalarCapability": "truss.native-temporal-scalars/0.1",
-  "nativeRelease": "truss-catalog-runtime/0.76-temporal-candidate",
+  "nativeRelease": "truss-catalog-runtime/0.76-candidate",
   "installation": "fresh-only",
   "ordinaryTimestampMeaning": "unchanged"
 }
