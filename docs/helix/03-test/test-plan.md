@@ -2341,3 +2341,50 @@ installed final wheel. This is separate from the mandatory complete source
 lineage gate, which now includes the actual prior-publication/lost-response
 controls. Record full native ACL identities, whole-route receipt append and
 existing ledger row preservation; never infer receipt-table absence from age.
+
+
+## Current temporal native qualification — freeze1
+
+The [bounded native qualification plan](../04-build/temporal-native-qualification-plan.md),
+ID `truss.temporal-native-qualification-plan`, allocates TN-00–14 to exact helper,
+whole-source/snapshot/security, Prep2.1/replay, public data/typed-page and final
+installed/public-artifact boundaries. It governs this fresh-only native0.76,
+explicit ABI1.3 cut while preserving ordinary ABI1.2 and all original HF62
+assertions. Temporal scalar scope and CONTRACT-075 grammar remain unchanged;
+ordinary nullable arrays regress, selected temporal containers refuse.
+
+The current-only six baseline controls apply; historical migration matrices in
+earlier sections are not revived by this cut. Expensive native qualification is
+default-off and explicitly selected: one focused F7 helper job, optional bounded
+guard smoke, then one coherent candidate Linux campaign. Source review, syntax,
+the existing public056 raw T4A probe and archived snapshot cases do not establish
+new native acceptance. No required gate can close on zero tests, skip, failed
+initdb, source inventory relabeling or unconfirmed cleanup.
+
+### PV5 direct cursor custody and prepared writer
+
+The [public-values addendum](../04-build/temporal-public-values-addendum.md),
+PV-5 decisions `truss.temporal-public-values/pv5-cursor-custody/1` and
+`truss.temporal-public-values/pv5-prepared-completion/1`, governs two selected
+completion slices within the same coherent candidate campaign. The
+[interface freeze](../04-build/temporal-interface-freeze.md) distinguishes direct
+object cursors from EngineRead full-sort-tuple continuations.
+
+For TN-08/10/11/14, page genuine public local objects to exhaustion; retain exact
+native-issued original_bytes through DTO/native base64 transport. Require exact
+immutable bounded bytes and current-person/source/release/profile/ABI custody.
+Missing/altered bytes or metadata, unsigned temporal cursors, wrong actor,
+stale source/revision/definition and ordinary/query cursor substitution refuse.
+Exercise module/root revocation, read-only pages, complete byte limits and
+confirmed cleanup. Ordinary/public54 cursors remain unchanged; live pages do
+not gain a cross-page snapshot guarantee.
+
+For TN-06/07/08/11/14, observe eligible temporal prepared dispatch on cold and
+warm schema-cache paths. Independently check outcomes/effects/diagnostics and
+original request custody; verify current grants even on a warm cache. Tampered
+input/documents/schema/owner/nativeDescriptor/presence/ordinal/patch/profile,
+stale revision and revoked authority refuse before partial effects. Exercise
+safe ineligible UNPREPARED TEMPORAL dispatch, dry-run/rollback and durable replay
+using existing controls where source correspondence permits reuse. Supplied
+invalid prepared packets must never silently retry. Source review and collection
+leave native gates open; these additions select no separate campaign.

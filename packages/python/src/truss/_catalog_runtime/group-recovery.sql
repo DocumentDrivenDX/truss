@@ -28,8 +28,8 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_authorize_retained_request(bigint) FROM PUBLIC;
 
-CREATE FUNCTION truss.recover_group_request(original_input bytea,original_documents bytea,original_request bytea,
- expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.recover_group_request_at_profile(original_input bytea,original_documents bytea,original_request bytea,
+ expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE request jsonb;installation truss.catalog_runtime_installation%ROWTYPE;actor oid;ns bytea;rk bytea;
  receipt truss.request_receipt%ROWTYPE;attempt_id uuid;attempt truss.runtime_object_attempt%ROWTYPE;result jsonb;state text;code text;
@@ -46,6 +46,10 @@ BEGIN
  IF original_request IS NULL OR octet_length(original_request) NOT BETWEEN 1 AND 65536
   OR (convert_from(original_request,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded original request frame required' USING ERRCODE='22023';END IF;
+ IF (convert_from(original_input,'UTF8')::jsonb)->>'interfaceVersion' IS DISTINCT FROM
+  (CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) THEN
+  RAISE EXCEPTION 'original frozen recovery provider required' USING ERRCODE='0A000';END IF;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  request:=convert_from(original_request,'UTF8')::jsonb;
  IF request->>'state' IS DISTINCT FROM 'present' THEN
   RAISE EXCEPTION 'request-present frame required' USING ERRCODE='22023';END IF;
@@ -82,6 +86,13 @@ EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE 'P1001' OR SQLSTATE 'P1403'
    WHEN '0A000' THEN 'profile' WHEN '54000' THEN 'resource' ELSE 'observation' END)::text,'UTF8');END IF;
  code:=CASE state WHEN '22023' THEN 'invalid_input' WHEN 'P1001' THEN 'request_conflict' ELSE 'unauthorized_person' END;
  RETURN convert_to(jsonb_build_object('outcome','failed','code',code,'nativeState',state)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.recover_group_request_at_profile(bytea,bytea,bytea,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.recover_group_request(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.recover_group_request_at_profile(original_input,original_documents,original_request,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.recover_group_request(bytea,bytea,bytea,text,text) FROM PUBLIC;

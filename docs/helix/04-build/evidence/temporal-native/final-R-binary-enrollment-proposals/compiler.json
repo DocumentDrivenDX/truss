@@ -1,0 +1,15 @@
+{
+  "distribution": "umf-weft",
+  "version": "0.4.57",
+  "sourceCommit": "c623b94b66b0b46d492d457c62faddc896e2e452",
+  "installedFiles": {
+    "__init__.py": "cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d",
+    "weft.abi3.so": "28889097ebb1ecd684235c841034390064c21b42bcba10420041f8cfb2402f21"
+  },
+  "checkers": [
+    "check_engine_temporal_read_shape_json",
+    "check_engine_temporal_page_shape_json",
+    "check_engine_temporal_read_json",
+    "check_engine_temporal_page_json"
+  ]
+}

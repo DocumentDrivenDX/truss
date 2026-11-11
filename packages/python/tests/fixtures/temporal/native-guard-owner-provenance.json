@@ -1,0 +1,9 @@
+{
+  "scope": "DEV canonical owner operation on authored tiny Truss model; no release claim",
+  "repository": "DocumentDrivenDX/umf",
+  "commit": "01151c1915392a7d1e85e78c500b95e326c5265a",
+  "source": "src/compilation/admission/access/index.ts",
+  "sourceSha256": "900cb7644eafe8638f4529ea93ce1373f33402c5b0268da14bf90d951b5b82f1",
+  "sha256": "f38a44ab8b2fffda5463b0b155e36113cd93b0dc53755a41a8f277403bb2a110",
+  "command": "bun /private/tmp/truss-temporal-native-guard-fixture.ts"
+}

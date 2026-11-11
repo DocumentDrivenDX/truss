@@ -1,0 +1,12 @@
+{
+  "scope": "Source provenance refusal checks only; compiled enrollment still unissued",
+  "guards": [
+    "Actual umf.__version__ must match enrolled umf-core distribution metadata version",
+    "Actual weft and loaded weft.weft __version__ must each match enrolled umf-weft metadata version"
+  ],
+  "existingCustody": "All package/native file hashes, real loaded native origins, closed manifest schemas and four exactF6 exports remain required; no ambient version adoption or ordinary051 bypass",
+  "controls": 13,
+  "passed": true,
+  "compiledArtifactsQualified": false,
+  "nativeSQLManifest": "Unchanged a96f88e1460601223cdae0e00e94906fc74df4aa2b7d21d237c8c7547f49cb72; prior actual71file/34function cursor receipt unchanged"
+}

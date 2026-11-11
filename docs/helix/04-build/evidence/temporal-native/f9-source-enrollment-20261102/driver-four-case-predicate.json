@@ -1,0 +1,13 @@
+{
+  "review": "Sol correction1, authorized selected dispatch after focused driver controls pass",
+  "predicate": "testsRun==4 AND skips==0 AND expectedFailures==0 AND unexpectedSuccesses==0 AND failures==0 AND errors==0 AND wasSuccessful AND inventoryVerified AND cleanupConfirmed",
+  "samePredicateForReportAndExit": true,
+  "focusedDriverControls": {
+    "testsRun": 6,
+    "result": "PASS",
+    "nativeStarted": false
+  },
+  "sensitivity": "real unittest TestResult.wasSuccessful is true for deliberately skipped case; driver exit1 and selected-result.passed=false asserted",
+  "nativeResult": "UNRUN at source correction commit",
+  "workflowSemantics": "unchanged FEC one-worker/four-case selection"
+}

@@ -1,0 +1,7 @@
+{
+  "repository": "DocumentDrivenDX/umf",
+  "commit": "01151c1915392a7d1e85e78c500b95e326c5265a",
+  "path": "tests/rust-core/fixtures/access-inspection/cases.json",
+  "sha256": "2e939f0d0f68f71a6b78c38e4fcd151e7b363513311f1aed170f9576333cbdc3",
+  "scope": "exact candidate DEV source fixture; no public release or native acceptance claim"
+}

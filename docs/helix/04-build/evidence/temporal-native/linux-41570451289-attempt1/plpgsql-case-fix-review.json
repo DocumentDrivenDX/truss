@@ -1,0 +1,25 @@
+{
+  "status": "bounded syntax grouping correction; source review required before next native run",
+  "redRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/41570451289",
+  "redSource": "591f46fe23997fdfca7497280aa4733f8a13ff67",
+  "actualCases": 4,
+  "passes": 3,
+  "failures": 1,
+  "errors": 0,
+  "skips": 0,
+  "errorClass": "psycopg.errors.SyntaxError",
+  "sqlState": "42601",
+  "fix": "parenthesize six newly authored SQL CASE expressions in PLpgSQL IF conditions across five files; preserve every original condition/refusal/member inventory/source-row check",
+  "changedSql": [
+    "runtime.sql",
+    "pages.sql",
+    "groups.sql",
+    "operations.sql",
+    "query-temporal-sources.sql"
+  ],
+  "syntaxSensitivity": "five distinct original CASE forms reproduce the native parser error; grouped forms parse; no database started locally",
+  "nativeStatus": "actual green installation pending reviewed selected run",
+  "stagedNativeManifestSha256": "d49e1c62c0bcf540dfac30cea38513a81a377c96a125669524746e9fcbfa1822",
+  "preservedFutureWork": "staged native manifest excludes uncommitted inspector resource enrollment; working copy retains it; no future work reset",
+  "workflow": "unchanged approved one-worker/four-case selection"
+}

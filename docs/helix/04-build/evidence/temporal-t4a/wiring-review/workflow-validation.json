@@ -1,0 +1,14 @@
+{
+  "yamlParsed": true,
+  "defaultProbeInput": false,
+  "jobs": [
+    "released-runtime",
+    "weft-abi12-probe"
+  ],
+  "oneUbuntuProbeWithoutMatrix": true,
+  "mutuallyExclusiveSelectors": true,
+  "alwaysUpload": true,
+  "shellBlocksSyntaxChecked": 10,
+  "dispatched": false,
+  "embeddedPythonBlocksSyntaxChecked": 1
+}

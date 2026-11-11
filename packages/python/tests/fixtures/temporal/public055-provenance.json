@@ -1,0 +1,53 @@
+{
+  "scope": "Authentic immutable GitHub-public055 fixture ONLY; no PyPI/install/native execution claim",
+  "distribution": "umf-truss",
+  "version": "0.0.55",
+  "wheelFilename": "umf_truss-0.0.55-py3-none-any.whl",
+  "wheelSHA256": "156df20641d8c4fee6d836c6b29266a0a7eb3b1299c407e430ce0d2c07a79805",
+  "wheelBytes": 4592923,
+  "publicURL": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.55/umf_truss-0.0.55-py3-none-any.whl",
+  "GitHubSHA256SUMS_SHA256": "9a2364e6f892212e0b04b893cfcb901dd8e14a379ab73a7a96aa0b5acc0e18ed",
+  "nativeManifestSHA256": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+  "nativeReleaseId": "truss-catalog-runtime/0.75-candidate",
+  "publishedProofSHA256": "1f13b6c9fbaea732f7760817dc34bbe2672da88fb910adfc1261083cb3647ae1",
+  "immutableRelease": true,
+  "PyPILookup": "0.0.55 JSON HTTP404; no PyPI qualification inferred",
+  "schema": "truss-temporal-public055-fixture/1",
+  "publishedProof": "docs/helix/05-deploy/evidence/truss-0.0.55-publication/download-verification.json",
+  "originalSeedProducer": "packages/python/tests/runtime_migration_fixture.py",
+  "originalSeedProducerSHA256": "a4cdb0b89acfe0f49a62564d0605796c8cfea1de4e17c5bf9e91546b51901897",
+  "seedProducer": "packages/python/tests/public055_seed_fixture.py",
+  "seedProducerSHA256": "914860f757e535690f1ea5fdccf85482e6e741a5e2bfc1ce314c6f4926c92100",
+  "seedDelta": "Same original seeding API sequence; installation only adds public055 operation_timeout_ms=180000. Original producer unchanged; same host statement10000ms/defaultoperation30000ms for other calls.",
+  "nativeExecuted": false,
+  "constraints": "packages/python/tests/fixtures/temporal/public055-isolated-runtime-constraints.txt",
+  "constraintsSHA256": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+  "constraintsPublicURL": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.55/isolated-runtime-constraints.txt",
+  "requestedExtras": [
+    "local",
+    "native"
+  ],
+  "dependencyPins311Linux": {
+    "attrs": "26.1.0",
+    "fasteners": "0.20",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
+    "mini-racer": "0.14.1",
+    "pgserver-pg18": "18.6.1",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2",
+    "psycopg": "3.3.6",
+    "psycopg-binary": "3.3.6",
+    "referencing": "0.37.0",
+    "rpds-py": "2026.9.1",
+    "typing-extensions": "4.16.0"
+  },
+  "forbiddenOwnerDistributions": [
+    "umf-core",
+    "umf-codegen",
+    "umf-weft",
+    "umf_access",
+    "weft-sql"
+  ],
+  "dependencyScope": "EXACT published055 isolated runtime constraints. Actual wheel METADATA local/native extras require NO external UMF/Weft/Access. Do not request query/typed-sdk or substitute current temporal owners. NewLinux311 resolver/native case still UNEXECUTED; no transfer of olderMac qualification."
+}

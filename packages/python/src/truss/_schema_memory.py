@@ -46,14 +46,15 @@ def record_state(connection):
         return _record_states.setdefault(connection, {})
 
 
-def record_schemas(key, records=None, basis=None):
+def record_schemas(key, records=None, basis=None, *, temporal=False):
     """Share the bounded revision cache with production record preparation.
 
     A warm lookup has no native observation or authorization meaning. Admission
     must check the retained installation/revision/source identity on every write.
     """
     global _cache_bytes
-    cache_key = ('records', key)
+    if type(temporal) is not bool:raise ValueError('Explicit value profile required')
+    cache_key = ('temporal-records' if temporal else 'records', key)
     with _lock:
         existing = _cache.get(cache_key)
         if existing is not None:
@@ -62,7 +63,7 @@ def record_schemas(key, records=None, basis=None):
         if records is None:
             return None
         from ._record_schema import compile_records
-        compiled = compile_records(records)
+        compiled = compile_records(records, temporal=temporal)
         selection = RecordSchemaSelection(_freeze(basis), compiled,
             MappingProxyType({r['definitionPin']: str(r['typeId']) for r in records}),
             MappingProxyType({str(r['typeId']): r['definitionPin'] for r in records}))

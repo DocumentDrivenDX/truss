@@ -1,0 +1,31 @@
+{
+  "schema": "truss.f7-canonical-source-review/0.1",
+  "predecessorReceiptCommit": "92b2d139",
+  "basis": "Frozen temporal interface F2/F7 and unchanged UMF CONTRACT-075; authentic Linux T4A raw compatibility run41547057318.",
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_runtime/query-temporal.sql": "6b3154ba72ae0445e6c1d3d27ae0e526393ea91138782a52fc229b5af0044b90",
+    "packages/python/tests/test_temporal_canonical_text_native.py": "3386df844aac7f9c6de9482f9d1b5f2b3013babd508525ce00c255e7712477b5"
+  },
+  "implementation": "Native deterministic strict date/local/instant canonical-text helper using bounded ASCII grammar, Gregorian make_date validation and integer day/clock offset normalization; PUBLIC EXECUTE revoked.",
+  "checks": {
+    "pythonModuleBoundaries": {
+      "passed": true,
+      "imports": 1739,
+      "scope": "Python only"
+    },
+    "sqlParser": {
+      "tool": "pglast v8.7",
+      "sqlStatementsParsed": 2,
+      "plpgsqlFunctionsParsed": 1,
+      "scope": "Syntax only"
+    },
+    "nativeTestsCollected": 5,
+    "nativeTestsExecuted": 0,
+    "ordinaryManifestSha256Unchanged": "5ecb599f65d64e6656bf6c83c30cea6e2aefd488cb3fe821b749458d5e9b3522",
+    "helperEnrolledByOrdinaryManifest": false
+  },
+  "pending": "Native component execution, complete ABI1.3 descriptor/source/ACL/dependency enrollment, buffered temporal sources, noncompact Prep2.1 transport and inverse coverage, fresh-only target/public54 refusal, and ordinary ABI1.2/HF62 adoption on the final reviewed cohort remain required.",
+  "nativeTestCommand": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests:scripts python -m unittest test_temporal_canonical_text_native.TemporalCanonicalTextNativeTests -v",
+  "versionOwnership": "Truss0.0.55 remains reserved to the separate installation-only candidate; temporal package version unassigned. Native0.76 freeze is independent. No manifest, initializer, compiler guard, dependency pin or source receipt was relabeled.",
+  "qualification": "Source component ready for review only; no native execution, temporal support, candidate installation or release claim."
+}

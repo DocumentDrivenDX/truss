@@ -1,0 +1,9 @@
+Collecting umf-truss==0.0.54
+  Downloading umf_truss-0.0.54-py3-none-any.whl.metadata (940 bytes)
+Downloading umf_truss-0.0.54-py3-none-any.whl (4.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 18.4 MB/s  0:00:00
+Saved /home/runner/work/_temp/weft-abi12-probe/inputs/truss/umf_truss-0.0.54-py3-none-any.whl
+Successfully downloaded umf-truss
+
+[notice] A new release of pip is available: 26.2.2 -> 26.3
+[notice] To update, run: pip install --upgrade pip

@@ -1,0 +1,22 @@
+{
+  "status": "BOUNDED SOURCE FIX READY FOR SOL REVIEW; no changed-source rerun dispatched",
+  "failedRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/41565825061",
+  "problem": "PostgreSQL operator precedence groups JSON member name with array subtraction, raising22P02 before intended guards",
+  "fix": "explicit parentheses around six JSONB member-extraction expressions in three temporal SQL files; predicates/refusal assertions unchanged",
+  "changedSql": [
+    "temporal-storage.sql",
+    "temporal-preparation.sql",
+    "query-temporal-sources.sql"
+  ],
+  "nativeManifestSha256": "4eb6b4234f1b15453e9dd5be36d94451e1cab89fbd067fd4df740dfa247b62c0",
+  "qualifiedHelperSha256": "6b3154ba72ae0445e6c1d3d27ae0e526393ea91138782a52fc229b5af0044b90",
+  "checks": {
+    "postgresqlParserAST": "old root operator ->; corrected root operator - with left member extraction",
+    "sqlSyntaxSources": 61,
+    "sourceAndCustodyComponentCases": 8,
+    "result": "PASS; no native startup"
+  },
+  "nativeResult": "OPEN: fresh installer and all three transport cases must pass real selected Linux gate",
+  "workflowSelection": "unchanged one worker, four cases; zero skips/xfail/xpass required",
+  "evidence": "original failed artifact/counts/cleanup retained; no error expectation weakened"
+}

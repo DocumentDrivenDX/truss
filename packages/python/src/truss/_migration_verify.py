@@ -205,10 +205,17 @@ def verify(cursor,expected,acl_profiles,*,full_names=False):
     # bounded installation evidence. Keep the original exact default check.
     defaults=set(cursor.fetchall())
     if defaults!={('f',0,owner,'EXECUTE',False),('T',0,owner,'USAGE',False)}:raise ValueError('Private default grants drifted')
+    if any(r[0]=='runtime_initialization_custody' for r in expected['relations']):
+        from ._installation_privileges import verify_initialization_custody_privileges
+        verify_initialization_custody_privileges(cursor,owner,ordinary_roles)
     return ctx
 
 
-def matches_inventory(observed,profile):
+def matches_inventory(observed,profile,*,initialization_custody=None):
+    if 'initialization-custody.sql' in profile.get('manifest',{}).get('files',{}) and not profile.get('initializationPolicies'):return False
+    if 'initializationPolicies' in profile:
+        from ._initialization_custody import custody_matches
+        return custody_matches(observed,profile,initialization_custody)
     expected=profile['inventory']
     if observed.keys()!=expected.keys():return False
     rules={(r['surface'],*r['identity']):r['definitions'] for r in profile.get('definitionAlternatives',[])}
@@ -230,7 +237,7 @@ def matches_inventory(observed,profile):
 
 def require_preserved_initialization(source,target):
     """Qualified source variants are distinct native instants, never conversions."""
-    for rule in source.get('initializationAlternatives',[]):
+    for rule in [*source.get('initializationAlternatives',[]),*source.get('initializationPolicies',[])]:
         identity=rule['identity'][0]
         before=[r for r in source['inventory']['relations'] if r[0]==identity]
         after=[r for r in target['inventory']['relations'] if r[0]==identity]
@@ -239,6 +246,14 @@ def require_preserved_initialization(source,target):
 
 def verify_artifact(cursor,profile):
     observed=structure(cursor)
+    if profile.get('initializationPolicies'):
+        from ._initialization_custody import static_inventory_matches,verify_stored
+        if not static_inventory_matches(observed,profile):raise ValueError('Installed static native definitions drifted')
+        ctx=verify(cursor,observed,profile['acl'],full_names=profile.get('aclNameProfile')=='truss-native-acl-names/0.2')
+        row=[r for r in observed['relations'] if r[0]=='journal_runtime_horizon'][0]
+        custody=verify_stored(cursor,profile,row)
+        if not matches_inventory(observed,profile,initialization_custody=custody):raise ValueError('Native initialization custody drifted')
+        return ctx,{**profile,'inventory':observed,'initializationCustody':{'witnessHex':custody.raw.hex(),'sha256':custody.digest}}
     if not matches_inventory(observed,profile):raise ValueError('Installed native definitions drifted')
     selected={**profile,'inventory':observed}
     return verify(cursor,observed,profile['acl'],full_names=profile.get('aclNameProfile')=='truss-native-acl-names/0.2'),selected
@@ -261,6 +276,12 @@ def installed_profile(cursor,manifest,artifacts):
     observed=structure(cursor)
     for digest in [manifest['target'],*manifest['sources']]:
         expected=profile_for(manifest,artifacts,digest)
+        if expected.get('initializationPolicies'):
+            from ._initialization_custody import static_inventory_matches
+            if not static_inventory_matches(observed,expected):continue
+            ctx,selected=verify_artifact(cursor,expected)
+            verify_profile(cursor,selected)
+            return ctx,selected
         if matches_inventory(observed,expected):
             selected={**expected,'inventory':observed}
             ctx=verify(cursor,observed,expected['acl'],full_names=expected.get('aclNameProfile')=='truss-native-acl-names/0.2')

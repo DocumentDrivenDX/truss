@@ -15,6 +15,18 @@ on:
         type: choice
         default: none
         options: [none, all, small, nominal, type-heavy, many-types, wide, complex, dense-edges, index-heavy, skewed, node-heavy, large]
+      temporal_qualification_run_id:
+        description: Original successful qualify119 workflow run ID for the exact tagged source
+        type: string
+        default: ''
+      temporal_qualification_artifact_id:
+        description: Original successful qualify119 artifact ID
+        type: string
+        default: ''
+      temporal_qualification_artifact_sha256:
+        description: SHA256 of the original qualify119 artifact ZIP
+        type: string
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -24,6 +36,9 @@ jobs:
   package:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
     steps:
       - uses: actions/checkout@v6
         with:
@@ -32,11 +47,76 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Resolve temporal release route from source and explicit artifact references
+        env:
+          TN_RUN_ID: ${{ inputs.temporal_qualification_run_id }}
+          TN_ARTIFACT_ID: ${{ inputs.temporal_qualification_artifact_id }}
+          TN_ARTIFACT_SHA256: ${{ inputs.temporal_qualification_artifact_sha256 }}
+        run: |
+          python - <<'PYTHON'
+          import os,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          import temporal_qualified_artifact as qualified
+          selected=qualified.validate_dispatch_inputs({
+              'temporal_qualification_run_id':os.environ['TN_RUN_ID'],
+              'temporal_qualification_artifact_id':os.environ['TN_ARTIFACT_ID'],
+              'temporal_qualification_artifact_sha256':os.environ['TN_ARTIFACT_SHA256']},
+              temporal_candidate=qualified.temporal_candidate(Path.cwd()))
+          with open(os.environ['GITHUB_ENV'],'a') as output:
+              output.write('TEMPORAL_QUALIFIED_ROUTE='+('true' if selected else 'false')+'\n')
+              if selected:
+                  for key,value in (('TN_RUN_ID',selected['runId']),('TN_ARTIFACT_ID',selected['artifactId']),
+                                    ('TN_ARTIFACT_SHA256',selected['artifactSha256'])):
+                      output.write(key+'='+value+'\n')
+                  import tomllib
+                  version=tomllib.loads(Path('packages/python/pyproject.toml').read_text())['project']['version']
+                  from publish_pypi_release import distribution_for_version,wheel_prefix_for_version
+                  output.write('DISTRIBUTION='+distribution_for_version(version)+'\n')
+                  output.write('WHEEL_PREFIX='+wheel_prefix_for_version(version)+'\n')
+          PYTHON
+      - name: Authenticate original campaign artifact and stage its exact candidate wheel
+        if: env.TEMPORAL_QUALIFIED_ROUTE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/temporal-release-intake"
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$TN_RUN_ID" > "$RUNNER_TEMP/temporal-release-intake/run.json"
+          attempt=$(python -c "import json,os;print(json.load(open(os.environ['RUNNER_TEMP']+'/temporal-release-intake/run.json'))['run_attempt'])")
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$TN_RUN_ID/attempts/$attempt/jobs?per_page=100" > "$RUNNER_TEMP/temporal-release-intake/jobs-pages.json"
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$TN_RUN_ID/artifacts?per_page=100" > "$RUNNER_TEMP/temporal-release-intake/artifacts-pages.json"
+          python - <<'PYTHON'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'temporal-release-intake'
+          run=json.loads((root/'run.json').read_bytes())
+          jobs=[row for page in json.loads((root/'jobs-pages.json').read_bytes()) for row in page.get('jobs',[])]
+          artifacts=[row for page in json.loads((root/'artifacts-pages.json').read_bytes()) for row in page.get('artifacts',[])]
+          selected_jobs=[row for row in jobs if row.get('name')=='temporal-candidate' and str(row.get('run_id'))==os.environ['TN_RUN_ID'] and str(row.get('run_attempt'))==str(run.get('run_attempt'))]
+          selected_artifacts=[row for row in artifacts if str(row.get('id'))==os.environ['TN_ARTIFACT_ID']]
+          if len(selected_jobs)!=1 or len(selected_artifacts)!=1:raise ValueError('Unique original qualify119 job/artifact required')
+          artifact=selected_artifacts[0]
+          if str(artifact.get('workflow_run',{}).get('id'))!=os.environ['TN_RUN_ID']:raise ValueError('Artifact does not belong to selected run')
+          (root/'job.json').write_text(json.dumps(selected_jobs[0],indent=2)+'\n')
+          (root/'artifact.json').write_text(json.dumps(artifact,indent=2)+'\n')
+          PYTHON
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$TN_ARTIFACT_ID/zip" > "$RUNNER_TEMP/temporal-release-intake/artifact.zip"
+          python scripts/temporal_qualified_artifact.py --intake \
+            --run-json "$RUNNER_TEMP/temporal-release-intake/run.json" \
+            --job-json "$RUNNER_TEMP/temporal-release-intake/job.json" \
+            --artifact-json "$RUNNER_TEMP/temporal-release-intake/artifact.json" \
+            --artifact-zip "$RUNNER_TEMP/temporal-release-intake/artifact.zip" \
+            --repository "$GITHUB_REPOSITORY" --run-id "$TN_RUN_ID" \
+            --artifact-id "$TN_ARTIFACT_ID" --artifact-sha256 "$TN_ARTIFACT_SHA256" \
+            --source-commit "$GITHUB_SHA" --source-tree "$(git rev-parse 'HEAD^{tree}')" --output dist
       - name: Check active HF release cohort bindings
         env:
           PYTHONPATH: packages/python/tests
           PYTHONDONTWRITEBYTECODE: '1'
-        run: python -m unittest test_release_cohort_binding -v
+        run: python -m unittest test_release_cohort_binding test_packaging_cohort -v
+      - name: Require genuinely qualified release identities
+        run: python scripts/release_cohort.py --qualified
       - name: Check large-workload runner capacity controls
         env:
           PYTHONPATH: packages/python/tests
@@ -54,6 +134,7 @@ jobs:
           bun scripts/build-python-embedded.ts
           git diff --exit-code -- packages/python/src/truss/_embedded_js packages/python/src/truss/_embedded_release.py
       - name: Check version and build package
+        if: env.TEMPORAL_QUALIFIED_ROUTE != 'true'
         run: |
           python - <<'PYTHON'
           import os,sys,tomllib
@@ -69,6 +150,11 @@ jobs:
           PYTHON
           python -m pip install build==1.3.0
           python -m build --outdir dist packages/python
+      - name: Build only the source archive from the qualified candidate source
+        if: env.TEMPORAL_QUALIFIED_ROUTE == 'true'
+        run: |
+          python -m pip install build==1.3.0
+          python -m build --sdist --outdir dist packages/python
       - name: Verify complete source payload in wheel and sdist
         run: |
           python - <<'PYTHON'
@@ -127,8 +213,8 @@ jobs:
           python - <<'PYTHON'
           import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
           requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
-          assert requirement.startswith('weft-sql==')
-          version=requirement.removeprefix('weft-sql==')
+          assert requirement.startswith('umf-weft==')
+          version=requirement.removeprefix('umf-weft==')
           assert version and all(part.isdecimal() for part in version.split('.'))
           subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
@@ -136,8 +222,8 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
-          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
-          python -m pip install --no-deps /tmp/weft-wheels/*.whl
+          python scripts/verify-weft-release-wheel.py --cohort scripts/truss-release-cohort.json /tmp/weft-wheels/*.whl
+          python -m pip install /tmp/weft-wheels/*.whl
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -maxdepth 1 -name '*.whl' -print -quit)"
       - name: Qualify the installed standalone local carrier and retained refusals
@@ -151,7 +237,8 @@ jobs:
           origin=pathlib.Path(truss.__file__).resolve()
           assert not origin.is_relative_to(pathlib.Path('packages/python/src').resolve())
           assert importlib.metadata.version(project['name'])==project['version']
-          modules=['test_local_timestamp_value','test_public_contracts','test_record_schema','test_import_contracts']
+          modules=['test_local_timestamp_value','test_public_contracts','test_record_schema','test_import_contracts',
+              'test_temporal_value_transport','test_temporal_public_values']
           result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(modules))
           wheel=next(pathlib.Path('dist').glob('*.whl'))
           record={'profile':'truss-standalone-local-carrier/0.1','sourceCommit':os.environ['GITHUB_SHA'],
@@ -297,8 +384,8 @@ jobs:
           import importlib.metadata,pathlib,tomllib,truss,weft
           project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
           assert importlib.metadata.version(project['name'])==project['version']
-          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
-          assert importlib.metadata.version('weft-sql')==weft.__version__==expected_compiler
+          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('umf-weft==')
+          assert importlib.metadata.version('umf-weft')==weft.__version__==expected_compiler
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun /missing/bun
@@ -311,7 +398,7 @@ jobs:
 
       - name: Run installed original public workload
         id: public_workflows
-        if: github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
+        if: inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
         env:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
@@ -321,7 +408,7 @@ jobs:
           python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --count-sql-submissions --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
 
       - name: Record original public workload status
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         env:
           REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
           WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
@@ -338,7 +425,7 @@ jobs:
           (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
           PYTHON
       - name: Retain original public workload report and log
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        if: always() && (inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         uses: actions/upload-artifact@v4
         with:
           name: original-public-workflow-${{ matrix.os }}
@@ -626,8 +713,8 @@ jobs:
           python - <<'PYTHON'
           import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
           requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
-          assert requirement.startswith('weft-sql==')
-          version=requirement.removeprefix('weft-sql==')
+          assert requirement.startswith('umf-weft==')
+          version=requirement.removeprefix('umf-weft==')
           assert version and all(part.isdecimal() for part in version.split('.'))
           subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
@@ -635,8 +722,8 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
-          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
-          python -m pip install --no-deps /tmp/weft-wheels/*.whl
+          python scripts/verify-weft-release-wheel.py --cohort scripts/truss-release-cohort.json /tmp/weft-wheels/*.whl
+          python -m pip install /tmp/weft-wheels/*.whl
       - name: "Install checksum-verified PG18 and this exact Truss wheel"
         run: "python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel \"$(find dist -maxdepth 1 -name '*.whl' -print -quit)\""
       - name: "Run selected installed public stress workload"
@@ -726,8 +813,21 @@ jobs:
           import importlib.util
           project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
           backend=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('packages/python/src/truss/_query_runtime.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='BACKEND' for t in n.targets))
-          root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==4
+          root=pathlib.Path('dist');assets=sorted(root.iterdir())
+          qualification_path=root/'temporal-qualification-binding.json'
+          temporal_qualified=qualification_path.is_file()
+          assert len(assets)==(8 if temporal_qualified else 4)
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
+          if json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json').read_bytes()).get('releaseId')=='truss-catalog-runtime/0.76-temporal-candidate':
+              assert temporal_qualified, 'Selected temporal release requires original qualified-wheel bundle'
+          temporal_qualification=None
+          if temporal_qualified:
+              import sys
+              sys.path.insert(0,'scripts')
+              import temporal_qualified_artifact
+              source_tree=subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip()
+              temporal_qualification=temporal_qualified_artifact.verify_release_staging(root,source_commit=os.environ['GITHUB_SHA'],source_tree=source_tree)
+              assert temporal_qualification['candidateWheelSha256']==hashlib.sha256(next(root.glob('*.whl')).read_bytes()).hexdigest()
           carrier_path=pathlib.Path('/tmp/published-standalone-carrier/qualification.json')
           carrier=json.loads(carrier_path.read_bytes())
           assert carrier['passed'] and carrier['tests']>=31 and carrier['failures']==carrier['errors']==carrier['skipped']==0
@@ -748,11 +848,16 @@ jobs:
           assert hf['passed'] and hf['skipped']==0 and hf['sourceCommit']==os.environ['GITHUB_SHA']
           assert hf['nativeManifestSha256']==qualification['targetManifestSha256']
           corpus_path=pathlib.Path('docs/helix/03-test/fixtures/hohfeld-followup-0.1.json')
-          corpus=json.loads(corpus_path.read_bytes())
+          import sys
+          sys.path.insert(0,'scripts')
+          from release_cohort import hf_profile,load_cohort
+          corpus=hf_profile(pathlib.Path.cwd())
           assert hf['corpusSha256']==hashlib.sha256(corpus_path.read_bytes()).hexdigest()
           assert hf['profile']==corpus['profile']
+          assert hf['cohortSha256']==hashlib.sha256(pathlib.Path('scripts/truss-release-cohort.json').read_bytes()).hexdigest()
+          assert hf['dependencyCohort']==load_cohort(require_qualified=True)
           assert hf['toolkit']==corpus['toolkitVersion']==project['version']
-          assert hf['compiler']==corpus['compilerVersion']==project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
+          assert hf['compiler']==corpus['compilerVersion']==project['optional-dependencies']['query'][0].removeprefix('umf-weft==')
           assert hf['tests']==len(corpus['cases']) and hf['failures']==hf['errors']==0
           compiler_cohorts=[c for c in corpus['compilerCohorts'] if c['nativeModuleSha256']==hf['compilerNativeModuleSha256'] and c['sourceRevision']==hf['compilerSourceRevision'] and c['platform']=='linux-x86_64']
           assert len(compiler_cohorts)==1
@@ -790,8 +895,19 @@ jobs:
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
           assert qualification['targetManifestSha256']==hashlib.sha256(manifest.read_bytes()).hexdigest()
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':project['name'],'version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':project['name'],'version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('umf-weft=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
+          if temporal_qualification is not None:
+              intake=json.loads((root/'temporal-qualification-intake.json').read_bytes())
+              pins['temporalQualifiedWheel']={'schema':'truss.temporal-qualified-wheel-release-pin/1',
+                  'sourceCommit':temporal_qualification['sourceCommit'],'sourceTree':temporal_qualification['sourceTree'],
+                  'runId':temporal_qualification['artifactRunId'],'runAttempt':temporal_qualification['artifactRunAttempt'],
+                  'artifactId':temporal_qualification['artifactId'],'artifactSha256':temporal_qualification['artifactSha256'],
+                  'candidateWheelSha256':temporal_qualification['candidateWheelSha256'],
+                  'qualifiedBundleSha256':hashlib.sha256((root/'temporal-qualified-evidence.zip').read_bytes()).hexdigest(),
+                  'bindingSha256':hashlib.sha256((root/'temporal-qualification-binding.json').read_bytes()).hexdigest(),
+                  'memberManifestSha256':hashlib.sha256((root/'temporal-qualified-member-manifest.json').read_bytes()).hexdigest()}
           pins.update(hfConformanceProfile=hf['profile'],hfConformanceCorpusSha256=hf['corpusSha256'],hfConformanceArchive=next(root.glob('truss-hf-conformance-*.zip')).name,hfConformanceTests=hf['tests'])
+          pins.update(dependencyCohort=load_cohort(require_qualified=True))
           pins.update(weftSourceRevision=hf['compilerSourceRevision'],weftNativeModuleSha256=hf['compilerNativeModuleSha256'],weftWheelSha256=compiler_cohorts[0]['wheelSha256'])
           pins.update(localRuntimeConstraintsAsset=constraints.name,localRuntimeConstraintsSha256=hashlib.sha256(constraints.read_bytes()).hexdigest())
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-current010.json')
@@ -860,7 +976,7 @@ jobs:
           pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf010CatalogSupport={'identity':policy['identity'],'version':policy['version'],'sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf010CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
-          compiler_source=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('scripts/build-weft-runtime-python.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='REVISION' for t in n.targets))
+          compiler_source=load_cohort(require_qualified=True)['qualified']['weftSourceRevision']
           assert compiler_source==hf['compilerSourceRevision']
           pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64'],currentQueryWeftSource=compiler_source)
           group_profiles=json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/group-profiles.json').read_bytes())['profiles']

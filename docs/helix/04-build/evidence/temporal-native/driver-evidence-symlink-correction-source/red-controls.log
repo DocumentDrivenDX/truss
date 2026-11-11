@@ -1,0 +1,36 @@
+======================================================================
+FAIL: test_untracked_executable_symlink_to_approved_evidence_refuses (test_temporal_qualification_provenance.TemporalQualificationProvenanceTests.test_untracked_executable_symlink_to_approved_evidence_refuses) (ignored=False, externalEvidence=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_temporal_qualification_provenance.py", line 110, in executable_evidence_symlink_refuses
+    with self.assertRaisesRegex(ValueError,'scripts/evidence-input.py'):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_untracked_executable_symlink_to_approved_evidence_refuses (test_temporal_qualification_provenance.TemporalQualificationProvenanceTests.test_untracked_executable_symlink_to_approved_evidence_refuses) (ignored=False, externalEvidence=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_temporal_qualification_provenance.py", line 110, in executable_evidence_symlink_refuses
+    with self.assertRaisesRegex(ValueError,'scripts/evidence-input.py'):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_ignored_executable_symlink_to_approved_evidence_refuses (test_temporal_qualification_provenance.TemporalQualificationProvenanceTests.test_ignored_executable_symlink_to_approved_evidence_refuses) (ignored=True, externalEvidence=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_temporal_qualification_provenance.py", line 110, in executable_evidence_symlink_refuses
+    with self.assertRaisesRegex(ValueError,'scripts/evidence-input.py'):
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_ignored_executable_symlink_to_approved_evidence_refuses (test_temporal_qualification_provenance.TemporalQualificationProvenanceTests.test_ignored_executable_symlink_to_approved_evidence_refuses) (ignored=True, externalEvidence=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_temporal_qualification_provenance.py", line 110, in executable_evidence_symlink_refuses
+    with self.assertRaisesRegex(ValueError,'scripts/evidence-input.py'):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 15.604s
+
+FAILED (failures=4)

@@ -41,11 +41,14 @@ def _group_refusal_state(result):
 _DIAGNOSTIC=ProfilePin(identity='truss-import-input-diagnostic',version='0.1',sha256=sha256(b'Closed import invalid-input code; no native diagnostic disclosure;v1').hexdigest())
 
 
-def _cell(value,*,containers=False,recursive=False,_depth=0,_budget=None):
+def _cell(value,*,containers=False,recursive=False,_depth=0,_budget=None,temporal=False):
     if _budget is None:_budget=[4096]
     _budget[0]-=1
     if _depth>32 or _budget[0]<0:raise ValueError('Container value capacity')
     if type(value) is not dict:raise ValueError('Exact scalar cell required')
+    if temporal and _depth==0 and value.get('kind')=='localTimestamp':
+        from ._temporal_values import local_timestamp_cell
+        return local_timestamp_cell(value)
     if value=={'kind':'null'}:return NullValue()
     if value.get('kind')=='boolean' and set(value)=={'kind','value'}:return BooleanValue(value=value['value'])
     if value.get('kind') in ('string','integer','decimal','timestamp','binary','date') and set(value)=={'kind','text'}:return TextValue(kind=value['kind'],text=value['text'])
@@ -58,12 +61,16 @@ def _cell(value,*,containers=False,recursive=False,_depth=0,_budget=None):
     raise ValueError('Selected scalar cell required')
 
 
-def _payload(record,metadata):
+def _payload(record,metadata,*,temporal=False):
     value=decode_acceptance_json(base64.b64decode(record.payload.bytes_base64,validate=True))
     fields={'interfaceVersion','kind','values','source','ownership' if type(record) is ObjectImportRecord else 'orderKey'}
-    if set(value)-fields or value.get('interfaceVersion')!='truss-import-payload/0.1.0' or value.get('kind')!=record.kind or type(value.get('values')) is not list:
+    if set(value)-fields or value.get('interfaceVersion')!=('truss-import-temporal-payload/0.1.0' if temporal else 'truss-import-payload/0.1.0') or value.get('kind')!=record.kind or type(value.get('values')) is not list:
         raise ValueError('Closed original import payload required')
-    values=tuple(AuthoredValue(name=v['name'],value=_cell(v['value'],containers=type(record) is ObjectImportRecord and record.payload_profile.version in ('0.2','0.3'),recursive=type(record) is ObjectImportRecord and record.payload_profile.version=='0.3')) for v in value['values'])
+    authored_type,create_type=AuthoredValue,CreateObject
+    if temporal:
+        from .temporal import AuthoredValue as TemporalAuthored, CreateObject as TemporalCreate
+        authored_type,create_type=TemporalAuthored,TemporalCreate
+    values=tuple(authored_type(name=v['name'],value=_cell(v['value'],containers=type(record) is ObjectImportRecord and (temporal or record.payload_profile.version in ('0.2','0.3')),recursive=type(record) is ObjectImportRecord and (temporal or record.payload_profile.version=='0.3'),temporal=temporal)) for v in value['values'])
     if len(values)>1024 or len({v.name for v in values})!=len(values) or any(set(v)!= {'name','value'} for v in value['values']):raise ValueError('Unique authored scalar values required')
     if 'source' in value:
         source=value['source']
@@ -75,7 +82,7 @@ def _payload(record,metadata):
         if value.get('ownership')!={'state':'rootless'}:raise ValueError('Rootless imported objects required')
         for primary in metadata['primaryFields']:
             if not any(v.name==primary['name'] and _wire(v.value)==primary['value'] for v in values):raise ValueError('Original primary payload agreement required')
-        return CreateObject(type_definition_pin=metadata['definitionPin'],values=values,ownership=RootlessOwnership())
+        return create_type(type_definition_pin=metadata['definitionPin'],values=values,ownership=RootlessOwnership())
     order=value.get('orderKey')
     if order=={'state':'null'}:order_key=NullOrderKey()
     elif type(order) is dict and set(order)=={'state','text'} and order['state']=='text':order_key=TextOrderKey(text=order['text'])
@@ -84,8 +91,12 @@ def _payload(record,metadata):
         target=StoredObjectReference(identity=record.identity.target),values=values,order_key=order_key)
 
 
-def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_engine=None):
-    if type(input) is not ImportInput or type(documents) is not tuple or any(type(d) is not CatalogDocument for d in documents) or any(type(r) not in (ObjectImportRecord,EdgeImportRecord) for r in input.records):
+def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_engine=None,temporal=False):
+    input_type=ImportInput
+    if temporal:
+        from .temporal import ImportInput as TemporalInput
+        input_type=TemporalInput
+    if type(input) is not input_type or type(documents) is not tuple or any(type(d) is not CatalogDocument for d in documents) or any(type(r) not in ((ObjectImportRecord,) if temporal else (ObjectImportRecord,EdgeImportRecord)) for r in input.records):
         return ImportInvalid(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))
     try:
         original=canonical_numeric_free(_wire(input))
@@ -111,12 +122,12 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
             created_transaction_unresolved=str(sum(type(o) is ImportCreated and o.batch_id in unresolved for o in outcomes)),attempt_unknown=str(sum(type(o) is ImportAttemptUnknown for o in outcomes)),
             skipped=str(sum(type(o) is ImportSkipped for o in outcomes)),rejected=str(sum(type(o) is ImportRejected for o in outcomes)),unprocessed=str(len(input.records)-len(visited)))
         return ImportReport(attempt_id=attempt_id,input_count=str(len(input.records)),executed_catalog_revision=context['catalog']['revision'],import_profile=input.import_profile,
-            selected_configuration=configuration,input_sha256=sha256(b'truss-canonical/0.1.0\ntruss-import-input/0.1.0\n'+original).hexdigest(),execution='host_adopted' if _engine is None else 'engine_owned',status=status,
+            selected_configuration=configuration,input_sha256=sha256(b'truss-canonical/0.1.0\n'+input.interface_version.encode()+b'\n'+original).hexdigest(),execution='host_adopted' if _engine is None else 'engine_owned',status=status,
             outcomes=tuple(sorted(outcomes,key=lambda o:int(o.input_index))),batches=tuple(batches),unprocessed_indices=tuple(str(i) for i in range(len(input.records)) if i not in visited),counts=counts)
     def release_report(cursor,observed):
         pin_cursor(cursor)
         def original_scope():
-            cursor.execute('SELECT truss.person_group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.person_temporal_group_context(%s,%s)' if temporal else 'SELECT truss.person_group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
             native=json.loads(bytes(cursor.fetchone()[0]))
             if any(native[k]!=context[k] for k in ('installationId','sourceEpoch','authorizedScopeIdentity')):
                 raise ValueError('Original engine import disclosure context required')
@@ -150,7 +161,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
     try:
         with _HostOperationReservation(host) if _engine is None else nullcontext():
             def admit(cursor,observed):
-                pin_cursor(cursor);cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+                pin_cursor(cursor);cursor.execute('SELECT truss.person_temporal_import_context(%s,%s)' if temporal else 'SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
                 native=json.loads(bytes(cursor.fetchone()[0]))
                 if _wire(input.layout_profile)!=native['layoutProfile'] or _wire(input.import_profile)!=native['importProfile'] or _wire(input.value_profile)!=native['valueProfile'] or _wire(input.catalog)!=native['catalog']:
                     raise ValueError('Selected original import context required')
@@ -173,28 +184,32 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
             context=admitted.value;selected=context['selectedConfiguration']
             configuration=SelectedMutationConfiguration(source_epoch=selected['sourceEpoch'],installation_id=selected['installationId'],generation=selected['generation'],
                 key_reuse=selected['keyReuse'],journal_mode=selected['journalMode'],configuration_profile=ProfilePin(**selected['configurationProfile']),installed_producer_inventory_sha256=selected['installedProducerInventorySha256'])
-            group_context=GroupRuntimeContext(layout_profile=input.layout_profile,mutation_profile=ProfilePin(**context['mutationProfile']),value_profile=input.value_profile,
-                request_fingerprint_profile=ProfilePin(**context['requestFingerprintProfile']),authorized_scope_identity=context['authorizedScopeIdentity'],source_epoch=context['sourceEpoch'],history_profile=context['historyProfile'])
+            if temporal:
+                from ._temporal_group import context_from_native
+                group_context=context_from_native(context,manifest,digest)
+            else:
+                group_context=GroupRuntimeContext(layout_profile=input.layout_profile,mutation_profile=ProfilePin(**context['mutationProfile']),value_profile=input.value_profile,
+                    request_fingerprint_profile=ProfilePin(**context['requestFingerprintProfile']),authorized_scope_identity=context['authorizedScopeIdentity'],source_epoch=context['sourceEpoch'],history_profile=context['historyProfile'])
             order=sorted(range(len(input.records)),key=lambda i:(type(input.records[i]) is EdgeImportRecord,i))
             for index in order:
                 record=input.records[index];batch_id=attempt_id+':'+str(index);known=[None];entered=[False];submitted=[False];before_attempt=host._custody.last_attempt
                 def execute(cursor,observed):
                     entered[0]=True
                     pin_cursor(cursor)
-                    cursor.execute('SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+                    cursor.execute('SELECT truss.person_temporal_import_context(%s,%s)' if temporal else 'SELECT truss.person_import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
                     if json.loads(bytes(cursor.fetchone()[0]))!= {k:v for k,v in context.items() if k!='hostTransactionId'}:raise ValueError('Original import context changed')
                     if type(record) is ObjectImportRecord:
-                        cursor.execute('SELECT truss.person_import_object_identity(%s,%s,NULL,%s,%s)',
+                        cursor.execute('SELECT truss.person_temporal_import_object_identity(%s,%s,NULL,%s,%s)' if temporal else 'SELECT truss.person_import_object_identity(%s,%s,NULL,%s,%s)',
                             (_bytes(_wire(record.identity)),sources[record.identity.type.owner.document_id],manifest['releaseId'],digest),prepare=False)
                     else:cursor.execute('SELECT truss.person_import_edge_identity(%s,%s,%s)',(_bytes(_wire(record.identity)),manifest['releaseId'],digest),prepare=False)
                     metadata=json.loads(bytes(cursor.fetchone()[0]))
                     if metadata['state']=='skipped':return ImportSkipped(input_index=str(index),batch_id=batch_id,reason=metadata['reason'],identity=_identity(metadata['identity']) if 'identity' in metadata else ABSENT)
-                    try:operation=_payload(record,metadata)
+                    try:operation=_payload(record,metadata,temporal=temporal)
                     except (ValueError,TypeError,KeyError):known[0]='invalid_payload';raise _RecordRefused('Eligible import payload refused')
                     origin=MapValue(entries=input.asserted_origin.entries+(MapEntry(key='x-load-id',value=TextValue(kind='string',text=input.load_id)),))
                     capture=[];submitted[0]=True
                     applied=apply_group(host,transaction,group_context.input((operation,),origin),RequestNone(),documents,manifest,digest,pin_cursor,
-                        bun_executable=bun_executable,_cursor=cursor,_attempt_capture=capture)
+                        bun_executable=bun_executable,_cursor=cursor,_attempt_capture=capture,temporal=temporal)
                     if not isinstance(applied,Ok):raise _RecordRefused('Import execution failed')
                     if not isinstance(applied.value,GroupSuccess):
                         raise _RecordRefused('Import group refused',native_state=_group_refusal_state(applied.value))

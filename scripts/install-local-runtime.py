@@ -24,10 +24,14 @@ if not wheels:raise RuntimeError('No released compatible wheel; source builds ar
 for wheel in wheels:
  if hashlib.sha256(wheel.read_bytes()).hexdigest()!=entries.get(wheel.name):raise RuntimeError('Released wheel checksum mismatch; remove stale or preliminary cache: '+str(wheel))
 (a.wheelhouse/'SHA256SUMS').write_bytes(checksums)
+if len(wheels)!=1:raise RuntimeError('One exact compatible runtime wheel required')
 print(json.dumps({'release':listing,'wheels':[str(w) for w in wheels],'checksumsVerified':True}),flush=True)
 if not a.download_only:
+ from release_cohort import refuse_legacy_weft
+ refuse_legacy_weft()
  target=str(a.truss_wheel.resolve()) if a.truss_wheel else str(ROOT/'packages/python')
  # Truss's own pure-Python wheel may be built; every dependency must be binary.
- subprocess.run([sys.executable,'-m','pip','install','--only-binary=:all:','--find-links',str(a.wheelhouse),target+'[local,native,experimental-pg8000]'],check=True)
- subprocess.run([sys.executable,'-m','pip','install','--only-binary=:all:','--no-index','--no-deps','--force-reinstall','--find-links',str(a.wheelhouse),profile['distribution']+'=='+profile['distributionVersion']],check=True)
+ subprocess.run([sys.executable,'-m','pip','install','--only-binary=:all:','--find-links',str(a.wheelhouse),target+'[local,native,query,typed-sdk,experimental-pg8000]',str(wheels[0])],check=True)
  subprocess.run([sys.executable,'-m','pip','check'],check=True)
+ from release_cohort import verify_installed
+ verify_installed()

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Truss-owned catalog composition/execution; Weft owns all SQL interpretation."""
 from decimal import Decimal
+import importlib.metadata
 import re
 import base64
 from datetime import date, datetime, timezone
@@ -22,12 +23,20 @@ BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.43',
 def compiler(*, engine_catalog=False, engine_pages=False, entity_projection=False):
     try:
         import weft
-        if weft.__version__ != '0.4.51' or not callable(getattr(weft,'compile_truss_runtime_json',None)):
+        if weft.__version__ != '0.4.57' or importlib.metadata.version('umf-weft') != '0.4.57':
+            return None
+        try:
+            importlib.metadata.distribution('weft-sql')
+        except importlib.metadata.PackageNotFoundError:
+            pass
+        else:
+            return None
+        if not callable(getattr(weft,'compile_truss_runtime_json',None)):
             return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None
         return weft.compile_truss_runtime_json
-    except (ImportError, AttributeError):
+    except (ImportError, AttributeError, importlib.metadata.PackageNotFoundError):
         return None
 
 
@@ -230,6 +239,12 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
               maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None, engine_program=None, capture_catalog=False,
               read_catalog=False,catalog_validator=None,entity_projection=None):
+    if engine_program is not None:
+        from ._temporal_query_execution import selected
+        if selected(engine_program):
+            # The selected SDK executor owns temporal checker/native custody.
+            # Ordinary query/page entrypoints never retry this with ABI1.2.
+            return Ok(QueryRefused(code='unsupported_query'))
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)

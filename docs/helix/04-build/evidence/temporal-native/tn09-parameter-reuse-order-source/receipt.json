@@ -1,0 +1,37 @@
+{
+  "scope": "TN09/10 test SOURCE additions requested by Sol after ba9ece8f; no native execution or qualification",
+  "baseCommit": "9515de33a28852c1bab61f0d545c71b6d8a77f9a",
+  "priorReviewedTestSource": "ba9ece8f01a39cb76ee96f2e4d610750bfdcd114",
+  "coverage": [
+    "One authentic compiled EngineRead entry reused for original, changed, then original parameters; exact wrapper bytes unchanged and independently expected row labels",
+    "Independent known-admitted SQL VALUES date/timestamptz oracle; each ASC/DESC x NULLS FIRST/LAST x primary composite/alternate Key (16 date/instant permutations) beside original 8 local permutations; all 6 rows and terminal continuation asserted"
+  ],
+  "checks": {
+    "python": "/private/tmp/truss-temporal-current054-venv/bin/python (3.11)",
+    "syntax": "PASS (AST, no native execution)",
+    "engineCasesCollected": 9,
+    "targetReleaseCasesCollected": 2,
+    "pureControls": 75,
+    "pureFailures": 0,
+    "pureErrors": 0,
+    "pureResult": "PASS",
+    "nativeCasesExecuted": 0,
+    "pureModules": [
+      "test_temporal_public_values",
+      "test_temporal_preparation_custody",
+      "test_temporal_private_transport",
+      "test_temporal_program_custody",
+      "test_temporal_native_integer_transport",
+      "test_temporal_query_capture",
+      "test_temporal_value_transport",
+      "test_temporal_query_values",
+      "test_temporal_query_continuation",
+      "test_temporal_inspector_enrollment",
+      "test_temporal_candidate_source",
+      "test_temporal_enrollment_probe"
+    ]
+  },
+  "initialSyntaxCommand": "System python3.9 py_compile could not create its cache outside writable roots; replaced with successful 3.11 AST parse. No source failure, no native launch.",
+  "qualification": "Include in SAME coherent installed candidate TN campaign with actual Core/Access/Weft and genuine enrolled manifests. No extra CI campaign; no fake owner or binding; previous cursor/F7/T4A receipts unchanged.",
+  "packagingDelegation": "No packaging files modified; exclusive scoped packaging handoff offered to coordinator at baseCommit."
+}

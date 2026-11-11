@@ -452,3 +452,42 @@ Cross-artifact admission verifies that presence acceptedDefinition and codec aut
 Verify the entire batch before publication. Missing artifacts, conflicting definitions, wrong owner/home/domain, incompatible profile versions or unavailable semantic/native interpretation refuse activation without a partially registered field facade. Placeholder bytes and shape-valid zero hashes remain insufficient. Existing trusted registration owns executable interpretation; neither operation input nor a definition artifact loads arbitrary SQL/code. Actual native producer/parser/guard/dependency/resource evidence and explicit Weft adoption remain required.
 
 The [reference row value definition](truss-reference-row-value-v0.1.proposal.schema.json) supplies the remaining scalar-field composition wire for this original milestone. Its fieldIdentity, accepted/authored source, row-join, presence, scalar-codec and physical artifacts must resolve the same original field and admitted native home. The historical value graph’s JSON storageRepresentation cannot be relabeled as row-scalar storage. This new candidate covers the four original scalar fields only and grants no recursive/mixed-home or broader release support. Absence belongs to complete presence interpretation rather than a fabricated value node; an explicit null root has no scalar payload. Scalar family must match the original Field and exact selected codec, including decimal(21,3) for Item.amount. All four value definitions are admitted atomically with their existing complete graph/record requirements; compiler interpretation remains explicitly owner-admitted.
+
+
+## Selected finite temporal transport — freeze1
+
+[Temporal interface freeze1](../../04-build/temporal-interface-freeze.md),
+F2/F4/F8, selects an additive explicit transport. CONTRACT-075's32-character,
+1–6-fraction-digit grammar is unchanged; seven digits refuse even when the
+excess is zero. The broader exact-zero-residue projection procedure elsewhere
+in this contract remains scoped to its separately admitting source grammar;
+it MUST NOT be used to widen this selected temporal route.
+
+Temporal query selection uses umf.weft-binding-temporal/0.2 and decoder
+truss-temporal/0.2. Date, fixed-offset instant and naive local remain distinct;
+source spelling is retained independently of canonical comparison/carrier text.
+The immutable LocalTimestampValue is explicitly serialized only under
+truss-exact-value-temporal/0.1 as canonical26 localTimestamp. Existing exact-value
+profiles/carrier constructors remain closed. Missing, explicit null and value
+stay distinct; no temporal Key or temporal container support follows.
+
+Prep2.1/summary2.1 with truss-fresh-catalog-temporal-support/0.2 uses noncompact
+original descriptor-bearing declarations, exact source and full UMF inspection
+custody. Descriptor iff owner-admitted local is enforced before publication.
+Stripping descriptor/owner coverage, empty declarations or reconstructing through
+legacy2.0 refuses atomically. Durable request/replay/recovery retain exact original
+bytes. Core timestamp declarations and old property/cell meanings are unchanged.
+
+
+### Public temporal construction and decoding selection
+
+The [PV1 public value addendum](../../04-build/temporal-public-values-addendum.md)
+selects `assembly.temporal_values()` and exact `truss.temporal` DTO/input/payload/
+result profiles for the explicit truss-exact-value-temporal/0.1 carrier route.
+Ordinary ExactValue/AuthoredValue/container constructors and ordinary entrypoints
+remain closed. Actual native0.76/ABI1.3/profile/source-descriptor admission is
+required per operation; native release label alone cannot select a local decoder.
+Local cell is exactly canonical26 localTimestamp under the existing standalone
+carrier, UMF strict075 and F7 helper. Ordinary nullable/container semantics remain;
+local container descendants, Keys and edge properties refuse. New profile bytes/
+hashes and replay framing remain exact and separate from ordinary profiles.

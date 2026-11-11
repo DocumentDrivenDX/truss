@@ -47,7 +47,8 @@ def _read_profile(program, kind):
     """Closed owner compiler/version pairs; binary streams remain separate."""
     return (program.get('compiler'),program.get('version')) in (
         ('truss-runtime','weft.engine-'+kind+'/0.1'),
-        ('truss-runtime-binary','weft.engine-'+kind+'/0.2'))
+        ('truss-runtime-binary','weft.engine-'+kind+'/0.2'),
+        ('truss-runtime-temporal','weft.engine-'+kind+'/0.4'))
 
 
 def _related_key_models(value, decoder, key_model):
@@ -79,6 +80,9 @@ def _related_key_models(value, decoder, key_model):
 
 def _typed_rows(entry, program, native):
     """Validate source correspondence even when the native result is empty."""
+    if program.get('compiler')=='truss-runtime-temporal':
+        from ._temporal_query_values import typed_rows
+        return typed_rows(entry,program,native)
     if native.columns!=tuple(entry.result.model_fields):
         raise ValueError('Truss complete ordered output signature differs')
     binary=program.get('compiler')=='truss-runtime-binary'
@@ -194,9 +198,27 @@ class TrussTarget:
         documents=tuple(dict.fromkeys(m['pin']['documentId'] for m in request['modules']))
         with self.operation(budget) as (assembly,transaction):
             if monotonic()>=deadline:raise TimedOut('deadline expired before engine dispatch')
-            outcome=assembly.query_in_transaction(transaction,sql=request['sql'],document_ids=documents,
-                parameters=values.model_dump(mode='python'),maximum_rows=binding['maximumResultRows'],
-                maximum_scan_rows=binding['maximumScanRows'],maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
+            if program['compiler']=='truss-runtime-temporal':
+                from ._temporal_query_execution import run_read
+                from .catalog_runtime import _release,_pin_cursor
+                with assembly._lock:
+                    assembly._available()
+                    manifest,digest,_=_release()
+                    outcome=run_read(assembly._host,transaction,engine_program=entry.artifact_json,
+                        sql=request['sql'],document_ids=documents,parameters=values.model_dump(mode='python'),
+                        maximum_rows=binding['maximumResultRows'],maximum_scan_rows=binding['maximumScanRows'],
+                        maximum_bytes=binding['maximumBytes'],manifest=manifest,digest=digest,pin_cursor=_pin_cursor,
+                        operation_deadline=deadline)
+            else:
+                outcome=assembly.query_in_transaction(transaction,sql=request['sql'],document_ids=documents,
+                    parameters=values.model_dump(mode='python'),maximum_rows=binding['maximumResultRows'],
+                    maximum_scan_rows=binding['maximumScanRows'],maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
+            if program['compiler']=='truss-runtime-temporal' and isinstance(outcome,Ok):
+                owner_refusal=outcome.value
+                if isinstance(getattr(owner_refusal,'parsed',None),dict):
+                    # Preserve the whole parsed diagnostic envelope; the cause
+                    # retains its unchanged .original response JSON as well.
+                    raise TrussReadRefused(owner_refusal.parsed) from owner_refusal
             if not isinstance(outcome,Ok) or not isinstance(outcome.value,QueryRows):raise TrussReadRefused(outcome)
             native=outcome.value
             result=_typed_rows(entry,program,native)
@@ -213,6 +235,10 @@ class TrussTarget:
             for name,p in request['parameters'].items():
                 family,value=p['family'],p['value']
                 sample[name]={'string':lambda:value,'integer':lambda:int(value),'decimal':lambda:Decimal(value),'boolean':lambda:value=='true'}[family]()
+            if entry.artifact()['compiler']=='truss-runtime-temporal':
+                from datetime import date,datetime
+                for name,p in request['temporalParameters'].items():
+                    sample[name]=(date.fromisoformat(p['value']) if p['kind']=='date' else datetime.fromisoformat(p['value']))
             if _read_profile(entry.artifact(),'page'):self.page(entry,entry.parameters.model_validate(sample))
             else:self.read(entry,entry.parameters.model_validate(sample))
     def page(self,entry:CatalogRead[P,R],parameters:P,*,after:ReadContinuation|None=None,timeout:timedelta|None=None)->ReadPage[R]:
@@ -233,10 +259,24 @@ class TrussTarget:
         documents=tuple(dict.fromkeys(m['pin']['documentId'] for m in request['modules']))
         with self.operation(budget) as (assembly,transaction):
             if monotonic()>=deadline:raise TimedOut('deadline expired before page dispatch')
-            outcome=assembly.query_page_in_transaction(transaction,sql=request['sql'],document_ids=documents,
-                parameters=values.model_dump(mode='python'),limit=program['pageSize'],cursor=cursor,
-                maximum_rows=binding['maximumResultRows'],maximum_scan_rows=binding['maximumScanRows'],
-                maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
+            if program['compiler']=='truss-runtime-temporal':
+                from ._temporal_query_execution import run_page
+                from .catalog_runtime import _release,_pin_cursor
+                with assembly._lock:
+                    assembly._available()
+                    manifest,digest,_=_release()
+                    outcome=run_page(assembly._host,transaction,engine_program=entry.artifact_json,
+                        sql=request['sql'],document_ids=documents,parameters=values.model_dump(mode='python'),
+                        page_size=program['pageSize'],page_cursor=cursor,maximum_rows=binding['maximumResultRows'],
+                        maximum_scan_rows=binding['maximumScanRows'],maximum_bytes=binding['maximumBytes'],
+                        manifest=manifest,digest=digest,pin_cursor=_pin_cursor,operation_deadline=deadline)
+                if isinstance(outcome,Ok) and isinstance(getattr(outcome.value,'parsed',None),dict):
+                    raise TrussReadRefused(outcome.value.parsed) from outcome.value
+            else:
+                outcome=assembly.query_page_in_transaction(transaction,sql=request['sql'],document_ids=documents,
+                    parameters=values.model_dump(mode='python'),limit=program['pageSize'],cursor=cursor,
+                    maximum_rows=binding['maximumResultRows'],maximum_scan_rows=binding['maximumScanRows'],
+                    maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
             if not isinstance(outcome,Ok) or not isinstance(outcome.value,QueryPage):raise TrussReadRefused(outcome)
             native=outcome.value
             rows=_typed_rows(entry,program,native)

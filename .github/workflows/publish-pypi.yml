@@ -77,20 +77,47 @@ jobs:
           TAG: ${{ steps.identity.outputs.tag }}
           EVENT_NAME: ${{ github.event_name }}
           PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
+          PRODUCER_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          SOURCE_SHA: ${{ steps.identity.outputs.source_sha }}
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p incoming
           gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > incoming/release.json
           gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$TAG" > incoming/tag-ref.json
+          gh api "repos/$GITHUB_REPOSITORY/git/commits/$SOURCE_SHA" > incoming/source-commit.json
           if [[ "$(jq -r .object.type incoming/tag-ref.json)" == tag ]]; then
             OBJECT_SHA="$(jq -r .object.sha incoming/tag-ref.json)"
             gh api "repos/$GITHUB_REPOSITORY/git/tags/$OBJECT_SHA" > incoming/tag-object.json
           fi
           if [[ "$EVENT_NAME" == workflow_run ]]; then
             gh api "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID" > incoming/producer-run.json
+            gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/actions/runs/$PRODUCER_RUN_ID/attempts/$PRODUCER_ATTEMPT/jobs?per_page=100" \
+              | jq '{jobs: [.[].jobs[]]}' > incoming/producer-jobs.json
           fi
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir incoming/assets
+          TEMPORAL_ID="$(jq -r '.releaseId' packages/python/src/truss/_catalog_runtime/manifest.json)"
+          if [[ "$TEMPORAL_ID" == "truss-catalog-runtime/0.76-temporal-candidate" ]]; then
+            WEFT_VERSION="$(jq -r '.weft.version' scripts/truss-release-cohort.json)"
+            OWNER_TAG="v$WEFT_VERSION"
+            OWNER_DIR="incoming/weft-owner"
+            mkdir -p "$OWNER_DIR"
+            gh api "repos/DocumentDrivenDX/weft/releases/tags/$OWNER_TAG" > "$OWNER_DIR/release-api.json"
+            gh release download "$OWNER_TAG" --repo DocumentDrivenDX/weft --dir "$OWNER_DIR" \
+              --pattern "release-pins.json" --pattern "release-assets-$WEFT_VERSION.json" \
+              --pattern "SHA256SUMS" --pattern "current-controller-pair-registration.json" \
+              --pattern "current-source-manifest.json" --pattern "current-wasm-manifest.json" \
+              --pattern "macos-browser-compiler-parity.json" --pattern "macos-browser-compiler-receipts.json" \
+              --pattern "x86_64-unknown-linux-gnu-component.json" \
+              --pattern "x86_64-unknown-linux-gnu-sdk-smoke.json" \
+              --pattern "x86_64-unknown-linux-gnu-packaging.json" \
+              --pattern "aarch64-unknown-linux-gnu-component.json" \
+              --pattern "aarch64-unknown-linux-gnu-sdk-smoke.json" \
+              --pattern "aarch64-unknown-linux-gnu-packaging.json" \
+              --pattern "aarch64-apple-darwin-component.json" \
+              --pattern "aarch64-apple-darwin-sdk-smoke.json" \
+              --pattern "aarch64-apple-darwin-packaging.json"
+          fi
       - name: Verify tag source, checksum manifest, pins and package metadata
         id: source
         env:
@@ -114,9 +141,12 @@ jobs:
             --wheel-prefix "$WHEEL_PREFIX" --wheel-count 1 --require-sdist
             --release-json incoming/release.json --tag-ref-json incoming/tag-ref.json
             --assets-dir incoming/assets --output-dir dist --receipt dist/source-receipt.json)
+          if [[ -d incoming/weft-owner ]]; then ARGS+=(--owner-release-dir incoming/weft-owner); fi
+          ARGS+=(--expected-source-tree "$(jq -r .tree.sha incoming/source-commit.json)")
           if [[ -f incoming/tag-object.json ]]; then ARGS+=(--tag-object-json incoming/tag-object.json); fi
           if [[ "$EVENT_NAME" == workflow_run ]]; then
-            ARGS+=(--producer-run-json incoming/producer-run.json --producer-workflow-path .github/workflows/release.yml)
+            ARGS+=(--producer-run-json incoming/producer-run.json --producer-jobs-json incoming/producer-jobs.json
+              --producer-workflow-path .github/workflows/release.yml)
           fi
           python scripts/publish_pypi_release.py "${ARGS[@]}"
           printf 'version=%s\ndistribution=%s\n' "$VERSION" "$DISTRIBUTION" >> "$GITHUB_OUTPUT"
@@ -207,6 +237,53 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: tn14-controller
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: truss-pypi-release-${{ needs.verify-release.outputs.version }}
+          path: ${{ runner.temp }}/tn14-assets
+      - uses: actions/download-artifact@v4
+        with:
+          name: truss-pypi-publication-${{ needs.verify-release.outputs.version }}
+          path: ${{ runner.temp }}/tn14-publication
+      - name: Select actual released temporal wheel without importing owner packages
+        id: tn14
+        env:
+          ASSETS: ${{ runner.temp }}/tn14-assets
+        run: |
+          python -I -B - <<'PYTHON'
+          import json,os,zipfile
+          from pathlib import Path
+          assets=Path(os.environ['ASSETS'])
+          source=json.loads((assets/'source-receipt.json').read_bytes())
+          wheels=[assets/name for name in source['files'] if name.endswith('.whl')]
+          assert len(wheels)==1
+          with zipfile.ZipFile(wheels[0]) as wheel:
+              manifest=json.loads(wheel.read('truss/_catalog_runtime/manifest.json'))
+          selected=manifest['releaseId']=='truss-catalog-runtime/0.76-temporal-candidate'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as output:
+              output.write('selected='+str(selected).lower()+'\n')
+              output.write('source='+source['source_sha']+'\n')
+              output.write('tag='+source['tag']+'\n')
+          PYTHON
+      - uses: actions/checkout@v6
+        if: steps.tn14.outputs.selected == 'true'
+        with:
+          ref: ${{ steps.tn14.outputs.source }}
+          path: tn14-source
+          persist-credentials: false
+      - name: Fetch exact published temporal qualification assets
+        if: steps.tn14.outputs.selected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.tn14.outputs.tag }}
+        run: |
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern 'temporal-*' --pattern 'release-pins.json' --pattern 'SHA256SUMS' --dir "$RUNNER_TEMP/tn14-assets"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -224,13 +301,16 @@ jobs:
           python -m venv "$RUNNER_TEMP/pypi-consumer"
           "$RUNNER_TEMP/pypi-consumer/bin/python" -m pip --isolated install \
             --disable-pip-version-check --no-cache-dir --index-url https://pypi.org/simple \
-            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query]==$VERSION"
+            --report "$RUNNER_TEMP/pip-install-report.json" "${TRUSS_DISTRIBUTION}[query,typed-sdk]==$VERSION"
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/pypi-consumer/bin/python" - <<'PY'
           import importlib.metadata, json, os
           from pathlib import Path
+          import subprocess,sys
+          subprocess.run([sys.executable,"-m","pip","check"],check=True)
           import truss
           import weft
+          import umf_access
           report = json.loads(Path(os.environ["RUNNER_TEMP"], "pip-install-report.json").read_text(encoding="utf-8"))
           for item in report["install"]:
               url = item["download_info"]["url"]
@@ -240,6 +320,13 @@ jobs:
               if item.startswith(("weft-sql==", "umf-weft==")) and item.partition(";")[2].strip() == 'extra == "query"']
           assert len(query_pins) == 1, "One exact declared query compiler required"
           weft_distribution, expected_weft_version = query_pins[0].split("==")
+          if os.environ["VERSION"] == "0.0.56":
+              assert (weft_distribution, expected_weft_version) == ("umf-weft", "0.4.57")
+              assert importlib.metadata.version("umf_access") == "0.1.0.dev10"
+              assert importlib.metadata.version("umf-core") == "0.10.8"
+              try: importlib.metadata.version("weft-sql")
+              except importlib.metadata.PackageNotFoundError: pass
+              else: raise AssertionError("Conflicting legacy weft-sql installed")
           record = {
               "schema": "pypi-consumer-receipt.v1",
               "status": "passed",
@@ -249,30 +336,78 @@ jobs:
               "truss_version": importlib.metadata.version(os.environ["TRUSS_DISTRIBUTION"]),
               "weft_version": importlib.metadata.version(weft_distribution),
           }
+          if os.environ["VERSION"] == "0.0.56":
+              record.update(access_version=importlib.metadata.version("umf_access"),
+                            core_version=importlib.metadata.version("umf-core"),
+                            scope="Public normal-resolver package/import proof; temporal native proof is separate")
           assert record["truss_version"] == os.environ["VERSION"]
           assert record["weft_version"] == weft.__version__ == expected_weft_version
           assert f'{record["weft_distribution"]}=={record["weft_version"]}' in [item.partition(";")[0].strip() for item in importlib.metadata.requires(record["truss_distribution"])]
           if tuple(map(int, record['truss_version'].split('.'))) >= (0, 0, 54):
               from dataclasses import asdict
-              from truss.contracts import LocalTimestampValue,PresentValue,SequenceValue,TextValue
+              from truss.contracts import LocalTimestampValue,MapEntry,PresentValue,SequenceValue,TextValue
+              from truss._record_schema import _wire_cell
+              from truss._import_runtime import _cell
               token='2024-02-29T23:59:58.000001'
               local=truss.LocalTimestampValue(text=token)
               assert type(local) is LocalTimestampValue
               assert asdict(local)=={'text':token,'kind':'localTimestamp'}
+              assert _wire_cell(local) is None, 'Default ABI must stay closed'
               for rejected in (lambda: LocalTimestampValue(text=token+'Z'),
                   lambda: PresentValue(value=local),lambda: SequenceValue(items=(local,)),
-                  lambda: TextValue(kind='localTimestamp',text=token)):
+                  lambda: TextValue(kind='localTimestamp',text=token),
+                  lambda: MapEntry(key='local',value=local),
+                  lambda: _cell(asdict(local)),
+                  lambda: _cell({'kind':'sequence','items':[asdict(local)]},containers=True)):
                   try: rejected()
                   except ValueError: pass
-                  else: raise AssertionError('Unqualified local temporal value was admitted')
+                  else: raise AssertionError('Ordinary constructor/container/default ABI admitted local value')
               record['standalone_local_timestamp_carrier']='passed'
               record['legacy_exact_value_refusals']='passed'
-              record['native_temporal_acceptance_qualified']=False
+              if tuple(map(int, record['truss_version'].split('.'))) < (0, 0, 56):
+                  record['native_temporal_acceptance_qualified']=False
+              else:
+                  from truss._temporal_values import logical_object_cell
+                  for default_or_nested in (lambda: logical_object_cell(asdict(local)),
+                      lambda: logical_object_cell({'kind':'sequence','items':[asdict(local)]},local=True)):
+                      try: default_or_nested()
+                      except ValueError: pass
+                      else: raise AssertionError('Default/nested temporal decoding must refuse')
+                  record['ordinary_default_abi_and_nested_refusals']='passed'
           Path(os.environ["RUNNER_TEMP"], "consumer-receipt.json").write_text(
               json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
           )
           print("fresh PyPI Truss query consumer imported Truss and Weft")
           PY
+      - uses: oven-sh/setup-bun@v2
+        if: steps.tn14.outputs.selected == 'true'
+        with:
+          bun-version: '1.4.3'
+      - name: Genuine fresh public temporal TN-14 consumer
+        if: steps.tn14.outputs.selected == 'true'
+        env:
+          PIP_CONFIG_FILE: /dev/null
+          PIP_INDEX_URL: ''
+          PIP_EXTRA_INDEX_URL: ''
+          PIP_FIND_LINKS: ''
+          PIP_NO_INDEX: ''
+        run: |
+          set -euo pipefail
+          python -m venv "$RUNNER_TEMP/tn14-public-env"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/tn14-public-env/bin/python" -I -B \
+            "$GITHUB_WORKSPACE/tn14-controller/scripts/verify_published_temporal_consumer.py" \
+            --assets "$RUNNER_TEMP/tn14-assets" \
+            --publication "$RUNNER_TEMP/tn14-publication/publication-receipt.json" \
+            --source "$GITHUB_WORKSPACE/tn14-source" \
+            --output "$RUNNER_TEMP/tn14-public-result"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.tn14.outputs.selected == 'true'
+        with:
+          name: truss-public-tn14-${{ needs.verify-release.outputs.version }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/tn14-public-result/
+          if-no-files-found: error
+          retention-days: 365
       - uses: actions/upload-artifact@v4
         with:
           name: truss-pypi-consumer-${{ needs.verify-release.outputs.version }}

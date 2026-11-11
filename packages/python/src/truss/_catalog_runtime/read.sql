@@ -1,8 +1,8 @@
 -- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Render frozen row/catalog inputs without observing current data tables.
-CREATE FUNCTION truss.render_scalar_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.render_object_at_profile(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def;cell jsonb;values_json jsonb:='[]';retained_json jsonb:='[]';result bytea;
+DECLARE property truss.prop_def;cell jsonb;values_json jsonb:='[]';retained_json jsonb:='[]';result bytea;result_document jsonb;
 BEGIN
  IF current_object.rev>captured_revision THEN
   RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
@@ -17,6 +17,8 @@ BEGIN
    SELECT 1 FROM unnest(properties) p WHERE p.prop_id::text=k)) THEN
   RAISE EXCEPTION 'unsupported complete object representation' USING ERRCODE='0A000'; END IF;
  FOREACH property IN ARRAY properties LOOP
+  IF property.scalar_type='localTimestamp' AND temporal_profile IS NOT TRUE THEN
+   RAISE EXCEPTION 'ordinary object provider refuses local property output' USING ERRCODE='0A000';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE OR property.since_rev>captured_revision THEN
    RAISE EXCEPTION 'unsupported property profile' USING ERRCODE='0A000'; END IF;
   IF NOT current_object.props ? property.prop_id::text THEN
@@ -25,52 +27,69 @@ BEGIN
   END IF;
   cell:=current_object.props->property.prop_id::text;
   IF truss.valid_property_value(cell,property) IS NOT TRUE THEN RAISE EXCEPTION 'malformed exact logical value' USING ERRCODE='55000';END IF;
-  cell:=truss.logical_flat_cell(cell);
+  IF property.scalar_type IS DISTINCT FROM 'localTimestamp' OR cell='{"kind":"null"}'::jsonb THEN cell:=truss.logical_flat_cell(cell);END IF;
   values_json:=values_json||jsonb_build_array(jsonb_build_array(property.name,cell));
  END LOOP;
  FOR cell IN SELECT jsonb_build_array(key,value) FROM jsonb_each(coalesce(current_object.retained,'{}'::jsonb)) ORDER BY key COLLATE "C" LOOP
   cell:=jsonb_build_array(cell->0,truss.logical_flat_cell(cell->1));
   retained_json:=retained_json||jsonb_build_array(cell);
  END LOOP;
- result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.4','releaseId',expected_release,
+ result_document:=jsonb_build_object('profile',CASE WHEN temporal_profile THEN 'truss-python-temporal-scalar-object/0.1' ELSE 'truss-python-scalar-object/0.4' END,'releaseId',expected_release,
  'releaseSha256',expected_digest,'documentId',selected_type.document_id,'moduleId',selected_type.module,'recordId',selected_type.element,
  'id',current_object.id::text,'typeId',current_object.type_id::text,
  'definitionPin',definition_pin,'version',current_object.ver::text,
  'catalogRevision',captured_revision::text,'recordRevision',current_object.rev::text,
  'createdAt',to_char(current_object.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
  'updatedAt',to_char(current_object.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
- 'values',values_json,'retained',retained_json)::text,'UTF8');
+ 'values',values_json,'retained',retained_json);
+ IF temporal_profile THEN result_document:=result_document||jsonb_build_object(
+  'valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi());END IF;
+ result:=convert_to(result_document::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'object output budget exceeded' USING ERRCODE='54000'; END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.render_object_at_profile(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.render_scalar_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.render_object_at_profile(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text) FROM PUBLIC;
 
 -- Root identity and root row have already been frozen in the same observation.
 -- Keep the historical rootless renderer's contract intact.
-CREATE FUNCTION truss.render_logical_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text,root_identity jsonb) RETURNS bytea
+CREATE FUNCTION truss.render_logical_object_at_profile(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text,root_identity jsonb,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE scalar_copy truss.object; rendered jsonb;result bytea;
 BEGIN
  IF current_object.root_id IS NULL AND current_object.root_type IS NULL THEN
   IF root_identity IS NOT NULL THEN RAISE EXCEPTION 'rootless observation required' USING ERRCODE='55000';END IF;
-  RETURN truss.render_scalar_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest);
+  RETURN truss.render_object_at_profile(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest,temporal_profile);
  END IF;
  IF current_object.root_id IS NULL OR current_object.root_type IS NULL OR current_object.root_id<=0
   OR root_identity IS NULL OR root_identity->>'id' IS DISTINCT FROM current_object.root_id::text
   OR root_identity->>'typeId' IS DISTINCT FROM current_object.root_type::text THEN
   RAISE EXCEPTION 'complete frozen ownership required' USING ERRCODE='55000';END IF;
  scalar_copy:=current_object;scalar_copy.root_id:=NULL;scalar_copy.root_type:=NULL;
- rendered:=convert_from(truss.render_scalar_object(scalar_copy,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest),'UTF8')::jsonb;
- result:=convert_to((rendered||jsonb_build_object('profile','truss-python-logical-object/0.1','root',root_identity))::text,'UTF8');
+ rendered:=convert_from(truss.render_object_at_profile(scalar_copy,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest,temporal_profile),'UTF8')::jsonb;
+ result:=convert_to((rendered||jsonb_build_object('profile',CASE WHEN temporal_profile THEN 'truss-python-temporal-logical-object/0.1' ELSE 'truss-python-logical-object/0.1' END,'root',root_identity))::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'object output budget exceeded' USING ERRCODE='54000';END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.render_logical_object_at_profile(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text,jsonb,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.render_logical_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text,root_identity jsonb) RETURNS bytea
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.render_logical_object_at_profile(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest,root_identity,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.render_logical_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text,jsonb) FROM PUBLIC;
 
 -- Public identity read, scalar-string object profile; no mutation authority.
-CREATE FUNCTION truss.get_object(selected_document text,selected_module text,selected_record text,selected_id bigint,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.get_object_at_profile(selected_document text,selected_module text,selected_record text,selected_id bigint,maximum_bytes int,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE actor_oid oid; selected_type truss.type_def%ROWTYPE; current_object truss.object%ROWTYPE;
  property truss.prop_def%ROWTYPE; cell jsonb; values_json jsonb:='[]'; retained_json jsonb:='[]';
@@ -91,7 +110,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.75-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.76-temporal-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -133,7 +152,7 @@ BEGIN
    'definitionPin',(SELECT d.definition_pin FROM truss.runtime_owned_definition_metadata('type',root_object.type_id) d),
    'owner',jsonb_build_object('documentId',root_definition.document_id,'moduleId',root_definition.module));
  END IF;
- result:=truss.render_logical_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,installation.release_id,installation.release_sha256,root_identity);
+ result:=truss.render_logical_object_at_profile(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,installation.release_id,installation.release_sha256,root_identity,temporal_profile);
  actor_oid:=truss.runtime_person(false);
  IF current_setting('transaction_read_only')='on' THEN
   SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module;
@@ -148,6 +167,13 @@ BEGIN
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
   RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
  RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.get_object_at_profile(text,text,text,bigint,int,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.get_object(selected_document text,selected_module text,selected_record text,selected_id bigint,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.get_object_at_profile(selected_document,selected_module,selected_record,selected_id,maximum_bytes,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) FROM PUBLIC;

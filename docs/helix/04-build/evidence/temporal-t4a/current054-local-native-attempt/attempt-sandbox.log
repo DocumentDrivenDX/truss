@@ -1,0 +1,22 @@
+setUpClass (test_query_stream_abi12_native.QueryStreamABI12Tests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_query_stream_abi12_native.QueryStreamABI12Tests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/umf-stack-release-truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/umf-stack-release-truss/packages/python/src/truss/local_runtime.py", line 203, in __enter__
+    self._run('initdb', '-D', str(self.directory), '--auth=trust',
+  File "/private/tmp/umf-stack-release-truss/packages/python/src/truss/local_runtime.py", line 146, in _run
+    raise LocalRuntimeError(f'{command} failed: {details or completed.returncode}')
+truss.local_runtime.LocalRuntimeError: initdb failed: 2026-11-02 18:08:59.500 EST [78827] FATAL:  could not create shared memory segment: Operation not permitted
+2026-11-02 18:08:59.500 EST [78827] DETAIL:  Failed system call was shmget(key=319949182, size=56, 03600).
+child process exited with exit code 1
+initdb: removing contents of data directory "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-1x5e0f4h/data"
+
+----------------------------------------------------------------------
+Ran 0 tests in 7.900s
+
+FAILED (errors=1)

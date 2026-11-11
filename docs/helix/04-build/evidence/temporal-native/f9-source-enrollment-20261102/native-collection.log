@@ -1,0 +1,7 @@
+test_temporal_enrollment_native 1 COLLECTED ONLY, UNRUN
+test_temporal_transport_component_native 3 COLLECTED ONLY, UNRUN
+test_temporal_catalog_acceptance_native 4 COLLECTED ONLY, UNRUN
+test_local_timestamp_query_native 2 COLLECTED ONLY, UNRUN
+test_temporal_source_guard_native 5 COLLECTED ONLY, UNRUN
+test_temporal_source_security_native 3 COLLECTED ONLY, UNRUN
+test_temporal_catalog_transport_native 1 COLLECTED ONLY, UNRUN

@@ -1,0 +1,13 @@
+test_declared_person_sources_are_additive_and_stable (test_temporal_candidate_source.TemporalCandidateSourceTests.test_declared_person_sources_are_additive_and_stable) ... ok
+test_fresh076_sources_keep_original_abi12_and_hash_actual_abi13 (test_temporal_candidate_source.TemporalCandidateSourceTests.test_fresh076_sources_keep_original_abi12_and_hash_actual_abi13) ... ok
+test_changed_original_pin_or_owner_result_refuses (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_changed_original_pin_or_owner_result_refuses) ... ok
+test_genuine_preparation_retains_noncompact21_and_durable_originals (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_genuine_preparation_retains_noncompact21_and_durable_originals) ... ok
+test_original_declaration_and_complete_owner_result_retained (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_original_declaration_and_complete_owner_result_retained) ... ok
+test_removed_duplicate_foreign_or_reordered_owner_members_refuse (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_removed_duplicate_foreign_or_reordered_owner_members_refuse) ... ok
+test_stripped_changed_or_duplicate_descriptor_refuses (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_stripped_changed_or_duplicate_descriptor_refuses) ... ok
+test_unknown_owner_content_and_diagnostics_are_not_discarded (test_temporal_preparation_custody.TemporalPreparationCustodyTests.test_unknown_owner_content_and_diagnostics_are_not_discarded) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.629s
+
+OK

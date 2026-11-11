@@ -1,0 +1,10 @@
+test_temporal_source_guard_native 5
+test_temporal_source_security_native 5
+test_temporal_catalog_acceptance_native 5
+test_local_timestamp_query_native 3
+test_temporal_catalog_transport_native 1
+test_temporal_enrollment_native 1
+test_temporal_cursor_component_native 3
+test_temporal_engine_native 3
+test_temporal_target_release_native 2
+Collection only; no new native cases executed or qualified.

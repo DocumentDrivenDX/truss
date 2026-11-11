@@ -1,0 +1,98 @@
+{
+  "evidence/download-runtime.log": {
+    "sha256": "1e1c526d74b1811f2f29cb80c3c023a1aa5b2780f5d140cea02f46e6cd281d21",
+    "bytes": 865
+  },
+  "evidence/download-truss.log": {
+    "sha256": "0347e90dcc0bc7a53dd97f215899c2db058cae293c6054b160b339385443d137",
+    "bytes": 546
+  },
+  "evidence/download-weft051.log": {
+    "sha256": "6b1341b140f8cf3a38e0eb177c9757cb5bbafbfe49d03bfd0e1a94ddcf6be715",
+    "bytes": 543
+  },
+  "evidence/download-weft056.log": {
+    "sha256": "ab59683e3face60d3c8b3baf319ed5f55d79b77e0350d8e419989dea4de97531",
+    "bytes": 543
+  },
+  "evidence/input-wheels.json": {
+    "sha256": "a892db9da5b07b899f553578e44ccf5350fa8987092f2f8b8aaf3ccf399fc1b6",
+    "bytes": 947
+  },
+  "evidence/install-public054.log": {
+    "sha256": "cc8547625fde4757519342a8c55006eeb2df0eaa3ec67f60f467cd40ecbf6dee",
+    "bytes": 4813
+  },
+  "evidence/install-weft056.log": {
+    "sha256": "e4e0f3858eaeb1dff9b8fd9436cd04cd3e9fb5e553b20ac73ced3e515dfd71e8",
+    "bytes": 338
+  },
+  "evidence/probe-controls.log": {
+    "sha256": "13e411fd7e7e9989babc2439d6a521c4d9d54cfe7391da2febfe2a9aa8d936c7",
+    "bytes": 1317
+  },
+  "evidence/public054-capture.json": {
+    "sha256": "c270e994ad9b2ba76389393d2ebf386a90d35819e6653a91898bca7727a9e0fb",
+    "bytes": 600385
+  },
+  "evidence/public054-capture.json.cleanup.json": {
+    "sha256": "d19a63ae9f93ec4bc9083e16bea12a714834110b53e9d303ab3b0f0c87a17580",
+    "bytes": 273
+  },
+  "evidence/public054-capture.json.run.json": {
+    "sha256": "2b04ffbc7310afe5c5935519b666c6bc112c01f92d45cc2eeda9589d92d3c563",
+    "bytes": 391
+  },
+  "evidence/public054-capture.log": {
+    "sha256": "c83677ac8e43ab8b0a4e33b38a6ee0533f37474dbefbdbd51b42a19b9c5506f2",
+    "bytes": 947
+  },
+  "evidence/public054-freeze.txt": {
+    "sha256": "cdf9319e92f6f356faddd8b47126b6d985336a755488771cb5e27d235dd34cd5",
+    "bytes": 869
+  },
+  "evidence/verify-weft051.log": {
+    "sha256": "56ff63743bdd96443c407b390138a6505ef4f6bd04293f06b009295ab267b349",
+    "bytes": 409
+  },
+  "evidence/weft056-freeze.txt": {
+    "sha256": "2f5c440d8a28ef745f99b8529330aeb94720cb0043bbd3a06cbf4148f7f5ef69",
+    "bytes": 219
+  },
+  "evidence/weft056-replay.json": {
+    "sha256": "e3e496cbb305c5c74b3851e601186a09c016b65d3024b1df9b0ffb6584241290",
+    "bytes": 1398330
+  },
+  "evidence/weft056-replay.log": {
+    "sha256": "f4bc6ec746b6148fbb0a5f80cbb2e7cb0a1c27bc141525cd865aa3f40b057272",
+    "bytes": 520
+  },
+  "inputs/runtime/SHA256SUMS": {
+    "sha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+    "bytes": 1660
+  },
+  "inputs/runtime/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+    "sha256": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+    "bytes": 12378048
+  },
+  "inputs/truss/umf_truss-0.0.54-py3-none-any.whl": {
+    "sha256": "4aebc56e92fdbde6714d9b811860707d2ffc9b0edbc63cc91e9dc3488c042b52",
+    "bytes": 4592541
+  },
+  "inputs/weft051/SHA256SUMS": {
+    "sha256": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75",
+    "bytes": 394
+  },
+  "inputs/weft051/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+    "sha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+    "bytes": 13531659
+  },
+  "inputs/weft056/SHA256SUMS": {
+    "sha256": "9517c200f2059bf1280a8958fed05ec91fe21afbb7c059f208abc061516a8e0f",
+    "bytes": 841
+  },
+  "inputs/weft056/umf_weft-0.4.56-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
+    "sha256": "32f4c38d9a614dd4c3a367f8b24d5cd4ba41ec80c2a4a2e3423e2082a294dbdd",
+    "bytes": 14358901
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "interfaceVersion": "truss-person-invocations/0.2",
+  "scope": "Authored F7 person source declarations; actual native signatures/owners/ACL/stability require installed qualification; original ordinary inventory retained separately",
+  "functions": [
+    {
+      "name": "query_temporal_binding",
+      "publicName": "person_query_temporal_binding",
+      "signature": "truss.query_temporal_binding(jsonb,integer,integer,integer,text,text)",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "query_temporal_objects",
+      "publicName": "person_query_temporal_objects",
+      "signature": "truss.query_temporal_objects(jsonb,integer,jsonb)",
+      "arguments": "binding jsonb, selected_type integer, requirements jsonb",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true,
+      "volatility": "s"
+    },
+    {
+      "name": "query_temporal_page_objects",
+      "publicName": "person_query_temporal_page_objects",
+      "signature": "truss.query_temporal_page_objects(jsonb,integer,text,jsonb)",
+      "arguments": "binding jsonb, selected_type integer, selected_key text, requirements jsonb",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true,
+      "volatility": "s"
+    },
+    {
+      "name": "temporal_group_context",
+      "publicName": "person_temporal_group_context",
+      "signature": "truss.temporal_group_context(text,text)",
+      "arguments": "expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "apply_temporal_group",
+      "publicName": "person_apply_temporal_group",
+      "signature": "truss.apply_temporal_group(bytea,bytea,bytea,text,text)",
+      "arguments": "original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "apply_temporal_group_prepared",
+      "publicName": "person_apply_temporal_group_prepared",
+      "signature": "truss.apply_temporal_group_prepared(bytea,bytea,bytea,text,text,jsonb)",
+      "arguments": "original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,app_prepared jsonb",
+      "mode": "write",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "temporal_import_context",
+      "publicName": "person_temporal_import_context",
+      "signature": "truss.temporal_import_context(text,text)",
+      "arguments": "expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "temporal_import_key_selection",
+      "publicName": "person_temporal_import_key_selection",
+      "signature": "truss.temporal_import_key_selection(text,text,text,text,text)",
+      "arguments": "selected_document text,selected_module text,selected_record text,expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "temporal_import_object_identity",
+      "publicName": "person_temporal_import_object_identity",
+      "signature": "truss.temporal_import_object_identity(bytea,bytea,bytea,text,text)",
+      "arguments": "original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "temporal_writer_schema_basis",
+      "publicName": "person_temporal_writer_schema_basis",
+      "signature": "truss.temporal_writer_schema_basis(bytea,bytea,text,text)",
+      "arguments": "original_input bytea,original_documents bytea,expected_release text,expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "get_temporal_object",
+      "publicName": "person_get_temporal_object",
+      "signature": "truss.get_temporal_object(text,text,text,bigint,int,text,text)",
+      "arguments": "selected_document text,selected_module text,selected_record text,selected_id bigint,maximum_bytes int,expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "page_temporal_objects",
+      "publicName": "person_page_temporal_objects",
+      "signature": "truss.page_temporal_objects(text,text,text,int,int,bytea,text,text)",
+      "arguments": "selected_document text,selected_module text,selected_record text,page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "lookup_temporal_key",
+      "publicName": "person_lookup_temporal_key",
+      "signature": "truss.lookup_temporal_key(text,text,text,text,bytea,bytea,bytea,int,text,text)",
+      "arguments": "selected_document text,selected_module text,selected_record text,selected_key text,original_document bytea,values_bytes bytea,tuple_bytes bytea,maximum_bytes int,expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "recover_temporal_group_request",
+      "publicName": "person_recover_temporal_group_request",
+      "signature": "truss.recover_temporal_group_request(bytea,bytea,bytea,text,text)",
+      "arguments": "original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text",
+      "mode": "write",
+      "result": "bytea",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "temporal_scope",
+      "publicName": "person_temporal_scope",
+      "signature": "truss.temporal_scope(text,text)",
+      "arguments": "expected_release text,expected_digest text",
+      "mode": "read",
+      "result": "void",
+      "set": false,
+      "volatility": "v"
+    },
+    {
+      "name": "query_temporal_cursor_encode",
+      "publicName": "person_query_temporal_cursor_encode",
+      "signature": "truss.query_temporal_cursor_encode(jsonb,bytea,text,jsonb)",
+      "arguments": "binding jsonb,original_context bytea,original_after text,sort_kinds jsonb",
+      "mode": "read",
+      "result": "TABLE(cursor_bytes bytea, after_json text)",
+      "set": true,
+      "volatility": "v"
+    },
+    {
+      "name": "query_temporal_cursor_decode",
+      "publicName": "person_query_temporal_cursor_decode",
+      "signature": "truss.query_temporal_cursor_decode(jsonb,bytea,bytea)",
+      "arguments": "binding jsonb,original_context bytea,original_cursor bytea",
+      "mode": "read",
+      "result": "text",
+      "set": false,
+      "volatility": "v"
+    }
+  ]
+}

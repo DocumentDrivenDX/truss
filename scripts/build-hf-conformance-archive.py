@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Archive the exact independent conformance producers; no old runtime is bundled."""
-import argparse,hashlib,json,zipfile
+import argparse,hashlib,json,zipfile,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',required=True,type=Path);a=p.parse_args()
-corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=json.loads(corpus.read_bytes());paths=[ROOT/name for name in profile['producers']]+[corpus,ROOT/'scripts/run-hf-conformance.py',ROOT/'scripts/publish_pypi_release.py']
+sys.path.insert(0,str(ROOT/"scripts"))
+from release_cohort import hf_profile
+corpus=ROOT/'docs/helix/03-test/fixtures/hohfeld-followup-0.1.json';profile=hf_profile(ROOT);paths=[ROOT/name for name in profile['producers']]+[corpus,ROOT/'scripts/run-hf-conformance.py',ROOT/'scripts/publish_pypi_release.py',ROOT/'scripts/release_cohort.py',ROOT/'scripts/truss-release-cohort.json']
 for name,digest in profile['producers'].items():
  if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=digest:raise ValueError('Original producer changed: '+name)
 paths += [p for p in (ROOT/'packages/python/tests/fixtures').rglob('*') if p.is_file() and '__pycache__' not in p.parts]
 paths += [ROOT/'packages/python'/name for name in ('LICENSE.md','LICENSE-MIT','LICENSE-APACHE')]
-archive_manifest={'profile':profile['profile'],'toolkitVersion':profile['toolkitVersion'],'nativeManifestSha256':profile['nativeManifestSha256'],'compilerVersion':profile['compilerVersion'],'files':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(paths))},'scope':'Independent synthetic native fixture corpus and runner, not a runtime distribution or permission to modify application databases'}
+archive_manifest={'cohortSha256':hashlib.sha256((ROOT/'scripts/truss-release-cohort.json').read_bytes()).hexdigest(),'profile':profile['profile'],'toolkitVersion':profile['toolkitVersion'],'nativeManifestSha256':profile['nativeManifestSha256'],'compilerVersion':profile['compilerVersion'],'files':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(set(paths))},'scope':'Independent synthetic native fixture corpus and runner, not a runtime distribution or permission to modify application databases'}
 a.output.parent.mkdir(parents=True,exist_ok=True)
 with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED) as z:
  def write(name,raw):

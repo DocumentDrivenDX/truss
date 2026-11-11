@@ -38,11 +38,13 @@ class DocumentInterpretation:
     def observation(self) -> dict[str, object]:
         """Fresh source and the exact current UMF validation result."""
         evidence=json.loads(self.observation_bytes)
-        if evidence.get('interfaceVersion')=='truss-registration-preparation/2.0':
+        if evidence.get('interfaceVersion') in ('truss-registration-preparation/2.0','truss-registration-preparation/2.1'):
             entry=next(d for d in evidence['documents'] if d['documentId']==self.document.document_id)
             if entry['contentSha256']!=sha256(self.document.content).hexdigest():raise ValueError('Original source digest required')
             result={'originalText':self.document.content.decode('utf8'),'source':self.source(),
                 'sourceValidation':entry['validation']}
+            if evidence['interfaceVersion']=='truss-registration-preparation/2.1':
+                result['inspection']=entry['inspection']
             if 'dddProfile' in entry:result.update(dddProfile=entry['dddProfile'],dddValidation=entry['dddValidation'])
             return result
         return evidence
@@ -71,6 +73,14 @@ class PreparedAcceptance:
     @property
     def declarations_bytes(self) -> bytes:
         """Compatibility projection, derived on demand from the one original source."""
+        summary=json.loads(self.report_evidence_bytes)
+        if summary.get('interfaceVersion')=='truss-registration-preparation/2.1':
+            from ._temporal_preparation import temporal_declarations, support_profile
+            if self.input()['supportProfile']!=support_profile():raise ValueError('Exact temporal support profile required')
+            entries=summary['documents']
+            if len(entries)!=len(self.documents):raise ValueError('Complete original temporal documents required')
+            return _json([temporal_declarations(d.document,entry['inspection'])
+                for d,entry in zip(self.documents,entries,strict=True)])
         return _json([_catalog_declarations(d.document.document_id,d.source()) for d in self.documents])
 
     @property
@@ -80,6 +90,8 @@ class PreparedAcceptance:
         def stored_validation(document_id):
             entry=validations[document_id]
             result={'storageFormat':'truss-catalog-source/2','sourceValidation':entry['validation'],'transition':None}
+            if summary.get('interfaceVersion')=='truss-registration-preparation/2.1':
+                result.update(storageFormat='truss-catalog-source/2.1',inspection=entry['inspection'])
             if 'dddProfile' in entry:result.update(dddProfile=entry['dddProfile'],dddValidation=entry['dddValidation'])
             return result
         return _json([{'documentId':d.document.document_id,'revision':d.document.document_revision,

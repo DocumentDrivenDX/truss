@@ -10,34 +10,45 @@ import json
 
 from .contracts import ABSENT
 from .groups import CreateObject, RootlessOwnership, StoredObjectReference, UpdateObject
-from ._record_schema import SchemaCompilationError
+from ._record_schema import SchemaCompilationError, _thaw_json
 from ._schema_memory import record_schemas
 
 
 PROFILE = 'truss-application-record-preparation/0.1'
 
 
-def prepare_records(cursor, state, input, original_input, original_documents, release, digest, *, _refresh=True):
+def prepare_records(cursor, state, input, original_input, original_documents, release, digest, *, _refresh=True, temporal=False):
+    if type(temporal) is not bool:raise ValueError('Explicit value-profile discriminator required')
+    create_types,update_types=(CreateObject,),(UpdateObject,)
+    if temporal:
+        from .temporal import CreateObject as TemporalCreate, UpdateObject as TemporalUpdate
+        create_types+=(TemporalCreate,);update_types+=(TemporalUpdate,)
     operations = input.operations
-    creates = all(type(op) is CreateObject and type(op.ownership) is RootlessOwnership for op in operations)
-    updates = all(type(op) is UpdateObject and type(op.target) is StoredObjectReference
+    creates = all(type(op) in create_types and type(op.ownership) is RootlessOwnership for op in operations)
+    updates = all(type(op) in update_types and type(op.target) is StoredObjectReference
                   and op.ownership_change is ABSENT for op in operations)
     if not (creates or updates):
         return None
     if updates and len({(op.target.identity.type_id, op.target.identity.id) for op in operations}) != len(operations):
         return None
     documents_digest = sha256(original_documents).hexdigest()
-    source_key = (release, digest, documents_digest)
-    cached = record_schemas(state['key']) if state.get('source') == source_key and 'key' in state else None
+    source_key = (release, digest, documents_digest, 'temporal' if temporal else 'ordinary')
+    cached = record_schemas(state['key'], temporal=temporal) if state.get('source') == source_key and 'key' in state else None
     warm = cached is not None
     if cached is None:
-        cursor.execute('SELECT truss.person_writer_schema_basis(%s,%s,%s,%s)',
+        command='SELECT truss.person_temporal_writer_schema_basis(%s,%s,%s,%s)' if temporal else 'SELECT truss.person_writer_schema_basis(%s,%s,%s,%s)'
+        cursor.execute(command,
                        (original_input, original_documents, release, digest), prepare=False)
         raw = cursor.fetchone()[0]
         if raw is None:
             return None
         basis = json.loads(bytes(raw))
         identity = basis['basis']
+        if temporal:
+            from ._temporal_profiles import profiles,abi
+            if (identity.get('valueProfile')!=profiles()['valueProfile'] or identity.get('queryAbi')!=abi()
+                    or identity.get('inputProfile')!='truss-group-temporal-input/0.1.0'):
+                raise ValueError('Exact selected temporal native writer basis required')
         # The native basis binds exact supplied documents before its metadata is
         # compiled. Installation identity separates databases sharing revisions.
         if identity['documentsSha256'] != documents_digest or identity['releaseSha256'] != digest:
@@ -52,7 +63,7 @@ def prepare_records(cursor, state, input, original_input, original_documents, re
         key = sha256(json.dumps([identity, selection], sort_keys=True,
                                separators=(',', ':')).encode('utf8')).digest()
         try:
-            cached = record_schemas(key, records, identity)
+            cached = record_schemas(key, records, identity, temporal=temporal)
         except SchemaCompilationError:
             return None
         if cached is None:
@@ -77,7 +88,7 @@ def prepare_records(cursor, state, input, original_input, original_documents, re
                 # subset. Refresh metadata once before any write is dispatched.
                 state.clear()
                 return prepare_records(cursor, state, input, original_input, original_documents,
-                                       release, digest, _refresh=False)
+                                       release, digest, _refresh=False, temporal=temporal)
             return None
         patch = cached.compiled.prepare_patch(str(type_id), pin, values, unset=unset,
                                               mode='create' if creates else 'update')
@@ -85,6 +96,10 @@ def prepare_records(cursor, state, input, original_input, original_documents, re
             return None
         patches.append({'operationIndex': index, 'typeId': str(type_id), **patch.wire_payload()})
         selected_schemas[str(type_id)] = {'definitionPin': pin}
-    return {'profile': PROFILE, 'basis': dict(cached.basis),
+    result={'profile': 'truss-python-temporal-record-patch/0.1' if temporal else PROFILE, 'basis': _thaw_json(cached.basis),
             'inputSha256': sha256(original_input).hexdigest(),
             'schemas': selected_schemas, 'operations': patches}
+    if temporal:
+        from ._temporal_profiles import profiles,abi
+        result.update(valueProfile=profiles()['valueProfile'],queryAbi=abi())
+    return result

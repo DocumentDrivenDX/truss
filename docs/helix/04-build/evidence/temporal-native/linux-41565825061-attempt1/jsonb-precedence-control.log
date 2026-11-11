@@ -1,0 +1,3 @@
+original-failing-grouping root operator -> source SELECT packet->'ownerProfile'-ARRAY['identity','version','sha256']
+correct-grouping root operator - source SELECT (packet->'ownerProfile')-ARRAY['identity','version','sha256']
+all 61 SQL sources parse; actual native type resolution and four cases require reviewed-source run

@@ -1,0 +1,59 @@
+{
+  "scope": "PV1 explicit additive profiles; native qualification/review required; ordinary definitions unchanged",
+  "profiles": [
+    {
+      "name": "valueProfile",
+      "pin": {
+        "identity": "truss-exact-value-temporal",
+        "version": "0.1",
+        "sha256": "93a6cb473589d627af11763fbe735412a2e9a3aeeb0dac4b928a7574f8028e7a"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"local\":\"canonical26 LocalTimestampValue in known singular owner-admitted local property only; strict F7 helper; no nested local, temporal key, edge local, asserted-origin local or unknown retained local\"},\"identity\":\"truss-exact-value-temporal\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-scalar-string-values\",\"sha256\":\"ca49b4e13a55be8e23d44d4b00ef07332b6249d4f5ae16e5b82c8881061e22ce\",\"version\":\"0.6\"},\"version\":\"0.1\"}"
+    },
+    {
+      "name": "mutationProfile",
+      "pin": {
+        "identity": "truss-owned-temporal-graph",
+        "version": "0.1",
+        "sha256": "0627b6b6bd8bfd975b56b98057f590dd46764e6adacd74672ead9e5b2d710fc0"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"input\":\"truss-group-temporal-input/0.1.0\",\"meaning\":\"unchanged owned graph operations, preconditions, original bytes/replay, authority and atomicity; explicit selected local property values only\",\"requestInputProfile\":\"truss-group-temporal-input/0.1.0\"},\"identity\":\"truss-owned-temporal-graph\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-owned-scalar-graph\",\"sha256\":\"5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde\",\"version\":\"0.1\"},\"version\":\"0.1\"}"
+    },
+    {
+      "name": "importProfile",
+      "pin": {
+        "identity": "truss-temporal-object-import",
+        "version": "0.1",
+        "sha256": "0396d1afbc8620110cadfb57a50f4b27a423bc932fd5769915e9f94b9503a4d7"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"input\":\"truss-import-temporal-input/0.1.0\",\"meaning\":\"unchanged per-record create/skip/reject/partial reporting; object records only; selected temporal group provider\"},\"identity\":\"truss-temporal-object-import\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-scalar-import\",\"sha256\":\"f6bd20e9e82cbf0f6e8884ac07083dfee6dc8f67c4aa2c486b561db873dfd572\",\"version\":\"0.3\"},\"version\":\"0.1\"}"
+    },
+    {
+      "name": "importPayloadProfile",
+      "pin": {
+        "identity": "truss-import-temporal-payload",
+        "version": "0.1.0",
+        "sha256": "a9ac1b424aa610eac3d47674c8493f2ccb767eeb4bd828baf11d156b836b6831"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"meaning\":\"original exact object payload and source bytes; selected local top-level known values; no edge records\",\"payload\":\"truss-import-temporal-payload/0.1.0\"},\"identity\":\"truss-import-temporal-payload\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-scalar-import-payload\",\"sha256\":\"60f3b8c801fb236b514389b8783909cb8703ab0c2466e879af0e919ec08815ae\",\"version\":\"0.3\"},\"version\":\"0.1.0\"}"
+    },
+    {
+      "name": "ownedImportProfile",
+      "pin": {
+        "identity": "truss-owned-temporal-object-import",
+        "version": "0.1",
+        "sha256": "a40d657011ad8e11f8808148f9046b6a023b0565fff35b1ecc6851d6d14c1e54"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"input\":\"truss-owned-import-temporal-input/0.1.0\",\"meaning\":\"unchanged atomic owned object graph import and original-key/source machinery; no temporal edge imports\"},\"identity\":\"truss-owned-temporal-object-import\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-atomic-owned-import\",\"sha256\":\"c7d62e8d980556be042c5965f592080215455f5e223af64b4864a3e578688f68\",\"version\":\"0.1\"},\"version\":\"0.1\"}"
+    },
+    {
+      "name": "ownedImportPayloadProfile",
+      "pin": {
+        "identity": "truss-owned-import-temporal-payload",
+        "version": "0.1.0",
+        "sha256": "b9a150155650ac48d73d7670e7fc51132ef34b7a4e39d85a48e0437003bd6d6a"
+      },
+      "definition": "{\"authority\":\"truss.temporal-public-values/1\",\"extension\":{\"meaning\":\"original exact owned-object payload, root and source semantics; selected top-level local known fields only\",\"payload\":\"truss-owned-import-temporal-payload/0.1.0\"},\"identity\":\"truss-owned-import-temporal-payload\",\"installation\":\"fresh native0.76; exact ABI1.3; actual owner/native descriptor custody required for every operation\",\"ordinaryProfile\":{\"identity\":\"truss-owned-import-payload\",\"sha256\":\"58e4b51b06bd4a36cb3c1b5c1384adac6c0bb1654e438b41da76734eed0c0f4a\",\"version\":\"0.1\"},\"version\":\"0.1.0\"}"
+    }
+  ]
+}

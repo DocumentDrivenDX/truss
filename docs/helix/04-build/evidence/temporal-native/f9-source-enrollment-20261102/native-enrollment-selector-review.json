@@ -1,0 +1,45 @@
+{
+  "status": "PREPARED; Sol wiring/source review required before dispatch",
+  "sourceCommit": "ad93f0eca0a8ac6372651d366d7f1ecc16f069aa",
+  "workflow": ".github/workflows/python-runtime.yml",
+  "workflowSha256": "3910d6e82346e966048b32ba5a1c1bb69ad348dc701881d68b25e00445eb7d3b",
+  "selector": "temporal_native_probe",
+  "default": false,
+  "runner": "ubuntu-24.04",
+  "python": "3.11",
+  "job": "temporal-native-probe",
+  "matrix": false,
+  "nativeCases": 4,
+  "selectors": [
+    "test_temporal_enrollment_native.TemporalEnrollmentNativeTests.test_fresh_installer_enrolls_original_sources_and_additive_abi",
+    "test_temporal_transport_component_native"
+  ],
+  "purpose": "actual fresh0.76 installer/enrollment + three structural inverse/cell controls; independent of held canonical inspector/compiler adoption",
+  "claimsExcluded": [
+    "public facade native acceptance",
+    "TN02-12 complete qualification",
+    "ordinary ABI1.2 cohort adoption",
+    "HF62",
+    "TN13/TN14",
+    "publication"
+  ],
+  "dependencyProcurement": "existing checksum-verifying install-local-runtime.py --download-only; no candidate package version or owner binding built",
+  "cleanup": "actual original postmaster PID captured before stop, pg_ctl status3 AND PID absence BEFORE deletion; uncertain cleanup fails/retains data; original fixture cleanup records copied before deletion",
+  "checks": [
+    "YAML parsed and selected shell scripts bash -n passed",
+    "all eight mutually exclusive selector combinations previously verified",
+    "four native cases collected; actual native UNRUN",
+    "cleanup positive and status/PID/missing-PID negative controls passed"
+  ],
+  "dispatchAfterSolReview": "gh workflow run python-runtime.yml --repo DocumentDrivenDX/truss --ref codex/temporal-completion -f temporal_native_probe=true -f temporal_scalar_probe=false -f weft_abi12_probe=false",
+  "dispatchPerformed": false,
+  "runnerScript": "scripts/probe-temporal-native-enrollment.py",
+  "runnerScriptSha256": "c74314a61460ba539a546dba31f21ec0756cb1f7f63cd70bda0883f63a40a52f",
+  "workerPolicy": "ONE owned WorkerCluster; serial disposable DatabaseFixture leases; exact role/database inventory restoration; poisoned worker refuses reuse",
+  "cleanupControls": {
+    "cases": 3,
+    "result": "PASS",
+    "scope": "mocked cleanup controls ONLY; no PostgreSQL started"
+  },
+  "sourceReview": "ad93f0ec + 01547f16 and current narrow shared-worker harness; Sol source/wiring review required before dispatch"
+}

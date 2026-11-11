@@ -1,0 +1,24 @@
+{
+  "scope": "F7 unenrolled native scalar component; selector pending Sol review",
+  "nativeExecuted": false,
+  "testsCollected": 7,
+  "sharedOracle": {
+    "repository": "DocumentDrivenDX/umf",
+    "checkoutCommit": "01151c1915392a7d1e85e78c500b95e326c5265a",
+    "path": "fixtures/access/golden-vectors/temporal-profile.json",
+    "sha256": "33e246d47ead263e9b2467b57a46811cdd3628d703d91b5f4fa564b1d207f9c2",
+    "cases": 38,
+    "qualification": "DEV exact source fixture, no release dependency claim"
+  },
+  "checks": {
+    "pythonModuleBoundaries": "passed 1739 imports",
+    "bashSyntax": "passed 8 run blocks",
+    "pythonSyntax": "passed"
+  },
+  "dispatchAfterWiringReview": "gh workflow run python-runtime.yml --repo DocumentDrivenDX/truss --ref codex/temporal-completion -f temporal_scalar_probe=true -f weft_abi12_probe=false",
+  "files": {
+    ".github/workflows/python-runtime.yml": "1cf0b997339a641c1a74f4444a2be46cd9da2a72a4f6fc3f7ed43bb04c0a83c7",
+    "packages/python/tests/test_temporal_canonical_text_native.py": "c1c6a4f69f6335e9f732d754108473eb052c5664c5baf0300f4c77baa9405a82",
+    "packages/python/tests/fixtures/temporal/strict075.json": "33e246d47ead263e9b2467b57a46811cdd3628d703d91b5f4fa564b1d207f9c2"
+  }
+}

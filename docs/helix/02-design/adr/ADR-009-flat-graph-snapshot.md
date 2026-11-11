@@ -58,7 +58,7 @@ requirements below: interactive expansion of a node's neighbourhood in both
 directions (links and backlinks), bounded fan-out with paging so a hub node cannot
 stall the UI, document bodies that load lazily rather than with the graph,
 type/facet filtering, and title/key search. Stable ids and deep-linkable
-node/edge references are required so a UI route can name a node. 
+node/edge references are required so a UI route can name a node.
 
 **Findings from the Atlas repository (2026-11-06) and owner figures.** Atlas is a
 HELIX `technology-atlas` flow, not a UMF/Truss-stored graph: nodes are Markdown

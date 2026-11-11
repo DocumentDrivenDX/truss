@@ -127,20 +127,35 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_module_writer(text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.group_context_qualified(expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
+CREATE FUNCTION truss.group_context_qualified_at_profile(expected_release text,expected_digest text,qualified_actor oid,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE person oid;installation truss.catalog_runtime_installation%ROWTYPE;revision int;
+DECLARE person oid;installation truss.catalog_runtime_installation%ROWTYPE;revision int;selected_profiles jsonb;
 BEGIN
  person:=qualified_actor;
+ IF temporal_profile IS NULL THEN RAISE EXCEPTION 'explicit private group provider required' USING ERRCODE='22023';END IF;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
+ selected_profiles:=truss.runtime_group_profiles();
+ IF temporal_profile THEN
+  selected_profiles:=selected_profiles||jsonb_build_object('mutationProfile',truss.runtime_temporal_profiles()->'mutationProfile',
+   'valueProfile',truss.runtime_temporal_profiles()->'valueProfile','queryAbi',truss.query_temporal_abi(),
+   'releaseId',expected_release,'releaseSha256',expected_digest);
+ END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
   RAISE EXCEPTION 'selected installed group runtime required' USING ERRCODE='0A000'; END IF;
  SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
- RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
+ RETURN convert_to((selected_profiles||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
   'catalogRevision',revision::text,'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile',
-   CASE WHEN truss.runtime_group_profiles()->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END))::text,'UTF8');
+   CASE WHEN truss.runtime_is_owned_profile(truss.runtime_group_profiles()->'mutationProfile') THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END))::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.group_context_qualified_at_profile(text,text,oid,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.group_context_qualified(expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.group_context_qualified_at_profile(expected_release,expected_digest,qualified_actor,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_context_qualified(text,text,oid) FROM PUBLIC;
@@ -161,13 +176,13 @@ DECLARE input jsonb;documents jsonb;operation jsonb;context jsonb;selected_type 
  source_pin record;archive truss.schema_doc%ROWTYPE;metadata jsonb;metadata_items jsonb[]:='{}';counted int:=0;source_text text;
  source_slots jsonb;source_slot_list jsonb;source_slot int;source_texts text[];source_verified boolean[];
 BEGIN
- context:=convert_from(truss.group_context_qualified(expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
+ context:=convert_from(truss.runtime_group_context_for_input(original_input,expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
  OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304 THEN
   RAISE EXCEPTION 'bounded group source required' USING ERRCODE='54000'; END IF;
  IF (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'unique original JSON members required' USING ERRCODE='22023'; END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;
- IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-group-input/0.1.0'
+ IF input->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN context->'valueProfile'=truss.runtime_temporal_profiles()->'valueProfile' THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END)
  OR input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile'
  OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile'
  OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile'
@@ -188,7 +203,7 @@ BEGIN
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   IF operation->>'operation' IS DISTINCT FROM 'create_object' OR
    (operation->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb AND
-    (input->'mutationProfile'=truss.runtime_owned_profile() AND operation->'ownership'->>'state'='owned'
+    (truss.runtime_is_owned_profile(input->'mutationProfile') AND operation->'ownership'->>'state'='owned'
      AND (operation->'ownership')-ARRAY['state','root']='{}'::jsonb) IS NOT TRUE) THEN
    RAISE EXCEPTION 'explicit selected create ownership required' USING ERRCODE='0A000'; END IF;
   WITH pinned AS MATERIALIZED (
@@ -375,7 +390,7 @@ BEGIN
   IF EXISTS(SELECT 1 FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
    WHERE t.object_id=NEW.id AND t.type_id=NEW.type_id AND t.before_object IS NULL
     AND t.writer_xid=pg_current_xact_id() AND a.writer_xid=pg_current_xact_id() AND a.complete
-    AND a.context->'mutationProfile'=truss.runtime_owned_profile()
+    AND truss.runtime_is_owned_profile(a.context->'mutationProfile')
     AND t.after_object->>'ver'=NEW.ver::text AND t.after_object->>'rev'=NEW.rev::text
     AND t.after_object->'root_id'=coalesce(to_jsonb(NEW.root_id),'null'::jsonb)
     AND t.after_object->'root_type'=coalesce(to_jsonb(NEW.root_type),'null'::jsonb)) THEN RETURN NULL;END IF;
@@ -422,7 +437,7 @@ DECLARE selected_owned boolean;changed_rows bigint;
  captured_revision int;outcome jsonb;outer_attempt record;
  type_metadata jsonb;key_codec jsonb;owned_plan jsonb;owned_state jsonb;root_reference text;root_identity jsonb;root_object truss.object%ROWTYPE;selected_history text;
 BEGIN
- selected_owned:=coalesce(selected_attempt IS NOT NULL AND selected_input->'mutationProfile'=truss.runtime_owned_profile(),false);
+ selected_owned:=coalesce(selected_attempt IS NOT NULL AND truss.runtime_is_owned_profile(selected_input->'mutationProfile'),false);
  -- Private create execution: request admission, replay and rollback belong to
  -- the outer group. Keep its one public exception boundary around all operations.
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
@@ -434,7 +449,7 @@ BEGIN
   OR (selected_attempt IS NULL AND
    (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE)) THEN
   RAISE EXCEPTION 'unique original create source required' USING ERRCODE='22023';END IF;
- context:=convert_from(truss.group_context_qualified(expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
+ context:=convert_from(truss.runtime_group_context_for_input(original_input,expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
  actor_oid:=qualified_actor;writer:=pg_current_xact_id();
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
@@ -479,7 +494,7 @@ BEGIN
  WHERE a.writer_xid=writer AND a.actor_oid=creation_leaf.actor_oid AND NOT a.complete
   AND a.context->'creationTransitionProfile'=creation_leaf.context->'creationTransitionProfile'
   AND a.documents_bytes=original_documents
-  AND CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  AND CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN
    a.results='[]'::jsonb AND a.aliases='[]'::jsonb AND
    (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.result IS NOT NULL)=a.next_index
    ELSE jsonb_array_length(a.results)=a.next_index END
@@ -499,10 +514,10 @@ BEGIN
   AND request='{"state":"none"}'::jsonb
  FOR UPDATE NOWAIT;
  END IF;
- selected_history:=CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
+ selected_history:=CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
  LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
  LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
- IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+ IF truss.runtime_is_owned_profile(input->'mutationProfile') THEN
   IF NOT selected_owned THEN
   owned_plan:=truss.runtime_owned_plan(outer_attempt.id,outer_attempt.next_index);
   IF owned_plan->'operation' IS DISTINCT FROM input->'operations'->0
@@ -529,7 +544,7 @@ BEGIN
  END IF;
  -- Modern creates are bounded by their admitted immutable outer attempt.
  -- Retain the published legacy transaction ceiling on its original profile.
- IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+ IF NOT truss.runtime_is_owned_profile(input->'mutationProfile') THEN
  IF (SELECT count(*) FROM (SELECT 1 FROM truss.runtime_object_transition WHERE writer_xid=writer AND before_object IS NULL LIMIT 129) g)>=128 THEN
   RAISE EXCEPTION 'bounded groups per transaction required' USING ERRCODE='54000'; END IF;
  END IF;
@@ -775,7 +790,7 @@ BEGIN
  IF actual_transition IS DISTINCT FROM expected_transition THEN
   RAISE EXCEPTION 'exact atomic create transition insert required' USING ERRCODE='55000';END IF;
  END IF;
- IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+ IF truss.runtime_is_owned_profile(input->'mutationProfile') THEN
   UPDATE truss.runtime_owned_operation p SET result=semantic->'results'->0
    WHERE p.attempt_id=outer_attempt.id AND p.operation_index=outer_attempt.next_index
     AND p.writer_xid=writer AND (selected_owned OR p.plan->'operation'=input->'operations'->0) AND p.result IS NULL;
@@ -810,9 +825,9 @@ BEGIN
  IF ROW(actual_progress.actor_oid,actual_progress.writer_xid,actual_progress.next_index,
   actual_progress.results,actual_progress.aliases,actual_progress.complete) IS DISTINCT FROM
   ROW(outer_attempt.actor_oid,outer_attempt.writer_xid,outer_attempt.next_index+1,
-   CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN '[]'::jsonb
+   CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN '[]'::jsonb
     ELSE outer_attempt.results||jsonb_build_array(semantic->'results'->0) END,
-   CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN '[]'::jsonb
+   CASE WHEN truss.runtime_is_owned_profile(input->'mutationProfile') THEN '[]'::jsonb
     ELSE outer_attempt.aliases||(semantic->'aliases') END,false) THEN
   RAISE EXCEPTION 'exact atomic outer create progress required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(j.row ORDER BY j.seq),'[]'::jsonb) INTO physical_journal FROM
@@ -837,7 +852,7 @@ BEGIN
  -- The selected owned leaf retains constraints, actual write counts and one
  -- result slot. Mandatory attempt settlement checks completion and authority.
  -- The compatibility creation path retains its original leaf check.
- IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+ IF NOT truss.runtime_is_owned_profile(input->'mutationProfile') THEN
   PERFORM truss.runtime_create_transition_validate_qualified((SELECT transition_id FROM truss.runtime_object_transition WHERE attempt_id=outer_attempt.id AND operation_index=outer_attempt.next_index AND before_object IS NULL),qualified_actor);
  END IF;
  FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
@@ -929,18 +944,21 @@ REVOKE ALL ON FUNCTION truss.prepare_group(bytea,bytea,text,text) FROM PUBLIC;
 -- Cold, operation-scoped schema material for the Python immutable cache. This
 -- never exports unrelated documents or definitions and never decides an apply
 -- outcome: any unsupported or unauthorized case defers to the native path.
-CREATE FUNCTION truss.writer_schema_basis(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.writer_schema_basis_at_profile(original_input bytea,original_documents bytea,expected_release text,expected_digest text,temporal_profile boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;ops jsonb;operation jsonb;actor oid;installation truss.catalog_runtime_installation%ROWTYPE;
  selected_revision int;registration uuid;required_types int[];records jsonb;declaration_count bigint;result_bytes bytea;
 BEGIN
+ IF temporal_profile IS NULL THEN RETURN NULL;END IF;
+ IF temporal_profile THEN PERFORM truss.require_temporal_capability(expected_release,expected_digest);END IF;
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
   OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304
   OR (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
   OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RETURN NULL;END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;ops:=input->'operations';
- IF input->>'interfaceVersion'<>'truss-group-input/0.1.0' OR input->'catalog'<>'{"selection":"current"}'::jsonb
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+ IF temporal_profile AND input->'valueProfile' IS DISTINCT FROM truss.runtime_temporal_profiles()->'valueProfile' THEN RETURN NULL;END IF;
+ IF input->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN temporal_profile THEN 'truss-group-temporal-input/0.1.0' ELSE 'truss-group-input/0.1.0' END) OR input->'catalog'<>'{"selection":"current"}'::jsonb
+  OR (CASE WHEN temporal_profile THEN input->'mutationProfile' IS DISTINCT FROM truss.runtime_temporal_profiles()->'mutationProfile' ELSE NOT truss.runtime_is_owned_profile(input->'mutationProfile') END)
   OR jsonb_typeof(ops)<>'array' OR jsonb_array_length(ops) NOT BETWEEN 1 AND 1024 THEN RETURN NULL;END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RETURN NULL;END IF;
@@ -1003,7 +1021,7 @@ BEGIN
  ), properties AS MATERIALIZED (
   SELECT p.type_id,jsonb_agg(jsonb_build_object('name',p.name,'prop_id',p.prop_id,'home',p.home,
    'cardinality',p.cardinality,'nullability',p.nullability,'scalar_type',p.scalar_type,
-   'facets',p.facets,'item',p.item) ORDER BY p.prop_id) rows
+   'facets',p.facets,'item',p.item)||(CASE WHEN temporal_profile THEN jsonb_build_object('native_temporal',p.native_temporal) ELSE '{}'::jsonb END) ORDER BY p.prop_id) rows
   FROM truss.prop_def p JOIN candidates c USING(type_id) WHERE p.retired_rev IS NULL GROUP BY p.type_id
  )
  SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',c.type_id::text,'definitionPin',c.definition_pin,
@@ -1017,11 +1035,18 @@ BEGIN
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM selected_revision THEN RETURN NULL;END IF;
  result_bytes:=convert_to(jsonb_build_object('basis',jsonb_build_object('installationId',installation.installation_id::text,
   'releaseSha256',installation.release_sha256,'sourceEpoch',installation.source_epoch::text,'catalogRevision',selected_revision,'registrationId',registration::text,
-  'documentsSha256',encode(sha256(original_documents),'hex')),'records',records)::text,'UTF8');
+  'documentsSha256',encode(sha256(original_documents),'hex'))||(CASE WHEN temporal_profile THEN truss.temporal_writer_basis_custody() ELSE '{}'::jsonb END),'records',records)::text,'UTF8');
  IF octet_length(result_bytes)>16777216 THEN RETURN NULL;END IF;
  RETURN result_bytes;
 EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE 'P1403' OR SQLSTATE '0A000' OR SQLSTATE '54000' OR SQLSTATE '55P03' OR SQLSTATE 'P0002' THEN
  RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.writer_schema_basis_at_profile(bytea,bytea,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.writer_schema_basis(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+BEGIN
+ RETURN truss.writer_schema_basis_at_profile(original_input,original_documents,expected_release,expected_digest,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.writer_schema_basis(bytea,bytea,text,text) FROM PUBLIC;

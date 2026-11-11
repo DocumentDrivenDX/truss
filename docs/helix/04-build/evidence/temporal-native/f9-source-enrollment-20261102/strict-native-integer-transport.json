@@ -1,0 +1,35 @@
+{
+  "review": "Sol correction2",
+  "scope": "object and continuation decimal string admission BEFORE conversion; component controls only",
+  "ranges": {
+    "object.id": "1..9223372036854775807",
+    "object.typeId": "1..2147483647",
+    "object.version": "1..9223372036854775807",
+    "object.catalogRevision": "1..2147483647",
+    "object.recordRevision": "1..2147483647",
+    "cursor.typeId": "1..2147483647",
+    "cursor.catalogRevision": "1..2147483647",
+    "cursor.afterId": "1..9223372036854775807",
+    "ownedRoot.id": "1..9223372036854775807",
+    "ownedRoot.typeId": "1..2147483647"
+  },
+  "rangeAuthority": "actual layout.sql/schema_rev native int and object bigint definitions; unchanged source",
+  "refusals": [
+    "bool",
+    "numeric JSON integer/fraction",
+    "sign",
+    "whitespace",
+    "leading zeros",
+    "zero",
+    "non-ASCII digits",
+    "overflow"
+  ],
+  "validBoundaries": "minimum1 and exact native int32/int64 maximum paired for object and cursor",
+  "controls": {
+    "testsRun": 17,
+    "result": "PASS",
+    "scope": "four strict numeric cases + three private transport cases + ten approved custody cases; no native startup"
+  },
+  "nativeQualification": "OPEN",
+  "sourceSha256": "a1d0e15e6d0fa49358b0d556f2d5857bae37778d295b8b87c6191e05c18767b5"
+}
