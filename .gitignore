@@ -20,3 +20,13 @@ packages/python/src/*.egg-info/
 
 # Local build-signing material; never commit
 .innsigle/private/
+
+# Run outputs and evidence stay out of git; CI keeps them as workflow artifacts.
+docs/**/evidence/
+**/receipts/
+*.whl
+*.zip
+*.tar.gz
+**/native.json
+.ci/
+!packages/python/src/truss/_installation/sources.zip
